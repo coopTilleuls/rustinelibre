@@ -1,18 +1,25 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  build:
-    name: 'CI'
+  api-ci:
+    name: API CI
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api/
     services:
       postgres:
         image: postgres
         env:
           POSTGRES_DB: app
-          POSTGRES_PASSWORD: !ChangeMe!
+          POSTGRES_PASSWORD: "!ChangeMe!"
           POSTGRES_USER: app
         ports:
           - 5432:5432
@@ -24,26 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
-          id: filter
-          with:
-            filters: |
-              php:
-                - 'api/**'
-#      - name: Pull images
-#        run: docker compose pull
-#      - name: Start services
-#        run: docker compose up --build -d
-#      - name: Wait for services
-#        run: |
-#          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
-#            case $status in
-#              starting) sleep 1;;
-#              healthy) exit 0;;
-#              unhealthy) exit 1;;
-#            esac
-#          done
-#          exit 1
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -63,7 +50,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Create env config
         run: |
-          echo "DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=15&charset=utf8" > .env.test.local
+          echo "DATABASE_URL=postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=15&charset=utf8" > .env.test.local
           cat .env.test.local
       - name: Install dependencies
         run: composer install
