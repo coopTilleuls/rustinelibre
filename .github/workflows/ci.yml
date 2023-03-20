@@ -50,7 +50,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Create env config
         run: |
-          echo "DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=15&charset=utf8" > .env.test.local
+          echo "DATABASE_URL=postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=15&charset=utf8" > .env.test.local
           cat .env.test.local
       - name: Install dependencies
         run: composer install
