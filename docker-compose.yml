@@ -3,7 +3,7 @@ version: '3.4'
 services:
   php:
     build:
-      context: .
+      context: ./api
       target: app_php
       args:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
@@ -26,7 +26,7 @@ services:
 
   caddy:
     build:
-      context: .
+      context: ./api
       target: app_caddy
     depends_on:
       - php
