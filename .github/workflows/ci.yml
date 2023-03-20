@@ -8,9 +8,12 @@ on:
   pull_request:
 
 jobs:
-  build:
-    name: 'CI'
+  api-ci:
+    name: API CI
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api/
     services:
       postgres:
         image: postgres
@@ -28,26 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
-          id: filter
-          with:
-            filters: |
-              php:
-                - 'api/**'
-#      - name: Pull images
-#        run: docker compose pull
-#      - name: Start services
-#        run: docker compose up --build -d
-#      - name: Wait for services
-#        run: |
-#          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
-#            case $status in
-#              starting) sleep 1;;
-#              healthy) exit 0;;
-#              unhealthy) exit 1;;
-#            esac
-#          done
-#          exit 1
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -71,4 +54,3 @@ jobs:
           cat .env.test.local
       - name: Install dependencies
         run: composer install
-#test
