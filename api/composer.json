@@ -11,7 +11,9 @@
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
+        "meilisearch/search-bundle": "^0.10.2",
         "nelmio/cors-bundle": "^2.2",
+        "nyholm/psr7": "^1.5",
         "phpdocumentor/reflection-docblock": "^5.3",
         "symfony/asset": "6.2.*",
         "symfony/console": "6.2.*",
@@ -19,6 +21,7 @@
         "symfony/expression-language": "6.2.*",
         "symfony/flex": "^2.2",
         "symfony/framework-bundle": "6.2.*",
+        "symfony/http-client": "6.2.*",
         "symfony/mercure-bundle": "^0.3.5",
         "symfony/monolog-bundle": "^3.8",
         "symfony/property-access": "6.2.*",
@@ -53,7 +56,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "php-http/discovery": true
         }
     },
     "autoload": {
