@@ -61,3 +61,7 @@ jobs:
         run: php -d memory_limit=256M vendor/bin/psalm src
       - name: Tests
         run: php -d memory_limit=256M vendor/bin/phpunit
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+      - name: Test kernel
+        run: php bin/console list > /dev/null
