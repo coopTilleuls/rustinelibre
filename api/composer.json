@@ -1,4 +1,6 @@
 {
+    "name": "cooptilleuls/bikecycle",
+    "description": "Platform of bike repairers",
     "type": "project",
     "license": "MIT",
     "require": {
