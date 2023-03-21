@@ -54,3 +54,9 @@ jobs:
           cat .env.test.local
       - name: Install dependencies
         run: composer install
+      - name: Test cs-fixer
+        run: php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
+      - name: Static analysis
+        run: -d memory_limit=256M vendor/bin/psalm src
+      - name: Tests
+        run: php -d memory_limit=256M vendor/bin/phpunit
