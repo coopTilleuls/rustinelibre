@@ -25,7 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\GeneratedValue]
     private int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]

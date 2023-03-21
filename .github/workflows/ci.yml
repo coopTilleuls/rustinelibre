@@ -8,8 +8,8 @@ on:
   workflow_dispatch: ~
 
 jobs:
-  tests:
-    name: Tests
+  api-ci:
+    name: API CI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
