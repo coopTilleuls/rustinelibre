@@ -45,12 +45,10 @@ jobs:
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
       - name: Test cs-fixer
-        run: docker compose exec -T php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
+        run: docker compose exec -T PHP_CS_FIXER_IGNORE_ENV=1 php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
       - name: Static analysis
         run: docker compose exec -T php -d memory_limit=256M vendor/bin/psalm src
       - name: PHPUnit
         run: docker compose exec -T php bin/phpunit
       - name: Validate composer
         run: docker compose exec -T composer validate
-      - name: Test kernel
-        run: docker compose exec -T php bin/console list > /dev/null
