@@ -1,67 +1,56 @@
 name: CI
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
-  pull_request:
+  pull_request: ~
+  workflow_dispatch: ~
 
 jobs:
-  api-ci:
-    name: API CI
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: api/
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DB: app
-          POSTGRES_PASSWORD: "!ChangeMe!"
-          POSTGRES_USER: app
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: intl, apcu, json, zip
-          ini-values: memory_limit=-1
-          tools: pecl, composer, php-cs-fixer
-          coverage: none
-      - name: Get composer cache directory
-        id: composercache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-#        run: echo "dir::$(composer config cache-files-dir)" >> $GITHUB_OUTPUT  // After deprecation (end of may)
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
-      - name: Create env config
+        uses: actions/checkout@v2
+      - name: Pull images
+        run: docker compose pull --ignore-pull-failures || true
+      - name: Start services
+        run: docker compose up --build -d
+      - name: Wait for services
         run: |
-          echo "DATABASE_URL=postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=15&charset=utf8" > .env.test.local
-          cat .env.test.local
-      - name: Install dependencies
-        run: composer install
+          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
+            case $status in
+              starting) sleep 1;;
+              healthy) exit 0;;
+              unhealthy)
+                docker compose ps
+                docker compose logs
+                exit 1
+              ;;
+            esac
+          done
+          exit 1
+      - name: Check HTTP reachability
+        run: curl -v -o /dev/null http://localhost
+      - name: Check API reachability
+        run: curl -vk -o /dev/null https://localhost
+      - name: Check PWA reachability
+        run: "curl -vk -o /dev/null -H 'Accept: text/html' https://localhost"
+      - name: Create test database
+        run: |
+          docker compose exec -T php bin/console -e test doctrine:database:create
+          docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+      - name: Doctrine Schema Validator
+        run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
       - name: Test cs-fixer
-        run: php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
+        run: docker compose exec -T php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
       - name: Static analysis
-        run: php -d memory_limit=256M vendor/bin/psalm src
-      - name: Tests
-        run: php -d memory_limit=256M vendor/bin/phpunit
+        run: docker compose exec -T php -d memory_limit=256M vendor/bin/psalm src
+      - name: PHPUnit
+        run: docker compose exec -T php bin/phpunit
       - name: Validate composer
-        run: composer validate
+        run: docker compose exec -T composer validate
       - name: Test kernel
-        run: php bin/console list > /dev/null
+        run: docker compose exec -T php bin/console list > /dev/null
