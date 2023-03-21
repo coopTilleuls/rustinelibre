@@ -1,4 +1,6 @@
 {
+    "name": "cooptilleuls/bikelib",
+    "description": "Platform of bike repairers",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
