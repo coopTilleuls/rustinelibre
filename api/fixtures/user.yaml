@@ -1,0 +1,21 @@
+App\Entity\User:
+  genialo_admin:
+    roles: ["ROLE_ADMIN"]
+    email: "clement@les-tilleuls.coop"
+    plainPassword: "test"
+    emailConfirmed: true
+  user_1:
+    roles: ["ROLE_USER"]
+    email: "user1@test.com"
+    plainPassword: "test"
+    emailConfirmed: true
+  user_{10..20}:
+    roles: ["ROLE_USER"]
+    email: <email()>
+    plainPassword: "test"
+    emailConfirmed: true
+  user_not_confirm{21..25}:
+    roles: ["ROLE_USER"]
+    email: <email()>
+    plainPassword: "test"
+    emailConfirmed: false

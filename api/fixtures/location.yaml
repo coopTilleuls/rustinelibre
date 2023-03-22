@@ -1,0 +1,15 @@
+App\Entity\Location:
+  location_1:
+    repairer: '@repairer_1'
+    street: "1936 rue Johnny Hallyday"
+    city: "Lomme"
+    postcode: "59160"
+    country: "France"
+    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
+  location_2:
+    repairer: '@repairer_2'
+    street: "1917 rue Francis Cabrel"
+    city: "Lille"
+    postcode: "59000"
+    country: "France"
+    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
