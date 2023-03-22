@@ -35,10 +35,6 @@ final class AvailableSlotComputer
         return array_filter($recurrences->toArray(), function (Recurrence $r) use ($fullSlots) {
             $start = $r->getStart();
 
-            // dump($start);
-            // dump($fullSlots);
-            // dump(in_array($start, $fullSlots, false));
-            // die;
             return !\in_array($start, $fullSlots, false);
         });
     }

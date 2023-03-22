@@ -6,9 +6,10 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Appointments\Services\AvailableSlotComputer;
 use App\Repository\LocationRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @template-implements ProviderInterface<Operationv>
+ * @template-implements ProviderInterface<Operation>
  */
 final class LocationAvailableSlotsProvider implements ProviderInterface
 {
@@ -17,11 +18,18 @@ final class LocationAvailableSlotsProvider implements ProviderInterface
     {
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $location = $this->locationRepository->find($uriVariables['id']);
 
-        if (!$location || !$location->getRrule()) {
+        if (!$location) {
+            throw new NotFoundHttpException(sprintf('This location id (%s) does not exist', $uriVariables['id']));
+        }
+
+        if (!$location->getRrule()) {
             return [];
         }
 
