@@ -1,0 +1,9 @@
+App\Entity\Repairer:
+  repairer_1:
+    owner: '@user_1'
+    description: "Lorem ipsum"
+    mobilePhone: "0720397700"
+  repairer_2:
+    owner: '@user_10'
+    description: "Lorem ipsum 2"
+    mobilePhone: "0720397700"
