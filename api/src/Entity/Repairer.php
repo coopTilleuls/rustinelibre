@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -31,9 +35,12 @@ use Doctrine\ORM\Mapping as ORM;
         new Patch(),
         new Put(),
         new Delete(),
-    ]
+    ],
+    paginationClientItemsPerPage: true
 )]
 #[ApiFilter(DateFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['city' => 'iexact', 'description' => 'ipartial', 'postcode' => 'iexact', 'country' => 'ipartial'])]
 class Repairer
 {
     #[ORM\Id]
@@ -54,7 +61,7 @@ class Repairer
     #[ORM\Column(length: 800, nullable: true)]
     private ?string $street = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -64,17 +71,16 @@ class Repairer
     private ?string $country = null;
 
     #[AppAssert\Rrule]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $rrule = 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR';
-
-    #[ORM\Column]
-    private ?int $minimumPreparationDelay = 30;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $latitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $longitude = null;
+
+    private ?\DateTimeInterface $firstSlotAvailable = null;
 
     public function getId(): ?int
     {
@@ -177,18 +183,6 @@ class Repairer
         return $this;
     }
 
-    public function getMinimumPreparationDelay(): ?int
-    {
-        return $this->minimumPreparationDelay;
-    }
-
-    public function setMinimumPreparationDelay(int $minimumPreparationDelay): self
-    {
-        $this->minimumPreparationDelay = $minimumPreparationDelay;
-
-        return $this;
-    }
-
     public function getLatitude(): ?string
     {
         return $this->latitude;
@@ -207,5 +201,15 @@ class Repairer
     public function setLongitude(?string $longitude): void
     {
         $this->longitude = $longitude;
+    }
+
+    public function getFirstSlotAvailable(): ?\DateTimeInterface
+    {
+        return $this->firstSlotAvailable;
+    }
+
+    public function setFirstSlotAvailable(?\DateTimeInterface $firstSlotAvailable): void
+    {
+        $this->firstSlotAvailable = $firstSlotAvailable;
     }
 }
