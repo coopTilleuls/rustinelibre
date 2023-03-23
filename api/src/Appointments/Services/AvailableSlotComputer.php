@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Appointments\Services;
 
 use App\Entity\Repairer;
@@ -16,11 +18,18 @@ final class AvailableSlotComputer
     {
     }
 
+    /**
+     * @return array<int, Recurrence>
+     */
     public function computeAvailableSlotsByRepairer(Repairer $repairer, \DateTimeInterface $startDate, \DateTimeInterface $endDate): array
     {
         if ($startDate > $endDate || $startDate->diff($endDate)->days > 31) {
             throw new \InvalidArgumentException(sprintf('Invalid date range %s - %s (1 month max).', $startDate->format(\DateTime::ATOM), $endDate->format(\DateTime::ATOM)));
         }
+
+        // Set available slots from next hour
+        $startDate = $startDate->setTime((int) $startDate->format('G') + 1, 0);
+        $endDate = $endDate->setTime((int) $endDate->format('G'), 0);
 
         $rule = new Rule($repairer->getRrule());
         $rule->setStartDate($startDate);

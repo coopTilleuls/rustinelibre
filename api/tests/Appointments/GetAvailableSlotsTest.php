@@ -24,9 +24,11 @@ class GetAvailableSlotsTest extends ApiTestCase
             'hydra:totalItems' => 63, // Should have 63 slots
         ]);
 
-        $this->assertArrayHasKey('start', $response->toArray()['hydra:member'][0]);
-        $this->assertArrayHasKey('end', $response->toArray()['hydra:member'][0]);
-        $this->assertArrayHasKey('index', $response->toArray()['hydra:member'][0]);
+        $firstItem = $response->toArray()['hydra:member'][0];
+        $this->assertEquals('2023-03-20T09:00:00+00:00', $firstItem['start']);
+        $this->assertArrayHasKey('start', $firstItem);
+        $this->assertArrayHasKey('end', $firstItem);
+        $this->assertArrayHasKey('index', $firstItem);
     }
 
     public function testLessSlotsAvailable(): void

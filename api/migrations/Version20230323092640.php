@@ -27,7 +27,7 @@ final class Version20230323092640 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_FE38F8449395C3F3 ON appointment (customer_id)');
         $this->addSql('CREATE INDEX IDX_FE38F84447C5DFEE ON appointment (repairer_id)');
         $this->addSql('COMMENT ON COLUMN appointment.slot_time IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE repairer (id INT NOT NULL, owner_id INT NOT NULL, description TEXT DEFAULT NULL, mobile_phone VARCHAR(255) DEFAULT NULL, street VARCHAR(800) DEFAULT NULL, city VARCHAR(255) NOT NULL, postcode VARCHAR(255) DEFAULT NULL, country VARCHAR(255) DEFAULT NULL, rrule VARCHAR(255) NOT NULL, minimum_preparation_delay INT NOT NULL, latitude VARCHAR(255) DEFAULT NULL, longitude VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE repairer (id INT NOT NULL, owner_id INT NOT NULL, description TEXT DEFAULT NULL, mobile_phone VARCHAR(255) DEFAULT NULL, street VARCHAR(800) DEFAULT NULL, city VARCHAR(255) NOT NULL, postcode VARCHAR(255) DEFAULT NULL, country VARCHAR(255) DEFAULT NULL, rrule VARCHAR(255) NOT NULL, latitude VARCHAR(255) DEFAULT NULL, longitude VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_4A73F2BF7E3C61F9 ON repairer (owner_id)');
         $this->addSql('CREATE TABLE "user" (id INT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, email_confirmed BOOLEAN NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (email)');
