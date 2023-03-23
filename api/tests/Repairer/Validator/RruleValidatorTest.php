@@ -1,19 +1,24 @@
 <?php
 
-namespace App\Tests\Location\Validator;
+namespace App\Tests\Repairer\Validator;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use App\Entity\Repairer;
+use App\Entity\User;
 
 class RruleValidatorTest extends ApiTestCase
 {
-    public function testCreateLocation(): void
+    public function testCreateRepairer(): void
     {
-        $randomRepairer = static::getContainer()->get('doctrine')->getRepository(Repairer::class)->findOneBy([]);
-        static::createClient()->request('POST', '/locations', ['json' => [
-            'repairer' => '/repairers/'.$randomRepairer->getId(),
+        $randomUser = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy([]);
+        static::createClient()->request('POST', '/repairers', ['json' => [
+            'owner' => '/users/'.$randomUser->getId(),
+            'description' => 'Super atelier de vélo',
+            'mobilePhone' => '0720397700',
             'street' => 'avenue Karl Marx',
             'city' => 'Lille',
+            'postcode' => '59160',
+            'country' => 'FRANCE',
+            'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
         ]]);
 
         $this->assertResponseStatusCodeSame(201);
@@ -22,11 +27,13 @@ class RruleValidatorTest extends ApiTestCase
 
     public function testCreateInvalidRrule(): void
     {
-        $randomRepairer = static::getContainer()->get('doctrine')->getRepository(Repairer::class)->findOneBy([]);
-        static::createClient()->request('POST', '/locations', ['json' => [
-            'repairer' => '/repairers/'.$randomRepairer->getId(),
+        $randomUser = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy([]);
+
+        static::createClient()->request('POST', '/repairers', ['json' => [
+            'owner' => '/users/'.$randomUser->getId(),
             'street' => 'avenue P. Poutou',
             'city' => 'Lille',
+            'description' => 'Super atelier de vélo',
             'rrule' => 'BAD RULE',
         ]]);
 

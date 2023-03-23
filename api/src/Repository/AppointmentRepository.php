@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Appointment;
-use App\Entity\Location;
+use App\Entity\Repairer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,18 +40,18 @@ class AppointmentRepository extends ServiceEntityRepository
         }
     }
 
-    public function findFullSlots(Location $location, \DateTimeInterface $start, \DateTimeInterface $end): array
+    public function findFullSlots(Repairer $repairer, \DateTimeInterface $start, \DateTimeInterface $end): array
     {
         $query = $this->getEntityManager()->createQuery(<<<DQL
             SELECT a.slotTime AS appointment_time
             FROM {$this->getClassName()} a
-            WHERE a.location = :location
+            WHERE a.repairer = :repairer
             AND a.slotTime BETWEEN :start_date AND :end_date
-            GROUP BY a.location, a.slotTime
+            GROUP BY a.repairer, a.slotTime
             ORDER BY a.slotTime
         DQL
         )->setParameters([
-            'location' => $location,
+            'repairer' => $repairer,
             'start_date' => $start,
             'end_date' => $end,
         ]);

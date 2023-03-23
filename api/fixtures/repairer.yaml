@@ -3,7 +3,17 @@ App\Entity\Repairer:
     owner: '@user_1'
     description: "Lorem ipsum"
     mobilePhone: "0720397700"
+    street: "1936 rue Johnny Hallyday"
+    city: "Lomme"
+    postcode: "59160"
+    country: "France"
+    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
   repairer_2:
     owner: '@user_10'
     description: "Lorem ipsum 2"
     mobilePhone: "0720397700"
+    street: "1917 rue Francis Cabrel"
+    city: "Lille"
+    postcode: "59000"
+    country: "France"
+    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
