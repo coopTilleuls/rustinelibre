@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Appointments\StateProvider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Appointments\Services\AvailableSlotComputer;
 use App\Repository\RepairerRepository;
+use Recurr\Recurrence;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -19,7 +22,7 @@ final class RepairerAvailableSlotsProvider implements ProviderInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, Recurrence>
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
@@ -40,7 +43,7 @@ final class RepairerAvailableSlotsProvider implements ProviderInterface
 
         return $this->availableSlotComputer->computeAvailableSlotsByRepairer(
             $repairer,
-            isset($startDate) ? new \DateTimeImmutable($startDate) : new \DateTimeImmutable(sprintf('+%d minutes', $repairer->getMinimumPreparationDelay())),
+            isset($startDate) ? new \DateTimeImmutable($startDate) : new \DateTimeImmutable(),
             isset($endDate) ? new \DateTimeImmutable($endDate) : new \DateTimeImmutable('+1 week')
         );
     }
