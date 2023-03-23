@@ -45,6 +45,8 @@ jobs:
           docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
       - name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
+      - name: Validate composer
+        run: docker compose exec -T php composer validate
       - name: Test cs-fixer
         run: docker compose exec -T php php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
       - name: Static analysis
@@ -53,5 +55,3 @@ jobs:
         run: docker compose exec -T php bin/console hautelook:fixtures:load --env=test --no-interaction
       - name: PHPUnit
         run: docker compose exec -T php bin/phpunit
-      - name: Validate composer
-        run: docker compose exec -T php composer validate
