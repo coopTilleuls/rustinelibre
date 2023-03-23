@@ -21,7 +21,7 @@ class Appointment
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Location $location = null;
+    private ?Repairer $repairer = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $slotTime = null;
@@ -46,16 +46,14 @@ class Appointment
         return $this;
     }
 
-    public function getLocation(): ?Location
+    public function getRepairer(): ?Repairer
     {
-        return $this->location;
+        return $this->repairer;
     }
 
-    public function setLocation(?Location $location): self
+    public function setRepairer(?Repairer $repairer): void
     {
-        $this->location = $location;
-
-        return $this;
+        $this->repairer = $repairer;
     }
 
     public function getSlotTime(): ?\DateTimeImmutable
