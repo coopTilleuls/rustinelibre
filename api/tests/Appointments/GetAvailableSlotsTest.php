@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Appointments;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Appointment;
 use App\Entity\Repairer;
+use App\Tests\AbstractTestCase;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
-class GetAvailableSlotsTest extends ApiTestCase
+class GetAvailableSlotsTest extends AbstractTestCase
 {
     public function testGetSlotsAvailable(): void
     {
         $randomRepairer = static::getContainer()->get('doctrine')->getRepository(Repairer::class)->findOneBy([]);
+        // No need to be authenticated
         $response = static::createClient()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $randomRepairer->getId()));
 
         $this->assertResponseIsSuccessful();
@@ -21,7 +24,7 @@ class GetAvailableSlotsTest extends ApiTestCase
             '@context' => '/contexts/Repairer',
             '@id' => '/repairer_get_slots_available/'.$randomRepairer->getId(),
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 63, // Should have 63 slots
+            'hydra:totalItems' => 64, // Should have 63 slots
         ]);
 
         $firstItem = $response->toArray()['hydra:member'][0];
@@ -49,6 +52,6 @@ class GetAvailableSlotsTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
         // Should have 1 slot less
-        $this->assertCount(62, $response->toArray()['hydra:member']);
+        $this->assertCount(63, $response->toArray()['hydra:member']);
     }
 }

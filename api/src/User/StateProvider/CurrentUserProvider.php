@@ -6,45 +6,28 @@ namespace App\User\StateProvider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Appointments\Services\AvailableSlotComputer;
-use App\Repository\RepairerRepository;
-use Recurr\Recurrence;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
+use App\Entity\User;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
- * @template-implements ProviderInterface<Operation>
+ * @template-implements ProviderInterface<User>
  */
 final class CurrentUserProvider implements ProviderInterface
 {
-    public function __construct(private TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        private Security $security,
+    ) {
     }
 
-    /**
-     * @return array<int, Recurrence>
-     */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?User
     {
-        $repairer = $this->repairerRepository->find($uriVariables['id']);
+        /** @var User $user */
+        $user = $this->security->getUser();
 
-        if (!$repairer) {
-            throw new NotFoundHttpException(sprintf('This repairer id (%s) does not exist', $uriVariables['id']));
+        if (!$user instanceof User) {
+            return null;
         }
 
-        if (!$repairer->getRrule()) {
-            return [];
-        }
-
-        if (array_key_exists('filters', $context) && array_key_exists('date', $context['filters'])) {
-            $startDate = $context['filters']['date']['after'] ?? null;
-            $endDate = $context['filters']['date']['before'] ?? null;
-        }
-
-        return $this->availableSlotComputer->computeAvailableSlotsByRepairer(
-            $repairer,
-            isset($startDate) ? new \DateTimeImmutable($startDate) : new \DateTimeImmutable(),
-            isset($endDate) ? new \DateTimeImmutable($endDate) : new \DateTimeImmutable('+1 week')
-        );
+        return $user;
     }
 }
