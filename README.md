@@ -36,11 +36,22 @@ bin/console h:f:l           # Injecte les fixtures
 bin/phpunit             # Lance les tests API
 ```
 
-## Lors du changement de branche
-Des dépendances ont pu être modifées et des migrations ajoutées
-``` shell
-composer install
-bin/console d:m:m  
+
+## Pour obtenir un token JWT (JsonWebToken)
+Make a POST request on URL : https://localhost/auth with body
+```
+{
+    "email": "clement@les-tilleuls.coop", 
+    "password": "test"
+}
 ```
 
+To obtain the following token
+```
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Nzk2NTQxOTgsImV4cCI6MTY3OTY1Nzc5OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImNsZW1lbnRAbGVzLXRpbGxldWxzLmNvb3AifQ.OmmLYlmeriqt-SSIgseyTDDYcAOFs_ws4p7FmbBbExpPn3JQOyrIQk3zs-NKOIupxT8grB42KPnCa_cm08i6Mu1p4Bm-lBWe2N95rNCTRAhazFirwVCx5Jgkp1QD2ICUElOyw6pid8oroTQ903XhtHJnK8tRADArDZqz64U3p4eHcMbappjyJCQhVeV50oYsqcmR3gPWkO5uNt-9lMz4prOasz4rRPXY3MIVrGX6NJTCGkQjQPD0ibcqofJxoXpWmYvzIMNfRw7Wb0yd7guQxm7rWRVAwjBWFiW1eLou4upuq_KREojGLJwcTHVODeCrJcsQyRPtW1SRvrtP-PJ3tA"
+}
+```
+
+Then pass the JWT on your request's header as  `Authorization: Bearer {token}`
 

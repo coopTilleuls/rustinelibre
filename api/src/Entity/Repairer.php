@@ -31,10 +31,18 @@ use Doctrine\ORM\Mapping as ORM;
             uriTemplate: '/repairer_get_slots_available/{id}',
             requirements: ['id' => '\d+'],
         ),
-        new Post(),
-        new Patch(),
-        new Put(),
-        new Delete(),
+        new Post(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')"
+        ),
+        new Patch(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+        ),
+        new Put(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+        ),
+        new Delete(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+        ),
     ],
     paginationClientItemsPerPage: true
 )]
