@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
+use App\User\StateProvider\CurrentUserProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,6 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+        ),
+        new Get(
+            provider: CurrentUserProvider::class,
+            uriTemplate: '/me',
+            security: "is_granted('IS_AUTHENTICATED_FULLY')"
         ),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN')"
