@@ -6,6 +6,7 @@ import Head from 'next/head';
 import {NextPage} from 'next';
 import {ComponentType, PropsWithChildren} from 'react';
 import type { ReactElement, ReactNode } from 'react'
+import Script from 'next/script'
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode

@@ -1,8 +1,11 @@
-import {Header} from '@components/layout/Header';
 import {NextPageWithLayout} from 'pages/_app';
 import {useRouter} from 'next/router';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Footer} from "@components/layout/Footer";
+import Head from "next/head";
+import {Navbar} from "@components/layout/Navbar";
+import {HomeCard} from "@components/home/HomeCard";
+import {repairerResource} from 'resources/repairerResource';
 
 interface BikeType {
     id: number;
@@ -32,9 +35,9 @@ const SearchRepairer: NextPageWithLayout = () => {
 
     const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCity(event.target.value);
-        if (event.target.value.length > 1) {
-            searchCity();
-        }
+        // if (event.target.value.length > 1) {
+        //     searchCity();
+        // }
     };
 
     const handleBikeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -48,40 +51,62 @@ const SearchRepairer: NextPageWithLayout = () => {
             return;
         }
 
-        console.log('submit');
+        fetchRepairers();
+    };
+
+    const fetchRepairers = async () => {
+        const response = await repairerResource.getAll({'city': city, 'order[firstSlotAvailable]': 'DESC'});
+
+        console.log(response);
     };
 
     const searchCity = async () => {
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${city}`);
         const data = await response.json();
         const cityDetails = data[0];
-
         console.log(cityDetails);
     }
 
     return (
         <>
-            <Header title="Encore un peu de patience" />
-            <div className="container max-w-3xl px-4 mb-20 | sm:px-0 sm:mb-0">
-                Chercher un réparateur
+            <div className="w-full overflow-x-hidden">
+                <Head>
+                    <title>Chercher un réparateur</title>
+                </Head>
+                <Navbar/>
+                <div className="w-full max-w-xs">
+                    <form onSubmit={handleSubmit} className="bg-white rounded px-8 pt-6 pb-8 mb-4 text-center">
+                        <div className="mb-8">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="bikeType">
+                                Type de Vélo
+                            </label>
+
+                            <select
+                                value={selectedBike?.id ?? ''} onChange={handleBikeChange}
+                                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="grid-state">
+                                    <option value="">Choisissez un type de vélo</option>
+                                        {bikeTypes.map((bike) => (
+                                            <option key={bike.id} value={bike.id}>
+                                                {bike.name}
+                                            </option>
+                                        ))}
+                            </select>
+                        </div>
+                        <div className="mb-8">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">
+                                Ville
+                            </label>
+                            <input
+                                onChange={handleCityChange}
+                                className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                                id="inline-full-name" type="text" value={city} />
+                        </div>
+                    </form>
+                </div>
+
+                <Footer logged={true} />
             </div>
-
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="city">Ville</label>
-                <input type="text" id="city" name="city" onChange={handleCityChange} required />
-
-                <label htmlFor="bikeType">Type de Vélo</label>
-                <select value={selectedBike?.id ?? ''} onChange={handleBikeChange}>
-                    <option value="">Choisissez un type de vélo</option>
-                    {bikeTypes.map((bike) => (
-                        <option key={bike.id} value={bike.id}>
-                            {bike.name}
-                        </option>
-                    ))}
-                </select>
-            </form>
-
-            <Footer logged={true} />
         </>
     );
 };

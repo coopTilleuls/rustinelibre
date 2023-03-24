@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-    * {
-        font-family: Poppins;
-    }
-
     a {
         @apply no-underline text-cyan-700;
     }
@@ -27,7 +23,7 @@
   }
 }
 
-/*footer {*/
-/*    position: fixed;*/
-/*    bottom: 0px;*/
-/*}*/
+@font-face {
+    font-family: Poppins;
+    font-weight: normal;
+}
