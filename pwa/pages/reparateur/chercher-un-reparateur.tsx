@@ -20,12 +20,6 @@ interface FormProps {
     bikeTypes: BikeType[];
 }
 
-interface SearchResult {
-    displayName: string;
-    lat: string;
-    lon: string;
-}
-
 const bikeTypes: BikeType[] = [
     { id: 1, name: "Vélo de ville" },
     { id: 2, name: "Vélo électrique" },

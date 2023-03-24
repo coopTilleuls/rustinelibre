@@ -27,7 +27,7 @@ const Home = () => (
         pageLink="/carnet/creer-mon-carnet"
     />
     <HomeCard
-        title="Tu est réparateur ?"
+        title="Tu es réparateur ?"
         subTitle="Rejoins notre collectif de réparateurs sur la plateforme"
         button="Je rejoins le collectif"
         backgroundColor="bg-slate-200"
