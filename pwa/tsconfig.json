@@ -17,10 +17,10 @@
     "incremental": true,
     "paths": {
       "@components/*": ["components/*"],
-      "@constants": ["constants"],
-      "@contexts": ["contexts"],
+      "@constants": ["constants/*"],
+      "@contexts": ["contexts/*/"],
       "@helpers": ["helpers/*"],
-      "@hooks": ["hooks"],
+      "@hooks": ["hooks/*"],
       "@interfaces": ["interfaces/*"],
       "@resources": ["resources/*"]
     }
