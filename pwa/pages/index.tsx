@@ -1,5 +1,6 @@
 import Head from "next/head";
-import {Header} from '@components/layout/Header';
+import {Footer} from '@components/layout/Footer';
+import {Navbar} from '@components/layout/Navbar';
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -12,11 +13,8 @@ const Home = () => (
     <Head>
       <title>Bienvenue sur la page d'accueil!</title>
     </Head>
-      <div className="relative flex-1 pb-20">
-          <Header
-              title="Je suis un test"
-          />
-      </div>
+      <Navbar/>
+      <Footer logged={true} />
   </div>
 );
 export default Home;
