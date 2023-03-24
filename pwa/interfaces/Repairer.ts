@@ -5,13 +5,14 @@ export interface Repairer {
     '@type': string;
     id: string;
     owner: User;
-    description: string;
-    city: string;
-    postcode: string;
-    country: string;
-    mobilePhone: string;
-    street: string;
+    description?: string;
+    city?: string;
+    postcode?: string;
+    country?: string;
+    mobilePhone?: string;
+    street?: string;
     rrule: string;
-    latitude: string;
-    longitude: string;
+    latitude?: string;
+    longitude?: string;
+    firstSlotAvailable?: Date
 }
