@@ -2,15 +2,15 @@
 
 namespace App\Tests\Repairer\Validator;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\User;
+use App\Tests\AbstractTestCase;
 
-class RruleValidatorTest extends ApiTestCase
+class RruleValidatorTest extends AbstractTestCase
 {
     public function testCreateRepairer(): void
     {
         $randomUser = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy([]);
-        static::createClient()->request('POST', '/repairers', ['json' => [
+        $this->createClientAuthAsUser()->request('POST', '/repairers', ['json' => [
             'owner' => '/users/'.$randomUser->getId(),
             'description' => 'Super atelier de vélo',
             'mobilePhone' => '0720397700',
@@ -29,7 +29,7 @@ class RruleValidatorTest extends ApiTestCase
     {
         $randomUser = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy([]);
 
-        static::createClient()->request('POST', '/repairers', ['json' => [
+        $this->createClientAuthAsUser()->request('POST', '/repairers', ['json' => [
             'owner' => '/users/'.$randomUser->getId(),
             'street' => 'avenue P. Poutou',
             'city' => 'Lille',
