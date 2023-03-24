@@ -1,13 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    'styles/globals.scss',
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Poppins", "system-ui"],
+        sans: ['Poppins', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
       },
       boxShadow: {
         card: "0px 0px 20px 0px rgba(0, 0, 0, 0.15)",

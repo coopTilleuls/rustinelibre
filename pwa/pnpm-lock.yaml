@@ -12,6 +12,7 @@ specifiers:
   autoprefixer: ^10.4.13
   eslint: ^8.31.0
   eslint-config-next: ^13.1.2
+  flowbite: ^1.6.4
   formik: ^2.2.9
   isomorphic-unfetch: ^3.1.0
   next: ^13.1.2
@@ -26,6 +27,7 @@ dependencies:
   '@api-platform/admin': 3.4.3_vwskmg7mzf6u2jufkkmcrhvxcm
   '@fontsource/poppins': 4.5.10
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.4
+  flowbite: 1.6.4
   formik: 2.2.9_react@18.2.0
   isomorphic-unfetch: 3.1.0
   next: 13.1.2_pjwopsidmaokadturxaafygjp4
@@ -1949,6 +1951,13 @@ packages:
   /flatted/3.2.7:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
+
+  /flowbite/1.6.4:
+    resolution: {integrity: sha512-//kSaigwERCcE3udumadB3+xfOXeN/ZQzcub2qVCHuB7uscB4XIm3yP9R8zL0XsEOnYG2lnroq/dydQZbzvESw==}
+    dependencies:
+      '@popperjs/core': 2.11.6
+      mini-svg-data-uri: 1.4.4
+    dev: false
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
