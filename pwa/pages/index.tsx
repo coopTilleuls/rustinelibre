@@ -1,6 +1,7 @@
 import Head from "next/head";
 import {Footer} from '@components/layout/Footer';
 import {Navbar} from '@components/layout/Navbar';
+import {CardNeedRepairer} from '@components/home/CardNeedRepairer';
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -14,6 +15,7 @@ const Home = () => (
       <title>Bienvenue sur la page d'accueil!</title>
     </Head>
       <Navbar/>
+      <CardNeedRepairer />
       <Footer logged={true} />
   </div>
 );
