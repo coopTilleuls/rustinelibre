@@ -17,8 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+        ),
+        new GetCollection(
+            security: "is_granted('ROLE_ADMIN')"
+        ),
     ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]

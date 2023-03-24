@@ -9,6 +9,11 @@ App\Entity\User:
     email: "user1@test.com"
     plainPassword: "test"
     emailConfirmed: true
+  repairer_2:
+    roles: ["ROLE_REPAIRER"]
+    email: "repairer2@test.com"
+    plainPassword: "test"
+    emailConfirmed: true
   user_{10..20}:
     roles: ["ROLE_USER"]
     email: <email()>

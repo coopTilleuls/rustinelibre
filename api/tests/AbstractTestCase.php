@@ -1,0 +1,60 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Tests;
+
+use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use ApiPlatform\Symfony\Bundle\Test\Client;
+
+abstract class AbstractTestCase extends ApiTestCase
+{
+    protected function setUp(): void
+    {
+        self::bootKernel();
+    }
+
+    protected function createClientAuthAsAdmin(): Client
+    {
+        $response = static::createClient()->request('POST', '/auth', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'clement@les-tilleuls.coop',
+                'password' => 'test',
+            ],
+        ]);
+
+        $json = $response->toArray();
+
+        $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
+
+        return $client;
+    }
+
+    protected function createClientWithCredentials(array $body = []): Client
+    {
+        $response = static::createClient()->request('POST', '/auth', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => $body ?: [
+                'email' => 'user1@test.com',
+                'password' => 'test',
+            ],
+        ]);
+
+        $json = $response->toArray();
+
+        $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
+
+        return $client;
+    }
+
+    protected function createClientAuthAsUser(): Client
+    {
+        return $this->createClientWithCredentials();
+    }
+
+    protected function createClientAuthAsRepairer(): Client
+    {
+        return $this->createClientWithCredentials(['email' => 'repairer2@test.com', 'password' => 'test']);
+    }
+}
