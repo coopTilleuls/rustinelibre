@@ -1,5 +1,5 @@
 api_platform:
-    title: Hello API Platform
+    title: Bikelib
     version: 1.0.0
     # Mercure integration, remove if unwanted
     mercure: ~
@@ -8,3 +8,8 @@ api_platform:
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
