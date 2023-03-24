@@ -39,13 +39,12 @@ class RepairerFirstSlotAvailableCollectionNormalizer implements NormalizerInterf
 
         if (!$this->request->query->has('order') ||
             !array_key_exists('firstSlotAvailable', $orderFirstSlot = $this->request->get('order')) ||
-            empty($data['hydra:member']) ||
-            2 > count($collection = $data['hydra:member'])
+            empty($data['hydra:member'])
         ) {
             return $data;
         }
 
-        foreach ($collection as $key => $repairerDatum) {
+        foreach ($collection = $data['hydra:member'] as $key => $repairerDatum) {
             $repairer = $this->repairerRepository->find($repairerDatum['id']);
             /** @var array<int, Recurrence> $slotsAvailable */
             $slotsAvailable = $this->availableSlotComputer->computeAvailableSlotsByRepairer($repairer, new \DateTimeImmutable(), new \DateTimeImmutable('+1 month'));
@@ -56,11 +55,14 @@ class RepairerFirstSlotAvailableCollectionNormalizer implements NormalizerInterf
             }
         }
 
-        $keyValues = array_column($collection, 'firstSlotAvailable');
-        if ('asc' === $orderFirstSlot['firstSlotAvailable']) {
-            array_multisort($keyValues, SORT_ASC, $collection);
-        } else {
-            array_multisort($keyValues, SORT_DESC, $collection);
+        // Don't order if less than 2 results
+        if (1 < count($collection)) {
+            $keyValues = array_column($collection, 'firstSlotAvailable');
+            if ('asc' === $orderFirstSlot['firstSlotAvailable']) {
+                array_multisort($keyValues, SORT_ASC, $collection);
+            } else {
+                array_multisort($keyValues, SORT_DESC, $collection);
+            }
         }
 
         $data['hydra:member'] = $collection;
