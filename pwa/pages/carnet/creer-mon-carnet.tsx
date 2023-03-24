@@ -5,7 +5,6 @@ import {Footer} from '@components/layout/Footer';
 import {Navbar} from '@components/layout/Navbar';
 
 const CreateMaintenanceBook: NextPageWithLayout = () => {
-
     return (
         <div className="w-full overflow-x-hidden">
             <Head>

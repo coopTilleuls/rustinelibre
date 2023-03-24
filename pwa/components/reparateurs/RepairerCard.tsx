@@ -7,10 +7,6 @@ interface RepairerProps {
 }
 
 export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
-
-    console.log(repairer.firstSlotAvailable);
-    console.log(typeof repairer.firstSlotAvailable);
-
     return (
         <div className="max-w-sm rounded overflow-hidden shadow-lg mb-10">
                 <div className="px-6 py-4">
