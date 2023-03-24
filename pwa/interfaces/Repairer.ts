@@ -1,4 +1,5 @@
 import {User} from 'interfaces/User';
+import {DateObject} from 'interfaces/DateObject';
 
 export interface Repairer {
     '@id': string;
@@ -14,5 +15,5 @@ export interface Repairer {
     rrule: string;
     latitude?: string;
     longitude?: string;
-    firstSlotAvailable?: Date
+    firstSlotAvailable?: DateObject
 }
