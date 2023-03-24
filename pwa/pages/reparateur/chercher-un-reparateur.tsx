@@ -75,12 +75,12 @@ const SearchRepairer: NextPageWithLayout = () => {
 
     return (
         <>
-            <div className="w-full overflow-x-hidden">
+            <div className="w-screen overflow-x-hidden">
                 <Head>
                     <title>Chercher un réparateur</title>
                 </Head>
                 <Navbar/>
-                <div className="w-full max-w-xs">
+                <div className="w-screen">
                     <form onSubmit={handleSubmit} className="bg-white rounded px-8 pt-6 pb-8 mb-4 text-center">
                         <div className="mb-8">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="bikeType">
