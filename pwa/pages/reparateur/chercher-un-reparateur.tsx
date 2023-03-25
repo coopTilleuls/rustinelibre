@@ -4,9 +4,8 @@ import React, {useState} from 'react';
 import {Footer} from "@components/layout/Footer";
 import Head from "next/head";
 import {Navbar} from "@components/layout/Navbar";
-import {HomeCard} from "@components/home/HomeCard";
 import {repairerResource} from 'resources/repairerResource';
-import {Collection} from 'interfaces/Resource';
+import {bikeTypeResource} from 'resources/bikeTypeResource';
 import {Repairer} from 'interfaces/Repairer';
 import {RepairerCard} from 'components/reparateurs/RepairerCard';
 import Spinner from 'components/icons/Spinner';
@@ -19,6 +18,18 @@ interface BikeType {
 interface FormProps {
     bikeTypes: BikeType[];
 }
+//
+// export async function getStaticProps() {
+//     const response = await bikeTypeResource.getAll({});
+//
+//     console.log(response);
+//
+//     // return {
+//     //     props: {
+//     //         response['hydra:member']
+//     //     },
+//     // }
+// }
 
 const bikeTypes: BikeType[] = [
     { id: 1, name: "Vélo de ville" },
@@ -28,6 +39,7 @@ const bikeTypes: BikeType[] = [
 
 const SearchRepairer: NextPageWithLayout = () => {
     const [city, setCity] = useState('')
+    const [bikes, setBikes] = useState([])
     const [selectedBike, setSelectedBike] = useState<BikeType>();
     const [repairers, setRepairers] = useState<Repairer[]>();
     const [pendingSearchCity, setPendingSearchCity] = useState(false);
