@@ -1,4 +1,5 @@
 import {User} from 'interfaces/User';
+import {BikeType} from 'interfaces/BikeType';
 import {DateObject} from 'interfaces/DateObject';
 
 export interface Repairer {
@@ -15,5 +16,6 @@ export interface Repairer {
     rrule: string;
     latitude?: string;
     longitude?: string;
-    firstSlotAvailable?: DateObject
+    firstSlotAvailable?: DateObject,
+    bikeTypesSupported: BikeType[]
 }

@@ -7,8 +7,9 @@ export const setToken = (token: string): void => {
 };
 
 export const getToken = (): string | null => {
-  return sessionStorage?.getItem(AUTH_TOKEN) || null;
+    return sessionStorage?.getItem(AUTH_TOKEN) || null;
 };
+
 export const removeToken = (): void => {
   sessionStorage?.removeItem(AUTH_TOKEN);
 };

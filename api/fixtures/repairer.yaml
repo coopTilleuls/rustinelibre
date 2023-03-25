@@ -1,5 +1,6 @@
 App\Entity\Repairer:
   repairer_1:
+    name: 'Chez Johnny'
     owner: '@user_1'
     description: "Lorem ipsum"
     mobilePhone: "0720397700"
@@ -8,7 +9,9 @@ App\Entity\Repairer:
     postcode: "59160"
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
+    bikeTypesSupported: ['@bike_elec', '@bike_cargo', '@bike_ndl']
   repairer_2:
+    name: 'Chez Francis'
     owner: '@user_10'
     description: "Lorem ipsum 2"
     mobilePhone: "0720397700"
@@ -17,7 +20,9 @@ App\Entity\Repairer:
     postcode: "59000"
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
+    bikeTypesSupported: [ '@bike_elec', '@bike_ndl' ]
   repairer_3:
+    name: 'Chez Benoit Broutchoux'
     owner: '@user_11'
     description: "Lorem ipsum 3"
     mobilePhone: "0720397700"
@@ -26,3 +31,5 @@ App\Entity\Repairer:
     postcode: "59000"
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
+    bikeTypesSupported: [ '@bike_cargo' ]
+
