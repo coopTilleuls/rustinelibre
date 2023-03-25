@@ -1,5 +1,5 @@
 import {AbstractResource} from 'resources/AbstractResource';
-import {Repairer} from '@interfaces';
+import {Repairer} from 'interfaces/Repairer';
 
 class RepairerResource extends AbstractResource<Repairer> {
     protected endpoint = '/repairers';
@@ -18,7 +18,6 @@ class RepairerResource extends AbstractResource<Repairer> {
 
         return response.json();
     }
-
 }
 
 export const repairerResource = new RepairerResource();

@@ -154,7 +154,7 @@ export abstract class AbstractResource<T> {
     return result;
   }
 
-  protected getUrl(id?: string, params?: RequestParams): string {
+  public getUrl(id?: string, params?: RequestParams): string {
     const url = new URL(
       process.env.NEXT_PUBLIC_ENTRYPOINT +
         (undefined !== id ? id : this.endpoint)

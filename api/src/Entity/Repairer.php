@@ -18,14 +18,17 @@ use ApiPlatform\Metadata\Put;
 use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
 use App\Repository\RepairerRepository;
 use App\Validator as AppAssert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(normalizationContext: ['groups' => ['repairer_read']]),
+        new GetCollection(normalizationContext: ['groups' => ['repairer_read']]),
         new GetCollection(
             provider: RepairerAvailableSlotsProvider::class,
             uriTemplate: '/repairer_get_slots_available/{id}',
@@ -48,42 +51,56 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 #[ApiFilter(DateFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
-#[ApiFilter(SearchFilter::class, properties: ['city' => 'iexact', 'description' => 'ipartial', 'postcode' => 'iexact', 'country' => 'ipartial'])]
+#[ApiFilter(SearchFilter::class, properties: ['city' => 'iexact', 'description' => 'ipartial', 'postcode' => 'iexact', 'country' => 'ipartial', 'bikeTypesSupported.id' => 'exact', 'bikeTypesSupported.name' => 'ipartial'])]
 class Repairer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['repairer_read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[Groups(['repairer_read'])]
     private ?User $owner;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $mobilePhone = null;
 
     #[ORM\Column(length: 800, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $country = null;
 
     #[AppAssert\Rrule]
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $rrule = 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR';
+
+    #[ORM\ManyToMany(targetEntity: BikeType::class, inversedBy: 'repairers')]
+    #[Groups(['repairer_read'])]
+    private Collection $bikeTypesSupported;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $latitude = null;
@@ -92,6 +109,11 @@ class Repairer
     private ?string $longitude = null;
 
     private ?\DateTimeInterface $firstSlotAvailable = null;
+
+    public function __construct()
+    {
+        $this->bikeTypesSupported = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -232,5 +254,29 @@ class Repairer
     public function setFirstSlotAvailable(?\DateTimeInterface $firstSlotAvailable): void
     {
         $this->firstSlotAvailable = $firstSlotAvailable;
+    }
+
+    /**
+     * @return Collection<int, BikeType>
+     */
+    public function getBikeTypesSupported(): Collection
+    {
+        return $this->bikeTypesSupported;
+    }
+
+    public function addBikeTypesSupported(BikeType $bikeTypesSupported): self
+    {
+        if (!$this->bikeTypesSupported->contains($bikeTypesSupported)) {
+            $this->bikeTypesSupported->add($bikeTypesSupported);
+        }
+
+        return $this;
+    }
+
+    public function removeBikeTypesSupported(BikeType $bikeTypesSupported): self
+    {
+        $this->bikeTypesSupported->removeElement($bikeTypesSupported);
+
+        return $this;
     }
 }
