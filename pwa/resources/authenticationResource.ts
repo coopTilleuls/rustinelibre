@@ -12,10 +12,9 @@ import {
 class AuthenticationResource extends AbstractResource<AuthenticationResponse> {
   protected endpoint = '';
 
-  // @todo implement when auth will be done on API side
   async authenticate(body: RequestBody = {}): Promise<AuthenticationResponse> {
     const doFetch = async () => {
-      return await fetch(this.getUrl('/login_check'), {
+      return await fetch(this.getUrl('/auth'), {
         headers: {
           'Content-Type': 'application/json',
         },
