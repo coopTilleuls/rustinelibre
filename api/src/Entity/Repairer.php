@@ -60,6 +60,9 @@ class Repairer
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $owner;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -93,6 +96,16 @@ class Repairer
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getOwner(): User
