@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-    * {
-        font-family: Poppins;
-    }
-
     a {
         @apply no-underline text-cyan-700;
     }
@@ -25,4 +21,9 @@
         transform: translate(13.397459%, -100%) rotate(30deg); /* translateX: 100%*(1-cos(angleRotation) */
         transform-origin: bottom left;
   }
+}
+
+@font-face {
+    font-family: Poppins;
+    font-weight: normal;
 }

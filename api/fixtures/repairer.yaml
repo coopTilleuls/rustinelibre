@@ -17,3 +17,12 @@ App\Entity\Repairer:
     postcode: "59000"
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
+  repairer_3:
+    owner: '@user_11'
+    description: "Lorem ipsum 3"
+    mobilePhone: "0720397700"
+    street: "1917 rue Benoît Broutchouille"
+    city: "Lille"
+    postcode: "59000"
+    country: "France"
+    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
