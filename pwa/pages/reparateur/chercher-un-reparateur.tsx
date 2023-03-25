@@ -1,61 +1,50 @@
 import {NextPageWithLayout} from 'pages/_app';
-import {useRouter} from 'next/router';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Footer} from "@components/layout/Footer";
 import Head from "next/head";
 import {Navbar} from "@components/layout/Navbar";
-import {HomeCard} from "@components/home/HomeCard";
 import {repairerResource} from 'resources/repairerResource';
-import {Collection} from 'interfaces/Resource';
+import {bikeTypeResource} from 'resources/bikeTypeResource';
 import {Repairer} from 'interfaces/Repairer';
+import {BikeType} from 'interfaces/BikeType';
 import {RepairerCard} from 'components/reparateurs/RepairerCard';
 import Spinner from 'components/icons/Spinner';
 
-interface BikeType {
-    id: number;
-    name: string;
-}
-
-interface FormProps {
-    bikeTypes: BikeType[];
-}
-
-const bikeTypes: BikeType[] = [
-    { id: 1, name: "Vélo de ville" },
-    { id: 2, name: "Vélo électrique" },
-    { id: 3, name: "Vélo de montagne" },
-];
-
-const SearchRepairer: NextPageWithLayout = () => {
-    const [city, setCity] = useState('')
+const SearchRepairer: NextPageWithLayout = ({}) => {
+    const [city, setCity] = useState('');
+    const [bikes, setBikes] = useState<BikeType[]>([]);
     const [selectedBike, setSelectedBike] = useState<BikeType>();
     const [repairers, setRepairers] = useState<Repairer[]>();
     const [pendingSearchCity, setPendingSearchCity] = useState(false);
 
+    useEffect(() => {
+        const fetchBikes = async () => {
+            const response = await bikeTypeResource.getAll({});
+            setBikes(response['hydra:member']);
+        };
+        fetchBikes();
+    }, []);
+
     const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCity(event.target.value);
-        // if (event.target.value.length > 1) {
-        //     searchCity();
-        // }
     };
 
     const handleBikeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedBikeType = bikeTypes.find((bt) => bt.id === Number(event.target.value));
+        const selectedBikeType = bikes.find((bt) => bt.id === Number(event.target.value));
         setSelectedBike(selectedBikeType);
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setPendingSearchCity(true)
-        if (!city || !selectedBike) {
-            return;
-        }
-
         fetchRepairers();
     };
 
     const fetchRepairers = async () => {
-        const response = await repairerResource.getAll({'city': city, 'order[firstSlotAvailable]': 'DESC'});
+        if (!selectedBike || !city) {
+            return;
+        }
+        const response = await repairerResource.getAll({'city': city, 'bikeTypesSupported.id': selectedBike.id, 'order[firstSlotAvailable]': 'DESC'});
         setRepairers(response['hydra:member']);
         setPendingSearchCity(false);
     };
@@ -85,7 +74,7 @@ const SearchRepairer: NextPageWithLayout = () => {
                                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="grid-state">
                                     <option value="">Choisissez un type de vélo</option>
-                                        {bikeTypes.map((bike) => (
+                                        {bikes.map((bike) => (
                                             <option key={bike.id} value={bike.id}>
                                                 {bike.name}
                                             </option>
