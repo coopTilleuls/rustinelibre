@@ -1,6 +1,6 @@
 export interface BikeType {
     '@id': string;
     '@type': string;
-    id: string;
+    id: number;
     name: string;
 }
