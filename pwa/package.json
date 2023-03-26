@@ -13,10 +13,10 @@
     "@fontsource/poppins": "^4.5.10",
     "@tailwindcss/forms": "^0.5.3",
     "flowbite": "^1.6.4",
+    "flowbite-react": "^0.4.2",
     "formik": "^2.2.9",
     "isomorphic-unfetch": "^3.1.0",
     "next": "^13.1.2",
-    "postcss": "^8.4.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2"
@@ -30,6 +30,7 @@
     "autoprefixer": "^10.4.13",
     "eslint": "^8.31.0",
     "eslint-config-next": "^13.1.2",
+    "postcss": "^8.4.21",
     "tailwindcss": "^3.2.4",
     "typescript": "^4.9.4"
   },
