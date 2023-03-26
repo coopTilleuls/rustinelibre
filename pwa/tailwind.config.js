@@ -4,6 +4,8 @@ module.exports = {
     'styles/globals.scss',
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./public/**/*.html",
+    "./node_modules/flowbite-react/**/*.js",
   ],
   theme: {
     extend: {
@@ -40,5 +42,7 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/forms"),
+    require("flowbite/plugin")
   ],
+  darkMode: 'class',
 };

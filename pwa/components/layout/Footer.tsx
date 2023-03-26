@@ -14,25 +14,24 @@ export const Footer = ({
 
 
     <div
-        className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+        className="fixed bottom-0 left-0 z-50 w-full h-16 border-t border-gray-500 dark:bg-gray-700 dark:border-gray-600 bg-gray-800">
         <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
             <button type="button"
-                    className="inline-flex flex-col items-center justify-center px-5 border-gray-200 border-x hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600">
+                    className="inline-flex flex-col items-center justify-center px-5 border-gray-500 border-x hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600">
                 <svg
                     className="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path
                         d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
                 </svg>
-                <span
-                    className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">
-                    <Link href="/" className="text-white">
+                <span>
+                    <Link href="/" className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">
                         Accueil
                     </Link>
                 </span>
             </button>
             <button type="button"
-                    className="inline-flex flex-col items-center justify-center px-5 border-r border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600">
+                    className="inline-flex flex-col items-center justify-center px-5 border-r border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 group dark:border-gray-600">
                 <svg
                     className="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -58,7 +57,7 @@ export const Footer = ({
                 </span>
             </button>
             <button type="button"
-                    className="inline-flex flex-col items-center justify-center px-5 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group border-x dark:border-gray-600">
+                    className="inline-flex flex-col items-center justify-center px-5 border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 group border-x dark:border-gray-600">
                 <svg
                     className="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -72,7 +71,7 @@ export const Footer = ({
                 </span>
             </button>
             <button type="button"
-                    className="inline-flex flex-col items-center justify-center px-5 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 group border-x dark:border-gray-600">
+                    className="inline-flex flex-col items-center justify-center px-5 border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 group border-x dark:border-gray-600">
                 <svg
                     className="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
