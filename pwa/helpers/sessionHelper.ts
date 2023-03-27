@@ -1,6 +1,5 @@
-const AUTH_TOKEN = 'ffs_token';
-const AUTH_REFRESH_TOKEN = 'ffs_refresh_token';
-const WELCOME_READ = 'ffs_welcome_read';
+const AUTH_TOKEN = 'bikelib_token';
+const AUTH_REFRESH_TOKEN = 'bikelib_refresh_token';
 
 export const setToken = (token: string): void => {
   sessionStorage?.setItem(AUTH_TOKEN, token);
@@ -23,11 +22,4 @@ export const getRefreshToken = (): string | null => {
 };
 export const removeRefreshToken = (): void => {
   sessionStorage?.removeItem(AUTH_REFRESH_TOKEN);
-};
-
-export const hasWelcomeRead = (): boolean => {
-  return !!localStorage?.getItem(WELCOME_READ) || false;
-};
-export const setWelcomeRead = (): void => {
-  localStorage?.setItem(WELCOME_READ, 'true');
 };
