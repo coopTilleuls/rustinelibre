@@ -5,9 +5,9 @@ import Head from "next/head";
 import {Navbar} from "@components/layout/Navbar";
 import {repairerResource} from 'resources/repairerResource';
 import {bikeTypeResource} from 'resources/bikeTypeResource';
+import {ButtonShowMap} from 'components/repairers/ButtonShowMap';
 import {Repairer} from 'interfaces/Repairer';
 import {BikeType} from 'interfaces/BikeType';
-import {RepairerCard} from 'components/reparateurs/RepairerCard';
 import Spinner from 'components/icons/Spinner';
 import dynamic from 'next/dynamic';
 
@@ -15,11 +15,11 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [city, setCity] = useState('');
     const [bikes, setBikes] = useState<BikeType[]>([]);
     const [selectedBike, setSelectedBike] = useState<BikeType>();
-    const [selectedRepairer, setSelectedRepairer] = useState();
+    const [selectedRepairer, setSelectedRepairer] = useState('');
     const [repairers, setRepairers] = useState<Repairer[]>([]);
     const [pendingSearchCity, setPendingSearchCity] = useState(false);
     const [showMap, setShowMap] = useState(false);
-    const RepairersMap = dynamic(() => import("components/reparateurs/RepairersMap"));
+    const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"));
 
     useEffect(() => {
         const fetchBikes = async () => {
@@ -105,20 +105,16 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                         {pendingSearchCity && <Spinner />}
                     </div>
 
-                    <div className="m-2">
-                        {(Object.keys(repairers).length > 0 && !showMap) &&
-                            <span
-                                onClick={() => setShowMap(true)}
-                                className="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500 ml-20">
-                                    Voir sur la carte
-                            </span>
+                    <div className="md:hidden m-2">
+                        {Object.keys(repairers).length > 0 &&
+                            <ButtonShowMap showMap={showMap} setShowMap={setShowMap} />
                         }
+                    </div>
 
-                        {showMap && <RepairersMap repairers={repairers} selectedRepairer={selectedRepairer} setSelectedRepairer={setSelectedRepairer} />}
-
-                        {!showMap && repairers?.map((repairer) => {
-                            return <RepairerCard key={repairer.id} repairer={repairer} isSelect={false}/>
-                        })}
+                    <div className="m-2">
+                        {Object.keys(repairers).length > 0 &&
+                            <RepairersResults repairers={repairers} selectedRepairer={selectedRepairer} showMap={showMap} setSelectedRepairer={setSelectedRepairer} setRepairers={setRepairers} />
+                        }
                     </div>
                 </div>
 
