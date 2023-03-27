@@ -122,7 +122,7 @@ export abstract class AbstractResource<T> {
     // in case of bad authentication we try to refresh the token if refresh_token exists
     if (response.status === 401 && !!refreshToken) {
       // ask API for new tokens
-      const refreshResponse = await fetch(this.getUrl('/token/refresh'), {
+      const refreshResponse = await fetch(this.getUrl('/auth/refresh'), {
         headers: {
           'Content-Type': 'application/json',
         },
