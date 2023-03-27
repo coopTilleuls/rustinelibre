@@ -5,6 +5,7 @@ import {RepairerCard} from 'components/repairers/RepairerCard';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
+import {LeafletMouseEvent} from "leaflet";
 
 interface RepairersResultProps {
     repairers: Repairer[];
@@ -24,6 +25,14 @@ export const RepairersResults = ({repairers, selectedRepairer, showMap, setSelec
         const selectedRepairer = repairers.splice(index, 1)[0];
         repairers.unshift(selectedRepairer);
         setRepairers([...repairers]);
+    };
+
+    const handleClipMapPin = (event: LeafletMouseEvent, repairer: Repairer) => {
+        if (showMap) {
+            event.target.openPopup()
+        } else {
+            handleSelectRepairer(repairer.id)
+        }
     };
 
     return (
@@ -49,7 +58,7 @@ export const RepairersResults = ({repairers, selectedRepairer, showMap, setSelec
                                     position={[Number(repairer.latitude), Number(repairer.longitude)]}
                                     eventHandlers={{
                                         mouseover: (event) => event.target.openPopup(),
-                                        click: () => {handleSelectRepairer(repairer.id)}
+                                        click: (event) => {handleClipMapPin(event, repairer)}
                                     }}
                                 >
                                     <Popup>{repairer.name}</Popup>
