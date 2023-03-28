@@ -20,7 +20,7 @@ class BikeType
     #[ORM\Column]
     #[Groups(['repairer_read', 'bike_type_read'])]
     private ?int $id = null;
-
+//just to test the CI
     #[ORM\Column(length: 255)]
     #[Groups(['repairer_read', 'bike_type_read'])]
     private ?string $name = null;
