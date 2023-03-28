@@ -6,13 +6,19 @@ import {bikeTypeResource} from 'resources/bikeTypeResource';
 import {ButtonShowMap} from 'components/repairers/ButtonShowMap';
 import {Repairer} from 'interfaces/Repairer';
 import {BikeType} from 'interfaces/BikeType';
+import {City as NominatimCity} from 'interfaces/Nominatim';
+import {City as GouvCity} from 'interfaces/Gouv';
 import Spinner from 'components/icons/Spinner';
+import {searchCity} from 'utils/apiCity';
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
     const [city, setCity] = useState('');
+    const [gouvCities, setGouvCities] = useState<GouvCity[]>([]);
+    const [nominatimCities, setNominatimCities] = useState<NominatimCity[]>([]);
+    const [timeoutId, setTimeoutId] = useState<number | null>(null);
     const [bikes, setBikes] = useState<BikeType[]>([]);
     const [selectedBike, setSelectedBike] = useState<BikeType>();
     const [selectedRepairer, setSelectedRepairer] = useState('');
@@ -29,9 +35,44 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         fetchBikes();
     }, []);
 
-    const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
+
+    const handleCityChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setCity(event.target.value);
+
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+
+        const newTimeoutId = window.setTimeout(async () => {
+
+            if (!useNominatim) {
+                setGouvCities([]);
+                setGouvCities(await searchCity(event.target.value, useNominatim) as GouvCity[]);
+            }else{
+                setNominatimCities([]);
+                let cities = await searchCity(event.target.value, useNominatim) as NominatimCity[];
+                let displayNames : string[] = [];
+                cities = cities.filter((city: NominatimCity) => {
+                    if (!displayNames.includes(city.display_name)) {
+                        displayNames.push(city.display_name);
+                        return city;
+                    }
+                })
+                setNominatimCities(cities);
+            }
+        }, 500);
+
+        setTimeoutId(newTimeoutId);
     };
+
+    const handleCityClick = (city: string | undefined) => {
+        if(city !== undefined){
+            setCity(city);
+        }
+        setGouvCities([]);
+        setNominatimCities([]);
+    }
 
     const handleBikeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedBikeType = bikes.find((bt) => bt.id === Number(event.target.value));
@@ -52,13 +93,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setRepairers(response['hydra:member']);
         setPendingSearchCity(false);
     };
-
-    // const searchCity = async () => {
-    //     const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${city}`);
-    //     const data = await response.json();
-    //     const cityDetails = data[0];
-    //     console.log(cityDetails);
-    // }
 
     return (
         <>
@@ -94,6 +128,13 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                                 onChange={handleCityChange}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 id="inline-full-name" type="text" value={city} />
+                            {(useNominatim && nominatimCities.length > 0) && (nominatimCities.map((city: NominatimCity) => {
+                                return <div key={city.place_id} onClick={() => { handleCityClick(city.display_name) }} className="hover:cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{city.display_name}</div>
+                            }))}
+
+                            {(!useNominatim && gouvCities.length > 0) && (gouvCities.map((city: GouvCity) => {
+                                return <div key={city.properties?.city} onClick={() => { handleCityClick(city.properties?.city) }} className="hover:cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{city.properties?.city + ', ' + city.properties?.postcode + ', ' + 'France'}</div>
+                            }))}
                         </div>
 
                         <button type="submit" className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
