@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * This migration add default bike type value
  */
 final class Version20230327140014 extends AbstractMigration
 {
@@ -31,6 +31,6 @@ final class Version20230327140014 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-
+        $this->addSql('DELETE FROM `bike_type` WHERE `id` = 1 OR `id` = 2');
     }
 }
