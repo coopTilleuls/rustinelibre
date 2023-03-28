@@ -1,6 +1,7 @@
 App\Entity\BikeType:
-  bike_elec:
-    name: 'Vélo électrique'
   bike_classic:
     name: 'Vélo classique'
+  bike_elec:
+    name: 'Vélo électrique'
+
 
