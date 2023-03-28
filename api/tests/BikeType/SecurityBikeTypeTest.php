@@ -18,7 +18,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
                 'name' => 'Vélo cargo',
             ],
         ]);
-       /* $this->assertResponseIsSuccessful();*/
+        $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
     }
 

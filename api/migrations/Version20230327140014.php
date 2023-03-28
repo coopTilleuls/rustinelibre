@@ -7,14 +7,11 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * This migration add default bike type value
- */
 final class Version20230327140014 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Migration to set default bike type';
     }
 
     public function up(Schema $schema): void
