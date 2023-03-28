@@ -20,11 +20,12 @@ RUN corepack enable && \
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
 FROM builder_base AS deps
 
-COPY --link pnpm-lock.yaml ./
-RUN pnpm fetch
-
 COPY --link pnpm-lock.yaml package.json ./
 RUN pnpm i --fix-lockfile
+RUN pnpm fetch
+
+COPY --link . .
+RUN pnpm install -r --offline
 
 
 # Development image
@@ -33,7 +34,7 @@ FROM deps as dev
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["sh", "-c", "pnpm i --fix-lockfile ; pnpm dev"]
+CMD ["sh", "-c", "pnpm install -r --offline ; pnpm dev"]
 
 
 FROM builder_base AS builder
