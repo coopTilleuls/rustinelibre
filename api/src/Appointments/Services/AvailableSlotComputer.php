@@ -14,7 +14,7 @@ use Recurr\Transformer\Constraint\BetweenConstraint;
 
 final class AvailableSlotComputer
 {
-    public function __construct(private AppointmentRepository $appointmentRepository)
+    public function __construct(private readonly AppointmentRepository $appointmentRepository)
     {
     }
 

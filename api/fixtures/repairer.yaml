@@ -12,6 +12,7 @@ App\Entity\Repairer:
     bikeTypesSupported: ['@bike_elec', '@bike_cargo', '@bike_ndl']
     latitude: '50.621917'
     longitude: '3.063398'
+    firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 14:00:00"))>
   repairer_2:
     name: 'Chez Francis'
     owner: '@user_10'
@@ -25,6 +26,7 @@ App\Entity\Repairer:
     bikeTypesSupported: [ '@bike_elec', '@bike_ndl' ]
     latitude: '50.623932'
     longitude: '3.057561'
+    firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
   repairer_3:
     name: 'Chez Benoit Broutchoux'
     owner: '@user_11'
@@ -38,4 +40,5 @@ App\Entity\Repairer:
     bikeTypesSupported: [ '@bike_cargo' ]
     latitude: '50.634658'
     longitude: '3.059621'
+    firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 11:00:00"))>
 

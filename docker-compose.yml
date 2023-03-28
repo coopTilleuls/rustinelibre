@@ -63,15 +63,14 @@ services:
 
 ###> doctrine/doctrine-bundle ###
   database:
-    image: postgres:${POSTGRES_VERSION:-14}-alpine
+    image: postgis/postgis:14-3.3-alpine
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-app}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-!ChangeMe!}
       - POSTGRES_USER=${POSTGRES_USER:-app}
     volumes:
       - db_data:/var/lib/postgresql/data
-      # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./api/docker/db/data:/var/lib/postgresql/data
+      - ./init_sql:/docker-entrypoint-initdb.d
 ###< doctrine/doctrine-bundle ###
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
