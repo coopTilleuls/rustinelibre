@@ -7,6 +7,7 @@ export interface Repairer {
     '@type': string;
     id: string;
     owner: User;
+    name?: string;
     description?: string;
     city?: string;
     postcode?: string;
@@ -14,8 +15,8 @@ export interface Repairer {
     mobilePhone?: string;
     street?: string;
     rrule: string;
-    latitude?: string;
-    longitude?: string;
+    latitude?: number;
+    longitude?: number;
     firstSlotAvailable?: DateObject,
     bikeTypesSupported: BikeType[]
 }

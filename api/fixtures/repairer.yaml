@@ -10,6 +10,8 @@ App\Entity\Repairer:
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@bike_elec', '@bike_cargo', '@bike_ndl']
+    latitude: '50.621917'
+    longitude: '3.063398'
   repairer_2:
     name: 'Chez Francis'
     owner: '@user_10'
@@ -21,6 +23,8 @@ App\Entity\Repairer:
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: [ '@bike_elec', '@bike_ndl' ]
+    latitude: '50.623932'
+    longitude: '3.057561'
   repairer_3:
     name: 'Chez Benoit Broutchoux'
     owner: '@user_11'
@@ -32,4 +36,6 @@ App\Entity\Repairer:
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: [ '@bike_cargo' ]
+    latitude: '50.634658'
+    longitude: '3.059621'
 

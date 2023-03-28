@@ -103,9 +103,11 @@ class Repairer
     private Collection $bikeTypesSupported;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $latitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?string $longitude = null;
 
     private ?\DateTimeInterface $firstSlotAvailable = null;

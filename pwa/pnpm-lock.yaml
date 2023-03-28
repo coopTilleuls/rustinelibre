@@ -6,6 +6,7 @@ specifiers:
   '@fontsource/poppins': ^4.5.10
   '@popperjs/core': ^2.11.6
   '@tailwindcss/forms': ^0.5.3
+  '@types/leaflet': ^1.9.3
   '@types/node': ^18.11.18
   '@types/react': ^18.0.26
   '@types/react-dom': ^18.0.10
@@ -16,10 +17,14 @@ specifiers:
   flowbite-react: ^0.4.2
   formik: ^2.2.9
   isomorphic-unfetch: ^3.1.0
+  leaflet: ^1.9.3
+  leaflet-defaulticon-compatibility: ^0.1.1
+  leaflet-geosearch: ^3.7.0
   next: ^13.1.2
   postcss: ^8.4.21
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-leaflet: ^4.2.1
   react-query: ^3.39.2
   tailwindcss: ^3.2.4
   typescript: ^4.9.4
@@ -28,13 +33,18 @@ dependencies:
   '@api-platform/admin': 3.4.3_vwskmg7mzf6u2jufkkmcrhvxcm
   '@fontsource/poppins': 4.5.10
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.4
+  '@types/leaflet': 1.9.3
   flowbite: 1.6.4
   flowbite-react: 0.4.2_pvx5gp7avvezcze32dp33e43li
   formik: 2.2.9_react@18.2.0
   isomorphic-unfetch: 3.1.0
+  leaflet: 1.9.3
+  leaflet-defaulticon-compatibility: 0.1.1
+  leaflet-geosearch: 3.7.0
   next: 13.1.2_pjwopsidmaokadturxaafygjp4
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-leaflet: 4.2.1_yydtlhsdonbqao6vgvkwhv2zki
   react-query: 3.39.2_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
@@ -482,6 +492,14 @@ packages:
     resolution: {integrity: sha512-oYZVHsnlwV3VWM1SE/m6SUxVh0QLk5+2wB+lBiXcI7N/0KVQWmV9YykaPqfJHBLvmdya+MAOnv+BQHeLU1vOOw==}
     dev: false
 
+  /@googlemaps/js-api-loader/1.15.1:
+    resolution: {integrity: sha512-AsnEgNsB7S/VdrHGEQUaUM2e5tmjFGKBAfzR/AqO8O7TPq/jQGvoRw5liPBw4EMF38RDsHmKDV89q/X+qiUREQ==}
+    requiresBuild: true
+    dependencies:
+      fast-deep-equal: 3.1.3
+    dev: false
+    optional: true
+
   /@humanwhocodes/config-array/0.11.8:
     resolution: {integrity: sha512-UybHIJzJnR5Qc/MsD9Kr+RpO2h+/P1GhOwdiLPXK5TWk5sgTdu88bTD9UP+CKbPPh5Rni1u0GjAdYQLemG8g+g==}
     engines: {node: '>=10.10.0'}
@@ -869,6 +887,18 @@ packages:
   /@popperjs/core/2.11.6:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
 
+  /@react-leaflet/core/2.1.0_yydtlhsdonbqao6vgvkwhv2zki:
+    resolution: {integrity: sha512-Qk7Pfu8BSarKGqILj4x7bCSZ1pjuAPZ+qmRwH5S7mDS91VSbVVsJSrW4qA+GPrro8t69gFYVMWb1Zc4yFmPiVg==}
+    peerDependencies:
+      leaflet: ^1.9.0
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      leaflet: 1.9.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /@remix-run/router/1.2.1:
     resolution: {integrity: sha512-XiY0IsyHR+DXYS5vBxpoBe/8veTeoRpMHP+vDosLZxL5bnpetzI0igkxkLZS235ldLzyfkxF+2divEwWHP3vMQ==}
     engines: {node: '>=14'}
@@ -893,9 +923,19 @@ packages:
       tailwindcss: 3.2.4_postcss@8.4.21
     dev: false
 
+  /@types/geojson/7946.0.10:
+    resolution: {integrity: sha512-Nmh0K3iWQJzniTuPRcJn5hxXkfB1T1pgB89SBig5PlJQU5yocazeu4jATJlaA0GYFKWMqDdvYemoSnF2pXgLVA==}
+    dev: false
+
   /@types/json5/0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
+
+  /@types/leaflet/1.9.3:
+    resolution: {integrity: sha512-Caa1lYOgKVqDkDZVWkto2Z5JtVo09spEaUt2S69LiugbBpoqQu92HYFMGUbYezZbnBkyOxMNPXHSgRrRY5UyIA==}
+    dependencies:
+      '@types/geojson': 7946.0.10
+    dev: false
 
   /@types/node/18.11.18:
     resolution: {integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==}
@@ -1925,7 +1965,6 @@ packages:
 
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-    dev: true
 
   /fast-glob/3.2.12:
     resolution: {integrity: sha512-DVj4CQIYYow0BlaelwK1pHl5n5cRSJfM60UA0zK891sVInoPri2Ekj7+e1CT3/3qxXenpI+nBBmQAcJPJgaj4w==}
@@ -2577,6 +2616,21 @@ packages:
     dependencies:
       language-subtag-registry: 0.3.22
     dev: true
+
+  /leaflet-defaulticon-compatibility/0.1.1:
+    resolution: {integrity: sha512-vDBFdlUAwjSEGep9ih8kfJilf6yN8V9zTbF5NC/1ZwLeGko3RUQepspPnGCRMFV51dY3Lb3hziboicrFz+rxQA==}
+    dev: false
+
+  /leaflet-geosearch/3.7.0:
+    resolution: {integrity: sha512-pvDiBc+gnl0eCazT8Ls88cbCQN6NVFoYYqlK6wtQFxObkNlzlj1p919XKuhKJwrLQiF97GxY8pny5mcV9kCe6g==}
+    optionalDependencies:
+      '@googlemaps/js-api-loader': 1.15.1
+      leaflet: 1.9.3
+    dev: false
+
+  /leaflet/1.9.3:
+    resolution: {integrity: sha512-iB2cR9vAkDOu5l3HAay2obcUHZ7xwUBBjph8+PGtmW/2lYhbLizWtG7nTeYht36WfOslixQF9D/uSIzhZgGMfQ==}
+    dev: false
 
   /levn/0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -3254,6 +3308,19 @@ packages:
 
   /react-is/18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
+    dev: false
+
+  /react-leaflet/4.2.1_yydtlhsdonbqao6vgvkwhv2zki:
+    resolution: {integrity: sha512-p9chkvhcKrWn/H/1FFeVSqLdReGwn2qmiobOQGO3BifX+/vV/39qhY8dGqbdcPh1e6jxh/QHriLXr7a4eLFK4Q==}
+    peerDependencies:
+      leaflet: ^1.9.0
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      '@react-leaflet/core': 2.1.0_yydtlhsdonbqao6vgvkwhv2zki
+      leaflet: 1.9.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react-query/3.39.2_biqbaboplfbrettd7655fr4n2y:
