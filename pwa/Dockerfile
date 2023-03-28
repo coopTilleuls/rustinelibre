@@ -23,8 +23,8 @@ FROM builder_base AS deps
 COPY --link pnpm-lock.yaml ./
 RUN pnpm fetch
 
-COPY --link . .
-RUN pnpm install -r --offline --no-frozen-lockfile
+COPY --link pnpm-lock.yaml package.json ./
+RUN pnpm i --fix-lockfile
 
 
 # Development image
@@ -33,7 +33,7 @@ FROM deps as dev
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["sh", "-c", "pnpm install -r --offline --no-frozen-lockfile; pnpm dev"]
+CMD ["sh", "-c", "pnpm install -r --offline ; pnpm dev"]
 
 
 FROM builder_base AS builder
