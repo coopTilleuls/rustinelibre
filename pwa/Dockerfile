@@ -24,7 +24,7 @@ COPY --link pnpm-lock.yaml ./
 RUN pnpm fetch
 
 COPY --link . .
-RUN pnpm install -r --offline
+RUN pnpm install -r --offline --no-frozen-lockfile
 
 
 # Development image
