@@ -22,4 +22,12 @@ services:
 
     App\User\EventSubscriber\HashPasswordSubscriber:
         tags:
-            - { name: "doctrine.event_subscriber" }
+            - { name: doctrine.event_subscriber }
+
+    App\Appointments\EventSubscriber\AppointmentDoctrineEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    Jsor\Doctrine\PostGIS\Event\ORMSchemaEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

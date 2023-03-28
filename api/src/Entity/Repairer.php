@@ -16,12 +16,14 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
+use App\Repairers\Filter\AroundFilter;
 use App\Repository\RepairerRepository;
 use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Jsor\Doctrine\PostGIS\Types\PostGISType;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
@@ -50,6 +52,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientItemsPerPage: true
 )]
 #[ApiFilter(DateFilter::class)]
+#[ApiFilter(AroundFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: ['city' => 'iexact', 'description' => 'ipartial', 'postcode' => 'iexact', 'country' => 'ipartial', 'bikeTypesSupported.id' => 'exact', 'bikeTypesSupported.name' => 'ipartial'])]
 class Repairer
@@ -102,14 +105,27 @@ class Repairer
     #[Groups(['repairer_read'])]
     private Collection $bikeTypesSupported;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', nullable: true)]
     #[Groups(['repairer_read'])]
     private ?string $latitude = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', nullable: true)]
     #[Groups(['repairer_read'])]
     private ?string $longitude = null;
 
+    #[ORM\Column(
+        type: PostGISType::GEOGRAPHY,
+        nullable:true,
+        options: [
+            'geometry_type' => 'POINT',
+            'srid' => 4326
+        ],
+    )]
+    #[Groups(['repairer_read'])]
+    public ?string $gpsPoint;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
     public function __construct()
@@ -280,5 +296,15 @@ class Repairer
         $this->bikeTypesSupported->removeElement($bikeTypesSupported);
 
         return $this;
+    }
+
+    public function getGpsPoint(): ?string
+    {
+        return $this->gpsPoint;
+    }
+
+    public function setGpsPoint(?string $gpsPoint): void
+    {
+        $this->gpsPoint = $gpsPoint;
     }
 }
