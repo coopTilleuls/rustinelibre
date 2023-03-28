@@ -5,17 +5,21 @@ import Head from "next/head";
 import {Navbar} from "@components/layout/Navbar";
 import {repairerResource} from 'resources/repairerResource';
 import {bikeTypeResource} from 'resources/bikeTypeResource';
+import {ButtonShowMap} from 'components/repairers/ButtonShowMap';
 import {Repairer} from 'interfaces/Repairer';
 import {BikeType} from 'interfaces/BikeType';
-import {RepairerCard} from 'components/reparateurs/RepairerCard';
 import Spinner from 'components/icons/Spinner';
+import dynamic from 'next/dynamic';
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
     const [city, setCity] = useState('');
     const [bikes, setBikes] = useState<BikeType[]>([]);
     const [selectedBike, setSelectedBike] = useState<BikeType>();
-    const [repairers, setRepairers] = useState<Repairer[]>();
+    const [selectedRepairer, setSelectedRepairer] = useState('');
+    const [repairers, setRepairers] = useState<Repairer[]>([]);
     const [pendingSearchCity, setPendingSearchCity] = useState(false);
+    const [showMap, setShowMap] = useState(false);
+    const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"));
 
     useEffect(() => {
         const fetchBikes = async () => {
@@ -64,14 +68,15 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                 </Head>
                 <Navbar/>
                 <div className="w-screen">
-                    <form onSubmit={handleSubmit} className="bg-white rounded px-8 pt-6 pb-8 mb-4 text-center">
-                        <div className="mb-8">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="bikeType">
+                    <form onSubmit={handleSubmit} className="bg-white rounded m-2 px-8 pt-6 pb-4 mb-2 grid gap-4 md:grid-cols-2">
+                        <div className="mb-4 w-full">
+                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="bikeType">
                                 Type de Vélo
                             </label>
                             <select
+                                required
                                 value={selectedBike?.id ?? ''} onChange={handleBikeChange}
-                                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 id="grid-state">
                                     <option value="">Choisissez un type de vélo</option>
                                         {bikes.map((bike) => (
@@ -81,26 +86,36 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                                         ))}
                             </select>
                         </div>
-                        <div className="mb-8">
+                        <div className="mb-4 w-full">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">
                                 Ville
                             </label>
                             <input
                                 onChange={handleCityChange}
-                                className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 id="inline-full-name" type="text" value={city} />
                         </div>
 
-                        <div className="mb-10">
-                            {pendingSearchCity ?? <Spinner />}
-                        </div>
-
-                        <div className="mb-10">
-                            {repairers?.map((repairer) => {
-                                return <RepairerCard key={repairer.id} repairer={repairer}/>
-                            }) }
-                        </div>
+                        <button type="submit" className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Chercher
+                        </button>
                     </form>
+
+                    <div className="mb-3 mt-3">
+                        {pendingSearchCity && <Spinner />}
+                    </div>
+
+                    <div className="md:hidden m-2">
+                        {Object.keys(repairers).length > 0 &&
+                            <ButtonShowMap showMap={showMap} setShowMap={setShowMap} />
+                        }
+                    </div>
+
+                    <div className="m-2">
+                        {Object.keys(repairers).length > 0 &&
+                            <RepairersResults repairers={repairers} selectedRepairer={selectedRepairer} showMap={showMap} setSelectedRepairer={setSelectedRepairer} setRepairers={setRepairers} />
+                        }
+                    </div>
                 </div>
 
                 <Footer logged={true} />
