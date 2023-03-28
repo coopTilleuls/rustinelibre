@@ -15,8 +15,8 @@ class GetBikeTypesTest extends AbstractTestCase
         $response = $response->toArray();
         $this->assertMatchesResourceCollectionJsonSchema(BikeType::class);
         $this->assertIsArray($response['hydra:member']);
-        $this->assertArrayHasKey('id', $response['hydra:member'][0]);
-        $this->assertArrayHasKey('name', $response['hydra:member'][0]);
+        $this->assertSame(1, $response['hydra:member'][0]['id']);
+        $this->assertSame('Vélo classique', $response['hydra:member'][0]['name']);
 
     }
     public function testGetClassicBikeTypeItem(): void
