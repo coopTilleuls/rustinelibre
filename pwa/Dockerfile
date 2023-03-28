@@ -33,7 +33,7 @@ FROM deps as dev
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["sh", "-c", "pnpm install -r --offline; pnpm dev"]
+CMD ["sh", "-c", "pnpm install -r --offline --no-frozen-lockfile; pnpm dev"]
 
 
 FROM builder_base AS builder
