@@ -15,9 +15,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['user_read']],
+    denormalizationContext: ['groups' => ['user_write']],
     operations: [
         new Get(
             security: "is_granted('IS_AUTHENTICATED_FULLY')"
@@ -42,33 +45,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
+    #[Groups(['user_write'])]
     private int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user_read', 'user_write'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['user_read'])]
     private array $roles = [];
 
     #[Assert\Type('boolean')]
     #[ORM\Column(type: 'boolean', nullable: false)]
+    #[Groups(['user_read'])]
     private bool $emailConfirmed = false;
 
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
+    #[Groups(['user_read', 'user_write'])]
     private ?string $plainPassword = null;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Repairer::class, orphanRemoval: true)]
     private Collection $repairers;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user_read', 'user_write'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user_read', 'user_write'])]
     private ?string $firstName = null;
 
     public function __construct()

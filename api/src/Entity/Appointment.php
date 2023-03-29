@@ -13,9 +13,12 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
+    normalizationContext: ['groups' => ['appointment_read']],
+    denormalizationContext: ['groups' => ['appointment_write']],
     operations: [
         new Get(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
@@ -42,17 +45,21 @@ class Appointment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['appointment_read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Groups(['appointment_read', 'appointment_write'])]
     private ?User $customer = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['appointment_read', 'appointment_write'])]
     private ?Repairer $repairer = null;
 
     #[ORM\Column]
+    #[Groups(['appointment_read', 'appointment_write'])]
     private ?\DateTimeImmutable $slotTime = null;
 
     #[ORM\Column(nullable: true)]
