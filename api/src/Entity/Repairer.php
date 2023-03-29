@@ -30,11 +30,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(normalizationContext: ['groups' => ['repairer_read']]),
         new GetCollection(normalizationContext: ['groups' => ['repairer_read']]),
         new GetCollection(
-            provider: RepairerAvailableSlotsProvider::class,
             uriTemplate: '/repairer_get_slots_available/{id}',
             requirements: ['id' => '\d+'],
+            provider: RepairerAvailableSlotsProvider::class,
         ),
-        new Post(
+/*        new Post(
             security: "is_granted('IS_AUTHENTICATED_FULLY')"
         ),
         new Patch(
@@ -45,10 +45,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new Delete(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
-        ),
+        ),*/
     ],
     paginationClientItemsPerPage: true
 )]
+#[Get]
+#[GetCollection]
+#[Post(security: "is_granted('ROLE_BOSS')")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[ApiFilter(DateFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: ['city' => 'iexact', 'description' => 'ipartial', 'postcode' => 'iexact', 'country' => 'ipartial', 'bikeTypesSupported.id' => 'exact', 'bikeTypesSupported.name' => 'ipartial'])]

@@ -57,4 +57,9 @@ abstract class AbstractTestCase extends ApiTestCase
     {
         return $this->createClientWithCredentials(['email' => 'repairer2@test.com', 'password' => 'test']);
     }
+
+    protected function createClientAuthAsBoss(): Client
+    {
+        return $this->createClientWithCredentials(['email' => 'boss@test.com', 'password' => 'test']);
+    }
 }

@@ -10,7 +10,7 @@ class RruleValidatorTest extends AbstractTestCase
     public function testCreateRepairer(): void
     {
         $randomUser = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy([]);
-        $this->createClientAuthAsUser()->request('POST', '/repairers', ['json' => [
+        $this->createClientAuthAsBoss()->request('POST', '/repairers', ['json' => [
             'owner' => '/users/'.$randomUser->getId(),
             'description' => 'Super atelier de vélo',
             'mobilePhone' => '0720397700',
@@ -29,7 +29,7 @@ class RruleValidatorTest extends AbstractTestCase
     {
         $randomUser = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy([]);
 
-        $this->createClientAuthAsUser()->request('POST', '/repairers', ['json' => [
+        $this->createClientAuthAsBoss()->request('POST', '/repairers', ['json' => [
             'owner' => '/users/'.$randomUser->getId(),
             'street' => 'avenue P. Poutou',
             'city' => 'Lille',
