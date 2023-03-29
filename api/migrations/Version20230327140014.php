@@ -11,7 +11,7 @@ final class Version20230327140014 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Migration to set default bike type';
+        return 'Migration to set default bike types';
     }
 
     public function up(Schema $schema): void
