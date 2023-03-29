@@ -9,7 +9,7 @@ App\Entity\Repairer:
     postcode: "59160"
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
-    bikeTypesSupported: ['@bike_elec', '@bike_cargo', '@bike_ndl']
+    bikeTypesSupported: ['@bike_elec', '@bike_classic']
     latitude: '50.621917'
     longitude: '3.063398'
   repairer_2:
@@ -22,7 +22,7 @@ App\Entity\Repairer:
     postcode: "59000"
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
-    bikeTypesSupported: [ '@bike_elec', '@bike_ndl' ]
+    bikeTypesSupported: [ '@bike_elec', '@bike_classic' ]
     latitude: '50.623932'
     longitude: '3.057561'
   repairer_3:
@@ -35,7 +35,7 @@ App\Entity\Repairer:
     postcode: "59000"
     country: "France"
     rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
-    bikeTypesSupported: [ '@bike_cargo' ]
+    bikeTypesSupported: [ '@bike_classic' ]
     latitude: '50.634658'
     longitude: '3.059621'
 
