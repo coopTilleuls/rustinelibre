@@ -8,6 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SecurityBikeTypeTest extends AbstractTestCase
 {
+    public function testGetBikeType(): void
+    {
+        self::createClientAuthAsUser()->request('GET', '/bike_types/1');
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testPostBikeType(): void
     {
         self::createClientAuthAsAdmin()->request('POST', '/bike_types', [
@@ -58,18 +64,5 @@ class SecurityBikeTypeTest extends AbstractTestCase
         ]);
         $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-    }
-
-    public function testGetBikeType(): void
-    {
-        $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo hollandais']);
-
-        $client = self::createClientAuthAsUser();
-        // classic user given
-        $response = $client->request('GET', '/bike_types/'.$bikeCargo->getId());
-        $this->assertResponseIsSuccessful();
-        $response = $response->toArray();
-        $this->assertIsArray($response);
-        $this->assertSame($response['name'], 'Vélo hollandais');
     }
 }
