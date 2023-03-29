@@ -70,7 +70,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-app}
     volumes:
       - db_data:/var/lib/postgresql/data
-      - ./init_sql:/docker-entrypoint-initdb.d
+      - ./api/docker/database/init:/docker-entrypoint-initdb.d
 ###< doctrine/doctrine-bundle ###
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
