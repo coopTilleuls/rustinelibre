@@ -24,10 +24,14 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
-    App\Appointments\EventSubscriber\AppointmentDoctrineEventSubscriber:
+    App\Appointments\EventSubscriber\FirstSlotAvailableEventSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
 
-    Jsor\Doctrine\PostGIS\Event\ORMSchemaEventSubscriber:
+    App\Repairers\EventSubscriber\GpsPointEventSubscriber:
         tags:
-            - { name: doctrine.event_subscriber, connection: default }
+            - { name: doctrine.event_subscriber }
+
+    App\Repairers\EventSubscriber\RruleEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }

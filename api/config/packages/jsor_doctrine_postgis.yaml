@@ -18,14 +18,5 @@ doctrine:
         dql:
             string_functions:
                 ST_DWithin: Jsor\Doctrine\PostGIS\Functions\ST_DWithin
-                ST_GeographyFromText: Jsor\Doctrine\PostGIS\Functions\ST_GeographyFromText
-                ST_Distance: Jsor\Doctrine\PostGIS\Functions\ST_Distance
-                ST_DistanceSphere: Jsor\Doctrine\PostGIS\Functions\ST_DistanceSphere
                 ST_MakePoint: Jsor\Doctrine\PostGIS\Functions\ST_MakePoint
-                Geography: Jsor\Doctrine\PostGIS\Functions\Geography
                 ST_SetSRID: Jsor\Doctrine\PostGIS\Functions\ST_SetSRID
-                ST_Transform: Jsor\Doctrine\PostGIS\Functions\ST_Transform
-                ST_Point: Jsor\Doctrine\PostGIS\Functions\ST_Point
-                ST_GeomFromText: Jsor\Doctrine\PostGIS\Functions\ST_GeomFromText
-            numeric_functions:
-                ST_Distance: Jsor\Doctrine\PostGIS\Functions\ST_Distance

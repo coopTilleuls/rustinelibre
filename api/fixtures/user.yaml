@@ -1,25 +1,30 @@
 App\Entity\User:
   genialo_admin:
+    id: 999
     roles: ["ROLE_ADMIN"]
     email: "clement@les-tilleuls.coop"
     plainPassword: "test"
     emailConfirmed: true
   user_1:
+    id: 1
     roles: ["ROLE_USER"]
     email: "user1@test.com"
     plainPassword: "test"
     emailConfirmed: true
-  repairer_2:
+  user_2:
+    id: 2
     roles: ["ROLE_REPAIRER"]
     email: "repairer2@test.com"
     plainPassword: "test"
     emailConfirmed: true
   user_{10..20}:
+    id: <current()>
     roles: ["ROLE_USER"]
     email: <email()>
     plainPassword: "test"
     emailConfirmed: true
   user_not_confirm{21..25}:
+    id: <current()>
     roles: ["ROLE_USER"]
     email: <email()>
     plainPassword: "test"

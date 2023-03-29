@@ -35,7 +35,7 @@ final class AvailableSlotComputer
         $rule->setStartDate($startDate);
         $rule->setEndDate($endDate);
 
-        $fullSlots = $this->appointmentRepository->findFullSlots($repairer, $startDate, $endDate);
+        $fullSlots = $repairer->getId() ? $this->appointmentRepository->findFullSlots($repairer, $startDate, $endDate) : [];
         $recurrences = (new ArrayTransformer(new ArrayTransformerConfig()))->transform(
             $rule,
             new BetweenConstraint($startDate, $endDate)

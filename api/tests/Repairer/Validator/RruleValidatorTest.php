@@ -2,16 +2,14 @@
 
 namespace App\Tests\Repairer\Validator;
 
-use App\Entity\User;
 use App\Tests\AbstractTestCase;
 
 class RruleValidatorTest extends AbstractTestCase
 {
     public function testCreateRepairer(): void
     {
-        $randomUser = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy([]);
         $this->createClientAuthAsUser()->request('POST', '/repairers', ['json' => [
-            'owner' => '/users/'.$randomUser->getId(),
+            'owner' => '/users/12',
             'description' => 'Super atelier de vélo',
             'mobilePhone' => '0720397700',
             'street' => 'avenue Karl Marx',
@@ -27,10 +25,8 @@ class RruleValidatorTest extends AbstractTestCase
 
     public function testCreateInvalidRrule(): void
     {
-        $randomUser = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy([]);
-
         $this->createClientAuthAsUser()->request('POST', '/repairers', ['json' => [
-            'owner' => '/users/'.$randomUser->getId(),
+            'owner' => '/users/12',
             'street' => 'avenue P. Poutou',
             'city' => 'Lille',
             'description' => 'Super atelier de vélo',

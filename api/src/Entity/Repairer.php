@@ -37,13 +37,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
             requirements: ['id' => '\d+'],
         ),
         new Post(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')"
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            denormalizationContext: ['groups' => ['repairer_write']]
         ),
         new Patch(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+            security: "is_granted('IS_AUTHENTICATED_FULLY')", // @todo add voter
+            denormalizationContext: ['groups' => ['repairer_write']]
         ),
         new Put(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+            security: "is_granted('IS_AUTHENTICATED_FULLY')", // @todo add voter
+            denormalizationContext: ['groups' => ['repairer_write']]
         ),
         new Delete(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
@@ -65,63 +68,62 @@ class Repairer
 
     #[ORM\ManyToOne(inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?User $owner;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $mobilePhone = null;
 
     #[ORM\Column(length: 800, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $country = null;
 
     #[AppAssert\Rrule]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_write'])]
     private ?string $rrule = 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR';
 
     #[ORM\ManyToMany(targetEntity: BikeType::class, inversedBy: 'repairers')]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private Collection $bikeTypesSupported;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $latitude = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $longitude = null;
 
     #[ORM\Column(
         type: PostGISType::GEOGRAPHY,
-        nullable:true,
+        nullable: true,
         options: [
             'geometry_type' => 'POINT',
-            'srid' => 4326
+            'srid' => 4326,
         ],
     )]
-    #[Groups(['repairer_read'])]
     public ?string $gpsPoint;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
@@ -136,6 +138,11 @@ class Repairer
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getName(): ?string
