@@ -64,10 +64,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $repairers;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $lastname = null;
+    private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $firstname = null;
+    private ?string $firstName = null;
 
     public function __construct()
     {
