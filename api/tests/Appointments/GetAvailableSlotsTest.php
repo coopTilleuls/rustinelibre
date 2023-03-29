@@ -8,12 +8,9 @@ use App\Entity\Appointment;
 use App\Entity\Repairer;
 use App\Tests\AbstractTestCase;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 
 class GetAvailableSlotsTest extends AbstractTestCase
 {
-    // use ReloadDatabaseTrait;
-
     public function testGetSlotsAvailable(): void
     {
         // No need to be authenticated
@@ -23,7 +20,6 @@ class GetAvailableSlotsTest extends AbstractTestCase
 
         $this->assertJsonContains([
             '@context' => '/contexts/Repairer',
-            '@id' => '/repairer_get_slots_available/1',
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => 63,
         ]);

@@ -1,10 +1,7 @@
 App\Entity\BikeType:
-  bike_elec:
+  bike_classic:
     id: 1
-    name: 'Vélo électrique'
-  bike_cargo:
+    name: 'Vélo classique'
+  bike_elec:
     id: 2
-    name: 'Vélo cargo'
-  bike_ndl:
-    id: 3
-    name: 'Vélo hollandais'
+    name: 'Vélo électrique'
