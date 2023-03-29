@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['bike_type_read']],
 )]
 #[Get]
-#[Put(security: "is_granted('ROLE_ADMIN') ")]
+#[Put(security: "is_granted('ROLE_ADMIN')")]
 #[GetCollection]
 #[Post(security: "is_granted('ROLE_ADMIN')")]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
