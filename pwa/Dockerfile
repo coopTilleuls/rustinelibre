@@ -20,7 +20,8 @@ RUN corepack enable && \
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
 FROM builder_base AS deps
 
-COPY --link pnpm-lock.yaml ./
+COPY --link pnpm-lock.yaml package.json ./
+RUN pnpm i --fix-lockfile
 RUN pnpm fetch
 
 COPY --link . .
