@@ -38,9 +38,6 @@ jobs:
         run: curl -vk -o /dev/null https://localhost
       - name: Check PWA reachability
         run: "curl -vk -o /dev/null -H 'Accept: text/html' https://localhost"
-      - name: Install PostGIS extension
-        run: |
-          psql -U ${{ secrets.DB_USERNAME }} -d ${{ secrets.DB_NAME }} -h ${{ secrets.DB_HOST }} -c "CREATE EXTENSION postgis;"
       - name: Create test database
         run: |
           docker compose exec -T php bin/console -e test doctrine:database:drop --if-exists --force 
