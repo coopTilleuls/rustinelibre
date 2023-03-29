@@ -43,9 +43,9 @@ class FirstSlotAvailableTest extends AbstractTestCase
     {
         // Create a repairer
         $response = $this->createClientAuthAsAdmin()->request('POST', '/repairers', ['json' => [
-            'owner' => '/users/2',
+            'owner' => '/users/13',
             'description' => 'Nouvel atelier de réparation',
-            'mobilePhone' => '0720397700',
+            'mobilePhone' => '0720397799',
             'street' => 'avenue Nino Marchese',
         ]]);
 
