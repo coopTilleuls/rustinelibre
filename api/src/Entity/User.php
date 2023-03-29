@@ -7,6 +7,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use App\User\StateProvider\CurrentUserProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,8 +20,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+            security: "is_granted('IS_AUTHENTICATED_FULLY')"
         ),
+        new Post(),
         new Get(
             provider: CurrentUserProvider::class,
             uriTemplate: '/me',
@@ -71,6 +73,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getEmail(): ?string
