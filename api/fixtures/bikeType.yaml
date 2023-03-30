@@ -3,5 +3,3 @@ App\Entity\BikeType:
     name: 'Vélo classique'
   bike_elec:
     name: 'Vélo électrique'
-
-
