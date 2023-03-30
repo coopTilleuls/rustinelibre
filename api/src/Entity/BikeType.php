@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -26,6 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 class BikeType
 {
+    #[ApiProperty(identifier: true)]
     #[ORM\Column(type: 'integer')]
     #[ORM\Id, ORM\GeneratedValue()]
     #[Groups(['repairer_read', 'bike_type_read'])]
@@ -46,11 +48,6 @@ class BikeType
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
     }
 
     public function getName(): ?string

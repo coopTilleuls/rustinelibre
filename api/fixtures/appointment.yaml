@@ -1,6 +1,5 @@
 App\Entity\Appointment:
   appointment_1:
-    id: 1
     customer: '@user_1'
     repairer: '@repairer_1'
     slotTime: <(new DateTimeImmutable("2023-03-22T10:00:00"))>
