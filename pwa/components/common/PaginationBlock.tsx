@@ -9,7 +9,7 @@ interface PaginationBlockProps {
 
 const PaginationBlock = ({totalItems, onPageChange}: PaginationBlockProps): JSX.Element => {
 
-    const [currentPage, setCurrentPage] = React.useState(1);
+    const [currentPage, setCurrentPage] = React.useState<number>(1);
     const totalPages = Math.ceil(totalItems / 20);
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
