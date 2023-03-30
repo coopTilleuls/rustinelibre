@@ -21,7 +21,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [repairers, setRepairers] = useState<Repairer[]>([]);
     const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
     const [showMap, setShowMap] = useState<boolean>(false);
-    const [currentApiPage, setCurrentApiPage] = useState<number>(1);
     const [totalItems, setTotalItems] = useState<number>(0);
 
     useEffect((): void => {
@@ -59,7 +58,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     };
 
     const handlePageChange = (pageNumber: number): void => {
-        setCurrentApiPage(pageNumber)
         fetchRepairers(pageNumber);
     };
 
