@@ -4,6 +4,11 @@ App\Entity\User:
     email: "clement@les-tilleuls.coop"
     plainPassword: "test"
     emailConfirmed: true
+  boss_1:
+    roles: [ "ROLE_BOSS" ]
+    email: "boss@test.com"
+    plainPassword: "test"
+    emailConfirmed: true
   user_1:
     roles: ["ROLE_USER"]
     email: "user1@test.com"
