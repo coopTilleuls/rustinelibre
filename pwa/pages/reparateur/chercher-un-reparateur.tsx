@@ -118,7 +118,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                     </div>
                 </div>
 
-                <Footer logged={true} />
+                <Footer />
             </div>
         </>
     );

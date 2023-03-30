@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React from "react";
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -9,18 +8,12 @@ import Paper from '@mui/material/Paper';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Navbar from "@components/layout/Navbar";
 
-interface FooterProps {
-    logged: boolean;
-    role?: 'user';
-}
-
-export const Footer = ({
-                           logged,
-                           role,
-                       }: FooterProps): JSX.Element => {
+export const Footer = (): JSX.Element => {
 
     const [value, setValue] = React.useState(0);
+    const [logged, setLogged] = React.useState(false);
 
     return (
         <Box sx={{ width: 500 }}>
@@ -32,9 +25,7 @@ export const Footer = ({
                         setValue(newValue);
                     }}
                 >
-                    <Link href="/" passHref>
-                        <BottomNavigationAction label="Accueil" icon={<HomeIcon />} />
-                    </Link>
+                    <BottomNavigationAction href="/" label="Accueil" icon={<HomeIcon />} />
                     <BottomNavigationAction label="Rendez-vous" icon={<ListIcon />} />
                     <BottomNavigationAction label="Mes vélos" icon={<DirectionsBikeIcon />} />
                     <BottomNavigationAction label="Messages" icon={<ChatBubbleIcon />} />
@@ -44,3 +35,5 @@ export const Footer = ({
         </Box>
     );
 };
+
+export default Footer;
