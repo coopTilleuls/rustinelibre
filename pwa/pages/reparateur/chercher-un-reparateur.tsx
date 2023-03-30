@@ -13,10 +13,6 @@ const Footer = dynamic(() => import("components/layout/Footer"));
 const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"));
 import PaginationBlock from "components/common/PaginationBlock";
 
-// interface FetchProps {
-//     pageNumber?: number;
-// }
-
 const SearchRepairer: NextPageWithLayout = ({}) => {
     const [city, setCity] = useState<string>('');
     const [bikes, setBikes] = useState<BikeType[]>([]);
