@@ -8,6 +8,7 @@ use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -16,12 +17,14 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
+use App\Repairers\Filter\AroundFilter;
 use App\Repository\RepairerRepository;
 use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Jsor\Doctrine\PostGIS\Types\PostGISType;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
@@ -35,13 +38,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
             requirements: ['id' => '\d+'],
         ),
         new Post(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')"
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            denormalizationContext: ['groups' => ['repairer_write']]
         ),
         new Patch(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+            security: "is_granted('IS_AUTHENTICATED_FULLY')", // @todo add voter
+            denormalizationContext: ['groups' => ['repairer_write']]
         ),
         new Put(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+            security: "is_granted('IS_AUTHENTICATED_FULLY')", // @todo add voter
+            denormalizationContext: ['groups' => ['repairer_write']]
         ),
         new Delete(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
@@ -50,10 +56,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientItemsPerPage: true
 )]
 #[ApiFilter(DateFilter::class)]
+#[ApiFilter(AroundFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: ['city' => 'iexact', 'description' => 'ipartial', 'postcode' => 'iexact', 'country' => 'ipartial', 'bikeTypesSupported.id' => 'exact', 'bikeTypesSupported.name' => 'ipartial'])]
 class Repairer
 {
+    #[ApiProperty(identifier: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -62,54 +70,66 @@ class Repairer
 
     #[ORM\ManyToOne(inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?User $owner;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $mobilePhone = null;
 
     #[ORM\Column(length: 800, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $country = null;
 
     #[AppAssert\Rrule]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_write'])]
     private ?string $rrule = 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR';
 
     #[ORM\ManyToMany(targetEntity: BikeType::class, inversedBy: 'repairers')]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private Collection $bikeTypesSupported;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $latitude = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $longitude = null;
 
+    #[ORM\Column(
+        type: PostGISType::GEOGRAPHY,
+        nullable: true,
+        options: [
+            'geometry_type' => 'POINT',
+            'srid' => 4326,
+        ],
+    )]
+    public ?string $gpsPoint;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Groups(['repairer_read'])]
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
     public function __construct()
@@ -280,5 +300,15 @@ class Repairer
         $this->bikeTypesSupported->removeElement($bikeTypesSupported);
 
         return $this;
+    }
+
+    public function getGpsPoint(): ?string
+    {
+        return $this->gpsPoint;
+    }
+
+    public function setGpsPoint(?string $gpsPoint): void
+    {
+        $this->gpsPoint = $gpsPoint;
     }
 }

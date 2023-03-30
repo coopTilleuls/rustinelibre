@@ -14,7 +14,7 @@ use Recurr\Transformer\Constraint\BetweenConstraint;
 
 final class AvailableSlotComputer
 {
-    public function __construct(private AppointmentRepository $appointmentRepository)
+    public function __construct(private readonly AppointmentRepository $appointmentRepository)
     {
     }
 
@@ -35,7 +35,7 @@ final class AvailableSlotComputer
         $rule->setStartDate($startDate);
         $rule->setEndDate($endDate);
 
-        $fullSlots = $this->appointmentRepository->findFullSlots($repairer, $startDate, $endDate);
+        $fullSlots = $repairer->getId() ? $this->appointmentRepository->findFullSlots($repairer, $startDate, $endDate) : [];
         $recurrences = (new ArrayTransformer(new ArrayTransformerConfig()))->transform(
             $rule,
             new BetweenConstraint($startDate, $endDate)

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use App\User\StateProvider\CurrentUserProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,13 +16,17 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['user_read']],
+    denormalizationContext: ['groups' => ['user_write']],
     operations: [
         new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
+            security: "is_granted('IS_AUTHENTICATED_FULLY')"
         ),
+        new Post(),
         new Get(
             provider: CurrentUserProvider::class,
             uriTemplate: '/me',
@@ -37,36 +43,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private const EMAIL_MAX_LENGTH = 180;
 
+    #[ApiProperty(identifier: true)]
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
+    #[Groups(['user_read'])]
     private int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user_read', 'user_write'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['user_read'])]
     private array $roles = [];
 
     #[Assert\Type('boolean')]
     #[ORM\Column(type: 'boolean', nullable: false)]
+    #[Groups(['user_read'])]
     private bool $emailConfirmed = false;
 
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
+    #[Groups(['user_read', 'user_write'])]
     private ?string $plainPassword = null;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Repairer::class, orphanRemoval: true)]
     private Collection $repairers;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user_read', 'user_write'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user_read', 'user_write'])]
     private ?string $firstName = null;
 
     public function __construct()
