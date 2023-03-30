@@ -38,7 +38,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
-    const handleCityChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleCityChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         setCityInput(event.target.value);
 
         if (timeoutId) {

@@ -7,10 +7,9 @@ export interface City {
     formatted_name: string;
     lat: number;
     lon: number;
-
 }
 
-export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]) => {
+export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]): City[] => {
 
     let cities: City[] = [];
 
