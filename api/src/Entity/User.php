@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -18,6 +19,11 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+#[Get(uriTemplate: '/me', security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
+#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
+#[Post(security: "is_granted('ROLE_ADMIN') or !user" )]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
 
 #[ApiResource(
     normalizationContext: ['groups' => ['user_read']],
