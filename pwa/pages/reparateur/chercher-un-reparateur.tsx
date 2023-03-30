@@ -1,29 +1,46 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, MouseEventHandler, ChangeEvent, SyntheticEvent} from 'react';
 import Head from "next/head";
 import {repairerResource} from 'resources/repairerResource';
 import {bikeTypeResource} from 'resources/bikeTypeResource';
 import {ButtonShowMap} from 'components/repairers/ButtonShowMap';
 import {Repairer} from 'interfaces/Repairer';
 import {BikeType} from 'interfaces/BikeType';
+import {createCitiesWithGouvAPI, createCitiesWithNominatimAPI, City} from 'interfaces/City';
+import {City as NominatimCity} from 'interfaces/Nominatim';
+import {City as GouvCity} from 'interfaces/Gouv';
 import Spinner from 'components/icons/Spinner';
+import {searchCity} from 'utils/apiCity';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
 const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"));
 import PaginationBlock from "components/common/PaginationBlock";
+import Typography from '@mui/material/Typography';
+import useMediaQuery from 'hooks/useMediaQuery';
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
-    const [city, setCity] = useState<string>('');
+    const [cityInput, setCityInput] = useState<string>('');
+    const [city, setCity] = useState<City | null>(null);
+    const [citiesList, setCitiesList] = useState<City[]>([]);
+    const [timeoutId, setTimeoutId] = useState<number | null>(null);
     const [bikes, setBikes] = useState<BikeType[]>([]);
-    const [selectedBike, setSelectedBike] = useState<BikeType>();
+    const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
     const [selectedRepairer, setSelectedRepairer] = useState<string>('');
     const [repairers, setRepairers] = useState<Repairer[]>([]);
     const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
     const [showMap, setShowMap] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
+    const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
+    const isMobile = useMediaQuery('(max-width: 640px)');
 
-    useEffect((): void => {
+    useEffect(() => {
         const fetchBikes = async () => {
             const response = await bikeTypeResource.getAll({});
             setBikes(response['hydra:member']);
@@ -31,92 +48,138 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         fetchBikes();
     }, []);
 
-    const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        setCity(event.target.value);
+    const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
+
+    const handleCityChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
+
+        setCityInput(event.target.value);
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+
+        const newTimeoutId = window.setTimeout(async () => {
+            const citiesResponse = await searchCity(event.target.value, useNominatim);
+            const cities: City[] = useNominatim ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[]) : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
+            setCitiesList(cities);
+        }, 350);
+
+        setTimeoutId(newTimeoutId);
     };
 
-    const handleBikeChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+
+    const handleCitySelect = (event :  React.SyntheticEvent<Element, Event>, value: string | null) => {
+
+        setCityInput(value ?? '');
+        if (isMobile) {
+            fetchRepairers(1, value);
+        }
+    }
+
+    const handleBikeChange = (event: SelectChangeEvent): void => {
         const selectedBikeType = bikes.find((bt) => bt.id === Number(event.target.value));
-        setSelectedBike(selectedBikeType);
+        setSelectedBike(selectedBikeType ? selectedBikeType : null);
+
+        if (isMobile) {
+            fetchRepairers(1, cityInput, selectedBikeType);
+        }
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
-        setPendingSearchCity(true)
-        fetchRepairers();
-    };
-
-    const fetchRepairers = async (pageNumber?: number) => {
-        if (!selectedBike || !city) {
-            return;
-        }
-
-        const response = await repairerResource.getAll({'city': city, 'bikeTypesSupported.id': selectedBike.id, 'order[firstSlotAvailable]': 'DESC', 'page': `${pageNumber ?? 1}`, 'itemsPerPage': '20'});
-        setRepairers(response['hydra:member']);
-        setTotalItems(response['hydra:totalItems']);
-        setPendingSearchCity(false);
+        await fetchRepairers(1);
     };
 
     const handlePageChange = (pageNumber: number): void => {
         fetchRepairers(pageNumber);
     };
 
+    const fetchRepairers = async (pageNumber?: number, citySelected?: string | null, givenBike? : BikeType | null): Promise<void> => {
+
+        if (!selectedBike || !cityInput) {
+            return;
+        }
+        setPendingSearchCity(true)
+
+        let params = {
+            city: citySelected ?? cityInput,
+            itemsPerPage: 20,
+            'bikeTypesSupported.id': givenBike ? givenBike.id : selectedBike.id,
+            'order[firstSlotAvailable]': 'ASC',
+            'page': `${pageNumber ?? 1}`
+        };
+        params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
+
+        const response = await repairerResource.getAll(params);
+        setRepairers(response['hydra:member']);
+        setTotalItems(response['hydra:totalItems']);
+        setPendingSearchCity(false);
+        setAlreadyFetchApi(true);
+    };
+
     return (
         <>
-            <div className="w-screen overflow-x-hidden">
+            <div style={{width: "100vw", overflowX: "hidden"}}>
                 <Head>
                     <title>Chercher un réparateur</title>
                 </Head>
                 <Navbar/>
-                <div className="w-screen" style={{marginBottom: '100px'}}>
-                    <form onSubmit={handleSubmit} className="bg-white rounded m-2 px-8 pt-6 pb-4 mb-2 grid gap-4 md:grid-cols-2">
-                        <div className="mb-4 w-full">
-                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="bikeType">
-                                Type de Vélo
-                            </label>
-                            <select
-                                required
-                                value={selectedBike?.id ?? ''} onChange={handleBikeChange}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                id="grid-state">
-                                    <option value="">Choisissez un type de vélo</option>
-                                        {bikes.map((bike) => (
-                                            <option key={bike.id} value={bike.id}>
-                                                {bike.name}
-                                            </option>
-                                        ))}
-                            </select>
+                <div style={{width: "100vw", marginBottom: '100px'}}>
+                    <form onSubmit={handleSubmit} style={{margin: "6px", padding: "36px 24px 48px", display: "grid", gap: "24px", gridTemplateColumns: "1fr 1fr"}}>
+                        <div style={{marginBottom: "24px", width: "100%"}}>
+                            <InputLabel htmlFor="bikeType">Type de Vélo</InputLabel>
+                            <Select
+                                onChange={handleBikeChange}
+                                value={selectedBike?.name}
+                                style={{width: '100%'}}
+                            >
+                                <MenuItem disabled value="">Choisissez un type de vélo</MenuItem>
+                                {bikes.map((bike) => (
+                                    <MenuItem key={bike.id} value={bike.id}>{bike.name}</MenuItem>
+                                ))}
+                            </Select>
                         </div>
-                        <div className="mb-4 w-full">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">
-                                Ville
-                            </label>
-                            <input
-                                onChange={handleCityChange}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                id="inline-full-name" type="text" value={city} />
+                        <div style={{marginBottom: "24px", width: "100%"}}>
+                            <InputLabel htmlFor="city">Ville</InputLabel>
+
+                            <Autocomplete
+                                freeSolo
+                                value={cityInput}
+                                options={citiesList.map((optionCity) => optionCity.name)}
+                                onChange={(event, values) => handleCitySelect(event, values)}
+                                renderInput={(params) =>
+                                    <TextField
+                                        {...params}
+                                        value={cityInput}
+                                        onChange={(e) => handleCityChange(e)}
+                                    />}
+                            />
                         </div>
 
-                        <button type="submit" className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                Chercher
-                        </button>
+                        <div className="hidden md:block">
+                            <Button type="submit" variant="outlined">Chercher</Button>
+                        </div>
                     </form>
 
-                    <div className="mb-3 mt-3">
+                    <div style={{margin: "12px 0"}}>
                         {pendingSearchCity && <Spinner />}
                     </div>
 
-                    <div className="md:hidden m-2">
-                        {Object.keys(repairers).length > 0 &&
+                    <div className="md:hidden" style={{marginTop: "12px"}}>
+                        {Object.keys(repairers).length > 0 && isMobile &&
                             <ButtonShowMap showMap={showMap} setShowMap={setShowMap} />
                         }
                     </div>
 
-                    <div className="m-2">
+                    <div style={{marginTop: "12px"}}>
                         {Object.keys(repairers).length > 0 &&
                             <RepairersResults repairers={repairers} selectedRepairer={selectedRepairer} showMap={showMap} setSelectedRepairer={setSelectedRepairer} setRepairers={setRepairers} />
                         }
+
+                        {(Object.keys(repairers).length === 0 && alreadyFetchApi) &&
+                            <Typography>Pas de réparateurs disponibles</Typography>
+                        }
                     </div>
+
                     {totalItems > 20 && <PaginationBlock totalItems={totalItems} onPageChange={handlePageChange} />}
                 </div>
                 <Footer />
