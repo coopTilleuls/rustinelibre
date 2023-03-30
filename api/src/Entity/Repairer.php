@@ -29,36 +29,31 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
-    operations: [
-        new Get(normalizationContext: ['groups' => ['repairer_read']]),
-        new GetCollection(normalizationContext: ['groups' => ['repairer_read']]),
-        new GetCollection(
-            provider: RepairerAvailableSlotsProvider::class,
-            uriTemplate: '/repairer_get_slots_available/{id}',
-            requirements: ['id' => '\d+'],
-        ),
-        new Post(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
-            denormalizationContext: ['groups' => ['repairer_write']]
-        ),
-        new Patch(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')", // @todo add voter
-            denormalizationContext: ['groups' => ['repairer_write']]
-        ),
-        new Put(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')", // @todo add voter
-            denormalizationContext: ['groups' => ['repairer_write']]
-        ),
-        new Delete(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
-        ),
-    ],
     paginationClientItemsPerPage: true
 )]
+#[Get(normalizationContext: ['groups' => ['repairer_read']])]
+#[GetCollection(normalizationContext: ['groups' => ['repairer_read']])]
+#[GetCollection(
+    uriTemplate: '/repairer_get_slots_available/{id}',
+    requirements: ['id' => '\d+'],
+    provider: RepairerAvailableSlotsProvider::class,
+)]
+#[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_BOSS') or is_granted('ROLE_ADMIN')")]
+#[Put(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[ApiFilter(DateFilter::class)]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
-#[ApiFilter(SearchFilter::class, properties: ['city' => 'iexact', 'description' => 'ipartial', 'postcode' => 'iexact', 'country' => 'ipartial', 'bikeTypesSupported.id' => 'exact', 'bikeTypesSupported.name' => 'ipartial'])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'city' => 'iexact',
+    'description' => 'ipartial',
+    'postcode' => 'iexact',
+    'country' => 'ipartial',
+    'bikeTypesSupported.id' => 'exact',
+    'bikeTypesSupported.name' => 'ipartial',
+    'repairerType.id' => 'exact',
+    'repairerType.name' => 'ipartial'])]
 class Repairer
 {
     #[ApiProperty(identifier: true)]
@@ -72,6 +67,11 @@ class Repairer
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups(['repairer_read', 'repairer_write'])]
     private ?User $owner;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
+    private ?RepairerType $repairerType;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['repairer_read', 'repairer_write'])]
@@ -310,5 +310,15 @@ class Repairer
     public function setGpsPoint(?string $gpsPoint): void
     {
         $this->gpsPoint = $gpsPoint;
+    }
+
+    public function getRepairerType(): ?RepairerType
+    {
+        return $this->repairerType;
+    }
+
+    public function setRepairerType(?RepairerType $repairerType): void
+    {
+        $this->repairerType = $repairerType;
     }
 }
