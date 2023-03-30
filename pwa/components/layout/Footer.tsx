@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Head from 'next/head';
 import React from "react";
 
 interface FooterProps {
@@ -11,7 +10,6 @@ export const Footer = ({
                            logged,
                            role,
                        }: FooterProps): JSX.Element => (
-
 
     <div
         className="fixed bottom-0 left-0 z-50 w-full h-16 border-t border-gray-500 dark:bg-gray-700 dark:border-gray-600 bg-gray-800">
