@@ -10,18 +10,25 @@ import Spinner from 'components/icons/Spinner';
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
+const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"));
+import PaginationBlock from "components/common/PaginationBlock";
+
+// interface FetchProps {
+//     pageNumber?: number;
+// }
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
-    const [city, setCity] = useState('');
+    const [city, setCity] = useState<string>('');
     const [bikes, setBikes] = useState<BikeType[]>([]);
     const [selectedBike, setSelectedBike] = useState<BikeType>();
-    const [selectedRepairer, setSelectedRepairer] = useState('');
+    const [selectedRepairer, setSelectedRepairer] = useState<string>('');
     const [repairers, setRepairers] = useState<Repairer[]>([]);
-    const [pendingSearchCity, setPendingSearchCity] = useState(false);
-    const [showMap, setShowMap] = useState(false);
-    const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"));
+    const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
+    const [showMap, setShowMap] = useState<boolean>(false);
+    const [currentApiPage, setCurrentApiPage] = useState<number>(1);
+    const [totalItems, setTotalItems] = useState<number>(0);
 
-    useEffect(() => {
+    useEffect((): void => {
         const fetchBikes = async () => {
             const response = await bikeTypeResource.getAll({});
             setBikes(response['hydra:member']);
@@ -29,36 +36,36 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         fetchBikes();
     }, []);
 
-    const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setCity(event.target.value);
     };
 
-    const handleBikeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleBikeChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         const selectedBikeType = bikes.find((bt) => bt.id === Number(event.target.value));
         setSelectedBike(selectedBikeType);
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
         setPendingSearchCity(true)
         fetchRepairers();
     };
 
-    const fetchRepairers = async () => {
+    const fetchRepairers = async (pageNumber?: number) => {
         if (!selectedBike || !city) {
             return;
         }
-        const response = await repairerResource.getAll({'city': city, 'bikeTypesSupported.id': selectedBike.id, 'order[firstSlotAvailable]': 'DESC'});
+
+        const response = await repairerResource.getAll({'city': city, 'bikeTypesSupported.id': selectedBike.id, 'order[firstSlotAvailable]': 'DESC', 'page': `${pageNumber ?? 1}`, 'itemsPerPage': '20'});
         setRepairers(response['hydra:member']);
+        setTotalItems(response['hydra:totalItems']);
         setPendingSearchCity(false);
     };
 
-    // const searchCity = async () => {
-    //     const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${city}`);
-    //     const data = await response.json();
-    //     const cityDetails = data[0];
-    //     console.log(cityDetails);
-    // }
+    const handlePageChange = (pageNumber: number): void => {
+        setCurrentApiPage(pageNumber)
+        fetchRepairers(pageNumber);
+    };
 
     return (
         <>
@@ -67,7 +74,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                     <title>Chercher un réparateur</title>
                 </Head>
                 <Navbar/>
-                <div className="w-screen">
+                <div className="w-screen" style={{marginBottom: '100px'}}>
                     <form onSubmit={handleSubmit} className="bg-white rounded m-2 px-8 pt-6 pb-4 mb-2 grid gap-4 md:grid-cols-2">
                         <div className="mb-4 w-full">
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="bikeType">
@@ -116,8 +123,8 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                             <RepairersResults repairers={repairers} selectedRepairer={selectedRepairer} showMap={showMap} setSelectedRepairer={setSelectedRepairer} setRepairers={setRepairers} />
                         }
                     </div>
+                    {totalItems > 20 && <PaginationBlock totalItems={totalItems} onPageChange={handlePageChange} />}
                 </div>
-
                 <Footer />
             </div>
         </>
