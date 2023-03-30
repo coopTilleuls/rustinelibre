@@ -10,13 +10,13 @@ class SecurityBikeTypeTest extends AbstractTestCase
 {
     public function testGetBikeType(): void
     {
-        self::createClientAuthAsUser()->request('GET', '/bike_types/1');
+        $this->createClientAuthAsUser()->request('GET', '/bike_types/1');
         $this->assertResponseIsSuccessful();
     }
 
     public function testPostBikeType(): void
     {
-        self::createClientAuthAsAdmin()->request('POST', '/bike_types', [
+        $this->createClientAuthAsAdmin()->request('POST', '/bike_types', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo cargo',
@@ -28,7 +28,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
 
     public function testPostBikeTypeFail(): void
     {
-        self::createClientAuthAsUser()->request('POST', '/bike_types', [
+        $this->createClientAuthAsUser()->request('POST', '/bike_types', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo cargo',
@@ -42,7 +42,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
     {
         $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo cargo']);
 
-        self::createClientAuthAsAdmin()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
+        $this->createClientAuthAsAdmin()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo hollandais',
@@ -56,7 +56,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
     {
         $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo hollandais']);
 
-        self::createClientAuthAsUser()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
+        $this->createClientAuthAsUser()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo hollandais',
