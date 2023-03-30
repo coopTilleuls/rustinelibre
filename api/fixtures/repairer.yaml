@@ -1,6 +1,5 @@
 App\Entity\Repairer:
   repairer_1:
-    id: 1
     name: 'Chez Johnny'
     owner: '@user_1'
     description: "Lorem ipsum"
@@ -15,7 +14,6 @@ App\Entity\Repairer:
     longitude: '3.063398'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 14:00:00"))>
   repairer_2:
-    id: 2
     name: 'Chez Francis'
     owner: '@user_10'
     description: "Lorem ipsum 2"
@@ -30,7 +28,6 @@ App\Entity\Repairer:
     longitude: '3.057561'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
   repairer_3:
-    id: 3
     name: 'Chez Benoit Broutchoux'
     owner: '@user_11'
     description: "Lorem ipsum 3"
