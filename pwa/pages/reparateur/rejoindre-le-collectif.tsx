@@ -11,9 +11,6 @@ const JoinGroup: NextPageWithLayout = () => {
                 <title>Rejoindre le collectif</title>
             </Head>
             <Navbar/>
-            <p>
-                HELLO
-            </p>
             <Footer logged={true} />
         </div>
     );

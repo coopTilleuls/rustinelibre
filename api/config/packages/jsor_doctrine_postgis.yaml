@@ -1,0 +1,22 @@
+services:
+    Jsor\Doctrine\PostGIS\Event\ORMSchemaEventSubscriber:
+        tags: [{ name: doctrine.event_subscriber, connection: default }]
+
+doctrine:
+    dbal:
+        schema_filter: ~^(?!tiger)(?!topology)~
+        mapping_types:
+            _text: string
+        types:
+            geography:
+                class: 'Jsor\Doctrine\PostGIS\Types\GeographyType'
+                commented: false
+            geometry:
+                class: 'Jsor\Doctrine\PostGIS\Types\GeometryType'
+                commented: false
+    orm:
+        dql:
+            string_functions:
+                ST_DWithin: Jsor\Doctrine\PostGIS\Functions\ST_DWithin
+                ST_MakePoint: Jsor\Doctrine\PostGIS\Functions\ST_MakePoint
+                ST_SetSRID: Jsor\Doctrine\PostGIS\Functions\ST_SetSRID

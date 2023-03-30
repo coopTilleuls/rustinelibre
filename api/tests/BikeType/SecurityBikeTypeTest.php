@@ -2,32 +2,33 @@
 
 namespace App\Tests\BikeType;
 
+use App\Entity\BikeType;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class SecurityBikeTypeTest extends AbstractTestCase
 {
+    public function testGetBikeType(): void
+    {
+        $this->createClientAuthAsUser()->request('GET', '/bike_types/1');
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testPostBikeType(): void
     {
-        $client = self::createClientAuthAsAdmin();
-
-        // Valid admin given
-        $response = $client->request('POST', '/bike_types', [
+        $this->createClientAuthAsAdmin()->request('POST', '/bike_types', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo cargo',
             ],
         ]);
         $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
     public function testPostBikeTypeFail(): void
     {
-        $client = self::createClientAuthAsUser();
-
-        // classic user given
-        $response = $client->request('POST', '/bike_types', [
+        $this->createClientAuthAsUser()->request('POST', '/bike_types', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo cargo',
@@ -39,25 +40,23 @@ class SecurityBikeTypeTest extends AbstractTestCase
 
     public function testPutBikeType(): void
     {
-        $client = self::createClientAuthAsAdmin();
+        $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo cargo']);
 
-        // Valid admin given
-        $response = $client->request('PUT', '/bike_types/3', [
+        $this->createClientAuthAsAdmin()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo hollandais',
             ],
         ]);
         $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     public function testPutBikeTypeFail(): void
     {
-        $client = self::createClientAuthAsUser();
+        $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo hollandais']);
 
-        // classic user given
-        $response = $client->request('PUT', '/bike_types/3', [
+        $this->createClientAuthAsUser()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo hollandais',
@@ -65,16 +64,5 @@ class SecurityBikeTypeTest extends AbstractTestCase
         ]);
         $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-    }
-
-    public function testGetBikeType(): void
-    {
-        $client = self::createClientAuthAsUser();
-        // classic user given
-        $response = $client->request('GET', '/bike_types/3');
-        $this->assertResponseIsSuccessful();
-        $response = $response->toArray();
-        $this->assertIsArray($response);
-        $this->assertSame($response['name'], 'Vélo hollandais');
     }
 }

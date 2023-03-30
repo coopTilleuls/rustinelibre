@@ -52,6 +52,6 @@ jobs:
       - name: Static analysis
         run: docker compose exec -T php php -d memory_limit=256M vendor/bin/psalm src
       - name: Fixtures
-        run: docker compose exec -T php bin/console hautelook:fixtures:load --env=test --no-interaction
+        run: docker compose exec -T php bin/console hautelook:fixtures:load --env=test --no-interaction --purge-with-truncate
       - name: PHPUnit
         run: docker compose exec -T php bin/phpunit
