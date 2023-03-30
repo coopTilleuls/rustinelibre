@@ -29,32 +29,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
-    operations: [
-        new Get(normalizationContext: ['groups' => ['repairer_read']]),
-        new GetCollection(normalizationContext: ['groups' => ['repairer_read']]),
-        new GetCollection(
-            provider: RepairerAvailableSlotsProvider::class,
-            uriTemplate: '/repairer_get_slots_available/{id}',
-            requirements: ['id' => '\d+'],
-        ),
-        new Post(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
-            denormalizationContext: ['groups' => ['repairer_write']]
-        ),
-        new Patch(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')", // @todo add voter
-            denormalizationContext: ['groups' => ['repairer_write']]
-        ),
-        new Put(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')", // @todo add voter
-            denormalizationContext: ['groups' => ['repairer_write']]
-        ),
-        new Delete(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
-        ),
-    ],
     paginationClientItemsPerPage: true
 )]
+#[Get(normalizationContext: ['groups' => ['repairer_read']])]
+#[GetCollection(normalizationContext: ['groups' => ['repairer_read']])]
+#[GetCollection(
+    uriTemplate: '/repairer_get_slots_available/{id}',
+    requirements: ['id' => '\d+'],
+    provider: RepairerAvailableSlotsProvider::class,
+)]
+#[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_BOSS') or is_granted('ROLE_ADMIN')")]
+#[Put(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[ApiFilter(DateFilter::class)]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
