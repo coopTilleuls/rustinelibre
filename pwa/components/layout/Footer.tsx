@@ -8,9 +8,8 @@ import Paper from '@mui/material/Paper';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Navbar from "@components/layout/Navbar";
 
-export const Footer = (): JSX.Element => {
+const Footer = (): JSX.Element => {
 
     const [value, setValue] = React.useState(0);
     const [logged, setLogged] = React.useState(false);

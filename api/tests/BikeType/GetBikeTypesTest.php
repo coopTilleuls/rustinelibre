@@ -17,8 +17,8 @@ class GetBikeTypesTest extends AbstractTestCase
         $this->assertIsArray($response['hydra:member']);
         $this->assertSame(1, $response['hydra:member'][0]['id']);
         $this->assertSame('Vélo classique', $response['hydra:member'][0]['name']);
-
     }
+
     public function testGetClassicBikeTypeItem(): void
     {
         $response = static::createClient()->request('GET', '/bike_types/1');
@@ -29,6 +29,7 @@ class GetBikeTypesTest extends AbstractTestCase
         $this->assertArrayHasKey('name', $response);
         $this->assertSame($response['name'], 'Vélo classique');
     }
+
     public function testGetElectricBikeTypeItem(): void
     {
         $response = static::createClient()->request('GET', '/bike_types/2');
