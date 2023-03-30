@@ -34,7 +34,7 @@ class FirstSlotAvailableTest extends AbstractTestCase
         $response = static::createClient()->request('GET', '/repairers?order[firstSlotAvailable]=ASC');
         $responseData = $response->toArray();
         $this->assertResponseIsSuccessful();
-        $this->assertNotEquals(3, $responseData['hydra:member'][0]['name']);
+        $this->assertNotEquals(3, $responseData['hydra:member'][0]['id']);
         $this->assertLessThanOrEqual($responseData['hydra:member'][1]['firstSlotAvailable'], $responseData['hydra:member'][0]['firstSlotAvailable']);
         $this->assertLessThanOrEqual($responseData['hydra:member'][2]['firstSlotAvailable'], $responseData['hydra:member'][1]['firstSlotAvailable']);
     }
