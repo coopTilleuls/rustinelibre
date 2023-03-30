@@ -3,6 +3,7 @@
 namespace App\Tests\Repairer;
 
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class SecurityRepairerTest extends AbstractTestCase
 {
@@ -25,12 +26,10 @@ class SecurityRepairerTest extends AbstractTestCase
                 'country'=> "France",
                 'rrule'=> 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported'=> ['/bike_types/1', '/bike_types/2'],
-                'latitude'=> '50.6365654',
-                'longitude'=> '3.0635282',
             ],
         ]);
         $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
     public function testPostRepairerFail(): void
