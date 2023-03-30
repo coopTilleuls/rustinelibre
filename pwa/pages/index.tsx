@@ -1,5 +1,4 @@
 import Head from "next/head";
-import {Footer} from '@components/layout/Footer';
 import {HomeCard} from '@components/home/HomeCard';
 import React from "react";
 import "@fontsource/poppins";
