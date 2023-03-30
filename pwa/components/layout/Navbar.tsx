@@ -15,7 +15,7 @@ import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 const pagesNotLogged = ['Notre collectif', 'Inscription', 'Liste des réparateurs', 'FAQ', 'Devenir réparateur'];
 const pagesLogged = ['Notre collectif', 'Liste des réparateurs', 'FAQ', 'Devenir réparateur'];
 
-export const Navbar = (): JSX.Element => {
+const Navbar = (): JSX.Element => {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -118,5 +118,6 @@ export const Navbar = (): JSX.Element => {
             </Container>
         </AppBar>
     );
-}
+};
+
 export default Navbar;
