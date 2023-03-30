@@ -2,7 +2,6 @@ import {City as Gouv} from "./Gouv";
 import {City as Nominatim} from "./Nominatim";
 
 export interface City {
-
     id: string|number;
     name: string;
     formatted_name: string;
@@ -35,11 +34,13 @@ export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]) => {
 export const createCitiesWithNominatimAPI = (citiesResponse: Nominatim[]): City[] => {
 
     let cities: City[] = [];
+    let citiesNames: string[] = [];
 
     citiesResponse.forEach((city: Nominatim) => {
         const args = [city.display_name, city.place_id, city.lat, city.lon];
 
-        if (!args.some((arg) => arg === undefined)) {
+        if (!args.some((arg) => arg === undefined) && !citiesNames.includes(city.display_name)) {
+            citiesNames.push(city.display_name);
             cities.push({
                 id: city.place_id,
                 name: city.display_name,
