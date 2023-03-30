@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -17,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: BikeTypeRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['bike_type_read']],
+    denormalizationContext: ['groups' => ['bike_type_write']],
 )]
 #[Get]
 #[Put(security: "is_granted('ROLE_ADMIN')")]
@@ -25,14 +27,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 class BikeType
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ApiProperty(identifier: true)]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id, ORM\GeneratedValue()]
     #[Groups(['repairer_read', 'bike_type_read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['repairer_read', 'bike_type_read'])]
+    #[Groups(['repairer_read', 'bike_type_read', 'bike_type_write'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Repairer::class, mappedBy: 'bikeTypesSupported')]

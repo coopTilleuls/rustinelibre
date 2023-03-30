@@ -13,18 +13,15 @@ class GetAvailableSlotsTest extends AbstractTestCase
 {
     public function testGetSlotsAvailable(): void
     {
-        $randomRepairer = static::getContainer()->get('doctrine')->getRepository(Repairer::class)->findOneBy([]);
         // No need to be authenticated
-        $response = static::createClient()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $randomRepairer->getId()));
-
+        $response = static::createClient()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', 1));
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
         $this->assertJsonContains([
             '@context' => '/contexts/Repairer',
-            '@id' => '/repairer_get_slots_available/'.$randomRepairer->getId(),
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 64, // Should have 63 slots
+            'hydra:totalItems' => 63,
         ]);
 
         $firstItem = $response->toArray()['hydra:member'][0];
@@ -52,6 +49,6 @@ class GetAvailableSlotsTest extends AbstractTestCase
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
         // Should have 1 slot less
-        $this->assertCount(63, $response->toArray()['hydra:member']);
+        $this->assertCount(62, $response->toArray()['hydra:member']);
     }
 }

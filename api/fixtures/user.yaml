@@ -9,6 +9,7 @@ App\Entity\User:
     email: "user1@test.com"
     plainPassword: "test"
     emailConfirmed: true
+  user_2:
   boss_1:
     roles: [ "ROLE_BOSS" ]
     email: "boss@test.com"

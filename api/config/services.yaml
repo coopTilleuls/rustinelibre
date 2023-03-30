@@ -22,4 +22,16 @@ services:
 
     App\User\EventSubscriber\HashPasswordSubscriber:
         tags:
-            - { name: "doctrine.event_subscriber" }
+            - { name: doctrine.event_subscriber }
+
+    App\Appointments\EventSubscriber\FirstSlotAvailableEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    App\Repairers\EventSubscriber\GpsPointEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    App\Repairers\EventSubscriber\RruleEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
