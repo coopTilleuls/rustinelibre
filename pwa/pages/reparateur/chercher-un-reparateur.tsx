@@ -11,6 +11,12 @@ import {City as NominatimCity} from 'interfaces/Nominatim';
 import {City as GouvCity} from 'interfaces/Gouv';
 import Spinner from 'components/icons/Spinner';
 import {searchCity} from 'utils/apiCity';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
@@ -60,7 +66,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setCitiesList([]);
     }
 
-    const handleBikeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleBikeChange = (event: SelectChangeEvent) => {
         const selectedBikeType = bikes.find((bt) => bt.id === Number(event.target.value));
         setSelectedBike(selectedBikeType);
     };
@@ -86,59 +92,50 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
     return (
         <>
-            <div className="w-screen overflow-x-hidden">
+            <div style={{width: "100vw", overflowX: "hidden"}}>
                 <Head>
                     <title>Chercher un réparateur</title>
                 </Head>
                 <Navbar/>
-                <div className="w-screen">
-                    <form onSubmit={handleSubmit} className="bg-white rounded m-2 px-8 pt-6 pb-4 mb-2 grid gap-4 md:grid-cols-2">
-                        <div className="mb-4 w-full">
-                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="bikeType">
-                                Type de Vélo
-                            </label>
-                            <select
-                                required
-                                value={selectedBike?.id ?? ''} onChange={handleBikeChange}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                id="grid-state">
-                                    <option value="">Choisissez un type de vélo</option>
-                                        {bikes.map((bike) => (
-                                            <option key={bike.id} value={bike.id}>
-                                                {bike.name}
-                                            </option>
-                                        ))}
-                            </select>
+                <div style={{width: "100vw"}}>
+                    <form onSubmit={handleSubmit} style={{margin: "6px", padding: "36px 24px 48px", display: "grid", gap: "24px", gridTemplateColumns: "1fr 1fr"}}>
+                        <div style={{marginBottom: "24px", width: "100%"}}>
+                            <InputLabel htmlFor="bikeType">Type de Vélo</InputLabel>
+                            <Select
+                                onChange={handleBikeChange}
+                                value={selectedBike?.name}
+                                style={{width: '100%'}}
+                            >
+                                <MenuItem disabled value="">Choisissez un type de vélo</MenuItem>
+                                {bikes.map((bike) => (
+                                    <MenuItem key={bike.id} value={bike.id}>{bike.name}</MenuItem>
+                                ))}
+
+                            </Select>
                         </div>
-                        <div className="mb-4 w-full">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">
-                                Ville
-                            </label>
-                            <input
-                                onChange={handleCityChange}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                id="inline-full-name" type="text" value={cityInput} />
-                            {(citiesList.map((city: City) => {
-                                return <div key={city.id} onClick={() => { handleCityClick(city) }} className="hover:cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{city.formatted_name}</div>
-                            }))}
+                        <div style={{marginBottom: "24px", width: "100%"}}>
+                            <InputLabel htmlFor="city">Ville</InputLabel>
+                            <Autocomplete
+                                renderInput={(params => <TextField {...params} value={cityInput} onChange={handleCityChange} />)}
+                                options={citiesList.map((city: City) => city.name)}
+                                noOptionsText={"Pas de résultats"}
+                            />
                         </div>
 
-                        <button type="submit" className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                Chercher
-                        </button>
+                        <Button type="submit" variant="outlined">Chercher</Button>
                     </form>
 
-                    <div className="mb-3 mt-3">
+                    <div style={{margin: "12px 0"}}>
                         {pendingSearchCity && <Spinner />}
                     </div>
 
-                    <div className="md:hidden m-2">
+                    <div style={{marginTop: "12px"}}> {/* TODO: cacher en format mobile */}
                         {Object.keys(repairers).length > 0 &&
                             <ButtonShowMap showMap={showMap} setShowMap={setShowMap} />
                         }
                     </div>
 
-                    <div className="m-2">
+                    <div style={{marginTop: "12px"}}>
                         {Object.keys(repairers).length > 0 &&
                             <RepairersResults repairers={repairers} selectedRepairer={selectedRepairer} showMap={showMap} setSelectedRepairer={setSelectedRepairer} setRepairers={setRepairers} />
                         }
