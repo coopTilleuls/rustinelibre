@@ -1,0 +1,7 @@
+App\Entity\RepairerType:
+  atelier:
+    name: 'Atelier de réparation'
+  auto_reparation:
+    name: 'Auto réparation'
+  reparateur_velo:
+    name: 'Réparateur à vélo'
