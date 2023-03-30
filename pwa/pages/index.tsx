@@ -7,11 +7,10 @@ import "@fontsource/poppins/700.css";
 import dynamic from "next/dynamic";
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+const Navbar = dynamic(() => import("components/layout/Navbar"));
+const Footer = dynamic(() => import("components/layout/Footer"));
 
 const Home = () => {
-
-    const Navbar = dynamic(() => import("components/layout/Navbar"));
-    const Footer = dynamic(() => import("components/layout/Footer"));
 
     return (
         <div className="w-full overflow-x-hidden">
