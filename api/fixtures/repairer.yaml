@@ -44,19 +44,3 @@ App\Entity\Repairer:
     longitude: '3.059621'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 11:00:00"))>
     repairerType: '@reparateur_velo'
-  repairer_{4..70}:
-    name: 'Chez Benoit Broutchoux'
-    owner: '@user_11'
-    description: "Lorem ipsum 3"
-    mobilePhone: "0720397700"
-    street: "1917 rue Benoît Broutchouille"
-    city: "Lille"
-    postcode: "59000"
-    country: "France"
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
-    bikeTypesSupported: [ '@bike_classic' ]
-    latitude: '50.634658'
-    longitude: '3.059621'
-    firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 11:00:00"))>
-    repairerType: '@reparateur_velo'
-
