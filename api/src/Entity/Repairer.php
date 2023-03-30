@@ -58,7 +58,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(DateFilter::class)]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
-#[ApiFilter(SearchFilter::class, properties: ['city' => 'iexact', 'description' => 'ipartial', 'postcode' => 'iexact', 'country' => 'ipartial', 'bikeTypesSupported.id' => 'exact', 'bikeTypesSupported.name' => 'ipartial'])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'city' => 'iexact',
+    'description' => 'ipartial',
+    'postcode' => 'iexact',
+    'country' => 'ipartial',
+    'bikeTypesSupported.id' => 'exact',
+    'bikeTypesSupported.name' => 'ipartial',
+    'repairerType.id' => 'exact',
+    'repairerType.name' => 'ipartial'])]
 class Repairer
 {
     #[ApiProperty(identifier: true)]
@@ -72,6 +80,11 @@ class Repairer
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups(['repairer_read', 'repairer_write'])]
     private ?User $owner;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
+    private ?RepairerType $repairerType;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['repairer_read', 'repairer_write'])]
@@ -310,5 +323,15 @@ class Repairer
     public function setGpsPoint(?string $gpsPoint): void
     {
         $this->gpsPoint = $gpsPoint;
+    }
+
+    public function getRepairerType(): ?RepairerType
+    {
+        return $this->repairerType;
+    }
+
+    public function setRepairerType(?RepairerType $repairerType): void
+    {
+        $this->repairerType = $repairerType;
     }
 }
