@@ -16,9 +16,9 @@ const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
-    const [citySearch, setCitySearch] = useState('');
+    const [cityInput, setCityInput] = useState('');
     const [city, setCity] = useState<City | null>(null);
-    const [cities, setCities] = useState<City[]>([]);
+    const [citiesList, setCitiesList] = useState<City[]>([]);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
     const [bikes, setBikes] = useState<BikeType[]>([]);
     const [selectedBike, setSelectedBike] = useState<BikeType>();
@@ -39,7 +39,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
     const handleCityChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCitySearch(event.target.value);
+        setCityInput(event.target.value);
 
         if (timeoutId) {
             clearTimeout(timeoutId);
@@ -48,16 +48,16 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         const newTimeoutId = window.setTimeout(async () => {
             const citiesResponse = await searchCity(event.target.value, useNominatim);
             const cities: City[] = useNominatim ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[]) : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
-            setCities(cities);
+            setCitiesList(cities);
         }, 500);
 
         setTimeoutId(newTimeoutId);
     };
 
     const handleCityClick = (city: City) => {
-        setCitySearch(city.name);
+        setCityInput(city.name);
         setCity(city);
-        setCities([]);
+        setCitiesList([]);
     }
 
     const handleBikeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -76,7 +76,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             return;
         }
 
-        let params = {city: citySearch, 'bikeTypesSupported.id': selectedBike.id, 'order[firstSlotAvailable]': 'DESC'};
+        let params = {city: cityInput, itemsPerPage: 20, 'bikeTypesSupported.id': selectedBike.id, 'order[firstSlotAvailable]': 'DESC'};
         params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
 
         const response = await repairerResource.getAll(params);
@@ -117,8 +117,8 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                             <input
                                 onChange={handleCityChange}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                id="inline-full-name" type="text" value={citySearch} />
-                            {(cities.map((city: City) => {
+                                id="inline-full-name" type="text" value={cityInput} />
+                            {(citiesList.map((city: City) => {
                                 return <div key={city.id} onClick={() => { handleCityClick(city) }} className="hover:cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{city.formatted_name}</div>
                             }))}
                         </div>
