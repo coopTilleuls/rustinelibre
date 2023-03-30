@@ -17,6 +17,6 @@ export interface Repairer {
     rrule: string;
     latitude?: number;
     longitude?: number;
-    firstSlotAvailable?: DateObject,
+    firstSlotAvailable?: string,
     bikeTypesSupported: BikeType[]
 }

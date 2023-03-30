@@ -1,6 +1,7 @@
 import {PropsWithChildren} from 'react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 interface HomeCardProps extends PropsWithChildren {
     title: string;
@@ -22,19 +23,23 @@ export const HomeCard = ({
                     img,
                     children,
                  }: HomeCardProps): JSX.Element => (
-    <div className={backgroundColor}>
-        <div className="p-5">
-            <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl text-black text-center">
-                {title}
-            </h1>
-            <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-800 text-center">
-                {subTitle}
-            </p>
-            <Link href={pageLink}
-               style={{marginLeft:'15%'}}
-               className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900 ml-16 w-64">
-                {button}
-            </Link>
+    <div className={backgroundColor} style={{paddingBottom: '30px'}}>
+        <div className="hero_unit">
+            <div className="hero_content">
+                <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                    {title}
+                </Typography>
+                <Typography variant="h6" align="center" color="textSecondary" paragraph>
+                    {subTitle}
+                </Typography>
+                <div className="hero_buttons">
+                    <Link href={pageLink}>
+                        <Button variant="outlined" color="primary" style={{marginLeft: '45%'}}>
+                            {button}
+                        </Button>
+                    </Link>
+                </div>
+            </div>
         </div>
     </div>
 );

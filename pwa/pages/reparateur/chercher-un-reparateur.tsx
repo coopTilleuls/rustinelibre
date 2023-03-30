@@ -1,8 +1,6 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect} from 'react';
-import {Footer} from "@components/layout/Footer";
 import Head from "next/head";
-import {Navbar} from "@components/layout/Navbar";
 import {repairerResource} from 'resources/repairerResource';
 import {bikeTypeResource} from 'resources/bikeTypeResource';
 import {ButtonShowMap} from 'components/repairers/ButtonShowMap';
@@ -10,6 +8,8 @@ import {Repairer} from 'interfaces/Repairer';
 import {BikeType} from 'interfaces/BikeType';
 import Spinner from 'components/icons/Spinner';
 import dynamic from 'next/dynamic';
+const Navbar = dynamic(() => import("components/layout/Navbar"));
+const Footer = dynamic(() => import("components/layout/Footer"));
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
     const [city, setCity] = useState('');
@@ -118,7 +118,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                     </div>
                 </div>
 
-                <Footer logged={true} />
+                <Footer />
             </div>
         </>
     );
