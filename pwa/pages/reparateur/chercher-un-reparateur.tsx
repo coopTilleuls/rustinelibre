@@ -26,6 +26,10 @@ import PaginationBlock from "components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
 import useMediaQuery from 'hooks/useMediaQuery';
 
+interface OrderByOption {
+    [key: string]: string;
+}
+
 const SearchRepairer: NextPageWithLayout = ({}) => {
     const [cityInput, setCityInput] = useState<string>('');
     const [city, setCity] = useState<City | null>(null);
@@ -39,6 +43,8 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [showMap, setShowMap] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
+    const [orderByKey, setOrderByKey] = useState<string|null>(null);
+    const [orderByValue, setOrderByValue] = useState<string|null>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
     const listContainerRef = useRef<HTMLDivElement>(null);
 
@@ -68,8 +74,27 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setTimeoutId(newTimeoutId);
     };
 
-    const handleChangeSort = () => {
+    const handleChangeSort = (sortOption: string) => {
 
+        let orderBy: OrderByOption;
+        switch (sortOption) {
+            case 'proximity':
+                setOrderByKey('sort');
+                setOrderByValue('proximity');
+                orderBy = {'sort': 'proximity'};
+                break;
+            case 'repairersType':
+                setOrderByKey('sort');
+                setOrderByValue('repairersType');
+                orderBy = {'sort': 'repairersType'};
+                break;
+            default:
+                setOrderByKey('order[firstSlotAvailable]');
+                setOrderByValue('ASC');
+                orderBy = {'order[firstSlotAvailable]': 'ASC'};
+        }
+
+        fetchRepairers(1, city, selectedBike, orderBy);
     }
 
     const handleCitySelect = (event :  SyntheticEvent<Element, Event>, value: string | null) => {
@@ -108,7 +133,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         }
     };
 
-    const fetchRepairers = async (pageNumber?: number, citySelected?: City | null, givenBike? : BikeType | null): Promise<void> => {
+    const fetchRepairers = async (pageNumber?: number, citySelected?: City | null, givenBike? : BikeType | null, orderByGiven?: OrderByOption | null): Promise<void> => {
 
         if (!selectedBike || !cityInput) {
             return;
@@ -119,12 +144,23 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             city: citySelected ? citySelected.name : (city ? city.name : cityInput),
             itemsPerPage: 20,
             'bikeTypesSupported.id': givenBike ? givenBike.id : selectedBike.id,
-            'order[firstSlotAvailable]': 'ASC',
             'page': `${pageNumber ?? 1}`
         };
         
         params = citySelected ? {...{'around[5000]': `${citySelected.lat},${citySelected.lon}`}, ...params}
             :  (city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params);
+
+        // if (orderByGiven) {
+        //     const orderKey = Object.keys(orderByGiven)[0];
+        //     const orderValue = orderByGiven[orderKey];
+        //     params = {...{orderKey: orderValue}, ...params};
+        // } else if (orderByKey && orderByValue) {
+        //     params = {...{orderByKey: orderByValue}, ...params};
+        // } else {
+        //     params = {...{'order[firstSlotAvailable]': 'ASC'}, ...params};
+        // }
+
+        console.log(params);
 
         const response = await repairerResource.getAll(params);
         setRepairers(response['hydra:member']);
