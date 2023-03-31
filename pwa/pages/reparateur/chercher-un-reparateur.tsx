@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent} from 'react';
+import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent, FormEvent} from 'react';
 import Head from "next/head";
 import {repairerResource} from 'resources/repairerResource';
 import {bikeTypeResource} from 'resources/bikeTypeResource';
@@ -70,9 +70,12 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
     const handleCitySelect = (event :  SyntheticEvent<Element, Event>, value: string | null) => {
 
+        const selectedCity = citiesList.find((city) => city.name === value);
+        setCity(selectedCity ?? null);
         setCityInput(value ?? '');
+
         if (isMobile) {
-            fetchRepairers(1, value);
+            fetchRepairers(1, selectedCity);
         }
     }
 
@@ -81,11 +84,11 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setSelectedBike(selectedBikeType ? selectedBikeType : null);
 
         if (isMobile) {
-            fetchRepairers(1, cityInput, selectedBikeType);
+            fetchRepairers(1, city, selectedBikeType);
         }
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
         await fetchRepairers(1);
     };
@@ -101,7 +104,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         }
     };
 
-    const fetchRepairers = async (pageNumber?: number, citySelected?: string | null, givenBike? : BikeType | null): Promise<void> => {
+    const fetchRepairers = async (pageNumber?: number, citySelected?: City | null, givenBike? : BikeType | null): Promise<void> => {
 
         if (!selectedBike || !cityInput) {
             return;
@@ -109,13 +112,15 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setPendingSearchCity(true)
 
         let params = {
-            city: citySelected ?? cityInput,
+            city: citySelected ? citySelected.name : (city ? city.name : cityInput),
             itemsPerPage: 20,
             'bikeTypesSupported.id': givenBike ? givenBike.id : selectedBike.id,
             'order[firstSlotAvailable]': 'ASC',
             'page': `${pageNumber ?? 1}`
         };
-        params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
+        
+        params = citySelected ? {...{'around[5000]': `${citySelected.lat},${citySelected.lon}`}, ...params}
+            :  (city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params);
 
         const response = await repairerResource.getAll(params);
         setRepairers(response['hydra:member']);
