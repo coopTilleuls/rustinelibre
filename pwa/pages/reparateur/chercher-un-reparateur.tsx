@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, MouseEventHandler, ChangeEvent, SyntheticEvent} from 'react';
+import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent} from 'react';
 import Head from "next/head";
 import {repairerResource} from 'resources/repairerResource';
 import {bikeTypeResource} from 'resources/bikeTypeResource';
@@ -39,6 +39,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
     const isMobile = useMediaQuery('(max-width: 640px)');
+    const listContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchBikes = async () => {
@@ -67,7 +68,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     };
 
 
-    const handleCitySelect = (event :  React.SyntheticEvent<Element, Event>, value: string | null) => {
+    const handleCitySelect = (event :  SyntheticEvent<Element, Event>, value: string | null) => {
 
         setCityInput(value ?? '');
         if (isMobile) {
@@ -91,6 +92,13 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
     const handlePageChange = (pageNumber: number): void => {
         fetchRepairers(pageNumber);
+        scrollToTop();
+    };
+
+    const scrollToTop = (): void => {
+        if (listContainerRef.current) {
+            listContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     const fetchRepairers = async (pageNumber?: number, citySelected?: string | null, givenBike? : BikeType | null): Promise<void> => {
@@ -138,7 +146,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                                 ))}
                             </Select>
                         </div>
-                        <div style={{marginBottom: "24px", width: "100%"}}>
+                        <div style={{marginBottom: "24px", width: "100%"}} ref={listContainerRef}>
                             <InputLabel htmlFor="city">Ville</InputLabel>
 
                             <Autocomplete
