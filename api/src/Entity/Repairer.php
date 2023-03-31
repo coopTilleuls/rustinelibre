@@ -53,7 +53,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'bikeTypesSupported.name' => 'ipartial',
     'repairerType.id' => 'exact',
     'repairerType.name' => 'ipartial'])]
-#[ApiFilter(AroundFilter::class)]g
+#[ApiFilter(AroundFilter::class)]
 class Repairer
 {
     #[ApiProperty(identifier: true)]
