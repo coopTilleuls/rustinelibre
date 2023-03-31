@@ -31,8 +31,10 @@ interface OrderByOption {
 }
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
+    const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
     const [cityInput, setCityInput] = useState<string>('');
     const [city, setCity] = useState<City | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const [citiesList, setCitiesList] = useState<City[]>([]);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
     const [bikes, setBikes] = useState<BikeType[]>([]);
@@ -49,14 +51,20 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const listContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        if (isMobile && city && selectedBike) {
+            fetchRepairers();
+        }
+    }, [city, selectedBike]);
+
+    useEffect(() => {fetchRepairers();scrollToTop()},[currentPage]);
+
+    useEffect(() => {
         const fetchBikes = async () => {
             const response = await bikeTypeResource.getAll({});
             setBikes(response['hydra:member']);
         };
         fetchBikes();
     }, []);
-
-    const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
     const handleCityChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
 
@@ -94,37 +102,27 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                 orderBy = {'order[firstSlotAvailable]': 'ASC'};
         }
 
-        fetchRepairers(1, city, selectedBike, orderBy);
+        // @todo useState to change sort
     }
 
     const handleCitySelect = (event :  SyntheticEvent<Element, Event>, value: string | null) => {
-
         const selectedCity = citiesList.find((city) => city.name === value);
         setCity(selectedCity ?? null);
         setCityInput(value ?? '');
-
-        if (isMobile) {
-            fetchRepairers(1, selectedCity);
-        }
     }
 
     const handleBikeChange = (event: SelectChangeEvent): void => {
         const selectedBikeType = bikes.find((bt) => bt.id === Number(event.target.value));
         setSelectedBike(selectedBikeType ? selectedBikeType : null);
-
-        if (isMobile) {
-            fetchRepairers(1, city, selectedBikeType);
-        }
     };
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
-        await fetchRepairers(1);
+        await fetchRepairers();
     };
 
     const handlePageChange = (pageNumber: number): void => {
-        fetchRepairers(pageNumber);
-        scrollToTop();
+        setCurrentPage(pageNumber)
     };
 
     const scrollToTop = (): void => {
@@ -133,22 +131,22 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         }
     };
 
-    const fetchRepairers = async (pageNumber?: number, citySelected?: City | null, givenBike? : BikeType | null, orderByGiven?: OrderByOption | null): Promise<void> => {
+    const fetchRepairers = async (): Promise<void> => {
 
         if (!selectedBike || !cityInput) {
             return;
         }
+
         setPendingSearchCity(true)
 
         let params = {
-            city: citySelected ? citySelected.name : (city ? city.name : cityInput),
+            city: city ? city.name : cityInput,
             itemsPerPage: 20,
-            'bikeTypesSupported.id': givenBike ? givenBike.id : selectedBike.id,
-            'page': `${pageNumber ?? 1}`
+            'bikeTypesSupported.id': selectedBike.id,
+            'page': `${currentPage ?? 1}`
         };
         
-        params = citySelected ? {...{'around[5000]': `${citySelected.lat},${citySelected.lon}`}, ...params}
-            :  (city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params);
+        params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
 
         // if (orderByGiven) {
         //     const orderKey = Object.keys(orderByGiven)[0];
