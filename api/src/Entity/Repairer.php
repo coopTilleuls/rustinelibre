@@ -53,7 +53,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'bikeTypesSupported.id' => 'exact',
     'bikeTypesSupported.name' => 'ipartial',
     'repairerType.id' => 'exact',
-    'repairerType.name' => 'ipartial'])]
+    'repairerType.name' => 'ipartial',
+])]
 class Repairer
 {
     #[ApiProperty(identifier: true)]
