@@ -21,29 +21,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
-/*    operations: [*/
-/*        new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')"
-        ),
-        new Post(),
-        new Get(
-            uriTemplate: '/me',
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
-            provider: CurrentUserProvider::class
-        ),
-        new GetCollection(
-            security: "is_granted('ROLE_ADMIN')"
-        ),
-    ],*/
     normalizationContext: ['groups' => ['user_read']],
     denormalizationContext: ['groups' => ['user_write']]
 )]
-#[Get(uriTemplate: '/me', security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
-#[Get(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
-#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
+#[Get(uriTemplate: '/me', security: "is_granted('IS_AUTHENTICATED_FULLY')", provider: CurrentUserProvider::class)]
+#[Get(security: "is_granted('ROLE_ADMIN') or object == user")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
-#[Post(security: "is_granted('ROLE_ADMIN') or !user" )]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
+#[Post(security: "is_granted('ROLE_ADMIN') or !user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or is_granted('IS_AUTHENTICATED_FULLY')")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface

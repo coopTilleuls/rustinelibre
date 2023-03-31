@@ -2,6 +2,7 @@
 
 namespace App\Tests\User;
 
+use App\Entity\User;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -9,28 +10,31 @@ class SecurityUserTest extends AbstractTestCase
 {
     public function testPostUser(): void
     {
-        $this->createClientAuthAsAdmin()->request('POST', '/users', [
+        $this->createClient()->request('POST', '/users', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'name' => 'Vélo cargo',
+                'email' => 'newUser@test.com',
+                'plainPassword' => 'test',
             ],
         ]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-    }
-
-    public function testGetUser(): void
-    {
-        $this->createClientAuthAsUser()->request('GET', '/bike_types/1');
-        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@context' => '/contexts/User',
+            '@id' => '/me',
+            '@type' => 'User',
+            'email' => 'newUser@test.com',
+        ]);
     }
 
     public function testPostUserFail(): void
     {
-        $this->createClientAuthAsUser()->request('POST', '/bike_types', [
+        $this->createClientAuthAsUser()->request('POST', '/users', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'name' => 'Vélo cargo',
+                'roles' => ["ROLE_USER"],
+                'email' => "failUser@test.com",
+                'plainPassword' => "test",
             ],
         ]);
         $this->assertResponseStatusCodeSame(403);
@@ -39,12 +43,11 @@ class SecurityUserTest extends AbstractTestCase
 
     public function testPutUser(): void
     {
-        $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo cargo']);
-
-        $this->createClientAuthAsAdmin()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
+        $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'newUser@test.com']);
+        $this->createClientAuthAsAdmin()->request('PUT', '/users/'.$user->getId(), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'name' => 'Vélo hollandais',
+                'email' => 'putUser@test.com',
             ],
         ]);
         $this->assertResponseIsSuccessful();
@@ -53,22 +56,45 @@ class SecurityUserTest extends AbstractTestCase
 
     public function testPutUserFail(): void
     {
-        $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo hollandais']);
-
-        $this->createClientAuthAsUser()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
+        $this->createClientAuthAsUser()->request('PUT', '/users/21', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'name' => 'Vélo hollandais',
+                'email' => 'putUser@test.com',
             ],
         ]);
         $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 
-    public function testGetModifiedUser(): void
+    public function testGetUserByAdmin(): void
     {
-        $this->createClientAuthAsUser()->request('GET', '/bike_types/1');
+        $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'putUser@test.com']);
+        $this->createClientAuthAsAdmin()->request('GET', '/users/'.$user->getId());
         $this->assertResponseIsSuccessful();
     }
 
+    public function testGetUser(): void
+    {
+        $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'user1@test.com']);
+        $this->createClientAuthAsUser()->request('GET', '/users/'.$user->getId());
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testGetModifiedUserFail(): void
+    {
+        $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'putUser@test.com']);
+        $this->createClientAuthAsUser()->request('GET', '/users/'.$user->getId());
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+   public function testGetUserCollection(): void
+    {
+        $this->createClientAuthAsAdmin()->request('GET', '/users');
+        $this->assertResponseIsSuccessful();
+    }
+    public function testGetUserCollectionFail(): void
+    {
+        $this->createClientAuthAsUser()->request('GET', '/users');
+        $this->assertResponseStatusCodeSame(403);
+    }
 }
