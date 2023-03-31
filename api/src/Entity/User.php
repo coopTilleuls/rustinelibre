@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use App\User\StateProvider\CurrentUserProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,30 +20,30 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-#[Get(uriTemplate: '/me', security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
-#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
-#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
-#[Post(security: "is_granted('ROLE_ADMIN') or !user" )]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
-
 #[ApiResource(
-    normalizationContext: ['groups' => ['user_read']],
-    denormalizationContext: ['groups' => ['user_write']],
-    operations: [
-        new Get(
+/*    operations: [*/
+/*        new Get(
             security: "is_granted('IS_AUTHENTICATED_FULLY')"
         ),
         new Post(),
         new Get(
-            provider: CurrentUserProvider::class,
             uriTemplate: '/me',
-            security: "is_granted('IS_AUTHENTICATED_FULLY')"
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            provider: CurrentUserProvider::class
         ),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN')"
         ),
-    ]
+    ],*/
+    normalizationContext: ['groups' => ['user_read']],
+    denormalizationContext: ['groups' => ['user_write']]
 )]
+#[Get(uriTemplate: '/me', security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
+#[Get(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
+#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
+#[Post(security: "is_granted('ROLE_ADMIN') or !user" )]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user", provider: CurrentUserProvider::class)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
