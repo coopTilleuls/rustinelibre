@@ -33,8 +33,8 @@ class SecurityUserTest extends AbstractTestCase
         $this->createClientAuthAsUser()->request('POST', '/users', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'email' => "failUser@test.com",
-                'plainPassword' => "test",
+                'email' => 'failUser@test.com',
+                'plainPassword' => 'test',
             ],
         ]);
         $this->assertResponseStatusCodeSame(403);
@@ -58,6 +58,7 @@ class SecurityUserTest extends AbstractTestCase
             'email' => 'putUser@test.com',
         ]);
     }
+
     public function testPutUserByHimself(): void
     {
         $client = $this->createClientWithUserId();
@@ -109,10 +110,11 @@ class SecurityUserTest extends AbstractTestCase
     }
 
    public function testGetUserCollection(): void
-    {
-        $this->createClientAuthAsAdmin()->request('GET', '/users');
-        $this->assertResponseIsSuccessful();
-    }
+   {
+       $this->createClientAuthAsAdmin()->request('GET', '/users');
+       $this->assertResponseIsSuccessful();
+   }
+
     public function testGetUserCollectionFail(): void
     {
         $this->createClientAuthAsUser()->request('GET', '/users');
