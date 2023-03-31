@@ -55,7 +55,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'repairerType.name' => 'ipartial',
 ])]
 #[ApiFilter(AroundFilter::class)]
-class Repairger
+class Repairer
 {
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
