@@ -21,6 +21,7 @@ import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
 const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"));
+import RepairerSortOptions from "components/repairers/RepairerSortOptions";
 import PaginationBlock from "components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
 import useMediaQuery from 'hooks/useMediaQuery';
@@ -67,6 +68,9 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setTimeoutId(newTimeoutId);
     };
 
+    const handleChangeSort = () => {
+
+    }
 
     const handleCitySelect = (event :  SyntheticEvent<Element, Event>, value: string | null) => {
 
@@ -168,8 +172,10 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                             />
                         </div>
 
+                        <RepairerSortOptions handleChangeSort={handleChangeSort} />
+
                         <div className="hidden md:block">
-                            <Button type="submit" variant="outlined">Chercher</Button>
+                            <Button fullWidth type="submit" variant="outlined">Chercher</Button>
                         </div>
                     </form>
 
