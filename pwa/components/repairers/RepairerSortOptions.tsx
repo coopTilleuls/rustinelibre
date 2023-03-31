@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import {Repairer} from "../../interfaces/Repairer";
 import {formatDate} from 'helpers/dateHelper';
 import Box from '@mui/material/Box';
@@ -11,34 +11,41 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+const sortOptions: Record<string, string> = {
+    "availability": 'Disponibilité',
+    "repairersType": 'Type de réparateur',
+    "proximity": 'Proximité'
+};
+
 interface RepairerSortOptionsProps {
     handleChangeSort: any;
 }
-
-const sortOptions = [
-    'availability',
-    'repairersType',
-    'proximity'
-];
 
 const RepairerSortOptions = ({handleChangeSort}: RepairerSortOptionsProps): JSX.Element => {
 
     const [sortChosen, setSortChosen] = useState<string>('availability');
 
+    const handleSelect = (event: SelectChangeEvent) => {
+        setSortChosen(event.target.value);
+        handleChangeSort(event.target.value);
+    };
 
     return (
         <div>
             <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                <InputLabel id="demo-simple-select-label">Filtrer vos résultats</InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Age"
-                    onChange={handleChangeSort}
+                    labelId="select_sort_option"
+                    id="select_sort_option"
+                    label="Filtrer vos résultats"
+                    onChange={handleSelect}
+                    value={sortChosen}
                 >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {Object.entries(sortOptions).map(([key, option]) => (
+                        <MenuItem key={key} value={key}>
+                            {option}
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
         </div>
