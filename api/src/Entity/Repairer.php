@@ -43,7 +43,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[ApiFilter(DateFilter::class)]
-#[ApiFilter(AroundFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: [
     'city' => 'iexact',
@@ -54,6 +53,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'bikeTypesSupported.name' => 'ipartial',
     'repairerType.id' => 'exact',
     'repairerType.name' => 'ipartial'])]
+#[ApiFilter(AroundFilter::class)]g
 class Repairer
 {
     #[ApiProperty(identifier: true)]
