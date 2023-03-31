@@ -101,7 +101,7 @@ const Navbar = (): JSX.Element => {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        Bikelib
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pagesNotLogged.map((page) => (

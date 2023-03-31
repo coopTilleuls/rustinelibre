@@ -44,4 +44,3 @@ App\Entity\Repairer:
     longitude: '3.059621'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 11:00:00"))>
     repairerType: '@reparateur_velo'
-
