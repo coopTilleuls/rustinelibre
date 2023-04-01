@@ -27,7 +27,8 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from 'hooks/useMediaQuery';
 
 interface OrderByOption {
-    [key: string]: string;
+    key: string;
+    value: string;
 }
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
@@ -45,8 +46,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [showMap, setShowMap] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
-    const [orderByKey, setOrderByKey] = useState<string|null>(null);
-    const [orderByValue, setOrderByValue] = useState<string|null>(null);
+    const [orderBy, setOrderBy] = useState<object|null>({});
     const isMobile = useMediaQuery('(max-width: 640px)');
     const listContainerRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +54,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         if (isMobile && city && selectedBike) {
             fetchRepairers();
         }
-    }, [city, selectedBike]);
+    }, [city, selectedBike, orderBy]);
 
     useEffect(() => {fetchRepairers();scrollToTop()},[currentPage]);
 
@@ -87,19 +87,22 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         let orderBy: OrderByOption;
         switch (sortOption) {
             case 'proximity':
-                setOrderByKey('sort');
-                setOrderByValue('proximity');
-                orderBy = {'sort': 'proximity'};
+                setOrderBy({
+                    'key': 'proximity',
+                    'value': 'ASC'
+                });
                 break;
             case 'repairersType':
-                setOrderByKey('sort');
-                setOrderByValue('repairersType');
-                orderBy = {'sort': 'repairersType'};
+                setOrderBy({
+                    'key': 'repairerType.id',
+                    'value': 'ASC' // @todo change
+                });
                 break;
             default:
-                setOrderByKey('order[firstSlotAvailable]');
-                setOrderByValue('ASC');
-                orderBy = {'order[firstSlotAvailable]': 'ASC'};
+                setOrderBy({
+                    'key': 'availability',
+                    'value': 'ASC' // @todo change
+                });
         }
 
         // @todo useState to change sort
