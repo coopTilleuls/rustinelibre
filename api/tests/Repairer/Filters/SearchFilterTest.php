@@ -15,7 +15,7 @@ class SearchFilterTest extends AbstractTestCase
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
         $responseData = $response->toArray();
-        $this->assertEquals(2, $responseData['hydra:totalItems']);
+        $this->assertEquals(15, $responseData['hydra:totalItems']);
         $this->assertStringContainsString('atelier', strtolower($responseData['hydra:member'][0]['repairerType']['name']));
         $this->assertStringContainsString('atelier', strtolower($responseData['hydra:member'][1]['repairerType']['name']));
     }

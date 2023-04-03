@@ -14,7 +14,7 @@ class AroundFilterTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
-        $this->assertEquals(3, $response->toArray()['hydra:totalItems']);
+        $this->assertEquals(21, $response->toArray()['hydra:totalItems']);
     }
 
     public function testAroundFilter1km(): void
@@ -23,7 +23,7 @@ class AroundFilterTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
-        $this->assertEquals(2, $response->toArray()['hydra:totalItems']);
+        $this->assertEquals(6, $response->toArray()['hydra:totalItems']);
     }
 
     public function testAroundFilter50meters(): void

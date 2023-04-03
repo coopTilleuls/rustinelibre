@@ -22,7 +22,6 @@ final class Version20230327140014 extends AbstractMigration
                                 (1, 'Vélo classique'),
                                 (2, 'Vélo électrique');
         ");
-
     }
 
     public function down(Schema $schema): void
