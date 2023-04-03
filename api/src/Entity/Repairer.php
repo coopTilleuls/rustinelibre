@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
 use App\Repairers\Filter\AroundFilter;
+use App\Repairers\Filter\ProximityFilter;
 use App\Repository\RepairerRepository;
 use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -55,6 +56,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'repairerType.name' => 'ipartial',
 ])]
 #[ApiFilter(AroundFilter::class)]
+#[ApiFilter(ProximityFilter::class)]
 class Repairer
 {
     #[ApiProperty(identifier: true)]
