@@ -51,6 +51,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const isMobile = useMediaQuery('(max-width: 640px)');
     const listContainerRef = useRef<HTMLDivElement>(null);
     const [repairerTypeSelected, setRepairerTypeSelected] = useState<string>('');
+    const [sortChosen, setSortChosen] = useState<string>('availability');
 
     useEffect(() => {
         if (isMobile && city && selectedBike) {
@@ -61,10 +62,12 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     useEffect(() => {fetchRepairers();scrollToTop()},[currentPage]);
 
     useEffect(() => {
-        setOrderBy({
-            'key': 'repairerType.id',
-            'value': repairerTypeSelected
-        })
+        if (sortChosen === 'repairersType') {
+            setOrderBy({
+                'key': 'repairerType.id',
+                'value': repairerTypeSelected
+            })
+        }
     }, [repairerTypeSelected]);
 
     useEffect(() => {
@@ -91,10 +94,11 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setTimeoutId(newTimeoutId);
     };
 
-    const handleChangeSort = (sortOption: string) => {
+    const handleChangeSort = (sortOption: string): void => {
+        setSortChosen(sortOption);
         setOrderBy({
             'key': sortOption,
-            'value': 'ASC',
+            'value': sortOption !== 'repairersType' ? 'ASC' : repairerTypeSelected,
         });
     }
 
@@ -138,12 +142,14 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             'bikeTypesSupported.id': selectedBike.id,
             'page': `${currentPage ?? 1}`
         };
-        
+
+        params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
+
         if (orderBy) {
             const { key, value } = orderBy;
             params = {...params, [key]: value}
         } else {
-            params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
+            params = {...{'availability': 'ASC'}, ...params}
         }
 
         const response = await repairerResource.getAll(params);
@@ -192,7 +198,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                             />
                         </div>
 
-                        <RepairerSortOptions handleChangeSort={handleChangeSort} isMobile={isMobile} repairerTypeSelected={repairerTypeSelected} setRepairerTypeSelected={setRepairerTypeSelected} />
+                        <RepairerSortOptions sortChosen={sortChosen} handleChangeSort={handleChangeSort} isMobile={isMobile} repairerTypeSelected={repairerTypeSelected} setRepairerTypeSelected={setRepairerTypeSelected} />
 
                         <div className="hidden md:block">
                             <Button fullWidth type="submit" variant="outlined">Chercher</Button>

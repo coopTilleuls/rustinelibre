@@ -7,34 +7,36 @@ import {repairerTypeResource} from "../../resources/repairerTypeResource";
 import {RepairerType} from "../../interfaces/RepairerType";
 
 const sortOptions: Record<string, string> = {
-    "availability": 'Disponibilité',
-    "repairersType": 'Type de réparateur',
-    "proximity": 'Proximité'
+    "availability": 'Par disponibilité',
+    "repairersType": 'Par type de réparateur',
+    "proximity": 'Par proximité'
 };
 
 interface RepairerSortOptionsProps {
+    sortChosen: string;
     handleChangeSort: (newSortSelected: string) => void;
     isMobile: boolean;
     repairerTypeSelected: string;
     setRepairerTypeSelected: (newRepairerTypeSelected: string) => void;
 }
 
-const RepairerSortOptions = ({handleChangeSort, isMobile, repairerTypeSelected, setRepairerTypeSelected}: RepairerSortOptionsProps): JSX.Element => {
+const RepairerSortOptions = ({sortChosen, handleChangeSort, isMobile, repairerTypeSelected, setRepairerTypeSelected}: RepairerSortOptionsProps): JSX.Element => {
 
-    const [sortChosen, setSortChosen] = useState<string>('availability');
     const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
 
     useEffect(() => {
         async function fetchRepairerTypes() {
             const response = await repairerTypeResource.getAll({});
             setRepairerTypes(response['hydra:member']);
+            if (response['hydra:totalItems'] > 0) {
+                setRepairerTypeSelected((response['hydra:member'][0].id.toString()));
+            }
         }
 
         fetchRepairerTypes();
     }, []);
 
     const handleSelectSortOption = (event: SelectChangeEvent) => {
-        setSortChosen(event.target.value);
         handleChangeSort(event.target.value);
     };
 
