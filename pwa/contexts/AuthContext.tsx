@@ -48,6 +48,27 @@ export const AuthProvider = ({children}: PropsWithChildren): JSX.Element => {
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
+export const useAccount = ({
+                             redirectIfFound,
+                             redirectIfNotFound,
+                           }: {
+  redirectIfFound?: string;
+  redirectIfNotFound?: string;
+}) => {
+  const {user} = useAuth();
+
+  useEffect(() => {
+    if (user && redirectIfFound) {
+      Router.push(redirectIfFound);
+    } else if (!user && redirectIfNotFound) {
+      Router.push(redirectIfNotFound);
+    }
+  }, [redirectIfFound, redirectIfNotFound, user]);
+
+  return user;
+};
+
+
 // Provider hook that creates auth object and handles state
 const useProviderAuth = () => {
   const [user, setUser] = useState<User | null>(null);
