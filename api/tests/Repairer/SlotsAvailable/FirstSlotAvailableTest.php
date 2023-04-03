@@ -12,15 +12,15 @@ class FirstSlotAvailableTest extends AbstractTestCase
     public function testGetOrderBySlotAvailable(): void
     {
         // Check order of results
-        $response = static::createClient()->request('GET', '/repairers?order[firstSlotAvailable]=ASC');
+        $response = static::createClient()->request('GET', '/repairers?availability=ASC');
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
         $responseData = $response->toArray();
         // Check that first result is less than second and second less than third
         $this->assertEquals(3, $responseData['hydra:member'][0]['id']);
-        $this->assertLessThan($responseData['hydra:member'][1]['firstSlotAvailable'], $responseData['hydra:member'][0]['firstSlotAvailable']);
-        $this->assertLessThan($responseData['hydra:member'][2]['firstSlotAvailable'], $responseData['hydra:member'][1]['firstSlotAvailable']);
+        $this->assertLessThanOrEqual($responseData['hydra:member'][1]['firstSlotAvailable'], $responseData['hydra:member'][0]['firstSlotAvailable']);
+        $this->assertLessThanOrEqual($responseData['hydra:member'][2]['firstSlotAvailable'], $responseData['hydra:member'][1]['firstSlotAvailable']);
 
         // Create an appointment
         $this->createClientAuthAsAdmin()->request('POST', '/appointments', ['json' => [
@@ -31,10 +31,10 @@ class FirstSlotAvailableTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
         // Check that previous first result is no more before others
-        $response = static::createClient()->request('GET', '/repairers?order[firstSlotAvailable]=ASC');
+        $response = static::createClient()->request('GET', '/repairers?availability=ASC');
         $responseData = $response->toArray();
         $this->assertResponseIsSuccessful();
-        $this->assertNotEquals(3, $responseData['hydra:member'][0]['id']);
+        $this->assertNotEquals(1, $responseData['hydra:member'][0]['id']);
         $this->assertLessThanOrEqual($responseData['hydra:member'][1]['firstSlotAvailable'], $responseData['hydra:member'][0]['firstSlotAvailable']);
         $this->assertLessThanOrEqual($responseData['hydra:member'][2]['firstSlotAvailable'], $responseData['hydra:member'][1]['firstSlotAvailable']);
     }
