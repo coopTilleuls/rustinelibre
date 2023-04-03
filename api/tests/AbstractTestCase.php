@@ -65,13 +65,22 @@ abstract class AbstractTestCase extends ApiTestCase
         return $this->createClientWithCredentials(['email' => 'boss@test.com', 'password' => 'test']);
     }
 
-    protected function authById(): Client
+    protected function createClientWithUserId(int $id = 10): Client
     {
-        $client = static::createClient();
-        $userRepository = static::getContainer()->get(UserRepository::class);
-        $testUser = $userRepository->findOneBy(['id' => 10]);
-        $client->loginUser($testUser);
+        $userToConnect = static::getContainer()->get('doctrine')->getRepository(User::class)->find($id);
+        $response = static::createClient()->request('POST', '/auth', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => $userToConnect->getEmail(),
+                'password' => 'test',
+            ],
+        ]);
+
+        $json = $response->toArray();
+
+        $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
 
         return $client;
+
     }
 }

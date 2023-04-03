@@ -60,7 +60,7 @@ class SecurityUserTest extends AbstractTestCase
     }
     public function testPutUserByHimself(): void
     {
-        $client = $this->authById();
+        $client = $this->createClientWithUserId();
         $client->request('PUT', '/users/10', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
