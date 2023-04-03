@@ -25,7 +25,6 @@ import RepairerSortOptions from "components/repairers/RepairerSortOptions";
 import PaginationBlock from "components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
 import useMediaQuery from 'hooks/useMediaQuery';
-import {CircularProgress} from "@mui/material";
 
 interface OrderByOption {
     key: string;
