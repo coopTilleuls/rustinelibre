@@ -10,18 +10,19 @@ class SecurityUserTest extends AbstractTestCase
 {
     public function testPostUser(): void
     {
-        $this->createClient()->request('POST', '/users', [
+        $response = $this->createClient()->request('POST', '/users', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'newUser@test.com',
                 'plainPassword' => 'test',
             ],
         ]);
+        $response->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertJsonContains([
             '@context' => '/contexts/User',
-            '@id' => '/me',
+            '@id' => '/users/21',
             '@type' => 'User',
             'email' => 'newUser@test.com',
         ]);
@@ -32,7 +33,6 @@ class SecurityUserTest extends AbstractTestCase
         $this->createClientAuthAsUser()->request('POST', '/users', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'roles' => ["ROLE_USER"],
                 'email' => "failUser@test.com",
                 'plainPassword' => "test",
             ],
@@ -41,10 +41,9 @@ class SecurityUserTest extends AbstractTestCase
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 
-    public function testPutUser(): void
+    public function testPutUserByAdmin(): void
     {
-        $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'newUser@test.com']);
-        $this->createClientAuthAsAdmin()->request('PUT', '/users/'.$user->getId(), [
+        $this->createClientAuthAsAdmin()->request('PUT', '/users/13', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'putUser@test.com',
@@ -52,6 +51,30 @@ class SecurityUserTest extends AbstractTestCase
         ]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertJsonContains([
+            '@context' => '/contexts/User',
+            '@id' => '/users/13',
+            '@type' => 'User',
+            'email' => 'putUser@test.com',
+        ]);
+    }
+    public function testPutUserByHimself(): void
+    {
+        $client = $this->authById();
+        $client->request('PUT', '/users/10', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'putUserHimself@test.com',
+            ],
+        ]);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertJsonContains([
+            '@context' => '/contexts/User',
+            '@id' => '/users/10',
+            '@type' => 'User',
+            'email' => 'putUserHimself@test.com',
+        ]);
     }
 
     public function testPutUserFail(): void
@@ -68,22 +91,20 @@ class SecurityUserTest extends AbstractTestCase
 
     public function testGetUserByAdmin(): void
     {
-        $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'putUser@test.com']);
-        $this->createClientAuthAsAdmin()->request('GET', '/users/'.$user->getId());
+        $this->createClientAuthAsAdmin()->request('GET', '/users/21');
         $this->assertResponseIsSuccessful();
     }
 
-    public function testGetUser(): void
+    public function testUserGetHimself(): void
     {
         $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'user1@test.com']);
         $this->createClientAuthAsUser()->request('GET', '/users/'.$user->getId());
         $this->assertResponseIsSuccessful();
     }
 
-    public function testGetModifiedUserFail(): void
+    public function testGetUserFail(): void
     {
-        $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'putUser@test.com']);
-        $this->createClientAuthAsUser()->request('GET', '/users/'.$user->getId());
+        $this->createClientAuthAsUser()->request('GET', '/users/17');
         $this->assertResponseStatusCodeSame(403);
     }
 

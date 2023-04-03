@@ -6,6 +6,8 @@ namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
+use App\Entity\User;
+use App\Repository\UserRepository;
 
 abstract class AbstractTestCase extends ApiTestCase
 {
@@ -61,5 +63,15 @@ abstract class AbstractTestCase extends ApiTestCase
     protected function createClientAuthAsBoss(): Client
     {
         return $this->createClientWithCredentials(['email' => 'boss@test.com', 'password' => 'test']);
+    }
+
+    protected function authById(): Client
+    {
+        $client = static::createClient();
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $testUser = $userRepository->findOneBy(['id' => 10]);
+        $client->loginUser($testUser);
+
+        return $client;
     }
 }
