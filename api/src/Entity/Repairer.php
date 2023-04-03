@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -18,6 +16,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
 use App\Repairers\Filter\AroundFilter;
+use App\Repairers\Filter\FirstAvailableSlotFilter;
+use App\Repairers\Filter\RandomFilter;
 use App\Repository\RepairerRepository;
 use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -42,8 +42,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Put(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
-#[ApiFilter(DateFilter::class)]
-#[ApiFilter(OrderFilter::class, properties: ['firstSlotAvailable'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(AroundFilter::class)]
+#[ApiFilter(FirstAvailableSlotFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'city' => 'iexact',
     'description' => 'ipartial',
@@ -52,9 +52,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'bikeTypesSupported.id' => 'exact',
     'bikeTypesSupported.name' => 'ipartial',
     'repairerType.id' => 'exact',
-    'repairerType.name' => 'ipartial',
-])]
-#[ApiFilter(AroundFilter::class)]
+    'repairerType.name' => 'ipartial'])]
+#[ApiFilter(RandomFilter::class)]
 class Repairer
 {
     #[ApiProperty(identifier: true)]

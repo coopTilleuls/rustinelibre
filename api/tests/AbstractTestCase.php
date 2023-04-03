@@ -7,7 +7,6 @@ namespace App\Tests;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use App\Entity\User;
-use App\Repository\UserRepository;
 
 abstract class AbstractTestCase extends ApiTestCase
 {
@@ -81,6 +80,5 @@ abstract class AbstractTestCase extends ApiTestCase
         $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
 
         return $client;
-
     }
 }
