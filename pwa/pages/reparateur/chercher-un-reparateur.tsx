@@ -103,9 +103,19 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
     const handleChangeSort = (sortOption: string): void => {
         setSortChosen(sortOption);
+
+        let value = '';
+        if(sortOption === 'repairersType') {
+            value = repairerTypeSelected;
+        }else if (sortOption === 'availability') {
+            value = 'ASC';
+        }else if (sortOption === 'proximity') {
+            value = `${city?.lat},${city?.lon}`;
+        }
+
         setOrderBy({
             'key': sortOption,
-            'value': sortOption !== 'repairersType' ? 'ASC' : repairerTypeSelected,
+            'value': value,
         });
     }
 
@@ -147,7 +157,8 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             city: city ? city.name : cityInput,
             itemsPerPage: 20,
             'bikeTypesSupported.id': selectedBike.id,
-            'page': `${currentPage ?? 1}`
+            'page': `${currentPage ?? 1}`,
+            'sort': 'random'
         };
 
         params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
