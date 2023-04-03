@@ -6,9 +6,11 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use App\User\StateProvider\CurrentUserProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,22 +23,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['user_read']],
-    denormalizationContext: ['groups' => ['user_write']],
-    operations: [
-        new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')"
-        ),
-        new Post(),
-        new Get(
-            provider: CurrentUserProvider::class,
-            uriTemplate: '/me',
-            security: "is_granted('IS_AUTHENTICATED_FULLY')"
-        ),
-        new GetCollection(
-            security: "is_granted('ROLE_ADMIN')"
-        ),
-    ]
+    denormalizationContext: ['groups' => ['user_write']]
 )]
+#[Get(security: "is_granted('ROLE_ADMIN') or object == user")]
+#[Post(security: "is_granted('ROLE_ADMIN') or !user")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
+#[Get(uriTemplate: '/me', security: "is_granted('IS_AUTHENTICATED_FULLY')", provider: CurrentUserProvider::class)]
+#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
