@@ -9,10 +9,10 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
-import {useAccount, useAuth} from 'contexts/AuthContext';
+import {useAccount} from 'contexts/AuthContext';
 
 const Home = () => {
-
+    const user = useAccount({});
 
     return (
         <div className="w-full overflow-x-hidden">
