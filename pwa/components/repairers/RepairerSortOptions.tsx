@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -11,7 +11,6 @@ const sortOptions: Record<string, string> = {
     "repairersType": 'Type de réparateur',
     "proximity": 'Proximité'
 };
-
 
 interface RepairerSortOptionsProps {
     handleChangeSort: (newSortSelected: string) => void;
@@ -34,7 +33,7 @@ const RepairerSortOptions = ({handleChangeSort, isMobile, repairerTypeSelected, 
         fetchRepairerTypes();
     }, []);
 
-    const handleSelect = (event: SelectChangeEvent) => {
+    const handleSelectSortOption = (event: SelectChangeEvent) => {
         setSortChosen(event.target.value);
         handleChangeSort(event.target.value);
     };
@@ -51,7 +50,7 @@ const RepairerSortOptions = ({handleChangeSort, isMobile, repairerTypeSelected, 
                     labelId="select_sort_option"
                     id="select_sort_option"
                     label="Filtrer vos résultats"
-                    onChange={handleSelect}
+                    onChange={handleSelectSortOption}
                     value={sortChosen}
                 >
                     {Object.entries(sortOptions).map(([key, option]) => (
