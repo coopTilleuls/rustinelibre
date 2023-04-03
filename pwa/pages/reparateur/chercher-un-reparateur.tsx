@@ -25,6 +25,7 @@ import RepairerSortOptions from "components/repairers/RepairerSortOptions";
 import PaginationBlock from "components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
 import useMediaQuery from 'hooks/useMediaQuery';
+import {CircularProgress} from "@mui/material";
 
 interface OrderByOption {
     key: string;
@@ -46,9 +47,10 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [showMap, setShowMap] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
-    const [orderBy, setOrderBy] = useState<object|null>({});
+    const [orderBy, setOrderBy] = useState<OrderByOption|null>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
     const listContainerRef = useRef<HTMLDivElement>(null);
+    const [repairerTypeSelected, setRepairerTypeSelected] = useState<string>('');
 
     useEffect(() => {
         if (isMobile && city && selectedBike) {
@@ -57,6 +59,13 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     }, [city, selectedBike, orderBy]);
 
     useEffect(() => {fetchRepairers();scrollToTop()},[currentPage]);
+
+    useEffect(() => {
+        setOrderBy({
+            'key': 'repairerType.id',
+            'value': repairerTypeSelected
+        })
+    }, [repairerTypeSelected]);
 
     useEffect(() => {
         const fetchBikes = async () => {
@@ -83,29 +92,10 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     };
 
     const handleChangeSort = (sortOption: string) => {
-
-        let orderBy: OrderByOption;
-        switch (sortOption) {
-            case 'proximity':
-                setOrderBy({
-                    'key': 'proximity',
-                    'value': 'ASC'
-                });
-                break;
-            case 'repairersType':
-                setOrderBy({
-                    'key': 'repairerType.id',
-                    'value': 'ASC' // @todo change
-                });
-                break;
-            default:
-                setOrderBy({
-                    'key': 'availability',
-                    'value': 'ASC' // @todo change
-                });
-        }
-
-        // @todo useState to change sort
+        setOrderBy({
+            'key': sortOption,
+            'value': 'ASC',
+        });
     }
 
     const handleCitySelect = (event :  SyntheticEvent<Element, Event>, value: string | null) => {
@@ -149,19 +139,12 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             'page': `${currentPage ?? 1}`
         };
         
-        params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
-
-        // if (orderByGiven) {
-        //     const orderKey = Object.keys(orderByGiven)[0];
-        //     const orderValue = orderByGiven[orderKey];
-        //     params = {...{orderKey: orderValue}, ...params};
-        // } else if (orderByKey && orderByValue) {
-        //     params = {...{orderByKey: orderByValue}, ...params};
-        // } else {
-        //     params = {...{'order[firstSlotAvailable]': 'ASC'}, ...params};
-        // }
-
-        console.log(params);
+        if (orderBy) {
+            const { key, value } = orderBy;
+            params = {...params, [key]: value}
+        } else {
+            params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
+        }
 
         const response = await repairerResource.getAll(params);
         setRepairers(response['hydra:member']);
@@ -179,7 +162,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                 <Navbar/>
                 <div style={{width: "100vw", marginBottom: '100px'}}>
                     <form onSubmit={handleSubmit} style={{margin: "6px", padding: "36px 24px 48px", display: "grid", gap: "24px", gridTemplateColumns: "1fr 1fr"}}>
-                        <div style={{marginBottom: "24px", width: "100%"}}>
+                        <div style={{marginBottom: "14px"}}>
                             <InputLabel htmlFor="bikeType">Type de Vélo</InputLabel>
                             <Select
                                 onChange={handleBikeChange}
@@ -192,9 +175,8 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                                 ))}
                             </Select>
                         </div>
-                        <div style={{marginBottom: "24px", width: "100%"}} ref={listContainerRef}>
+                        <div style={{marginBottom: "14px"}} ref={listContainerRef}>
                             <InputLabel htmlFor="city">Ville</InputLabel>
-
                             <Autocomplete
                                 freeSolo
                                 value={cityInput}
@@ -205,11 +187,12 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                                         {...params}
                                         value={cityInput}
                                         onChange={(e) => handleCityChange(e)}
-                                    />}
+                                    />
+                                }
                             />
                         </div>
 
-                        <RepairerSortOptions handleChangeSort={handleChangeSort} />
+                        <RepairerSortOptions handleChangeSort={handleChangeSort} isMobile={isMobile} repairerTypeSelected={repairerTypeSelected} setRepairerTypeSelected={setRepairerTypeSelected} />
 
                         <div className="hidden md:block">
                             <Button fullWidth type="submit" variant="outlined">Chercher</Button>
