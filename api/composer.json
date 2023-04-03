@@ -17,6 +17,7 @@
         "lexik/jwt-authentication-bundle": "^2.18",
         "nelmio/cors-bundle": "^2.2",
         "phpdocumentor/reflection-docblock": "^5.3",
+        "qbbr/pgsql-doctrine-random-function": "^1.0",
         "simshaun/recurr": "^5.0",
         "symfony/asset": "6.2.*",
         "symfony/console": "6.2.*",

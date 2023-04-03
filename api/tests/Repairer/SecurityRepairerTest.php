@@ -11,21 +11,20 @@ class SecurityRepairerTest extends AbstractTestCase
     {
         $client = self::createClientAuthAsBoss();
 
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'name'=> 'Chez Jojo',
-                'owner'=> '/users/3',
-                'description'=> "On aime réparer des trucs",
-                'mobilePhone'=> "0720596321",
-                'street'=> "8 rue de la clé",
-                'city'=> "Lille",
-                'postcode'=> "59000",
-                'country'=> "France",
-                'rrule'=> 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported'=> ['/bike_types/1', '/bike_types/2'],
+                'name' => 'Chez Jojo',
+                'owner' => '/users/3',
+                'description' => 'On aime réparer des trucs',
+                'mobilePhone' => '0720596321',
+                'street' => '8 rue de la clé',
+                'city' => 'Lille',
+                'postcode' => '59000',
+                'country' => 'France',
+                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
+                'bikeTypesSupported' => ['/bike_types/1', '/bike_types/2'],
             ],
         ]);
         $this->assertResponseIsSuccessful();
@@ -40,18 +39,18 @@ class SecurityRepairerTest extends AbstractTestCase
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'name'=> 'Chez Jojo',
-                'owner'=> '/users/4',
-                'description'=> "On aime réparer des trucs",
-                'mobilePhone'=> "0720596321",
-                'street'=> "8 rue de la clé",
-                'city'=> "Lille",
-                'postcode'=> "59000",
-                'country'=> "France",
-                'rrule'=> 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported'=> ['/bike_types/1'],
-                'latitude'=> '50.6365654',
-                'longitude'=> '3.0635282',
+                'name' => 'Chez Jojo',
+                'owner' => '/users/4',
+                'description' => 'On aime réparer des trucs',
+                'mobilePhone' => '0720596321',
+                'street' => '8 rue de la clé',
+                'city' => 'Lille',
+                'postcode' => '59000',
+                'country' => 'France',
+                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
+                'bikeTypesSupported' => ['/bike_types/1'],
+                'latitude' => '50.6365654',
+                'longitude' => '3.0635282',
             ],
         ]);
         $this->assertResponseStatusCodeSame(403);
@@ -66,6 +65,6 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
         $this->assertIsArray($response);
-        $this->assertSame($response['name'], 'Chez Jojo');
+        $this->assertSame($response['name'], 'Au réparateur de bicyclettes');
     }
 }
