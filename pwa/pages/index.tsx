@@ -18,7 +18,6 @@ const Home = () => {
                 <title>Bienvenue sur la page d'accueil!</title>
             </Head>
             <Navbar />
-
             <Box sx={{ width: '100%' }}>
                 <Stack spacing={2}>
                     <HomeCard

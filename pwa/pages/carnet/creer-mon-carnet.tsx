@@ -1,8 +1,8 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState} from 'react';
 import Head from "next/head";
-import {Footer} from '@components/layout/Footer';
-import {Navbar} from '@components/layout/Navbar';
+import Navbar from "@components/layout/Navbar";
+import Footer from "@components/layout/Footer";
 
 const CreateMaintenanceBook: NextPageWithLayout = () => {
     return (
@@ -10,11 +10,8 @@ const CreateMaintenanceBook: NextPageWithLayout = () => {
             <Head>
                 <title>Mon carnet d'entretien</title>
             </Head>
-            <Navbar/>
-            <p>
-                HELLO
-            </p>
-            <Footer logged={true} />
+            <Navbar />
+            <Footer />
         </div>
     );
 };
