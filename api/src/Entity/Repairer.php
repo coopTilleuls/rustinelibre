@@ -136,6 +136,12 @@ class Repairer
     #[Groups(['repairer_read'])]
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profilePicture = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pagePicture = null;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
@@ -324,5 +330,29 @@ class Repairer
     public function setRepairerType(?RepairerType $repairerType): void
     {
         $this->repairerType = $repairerType;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
+
+        return $this;
+    }
+
+    public function getPagePicture(): ?string
+    {
+        return $this->pagePicture;
+    }
+
+    public function setPagePicture(?string $pagePicture): self
+    {
+        $this->pagePicture = $pagePicture;
+
+        return $this;
     }
 }
