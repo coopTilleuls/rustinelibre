@@ -35,15 +35,12 @@ final class AroundFilter extends AbstractFilter
         $queryBuilder->orWhere($queryBuilder->expr()->eq(
             'ST_DWithin(
                     o.gpsPoint,
-                    ST_SetSRID(ST_MakePoint(:latitude, :longitude), 4326),
-                    :distance
+                    ST_SetSRID(ST_MakePoint(:around_latitude, :around_longitude), 4326),
+                    :around_distance
                 )', 'true'));
-
-        $queryBuilder->setParameters([
-            'latitude' => $coordinates[0],
-            'longitude' => $coordinates[1],
-            'distance' => $distance,
-        ]);
+        $queryBuilder->setParameter('around_latitude', $coordinates[0]);
+        $queryBuilder->setParameter('around_longitude', $coordinates[1]);
+        $queryBuilder->setParameter('around_distance', $distance);
     }
 
     public function getDescription(string $resourceClass): array
