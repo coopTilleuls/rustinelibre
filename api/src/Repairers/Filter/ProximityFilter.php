@@ -11,9 +11,9 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
 
-final class AroundFilter extends AbstractFilter
+final class ProximityFilter extends AbstractFilter
 {
-    public const PROPERTY_NAME = 'around';
+    public const PROPERTY_NAME = 'proximity';
 
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
@@ -21,29 +21,21 @@ final class AroundFilter extends AbstractFilter
             return;
         }
 
-        if (!property_exists($resourceClass, 'latitude') || !property_exists($resourceClass, 'longitude')) {
-            throw new BadRequestHttpException(sprintf('Your resource class %s has no latitude or longitude property', $resourceClass));
+        try {
+            $coordinates = explode(',', $value);
+            $latitude = $coordinates[0];
+            $longitude = $coordinates[1];
+        } catch (\Exception $exception) {
+            throw new BadRequestHttpException('TThe parameters provided in the proximity filter have the wrong format, it should be ?proximity=50.43321,3.03943');
         }
 
-        if (!is_array($value) || empty($value)) {
-            throw new BadRequestHttpException('Wrong format provided for the filter, should be : ?around[distance]=latitude,longitude');
-        }
-
-        $distance = key($value);
-        $coordinates = explode(',', $value[$distance]);
-
-        $queryBuilder->orWhere($queryBuilder->expr()->eq(
-            'ST_DWithin(
-                    o.gpsPoint,
-                    ST_SetSRID(ST_MakePoint(:latitude, :longitude), 4326),
-                    :distance
-                )', 'true'));
-
+        $queryBuilder->addSelect('ST_Distance(o.gpsPoint, ST_SetSRID(ST_MakePoint(:latitude, :longitude), 4326)) as distance');
         $queryBuilder->setParameters([
-            'latitude' => $coordinates[0],
-            'longitude' => $coordinates[1],
-            'distance' => $distance,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
         ]);
+
+        $queryBuilder->addOrderBy('distance', 'ASC');
     }
 
     public function getDescription(string $resourceClass): array
@@ -54,12 +46,13 @@ final class AroundFilter extends AbstractFilter
 
         $description = [];
         foreach ($this->properties as $property => $strategy) {
-            $description['around'] = [
+            $description['proximity'] = [
+                'property' => $property,
                 'type' => Type::BUILTIN_TYPE_STRING,
                 'required' => false,
-                'description' => 'Filter to get points around given GPS coordinates',
+                'description' => 'Filter to get data order by proximity from a given latitude/longitude. Default order is ASC',
                 'openapi' => [
-                    'example' => '/repairers?around[distance]=latitude,longitude',
+                    'example' => '/repairers?proximity=<latitude,longitude>',
                     'allowReserved' => false,
                     'allowEmptyValue' => true,
                     'explode' => false,
