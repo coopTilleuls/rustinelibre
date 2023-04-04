@@ -29,7 +29,12 @@ final class ProximityFilter extends AbstractFilter
             throw new BadRequestHttpException('TThe parameters provided in the proximity filter have the wrong format, it should be ?proximity=50.43321,3.03943');
         }
 
-        $queryBuilder->addSelect(sprintf('ST_Distance(o.gpsPoint, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) as distance', $latitude, $longitude));
+        $queryBuilder->addSelect('ST_Distance(o.gpsPoint, ST_SetSRID(ST_MakePoint(:latitude, :longitude), 4326)) as distance');
+        $queryBuilder->setParameters([
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+        ]);
+
         $queryBuilder->addOrderBy('distance', 'ASC');
     }
 
