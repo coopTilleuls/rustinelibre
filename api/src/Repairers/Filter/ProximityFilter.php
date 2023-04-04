@@ -8,6 +8,7 @@ use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
 
 final class ProximityFilter extends AbstractFilter
@@ -20,8 +21,15 @@ final class ProximityFilter extends AbstractFilter
             return;
         }
 
-        $coordinates = explode(',', $value);
-        $queryBuilder->addSelect(sprintf('ST_Distance(o.gpsPoint, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) as distance', $coordinates[0], $coordinates[1]));
+        try {
+            $coordinates = explode(',', $value);
+            $latitude = $coordinates[0];
+            $longitude = $coordinates[1];
+        } catch (\Exception $exception) {
+            throw new BadRequestHttpException('TThe parameters provided in the proximity filter have the wrong format, it should be ?proximity=50.43321,3.03943');
+        }
+
+        $queryBuilder->addSelect(sprintf('ST_Distance(o.gpsPoint, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) as distance', $latitude, $longitude));
         $queryBuilder->addOrderBy('distance', 'ASC');
     }
 
