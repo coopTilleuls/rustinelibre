@@ -29,7 +29,7 @@ const Navbar = (): JSX.Element => {
     };
 
     return (
-        <AppBar position="fixed">
+        <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <DirectionsBikeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
