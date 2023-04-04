@@ -11,12 +11,15 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import {useAccount} from "../../contexts";
 
 const pagesNotLogged = ['Notre collectif', 'Inscription', 'Liste des réparateurs', 'FAQ', 'Devenir réparateur'];
 const pagesLogged = ['Notre collectif', 'Liste des réparateurs', 'FAQ', 'Devenir réparateur'];
 
 const Navbar = (): JSX.Element => {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+    const user = useAccount({});
+    const pages = user ? pagesLogged : pagesNotLogged;
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -104,7 +107,7 @@ const Navbar = (): JSX.Element => {
                         Bikelib
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pagesNotLogged.map((page) => (
+                        {pages.map((page) => (
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
