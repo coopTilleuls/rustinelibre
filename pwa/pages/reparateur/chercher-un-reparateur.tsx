@@ -18,9 +18,15 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
-const Navbar = dynamic(() => import("components/layout/Navbar"));
-const Footer = dynamic(() => import("components/layout/Footer"));
-const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"));
+const Navbar = dynamic(() => import("components/layout/Navbar"), {
+    ssr: false
+});
+const Footer = dynamic(() => import("components/layout/Footer"), {
+    ssr: false
+});
+const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"), {
+    ssr: false
+});
 import RepairerSortOptions from "components/repairers/RepairerSortOptions";
 import PaginationBlock from "components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
@@ -77,20 +83,22 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         fetchBikes();
     }, []);
 
-    const handleCityChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
+    useEffect(() => {
+        if (cityInput === '') return;
 
-        setCityInput(event.target.value);
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
+        if (timeoutId) clearTimeout(timeoutId);
 
         const newTimeoutId = window.setTimeout(async () => {
-            const citiesResponse = await searchCity(event.target.value, useNominatim);
+            const citiesResponse = await searchCity(cityInput, useNominatim);
             const cities: City[] = useNominatim ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[]) : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
             setCitiesList(cities);
         }, 350);
 
         setTimeoutId(newTimeoutId);
+    }, [cityInput]);
+
+    const handleCityChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
+        setCityInput(event.target.value);
     };
 
     const handleChangeSort = (sortOption: string): void => {
