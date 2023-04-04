@@ -1,8 +1,8 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState} from 'react';
 import Head from "next/head";
-import {Footer} from '@components/layout/Footer';
-import {Navbar} from '@components/layout/Navbar';
+import Navbar from "@components/layout/Navbar";
+import Footer from "@components/layout/Footer";
 
 const JoinGroup: NextPageWithLayout = () => {
     return (
@@ -11,7 +11,7 @@ const JoinGroup: NextPageWithLayout = () => {
                 <title>Rejoindre le collectif</title>
             </Head>
             <Navbar/>
-            <Footer logged={true} />
+            <Footer />
         </div>
     );
 };

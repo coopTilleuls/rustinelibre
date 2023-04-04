@@ -8,11 +8,12 @@ import Paper from '@mui/material/Paper';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {useAccount} from "../../contexts";
 
 const Footer = (): JSX.Element => {
 
     const [value, setValue] = React.useState(0);
-    const [logged, setLogged] = React.useState(false);
+    const user = useAccount({});
 
     return (
         <Box sx={{ width: 500 }}>
@@ -28,7 +29,7 @@ const Footer = (): JSX.Element => {
                     <BottomNavigationAction label="Rendez-vous" icon={<ListIcon />} />
                     <BottomNavigationAction label="Mes vélos" icon={<DirectionsBikeIcon />} />
                     <BottomNavigationAction label="Messages" icon={<ChatBubbleIcon />} />
-                    <BottomNavigationAction label={logged ? 'Profil' : 'Connexion'} icon={<AccountCircleIcon />} />
+                    <BottomNavigationAction href={user ? '/' : '/login'} label={user ? 'Profil' : 'Connexion'} icon={<AccountCircleIcon />} />
                 </BottomNavigation>
             </Paper>
         </Box>

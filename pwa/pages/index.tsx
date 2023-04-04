@@ -9,10 +9,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
-import {useAccount} from 'contexts/AuthContext';
 
 const Home = () => {
-    const user = useAccount({});
 
     return (
         <div className="w-full overflow-x-hidden">
@@ -20,7 +18,6 @@ const Home = () => {
                 <title>Bienvenue sur la page d'accueil!</title>
             </Head>
             <Navbar />
-
             <Box sx={{ width: '100%' }}>
                 <Stack spacing={2}>
                     <HomeCard
