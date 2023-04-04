@@ -8,7 +8,7 @@ const CreateMaintenanceBook: NextPageWithLayout = () => {
     return (
         <div className="w-full overflow-x-hidden">
             <Head>
-                <title>Mon carnet d'entretien</title>
+                <title>Mon carnet d’entretien</title>
             </Head>
             <Navbar />
             <Footer />
