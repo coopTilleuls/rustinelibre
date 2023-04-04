@@ -136,26 +136,15 @@ class Repairer
     #[Groups(['repairer_read'])]
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profilePicture = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $pagePicture = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $speciality = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $openingHours = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $deliveryDescription = null;
-
-    #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2, nullable: true)]
-    private ?string $deliveryPrice = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $optionalPage = null;
+
+    #[ORM\Column]
+    #[ApiProperty(security: "is_granted('ROLE_ADMIN')", securityPostDenormalize: "is_granted('UPDATE', object)")]
+    private ?bool $enabled = false;
 
     public function __construct()
     {
@@ -347,42 +336,6 @@ class Repairer
         $this->repairerType = $repairerType;
     }
 
-    public function getProfilePicture(): ?string
-    {
-        return $this->profilePicture;
-    }
-
-    public function setProfilePicture(?string $profilePicture): self
-    {
-        $this->profilePicture = $profilePicture;
-
-        return $this;
-    }
-
-    public function getPagePicture(): ?string
-    {
-        return $this->pagePicture;
-    }
-
-    public function setPagePicture(?string $pagePicture): self
-    {
-        $this->pagePicture = $pagePicture;
-
-        return $this;
-    }
-
-    public function getSpeciality(): ?string
-    {
-        return $this->speciality;
-    }
-
-    public function setSpeciality(?string $speciality): self
-    {
-        $this->speciality = $speciality;
-
-        return $this;
-    }
-
     public function getOpeningHours(): ?string
     {
         return $this->openingHours;
@@ -391,30 +344,6 @@ class Repairer
     public function setOpeningHours(?string $openingHours): self
     {
         $this->openingHours = $openingHours;
-
-        return $this;
-    }
-
-    public function getDeliveryDescription(): ?string
-    {
-        return $this->deliveryDescription;
-    }
-
-    public function setDeliveryDescription(?string $deliveryDescription): self
-    {
-        $this->deliveryDescription = $deliveryDescription;
-
-        return $this;
-    }
-
-    public function getDeliveryPrice(): ?string
-    {
-        return $this->deliveryPrice;
-    }
-
-    public function setDeliveryPrice(?string $deliveryPrice): self
-    {
-        $this->deliveryPrice = $deliveryPrice;
 
         return $this;
     }
@@ -430,4 +359,17 @@ class Repairer
 
         return $this;
     }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
 }
