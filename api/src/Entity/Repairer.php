@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Put;
 use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
 use App\Repairers\Filter\AroundFilter;
 use App\Repairers\Filter\FirstAvailableSlotFilter;
+use App\Repairers\Filter\ProximityFilter;
 use App\Repairers\Filter\RandomFilter;
 use App\Repository\RepairerRepository;
 use App\Validator as AppAssert;
@@ -52,7 +53,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'bikeTypesSupported.id' => 'exact',
     'bikeTypesSupported.name' => 'ipartial',
     'repairerType.id' => 'exact',
-    'repairerType.name' => 'ipartial'])]
+    'repairerType.name' => 'ipartial',
+])]
+#[ApiFilter(AroundFilter::class)]
+#[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)]
 class Repairer
 {
