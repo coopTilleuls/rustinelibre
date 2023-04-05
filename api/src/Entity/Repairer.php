@@ -72,7 +72,7 @@ class Repairer
 
     #[ORM\ManyToOne(inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups(['repairer_read'])]
     private ?User $owner;
 
     #[ORM\ManyToOne]

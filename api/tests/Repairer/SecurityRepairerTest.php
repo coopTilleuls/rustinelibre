@@ -12,11 +12,10 @@ class SecurityRepairerTest extends AbstractTestCase
         $client = self::createClientAuthAsBoss();
 
         // Valid boss role given
-        $client->request('POST', '/repairers', [
+       $response =  $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
-                'owner' => '/users/2',
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -47,7 +46,6 @@ class SecurityRepairerTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
-                'owner' => '/users/51',
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -81,6 +79,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertSame($response['optionalPage'], 'Nous fonctionnons uniquement sur rendez-vous');
         $this->assertArrayNotHasKey('enabled', $response);
     }
+
     public function testGetRepairerByAdmin(): void
     {
         $client = self::createClientAuthAsAdmin();
@@ -92,6 +91,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertSame($response['name'], 'Au réparateur de bicyclettes');
         $this->assertArrayHasKey('enabled', $response);
     }
+
     public function testGetRepairerCollectionByAdmin(): void
     {
         $client = self::createClientAuthAsAdmin();
@@ -103,6 +103,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $lastRepairer = end($response['hydra:member']);
         $this->assertSame($lastRepairer['enabled'], false);
     }
+
     public function testGetRepairerCollectionByUser(): void
     {
         $client = self::createClientAuthAsUser();

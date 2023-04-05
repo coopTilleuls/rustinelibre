@@ -11,7 +11,7 @@ final class Version20230404131859 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add new fields to repairer entity';
+        return 'Add new fields to repairer table';
     }
 
     public function up(Schema $schema): void
