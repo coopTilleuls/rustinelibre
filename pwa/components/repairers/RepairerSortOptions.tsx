@@ -5,6 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {repairerTypeResource} from "../../resources/repairerTypeResource";
 import {RepairerType} from "../../interfaces/RepairerType";
+import useRepairerTypes from "../../hooks/useRepairerTypes";
 
 const sortOptions: Record<string, string> = {
     "availability": 'Par disponibilité',
@@ -22,19 +23,7 @@ interface RepairerSortOptionsProps {
 
 const RepairerSortOptions = ({sortChosen, handleChangeSort, isMobile, repairerTypeSelected, setRepairerTypeSelected}: RepairerSortOptionsProps): JSX.Element => {
 
-    const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
-
-    useEffect(() => {
-        async function fetchRepairerTypes() {
-            const response = await repairerTypeResource.getAll({});
-            setRepairerTypes(response['hydra:member']);
-            if (response['hydra:totalItems'] > 0) {
-                setRepairerTypeSelected((response['hydra:member'][0].id.toString()));
-            }
-        }
-
-        fetchRepairerTypes();
-    }, []);
+    const repairerTypes = useRepairerTypes();
 
     const handleSelectSortOption = (event: SelectChangeEvent) => {
         handleChangeSort(event.target.value);

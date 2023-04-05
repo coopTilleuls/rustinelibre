@@ -20,6 +20,7 @@
       "@constants": ["constants/*"],
       "@contexts": ["contexts/*/"],
       "@helpers": ["helpers/*"],
+      "@utils": ["utils/*"],
       "@hooks": ["hooks/*"],
       "@interfaces": ["interfaces/*"],
       "@resources": ["resources/*"]
