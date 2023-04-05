@@ -31,6 +31,7 @@ import RepairerSortOptions from "components/repairers/RepairerSortOptions";
 import PaginationBlock from "components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
 import useMediaQuery from 'hooks/useMediaQuery';
+import useBikeTypes from "../../hooks/useBikeTypes";
 
 interface OrderByOption {
     key: string;
@@ -44,7 +45,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [citiesList, setCitiesList] = useState<City[]>([]);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
-    const [bikes, setBikes] = useState<BikeType[]>([]);
     const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
     const [selectedRepairer, setSelectedRepairer] = useState<string>('');
     const [repairers, setRepairers] = useState<Repairer[]>([]);
@@ -57,6 +57,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const listContainerRef = useRef<HTMLDivElement>(null);
     const [repairerTypeSelected, setRepairerTypeSelected] = useState<string>('');
     const [sortChosen, setSortChosen] = useState<string>('availability');
+    const bikeTypes = useBikeTypes();
 
     useEffect(() => {
         if (isMobile && city && selectedBike) {
@@ -74,14 +75,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             })
         }
     }, [repairerTypeSelected]);
-
-    useEffect(() => {
-        const fetchBikes = async () => {
-            const response = await bikeTypeResource.getAll({});
-            setBikes(response['hydra:member']);
-        };
-        fetchBikes();
-    }, []);
 
     useEffect(() => {
         if (cityInput === '') return;
@@ -126,7 +119,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     }
 
     const handleBikeChange = (event: SelectChangeEvent): void => {
-        const selectedBikeType = bikes.find((bt) => bt.id === Number(event.target.value));
+        const selectedBikeType = bikeTypes.find((bt) => bt.id === Number(event.target.value));
         setSelectedBike(selectedBikeType ? selectedBikeType : null);
     };
 
@@ -194,7 +187,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                                 style={{width: '100%'}}
                             >
                                 <MenuItem disabled value="">Choisissez un type de vélo</MenuItem>
-                                {bikes.map((bike) => (
+                                {bikeTypes.map((bike) => (
                                     <MenuItem key={bike.id} value={bike.id}>{bike.name}</MenuItem>
                                 ))}
                             </Select>

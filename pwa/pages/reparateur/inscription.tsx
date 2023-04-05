@@ -6,7 +6,6 @@ const Navbar = dynamic(() => import("components/layout/Navbar"));
 const Footer = dynamic(() => import("components/layout/Footer"));
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from "@mui/material/Typography";
@@ -28,13 +27,17 @@ import useRepairerTypes from "../../hooks/useRepairerTypes";
 import {RepairerType} from "../../interfaces/RepairerType";
 import Select, {SelectChangeEvent} from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import useBikeTypes from "../../hooks/useBikeTypes";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
 const RepairerRegistration: NextPageWithLayout = ({}) => {
 
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
     const [name, setName] = useState<string>('');
     const [street, setStreet] = useState<string>('');
-    const [postcode, setPostcode] = useState<string>('');
     const [cityInput, setCityInput] = useState<string>('');
     const [city, setCity] = useState<City | null>(null);
     const [citiesList, setCitiesList] = useState<City[]>([]);
@@ -42,12 +45,14 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [repairerTypeSelected, setRepairerTypeSelected] = useState<RepairerType|null>(null);
-    const [bikeTypes, setBikeTypes] = useState<object>({});
     const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [bikeTypesRepaired, setBikeTypesRepaired] = React.useState<string[]>([]);
     const router = useRouter();
 
     const repairerTypes = useRepairerTypes();
+    const bikeTypes = useBikeTypes();
+
     const user = useAccount({});
     if (user) {
         setFirstName(user.firstName);
@@ -128,6 +133,15 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
     const handleChangeRepairerType = (event: SelectChangeEvent): void => {
         const selectedRepairerType = repairerTypes.find((rt) => rt.id === Number(event.target.value));
         setRepairerTypeSelected(selectedRepairerType ? selectedRepairerType : null);
+    };
+
+    const handleChangeBikeRepaired = (event: SelectChangeEvent<typeof bikeTypesRepaired>) => {
+        const {
+            target: { value },
+        } = event;
+        setBikeTypesRepaired(
+            typeof value === 'string' ? value.split(',') : value,
+        );
     };
 
     return (
@@ -219,13 +233,32 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                                 />
                                 <InputLabel htmlFor="bikeType">Type de réparateur</InputLabel>
                                 <Select
+                                    label="Choisissez votre type d'enseigne"
                                     onChange={handleChangeRepairerType}
                                     value={repairerTypeSelected?.name}
                                     style={{width: '100%'}}
                                 >
-                                    <MenuItem disabled value="">Choisissez un type de vélo</MenuItem>
                                     {repairerTypes.map((repairer) => (
                                         <MenuItem key={repairer.id} value={repairer.id}>{repairer.name}</MenuItem>
+                                    ))}
+                                </Select>
+
+                                <InputLabel id="demo-multiple-checkbox-label">Vélos réparés</InputLabel>
+                                <Select
+                                    labelId="multiple_bikes_repaired"
+                                    id="multiple_bikes_repaired"
+                                    multiple
+                                    fullWidth
+                                    value={bikeTypesRepaired}
+                                    onChange={handleChangeBikeRepaired}
+                                    input={<OutlinedInput label="Type de vélos" />}
+                                    renderValue={(selected) => selected.join(', ')}
+                                >
+                                    {bikeTypes.map((bikeType) => (
+                                        <MenuItem key={bikeType.id} value={bikeType.name}>
+                                            <Checkbox checked={bikeTypesRepaired.includes(bikeType.name)} />
+                                            <ListItemText primary={bikeType.name} />
+                                        </MenuItem>
                                     ))}
                                 </Select>
                                 <Button
@@ -241,12 +274,6 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                                         {errorMessage}
                                     </Typography>
                                 )}
-                                <Grid container>
-                                    <Typography variant="body1" color="grey">
-                                        En vous inscrivant, vous acceptez les conditions d'utilisation de l'application Bikelib
-                                        et sa politique de confidentialité
-                                    </Typography>
-                                </Grid>
                             </Box>
                         </Box>
                     </Container>
