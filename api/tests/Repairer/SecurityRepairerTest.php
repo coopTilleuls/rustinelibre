@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SecurityRepairerTest extends AbstractTestCase
 {
-/*    public function testPostRepairer(): void
+    public function testPostRepairer(): void
     {
         $client = self::createClientAuthAsBoss();
 
@@ -16,7 +16,7 @@ class SecurityRepairerTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
-                'owner' => '/users/3',
+                'owner' => '/users/2',
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -31,6 +31,13 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
+    public function testDeleteRepairer(): void
+    {
+        $client = self::createClientAuthAsAdmin();
+        $client->request('DELETE', 'repairers/26');
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testPostRepairerFail(): void
     {
         $client = self::createClientAuthAsUser();
@@ -40,7 +47,7 @@ class SecurityRepairerTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
-                'owner' => '/users/4',
+                'owner' => '/users/51',
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -55,7 +62,7 @@ class SecurityRepairerTest extends AbstractTestCase
         ]);
         $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-    }*/
+    }
 
     public function testGetRepairerByUser(): void
     {
@@ -66,7 +73,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $response->toArray();
         $this->assertIsArray($response);
         $this->assertSame($response['name'], 'Au réparateur de bicyclettes');
-        $this->assertSame($response['owner'], '/users/3');
+        $this->assertSame($response['owner'], '/users/24');
         $this->assertSame($response['bikeTypesSupported'][0]['@id'], '/bike_types/2');
         $this->assertSame($response['bikeTypesSupported'][1]['@id'], '/bike_types/1');
         $this->assertSame($response['repairerType']['@id'], '/repairer_types/1');
@@ -85,11 +92,40 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertSame($response['name'], 'Au réparateur de bicyclettes');
         $this->assertArrayHasKey('enabled', $response);
     }
-    public function testGetRepairerCollection(): void
+    public function testGetRepairerCollectionByAdmin(): void
     {
         $client = self::createClientAuthAsAdmin();
-        // classic user given
+        // admin user given
         $response = $client->request('GET', '/repairers');
+        $this->assertResponseIsSuccessful();
+        $response = $response->toArray();
+        $this->assertCount(25, $response['hydra:member']);
+        $lastRepairer = end($response['hydra:member']);
+        $this->assertSame($lastRepairer['enabled'], false);
+    }
+    public function testGetRepairerCollectionByUser(): void
+    {
+        $client = self::createClientAuthAsUser();
+        // classic user given
+        $response = $client->request('GET', '/repairers?enabled=true');
+        $this->assertResponseIsSuccessful();
+        $response = $response->toArray();
+        // On 25 repairers -> 3 aren't enabled
+        $this->assertCount(22, $response['hydra:member']);
+    }
 
+    public function testUniqueOwner(): void
+    {
+        $client = self::createClientAuthAsBoss();
+
+        // Valid boss role given but already have a repairer
+        $response = $client->request('POST', '/repairers', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'name' => 'Chez Jojo2',
+                'owner' => '/users/26',
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

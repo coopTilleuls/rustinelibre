@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -26,6 +27,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Jsor\Doctrine\PostGIS\Types\PostGISType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
@@ -58,6 +60,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)]
+#[UniqueEntity('owner')]
 class Repairer
 {
     #[ApiProperty(identifier: true)]
@@ -147,6 +150,7 @@ class Repairer
     #[ORM\Column]
     #[Groups(['repairer_read', 'repairer_write'])]
     #[ApiProperty(security: "is_granted('ROLE_ADMIN')", securityPostDenormalize: "is_granted('UPDATE', object)")]
+    #[ApiFilter(BooleanFilter::class)]
     private ?bool $enabled = false;
 
     public function __construct()
