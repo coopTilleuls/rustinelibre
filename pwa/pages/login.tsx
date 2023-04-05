@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent, FormEvent} from 'react';
+import React, {useState, ChangeEvent} from 'react';
 import Head from "next/head";
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import("components/layout/Navbar"));
@@ -17,11 +17,6 @@ import Button from "@mui/material/Button";
 import {useAuth} from 'contexts/AuthContext';
 import {useRouter} from 'next/router';
 import {CircularProgress} from "@mui/material";
-
-type AuthenticationValues = {
-    email: string;
-    password: string;
-};
 
 const Login: NextPageWithLayout = ({}) => {
 
