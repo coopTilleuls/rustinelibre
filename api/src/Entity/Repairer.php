@@ -136,6 +136,18 @@ class Repairer
     #[Groups(['repairer_read'])]
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
+    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[ApiProperty(types: ['https://schema.org/image'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
+    private ?MediaObject $thumbnail = null;
+
+    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[ApiProperty(types: ['https://schema.org/image'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
+    private ?MediaObject $descriptionPicture = null;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
@@ -324,5 +336,25 @@ class Repairer
     public function setRepairerType(?RepairerType $repairerType): void
     {
         $this->repairerType = $repairerType;
+    }
+
+    public function getThumbnail(): ?MediaObject
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?MediaObject $thumbnail): void
+    {
+        $this->thumbnail = $thumbnail;
+    }
+
+    public function getDescriptionPicture(): ?MediaObject
+    {
+        return $this->descriptionPicture;
+    }
+
+    public function setDescriptionPicture(?MediaObject $descriptionPicture): void
+    {
+        $this->descriptionPicture = $descriptionPicture;
     }
 }
