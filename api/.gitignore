@@ -29,3 +29,6 @@ Makefile
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+###> Images
+/public/medias/*
