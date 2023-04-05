@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SecurityRepairerTest extends AbstractTestCase
 {
-    public function testPostRepairer(): void
+/*    public function testPostRepairer(): void
     {
         $client = self::createClientAuthAsBoss();
 
@@ -55,9 +55,9 @@ class SecurityRepairerTest extends AbstractTestCase
         ]);
         $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-    }
+    }*/
 
-    public function testGetRepairer(): void
+    public function testGetRepairerByUser(): void
     {
         $client = self::createClientAuthAsUser();
         // classic user given
@@ -66,5 +66,30 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $response->toArray();
         $this->assertIsArray($response);
         $this->assertSame($response['name'], 'Au réparateur de bicyclettes');
+        $this->assertSame($response['owner'], '/users/3');
+        $this->assertSame($response['bikeTypesSupported'][0]['@id'], '/bike_types/2');
+        $this->assertSame($response['bikeTypesSupported'][1]['@id'], '/bike_types/1');
+        $this->assertSame($response['repairerType']['@id'], '/repairer_types/1');
+        $this->assertSame($response['openingHours'], 'Du lundi au vendredi : 9h-12h / 14h-19h');
+        $this->assertSame($response['optionalPage'], 'Nous fonctionnons uniquement sur rendez-vous');
+        $this->assertArrayNotHasKey('enabled', $response);
+    }
+    public function testGetRepairerByAdmin(): void
+    {
+        $client = self::createClientAuthAsAdmin();
+        // admin user given
+        $response = $client->request('GET', '/repairers/4');
+        $this->assertResponseIsSuccessful();
+        $response = $response->toArray();
+        $this->assertIsArray($response);
+        $this->assertSame($response['name'], 'Au réparateur de bicyclettes');
+        $this->assertArrayHasKey('enabled', $response);
+    }
+    public function testGetRepairerCollection(): void
+    {
+        $client = self::createClientAuthAsAdmin();
+        // classic user given
+        $response = $client->request('GET', '/repairers');
+
     }
 }

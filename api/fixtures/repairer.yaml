@@ -62,6 +62,8 @@ App\Entity\Repairer:
     longitude: '3.063796139948392'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
     enabled: true
   repairer_5:
     name: 'A vos vélos'
@@ -382,7 +384,6 @@ App\Entity\Repairer:
     longitude: '3.0665240417922486'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
-    enabled: true
   repairer_25:
     name: 'A vos vélos'
     owner: '@user_10'
@@ -398,4 +399,3 @@ App\Entity\Repairer:
     longitude: '3.0665240417922486'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
-    enabled: true

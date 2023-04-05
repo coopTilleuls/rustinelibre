@@ -137,12 +137,15 @@ class Repairer
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $openingHours = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $optionalPage = null;
 
     #[ORM\Column]
+    #[Groups(['repairer_read', 'repairer_write'])]
     #[ApiProperty(security: "is_granted('ROLE_ADMIN')", securityPostDenormalize: "is_granted('UPDATE', object)")]
     private ?bool $enabled = false;
 
@@ -371,5 +374,4 @@ class Repairer
 
         return $this;
     }
-
 }
