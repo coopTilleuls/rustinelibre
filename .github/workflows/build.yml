@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  workflow_call:
+
+jobs:
+  build-push-php:
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Build/Push
+      uses: coopTilleuls/action-docker-build-push@v4
+      with:
+        IMAGE_NAME: bikelib-php
+        BUILD_CONTEXT: api
+        BUILD_TARGET: app_php
+        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+
+  build-push-caddy:
+    # Same Dockerfile as php, with a build target which is after
+    needs: [build-push-php]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build/Push
+      uses: coopTilleuls/action-docker-build-push@v4
+      with:
+        IMAGE_NAME: bikelib-caddy
+        BUILD_CONTEXT: api
+        BUILD_TARGET: app_caddy
+        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+
+  build-push-pwa:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build/Push
+      uses: coopTilleuls/action-docker-build-push@v4
+      with:
+        IMAGE_NAME: bikelib-pwa
+        BUILD_CONTEXT: pwa
+        BUILD_TARGET: prod
+        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
