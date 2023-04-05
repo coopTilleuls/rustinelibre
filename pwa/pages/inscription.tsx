@@ -8,7 +8,6 @@ import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -17,6 +16,7 @@ import {useAccount} from 'contexts/AuthContext';
 import {useRouter} from 'next/router';
 import {CircularProgress} from "@mui/material";
 import {userResource} from 'resources/userResource';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Registration: NextPageWithLayout = ({}) => {
 
@@ -122,7 +122,7 @@ const Registration: NextPageWithLayout = ({}) => {
                             }}
                         >
                             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                                <LockOutlinedIcon />
+                                <PersonIcon />
                             </Avatar>
                             <Typography component="h1" variant="h5">
                                 Je créé mon compte
