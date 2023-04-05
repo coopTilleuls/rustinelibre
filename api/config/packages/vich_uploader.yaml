@@ -1,0 +1,12 @@
+vich_uploader:
+    db_driver: orm
+    storage: flysystem
+    metadata:
+        type: attribute
+
+    mappings:
+        media_object:
+            uri_prefix: /media
+            upload_destination: default.storage
+            # Will rename uploaded files using a uniqueid as a prefix.
+            namer: Vich\UploaderBundle\Naming\OrignameNamer
