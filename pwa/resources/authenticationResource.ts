@@ -1,4 +1,4 @@
-import {AbstractResource} from 'resources/AbstractResource';
+import {AbstractResource} from '@resources/AbstractResource';
 import {
   Collection,
   RequestBody,

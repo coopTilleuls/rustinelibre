@@ -17,13 +17,13 @@
     "incremental": true,
     "paths": {
       "@components/*": ["components/*"],
-      "@constants": ["constants/*"],
-      "@contexts": ["contexts/*/"],
-      "@helpers": ["helpers/*"],
-      "@utils": ["utils/*"],
-      "@hooks": ["hooks/*"],
-      "@interfaces": ["interfaces/*"],
-      "@resources": ["resources/*"]
+      "@constants/*": ["constants/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@contexts/*": ["contexts/*"],
+      "@helpers/*": ["helpers/*"],
+      "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"],
+      "@resources/*": ["resources/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -8,8 +8,7 @@ import Paper from '@mui/material/Paper';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import {useAccount} from "../../contexts";
-import {User} from "../../interfaces/User";
+import {User} from "@interfaces/User";
 
 interface FooterProps {
     user?: User;
@@ -18,7 +17,6 @@ interface FooterProps {
 const Footer = ({user}: FooterProps): JSX.Element => {
 
     const [value, setValue] = React.useState(0);
-    // const user = useAccount({});
 
     return (
         <Box sx={{ width: 500 }}>

@@ -4,7 +4,7 @@ import {
   RequestHeaders,
   RequestParams,
   ResponseError,
-} from 'interfaces/Resource';
+} from '@interfaces/Resource';
 
 import {
   getRefreshToken,
@@ -13,7 +13,7 @@ import {
   removeToken,
   setRefreshToken,
   setToken,
-} from 'helpers/sessionHelper';
+} from '@helpers/sessionHelper';
 
 export abstract class AbstractResource<T> {
   protected abstract endpoint: string;

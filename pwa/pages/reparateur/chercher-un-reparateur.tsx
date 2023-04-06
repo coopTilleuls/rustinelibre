@@ -1,15 +1,15 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent, FormEvent} from 'react';
 import Head from "next/head";
-import {repairerResource} from 'resources/repairerResource';
-import {ButtonShowMap} from 'components/repairers/ButtonShowMap';
-import {Repairer} from 'interfaces/Repairer';
-import {BikeType} from 'interfaces/BikeType';
-import {createCitiesWithGouvAPI, createCitiesWithNominatimAPI, City} from 'interfaces/City';
-import {City as NominatimCity} from 'interfaces/Nominatim';
-import {City as GouvCity} from 'interfaces/Gouv';
-import Spinner from 'components/icons/Spinner';
-import {searchCity} from 'utils/apiCity';
+import {repairerResource} from '@resources/repairerResource';
+import {ButtonShowMap} from '@components/repairers/ButtonShowMap';
+import {Repairer} from '@interfaces/Repairer';
+import {BikeType} from '@interfaces/BikeType';
+import {createCitiesWithGouvAPI, createCitiesWithNominatimAPI, City} from '@interfaces/City';
+import {City as NominatimCity} from '@interfaces/Nominatim';
+import {City as GouvCity} from '@interfaces/Gouv';
+import Spinner from '@components/icons/Spinner';
+import {searchCity} from '@utils/apiCity';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -17,14 +17,14 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
-const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"), {
+const RepairersResults = dynamic(() => import("@components/repairers/RepairersResults"), {
     ssr: false
 });
-import RepairerSortOptions from "components/repairers/RepairerSortOptions";
-import PaginationBlock from "components/common/PaginationBlock";
+import RepairerSortOptions from "@components/repairers/RepairerSortOptions";
+import PaginationBlock from "@components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
-import useMediaQuery from 'hooks/useMediaQuery';
-import useBikeTypes from "../../hooks/useBikeTypes";
+import useMediaQuery from '@hooks/useMediaQuery';
+import useBikeTypes from "@hooks/useBikeTypes";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 
 interface OrderByOption {

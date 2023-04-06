@@ -1,6 +1,6 @@
-import {AbstractResource} from 'resources/AbstractResource';
-import {User} from 'interfaces/User';
-import {RequestBody} from "../interfaces/Resource";
+import {AbstractResource} from '@resources/AbstractResource';
+import {User} from '@interfaces/User';
+import {RequestBody} from "@interfaces/Resource";
 
 class UserResource extends AbstractResource<User> {
   protected endpoint = '/users';

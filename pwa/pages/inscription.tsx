@@ -1,7 +1,6 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, ChangeEvent} from 'react';
 import Head from "next/head";
-import dynamic from 'next/dynamic';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
@@ -10,13 +9,13 @@ import Container from '@mui/material/Container';
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {useAccount} from 'contexts/AuthContext';
+import {useAccount} from '@contexts/AuthContext';
 import {useRouter} from 'next/router';
 import {CircularProgress} from "@mui/material";
-import {userResource} from 'resources/userResource';
+import {userResource} from '@resources/userResource';
 import PersonIcon from '@mui/icons-material/Person';
-import {validateEmail} from 'utils/emailValidator';
-import {validatePassword} from 'utils/passwordValidator';
+import {validateEmail} from '@utils/emailValidator';
+import {validatePassword} from '@utils/passwordValidator';
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 
 const Registration: NextPageWithLayout = ({}) => {
