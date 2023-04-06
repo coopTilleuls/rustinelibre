@@ -8,8 +8,8 @@ class RruleValidatorTest extends AbstractTestCase
 {
     public function testCreateRepairer(): void
     {
-        $this->createClientAuthAsBoss()->request('POST', '/repairers', ['json' => [
-            'owner' => '/users/46',
+        $this->createClientAuthAsAdmin()->request('POST', '/repairers', ['json' => [
+            'owner' => '/users/47',
             'description' => 'Super atelier de vélo',
             'mobilePhone' => '0720397700',
             'street' => 'avenue Karl Marx',
@@ -25,8 +25,8 @@ class RruleValidatorTest extends AbstractTestCase
 
     public function testCreateInvalidRrule(): void
     {
-        $this->createClientAuthAsBoss()->request('POST', '/repairers', ['json' => [
-            'owner' => '/users/47',
+        $this->createClientAuthAsAdmin()->request('POST', '/repairers', ['json' => [
+            'owner' => '/users/48',
             'street' => 'avenue P. Poutou',
             'city' => 'Lille',
             'description' => 'Super atelier de vélo',

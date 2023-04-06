@@ -41,7 +41,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     requirements: ['id' => '\d+'],
     provider: RepairerAvailableSlotsProvider::class,
 )]
-#[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_BOSS') or is_granted('ROLE_ADMIN')")]
+#[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN')")]
 #[Put(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
@@ -72,7 +72,7 @@ class Repairer
 
     #[ORM\ManyToOne(inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['repairer_read'])]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?User $owner;
 
     #[ORM\ManyToOne]
@@ -164,6 +164,9 @@ class Repairer
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups(['repairer_read', 'repairer_write'])]
     private ?MediaObject $descriptionPicture = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $comment = null;
 
     public function __construct()
     {
@@ -409,5 +412,17 @@ class Repairer
     public function setDescriptionPicture(?MediaObject $descriptionPicture): void
     {
         $this->descriptionPicture = $descriptionPicture;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 }

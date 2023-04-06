@@ -9,13 +9,14 @@ class SecurityRepairerTest extends AbstractTestCase
 {
     public function testPostRepairer(): void
     {
-        $client = self::createClientAuthAsBoss();
+        $client = self::createClientAuthAsAdmin();
 
         // Valid boss role given
-       $response =  $client->request('POST', '/repairers', [
+        $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
+                'owner' => '/users/2',
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -46,6 +47,7 @@ class SecurityRepairerTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
+                'owner' => '/users/51',
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -117,13 +119,13 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testUniqueOwner(): void
     {
-        $client = self::createClientAuthAsBoss();
+        $client = self::createClientAuthAsAdmin();
 
         // Valid boss role given but already have a repairer
         $response = $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'name' => 'Chez Jojo2',
+                'name' => 'Deuxième atelier du même boss',
                 'owner' => '/users/26',
             ],
         ]);
