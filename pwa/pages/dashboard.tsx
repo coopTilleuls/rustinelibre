@@ -3,7 +3,6 @@ import React from "react";
 import "@fontsource/poppins";
 import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
-import dynamic from "next/dynamic";
 import Box from '@mui/material/Box';
 import DashboardLayout from "@components/dashboard/DashboardLayout";
 

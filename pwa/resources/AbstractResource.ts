@@ -82,6 +82,7 @@ export abstract class AbstractResource<T> {
   }
 
   async delete(id: string, headers?: RequestHeaders): Promise<boolean> {
+
     const response = await fetch(this.getUrl(id), {
       headers: {
         ...this.getDefaultHeaders(),

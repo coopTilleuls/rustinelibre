@@ -2,7 +2,6 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent, FormEvent} from 'react';
 import Head from "next/head";
 import {repairerResource} from 'resources/repairerResource';
-import {bikeTypeResource} from 'resources/bikeTypeResource';
 import {ButtonShowMap} from 'components/repairers/ButtonShowMap';
 import {Repairer} from 'interfaces/Repairer';
 import {BikeType} from 'interfaces/BikeType';
@@ -18,12 +17,6 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
-const Navbar = dynamic(() => import("components/layout/Navbar"), {
-    ssr: false
-});
-const Footer = dynamic(() => import("components/layout/Footer"), {
-    ssr: false
-});
 const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"), {
     ssr: false
 });
@@ -32,6 +25,7 @@ import PaginationBlock from "components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
 import useMediaQuery from 'hooks/useMediaQuery';
 import useBikeTypes from "../../hooks/useBikeTypes";
+import WebsiteLayout from "@components/layout/WebsiteLayout";
 
 interface OrderByOption {
     key: string;
@@ -176,7 +170,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                 <Head>
                     <title>Chercher un réparateur</title>
                 </Head>
-                <Navbar/>
+                <WebsiteLayout />
                 <div style={{width: "100vw", marginBottom: '100px'}}>
                     <form onSubmit={handleSubmit} style={{margin: "6px", padding: "36px 24px 48px", display: "grid", gap: "24px", gridTemplateColumns: "1fr 1fr"}}>
                         <div style={{marginBottom: "14px"}}>
@@ -238,7 +232,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
                     {totalItems > 20 && <PaginationBlock totalItems={totalItems} onPageChange={handlePageChange} />}
                 </div>
-                <Footer />
             </div>
         </>
     );

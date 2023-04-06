@@ -11,13 +11,17 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import {useAccount} from "../../contexts";
 import {pagesLogged} from "components/layout/NavbarMenuLogged";
 import {pagesNotLogged} from "components/layout/NavbarMenuLogged";
+import {User} from "../../interfaces/User";
 
-const Navbar = (): JSX.Element => {
+interface NavbarProps {
+    user?: User;
+}
+
+const Navbar = ({user}: NavbarProps): JSX.Element => {
+
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-    const user = useAccount({});
     const pages = user ? pagesLogged : pagesNotLogged;
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {

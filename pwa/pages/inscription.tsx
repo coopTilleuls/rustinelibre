@@ -2,8 +2,6 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, ChangeEvent} from 'react';
 import Head from "next/head";
 import dynamic from 'next/dynamic';
-const Navbar = dynamic(() => import("components/layout/Navbar"));
-const Footer = dynamic(() => import("components/layout/Footer"));
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
@@ -17,6 +15,9 @@ import {useRouter} from 'next/router';
 import {CircularProgress} from "@mui/material";
 import {userResource} from 'resources/userResource';
 import PersonIcon from '@mui/icons-material/Person';
+import {validateEmail} from 'utils/emailValidator';
+import {validatePassword} from 'utils/passwordValidator';
+import WebsiteLayout from "@components/layout/WebsiteLayout";
 
 const Registration: NextPageWithLayout = ({}) => {
 
@@ -71,35 +72,25 @@ const Registration: NextPageWithLayout = ({}) => {
         setLastName(event.target.value);
     };
 
-    const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>): void => {
         setEmail(event.target.value);
-        validateEmail(event.target.value);
-    };
-
-    const handleChangePassword = (event: ChangeEvent<HTMLInputElement>): void => {
-        setPassword(event.target.value);
-        validatePassword(event.target.value);
-    };
-
-    const validatePassword = (value: string): void => {
-        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?.+=;/:,_"&])[A-Za-z\d@$!%*#?.+=;,/:_"&]{12,}$/;
-        if (!regex.test(value)) {
-            setPasswordError(true);
-            setPasswordInfo('Le mot de passe doit contenir au moins 12 caractères avec une majuscule, un chiffre et un caractère spécial.');
-        } else {
-            setPasswordError(false);
-            setPasswordInfo('');
-        }
-    };
-
-    const validateEmail = (value: string): void => {
-        const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-        if (!regex.test(value)) {
+        if (!validateEmail(event.target.value)) {
             setEmailError(true);
             setEmailHelperText('Veuillez entrer une adresse email valide.');
         } else {
             setEmailError(false);
             setEmailHelperText('');
+        }
+    };
+
+    const handleChangePassword = (event: ChangeEvent<HTMLInputElement>): void => {
+        setPassword(event.target.value);
+        if (!validatePassword(event.target.value)) {
+            setPasswordError(true);
+            setPasswordInfo('Votre mot de passe doit contenir 12 caractères, une majuscule, un caractères et des chiffres.');
+        } else {
+            setPasswordError(false);
+            setPasswordInfo('');
         }
     };
 
@@ -109,7 +100,7 @@ const Registration: NextPageWithLayout = ({}) => {
                 <Head>
                     <title>Inscription</title>
                 </Head>
-                <Navbar/>
+                <WebsiteLayout />
                 <div style={{width: "100vw", marginBottom: '100px'}}>
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
@@ -203,7 +194,6 @@ const Registration: NextPageWithLayout = ({}) => {
                         </Box>
                     </Container>
                 </div>
-                <Footer />
             </div>
         </>
     );

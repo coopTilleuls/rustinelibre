@@ -9,11 +9,16 @@ import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {useAccount} from "../../contexts";
+import {User} from "../../interfaces/User";
 
-const Footer = (): JSX.Element => {
+interface FooterProps {
+    user?: User;
+}
+
+const Footer = ({user}: FooterProps): JSX.Element => {
 
     const [value, setValue] = React.useState(0);
-    const user = useAccount({});
+    // const user = useAccount({});
 
     return (
         <Box sx={{ width: 500 }}>

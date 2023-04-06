@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {useAccount} from 'contexts/AuthContext';
+import {useAccount, useAuth} from 'contexts/AuthContext';
 import {useRouter} from 'next/router';
 import {CircularProgress} from "@mui/material";
 import {repairerResource} from 'resources/repairerResource';
@@ -20,7 +20,6 @@ import {searchCity} from "utils/apiCity";
 import {City, createCitiesWithGouvAPI, createCitiesWithNominatimAPI} from "interfaces/City";
 import {City as NominatimCity} from 'interfaces/Nominatim';
 import {City as GouvCity} from 'interfaces/Gouv';
-import Spinner from 'components/icons/Spinner';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputLabel from "@mui/material/InputLabel";
 import useRepairerTypes from "../../hooks/useRepairerTypes";
@@ -29,9 +28,13 @@ import Select, {SelectChangeEvent} from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import useBikeTypes from "../../hooks/useBikeTypes";
 import OutlinedInput from '@mui/material/OutlinedInput';
-import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
+import {validateEmail} from 'utils/emailValidator';
+import {validatePassword} from 'utils/passwordValidator';
+import {userResource} from "../../resources/userResource";
+import {removeToken} from "../../helpers";
+import {BikeType} from "../../interfaces/BikeType";
 
 const RepairerRegistration: NextPageWithLayout = ({}) => {
 
@@ -44,20 +47,21 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [comments, setComments] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [emailError, setEmailError] = useState<boolean>(false);
+    const [passwordError, setPasswordError] = useState<boolean>(false);
+    const [emailHelperText, setEmailHelperText] = useState<string>('');
+    const [passwordInfo, setPasswordInfo] = useState<string>('');
     const [repairerTypeSelected, setRepairerTypeSelected] = useState<RepairerType|null>(null);
     const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [bikeTypesRepaired, setBikeTypesRepaired] = React.useState<string[]>([]);
+    const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
     const router = useRouter();
-
-    const repairerTypes = useRepairerTypes();
-    const bikeTypes = useBikeTypes();
-
-    const user = useAccount({});
-    if (user) {
-        setFirstName(user.firstName);
-        setLastName(user.lastName);
-    }
+    const {login} = useAuth();
+    const repairerTypes: RepairerType[] = useRepairerTypes();
+    const bikeTypes: BikeType[] = useBikeTypes();
 
     useEffect(() => {
         if (cityInput === '') return;
@@ -84,34 +88,64 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
         event.preventDefault();
-        
-        if (!firstName || !lastName || !repairerTypeSelected || !city || Object.keys(bikeTypes).length === 0) {
+        if (!firstName || !lastName || !email || !password || !repairerTypeSelected || !city || Object.keys(selectedBikeTypes).length === 0) {
             return;
         }
 
         setErrorMessage(null);
         setPendingRegistration(true);
 
-        let newRepairer;
+        // First create a new user
+        let newUser;
         try {
-            newRepairer = await repairerResource.post({
+            newUser = await userResource.register({
                 'firstName': firstName,
                 'lastName': lastName,
-                'name': name,
-                'street': street,
-                'city': city.name,
-                'postcode': city?.postcode,
-                'repairerType': repairerTypeSelected?.["@id"]
+                'email': email,
+                'plainPassword': password,
             })
         } catch (e) {
             setErrorMessage('Inscription impossible');
         }
 
-        setPendingRegistration(false);
+        // If user created continue
+        if (newUser) {
+            // We authenticate our new user
+            await login({
+                'email': email,
+                'password': password
+            });
 
-        if (newRepairer) {
-            await router.push('/dashboard');
+            // Then we create a new repairer
+            let newRepairer;
+            try {
+                const selectedBikeTypeIRIs: string[] = bikeTypes
+                    .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
+                    .map((bikeType) => bikeType['@id']);
+
+                newRepairer = await repairerResource.post({
+                    'name': name,
+                    'street': street,
+                    'city': city.name,
+                    'postcode': city?.postcode,
+                    'owner' : newUser['@id'],
+                    'bikeTypesSupported': selectedBikeTypeIRIs,
+                    'repairerType': repairerTypeSelected ? repairerTypeSelected['@id'] : null,
+                    'comments': comments
+                })
+
+                if (newRepairer) {
+                    await router.push('/');
+                }
+            } catch (e) {
+                // if the repairer creation fail : remove user and remove token
+                await userResource.delete(newUser['@id']);
+                removeToken();
+                setErrorMessage('Demande impossible');
+            }
         }
+
+        setPendingRegistration(false);
     };
 
     const handleChangeFirstName = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -130,16 +164,41 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
         setStreet(event.target.value);
     };
 
+    const handleChangeComments = (event: ChangeEvent<HTMLInputElement>): void => {
+        setComments(event.target.value);
+    };
+
+    const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>): void => {
+        setEmail(event.target.value);
+        if (!validateEmail(event.target.value)) {
+            setEmailError(true);
+            setEmailHelperText('Veuillez entrer une adresse email valide.');
+        } else {
+            setEmailError(false);
+            setEmailHelperText('');
+        }
+    };
+
+    const handleChangePassword = (event: ChangeEvent<HTMLInputElement>): void => {
+        setPassword(event.target.value);
+        if (!validatePassword(event.target.value)) {
+            setPasswordError(true);
+            setPasswordInfo('Votre mot de passe doit contenir 12 caractères, une majuscule, un caractères et des chiffres.');
+        } else {
+            setPasswordError(false);
+            setPasswordInfo('');
+        }
+    };
+
     const handleChangeRepairerType = (event: SelectChangeEvent): void => {
-        const selectedRepairerType = repairerTypes.find((rt) => rt.id === Number(event.target.value));
+
+        const selectedRepairerType = repairerTypes.find((rt) => rt.name === event.target.value);
         setRepairerTypeSelected(selectedRepairerType ? selectedRepairerType : null);
     };
 
-    const handleChangeBikeRepaired = (event: SelectChangeEvent<typeof bikeTypesRepaired>) => {
-        const {
-            target: { value },
-        } = event;
-        setBikeTypesRepaired(
+    const handleChangeBikeRepaired = (event: SelectChangeEvent<typeof selectedBikeTypes>) => {
+        const {target: { value },} = event;
+        setSelectedBikeTypes(
             typeof value === 'string' ? value.split(',') : value,
         );
     };
@@ -173,18 +232,6 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                                     margin="normal"
                                     required
                                     fullWidth
-                                    id="name"
-                                    label="Nom de votre enseigne"
-                                    name="name"
-                                    autoComplete="name"
-                                    autoFocus
-                                    value={name}
-                                    onChange={handleChangeName}
-                                />
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
                                     id="firstName"
                                     label="Prénom"
                                     name="firstName"
@@ -198,12 +245,52 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                                     required
                                     fullWidth
                                     id="lastName"
-                                    label="Nom du responsable d'enseigne"
+                                    label="Nom"
                                     name="lastName"
                                     autoComplete="lastName"
                                     autoFocus
                                     value={lastName}
                                     onChange={handleChangeLastName}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    error={emailError}
+                                    helperText={emailHelperText}
+                                    id="email"
+                                    label="Email"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
+                                    value={email}
+                                    onChange={handleChangeEmail}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    error={passwordError}
+                                    helperText={passwordInfo}
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    value={password}
+                                    onChange={handleChangePassword}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="name"
+                                    label="Nom de votre enseigne"
+                                    name="name"
+                                    autoComplete="name"
+                                    autoFocus
+                                    value={name}
+                                    onChange={handleChangeName}
                                 />
                                 <TextField
                                     margin="normal"
@@ -233,13 +320,14 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                                 />
                                 <InputLabel htmlFor="bikeType">Type de réparateur</InputLabel>
                                 <Select
+                                    required
                                     label="Choisissez votre type d'enseigne"
                                     onChange={handleChangeRepairerType}
                                     value={repairerTypeSelected?.name}
                                     style={{width: '100%'}}
                                 >
                                     {repairerTypes.map((repairer) => (
-                                        <MenuItem key={repairer.id} value={repairer.id}>{repairer.name}</MenuItem>
+                                        <MenuItem key={repairer.id} value={repairer.name}>{repairer.name}</MenuItem>
                                     ))}
                                 </Select>
 
@@ -249,18 +337,31 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                                     id="multiple_bikes_repaired"
                                     multiple
                                     fullWidth
-                                    value={bikeTypesRepaired}
+                                    value={selectedBikeTypes}
                                     onChange={handleChangeBikeRepaired}
                                     input={<OutlinedInput label="Type de vélos" />}
                                     renderValue={(selected) => selected.join(', ')}
                                 >
                                     {bikeTypes.map((bikeType) => (
-                                        <MenuItem key={bikeType.id} value={bikeType.name}>
-                                            <Checkbox checked={bikeTypesRepaired.includes(bikeType.name)} />
+                                        <MenuItem key={bikeType.name} value={bikeType.name}>
+                                            <Checkbox checked={selectedBikeTypes.indexOf(bikeType.name) > -1} />
                                             <ListItemText primary={bikeType.name} />
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                <TextField
+                                    multiline
+                                    rows={3}
+                                    margin="normal"
+                                    fullWidth
+                                    id="comments"
+                                    label="Commentaires"
+                                    name="comments"
+                                    autoComplete="comments"
+                                    autoFocus
+                                    value={comments}
+                                    onChange={handleChangeComments}
+                                />
                                 <Button
                                     type="submit"
                                     fullWidth
