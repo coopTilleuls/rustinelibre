@@ -5,7 +5,7 @@ const Footer = dynamic(() => import("@components/layout/Footer"));
 import {useAccount} from '@contexts/AuthContext'
 
 const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
-    const user = useAccount({redirectIfNotFound: '/'});
+    const user = useAccount({});
 
     return (
         <div className="h-full w-full flex flex-col | md:flex-row">
