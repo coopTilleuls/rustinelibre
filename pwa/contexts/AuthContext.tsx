@@ -68,7 +68,6 @@ export const useAccount = ({
   return user;
 };
 
-
 // Provider hook that creates auth object and handles state
 const useProviderAuth = () => {
   const [user, setUser] = useState<User | null>(null);

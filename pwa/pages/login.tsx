@@ -2,8 +2,6 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, ChangeEvent} from 'react';
 import Head from "next/head";
 import dynamic from 'next/dynamic';
-const Navbar = dynamic(() => import("components/layout/Navbar"));
-const Footer = dynamic(() => import("components/layout/Footer"));
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
@@ -17,6 +15,7 @@ import Button from "@mui/material/Button";
 import {useAuth} from 'contexts/AuthContext';
 import {useRouter} from 'next/router';
 import {CircularProgress} from "@mui/material";
+import WebsiteLayout from "@components/layout/WebsiteLayout";
 
 const Login: NextPageWithLayout = ({}) => {
 
@@ -62,7 +61,7 @@ const Login: NextPageWithLayout = ({}) => {
                 <Head>
                     <title>Se connecter</title>
                 </Head>
-                <Navbar/>
+                <WebsiteLayout/>
                 <div style={{width: "100vw", marginBottom: '100px'}}>
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
@@ -134,7 +133,6 @@ const Login: NextPageWithLayout = ({}) => {
                         </Box>
                     </Container>
                 </div>
-                <Footer />
             </div>
         </>
     );

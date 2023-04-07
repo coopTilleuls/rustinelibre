@@ -1,16 +1,15 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent, FormEvent} from 'react';
 import Head from "next/head";
-import {repairerResource} from 'resources/repairerResource';
-import {bikeTypeResource} from 'resources/bikeTypeResource';
-import {ButtonShowMap} from 'components/repairers/ButtonShowMap';
-import {Repairer} from 'interfaces/Repairer';
-import {BikeType} from 'interfaces/BikeType';
-import {createCitiesWithGouvAPI, createCitiesWithNominatimAPI, City} from 'interfaces/City';
-import {City as NominatimCity} from 'interfaces/Nominatim';
-import {City as GouvCity} from 'interfaces/Gouv';
-import Spinner from 'components/icons/Spinner';
-import {searchCity} from 'utils/apiCity';
+import {repairerResource} from '@resources/repairerResource';
+import {ButtonShowMap} from '@components/repairers/ButtonShowMap';
+import {Repairer} from '@interfaces/Repairer';
+import {BikeType} from '@interfaces/BikeType';
+import {createCitiesWithGouvAPI, createCitiesWithNominatimAPI, City} from '@interfaces/City';
+import {City as NominatimCity} from '@interfaces/Nominatim';
+import {City as GouvCity} from '@interfaces/Gouv';
+import Spinner from '@components/icons/Spinner';
+import {searchCity} from '@utils/apiCity';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -18,19 +17,15 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
-const Navbar = dynamic(() => import("components/layout/Navbar"), {
+const RepairersResults = dynamic(() => import("@components/repairers/RepairersResults"), {
     ssr: false
 });
-const Footer = dynamic(() => import("components/layout/Footer"), {
-    ssr: false
-});
-const RepairersResults = dynamic(() => import("components/repairers/RepairersResults"), {
-    ssr: false
-});
-import RepairerSortOptions from "components/repairers/RepairerSortOptions";
-import PaginationBlock from "components/common/PaginationBlock";
+import RepairerSortOptions from "@components/repairers/RepairerSortOptions";
+import PaginationBlock from "@components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
-import useMediaQuery from 'hooks/useMediaQuery';
+import useMediaQuery from '@hooks/useMediaQuery';
+import useBikeTypes from "@hooks/useBikeTypes";
+import WebsiteLayout from "@components/layout/WebsiteLayout";
 
 interface OrderByOption {
     key: string;
@@ -44,7 +39,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [citiesList, setCitiesList] = useState<City[]>([]);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
-    const [bikes, setBikes] = useState<BikeType[]>([]);
     const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
     const [selectedRepairer, setSelectedRepairer] = useState<string>('');
     const [repairers, setRepairers] = useState<Repairer[]>([]);
@@ -57,6 +51,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const listContainerRef = useRef<HTMLDivElement>(null);
     const [repairerTypeSelected, setRepairerTypeSelected] = useState<string>('');
     const [sortChosen, setSortChosen] = useState<string>('availability');
+    const bikeTypes = useBikeTypes();
 
     useEffect(() => {
         if (isMobile && city && selectedBike) {
@@ -74,14 +69,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             })
         }
     }, [repairerTypeSelected]);
-
-    useEffect(() => {
-        const fetchBikes = async () => {
-            const response = await bikeTypeResource.getAll({});
-            setBikes(response['hydra:member']);
-        };
-        fetchBikes();
-    }, []);
 
     useEffect(() => {
         if (cityInput === '') return;
@@ -126,7 +113,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     }
 
     const handleBikeChange = (event: SelectChangeEvent): void => {
-        const selectedBikeType = bikes.find((bt) => bt.id === Number(event.target.value));
+        const selectedBikeType = bikeTypes.find((bt) => bt.id === Number(event.target.value));
         setSelectedBike(selectedBikeType ? selectedBikeType : null);
     };
 
@@ -183,7 +170,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                 <Head>
                     <title>Chercher un réparateur</title>
                 </Head>
-                <Navbar/>
+                <WebsiteLayout />
                 <div style={{width: "100vw", marginBottom: '100px'}}>
                     <form onSubmit={handleSubmit} style={{margin: "6px", padding: "36px 24px 48px", display: "grid", gap: "24px", gridTemplateColumns: "1fr 1fr"}}>
                         <div style={{marginBottom: "14px"}}>
@@ -194,7 +181,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                                 style={{width: '100%'}}
                             >
                                 <MenuItem disabled value="">Choisissez un type de vélo</MenuItem>
-                                {bikes.map((bike) => (
+                                {bikeTypes.map((bike) => (
                                     <MenuItem key={bike.id} value={bike.id}>{bike.name}</MenuItem>
                                 ))}
                             </Select>
@@ -245,7 +232,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
                     {totalItems > 20 && <PaginationBlock totalItems={totalItems} onPageChange={handlePageChange} />}
                 </div>
-                <Footer />
             </div>
         </>
     );

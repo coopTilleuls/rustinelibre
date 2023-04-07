@@ -17,7 +17,7 @@ export const pagesNotLogged = [
     },
     {
         'name': 'Devenir réparateur',
-        'link': '/',
+        'link': '/reparateur/inscription',
     }];
 
 export const pagesLogged = [

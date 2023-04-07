@@ -9,7 +9,7 @@ class SecurityRepairerTest extends AbstractTestCase
 {
     public function testPostRepairer(): void
     {
-        $client = self::createClientAuthAsBoss();
+        $client = self::createClientAuthAsUser();
 
         // Valid boss role given
         $client->request('POST', '/repairers', [
@@ -33,10 +33,8 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testPostRepairerFail(): void
     {
-        $client = self::createClientAuthAsUser();
-
         // classic user given
-        $client->request('POST', '/repairers', [
+        self::createClient()->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
@@ -53,8 +51,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'longitude' => '3.0635282',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(403);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseStatusCodeSame(401);
     }
 
     public function testGetRepairer(): void
