@@ -1,5 +1,5 @@
-import {AbstractResource} from 'resources/AbstractResource';
-import {Repairer} from 'interfaces/Repairer';
+import {AbstractResource} from '@resources/AbstractResource';
+import {Repairer} from '@interfaces/Repairer';
 
 class RepairerResource extends AbstractResource<Repairer> {
     protected endpoint = '/repairers';

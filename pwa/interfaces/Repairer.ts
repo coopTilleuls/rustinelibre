@@ -1,5 +1,6 @@
 import {User} from 'interfaces/User';
 import {BikeType} from 'interfaces/BikeType';
+import {RepairerType} from "interfaces/RepairerType";
 
 export interface Repairer {
     '@id': string;
@@ -17,5 +18,6 @@ export interface Repairer {
     latitude?: number;
     longitude?: number;
     firstSlotAvailable?: string,
-    bikeTypesSupported: BikeType[]
+    bikeTypesSupported: BikeType[],
+    repairerType: RepairerType,
 }

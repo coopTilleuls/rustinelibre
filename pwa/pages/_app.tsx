@@ -1,11 +1,11 @@
-import "../styles/globals.css"
-import Layout from "../components/common/Layout"
+import "styles/globals.css"
+import Layout from "@components/common/Layout"
 import type { AppProps } from "next/app"
 import type { DehydratedState } from "react-query"
 import Head from 'next/head';
 import {NextPage} from 'next';
 import type { ReactElement, ReactNode } from 'react'
-import {AuthProvider} from "../contexts";
+import {AuthProvider} from "@contexts/AuthContext";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode

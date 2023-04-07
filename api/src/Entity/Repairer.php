@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     requirements: ['id' => '\d+'],
     provider: RepairerAvailableSlotsProvider::class,
 )]
-#[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_BOSS') or is_granted('ROLE_ADMIN')")]
+#[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]

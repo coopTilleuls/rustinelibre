@@ -4,6 +4,7 @@ import {City as Nominatim} from "./Nominatim";
 export interface City {
     id: string|number;
     name: string;
+    postcode?: string;
     formatted_name: string;
     lat: number;
     lon: number;
@@ -20,6 +21,7 @@ export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]): City[] => {
             cities.push({
                 id: city.properties.id,
                 name: city.properties.city,
+                postcode: city.properties.postcode,
                 formatted_name: city.properties.city + ', ' + city.properties.postcode + ', ' + 'France',
                 lat: city.geometry.coordinates[1],
                 lon: city.geometry.coordinates[0]

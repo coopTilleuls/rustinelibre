@@ -1,4 +1,4 @@
-import {jwtDecode} from 'helpers/JWTDecoder';
+import {jwtDecode} from '@helpers/JWTDecoder';
 
 const AUTH_TOKEN = 'bikelib_token';
 const ROLE = 'role';
