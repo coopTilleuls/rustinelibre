@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {RepairerType} from "../interfaces/RepairerType";
-import {repairerTypeResource} from "../resources/repairerTypeResource";
+import {RepairerType} from "@interfaces/RepairerType";
+import {repairerTypeResource} from "@resources/repairerTypeResource";
 
 function useRepairerTypes(): RepairerType[] {
 
