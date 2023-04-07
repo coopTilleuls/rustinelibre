@@ -8,7 +8,7 @@ const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
     const user = useAccount({});
 
     return (
-        <div className="h-full w-full flex flex-col | md:flex-row">
+        <div className="h-full w-full flex flex-col | md:flex-grow">
             <Navbar user={user ?? undefined} />
             <Footer user={user ?? undefined} />
         </div>
