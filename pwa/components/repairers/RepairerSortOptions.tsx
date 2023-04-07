@@ -3,8 +3,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {repairerTypeResource} from "../../resources/repairerTypeResource";
-import {RepairerType} from "../../interfaces/RepairerType";
+import {repairerTypeResource} from "@resources/repairerTypeResource";
+import {RepairerType} from "@interfaces/RepairerType";
 
 const sortOptions: Record<string, string> = {
     "availability": 'Par disponibilité',

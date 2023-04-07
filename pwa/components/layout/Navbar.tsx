@@ -11,8 +11,8 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import {pagesLogged} from "components/layout/NavbarMenuLogged";
-import {pagesNotLogged} from "components/layout/NavbarMenuLogged";
+import {pagesLogged} from "@components/layout/NavbarMenuLogged";
+import {pagesNotLogged} from "@components/layout/NavbarMenuLogged";
 import {User} from "@interfaces/User";
 
 interface NavbarProps {
