@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {bikeTypeResource} from "../resources/bikeTypeResource";
-import {BikeType} from "../interfaces/BikeType";
+import {bikeTypeResource} from "@resources/bikeTypeResource";
+import {BikeType} from "@interfaces/BikeType";
 
 function useBikeTypes(): BikeType[] {
 
