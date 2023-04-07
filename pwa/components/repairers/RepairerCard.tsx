@@ -1,5 +1,5 @@
 import React from "react";
-import {Repairer} from "../../interfaces/Repairer";
+import {Repairer} from "@interfaces/Repairer";
 import {formatDate} from 'helpers/dateHelper';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
