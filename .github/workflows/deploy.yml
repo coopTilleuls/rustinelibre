@@ -9,9 +9,6 @@ on:
       domain:
         description: Main project deploy domain used in URLs
         required: true 
-      payum-apikey:
-        description: Payum API Key
-        required: true 
 
 jobs:
   deploy:
@@ -73,7 +70,6 @@ jobs:
             --set=ingress.tls[0].hosts[0]=${URL} \
             --set=postgresql.global.auth.password=changeme \
             --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
-            --set=payum.apikey="${{ secrets.payum-apikey }}" \
             --values ./helm/chart/values-prod.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
           echo "URL=$URL" >> $GITHUB_OUTPUT
