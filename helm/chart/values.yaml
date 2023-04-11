@@ -64,13 +64,13 @@ mercure:
 postgresql:
   enabled: true
   # If bringing your own PostgreSQL, the full uri to use
-  # url: postgresql://bikelib:!ChangeMe!@database:5432/api?serverVersion=13&charset=utf8
+  # url: postgresql://bikelib:!ChangeMe!@database:5432/bikelib?serverVersion=13&charset=utf8
   global:
     postgresql:
       auth:
-        username: "example"
+        username: "bikelib"
         password: "!ChangeMe!"
-        database: "api"
+        database: "bikelib"
   # Persistent Volume Storage configuration.
   # ref: https://kubernetes.io/docs/user-guide/persistent-volumes
   primary:
@@ -86,9 +86,15 @@ postgresql:
       requests:
         memory: 50Mi
         cpu: 1m
-
+    initdb:
+      scripts:
+        00_init_extensions.sh: |
+          #!/bin/sh
+          # create extension must run as admin
+          export PGPASSWORD=$POSTGRES_POSTGRES_PASSWORD
+          psql -U postgres -d $POSTGRES_DB -c "create extension if not exists postgis;"
 external-dns:
-  enabled: true
+  enabled: false
   domainFilters:
     - chart-example.local
   provider: cloudflare
