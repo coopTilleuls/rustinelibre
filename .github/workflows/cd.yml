@@ -11,17 +11,16 @@ on:
     types: [ opened, reopened, synchronize, labeled ]
 
 jobs:
-  # TODO: uncomment before merge
-  # remove-deploy-label:
-  #   name: Remove deploy label
-  #   if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: mondeja/remove-labels-gh-action@v1
-  #       with:
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         labels: |
-  #           deploy
+  remove-deploy-label:
+    name: Remove deploy label
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mondeja/remove-labels-gh-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            deploy
 
   build:
     name: Build
@@ -30,13 +29,12 @@ jobs:
     if: github.event_name != 'pull_request' || (github.event_name == 'pull_request')
     uses: ./.github/workflows/build.yml
 
-  # TODO: next step
-  # deploy:
-  #   name: Deploy
-  #   if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
-  #   needs: [ build ]
-  #   uses: ./.github/workflows/deploy.yml
-  #   concurrency: ${{ github.ref }}-deploy
-  #   secrets:
-  #     kubeconfig: ${{ secrets.KUBECONFIG }}
-  #     domain: ${{ secrets.DOMAIN }}
+  deploy:
+    name: Deploy
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
+    needs: [ build ]
+    uses: ./.github/workflows/deploy.yml
+    concurrency: ${{ github.ref }}-deploy
+    secrets:
+      kubeconfig: ${{ secrets.KUBECONFIG }}
+      domain: ${{ secrets.DOMAIN }}

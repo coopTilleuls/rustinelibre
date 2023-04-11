@@ -76,8 +76,11 @@ postgresql:
   primary:
     initdb:
       scripts:
-        00_init_extensions.sql: |
-          CREATE EXTENSION IF NOT EXISTS postgis;
+        00_init_extensions.sh: |
+          #!/bin/sh
+          # create extension must run as admin
+          export PGPASSWORD=$POSTGRES_POSTGRES_PASSWORD
+          psql -U postgres -d $POSTGRES_DB -c "create extension if not exists postgis;"
     persistence:
       enabled: true
       storageClass: standard

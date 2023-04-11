@@ -32,12 +32,8 @@ spec:
           command: ['/bin/sh', '-c']
           args: ['
             set -ex;
-            if [ "$APP_ENV" != "prod" ]; then
-              composer install --prefer-dist --no-progress --no-suggest --no-interaction;
-            fi;
-            bin/console -e test doctrine:database:drop --if-exists --force;
-            bin/console -e test doctrine:database:create;
-            bin/console -e test doctrine:migrations:migrate --no-interaction;
+            bin/console doctrine:schema:drop --full-database --force;
+            bin/console doctrine:migrations:migrate --no-interaction;
           ']
           env:
             - name: API_ENTRYPOINT_HOST
