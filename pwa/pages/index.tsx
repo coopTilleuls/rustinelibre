@@ -4,20 +4,17 @@ import React from "react";
 import "@fontsource/poppins";
 import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
-import dynamic from "next/dynamic";
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-const Navbar = dynamic(() => import("components/layout/Navbar"));
-const Footer = dynamic(() => import("components/layout/Footer"));
+import WebsiteLayout from "@components/layout/WebsiteLayout";
 
 const Home = () => {
-
     return (
         <div className="w-full overflow-x-hidden">
             <Head>
                 <title>Bienvenue sur la page d'accueil!</title>
             </Head>
-            <Navbar />
+            <WebsiteLayout />
             <Box sx={{ width: '100%' }}>
                 <Stack spacing={2}>
                     <HomeCard
@@ -42,7 +39,6 @@ const Home = () => {
                     />
                 </Stack>
             </Box>
-            <Footer />
         </div>
         )
 };

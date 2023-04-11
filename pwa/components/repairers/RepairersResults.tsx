@@ -1,4 +1,4 @@
-import {Repairer} from "../../interfaces/Repairer";
+import {Repairer} from "@interfaces/Repairer";
 import React, { useState } from "react";
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import {RepairerCard} from 'components/repairers/RepairerCard';

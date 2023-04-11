@@ -9,7 +9,7 @@ class SecurityRepairerTest extends AbstractTestCase
 {
     public function testPostRepairer(): void
     {
-        $client = self::createClientAuthAsAdmin();
+        $client = self::createClientAuthAsUser();
 
         // Valid boss role given
         $client->request('POST', '/repairers', [
@@ -40,10 +40,8 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testPostRepairerFail(): void
     {
-        $client = self::createClientAuthAsUser();
-
         // classic user given
-        $client->request('POST', '/repairers', [
+        self::createClient()->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',

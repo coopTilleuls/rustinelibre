@@ -68,7 +68,6 @@ export const useAccount = ({
   return user;
 };
 
-
 // Provider hook that creates auth object and handles state
 const useProviderAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -102,7 +101,7 @@ const useProviderAuth = () => {
         data
       );
       setToken(token);
-      // setRefreshToken(refresh_token); // @todo implement
+      setRefreshToken(refresh_token);
 
       return await fetchUser();
     } catch (e) {
