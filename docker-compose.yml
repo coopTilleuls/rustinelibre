@@ -63,7 +63,7 @@ services:
 
 ###> doctrine/doctrine-bundle ###
   database:
-    image: postgis/postgis:14-3.3-alpine
+    image: bitnami/postgresql
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-app}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-!ChangeMe!}
