@@ -9,11 +9,6 @@ redis:
       enabled: true
       size: "1Gi"
 
-payum:
-  enabled: true
-  gateway: 'mollie'
-  apikey: 'test'
-
 postgresql:
   auth:
     # PostgreSQL password is set only the first time chart in installed
