@@ -4,13 +4,12 @@ import Stack from '@mui/material/Stack';
 import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
 
 interface PaginationBlockProps {
-    totalItems: number;
     onPageChange: (pageNumber: number) => void;
 }
 
-const PaginationBlock = ({totalItems, onPageChange}: PaginationBlockProps): JSX.Element => {
+const PaginationBlock = ({onPageChange}: PaginationBlockProps): JSX.Element => {
 
-    const {currentPage, setCurrentPage} = useContext(SearchRepairerContext);
+    const {currentPage, setCurrentPage, totalItems} = useContext(SearchRepairerContext);
     const totalPages = Math.ceil(totalItems / 20);
 
     const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {

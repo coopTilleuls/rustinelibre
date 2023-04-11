@@ -190,7 +190,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                             />
                         </div>
 
-                        <RepairerSortOptions sortChosen={sortChosen} handleChangeSort={handleChangeSort} isMobile={isMobile} repairerTypeSelected={repairerTypeSelected} setRepairerTypeSelected={setRepairerTypeSelected} />
+                        <RepairerSortOptions handleChangeSort={handleChangeSort} isMobile={isMobile} />
 
                         <div className="hidden md:block">
                             <Button fullWidth type="submit" variant="outlined">Chercher</Button>
@@ -203,13 +203,13 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
                     <div className="md:hidden" style={{marginTop: "12px"}}>
                         {Object.keys(repairers).length > 0 && isMobile &&
-                            <ButtonShowMap showMap={showMap} setShowMap={setShowMap} />
+                            <ButtonShowMap />
                         }
                     </div>
 
                     <div style={{marginTop: "12px"}}>
                         {Object.keys(repairers).length > 0 &&
-                            <RepairersResults repairers={repairers} selectedRepairer={selectedRepairer} showMap={showMap} setSelectedRepairer={setSelectedRepairer} setRepairers={setRepairers} />
+                            <RepairersResults />
                         }
 
                         {(Object.keys(repairers).length === 0 && alreadyFetchApi) &&
@@ -217,7 +217,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                         }
                     </div>
 
-                    {totalItems > 20 && <PaginationBlock totalItems={totalItems} onPageChange={handlePageChange} />}
+                    {totalItems > 20 && <PaginationBlock onPageChange={handlePageChange} />}
                 </div>
             </div>
         </>
