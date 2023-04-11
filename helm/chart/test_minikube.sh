@@ -18,7 +18,7 @@ docker tag bikelib-pwa bikelib-pwa:$pwa_sha
 # push images to minikube
 #minikube image load bikelib-php:$php_sha
 #minikube image load bikelib-caddy:$caddy_sha
-for image in bikelib-php:$php_sha bikelib-caddy:$caddy_sha; do
+for image in bikelib-php:$php_sha bikelib-caddy:$caddy_sha bikelib-pwa:$pwa_sha; do
   minikube image ls | grep $image || minikube image load $image
 done
 
@@ -31,7 +31,7 @@ helm upgrade --install demo ./helm/chart \
   --debug \
   -f ./helm/chart/values-minikube.yml \
   --set   php.image.tag=$php_sha \
-  --set caddy.image.tag=$caddy_sha
+  --set caddy.image.tag=$caddy_sha \
   --set pwa.image.tag=$pwa_sha
 
 MINIKUBE_IP=$(minikube ip)

@@ -35,3 +35,8 @@ caddy:
   image:
     repository: bikelib-caddy
     tag: latest
+
+pwa:
+  image:
+    repository: bikelib-pwa
+    tag: latest
