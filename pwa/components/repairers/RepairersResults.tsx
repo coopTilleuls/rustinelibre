@@ -11,8 +11,8 @@ interface RepairersResultProps {
     repairers: Repairer[];
     selectedRepairer?: string;
     showMap: boolean;
-    setSelectedRepairer: React.Dispatch<React.SetStateAction<string>>;
-    setRepairers: React.Dispatch<React.SetStateAction<Repairer[]>>;
+    setSelectedRepairer: (value: string) => void;
+    setRepairers: (repairers: Repairer[]) => void;
 }
 
 export const RepairersResults = ({repairers, selectedRepairer, showMap, setSelectedRepairer, setRepairers}: RepairersResultProps): JSX.Element => {

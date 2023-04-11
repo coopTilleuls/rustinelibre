@@ -6,6 +6,7 @@ import Head from 'next/head';
 import {NextPage} from 'next';
 import type { ReactElement, ReactNode } from 'react'
 import {AuthProvider} from "@contexts/AuthContext";
+import {SearchRepairerProvider} from "@contexts/SearchRepairerContext";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode
@@ -18,6 +19,7 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppProps<{dehydratedState: DehydratedState}>) {
   return (
       <AuthProvider>
+        <SearchRepairerProvider>
           <>
             <Head>
               <meta
@@ -29,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps<{dehydratedState: DehydratedSt
               <Component {...pageProps} />
             </Layout>
           </>
+        </SearchRepairerProvider>
       </AuthProvider>
   )
 }

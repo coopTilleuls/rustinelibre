@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 
 interface ButtonShowMapProps {
     showMap: boolean;
-    setShowMap: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowMap: (value: boolean) => void;
 }
 
 export const ButtonShowMap = ({showMap, setShowMap}: ButtonShowMapProps): JSX.Element => {

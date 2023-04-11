@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Head from "next/head";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 import {useRouter} from "next/router";
@@ -18,11 +18,12 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {CircularProgress} from "@mui/material";
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
+import Link from "next/link";
 
 const RepairerPage: NextPageWithLayout = () => {
 
@@ -30,6 +31,11 @@ const RepairerPage: NextPageWithLayout = () => {
     const { id } = router.query;
     const [repairer, setRepairer] = useState<Repairer|null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+
+
+    const {cityInput, setCityInput, city, setCity, selectedBike, setSelectedBike, showMap, setShowMap,
+        setSelectedRepairer, selectedRepairer, repairers, setRepairers} = useContext(SearchRepairerContext);
+    console.log(city);
 
     useEffect(() => {
         async function fetchRepairer() {
@@ -52,6 +58,9 @@ const RepairerPage: NextPageWithLayout = () => {
                     <title>Réparateur {repairer?.name}</title>
                 </Head>
                 <WebsiteLayout />
+                <Link href={`/reparateur/chercher-un-reparateur`} passHref>
+                    <Button variant="outlined">Retour</Button>
+                </Link>
                 <main>
                     <Box
                         sx={{
