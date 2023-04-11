@@ -1,5 +1,5 @@
-import {User} from 'interfaces/User';
-import {Repairer} from 'interfaces/Repairer';
+import {User} from '@interfaces/User';
+import {Repairer} from '@interfaces/Repairer';
 
 export interface Appointment {
     '@id': string;

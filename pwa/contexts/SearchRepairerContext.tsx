@@ -1,4 +1,4 @@
-import React, {createContext, ReactNode, useContext, useState} from 'react';
+import React, {createContext, ReactNode, useState} from 'react';
 import {Repairer} from "@interfaces/Repairer";
 import {City} from "@interfaces/City";
 import {BikeType} from "@interfaces/BikeType";
