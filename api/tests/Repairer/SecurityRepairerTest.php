@@ -9,14 +9,13 @@ class SecurityRepairerTest extends AbstractTestCase
 {
     public function testPostRepairer(): void
     {
-        $client = self::createClientAuthAsUser();
+        $client = self::createClientAuthAsBoss();
 
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
-                'owner' => '/users/2',
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -41,11 +40,10 @@ class SecurityRepairerTest extends AbstractTestCase
     public function testPostRepairerFail(): void
     {
         // classic user given
-        self::createClient()->request('POST', '/repairers', [
+        $response = self::createClient()->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
-                'owner' => '/users/51',
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -58,8 +56,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'longitude' => '3.0635282',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(403);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseStatusCodeSame(401);
     }
 
     public function testGetRepairerByUser(): void
@@ -117,16 +114,39 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testUniqueOwner(): void
     {
-        $client = self::createClientAuthAsAdmin();
-
-        // Valid boss role given but already have a repairer
+        $client = self::createClientWithUserId(26);
+        // Valid user role given but already have a repairer
         $response = $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Deuxième atelier du même boss',
-                'owner' => '/users/26',
             ],
         ]);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    public function testPostComment(): void
+    {
+        $client = self::createClientWithUserId(50);
+        // Valid user given
+        $response = $client->request('POST', '/repairers', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'name' => 'Test comment',
+                'description' => 'Test comment',
+                'mobilePhone' => '0720596321',
+                'street' => '8 rue de la clé',
+                'city' => 'Lille',
+                'postcode' => '59000',
+                'country' => 'France',
+                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
+                'bikeTypesSupported' => ['/bike_types/1', '/bike_types/2'],
+                'comment' => 'Je voulais juste ajouter un commentaire',
+            ],
+        ]);
+        $response = $response->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
     }
 }

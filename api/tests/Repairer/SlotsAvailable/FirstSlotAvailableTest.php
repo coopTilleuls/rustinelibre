@@ -42,8 +42,7 @@ class FirstSlotAvailableTest extends AbstractTestCase
     public function testNewRepairerShouldHaveFirstSlotValue(): void
     {
         // Create a repairer
-        $response = $this->createClientAuthAsAdmin()->request('POST', '/repairers', ['json' => [
-            'owner' => '/users/46',
+        $response = $this->createClientWithUserId(46)->request('POST', '/repairers', ['json' => [
             'description' => 'Nouvel atelier de réparation',
             'mobilePhone' => '0720397799',
             'street' => 'avenue Nino Marchese',

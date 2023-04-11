@@ -42,7 +42,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     provider: RepairerAvailableSlotsProvider::class,
 )]
 #[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN')")]
 #[Put(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
@@ -73,8 +72,8 @@ class Repairer
 
     #[ORM\ManyToOne(inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['repairer_read', 'repairer_write'])]
-    private ?User $owner;
+    #[Groups(['repairer_read'])]
+    private ?User $owner = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
@@ -150,7 +149,7 @@ class Repairer
 
     #[ORM\Column]
     #[Groups(['repairer_read', 'repairer_write'])]
-    #[ApiProperty(security: "is_granted('ROLE_ADMIN')", securityPostDenormalize: "is_granted('UPDATE', object)")]
+    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     #[ApiFilter(BooleanFilter::class)]
     private ?bool $enabled = false;
 
@@ -167,6 +166,7 @@ class Repairer
     private ?MediaObject $descriptionPicture = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $comment = null;
 
     public function __construct()
@@ -189,7 +189,7 @@ class Repairer
         $this->name = $name;
     }
 
-    public function getOwner(): User
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
