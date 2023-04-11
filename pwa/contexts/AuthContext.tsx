@@ -101,7 +101,7 @@ const useProviderAuth = () => {
         data
       );
       setToken(token);
-      // setRefreshToken(refresh_token); // @todo implement
+      setRefreshToken(refresh_token);
 
       return await fetchUser();
     } catch (e) {
