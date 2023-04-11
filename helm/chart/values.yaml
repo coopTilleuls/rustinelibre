@@ -90,13 +90,6 @@ postgresql:
       requests:
         memory: 50Mi
         cpu: 1m
-    initdb:
-      scripts:
-        00_init_extensions.sh: |
-          #!/bin/sh
-          # create extension must run as admin
-          export PGPASSWORD=$POSTGRES_POSTGRES_PASSWORD
-          psql -U postgres -d $POSTGRES_DB -c "create extension if not exists postgis;"
 external-dns:
   enabled: false
   domainFilters:
