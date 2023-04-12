@@ -22,7 +22,7 @@ class SecurityUserTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertJsonContains([
             '@context' => '/contexts/User',
-            '@id' => '/users/21',
+            '@id' => '/users/56',
             '@type' => 'User',
             'email' => 'newUser@test.com',
         ]);
