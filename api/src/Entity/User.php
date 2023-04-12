@@ -13,8 +13,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use App\User\StateProvider\CurrentUserProvider;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -48,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user_read', 'user_write'])]
+    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -67,23 +65,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword = null;
 
     #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
-    private ?Repairer $repairer = null;
+    #[Groups(['user_read'])]
+    public ?Repairer $repairer = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user_read', 'user_write'])]
+    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user_read', 'user_write'])]
+    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $firstName = null;
 
-    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist'])]
     private ?RepairerEmployee $repairerEmployee = null;
-
-    public function __construct()
-    {
-        $this->repairers = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -174,36 +168,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-    //
-    // /**
-    //  * @return Collection<int, Repairer>
-    //  */
-    // public function getRepairers(): Collection
-    // {
-    //     return $this->repairers;
-    // }
-    //
-    // public function addRepairer(Repairer $repairer): self
-    // {
-    //     if (!$this->repairers->contains($repairer)) {
-    //         $this->repairers->add($repairer);
-    //         $repairer->setOwner($this);
-    //     }
-    //
-    //     return $this;
-    // }
-    //
-    // public function removeRepairer(Repairer $repairer): self
-    // {
-    //     if ($this->repairers->removeElement($repairer)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($repairer->getOwner() === $this) {
-    //             $repairer->setOwner(null);
-    //         }
-    //     }
-    //
-    //     return $this;
-    // }
+
+    public function getRepairer(): ?Repairer
+    {
+        return $this->repairer;
+    }
+
+    public function setRepairer(?Repairer $repairer): void
+    {
+        $this->repairer = $repairer;
+    }
 
     public function getLastName(): ?string
     {

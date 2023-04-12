@@ -1,0 +1,13 @@
+App\Entity\RepairerEmployee:
+  employee_1:
+    repairer: '@repairer_1'
+    employee: '@user_10'
+  employee_2:
+    repairer: '@repairer_1'
+    employee: '@user_11'
+  employee_3:
+    repairer: '@repairer_2'
+    employee: '@user_12'
+  employee_4:
+    repairer: '@repairer_2'
+    employee: '@user_13'

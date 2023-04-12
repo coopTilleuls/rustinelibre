@@ -116,6 +116,7 @@ export default function DashboardLayout() {
                     <DashboardSidebarListItem text="Agenda" open={open} icon={<CalendarMonthIcon />} path="/dashboard/agenda" />
                     <DashboardSidebarListItem text="Messages" open={open} icon={<ForumIcon />} path="/dashboard/messagerie" />
                     <DashboardSidebarListItem text="Clients" open={open} icon={<FolderSharedIcon />} path="/dashboard/clients" />
+                    <DashboardSidebarListItem text="Employes" open={open} icon={<FolderSharedIcon />} path="/dashboard/employes" />
                 </List>
                 <Divider />
                 <List>

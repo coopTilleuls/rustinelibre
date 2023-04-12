@@ -69,6 +69,7 @@ class Repairer
 
     #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['repairer_read', 'repairer_write'])]
     private ?User $owner;
 
     #[ORM\ManyToOne]

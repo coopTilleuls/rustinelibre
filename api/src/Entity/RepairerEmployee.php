@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -8,36 +10,54 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Employees\Dto\CreateUserEmployeeDto;
+use App\Employees\State\CreateUserEmployeeProcessor;
 use App\Repository\RepairerEmployeeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerEmployeeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => [self::EMPLOYEE_READ]],
+    denormalizationContext: ['groups' => [self::EMPLOYEE_WRITE]]
+)]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
-#[GetCollection(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
-#[Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
+#[GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
+#[Post(
+    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
+    input: CreateUserEmployeeDto::class,
+    processor: CreateUserEmployeeProcessor::class
+)]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
 class RepairerEmployee
 {
+    public const EMPLOYEE_READ = 'employee_read';
+    public const EMPLOYEE_WRITE = 'employee_write';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([self::EMPLOYEE_READ])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'repairerEmployees', cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Repairer $repairer = null;
+    #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
+    public ?Repairer $repairer = null;
 
     #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
     private ?User $employee = null;
 
     #[ORM\Column]
+    #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
     private ?bool $enabled = true;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
     private ?\DateTimeInterface $sinceDate;
 
     public function __construct()

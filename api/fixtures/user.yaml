@@ -5,7 +5,7 @@ App\Entity\User:
     plainPassword: "test"
     emailConfirmed: true
   boss_1:
-    roles: [ "ROLE_BOSS" ]
+    roles: ["ROLE_BOSS"]
     email: "boss@test.com"
     plainPassword: "test"
     emailConfirmed: true
@@ -15,12 +15,12 @@ App\Entity\User:
     plainPassword: "test"
     emailConfirmed: true
   user_2:
-    roles: ["ROLE_REPAIRER"]
+    roles: ["ROLE_USER"]
     email: "repairer2@test.com"
     plainPassword: "test"
     emailConfirmed: true
   user_{10..20}:
-    roles: ["ROLE_USER"]
+    roles: ["ROLE_EMPLOYEE"]
     email: <email()>
     plainPassword: "test"
     emailConfirmed: true
