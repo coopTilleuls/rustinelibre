@@ -31,6 +31,20 @@ export abstract class AbstractResource<T> {
     return await this.getResult(doFetch);
   }
 
+  async getById(id: string, headers?: RequestHeaders): Promise<T> {
+
+    const doFetch = async () => {
+      return await fetch(this.getUrl()+'/'+id, {
+        headers: {
+          ...this.getDefaultHeaders(),
+          ...headers,
+        },
+      });
+    };
+
+    return await this.getResult(doFetch);
+  }
+
   async getAll(
     params?: RequestParams,
     headers?: RequestHeaders

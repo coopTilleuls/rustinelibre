@@ -1,10 +1,8 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent, FormEvent} from 'react';
+import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent, FormEvent, useContext} from 'react';
 import Head from "next/head";
 import {repairerResource} from '@resources/repairerResource';
 import {ButtonShowMap} from '@components/repairers/ButtonShowMap';
-import {Repairer} from '@interfaces/Repairer';
-import {BikeType} from '@interfaces/BikeType';
 import {createCitiesWithGouvAPI, createCitiesWithNominatimAPI, City} from '@interfaces/City';
 import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
@@ -26,32 +24,21 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@hooks/useMediaQuery';
 import useBikeTypes from "@hooks/useBikeTypes";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
-
-interface OrderByOption {
-    key: string;
-    value: string;
-}
+import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
-    const [cityInput, setCityInput] = useState<string>('');
-    const [city, setCity] = useState<City | null>(null);
-    const [currentPage, setCurrentPage] = useState<number>(1);
     const [citiesList, setCitiesList] = useState<City[]>([]);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
-    const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
-    const [selectedRepairer, setSelectedRepairer] = useState<string>('');
-    const [repairers, setRepairers] = useState<Repairer[]>([]);
     const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
-    const [showMap, setShowMap] = useState<boolean>(false);
-    const [totalItems, setTotalItems] = useState<number>(0);
     const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
-    const [orderBy, setOrderBy] = useState<OrderByOption|null>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
     const listContainerRef = useRef<HTMLDivElement>(null);
-    const [repairerTypeSelected, setRepairerTypeSelected] = useState<string>('');
-    const [sortChosen, setSortChosen] = useState<string>('availability');
     const bikeTypes = useBikeTypes();
+
+    const {cityInput, setCityInput, city, setCity, selectedBike, setSelectedBike, showMap, setShowMap,
+        setSelectedRepairer, selectedRepairer, repairers, setRepairers, currentPage, setCurrentPage,
+        repairerTypeSelected, setRepairerTypeSelected, orderBy, setOrderBy, sortChosen, setSortChosen, totalItems, setTotalItems} = useContext(SearchRepairerContext);
 
     useEffect(() => {
         if (isMobile && city && selectedBike) {
@@ -203,7 +190,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                             />
                         </div>
 
-                        <RepairerSortOptions sortChosen={sortChosen} handleChangeSort={handleChangeSort} isMobile={isMobile} repairerTypeSelected={repairerTypeSelected} setRepairerTypeSelected={setRepairerTypeSelected} />
+                        <RepairerSortOptions handleChangeSort={handleChangeSort} isMobile={isMobile} />
 
                         <div className="hidden md:block">
                             <Button fullWidth type="submit" variant="outlined">Chercher</Button>
@@ -216,13 +203,13 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
 
                     <div className="md:hidden" style={{marginTop: "12px"}}>
                         {Object.keys(repairers).length > 0 && isMobile &&
-                            <ButtonShowMap showMap={showMap} setShowMap={setShowMap} />
+                            <ButtonShowMap />
                         }
                     </div>
 
                     <div style={{marginTop: "12px"}}>
                         {Object.keys(repairers).length > 0 &&
-                            <RepairersResults repairers={repairers} selectedRepairer={selectedRepairer} showMap={showMap} setSelectedRepairer={setSelectedRepairer} setRepairers={setRepairers} />
+                            <RepairersResults />
                         }
 
                         {(Object.keys(repairers).length === 0 && alreadyFetchApi) &&
@@ -230,7 +217,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                         }
                     </div>
 
-                    {totalItems > 20 && <PaginationBlock totalItems={totalItems} onPageChange={handlePageChange} />}
+                    {totalItems > 20 && <PaginationBlock onPageChange={handlePageChange} />}
                 </div>
             </div>
         </>
