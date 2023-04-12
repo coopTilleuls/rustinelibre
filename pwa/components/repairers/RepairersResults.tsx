@@ -1,22 +1,16 @@
 import {Repairer} from "@interfaces/Repairer";
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import {RepairerCard} from 'components/repairers/RepairerCard';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
 import {LeafletMouseEvent} from "leaflet";
+import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
 
-interface RepairersResultProps {
-    repairers: Repairer[];
-    selectedRepairer?: string;
-    showMap: boolean;
-    setSelectedRepairer: React.Dispatch<React.SetStateAction<string>>;
-    setRepairers: React.Dispatch<React.SetStateAction<Repairer[]>>;
-}
+export const RepairersResults = (): JSX.Element => {
 
-export const RepairersResults = ({repairers, selectedRepairer, showMap, setSelectedRepairer, setRepairers}: RepairersResultProps): JSX.Element => {
-
+    const {showMap, setSelectedRepairer, selectedRepairer, repairers, setRepairers} = useContext(SearchRepairerContext);
     const [mapCenter, setMapCenter] = useState<[number, number]>([Number(repairers[0].latitude), Number(repairers[0].longitude)]);
 
     const handleSelectRepairer = (id: string) => {

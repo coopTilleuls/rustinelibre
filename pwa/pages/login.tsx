@@ -1,7 +1,6 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, ChangeEvent} from 'react';
 import Head from "next/head";
-import dynamic from 'next/dynamic';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
