@@ -65,6 +65,7 @@ jobs:
             --kube-context $CONTEXT \
             --set=php.image.tag=${IMAGE_TAG} \
             --set=caddy.image.tag=${IMAGE_TAG} \
+            --set=pwa.image.tag=${IMAGE_TAG} \
             --set=ingress.hosts[0].host=${URL} \
             --set=ingress.tls[0].secretName=${RELEASE_NAME}-tls \
             --set=ingress.tls[0].hosts[0]=${URL} \
