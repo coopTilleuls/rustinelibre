@@ -6,8 +6,8 @@ import {
   PropsWithChildren,
 } from 'react';
 import Router from 'next/router';
-import {userResource} from '../resources/userResource';
-import {authenticationResource} from '../resources/authenticationResource';
+import {userResource} from '@resources/userResource';
+import {authenticationResource} from '@resources/authenticationResource';
 import { User } from 'interfaces/User';
 import {
   getToken,

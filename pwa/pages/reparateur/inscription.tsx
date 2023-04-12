@@ -2,8 +2,6 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, ChangeEvent, useEffect, SyntheticEvent} from 'react';
 import Head from "next/head";
 import dynamic from 'next/dynamic';
-const Navbar = dynamic(() => import("@components/layout/Navbar"));
-const Footer = dynamic(() => import("@components/layout/Footer"));
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -35,6 +33,7 @@ import {validatePassword} from '@utils/passwordValidator';
 import {userResource} from "@resources/userResource";
 import {removeToken} from "@helpers/sessionHelper";
 import {BikeType} from "@interfaces/BikeType";
+import WebsiteLayout from "@components/layout/WebsiteLayout";
 
 const RepairerRegistration: NextPageWithLayout = ({}) => {
 
@@ -209,7 +208,7 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                 <Head>
                     <title>Inscription</title>
                 </Head>
-                <Navbar/>
+                <WebsiteLayout/>
                 <div style={{width: "100vw", marginBottom: '100px'}}>
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
@@ -225,7 +224,7 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                                 <BuildIcon />
                             </Avatar>
                             <Typography component="h1" variant="h5">
-                                Tu est réparateur
+                                Tu es réparateur
                             </Typography>
                             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                                 <TextField
@@ -379,7 +378,6 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                         </Box>
                     </Container>
                 </div>
-                <Footer />
             </div>
         </>
     );

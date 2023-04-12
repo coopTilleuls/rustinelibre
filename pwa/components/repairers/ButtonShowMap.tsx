@@ -1,12 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import Button from '@mui/material/Button';
+import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
 
-interface ButtonShowMapProps {
-    showMap: boolean;
-    setShowMap: React.Dispatch<React.SetStateAction<boolean>>;
-}
+export const ButtonShowMap = (): JSX.Element => {
+    const {showMap, setShowMap} = useContext(SearchRepairerContext);
 
-export const ButtonShowMap = ({showMap, setShowMap}: ButtonShowMapProps): JSX.Element => {
     return (
         <>
             <div className="ml-4">

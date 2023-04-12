@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {repairerTypeResource} from "@resources/repairerTypeResource";
 import {RepairerType} from "@interfaces/RepairerType";
+import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
 
 const sortOptions: Record<string, string> = {
     "availability": 'Par disponibilité',
@@ -13,16 +14,14 @@ const sortOptions: Record<string, string> = {
 };
 
 interface RepairerSortOptionsProps {
-    sortChosen: string;
     handleChangeSort: (newSortSelected: string) => void;
     isMobile: boolean;
-    repairerTypeSelected: string;
-    setRepairerTypeSelected: (newRepairerTypeSelected: string) => void;
 }
 
-const RepairerSortOptions = ({sortChosen, handleChangeSort, isMobile, repairerTypeSelected, setRepairerTypeSelected}: RepairerSortOptionsProps): JSX.Element => {
+const RepairerSortOptions = ({handleChangeSort, isMobile}: RepairerSortOptionsProps): JSX.Element => {
 
     const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
+    const {repairerTypeSelected, setRepairerTypeSelected, sortChosen} = useContext(SearchRepairerContext);
 
     useEffect(() => {
         async function fetchRepairerTypes() {
