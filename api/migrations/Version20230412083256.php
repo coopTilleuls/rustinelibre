@@ -7,11 +7,11 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20230404131859 extends AbstractMigration
+final class Version20230412083256 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add new fields to repairer table';
+        return 'Add properties in repairer table';
     }
 
     public function up(Schema $schema): void
@@ -20,6 +20,7 @@ final class Version20230404131859 extends AbstractMigration
         $this->addSql('ALTER TABLE repairer ADD opening_hours TEXT DEFAULT NULL');
         $this->addSql('ALTER TABLE repairer ADD optional_page TEXT DEFAULT NULL');
         $this->addSql('ALTER TABLE repairer ADD enabled BOOLEAN NOT NULL');
+        $this->addSql('ALTER TABLE repairer ADD comment TEXT DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
@@ -29,5 +30,6 @@ final class Version20230404131859 extends AbstractMigration
         $this->addSql('ALTER TABLE repairer DROP opening_hours');
         $this->addSql('ALTER TABLE repairer DROP optional_page');
         $this->addSql('ALTER TABLE repairer DROP enabled');
+        $this->addSql('ALTER TABLE repairer DROP comment');
     }
 }

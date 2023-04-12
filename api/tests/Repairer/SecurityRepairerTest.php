@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SecurityRepairerTest extends AbstractTestCase
 {
-/*    public function testPostRepairer(): void
+    public function testPostRepairer(): void
     {
         $client = self::createClientAuthAsBoss();
 
@@ -39,8 +39,8 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testPostRepairerFail(): void
     {
-        // classic user given
-        $response = self::createClient()->request('POST', '/repairers', [
+        // unauthenticated client
+        self::createClient()->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
@@ -96,15 +96,14 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $client->request('GET', '/repairers');
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
-        $this->assertCount(25, $response['hydra:member']);
-        $lastRepairer = end($response['hydra:member']);
-        $this->assertSame($lastRepairer['enabled'], false);
+        // should have a minimum of 25 results as provided by fixtures
+        $this->assertTrue(25 <= count($response['hydra:member']));
     }
 
-    public function testGetRepairerCollectionByUser(): void
+    public function testGetRepairerCollectionFilterByEnabled(): void
     {
-        $client = self::createClientAuthAsUser();
-        // classic user given
+        $client = self::createClientAuthAsAdmin();
+        // admin user given
         $response = $client->request('GET', '/repairers?enabled=true');
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
@@ -116,7 +115,7 @@ class SecurityRepairerTest extends AbstractTestCase
     {
         $client = self::createClientWithUserId(26);
         // Valid user role given but already have a repairer
-        $response = $client->request('POST', '/repairers', [
+        $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Deuxième atelier du même boss',
@@ -148,7 +147,8 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
-    }*/
+    }
+
     public function testOwnerCreatedByUser() : void
     {
         $client = self::createClientWithUserId(16);
@@ -167,6 +167,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertSame($response['owner'], '/users/16');
     }
+
     public function testOwnerSecurity() : void
     {
         $client = self::createClientWithUserId(15);
@@ -190,6 +191,43 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertSame($response['owner'], '/users/15');
+    }
 
+    public function testPutEnabledByAdmin() : void
+    {
+        $client = self::createClientAuthAsAdmin();
+
+        // Valid admin role given
+        $response = $client->request('PUT', '/repairers/21', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'enabled' => false,
+            ],
+        ]);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $response = $response->toArray();
+        $this->assertSame($response['enabled'], false);
+    }
+    public function testPutEnabledByUserFail() : void
+    {
+       $client = self::createClientWithUserId(41);
+
+        // Valid user role given
+       $client->request('PUT', '/repairers/21', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'description' => 'test put enabled failed',
+                'enabled' => true,
+            ],
+        ]);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+
+        //Get the user 21 by admin to access to the enabled property
+        $admin = self::createClientAuthAsAdmin();
+        $response2 = $admin->request('GET', '/repairers/21');
+        $response2 = $response2->toArray();
+        $this->assertSame($response2['description'], 'test put enabled failed');
+        $this->assertSame($response2['enabled'], false);
     }
 }

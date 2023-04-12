@@ -32,7 +32,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
-    paginationClientItemsPerPage: true
+    denormalizationContext: ['groups' => ['admin_only']],
+    paginationClientItemsPerPage: true,
 )]
 #[Get(normalizationContext: ['groups' => ['repairer_read']])]
 #[GetCollection(normalizationContext: ['groups' => ['repairer_read']])]
@@ -73,7 +74,7 @@ class Repairer
     #[ORM\ManyToOne(inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups(['repairer_read', 'repairer_write'])]
-    private ?User $owner = null;
+    public ?User $owner = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]

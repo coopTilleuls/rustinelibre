@@ -38,11 +38,14 @@ final class RepairerEventSubscriber implements EventSubscriberInterface
         if (!$object instanceof Repairer || Request::METHOD_POST !== $method) {
             return;
         }
+
         /** @var User|null $user */
         $user = $this->security->getUser();
+
         if ($object->getOwner() && $user->isAdmin()) {
             return;
         }
+
         $object->setOwner($user);
         $this->validator->validate($object);
     }

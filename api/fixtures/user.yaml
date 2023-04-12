@@ -15,8 +15,8 @@ App\Entity\User:
     plainPassword: "test"
     emailConfirmed: true
   user_2:
-    roles: ["ROLE_REPAIRER"]
-    email: "repairer2@test.com"
+    roles: ["ROLE_USER"]
+    email: "user2@test.com"
     plainPassword: "test"
     emailConfirmed: true
   user_{10..20}:
