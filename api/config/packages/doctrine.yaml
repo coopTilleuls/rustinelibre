@@ -23,7 +23,8 @@ doctrine:
 when@test:
     doctrine:
         dbal:
-            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            # don't suffix dbname ith "_test" because db is created on db container creation with postgis ext
+            # dbname_suffix: '_test%env(default::TEST_TOKEN)%'
 
 when@prod:
     doctrine:
