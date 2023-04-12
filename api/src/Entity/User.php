@@ -66,8 +66,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user_read', 'user_write'])]
     private ?string $plainPassword = null;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Repairer::class, orphanRemoval: true)]
-    private Collection $repairers;
+    #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
+    private ?Repairer $repairer = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user_read', 'user_write'])]
@@ -76,6 +76,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user_read', 'user_write'])]
     private ?string $firstName = null;
+
+    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    private ?RepairerEmployee $repairerEmployee = null;
 
     public function __construct()
     {
@@ -171,36 +174,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
-    /**
-     * @return Collection<int, Repairer>
-     */
-    public function getRepairers(): Collection
-    {
-        return $this->repairers;
-    }
-
-    public function addRepairer(Repairer $repairer): self
-    {
-        if (!$this->repairers->contains($repairer)) {
-            $this->repairers->add($repairer);
-            $repairer->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRepairer(Repairer $repairer): self
-    {
-        if ($this->repairers->removeElement($repairer)) {
-            // set the owning side to null (unless already changed)
-            if ($repairer->getOwner() === $this) {
-                $repairer->setOwner(null);
-            }
-        }
-
-        return $this;
-    }
+    //
+    // /**
+    //  * @return Collection<int, Repairer>
+    //  */
+    // public function getRepairers(): Collection
+    // {
+    //     return $this->repairers;
+    // }
+    //
+    // public function addRepairer(Repairer $repairer): self
+    // {
+    //     if (!$this->repairers->contains($repairer)) {
+    //         $this->repairers->add($repairer);
+    //         $repairer->setOwner($this);
+    //     }
+    //
+    //     return $this;
+    // }
+    //
+    // public function removeRepairer(Repairer $repairer): self
+    // {
+    //     if ($this->repairers->removeElement($repairer)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($repairer->getOwner() === $this) {
+    //             $repairer->setOwner(null);
+    //         }
+    //     }
+    //
+    //     return $this;
+    // }
 
     public function getLastName(): ?string
     {
@@ -222,6 +225,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getRepairerEmployee(): ?RepairerEmployee
+    {
+        return $this->repairerEmployee;
+    }
+
+    public function setRepairerEmployee(RepairerEmployee $repairerEmployee): self
+    {
+        // set the owning side of the relation if necessary
+        if ($repairerEmployee->getEmployee() !== $this) {
+            $repairerEmployee->setEmployee($this);
+        }
+
+        $this->repairerEmployee = $repairerEmployee;
 
         return $this;
     }

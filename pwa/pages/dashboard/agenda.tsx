@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import DashboardLayout from "@components/dashboard/DashboardLayout";
 
 const Agenda = () => {
-
     return (
         <div className="w-full overflow-x-hidden">
             <Head>

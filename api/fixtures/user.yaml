@@ -29,3 +29,8 @@ App\Entity\User:
     email: <email()>
     plainPassword: "test"
     emailConfirmed: false
+  user_{26..60}:
+    roles: [ "ROLE_BOSS" ]
+    email: <email()>
+    plainPassword: "test"
+    emailConfirmed: true
