@@ -76,7 +76,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $firstName = null;
 
-    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist'])]
+    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    #[Groups(['user_read'])]
     private ?RepairerEmployee $repairerEmployee = null;
 
     public function getId(): ?int
@@ -218,5 +219,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->repairerEmployee = $repairerEmployee;
 
         return $this;
+    }
+
+    public function isAdmin(): bool
+    {
+        if (in_array('ROLE_ADMIN', $this->roles)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isBoss(): bool
+    {
+        if (in_array('ROLE_BOSS', $this->roles)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isEmployee(): bool
+    {
+        if (in_array('ROLE_EMPLOYEE', $this->roles)) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -26,11 +27,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Jsor\Doctrine\PostGIS\Types\PostGISType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
-    paginationClientItemsPerPage: true
+    denormalizationContext: ['groups' => ['admin_only']],
+    paginationClientItemsPerPage: true,
 )]
 #[Get(normalizationContext: ['groups' => ['repairer_read']])]
 #[GetCollection(normalizationContext: ['groups' => ['repairer_read']])]
@@ -58,6 +61,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)]
+#[UniqueEntity('owner')]
 class Repairer
 {
     #[ApiProperty(identifier: true)]
@@ -67,10 +71,10 @@ class Repairer
     #[Groups(['repairer_read'])]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(inversedBy: 'repairer')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups(['repairer_read', 'repairer_write'])]
-    private ?User $owner;
+    public ?User $owner = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
@@ -136,6 +140,20 @@ class Repairer
     #[Groups(['repairer_read'])]
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
+    private ?string $openingHours = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
+    private ?string $optionalPage = null;
+
+    #[ORM\Column]
+    #[Groups(['repairer_read', 'repairer_write'])]
+    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
+    #[ApiFilter(BooleanFilter::class)]
+    private ?bool $enabled = false;
+
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
@@ -150,6 +168,10 @@ class Repairer
 
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerEmployee::class, orphanRemoval: true)]
     private Collection $repairerEmployees;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['repairer_read', 'repairer_write'])]
+    private ?string $comment = null;
 
     public function __construct()
     {
@@ -172,7 +194,7 @@ class Repairer
         $this->name = $name;
     }
 
-    public function getOwner(): User
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
@@ -342,6 +364,42 @@ class Repairer
         $this->repairerType = $repairerType;
     }
 
+    public function getOpeningHours(): ?string
+    {
+        return $this->openingHours;
+    }
+
+    public function setOpeningHours(?string $openingHours): self
+    {
+        $this->openingHours = $openingHours;
+
+        return $this;
+    }
+
+    public function getOptionalPage(): ?string
+    {
+        return $this->optionalPage;
+    }
+
+    public function setOptionalPage(?string $optionalPage): self
+    {
+        $this->optionalPage = $optionalPage;
+
+        return $this;
+    }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
     public function getThumbnail(): ?MediaObject
     {
         return $this->thumbnail;
@@ -388,6 +446,18 @@ class Repairer
                 $repairerEmployee->setRepairer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }

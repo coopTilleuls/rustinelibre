@@ -56,7 +56,7 @@ class Appointment
     private ?User $customer = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups(['appointment_read', 'appointment_write'])]
     private ?Repairer $repairer = null;
 

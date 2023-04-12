@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     processor: CreateUserEmployeeProcessor::class
 )]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
+#[Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer == user.repairer)")]
 class RepairerEmployee
 {
     public const EMPLOYEE_READ = 'employee_read';
@@ -42,13 +42,13 @@ class RepairerEmployee
     #[Groups([self::EMPLOYEE_READ])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'repairerEmployees', cascade: ['remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'repairerEmployees')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
     public ?Repairer $repairer = null;
 
-    #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
     private ?User $employee = null;
 

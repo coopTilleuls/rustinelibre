@@ -14,6 +14,7 @@ App\Entity\Repairer:
     longitude: '3.063398'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_2:
     name: 'Chez Francis'
     owner: '@user_27'
@@ -29,6 +30,7 @@ App\Entity\Repairer:
     longitude: '3.057561'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_3:
     name: 'Chez Benoit Broutchoux'
     owner: '@user_28'
@@ -44,6 +46,7 @@ App\Entity\Repairer:
     longitude: '3.059621'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 11:00:00"))>
     repairerType: '@reparateur_velo'
+    enabled: true
   repairer_4:
     name: 'Au réparateur de bicyclettes'
     owner: '@user_29'
@@ -59,6 +62,9 @@ App\Entity\Repairer:
     longitude: '3.063796139948392'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
+    enabled: true
   repairer_5:
     name: 'A vos vélos'
     owner: '@user_30'
@@ -74,6 +80,7 @@ App\Entity\Repairer:
     longitude: '3.086616668783799'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
+    enabled: true
   repairer_6:
     name: 'Rafael'
     owner: '@user_31'
@@ -89,6 +96,7 @@ App\Entity\Repairer:
     longitude: '3.1073636687835653'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@reparateur_velo'
+    enabled: true
   repairer_7:
     name: 'Retape mon vélo'
     owner: '@user_32'
@@ -104,6 +112,7 @@ App\Entity\Repairer:
     longitude: '3.0558313974240985'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
+    enabled: true
   repairer_8:
     name: 'Reparakoeur'
     owner: '@user_33'
@@ -119,6 +128,7 @@ App\Entity\Repairer:
     longitude: '3.09824402625828'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
+    enabled: true
   repairer_9:
     name: "Doc'velos"
     owner: '@user_34'
@@ -134,6 +144,7 @@ App\Entity\Repairer:
     longitude: '3.030325812938165'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_10:
     name: 'Ridy'
     owner: '@user_35'
@@ -149,6 +160,7 @@ App\Entity\Repairer:
     longitude: '3.0765575685896245'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@reparateur_velo'
+    enabled: true
   repairer_11:
     name: 'Vélo Time'
     owner: '@user_36'
@@ -164,6 +176,7 @@ App\Entity\Repairer:
     longitude: '3.1022751550968466'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_12:
     name: 'Le vélo de Belleville'
     owner: '@user_37'
@@ -179,6 +192,7 @@ App\Entity\Repairer:
     longitude: '3.0693763550948643'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_13:
     name: 'Mon beau vélo'
     owner: '@user_38'
@@ -194,6 +208,7 @@ App\Entity\Repairer:
     longitude: '3.0760502974252044'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_14:
     name: 'Olivier réparations'
     owner: '@user_39'
@@ -209,6 +224,7 @@ App\Entity\Repairer:
     longitude: '3.0288867262606542'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@reparateur_velo'
+    enabled: true
   repairer_15:
     name: "V'Lo"
     owner: '@user_40'
@@ -224,6 +240,7 @@ App\Entity\Repairer:
     longitude: '3.0569075262601735'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
+    enabled: true
   repairer_16:
     name: 'Bizouk'
     owner: '@user_41'
@@ -239,6 +256,7 @@ App\Entity\Repairer:
     longitude: '3.0328065262592943'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_17:
     name: 'Les petits vélos de Maurice'
     owner: '@user_42'
@@ -254,6 +272,7 @@ App\Entity\Repairer:
     longitude: '3.0682853974238613'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_18:
     name: 'La chapelle du vélo'
     owner: '@user_43'
@@ -269,6 +288,7 @@ App\Entity\Repairer:
     longitude: '3.056235026259378'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_19:
     name: 'La Roue Liber'
     owner: '@user_44'
@@ -284,6 +304,7 @@ App\Entity\Repairer:
     longitude: '3.063150526258884'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_20:
     name: 'Velogik'
     owner: '@user_45'
@@ -299,6 +320,7 @@ App\Entity\Repairer:
     longitude: '3.067642855095133'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_21:
     name: 'Doctocyclo'
     owner: '@user_46'
@@ -314,6 +336,7 @@ App\Entity\Repairer:
     longitude: '3.0771190974245197'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_22:
     name: 'Les vélos de lille'
     owner: '@user_47'
@@ -329,6 +352,7 @@ App\Entity\Repairer:
     longitude: '3.065552426428842'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    enabled: true
   repairer_23:
     name: 'Le paradis du vélo'
     owner: '@user_48'

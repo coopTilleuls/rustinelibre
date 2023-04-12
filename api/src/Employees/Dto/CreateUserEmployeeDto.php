@@ -30,5 +30,4 @@ final class CreateUserEmployeeDto
 
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?Repairer $repairer = null;
-
 }
