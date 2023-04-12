@@ -124,31 +124,6 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function testPostComment(): void
-    {
-        $client = self::createClientWithUserId(50);
-        // Valid user given
-        $response = $client->request('POST', '/repairers', [
-            'headers' => ['Content-Type' => 'application/json'],
-            'json' => [
-                'name' => 'Test comment',
-                'description' => 'Test comment',
-                'mobilePhone' => '0720596321',
-                'street' => '8 rue de la clé',
-                'city' => 'Lille',
-                'postcode' => '59000',
-                'country' => 'France',
-                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/1', '/bike_types/2'],
-                'comment' => 'Je voulais juste ajouter un commentaire',
-            ],
-        ]);
-        $response = $response->toArray();
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
-    }
-
     public function testOwnerCreatedByUser() : void
     {
         $client = self::createClientWithUserId(16);
@@ -160,12 +135,14 @@ class SecurityRepairerTest extends AbstractTestCase
                 'description' => 'Test create by user',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/2'],
+                'comment' => 'Je voulais juste ajouter un commentaire',
             ]
         ]);
         $response = $response->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertSame($response['owner'], '/users/16');
+        $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
     }
 
     public function testOwnerSecurity() : void

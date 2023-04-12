@@ -42,7 +42,7 @@ final class RepairerEventSubscriber implements EventSubscriberInterface
         /** @var User|null $user */
         $user = $this->security->getUser();
 
-        if ($object->getOwner() && $user->isAdmin()) {
+        if ($user->isAdmin()) {
             return;
         }
 
