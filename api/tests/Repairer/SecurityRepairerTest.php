@@ -102,12 +102,12 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testGetRepairerCollectionFilterByEnabled(): void
     {
-        $client = self::createClientAuthAsAdmin();
-        // admin user given
-        $response = $client->request('GET', '/repairers?enabled=true');
+        $client = self::createClientAuthAsUser();
+        // classic user given
+        $response = $client->request('GET', '/repairers');
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
-        // On 25 repairers -> 3 aren't enabled
+        // Test doctrine extension, same route but different result because different role
         $this->assertCount(22, $response['hydra:member']);
     }
 
@@ -191,7 +191,7 @@ class SecurityRepairerTest extends AbstractTestCase
        $client = self::createClientWithUserId(41);
 
         // Valid user role given
-       $client->request('PUT', '/repairers/21', [
+       $response = $client->request('PUT', '/repairers/21', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'description' => 'test put enabled failed',
@@ -199,7 +199,6 @@ class SecurityRepairerTest extends AbstractTestCase
             ],
         ]);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-
         //Get the user 21 by admin to access to the enabled property
         $admin = self::createClientAuthAsAdmin();
         $response2 = $admin->request('GET', '/repairers/21');
