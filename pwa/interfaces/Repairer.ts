@@ -1,6 +1,6 @@
-import {User} from 'interfaces/User';
-import {BikeType} from 'interfaces/BikeType';
-import {RepairerType} from "interfaces/RepairerType";
+import {User} from '@interfaces/User';
+import {BikeType} from '@interfaces/BikeType';
+import {RepairerType} from "@interfaces/RepairerType";
 
 export interface Repairer {
     '@id': string;
