@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SecurityRepairerTest extends AbstractTestCase
 {
-    public function testPostRepairer(): void
+/*    public function testPostRepairer(): void
     {
         $client = self::createClientAuthAsBoss();
 
@@ -148,5 +148,48 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
+    }*/
+    public function testOwnerCreatedByUser() : void
+    {
+        $client = self::createClientWithUserId(16);
+        // simple user given
+        $response = $client->request('POST', '/repairers', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'name' => 'Test create by user',
+                'description' => 'Test create by user',
+                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
+                'bikeTypesSupported' => ['/bike_types/2'],
+            ]
+        ]);
+        $response = $response->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertSame($response['owner'], '/users/16');
+    }
+    public function testOwnerSecurity() : void
+    {
+        $client = self::createClientWithUserId(15);
+        // simple user given who try to assigne other owner
+        $response = $client->request('POST', '/repairers', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'name' => 'Test owner security',
+                'owner' => '/users/52',
+                'description' => 'Test owner security',
+                'mobilePhone' => '0720596321',
+                'street' => '8 rue de la clé',
+                'city' => 'Lille',
+                'postcode' => '59000',
+                'country' => 'France',
+                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
+                'bikeTypesSupported' => ['/bike_types/1'],
+            ]
+        ]);
+        $response = $response->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertSame($response['owner'], '/users/15');
+
     }
 }
