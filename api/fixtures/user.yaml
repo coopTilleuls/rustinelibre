@@ -20,7 +20,7 @@ App\Entity\User:
     plainPassword: "test"
     emailConfirmed: true
   user_{10..20}:
-    roles: ["ROLE_EMPLOYEE"]
+    roles: ["ROLE_USER"]
     email: <email()>
     plainPassword: "test"
     emailConfirmed: true

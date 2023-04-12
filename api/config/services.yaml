@@ -35,7 +35,3 @@ services:
     App\Repairers\EventSubscriber\RruleEventSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
-
-    App\Employees\State\CreateUserEmployeeProcessor:
-        bind:
-            $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'

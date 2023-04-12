@@ -17,7 +17,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final class CreateUserEmployeeProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ProcessorInterface $persistProcessor,
         private readonly ValidatorInterface $validator,
         private readonly Security $security,
         private readonly EntityManagerInterface $entityManager
@@ -65,9 +64,6 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         // Persist and flush
         $this->entityManager->persist($repairerEmployee);
         $this->entityManager->flush();
-
-        $data->user = $user;
-        $this->persistProcessor->process($data, $operation);
 
         return $repairerEmployee;
     }
