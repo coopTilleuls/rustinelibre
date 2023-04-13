@@ -9,7 +9,7 @@ class SecurityRepairerTest extends AbstractTestCase
 {
     public function testPostRepairer(): void
     {
-        $client = self::createClientAuthAsBoss();
+        $client = self::createClientWithUserId(50);
 
         // Valid boss role given
         $client->request('POST', '/repairers', [
@@ -124,7 +124,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function testOwnerCreatedByUser() : void
+    public function testOwnerCreatedByUser(): void
     {
         $client = self::createClientWithUserId(16);
         // simple user given
@@ -136,7 +136,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/2'],
                 'comment' => 'Je voulais juste ajouter un commentaire',
-            ]
+            ],
         ]);
         $response = $response->toArray();
         $this->assertResponseIsSuccessful();
@@ -145,7 +145,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
     }
 
-    public function testOwnerSecurity() : void
+    public function testOwnerSecurity(): void
     {
         $client = self::createClientWithUserId(15);
         // simple user given who try to assigne other owner
@@ -153,7 +153,6 @@ class SecurityRepairerTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test owner security',
-                'owner' => '/users/52',
                 'description' => 'Test owner security',
                 'mobilePhone' => '0720596321',
                 'street' => '8 rue de la clé',
@@ -162,7 +161,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/1'],
-            ]
+            ],
         ]);
         $response = $response->toArray();
         $this->assertResponseIsSuccessful();
@@ -170,7 +169,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertSame($response['owner'], '/users/15');
     }
 
-    public function testPutEnabledByAdmin() : void
+    public function testPutEnabledByAdmin(): void
     {
         $client = self::createClientAuthAsAdmin();
 
@@ -186,21 +185,22 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $response->toArray();
         $this->assertSame($response['enabled'], false);
     }
-    public function testPutEnabledByUserFail() : void
+
+    public function testPutEnabledByUserFail(): void
     {
-       $client = self::createClientWithUserId(41);
+        $client = self::createClientWithUserId(41);
 
         // Valid user role given
-       $client->request('PUT', '/repairers/21', [
-            'headers' => ['Content-Type' => 'application/json'],
-            'json' => [
-                'description' => 'test put enabled failed',
-                'enabled' => true,
-            ],
-        ]);
+        $client->request('PUT', '/repairers/21', [
+             'headers' => ['Content-Type' => 'application/json'],
+             'json' => [
+                 'description' => 'test put enabled failed',
+                 'enabled' => true,
+             ],
+         ]);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
-        //Get the user 21 by admin to access to the enabled property
+        // Get the user 21 by admin to access to the enabled property
         $admin = self::createClientAuthAsAdmin();
         $response2 = $admin->request('GET', '/repairers/21');
         $response2 = $response2->toArray();

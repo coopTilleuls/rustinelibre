@@ -1,7 +1,7 @@
 App\Entity\Repairer:
   repairer_1:
     name: 'Chez Johnny'
-    owner: '@user_26'
+    owner: '@boss_1'
     description: "Lorem ipsum"
     mobilePhone: "0720397700"
     street: "1936 rue Johnny Hallyday"
