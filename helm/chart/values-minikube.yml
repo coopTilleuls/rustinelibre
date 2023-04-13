@@ -1,14 +1,3 @@
-meilisearch:
-  persistence:
-    enabled: true
-    size: "1Gi"
-
-redis:
-  master:
-    persistence:
-      enabled: true
-      size: "1Gi"
-
 maildev:
   enabled: true
   ingress:

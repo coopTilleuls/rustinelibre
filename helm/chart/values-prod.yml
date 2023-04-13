@@ -15,19 +15,6 @@ ingress:
       hosts:
         - toset
 
-meilisearch:
-  persistence:
-    enabled: true
-    storageClass: "regionalpd-sc-euwest1"
-    size: "1Gi"
-
-redis:
-  master:
-    persistence:
-      enabled: true
-      storageClass: "regionalpd-sc-euwest1"
-      size: "1Gi"
-
 postgresql:
   persistence:
     enabled: true
