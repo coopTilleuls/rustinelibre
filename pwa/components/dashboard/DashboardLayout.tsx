@@ -17,6 +17,7 @@ import {ListItem} from "@mui/material";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import EngineeringIcon from '@mui/icons-material/Engineering';
 
 const drawerWidth = 240;
 
@@ -116,7 +117,7 @@ export default function DashboardLayout() {
                     <DashboardSidebarListItem text="Agenda" open={open} icon={<CalendarMonthIcon />} path="/dashboard/agenda" />
                     <DashboardSidebarListItem text="Messages" open={open} icon={<ForumIcon />} path="/dashboard/messagerie" />
                     <DashboardSidebarListItem text="Clients" open={open} icon={<FolderSharedIcon />} path="/dashboard/clients" />
-                    <DashboardSidebarListItem text="Employes" open={open} icon={<FolderSharedIcon />} path="/dashboard/employes" />
+                    <DashboardSidebarListItem text="Employes" open={open} icon={<EngineeringIcon />} path="/dashboard/employes" />
                 </List>
                 <Divider />
                 <List>

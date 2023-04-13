@@ -47,7 +47,7 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         $repairerEmployee->setEmployee($user);
 
         // If the current user is not an admin, inject automatically its repairer shop
-        if ($currentUser->isAdmin()) {
+        if ($currentUser->isAdmin() && !$currentUser->getRepairer()) {
             $repairerEmployee->setRepairer($data->repairer);
         } else {
             $currentRepairer = $currentUser->getRepairer();
