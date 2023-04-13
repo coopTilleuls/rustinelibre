@@ -70,7 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?Repairer $repairer = null;
 
     #[Assert\NotBlank]
-    #[Assert\length(
+    #[Assert\Length(
         min : 2,
     )]
     #[ORM\Column(length: 255, nullable: true)]
@@ -78,7 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[Assert\NotBlank]
-    #[Assert\length(
+    #[Assert\Length(
         min : 2,
     )]
     #[ORM\Column(length: 255, nullable: true)]
