@@ -2,39 +2,31 @@ App\Entity\User:
   genialo_admin:
     roles: ["ROLE_ADMIN"]
     email: "clement@les-tilleuls.coop"
-    firstname: Clement
-    lastname: Tilleuls
+    firstname: 'Clement'
+    lastname: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
-    firstName: 'Clément'
-    lastName: 'Tilleuls'
   boss_1:
     roles: ["ROLE_BOSS"]
     email: "boss@test.com"
-    firstname: Cécile
-    lastname: Tilleuls
+    firstname: 'Cécile'
+    lastname: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
-    firstName: 'Chémi'
-    lastName: 'Leboss'
   user_1:
     roles: ["ROLE_USER"]
     email: "user1@test.com"
-    firstname: Raphael
-    lastname: Tilleuls
+    firstname: 'Raphael'
+    lastname: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
-    firstName: <firstName()>
-    lastName: <lastName()>
   user_2:
     roles: ["ROLE_BOSS"]
     email: "repairer2@test.com"
-    firstname: Davy
-    lastname: Tilleuls
+    firstname: 'Davy'
+    lastname: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
-    firstName: <firstName()>
-    lastName: <lastName()>
   user_{10..20}:
     roles: ["ROLE_USER"]
     email: <email()>
@@ -42,8 +34,6 @@ App\Entity\User:
     lastname: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
-    firstName: <firstName()>
-    lastName: <lastName()>
   user_not_confirm{21..25}:
     roles: ["ROLE_USER"]
     email: <email()>
@@ -51,8 +41,6 @@ App\Entity\User:
     lastname: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: false
-    firstName: <firstName()>
-    lastName: <lastName()>
   user_{26..60}:
     roles: [ "ROLE_BOSS" ]
     email: <email()>
@@ -60,5 +48,3 @@ App\Entity\User:
     lastname: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
-    firstName: <firstName()>
-    lastName: <lastName()>
