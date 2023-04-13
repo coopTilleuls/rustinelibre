@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, {useContext, useEffect, useState} from "react";
+import React from "react";
 import Box from '@mui/material/Box';
 import DashboardLayout from "@components/dashboard/DashboardLayout";
 import {useAccount} from "@contexts/AuthContext";
