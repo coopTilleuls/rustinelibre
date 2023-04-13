@@ -1,7 +1,6 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, ChangeEvent, useEffect, SyntheticEvent} from 'react';
 import Head from "next/head";
-import dynamic from 'next/dynamic';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -9,7 +8,6 @@ import Container from '@mui/material/Container';
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {useAuth} from '@contexts/AuthContext';
 import {useRouter} from 'next/router';
 import {CircularProgress} from "@mui/material";
 import {repairerResource} from '@resources/repairerResource';
@@ -30,8 +28,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
-import {userResource} from "@resources/userResource";
-import {removeToken} from "@helpers/sessionHelper";
 import {BikeType} from "@interfaces/BikeType";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 
@@ -47,7 +43,7 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
-    const [comments, setComments] = useState<string>('');
+    const [comment, setComment] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [emailError, setEmailError] = useState<boolean>(false);
     const [passwordError, setPasswordError] = useState<boolean>(false);
@@ -58,7 +54,6 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
     const router = useRouter();
-    const {login} = useAuth();
     const repairerTypes: RepairerType[] = useRepairerTypes();
     const bikeTypes: BikeType[] = useBikeTypes();
 
@@ -87,61 +82,39 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
         event.preventDefault();
-        if (!firstName || !lastName || !email || !password || !repairerTypeSelected || !city || Object.keys(selectedBikeTypes).length === 0) {
+        if (!firstName || !lastName || !email || !password || !repairerTypeSelected || !street || !city || Object.keys(selectedBikeTypes).length === 0) {
             return;
         }
 
         setErrorMessage(null);
         setPendingRegistration(true);
 
-        // First create a new user
-        let newUser;
+        // Create a new repairer and an user
+        let newRepairer;
         try {
-            newUser = await userResource.register({
+            const selectedBikeTypeIRIs: string[] = bikeTypes
+                .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
+                .map((bikeType) => bikeType['@id']);
+
+            newRepairer = await repairerResource.postRepairerAndUser({
                 'firstName': firstName,
                 'lastName': lastName,
                 'email': email,
                 'plainPassword': password,
+                'name': name,
+                'street': street,
+                'city': city.name,
+                'postcode': city?.postcode,
+                'bikeTypesSupported': selectedBikeTypeIRIs,
+                'repairerType': repairerTypeSelected ? repairerTypeSelected['@id'] : null,
+                'comment': comment
             })
+
+            if (newRepairer) {
+                await router.push('/');
+            }
         } catch (e) {
             setErrorMessage('Inscription impossible');
-        }
-
-        // If user created continue
-        if (newUser) {
-            // We authenticate our new user
-            await login({
-                'email': email,
-                'password': password
-            });
-
-            // Then we create a new repairer
-            let newRepairer;
-            try {
-                const selectedBikeTypeIRIs: string[] = bikeTypes
-                    .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
-                    .map((bikeType) => bikeType['@id']);
-
-                newRepairer = await repairerResource.post({
-                    'name': name,
-                    'street': street,
-                    'city': city.name,
-                    'postcode': city?.postcode,
-                    'owner' : newUser['@id'],
-                    'bikeTypesSupported': selectedBikeTypeIRIs,
-                    'repairerType': repairerTypeSelected ? repairerTypeSelected['@id'] : null,
-                    'comments': comments
-                })
-
-                if (newRepairer) {
-                    await router.push('/');
-                }
-            } catch (e) {
-                // if the repairer creation fail : remove user and remove token
-                await userResource.delete(newUser['@id']);
-                removeToken();
-                setErrorMessage('Demande impossible');
-            }
         }
 
         setPendingRegistration(false);
@@ -164,7 +137,7 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
     };
 
     const handleChangeComments = (event: ChangeEvent<HTMLInputElement>): void => {
-        setComments(event.target.value);
+        setComment(event.target.value);
     };
 
     const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -353,12 +326,12 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
                                     rows={3}
                                     margin="normal"
                                     fullWidth
-                                    id="comments"
+                                    id="comment"
                                     label="Commentaires"
-                                    name="comments"
-                                    autoComplete="comments"
+                                    name="comment"
+                                    autoComplete="comment"
                                     autoFocus
-                                    value={comments}
+                                    value={comment}
                                     onChange={handleChangeComments}
                                 />
                                 <Button
