@@ -16,10 +16,12 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
+use App\Repairers\Dto\CreateUserRepairerDto;
 use App\Repairers\Filter\AroundFilter;
 use App\Repairers\Filter\FirstAvailableSlotFilter;
 use App\Repairers\Filter\ProximityFilter;
 use App\Repairers\Filter\RandomFilter;
+use App\Repairers\State\CreateUserRepairerProcessor;
 use App\Repository\RepairerRepository;
 use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -35,15 +37,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['admin_only']],
     paginationClientItemsPerPage: true,
 )]
-#[Get(normalizationContext: ['groups' => ['repairer_read']])]
-#[GetCollection(normalizationContext: ['groups' => ['repairer_read']])]
+#[Get(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
+#[GetCollection(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
 #[GetCollection(
     uriTemplate: '/repairer_get_slots_available/{id}',
     requirements: ['id' => '\d+'],
     provider: RepairerAvailableSlotsProvider::class,
 )]
-#[Post(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Put(denormalizationContext: ['groups' => ['repairer_write']], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Post(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('IS_AUTHENTICATED_FULLY')")]
+#[Post(
+    denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
+    uriTemplate: '/create_user_and_repairer',
+    input: CreateUserRepairerDto::class,
+    processor: CreateUserRepairerProcessor::class,
+    description: 'Allows the simultaneous creation of a user (boss) and an inactive repairer waiting for validation'
+)]
+#[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[ApiFilter(AroundFilter::class)]
@@ -64,66 +73,69 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[UniqueEntity('owner')]
 class Repairer
 {
+    public const REPAIRER_READ = 'repairer_read';
+    public const REPAIRER_WRITE = 'repairer_write';
+
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['repairer_read'])]
+    #[Groups([self::REPAIRER_READ])]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'repairer')]
+    #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?User $owner = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?RepairerType $repairerType;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $mobilePhone = null;
 
     #[ORM\Column(length: 800, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $street = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $country = null;
 
     #[AppAssert\Rrule]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['repairer_write'])]
+    #[Groups([self::REPAIRER_WRITE])]
     private ?string $rrule = 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR';
 
     #[ORM\ManyToMany(targetEntity: BikeType::class, inversedBy: 'repairers')]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private Collection $bikeTypesSupported;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $latitude = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $longitude = null;
 
     #[ORM\Column(
@@ -137,19 +149,19 @@ class Repairer
     public ?string $gpsPoint;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Groups(['repairer_read'])]
+    #[Groups([self::REPAIRER_READ])]
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $openingHours = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $optionalPage = null;
 
     #[ORM\Column]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     #[ApiFilter(BooleanFilter::class)]
     private ?bool $enabled = false;
@@ -157,20 +169,20 @@ class Repairer
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?MediaObject $thumbnail = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?MediaObject $descriptionPicture = null;
 
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerEmployee::class, orphanRemoval: true)]
     private Collection $repairerEmployees;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['repairer_read', 'repairer_write'])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $comment = null;
 
     public function __construct()

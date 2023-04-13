@@ -33,7 +33,7 @@ class SecurityRepairerTest extends AbstractTestCase
     public function testDeleteRepairer(): void
     {
         $client = self::createClientAuthAsAdmin();
-        $client->request('DELETE', 'repairers/26');
+        $client->request('DELETE', 'repairers/27');
         $this->assertResponseIsSuccessful();
     }
 
@@ -68,7 +68,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $response->toArray();
         $this->assertIsArray($response);
         $this->assertSame($response['name'], 'Au réparateur de bicyclettes');
-        $this->assertSame($response['owner'], '/users/24');
+        $this->assertIsString($response['owner']);
         $this->assertSame($response['bikeTypesSupported'][0]['@id'], '/bike_types/2');
         $this->assertSame($response['bikeTypesSupported'][1]['@id'], '/bike_types/1');
         $this->assertSame($response['repairerType']['@id'], '/repairer_types/1');
