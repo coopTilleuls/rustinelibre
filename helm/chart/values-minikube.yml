@@ -1,0 +1,21 @@
+maildev:
+  enabled: true
+  ingress:
+    enabled: true
+    hosts:
+      - maildev.chart-example.local
+
+php:
+  image:
+    repository: bikelib-php
+    tag: latest
+
+caddy:
+  image:
+    repository: bikelib-caddy
+    tag: latest
+
+pwa:
+  image:
+    repository: bikelib-pwa
+    tag: latest
