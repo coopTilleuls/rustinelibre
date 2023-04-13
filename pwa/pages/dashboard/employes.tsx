@@ -3,18 +3,18 @@ import React from "react";
 import Box from '@mui/material/Box';
 import DashboardLayout from "@components/dashboard/DashboardLayout";
 
-const Agenda = () => {
+const Employees = () => {
     return (
         <div className="w-full overflow-x-hidden">
             <Head>
-                <title>Agenda</title>
+                <title>Employés</title>
             </Head>
             <DashboardLayout />
             <Box component="main" sx={{ marginLeft: '20%', marginTop: '100px' }}>
-                Ici mon agenda
+
             </Box>
         </div>
     )
 };
 
-export default Agenda;
+export default Employees;

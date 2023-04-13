@@ -71,7 +71,7 @@ class Repairer
     #[Groups(['repairer_read'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'repairers')]
+    #[ORM\OneToOne(inversedBy: 'repairer')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups(['repairer_read', 'repairer_write'])]
     public ?User $owner = null;
@@ -166,6 +166,9 @@ class Repairer
     #[Groups(['repairer_read', 'repairer_write'])]
     private ?MediaObject $descriptionPicture = null;
 
+    #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerEmployee::class, orphanRemoval: true)]
+    private Collection $repairerEmployees;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['repairer_read', 'repairer_write'])]
     private ?string $comment = null;
@@ -173,6 +176,7 @@ class Repairer
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
+        $this->repairerEmployees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -414,6 +418,36 @@ class Repairer
     public function setDescriptionPicture(?MediaObject $descriptionPicture): void
     {
         $this->descriptionPicture = $descriptionPicture;
+    }
+
+    /**
+     * @return Collection<int, RepairerEmployee>
+     */
+    public function getRepairerEmployees(): Collection
+    {
+        return $this->repairerEmployees;
+    }
+
+    public function addRepairerEmployee(RepairerEmployee $repairerEmployee): self
+    {
+        if (!$this->repairerEmployees->contains($repairerEmployee)) {
+            $this->repairerEmployees->add($repairerEmployee);
+            $repairerEmployee->setRepairer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepairerEmployee(RepairerEmployee $repairerEmployee): self
+    {
+        if ($this->repairerEmployees->removeElement($repairerEmployee)) {
+            // set the owning side to null (unless already changed)
+            if ($repairerEmployee->getRepairer() === $this) {
+                $repairerEmployee->setRepairer(null);
+            }
+        }
+
+        return $this;
     }
 
     public function getComment(): ?string

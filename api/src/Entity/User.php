@@ -13,8 +13,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use App\User\StateProvider\CurrentUserProvider;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -48,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user_read', 'user_write'])]
+    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -66,21 +64,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user_read', 'user_write'])]
     private ?string $plainPassword = null;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Repairer::class, orphanRemoval: true)]
-    private Collection $repairers;
+    #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
+    #[Groups(['user_read'])]
+    public ?Repairer $repairer = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user_read', 'user_write'])]
+    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user_read', 'user_write'])]
+    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $firstName = null;
 
-    public function __construct()
-    {
-        $this->repairers = new ArrayCollection();
-    }
+    #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    #[Groups(['user_read'])]
+    private ?RepairerEmployee $repairerEmployee = null;
 
     public function getId(): ?int
     {
@@ -172,34 +170,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, Repairer>
-     */
-    public function getRepairers(): Collection
+    public function getRepairer(): ?Repairer
     {
-        return $this->repairers;
+        return $this->repairer;
     }
 
-    public function addRepairer(Repairer $repairer): self
+    public function setRepairer(?Repairer $repairer): void
     {
-        if (!$this->repairers->contains($repairer)) {
-            $this->repairers->add($repairer);
-            $repairer->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRepairer(Repairer $repairer): self
-    {
-        if ($this->repairers->removeElement($repairer)) {
-            // set the owning side to null (unless already changed)
-            if ($repairer->getOwner() === $this) {
-                $repairer->setOwner(null);
-            }
-        }
-
-        return $this;
+        $this->repairer = $repairer;
     }
 
     public function getLastName(): ?string
@@ -226,9 +204,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getRepairerEmployee(): ?RepairerEmployee
+    {
+        return $this->repairerEmployee;
+    }
+
+    public function setRepairerEmployee(RepairerEmployee $repairerEmployee): self
+    {
+        // set the owning side of the relation if necessary
+        if ($repairerEmployee->getEmployee() !== $this) {
+            $repairerEmployee->setEmployee($this);
+        }
+
+        $this->repairerEmployee = $repairerEmployee;
+
+        return $this;
+    }
+
     public function isAdmin(): bool
     {
         if (in_array('ROLE_ADMIN', $this->roles)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isBoss(): bool
+    {
+        if (in_array('ROLE_BOSS', $this->roles)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isEmployee(): bool
+    {
+        if (in_array('ROLE_EMPLOYEE', $this->roles)) {
             return true;
         }
 
