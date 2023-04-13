@@ -31,7 +31,7 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         $user = new User();
         $user->setFirstName($data->firstName);
         $user->setLastName($data->lastName);
-        $user->setPlainPassword($data->plainPassword);
+        $user->setPlainPassword($data->plainPassword ?: $this->generateRandomTempPassword());
         $user->setEmail($data->email);
         $user->setEmailConfirmed(true);
         $user->setRoles(['ROLE_EMPLOYEE']);
@@ -66,5 +66,31 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         $this->entityManager->flush();
 
         return $repairerEmployee;
+    }
+
+    private function generateRandomTempPassword(): string
+    {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=';
+        $password = '';
+        while (strlen($password) < 12) {
+            $bytes = random_bytes(1);
+            $char = substr($alphabet, ord($bytes) % strlen($alphabet), 1);
+
+            if (ctype_upper($char)) {
+                $hasUppercase = true;
+            } elseif (ctype_digit($char)) {
+                $hasDigit = true;
+            } else {
+                $hasSpecial = true;
+            }
+
+            $password .= $char;
+        }
+
+        if (!isset($hasUppercase) || !isset($hasDigit) || !isset($hasSpecial)) {
+            return $this->generateRandomTempPassword();
+        }
+
+        return $password;
     }
 }

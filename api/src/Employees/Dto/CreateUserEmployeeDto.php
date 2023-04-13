@@ -15,7 +15,6 @@ final class CreateUserEmployeeDto
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?string $email = null;
 
-    #[Assert\NotBlank]
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?string $plainPassword = null;
 
