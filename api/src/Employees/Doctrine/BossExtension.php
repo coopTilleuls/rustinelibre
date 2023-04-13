@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Employees\Doctrine;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\RepairerEmployee;
@@ -15,7 +14,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 /**
  * This extension prevents getting informations about employees who are not "mine".
  */
-final class BossExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final class BossExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(private readonly Security $security)
     {
@@ -24,10 +23,6 @@ final class BossExtension implements QueryCollectionExtensionInterface, QueryIte
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
         $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, Operation $operation = null, array $context = []): void
-    {
     }
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
