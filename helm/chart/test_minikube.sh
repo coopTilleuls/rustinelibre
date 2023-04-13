@@ -32,7 +32,8 @@ helm upgrade --install demo ./helm/chart \
   -f ./helm/chart/values-minikube.yml \
   --set   php.image.tag=$php_sha \
   --set caddy.image.tag=$caddy_sha \
-  --set pwa.image.tag=$pwa_sha
+  --set pwa.image.tag=$pwa_sha \
+  --set dailyCronjobDbReset.enabled=true
 
 MINIKUBE_IP=$(minikube ip)
 if ! grep -E "^$MINIKUBE_IP\s+(.+\s+)?bikelib.chart-example.local" /etc/hosts; then

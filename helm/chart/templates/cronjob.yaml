@@ -21,13 +21,19 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           serviceAccountName: {{ include "bikelib.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
           restartPolicy: Never
           containers:
             - name: {{ .Chart.Name }}-cronjob
               image: "{{ .Values.php.image.repository }}:{{ .Values.php.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.php.image.pullPolicy }}
               command: ['/bin/sh', '-c']
-              args: ['composer install --prefer-dist --no-progress --no-suggest --no-interaction && bin/console doctrine:schema:drop --force --no-interaction && bin/console doctrine:migrations:version --delete --all --no-interaction && bin/console doctrine:migrations:migrate --no-interaction && bin/console hautelook:fixtures:load --no-interaction']
+              args: ['
+                set -ex;
+                bin/console doctrine:schema:drop --full-database --force;
+                bin/console doctrine:migrations:migrate --no-interaction;
+              ']
               env:
                 - name: API_ENTRYPOINT_HOST
                   valueFrom:
@@ -60,9 +66,15 @@ spec:
                       name: {{ include "bikelib.fullname" . }}
                       key: php-trusted-proxies
                 - name: APP_ENV
-                  value: "dev"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: {{ include "bikelib.fullname" . }}
+                      key: php-app-env
                 - name: APP_DEBUG
-                  value: "1"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: {{ include "bikelib.fullname" . }}
+                      key: php-app-debug
                 - name: APP_SECRET
                   valueFrom:
                     secretKeyRef:
