@@ -27,11 +27,11 @@ class RepairerType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['repairer_type_read', 'repairer_read'])]
+    #[Groups(['repairer_type_read', Repairer::REPAIRER_READ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['repairer_type_read', 'repairer_read', 'repairer_type_write'])]
+    #[Groups(['repairer_type_read', Repairer::REPAIRER_READ, 'repairer_type_write'])]
     private ?string $name = null;
 
     public function getId(): ?int
