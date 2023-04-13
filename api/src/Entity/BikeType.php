@@ -32,11 +32,11 @@ class BikeType
     #[ApiProperty(identifier: true)]
     #[ORM\Column(type: 'integer')]
     #[ORM\Id, ORM\GeneratedValue()]
-    #[Groups(['repairer_read', 'bike_type_read'])]
+    #[Groups([Repairer::REPAIRER_READ, 'bike_type_read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['repairer_read', 'bike_type_read', 'bike_type_write'])]
+    #[Groups([Repairer::REPAIRER_READ, 'bike_type_read', 'bike_type_write'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Repairer::class, mappedBy: 'bikeTypesSupported')]
