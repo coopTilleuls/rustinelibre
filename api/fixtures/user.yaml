@@ -6,6 +6,8 @@ App\Entity\User:
     lastname: Tilleuls
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    firstName: 'Clément'
+    lastName: 'Tilleuls'
   boss_1:
     roles: ["ROLE_BOSS"]
     email: "boss@test.com"
@@ -13,6 +15,8 @@ App\Entity\User:
     lastname: Tilleuls
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    firstName: 'Chémi'
+    lastName: 'Leboss'
   user_1:
     roles: ["ROLE_USER"]
     email: "user1@test.com"
@@ -20,6 +24,8 @@ App\Entity\User:
     lastname: Tilleuls
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    firstName: <firstName()>
+    lastName: <lastName()>
   user_2:
     roles: ["ROLE_BOSS"]
     email: "repairer2@test.com"
@@ -27,6 +33,8 @@ App\Entity\User:
     lastname: Tilleuls
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    firstName: <firstName()>
+    lastName: <lastName()>
   user_{10..20}:
     roles: ["ROLE_USER"]
     email: <email()>
@@ -34,6 +42,8 @@ App\Entity\User:
     lastname: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    firstName: <firstName()>
+    lastName: <lastName()>
   user_not_confirm{21..25}:
     roles: ["ROLE_USER"]
     email: <email()>
@@ -41,6 +51,8 @@ App\Entity\User:
     lastname: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: false
+    firstName: <firstName()>
+    lastName: <lastName()>
   user_{26..60}:
     roles: [ "ROLE_BOSS" ]
     email: <email()>
@@ -48,3 +60,5 @@ App\Entity\User:
     lastname: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    firstName: <firstName()>
+    lastName: <lastName()>
