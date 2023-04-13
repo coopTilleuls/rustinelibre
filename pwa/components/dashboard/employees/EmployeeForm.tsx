@@ -103,8 +103,6 @@ export const EmployeeForm = ({employee, edit}: EmployeeEditFormProps): JSX.Eleme
 
     const handleChangeEnabled = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEnabled(event.target.checked);
-
-        console.log(event.target.checked)
     };
 
     return (
