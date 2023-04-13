@@ -21,7 +21,7 @@ abstract class AbstractTestCase extends ApiTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'clement@les-tilleuls.coop',
-                'password' => 'test',
+                'password' => 'Test1passwordOk!',
             ],
         ]);
 
@@ -38,7 +38,7 @@ abstract class AbstractTestCase extends ApiTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $body ?: [
                 'email' => 'user1@test.com',
-                'password' => 'test',
+                'password' => 'Test1passwordOk!',
             ],
         ]);
 
@@ -56,12 +56,12 @@ abstract class AbstractTestCase extends ApiTestCase
 
     protected function createClientAuthAsRepairer(): Client
     {
-        return $this->createClientWithCredentials(['email' => 'repairer2@test.com', 'password' => 'test']);
+        return $this->createClientWithCredentials(['email' => 'repairer2@test.com', 'password' => 'Test1passwordOk!']);
     }
 
     protected function createClientAuthAsBoss(): Client
     {
-        return $this->createClientWithCredentials(['email' => 'boss@test.com', 'password' => 'test']);
+        return $this->createClientWithCredentials(['email' => 'boss@test.com', 'password' => 'Test1passwordOk!']);
     }
 
     protected function createClientWithUserId(?int $id = 10): Client
@@ -71,7 +71,7 @@ abstract class AbstractTestCase extends ApiTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => $userToConnect->getEmail(),
-                'password' => 'test',
+                'password' => 'Test1passwordOk!',
             ],
         ]);
 

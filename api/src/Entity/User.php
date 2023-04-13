@@ -61,7 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
-    #[Assert\Regex('/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?.+=;/:,_"&])[A-Za-z\d@$!%*#?.+=;,/:_"&]{12,}$/')]
+    #[Assert\Regex("/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&\\/])[A-Za-z\d@$!%*?&\\/]{12,}$/")]
     #[Groups(['user_read', 'user_write'])]
     private ?string $plainPassword = null;
 

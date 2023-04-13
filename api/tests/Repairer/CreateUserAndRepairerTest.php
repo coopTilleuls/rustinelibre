@@ -11,7 +11,7 @@ class CreateUserAndRepairerTest extends AbstractTestCase
         'firstName' => 'Michel',
         'lastName' => 'Michel',
         'email' => 'michel@michel.com',
-        'plainPassword' => 'test',
+        'plainPassword' => 'Test1passwordOk!',
         'name' => 'Nouvel atelier',
         'street' => '8 rue de la justice',
         'city' => 'Lille',

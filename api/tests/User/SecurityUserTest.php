@@ -14,10 +14,12 @@ class SecurityUserTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'newUser@test.com',
-                'plainPassword' => 'test',
+                'plainPassword' => 'Test1passwordOk!',
+                'firstName' => 'Leon',
+                'lastName' => 'Bruxelles',
             ],
         ]);
-        $response->toArray();
+        $response = $response->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertJsonContains([
@@ -33,7 +35,7 @@ class SecurityUserTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'failUser@test.com',
-                'plainPassword' => 'test',
+                'plainPassword' => 'Test1passwordOk!',
             ],
         ]);
         $this->assertResponseStatusCodeSame(403);

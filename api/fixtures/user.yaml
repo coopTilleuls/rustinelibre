@@ -2,35 +2,49 @@ App\Entity\User:
   genialo_admin:
     roles: ["ROLE_ADMIN"]
     email: "clement@les-tilleuls.coop"
-    plainPassword: "test"
+    firstname: Clement
+    lastname: Tilleuls
+    plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   boss_1:
     roles: ["ROLE_BOSS"]
     email: "boss@test.com"
-    plainPassword: "test"
+    firstname: Cécile
+    lastname: Tilleuls
+    plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   user_1:
     roles: ["ROLE_USER"]
     email: "user1@test.com"
-    plainPassword: "test"
+    firstname: Raphael
+    lastname: Tilleuls
+    plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   user_2:
     roles: ["ROLE_BOSS"]
     email: "repairer2@test.com"
-    plainPassword: "test"
+    firstname: Davy
+    lastname: Tilleuls
+    plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   user_{10..20}:
     roles: ["ROLE_USER"]
     email: <email()>
-    plainPassword: "test"
+    firstname: <firstName()>
+    lastname: <lastName()>
+    plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   user_not_confirm{21..25}:
     roles: ["ROLE_USER"]
     email: <email()>
-    plainPassword: "test"
+    firstname: <firstName()>
+    lastname: <lastName()>
+    plainPassword: "Test1passwordOk!"
     emailConfirmed: false
   user_{26..60}:
     roles: [ "ROLE_BOSS" ]
     email: <email()>
-    plainPassword: "test"
+    firstname: <firstName()>
+    lastname: <lastName()>
+    plainPassword: "Test1passwordOk!"
     emailConfirmed: true
