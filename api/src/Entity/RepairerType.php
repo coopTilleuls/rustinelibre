@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\RepairerTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerTypeRepository::class)]
 #[ApiResource(
@@ -30,6 +31,11 @@ class RepairerType
     #[Groups(['repairer_type_read', Repairer::REPAIRER_READ])]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 2,
+        max : 80,
+    )]
     #[ORM\Column(length: 255)]
     #[Groups(['repairer_type_read', Repairer::REPAIRER_READ, 'repairer_type_write'])]
     private ?string $name = null;
