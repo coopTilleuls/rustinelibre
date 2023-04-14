@@ -2,13 +2,15 @@
 
 namespace App\Tests\Repairer\Validator;
 
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class RruleValidatorTest extends AbstractTestCase
 {
     public function testCreateRepairer(): void
     {
-        $this->createClientWithUserId(47)->request('POST', '/repairers', ['json' => [
+        $this->createClientWithCredentials()->request('POST', '/repairers', ['json' => [
             'description' => 'Super atelier de vélo',
             'mobilePhone' => '0720397700',
             'street' => 'avenue Karl Marx',
@@ -18,7 +20,7 @@ class RruleValidatorTest extends AbstractTestCase
             'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
         ]]);
 
-        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 

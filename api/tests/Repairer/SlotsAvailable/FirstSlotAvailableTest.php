@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Repairer\SlotsAvailable;
 
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,6 +12,7 @@ class FirstSlotAvailableTest extends AbstractTestCase
 {
     public function testGetOrderBySlotAvailable(): void
     {
+        $randomUser = $this->getObjectByClassNameAndValues(UserRepository::class, ['email' => 'user1@test.com']);
         // Check order of results
         $response = static::createClient()->request('GET', '/repairers?availability=ASC');
         $this->assertResponseIsSuccessful();
@@ -18,13 +20,12 @@ class FirstSlotAvailableTest extends AbstractTestCase
 
         $responseData = $response->toArray();
         // Check that first result is less than second and second less than third
-        $this->assertEquals(3, $responseData['hydra:member'][0]['id']);
         $this->assertLessThanOrEqual($responseData['hydra:member'][1]['firstSlotAvailable'], $responseData['hydra:member'][0]['firstSlotAvailable']);
         $this->assertLessThanOrEqual($responseData['hydra:member'][2]['firstSlotAvailable'], $responseData['hydra:member'][1]['firstSlotAvailable']);
 
         // Create an appointment
         $this->createClientAuthAsAdmin()->request('POST', '/appointments', ['json' => [
-            'customer' => '/users/1',
+            'customer' => '/users/'.$randomUser->id,
             'repairer' => '/repairers/'.$responseData['hydra:member'][0]['id'],
             'slotTime' => '2023-03-22T11:00:00+00:00',
         ]]);
@@ -32,17 +33,17 @@ class FirstSlotAvailableTest extends AbstractTestCase
 
         // Check that previous first result is no more before others
         $response = static::createClient()->request('GET', '/repairers?availability=ASC');
-        $responseData = $response->toArray();
+        $responseData2 = $response->toArray();
         $this->assertResponseIsSuccessful();
-        $this->assertNotEquals(1, $responseData['hydra:member'][0]['id']);
-        $this->assertLessThanOrEqual($responseData['hydra:member'][1]['firstSlotAvailable'], $responseData['hydra:member'][0]['firstSlotAvailable']);
-        $this->assertLessThanOrEqual($responseData['hydra:member'][2]['firstSlotAvailable'], $responseData['hydra:member'][1]['firstSlotAvailable']);
+        $this->assertNotEquals($responseData['hydra:member'][0]['id'], $responseData2['hydra:member'][0]['id']);
+        $this->assertLessThanOrEqual($responseData2['hydra:member'][1]['firstSlotAvailable'], $responseData2['hydra:member'][0]['firstSlotAvailable']);
+        $this->assertLessThanOrEqual($responseData2['hydra:member'][2]['firstSlotAvailable'], $responseData2['hydra:member'][1]['firstSlotAvailable']);
     }
 
     public function testNewRepairerShouldHaveFirstSlotValue(): void
     {
         // Create a repairer
-        $response = $this->createClientWithUserId(46)->request('POST', '/repairers', ['json' => [
+        $response = $this->createClientWithCredentials(['email' => 'user1@test.com', 'password' => 'Test1passwordOk!'])->request('POST', '/repairers', ['json' => [
             'description' => 'Nouvel atelier de réparation',
             'mobilePhone' => '0720397799',
             'street' => 'avenue Nino Marchese',
