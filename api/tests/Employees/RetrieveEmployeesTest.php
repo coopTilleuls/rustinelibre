@@ -4,20 +4,34 @@ declare(strict_types=1);
 
 namespace App\Tests\Employees;
 
+use App\Entity\User;
+use App\Repository\RepairerEmployeeRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RetrieveEmployeesTest extends AbstractTestCase
 {
+    private array $repairerEmployees = [];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->repairerEmployees = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll(); // should be 4 results
+    }
+
     public function testGetRepairerEmployeesAsUser(): void
     {
         $this->createClientAuthAsUser()->request('GET', '/repairer_employees');
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testGetRepairerEmployeeAsUser(): void
     {
-        $this->createClientAuthAsUser()->request('GET', '/repairer_employees/1');
-        $this->assertResponseStatusCodeSame(403);
+        $this->createClientAuthAsUser()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testGetRepairerEmployeesAsAdmin(): void
@@ -30,21 +44,21 @@ class RetrieveEmployeesTest extends AbstractTestCase
 
     public function testGetRepairerEmployeeAsAdmin(): void
     {
-        $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees/1');
+        $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
         $this->assertResponseIsSuccessful();
     }
 
     public function testGetRepairerEmployeeAsBadBoss(): void
     {
         // Boss of repairer 1 try to get an employee of repairer 2
-        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/3');
-        $this->assertResponseStatusCodeSame(403);
+        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/'.$this->repairerEmployees[2]->getId());
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testGetRepairerEmployeeAsGoodBoss(): void
     {
         // Boss of repairer 1 try to get an employee of repairer 1
-        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/1');
+        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
         $this->assertResponseIsSuccessful();
     }
 
@@ -52,13 +66,27 @@ class RetrieveEmployeesTest extends AbstractTestCase
     {
         // Boss of repairer 1 try to get an employee of repairer 2
         $response = $this->createClientAuthAsBoss()->request('GET', '/repairer_employees');
-        $this->assertEquals(2, $response->toArray()['hydra:totalItems']);
+        $this->assertEquals(3, $response->toArray()['hydra:totalItems']);
     }
 
     public function testGetEmployeesAsBossWithNoEmployees(): void
     {
+        $users = array_reverse(static::getContainer()->get(UserRepository::class)->findAll());
+
+        $firstRandomBoss = null;
+        /** @var User $user */
+        foreach ($users as $user) {
+            if ($user->isBoss() && 'boss@test.com' !== $user->email) {
+                $firstRandomBoss = $user;
+            }
+        }
+
+        if (!$firstRandomBoss) {
+            throw new NotFoundHttpException('No boss found');
+        }
+
         // Boss of repairer 1 try to get an employee of repairer 2
-        $response = $this->createClientWithUserId(28)->request('GET', '/repairer_employees');
+        $response = $this->createClientWithCredentials(['email' => $firstRandomBoss->email, 'password' => 'Test1passwordOk!'])->request('GET', '/repairer_employees');
         $this->assertEquals(0, $response->toArray()['hydra:totalItems']);
     }
 }
