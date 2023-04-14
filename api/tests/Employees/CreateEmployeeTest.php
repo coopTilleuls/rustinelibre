@@ -108,7 +108,7 @@ class CreateEmployeeTest extends AbstractTestCase
 
     public function testRemoveEmployeeAsBadBoss(): void
     {
-        $repairerEmployee5 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[4];
+        $repairerEmployee5 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[3];
         $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee5->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
