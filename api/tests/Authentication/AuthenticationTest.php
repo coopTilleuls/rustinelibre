@@ -49,7 +49,7 @@ class AuthenticationTest extends ApiTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         self::assertResponseHeaderSame('content-type', 'application/json');
         self::assertJsonEquals([
-            'code' => 401,
+            'code' => Response::HTTP_UNAUTHORIZED,
             'message' => 'Invalid credentials.',
         ]);
     }

@@ -41,7 +41,7 @@ App\Entity\User:
     lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: false
-  user_{26..60}:
+  user_{26..100}:
     roles: [ "ROLE_BOSS" ]
     email: <email()>
     firstName: <firstName()>

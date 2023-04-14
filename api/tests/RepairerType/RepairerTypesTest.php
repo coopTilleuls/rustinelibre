@@ -4,10 +4,24 @@ declare(strict_types=1);
 
 namespace App\Tests\RepairerType;
 
+use App\Repository\RepairerTypeRepository;
 use App\Tests\AbstractTestCase;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class RepairerTypesTest extends AbstractTestCase
 {
+    use RefreshDatabaseTrait;
+
+    private array $repairerTypes = [];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->repairerTypes = static::getContainer()->get(RepairerTypeRepository::class)->findAll();
+    }
+
     public function testGetCollection(): void
     {
         $response = static::createClient()->request('GET', '/repairer_types');
@@ -22,7 +36,7 @@ class RepairerTypesTest extends AbstractTestCase
 
     public function testGet(): void
     {
-        $response = static::createClient()->request('GET', '/repairer_types/1');
+        $response = static::createClient()->request('GET', '/repairer_types/'.$this->repairerTypes[0]->getId());
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
@@ -37,7 +51,7 @@ class RepairerTypesTest extends AbstractTestCase
             'name' => 'Nouvelle solution de réparation',
         ]]);
 
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testPost(): void
@@ -55,16 +69,16 @@ class RepairerTypesTest extends AbstractTestCase
 
     public function testPutNotAllowed(): void
     {
-        $this->createClientAuthAsUser()->request('PUT', '/repairer_types/3', ['json' => [
+        $this->createClientAuthAsUser()->request('PUT', '/repairer_types/'.$this->repairerTypes[2]->getId(), ['json' => [
             'name' => 'Nom mis à jour',
         ]]);
 
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testPut(): void
     {
-        $response = $this->createClientAuthAsAdmin()->request('PUT', '/repairer_types/3', ['json' => [
+        $response = $this->createClientAuthAsAdmin()->request('PUT', '/repairer_types/'.$this->repairerTypes[2]->getId(), ['json' => [
             'name' => 'Nom mis à jour',
         ]]);
 
