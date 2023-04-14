@@ -61,6 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
+    #[Assert\Regex("/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&\\/])[A-Za-z\d@$!%*?&\\/]{12,}$/")]
     #[Groups(['user_read', 'user_write'])]
     private ?string $plainPassword = null;
 
@@ -68,10 +69,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user_read'])]
     public ?Repairer $repairer = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 2,
+        max : 50,
+    )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $lastName = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 2,
+        max : 50,
+    )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
     private ?string $firstName = null;

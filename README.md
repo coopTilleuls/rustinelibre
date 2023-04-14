@@ -42,7 +42,7 @@ Make a POST request on URL : https://localhost/auth with body
 ```
 {
     "email": "clement@les-tilleuls.coop", 
-    "password": "test"
+    "password": "Test1passwordOk!"
 }
 ```
 
