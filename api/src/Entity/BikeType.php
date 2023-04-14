@@ -19,8 +19,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BikeTypeRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['bike_type_read']],
-    denormalizationContext: ['groups' => ['bike_type_write']],
+    normalizationContext: ['groups' => [self::BIKE_TYPE_READ]],
+    denormalizationContext: ['groups' => [self::BIKE_TYPE_WRITE]],
 )]
 #[Get]
 #[Put(security: "is_granted('ROLE_ADMIN')")]
@@ -29,14 +29,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 class BikeType
 {
+    public CONST BIKE_TYPE_READ = 'bike_type_read';
+    public CONST BIKE_TYPE_WRITE = 'bike_type_write';
+
     #[ApiProperty(identifier: true)]
     #[ORM\Column(type: 'integer')]
     #[ORM\Id, ORM\GeneratedValue()]
-    #[Groups([Repairer::REPAIRER_READ, 'bike_type_read'])]
+    #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups([Repairer::REPAIRER_READ, 'bike_type_read', 'bike_type_write'])]
+    #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ, self::BIKE_TYPE_WRITE])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Repairer::class, mappedBy: 'bikeTypesSupported')]
