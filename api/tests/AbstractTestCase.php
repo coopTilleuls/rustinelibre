@@ -81,4 +81,9 @@ abstract class AbstractTestCase extends ApiTestCase
 
         return $client;
     }
+
+    protected function getObjectByClassNameAndValues(string $repositoryClassName, array $data)
+    {
+        return static::getContainer()->get($repositoryClassName)->findOneBy($data);
+    }
 }
