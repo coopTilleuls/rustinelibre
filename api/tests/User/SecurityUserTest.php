@@ -3,11 +3,23 @@
 namespace App\Tests\User;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class SecurityUserTest extends AbstractTestCase
 {
+    use RefreshDatabaseTrait;
+    private array $users = [];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->users = static::getContainer()->get(UserRepository::class)->findAll();
+    }
+
     public function testPostUser(): void
     {
         $this->createClient()->request('POST', '/users', [
@@ -43,7 +55,7 @@ class SecurityUserTest extends AbstractTestCase
 
     public function testPutUserByAdmin(): void
     {
-        $this->createClientAuthAsAdmin()->request('PUT', '/users/13', [
+        $this->createClientAuthAsAdmin()->request('PUT', '/users/'.$this->users[12]->id, [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'putUser@test.com',
@@ -53,7 +65,7 @@ class SecurityUserTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertJsonContains([
             '@context' => '/contexts/User',
-            '@id' => '/users/13',
+            '@id' => '/users/'.$this->users[12]->id,
             '@type' => 'User',
             'email' => 'putUser@test.com',
         ]);
@@ -61,18 +73,19 @@ class SecurityUserTest extends AbstractTestCase
 
     public function testPutUserByHimself(): void
     {
-        $client = $this->createClientWithUserId();
-        $client->request('PUT', '/users/10', [
+        $client = $this->createClientWithUser($this->users[9]);
+        $client->request('PUT', '/users/'.$this->users[9]->id, [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'putUserHimself@test.com',
             ],
         ]);
+
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertJsonContains([
             '@context' => '/contexts/User',
-            '@id' => '/users/10',
+            '@id' => '/users/'.$this->users[9]->id,
             '@type' => 'User',
             'email' => 'putUserHimself@test.com',
         ]);
@@ -80,19 +93,19 @@ class SecurityUserTest extends AbstractTestCase
 
     public function testPutUserFail(): void
     {
-        $this->createClientAuthAsUser()->request('PUT', '/users/21', [
+        $this->createClientAuthAsUser()->request('PUT', '/users/'.$this->users[20]->id, [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'putUser@test.com',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 
     public function testGetUserByAdmin(): void
     {
-        $this->createClientAuthAsAdmin()->request('GET', '/users/21');
+        $this->createClientAuthAsAdmin()->request('GET', '/users/'.$this->users[21]->id);
         $this->assertResponseIsSuccessful();
     }
 
@@ -105,8 +118,9 @@ class SecurityUserTest extends AbstractTestCase
 
     public function testGetUserFail(): void
     {
-        $this->createClientAuthAsUser()->request('GET', '/users/17');
-        $this->assertResponseStatusCodeSame(403);
+        // User 15 try to get user 16
+        $this->createClientWithUser($this->users[15])->request('GET', '/users/'.$this->users[16]->id);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
    public function testGetUserCollection(): void
@@ -118,6 +132,6 @@ class SecurityUserTest extends AbstractTestCase
     public function testGetUserCollectionFail(): void
     {
         $this->createClientAuthAsUser()->request('GET', '/users');
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\User;
 
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class GetCurrentUserTest extends AbstractTestCase
 {
@@ -25,6 +26,6 @@ class GetCurrentUserTest extends AbstractTestCase
     public function testGetCurrentUserWithoutAuth(): void
     {
         static::createClient()->request('GET', sprintf('/me'));
-        $this->assertResponseStatusCodeSame(404);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 }

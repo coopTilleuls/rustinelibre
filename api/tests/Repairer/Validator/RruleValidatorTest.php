@@ -4,10 +4,13 @@ namespace App\Tests\Repairer\Validator;
 
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class RruleValidatorTest extends AbstractTestCase
 {
+    use RefreshDatabaseTrait;
+
     private ?array $users = [];
 
     public function setUp(): void

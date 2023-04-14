@@ -9,10 +9,13 @@ use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateEmployeeTest extends AbstractTestCase
 {
+    use RefreshDatabaseTrait;
+
     private array $jsonNewEmployee = [];
     private array $repairers = [];
     private array $repairerEmployees = [];
@@ -105,22 +108,25 @@ class CreateEmployeeTest extends AbstractTestCase
 
     public function testRemoveEmployeeAsBadBoss(): void
     {
-        $repairerEmployee5 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[4];
+        $repairerEmployee5 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[3];
         $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee5->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testRemoveEmployeeAsBoss(): void
     {
-        $repairerEmployee6 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[5];
-        $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee6->getId());
+        /** @var User $boss */
+        $boss = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'boss@test.com']);
+        $repairer = $boss->repairer;
+        $repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $repairer]);
+        $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testRemoveEmployeeAsAdmin(): void
     {
-        $repairerEmployee5 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[4];
-        $this->createClientAuthAsAdmin()->request('DELETE', '/repairer_employees/'.$repairerEmployee5->getId());
+        $repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[0];
+        $this->createClientAuthAsAdmin()->request('DELETE', '/repairer_employees/'.$repairerEmployee->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 }

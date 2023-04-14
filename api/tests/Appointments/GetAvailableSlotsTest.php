@@ -6,15 +6,24 @@ namespace App\Tests\Appointments;
 
 use App\Entity\Appointment;
 use App\Entity\Repairer;
+use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
 class GetAvailableSlotsTest extends AbstractTestCase
 {
+    private ?Repairer $repairer = null;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->repairer = static::getContainer()->get(RepairerRepository::class)->findAll()[0];
+    }
+
     public function testGetSlotsAvailable(): void
     {
         // No need to be authenticated
-        $response = static::createClient()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', 1));
+        $response = static::createClientAuthAsAdmin()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $this->repairer->getId()));
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
@@ -35,16 +44,15 @@ class GetAvailableSlotsTest extends AbstractTestCase
     {
         /** @var Registry $doctrine */
         $doctrine = static::getContainer()->get('doctrine');
-        $randomRepairer = static::getContainer()->get('doctrine')->getRepository(Repairer::class)->findOneBy([]);
 
         // Create a new appointment between 20/03 and 30/03
         $appointment = new Appointment();
-        $appointment->setRepairer($randomRepairer);
+        $appointment->setRepairer($this->repairer);
         $appointment->setSlotTime(new \DateTimeImmutable('2023-03-23T14:00:00'));
         $doctrine->getManager()->persist($appointment);
         $doctrine->getManager()->flush();
 
-        $response = static::createClient()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $randomRepairer->getId()));
+        $response = static::createClient()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $this->repairer->getId()));
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 

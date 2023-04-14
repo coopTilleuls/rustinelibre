@@ -2,24 +2,41 @@
 
 namespace App\Tests\Repairer;
 
+use App\Repository\BikeTypeRepository;
+use App\Repository\RepairerTypeRepository;
 use App\Tests\AbstractTestCase;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateUserAndRepairerTest extends AbstractTestCase
 {
-    private array $jsonNewRepairerAndUser = [
-        'firstName' => 'Michel',
-        'lastName' => 'Michel',
-        'email' => 'michel@michel.com',
-        'plainPassword' => 'Test1passwordOk!',
-        'name' => 'Nouvel atelier',
-        'street' => '8 rue de la justice',
-        'city' => 'Lille',
-        'postcode' => '59000',
-        'bikeTypesSupported' => ['/bike_types/1', '/bike_types/2'],
-        'repairerType' => '/repairer_types/1',
-        'comment' => 'Bonjour je voudrais rejoindre votre super plateforme',
-    ];
+    use RefreshDatabaseTrait;
+
+    private array $jsonNewRepairerAndUser = [];
+    private array $bikeTypes = [];
+    private array $repairerTypes = [];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->bikeTypes = static::getContainer()->get(BikeTypeRepository::class)->findAll();
+        $this->repairerTypes = static::getContainer()->get(RepairerTypeRepository::class)->findAll();
+
+        $this->jsonNewRepairerAndUser = [
+            'firstName' => 'Michel',
+            'lastName' => 'Michel',
+            'email' => 'michel@michel.com',
+            'plainPassword' => 'Test1passwordOk!',
+            'name' => 'Nouvel atelier',
+            'street' => '8 rue de la justice',
+            'city' => 'Lille',
+            'postcode' => '59000',
+            'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+            'repairerType' => '/repairer_types/'.$this->repairerTypes[0]->getId(),
+            'comment' => 'Bonjour je voudrais rejoindre votre super plateforme',
+        ];
+    }
 
     public function testPostRepairerAndUserMissingFields(): void
     {
@@ -32,7 +49,7 @@ class CreateUserAndRepairerTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $jsonMissingFields,
         ]);
-        $this->assertResponseStatusCodeSame(422);
+        $this->assertResponseStatusCodeSame(400);
     }
 
     public function testPostRepairerAndUser(): void

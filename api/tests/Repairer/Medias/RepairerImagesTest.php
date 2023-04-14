@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Repairer\Medias;
 
+use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Medias\MediasTest;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,7 +27,8 @@ class RepairerImagesTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $imageIri = $response->toArray()['@id'];
 
-        $responseRepairer = $this->createClientAuthAsAdmin()->request('PUT', '/repairers/3', ['json' => [
+        $repairer = static::getContainer()->get(RepairerRepository::class)->findAll()[0];
+        $responseRepairer = $this->createClientAuthAsAdmin()->request('PUT', '/repairers/'.$repairer->getId(), ['json' => [
             'thumbnail' => $imageIri,
             'descriptionPicture' => $imageIri,
         ]]);
