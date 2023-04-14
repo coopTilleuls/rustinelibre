@@ -40,13 +40,14 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
             return;
         }
 
+        $userEmployee = $entity->getEmployee();
         $email = (new Email())
             ->from($this->mailerSender)
-            ->to($entity->getEmployee()->getEmail())
+            ->to($userEmployee->getEmail())
             ->subject('Votre compte Bikelib vient d\'être créé')
             ->html($this->twig->render('mail/employee_send_password.html.twig', [
                 'webAppUrl' => $this->webAppUrl,
-                'employee' => $entity->getEmployee(),
+                'employee' => $userEmployee,
                 'repairer' => $entity->getRepairer(),
             ]));
 
@@ -55,5 +56,7 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
         } catch (\Exception $e) {
             $this->logger->alert(sprintf('New employee password email not send, error: %s', $e->getMessage()));
         }
+
+        $userEmployee->eraseCredentials();
     }
 }
