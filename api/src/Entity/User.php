@@ -20,8 +20,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['user_read']],
-    denormalizationContext: ['groups' => ['user_write']]
+    normalizationContext: ['groups' => [self::USER_READ]],
+    denormalizationContext: ['groups' => [self::USER_WRITE]]
 )]
 #[Get(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[Post(security: "is_granted('ROLE_ADMIN') or !user")]
@@ -34,39 +34,41 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private const EMAIL_MAX_LENGTH = 180;
+    public const USER_READ = 'user_read';
+    public const USER_WRITE = 'user_write';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
-    #[Groups(['user_read'])]
+    #[Groups([self::USER_READ])]
     public int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
     public ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['user_read'])]
+    #[Groups([self::USER_READ])]
     public array $roles = [];
 
     #[Assert\Type('boolean')]
     #[ORM\Column(type: 'boolean', nullable: false)]
-    #[Groups(['user_read'])]
+    #[Groups([self::USER_READ])]
     public bool $emailConfirmed = false;
 
     #[ORM\Column(type: 'string')]
     public ?string $password = null;
 
     #[Assert\Regex("/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&\\/])[A-Za-z\d@$!%*?&\\/]{12,}$/")]
-    #[Groups(['user_read', 'user_write'])]
+    #[Groups([self::USER_READ, self::USER_WRITE])]
     public ?string $plainPassword = null;
 
     #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
-    #[Groups(['user_read'])]
+    #[Groups([self::USER_READ])]
     public ?Repairer $repairer = null;
 
     #[Assert\NotBlank]
@@ -75,7 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
     public ?string $lastName = null;
 
     #[Assert\NotBlank]
@@ -84,11 +86,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
     public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    #[Groups(['user_read'])]
+    #[Groups([self::USER_READ])]
     public ?RepairerEmployee $repairerEmployee = null;
 
     /**
