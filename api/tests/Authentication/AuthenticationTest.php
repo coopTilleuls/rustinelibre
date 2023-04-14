@@ -46,7 +46,7 @@ class AuthenticationTest extends ApiTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(401);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         self::assertResponseHeaderSame('content-type', 'application/json');
         self::assertJsonEquals([
             'code' => 401,
