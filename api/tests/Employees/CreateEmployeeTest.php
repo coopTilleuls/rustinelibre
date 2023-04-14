@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Employees;
 
 use App\Entity\User;
+use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
@@ -14,12 +15,14 @@ class CreateEmployeeTest extends AbstractTestCase
 {
     private array $jsonNewEmployee = [];
     private array $repairers = [];
+    private array $repairerEmployees = [];
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->repairers = static::getContainer()->get(RepairerRepository::class)->findAll();
+        $this->repairerEmployees = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll(); // should be 4 results
 
         $this->jsonNewEmployee = [
             'email' => 'new_user@mail.com',
@@ -86,5 +89,38 @@ class CreateEmployeeTest extends AbstractTestCase
         $this->assertArrayHasKey('email', $responseData['employee']);
         $this->assertArrayHasKey('lastName', $responseData['employee']);
         $this->assertArrayHasKey('firstName', $responseData['employee']);
+    }
+
+    public function testRemoveEmployeeNotAuth(): void
+    {
+        $this->createClient()->request('DELETE', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function testRemoveEmployeeAsUser(): void
+    {
+        $this->createClientAuthAsUser()->request('DELETE', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testRemoveEmployeeAsBadBoss(): void
+    {
+        $repairerEmployee5 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[4];
+        $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee5->getId());
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testRemoveEmployeeAsBoss(): void
+    {
+        $repairerEmployee6 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[5];
+        $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee6->getId());
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+    }
+
+    public function testRemoveEmployeeAsAdmin(): void
+    {
+        $repairerEmployee5 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[4];
+        $this->createClientAuthAsAdmin()->request('DELETE', '/repairer_employees/'.$repairerEmployee5->getId());
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 }

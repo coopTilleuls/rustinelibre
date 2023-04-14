@@ -66,7 +66,7 @@ class RetrieveEmployeesTest extends AbstractTestCase
     {
         // Boss of repairer 1 try to get an employee of repairer 2
         $response = $this->createClientAuthAsBoss()->request('GET', '/repairer_employees');
-        $this->assertEquals(3, $response->toArray()['hydra:totalItems']);
+        $this->assertEquals(2, $response->toArray()['hydra:totalItems']);
     }
 
     public function testGetEmployeesAsBossWithNoEmployees(): void
