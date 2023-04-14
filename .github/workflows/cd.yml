@@ -24,9 +24,7 @@ jobs:
 
   build:
     name: Build
-    # TODO: set deploy label requirement before merge
-    # if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
-    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request')
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
     uses: ./.github/workflows/build.yml
 
   deploy:
