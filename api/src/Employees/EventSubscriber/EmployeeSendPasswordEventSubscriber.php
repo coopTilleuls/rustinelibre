@@ -8,6 +8,7 @@ use App\Entity\RepairerEmployee;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -19,6 +20,7 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
                                 private readonly string $mailerSender,
                                 private readonly string $webAppUrl,
                                 private readonly KernelInterface $kernel,
+                                private readonly LoggerInterface $logger,
                                 private readonly Environment $twig)
     {
     }
@@ -48,6 +50,10 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
                 'repairer' => $entity->getRepairer(),
             ]));
 
-        $this->mailer->send($email);
+        try {
+            $this->mailer->send($email);
+        } catch (\Exception $e) {
+            $this->logger->alert(sprintf('New employee password email not send, error: %s', $e->getMessage()));
+        }
     }
 }
