@@ -22,7 +22,7 @@ class AuthenticationTest extends ApiTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'clement@les-tilleuls.coop',
-                'password' => 'test',
+                'password' => 'Test1passwordOk!',
             ],
         ]);
 

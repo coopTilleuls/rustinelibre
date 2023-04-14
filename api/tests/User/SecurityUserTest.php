@@ -10,14 +10,15 @@ class SecurityUserTest extends AbstractTestCase
 {
     public function testPostUser(): void
     {
-        $response = $this->createClient()->request('POST', '/users', [
+        $this->createClient()->request('POST', '/users', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'newUser@test.com',
-                'plainPassword' => 'test',
+                'plainPassword' => 'Test1passwordOk!',
+                'firstName' => 'Leon',
+                'lastName' => 'Bruxelles',
             ],
         ]);
-        $response->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertJsonContains([
@@ -33,10 +34,10 @@ class SecurityUserTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'failUser@test.com',
-                'plainPassword' => 'test',
+                'plainPassword' => 'Test1passwordOk!',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 

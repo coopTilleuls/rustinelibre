@@ -11,6 +11,7 @@ class CreateEmployeeTest extends AbstractTestCase
 {
     public $jsonNewEmployee = [
         'email' => 'new_user@mail.com',
+        'plainPassword' => 'Test1passwordOk!',
         'firstName' => 'Michel',
         'lastName' => 'Michel',
         'repairer' => '/repairers/1',
