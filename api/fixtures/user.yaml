@@ -1,50 +1,108 @@
+#App\Entity\User:
+#  genialo_admin:
+#    id: 1
+#    roles: ["ROLE_ADMIN"]
+#    email: "clement@les-tilleuls.coop"
+#    firstName: 'Clement'
+#    lastName: 'Tilleuls'
+#    plainPassword: "Test1passwordOk!"
+#    emailConfirmed: true
+#  boss_1:
+#    id: 2
+#    roles: ["ROLE_BOSS"]
+#    email: "boss@test.com"
+#    firstName: 'Cécile'
+#    lastName: 'Tilleuls'
+#    plainPassword: "Test1passwordOk!"
+#    emailConfirmed: true
+#  user_1:
+#    id: 3
+#    roles: ["ROLE_USER"]
+#    email: "user1@test.com"
+#    firstName: 'Raphael'
+#    lastName: 'Tilleuls'
+#    plainPassword: "Test1passwordOk!"
+#    emailConfirmed: true
+#  user_2:
+#    id: 4
+#    roles: ["ROLE_BOSS"]
+#    email: "repairer2@test.com"
+#    firstName: 'Davy'
+#    lastName: 'Tilleuls'
+#    plainPassword: "Test1passwordOk!"
+#    emailConfirmed: true
+#  user_{5..15}:
+#    roles: ["ROLE_USER"]
+#    email: <email()>
+#    firstName: <firstName()>
+#    lastName: <lastName()>
+#    plainPassword: "Test1passwordOk!"
+#    emailConfirmed: true
+#    id: <current()>
+#  user_not_confirm{16..20}:
+#    roles: ["ROLE_USER"]
+#    email: <email()>
+#    firstName: <firstName()>
+#    lastName: <lastName()>
+#    plainPassword: "Test1passwordOk!"
+#    emailConfirmed: false
+#    id: <current()>
+#  user_{21..60}:
+#    roles: [ "ROLE_BOSS" ]
+#    email: <email()>
+#    firstName: <firstName()>
+#    lastName: <lastName()>
+#    plainPassword: "Test1passwordOk!"
+#    emailConfirmed: true
+#    id: <current()>
+
 App\Entity\User:
   genialo_admin:
     roles: ["ROLE_ADMIN"]
     email: "clement@les-tilleuls.coop"
-    firstname: 'Clement'
-    lastname: 'Tilleuls'
+    firstName: 'Clement'
+    lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   boss_1:
     roles: ["ROLE_BOSS"]
     email: "boss@test.com"
-    firstname: 'Cécile'
-    lastname: 'Tilleuls'
+    firstName: 'Cécile'
+    lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   user_1:
     roles: ["ROLE_USER"]
     email: "user1@test.com"
-    firstname: 'Raphael'
-    lastname: 'Tilleuls'
+    firstName: 'Raphael'
+    lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   user_2:
     roles: ["ROLE_BOSS"]
     email: "repairer2@test.com"
-    firstname: 'Davy'
-    lastname: 'Tilleuls'
+    firstName: 'Davy'
+    lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   user_{10..20}:
     roles: ["ROLE_USER"]
     email: <email()>
-    firstname: <firstName()>
-    lastname: <lastName()>
+    firstName: <firstName()>
+    lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
   user_not_confirm{21..25}:
     roles: ["ROLE_USER"]
     email: <email()>
-    firstname: <firstName()>
-    lastname: <lastName()>
+    firstName: <firstName()>
+    lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: false
   user_{26..60}:
     roles: [ "ROLE_BOSS" ]
     email: <email()>
-    firstname: <firstName()>
-    lastname: <lastName()>
+    firstName: <firstName()>
+    lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
