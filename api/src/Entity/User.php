@@ -72,6 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Length(
         min : 2,
+        max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
@@ -80,6 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Length(
         min : 2,
+        max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user_read', 'user_write', RepairerEmployee::EMPLOYEE_READ])]
