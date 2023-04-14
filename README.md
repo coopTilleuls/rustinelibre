@@ -55,3 +55,17 @@ To obtain the following token
 
 Then pass the JWT on your request's header as  `Authorization: Bearer {token}`
 
+
+## Pour l'envoi des emails
+By default in this project we use symfony/mailer and mailgun to send our emails. 
+You are free to implement another solution for this task.
+
+You just have to change the following environment variables, and install the library compatible with symfony/mailer 
+(gmail, amazon, mailchimp, mailjet etc...)
+
+```
+MAILER_SENDER
+MAILER_DSN
+```
+
+All the documentation is available here : https://symfony.com/doc/current/mailer.html
