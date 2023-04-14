@@ -43,7 +43,7 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
         $userEmployee = $entity->getEmployee();
         $email = (new Email())
             ->from($this->mailerSender)
-            ->to($userEmployee->getEmail())
+            ->to($userEmployee->email)
             ->subject('Votre compte Bikelib vient d\'être créé')
             ->html($this->twig->render('mail/employee_send_password.html.twig', [
                 'webAppUrl' => $this->webAppUrl,
