@@ -52,8 +52,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 )]
 class MediaObject
 {
-    public CONST MEDIA_OBJECT_CREATE = 'media_object_create';
-    public CONST MEDIA_OBJECT_READ = 'media_object:read';
+    public const MEDIA_OBJECT_CREATE = 'media_object_create';
+    public const MEDIA_OBJECT_READ = 'media_object:read';
 
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private ?int $id = null;

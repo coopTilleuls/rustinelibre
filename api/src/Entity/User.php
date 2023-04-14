@@ -34,8 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private const EMAIL_MAX_LENGTH = 180;
-    public CONST USER_READ = 'user_read';
-    public CONST USER_WRITE = 'user_write';
+    public const USER_READ = 'user_read';
+    public const USER_WRITE = 'user_write';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]

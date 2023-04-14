@@ -29,8 +29,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 class BikeType
 {
-    public CONST BIKE_TYPE_READ = 'bike_type_read';
-    public CONST BIKE_TYPE_WRITE = 'bike_type_write';
+    public const BIKE_TYPE_READ = 'bike_type_read';
+    public const BIKE_TYPE_WRITE = 'bike_type_write';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Column(type: 'integer')]

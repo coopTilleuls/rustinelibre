@@ -43,8 +43,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Appointment
 {
-    public CONST APPOINTMENT_READ = 'appointment_read';
-    public CONST APPOINTMENT_WRITE = 'appointment_write';
+    public const APPOINTMENT_READ = 'appointment_read';
+    public const APPOINTMENT_WRITE = 'appointment_write';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
