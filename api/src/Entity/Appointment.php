@@ -18,8 +18,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['appointment_read']],
-    denormalizationContext: ['groups' => ['appointment_write']],
     operations: [
         new Get(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
@@ -40,28 +38,33 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
         ),
     ],
+    normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
+    denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
 )]
 class Appointment
 {
+    public const APPOINTMENT_READ = 'appointment_read';
+    public const APPOINTMENT_WRITE = 'appointment_write';
+
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['appointment_read'])]
+    #[Groups([self::APPOINTMENT_READ])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups(['appointment_read', 'appointment_write'])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     private ?User $customer = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['appointment_read', 'appointment_write'])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     private ?Repairer $repairer = null;
 
     #[ORM\Column]
-    #[Groups(['appointment_read', 'appointment_write'])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     private ?\DateTimeImmutable $slotTime = null;
 
     #[ORM\Column(nullable: true)]

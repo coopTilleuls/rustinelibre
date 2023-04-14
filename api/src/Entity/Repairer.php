@@ -46,11 +46,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Post(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(
-    denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
     uriTemplate: '/create_user_and_repairer',
+    description: 'Allows the simultaneous creation of a user (boss) and an inactive repairer waiting for validation',
+    denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
     input: CreateUserRepairerDto::class,
-    processor: CreateUserRepairerProcessor::class,
-    description: 'Allows the simultaneous creation of a user (boss) and an inactive repairer waiting for validation'
+    processor: CreateUserRepairerProcessor::class
 )]
 #[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]

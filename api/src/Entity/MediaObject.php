@@ -25,10 +25,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Get(),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
             controller: CreateMediaObjectAction::class,
-            deserialize: false,
-            validationContext: ['groups' => ['Default', 'media_object_create']],
             openapi: new Model\Operation(
                 requestBody: new Model\RequestBody(
                     content: new \ArrayObject([
@@ -45,22 +42,28 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                         ],
                     ])
                 )
-            )
+            ),
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
+            validationContext: ['groups' => ['Default', self::MEDIA_OBJECT_CREATE]],
+            deserialize: false
         ),
     ],
-    normalizationContext: ['groups' => ['media_object:read']]
+    normalizationContext: ['groups' => [self::MEDIA_OBJECT_READ]]
 )]
 class MediaObject
 {
+    public const MEDIA_OBJECT_CREATE = 'media_object_create';
+    public const MEDIA_OBJECT_READ = 'media_object:read';
+
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private ?int $id = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['media_object:read', Repairer::REPAIRER_READ])]
+    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ])]
     public ?string $contentUrl = null;
 
     #[Vich\UploadableField(mapping: 'media_object', fileNameProperty: 'filePath')]
-    #[Assert\NotNull(groups: ['media_object_create'])]
+    #[Assert\NotNull(groups: [self::MEDIA_OBJECT_CREATE])]
     public ?File $file = null;
 
     #[ORM\Column(nullable: true)]
