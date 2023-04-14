@@ -99,7 +99,7 @@ class SecurityUserTest extends AbstractTestCase
     public function testUserGetHimself(): void
     {
         $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'user1@test.com']);
-        $this->createClientAuthAsUser()->request('GET', '/users/'.$user->getId());
+        $this->createClientAuthAsUser()->request('GET', '/users/'.$user->id);
         $this->assertResponseIsSuccessful();
     }
 

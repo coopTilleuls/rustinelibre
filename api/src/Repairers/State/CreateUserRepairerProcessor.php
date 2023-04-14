@@ -26,11 +26,11 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         $user = new User();
-        $user->setFirstName($data->firstName);
-        $user->setLastName($data->lastName);
-        $user->setPlainPassword($data->plainPassword);
-        $user->setEmail($data->email);
-        $user->setRoles(['ROLE_BOSS']);
+        $user->firstName = $data->firstName;
+        $user->lastName = $data->lastName;
+        $user->plainPassword = $data->plainPassword;
+        $user->email = $data->email;
+        $user->roles = ['ROLE_BOSS'];
         // Validate the new entity
         $this->validator->validate($user);
 
