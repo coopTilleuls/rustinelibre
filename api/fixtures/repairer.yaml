@@ -15,6 +15,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
   repairer_2:
     name: 'Chez Francis'
     owner: '@user_27'
@@ -31,6 +32,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_3:
     name: 'Chez Benoit Broutchoux'
     owner: '@user_28'
@@ -47,6 +50,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-22 11:00:00"))>
     repairerType: '@reparateur_velo'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_4:
     name: 'Au réparateur de bicyclettes'
     owner: '@user_29'
@@ -81,6 +86,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
     enabled: true
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_6:
     name: 'Rafael'
     owner: '@user_31'
@@ -97,6 +103,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@reparateur_velo'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_7:
     name: 'Retape mon vélo'
     owner: '@user_32'
@@ -113,6 +121,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_8:
     name: 'Reparakoeur'
     owner: '@user_33'
@@ -129,6 +139,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_9:
     name: "Doc'velos"
     owner: '@user_34'
@@ -145,6 +157,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_10:
     name: 'Ridy'
     owner: '@user_35'
@@ -161,6 +175,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@reparateur_velo'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_11:
     name: 'Vélo Time'
     owner: '@user_36'
@@ -177,6 +193,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_12:
     name: 'Le vélo de Belleville'
     owner: '@user_37'
@@ -193,6 +211,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_13:
     name: 'Mon beau vélo'
     owner: '@user_38'
@@ -209,6 +229,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_14:
     name: 'Olivier réparations'
     owner: '@user_39'
@@ -225,6 +247,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@reparateur_velo'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_15:
     name: "V'Lo"
     owner: '@user_40'
@@ -241,6 +265,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_16:
     name: 'Bizouk'
     owner: '@user_41'
@@ -257,6 +283,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_17:
     name: 'Les petits vélos de Maurice'
     owner: '@user_42'
@@ -273,6 +301,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_18:
     name: 'La chapelle du vélo'
     owner: '@user_43'
@@ -289,6 +319,8 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_19:
     name: 'La Roue Liber'
     owner: '@user_44'
@@ -305,6 +337,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_20:
     name: 'Velogik'
     owner: '@user_45'
@@ -321,6 +354,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_21:
     name: 'Doctocyclo'
     owner: '@user_46'
@@ -337,6 +371,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_22:
     name: 'Les vélos de lille'
     owner: '@user_47'
@@ -353,6 +388,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     enabled: true
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_23:
     name: 'Le paradis du vélo'
     owner: '@user_48'
@@ -368,6 +404,7 @@ App\Entity\Repairer:
     longitude: '3.0656641839311702'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_24:
     name: 'Pignons sur rue'
     owner: '@user_49'
@@ -383,6 +420,7 @@ App\Entity\Repairer:
     longitude: '3.0665240417922486'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_25:
     name: 'A vos vélos'
     owner: '@user_50'
@@ -398,3 +436,4 @@ App\Entity\Repairer:
     longitude: '3.0665240417922486'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
+    optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
