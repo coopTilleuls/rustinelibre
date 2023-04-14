@@ -93,7 +93,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ])]
     public ?RepairerEmployee $repairerEmployee = null;
 
-
     /**
      * A visual identifier that represents this user.
      *
