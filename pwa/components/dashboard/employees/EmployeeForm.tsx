@@ -117,7 +117,7 @@ export const EmployeeForm = ({employee, edit}: EmployeeEditFormProps): JSX.Eleme
                 }}
             >
                 <Typography component="h1" variant="h5">
-                    J'ajoute un réparateur
+                    {edit ? "Modifier ce réparateur" : "J'ajoute un réparateur"}
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
@@ -172,7 +172,7 @@ export const EmployeeForm = ({employee, edit}: EmployeeEditFormProps): JSX.Eleme
                         onChange={handleChangePassword}
                     />
                     <Typography variant="body1">
-                        Si vous ne renseignez pas de mot de passe, l'application en générera un aléatoirement
+                        {edit ? "Laissez ce champ vide pour conserver le mot de passe actuel" : "Si vous ne renseignez pas de mot de passe, l'application en générera un aléatoirement"}
                     </Typography>
                     {edit && <FormControlLabel control={<Switch checked={enabled} onChange={handleChangeEnabled} />} label={enabled ? "Réparateur activé" : "Réparateur désactivé"} /> }
                     <Button
