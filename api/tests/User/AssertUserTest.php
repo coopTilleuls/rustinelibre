@@ -2,7 +2,6 @@
 
 namespace App\Tests\User;
 
-use App\Entity\User;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -176,5 +175,4 @@ class AssertUserTest extends AbstractTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertResponseIsUnprocessable('lastName: This value is too long. It should have 50 characters or less.');
     }
-
 }

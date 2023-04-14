@@ -29,12 +29,12 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         $user = new User();
-        $user->setFirstName($data->firstName);
-        $user->setLastName($data->lastName);
-        $user->setPlainPassword($data->plainPassword ?: $this->generateRandomTempPassword());
-        $user->setEmail($data->email);
-        $user->setEmailConfirmed(true);
-        $user->setRoles(['ROLE_EMPLOYEE']);
+        $user->firstName = $data->firstName;
+        $user->lastName = $data->lastName;
+        $user->plainPassword = $data->plainPassword ?: $this->generateRandomTempPassword();
+        $user->email = $data->email;
+        $user->emailConfirmed = true;
+        $user->roles = ['ROLE_EMPLOYEE'];
         // Validate the new entity
         $this->validator->validate($user);
 
@@ -47,10 +47,10 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         $repairerEmployee->setEmployee($user);
 
         // If the current user is not an admin, inject automatically its repairer shop
-        if ($currentUser->isAdmin() && !$currentUser->getRepairer()) {
+        if ($currentUser->isAdmin() && !$currentUser->repairer) {
             $repairerEmployee->setRepairer($data->repairer);
         } else {
-            $currentRepairer = $currentUser->getRepairer();
+            $currentRepairer = $currentUser->repairer;
             if (!$currentRepairer) {
                 throw new BadRequestHttpException('You cannot add en employee if you dont have any repairer shop');
             }

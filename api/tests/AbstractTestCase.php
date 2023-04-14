@@ -70,7 +70,7 @@ abstract class AbstractTestCase extends ApiTestCase
         $response = static::createClient()->request('POST', '/auth', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'email' => $userToConnect->getEmail(),
+                'email' => $userToConnect->email,
                 'password' => 'Test1passwordOk!',
             ],
         ]);
@@ -80,5 +80,10 @@ abstract class AbstractTestCase extends ApiTestCase
         $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
 
         return $client;
+    }
+
+    protected function getObjectByClassNameAndValues(string $repositoryClassName, array $data)
+    {
+        return static::getContainer()->get($repositoryClassName)->findOneBy($data);
     }
 }

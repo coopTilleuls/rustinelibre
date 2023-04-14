@@ -48,13 +48,13 @@ final class HashPasswordSubscriber implements EventSubscriber
 
     private function hashPassword(User $user): void
     {
-        if (!$user->getPlainPassword()) {
+        if (!$user->plainPassword) {
             return;
         }
 
         /** @var string $plainPassword */
-        $plainPassword = $user->getPlainPassword();
+        $plainPassword = $user->plainPassword;
         $hashedPassword = $this->userPasswordHasher->hashPassword($user, $plainPassword);
-        $user->setPassword($hashedPassword);
+        $user->password = $hashedPassword;
     }
 }

@@ -42,30 +42,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
     #[Groups([self::USER_READ])]
-    private int $id;
+    public int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
-    private ?string $email = null;
+    public ?string $email = null;
 
     #[ORM\Column]
     #[Groups([self::USER_READ])]
-    private array $roles = [];
+    public array $roles = [];
 
     #[Assert\Type('boolean')]
     #[ORM\Column(type: 'boolean', nullable: false)]
     #[Groups([self::USER_READ])]
-    private bool $emailConfirmed = false;
+    public bool $emailConfirmed = false;
 
     #[ORM\Column(type: 'string')]
-    private ?string $password = null;
+    public ?string $password = null;
 
     #[Assert\Regex("/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&\\/])[A-Za-z\d@$!%*?&\\/]{12,}$/")]
     #[Groups([self::USER_READ, self::USER_WRITE])]
-    private ?string $plainPassword = null;
+    public ?string $plainPassword = null;
 
     #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
     #[Groups([self::USER_READ])]
@@ -78,7 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
-    private ?string $lastName = null;
+    public ?string $lastName = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(
@@ -87,28 +87,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
-    private ?string $firstName = null;
+    public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
     #[Groups([self::USER_READ])]
-    private ?RepairerEmployee $repairerEmployee = null;
+    public ?RepairerEmployee $repairerEmployee = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
 
     /**
      * A visual identifier that represents this user.
@@ -132,90 +116,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function isEmailConfirmed(): bool
-    {
-        return $this->emailConfirmed;
-    }
-
-    public function setEmailConfirmed(bool $emailConfirmed): void
-    {
-        $this->emailConfirmed = $emailConfirmed;
-    }
-
-    public function getPlainPassword(): ?string
-    {
-        return $this->plainPassword;
-    }
-
-    public function setPlainPassword(?string $plainPassword): void
-    {
-        $this->plainPassword = $plainPassword;
-    }
-
     public function eraseCredentials()
     {
         $this->plainPassword = null;
-    }
-
-    public function getRepairer(): ?Repairer
-    {
-        return $this->repairer;
-    }
-
-    public function setRepairer(?Repairer $repairer): void
-    {
-        $this->repairer = $repairer;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(?string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    public function setFirstName(?string $firstName): self
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    public function getRepairerEmployee(): ?RepairerEmployee
-    {
-        return $this->repairerEmployee;
     }
 
     public function setRepairerEmployee(RepairerEmployee $repairerEmployee): self
@@ -255,5 +158,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return false;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
     }
 }

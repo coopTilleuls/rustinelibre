@@ -3,6 +3,7 @@
 namespace App\Tests\BikeType;
 
 use App\Entity\BikeType;
+use App\Repository\BikeTypeRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,7 +11,8 @@ class SecurityBikeTypeTest extends AbstractTestCase
 {
     public function testGetBikeType(): void
     {
-        $this->createClientAuthAsUser()->request('GET', '/bike_types/1');
+        $bikeType1 = $this->getObjectByClassNameAndValues(BikeTypeRepository::class, ['name' => 'Vélo classique']);
+        $this->createClientAuthAsUser()->request('GET', '/bike_types/'.$bikeType1->getId());
         $this->assertResponseIsSuccessful();
     }
 
@@ -34,7 +36,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
                 'name' => 'Vélo cargo',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 
@@ -62,7 +64,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
                 'name' => 'Vélo hollandais',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 }
