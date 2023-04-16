@@ -12,7 +12,7 @@ log
 @pwa expression `(
         header({'Accept': '*text/html*'})
         && !path(
-            '/docs*', '/graphql*', '/bundles*', '/contexts*', '/_profiler*', '/_wdt*',
+            '/docs*', '/graphql*', '/bundles*', '/contexts*', '/_profiler*', '/_wdt*', '/media*',
             '*.json*', '*.html', '*.csv', '*.yml', '*.yaml', '*.xml'
         )
     )
