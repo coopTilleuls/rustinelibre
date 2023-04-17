@@ -97,28 +97,35 @@ class Repairer
     #[Assert\NotBlank]
     #[Assert\Length(
         min : 2,
-        max : 30,
+        max : 80,
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $name = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $description = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $mobilePhone = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Type('string')]
     #[ORM\Column(length: 800, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $street = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $city = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $postcode = null;
@@ -136,10 +143,12 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private Collection $bikeTypesSupported;
 
+    #[Assert\Type('string')]
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $latitude = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $longitude = null;
@@ -158,10 +167,12 @@ class Repairer
     #[Groups([self::REPAIRER_READ])]
     private ?\DateTimeInterface $firstSlotAvailable = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $openingHours = null;
 
+    #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $optionalPage = null;
@@ -187,6 +198,7 @@ class Repairer
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerEmployee::class, orphanRemoval: true)]
     private Collection $repairerEmployees;
 
+    #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $comment = null;

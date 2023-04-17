@@ -24,12 +24,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "email: This value is not a valid email address.",
+            'hydra:description' => 'email: This value is not a valid email address.',
         ]);
     }
 
@@ -47,12 +47,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "plainPassword: This value is not valid.",
+            'hydra:description' => 'plainPassword: This value is not valid.',
         ]);
     }
 
@@ -88,12 +88,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "firstName: This value should not be blank.",
+            'hydra:description' => 'firstName: This value should not be blank.',
         ]);
     }
 
@@ -111,12 +111,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "firstName: This value is too short. It should have 2 characters or more.",
+            'hydra:description' => 'firstName: This value is too short. It should have 2 characters or more.',
         ]);
     }
 
@@ -135,12 +135,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "firstName: This value is too long. It should have 50 characters or less.",
+            'hydra:description' => 'firstName: This value is too long. It should have 50 characters or less.',
         ]);
     }
 
@@ -157,12 +157,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "lastName: This value should not be blank.",
+            'hydra:description' => 'lastName: This value should not be blank.',
         ]);
     }
 
@@ -180,12 +180,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "lastName: This value is too short. It should have 2 characters or more.",
+            'hydra:description' => 'lastName: This value is too short. It should have 2 characters or more.',
         ]);
     }
 
@@ -203,12 +203,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "lastName: This value is too long. It should have 50 characters or less.",
+            'hydra:description' => 'lastName: This value is too long. It should have 50 characters or less.',
         ]);
     }
 }

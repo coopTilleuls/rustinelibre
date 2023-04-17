@@ -3,23 +3,22 @@
 namespace App\Tests\BikeType;
 
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class AssertBikeTypeTest extends AbstractTestCase
 {
     public function testPostEmptyName(): void
     {
         $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
-
         ]]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "name: This value should not be blank.",
+            'hydra:description' => 'name: This value should not be blank.',
         ]);
-
     }
 
     public function testPostShortName(): void
@@ -28,12 +27,12 @@ class AssertBikeTypeTest extends AbstractTestCase
             'name' => 'a',
         ]]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "name: This value is too short. It should have 2 characters or more.",
+            'hydra:description' => 'name: This value is too short. It should have 2 characters or more.',
         ]);
     }
 
@@ -43,12 +42,12 @@ class AssertBikeTypeTest extends AbstractTestCase
             'name' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eg',
         ]]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            "hydra:description" => "name: This value is too long. It should have 30 characters or less.",
+            'hydra:description' => 'name: This value is too long. It should have 30 characters or less.',
         ]);
     }
 }
