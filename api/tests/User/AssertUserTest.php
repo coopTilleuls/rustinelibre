@@ -21,8 +21,13 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertResponseIsUnprocessable('email: This value is not a valid email address.');
+        self::assertResponseStatusCodeSame(422);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            "hydra:description" => "email: This value is not a valid email address.",
+        ]);
     }
 
     public function testBadPassword(): void
@@ -39,8 +44,13 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertResponseIsUnprocessable('plainPassword: This value is not valid.');
+        self::assertResponseStatusCodeSame(422);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            "hydra:description" => "plainPassword: This value is not valid.",
+        ]);
     }
 
     public function testGoodEmailAndGoodPassword(): void
@@ -81,8 +91,13 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertResponseIsUnprocessable('firstName: This value should not be blank.');
+        self::assertResponseStatusCodeSame(422);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            "hydra:description" => "firstName: This value should not be blank.",
+        ]);
     }
 
     public function testWithShortFirstName(): void
@@ -99,8 +114,13 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertResponseIsUnprocessable('firstName: This value is too short. It should have 2 characters or more.');
+        self::assertResponseStatusCodeSame(422);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            "hydra:description" => "firstName: This value is too short. It should have 2 characters or more.",
+        ]);
     }
 
     public function testWithLongFirstName(): void
@@ -118,8 +138,13 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertResponseIsUnprocessable('firstName: This value is too long. It should have 50 characters or less.');
+        self::assertResponseStatusCodeSame(422);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            "hydra:description" => "firstName: This value is too long. It should have 50 characters or less.",
+        ]);
     }
 
     public function testWithoutLastName(): void
@@ -131,13 +156,17 @@ class AssertUserTest extends AbstractTestCase
             'json' => [
                 'email' => 'good@les-tilleuls.coop',
                 'plainPassword' => 'Test1passwordOk!',
-                'firstName' => 'A',
-                'lastName' => 'Bruxelles',
+                'firstName' => 'Leon',
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertResponseIsUnprocessable('lastName: This value should not be blank.');
+        self::assertResponseStatusCodeSame(422);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            "hydra:description" => "lastName: This value should not be blank.",
+        ]);
     }
 
     public function testWithShortLastName(): void
@@ -149,13 +178,18 @@ class AssertUserTest extends AbstractTestCase
             'json' => [
                 'email' => 'good@les-tilleuls.coop',
                 'plainPassword' => 'Test1passwordOk!',
-                'firstName' => 'A',
-                'lastName' => 'Bruxelles',
+                'firstName' => 'Leon',
+                'lastName' => 'A',
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertResponseIsUnprocessable('lastName: This value is too short. It should have 2 characters or more.');
+        self::assertResponseStatusCodeSame(422);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            "hydra:description" => "lastName: This value is too short. It should have 2 characters or more.",
+        ]);
     }
 
     public function testWithLongLastName(): void
@@ -172,7 +206,12 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertResponseIsUnprocessable('lastName: This value is too long. It should have 50 characters or less.');
+        self::assertResponseStatusCodeSame(422);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            "hydra:description" => "lastName: This value is too long. It should have 50 characters or less.",
+        ]);
     }
 }

@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Tests\RepairerType;
+namespace App\Tests\BikeType;
 
-use App\Entity\Repairer;
-use App\Entity\RepairerType;
 use App\Tests\AbstractTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
-class AssertRepairerTypesTest extends AbstractTestCase
+class AssertBikeTypeTest extends AbstractTestCase
 {
     public function testPostEmptyName(): void
     {
-        $this->createClientAuthAsAdmin()->request('POST', '/repairer_types', ['json' => [
+        $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
 
         ]]);
 
@@ -27,7 +24,7 @@ class AssertRepairerTypesTest extends AbstractTestCase
 
     public function testPostShortName(): void
     {
-       $this->createClientAuthAsAdmin()->request('POST', '/repairer_types', ['json' => [
+        $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
             'name' => 'a',
         ]]);
 
@@ -42,7 +39,7 @@ class AssertRepairerTypesTest extends AbstractTestCase
 
     public function testPostLongName(): void
     {
-        $this->createClientAuthAsAdmin()->request('POST', '/repairer_types', ['json' => [
+        $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
             'name' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eg',
         ]]);
 

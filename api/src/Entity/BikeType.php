@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BikeTypeRepository::class)]
 #[ApiResource(
@@ -35,6 +36,11 @@ class BikeType
     #[Groups([Repairer::REPAIRER_READ, 'bike_type_read'])]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 2,
+        max : 30,
+    )]
     #[ORM\Column(length: 255)]
     #[Groups([Repairer::REPAIRER_READ, 'bike_type_read', 'bike_type_write'])]
     private ?string $name = null;

@@ -34,7 +34,7 @@ class RepairerType
     #[Assert\NotBlank]
     #[Assert\Length(
         min : 2,
-        max : 80,
+        max : 30,
     )]
     #[ORM\Column(length: 255)]
     #[Groups(['repairer_type_read', Repairer::REPAIRER_READ, 'repairer_type_write'])]

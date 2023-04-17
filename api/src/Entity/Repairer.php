@@ -31,6 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Jsor\Doctrine\PostGIS\Types\PostGISType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
@@ -93,6 +94,11 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?RepairerType $repairerType;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 2,
+        max : 30,
+    )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $name = null;
