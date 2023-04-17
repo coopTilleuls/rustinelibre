@@ -27,7 +27,7 @@ class MediasTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertMatchesResourceItemJsonSchema(MediaObject::class);
 
-        $dirPath = sprintf('%s/../../public/medias', __DIR__);
+        $dirPath = sprintf('%s/../../public/media', __DIR__);
         $this->assertDirectoryExists($dirPath);
         $this->assertTrue($this->checkFileNameExistInDir($dirPath, self::IMAGE_NAME));
     }
