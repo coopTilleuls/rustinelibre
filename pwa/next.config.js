@@ -5,7 +5,19 @@ const nextConfig = {
   output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig

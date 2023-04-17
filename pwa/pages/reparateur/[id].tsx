@@ -13,6 +13,7 @@ import {CircularProgress} from "@mui/material";
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import Link from "next/link";
+import {apiImageUrl} from "@helpers/apiImagesHelper";
 
 const RepairerPage: NextPageWithLayout = () => {
 
@@ -66,6 +67,7 @@ const RepairerPage: NextPageWithLayout = () => {
                                     >
                                         {repairer.name}
                                     </Typography>
+                                    {repairer.thumbnail && <img alt="Photo de profil du réparateur" width="100" height="100" src={apiImageUrl(repairer.thumbnail.contentUrl)} />}
                                     <Button variant="outlined" style={{marginLeft: '30%'}}>{repairer.repairerType?.name}</Button>
                                     <Typography paragraph variant="h5" align="left" color="text.secondary" style={{marginTop: '10px'}}>
                                         <FmdGoodIcon /> {repairer.street} - {repairer.postcode} {repairer.city}
