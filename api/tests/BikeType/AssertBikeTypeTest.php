@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\BikeType;
 
 use App\Tests\AbstractTestCase;
@@ -11,7 +13,6 @@ class AssertBikeTypeTest extends AbstractTestCase
     {
         $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
         ]]);
-
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
@@ -26,7 +27,6 @@ class AssertBikeTypeTest extends AbstractTestCase
         $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
             'name' => 'a',
         ]]);
-
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
@@ -39,15 +39,14 @@ class AssertBikeTypeTest extends AbstractTestCase
     public function testPostLongName(): void
     {
         $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
-            'name' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eg',
+            'name' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean mas',
         ]]);
-
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'name: This value is too long. It should have 30 characters or less.',
+            'hydra:description' => 'name: This value is too long. It should have 100 characters or less.',
         ]);
     }
 }

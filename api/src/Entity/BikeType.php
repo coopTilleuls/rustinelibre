@@ -42,7 +42,7 @@ class BikeType
     #[Assert\NotBlank]
     #[Assert\Length(
         min : 2,
-        max : 30,
+        max : 100,
     )]
     #[ORM\Column(length: 255)]
     #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ, self::BIKE_TYPE_WRITE])]

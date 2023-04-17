@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Repairer;
 
 use App\Entity\User;
@@ -26,7 +28,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerWithoutName(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -53,7 +54,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerWithShortName(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -82,7 +82,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerWithLongName(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -111,7 +110,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerBadRequestDescription(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -140,7 +138,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerBadRequestPhone(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -169,7 +166,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerWithoutStreet(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -196,7 +192,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerWithoutCity(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -223,7 +218,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerBadRequestComment(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -253,7 +247,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerBadRequestOpeningHours(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -283,7 +276,6 @@ class AssertRepairerTest extends AbstractTestCase
     public function testPostRepairerBadOptionalPage(): void
     {
         $client = self::createClientWithUser($this->users[60]);
-
         // Valid boss role given
         $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
