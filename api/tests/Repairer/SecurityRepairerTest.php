@@ -143,7 +143,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'name' => 'Deuxième atelier du même boss',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(422);
+        $this->assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testOwnerCreatedByUser(): void
@@ -156,6 +156,8 @@ class SecurityRepairerTest extends AbstractTestCase
             'json' => [
                 'name' => 'Test create by user',
                 'description' => 'Test create by user',
+                'street' => '12 rue de Wazemmes',
+                'city' => 'Lille',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[1]->getId()],
                 'comment' => 'Je voulais juste ajouter un commentaire',
