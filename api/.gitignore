@@ -31,4 +31,4 @@ Makefile
 ###< lexik/jwt-authentication-bundle ###
 
 ###> Images
-/public/medias/*
+/public/media/*

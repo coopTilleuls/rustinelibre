@@ -20,8 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BikeTypeRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['bike_type_read']],
-    denormalizationContext: ['groups' => ['bike_type_write']],
+    normalizationContext: ['groups' => [self::BIKE_TYPE_READ]],
+    denormalizationContext: ['groups' => [self::BIKE_TYPE_WRITE]],
 )]
 #[Get]
 #[Put(security: "is_granted('ROLE_ADMIN')")]
@@ -30,10 +30,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 class BikeType
 {
+    public const BIKE_TYPE_READ = 'bike_type_read';
+    public const BIKE_TYPE_WRITE = 'bike_type_write';
+
     #[ApiProperty(identifier: true)]
     #[ORM\Column(type: 'integer')]
     #[ORM\Id, ORM\GeneratedValue()]
-    #[Groups([Repairer::REPAIRER_READ, 'bike_type_read'])]
+    #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ])]
     private ?int $id = null;
 
     #[Assert\NotBlank]
@@ -42,7 +45,7 @@ class BikeType
         max : 30,
     )]
     #[ORM\Column(length: 255)]
-    #[Groups([Repairer::REPAIRER_READ, 'bike_type_read', 'bike_type_write'])]
+    #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ, self::BIKE_TYPE_WRITE])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Repairer::class, mappedBy: 'bikeTypesSupported')]

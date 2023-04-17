@@ -3,10 +3,13 @@
 namespace App\Tests\User;
 
 use App\Tests\AbstractTestCase;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class AssertUserTest extends AbstractTestCase
 {
+    use RefreshDatabaseTrait;
+
     public function testBadEmail(): void
     {
         $client = self::createClient();
@@ -57,25 +60,19 @@ class AssertUserTest extends AbstractTestCase
     {
         $client = self::createClient();
 
-        $response = $client->request('POST', '/users', [
-            'headers' => ['Content-Type' => 'application/json'],
-            'json' => [
-                'email' => 'good@les-tilleuls.coop',
-                // Password with at least one uppercase, one lowercase, one number and one special character
-                'plainPassword' => 'Test1passwordOk!',
-                'firstName' => 'Leon',
-                'lastName' => 'Bruxelles',
-            ],
+        $client->request('POST', '/users', [
+           'headers' => ['Content-Type' => 'application/json'],
+           'json' => [
+               'email' => 'good@les-tilleuls.coop',
+               // Password with at least one uppercase, one lowercase, one number and one special character
+               'plainPassword' => 'Test1passwordOk!',
+               'firstName' => 'Leon',
+               'lastName' => 'Bruxelles',
+           ],
         ]);
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-
-        $response = $response->toArray();
-
-        $admin = self::createClientAuthAsAdmin();
-        $admin->request('DELETE', '/users/'.$response['id']);
-        $this->assertResponseIsSuccessful();
     }
 
     public function testWithoutFirstName(): void

@@ -16,8 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerTypeRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['repairer_type_read']],
-    denormalizationContext: ['groups' => ['repairer_type_write']],
+    normalizationContext: ['groups' => [self::REPAIRER_TYPE_READ]],
+    denormalizationContext: ['groups' => [self::REPAIRER_TYPE_WRITE]],
 )]
 #[Get]
 #[GetCollection]
@@ -25,10 +25,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Post(security: "is_granted('ROLE_ADMIN')")]
 class RepairerType
 {
+    public const REPAIRER_TYPE_READ = 'repairer_type_read';
+    public const REPAIRER_TYPE_WRITE = 'repairer_type_write';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['repairer_type_read', Repairer::REPAIRER_READ])]
+    #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ])]
     private ?int $id = null;
 
     #[Assert\NotBlank]
@@ -37,7 +40,7 @@ class RepairerType
         max : 30,
     )]
     #[ORM\Column(length: 255)]
-    #[Groups(['repairer_type_read', Repairer::REPAIRER_READ, 'repairer_type_write'])]
+    #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, self::REPAIRER_TYPE_WRITE])]
     private ?string $name = null;
 
     public function getId(): ?int
