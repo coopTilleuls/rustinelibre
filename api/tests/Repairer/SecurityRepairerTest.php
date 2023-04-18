@@ -148,7 +148,21 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testOwnerCreatedByUser(): void
     {
-        $client = self::createClientWithUser($this->users[93]);
+        /** @var ?User $user */
+        $user = null;
+
+        foreach ($this->users as $userIteration) {
+            if (null === $userIteration->repairer) {
+                $user = $userIteration;
+                break;
+            }
+        }
+
+        if (null === $user) {
+            $this->fail('No user found without repairer');
+        }
+
+        $client = self::createClientWithUser($user);
 
         // simple user given
         $response = $client->request('POST', '/repairers', [
@@ -166,7 +180,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $response->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->assertSame($response['owner'], '/users/'.$this->users[93]->id);
+        $this->assertSame($response['owner'], '/users/'.$user->id);
         $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
     }
 
