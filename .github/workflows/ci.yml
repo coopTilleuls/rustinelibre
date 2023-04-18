@@ -100,3 +100,5 @@ jobs:
         run: docker compose exec -T php bin/console hautelook:fixtures:load --env=test --no-interaction --purge-with-truncate
       - name: PHPUnit
         run: docker compose exec -T php bin/phpunit
+      - name: EsLint
+        run: docker compose exec -T pwa npm run lint

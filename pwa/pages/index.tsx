@@ -12,7 +12,7 @@ const Home = () => {
     return (
         <div className="w-full overflow-x-hidden">
             <Head>
-                <title>Bienvenue sur la page d'accueil!</title>
+                <title>Bienvenue sur la page d’accueil!</title>
             </Head>
             <WebsiteLayout />
             <Box sx={{ width: '100%' }}>

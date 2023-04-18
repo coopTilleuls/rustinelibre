@@ -1,5 +1,14 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, ChangeEvent, useRef, SyntheticEvent, FormEvent, useContext} from 'react';
+import React, {
+    useState,
+    useEffect,
+    ChangeEvent,
+    useRef,
+    SyntheticEvent,
+    FormEvent,
+    useContext,
+    useCallback
+} from 'react';
 import Head from "next/head";
 import {repairerResource} from '@resources/repairerResource';
 import {ButtonShowMap} from '@components/repairers/ButtonShowMap';
@@ -40,13 +49,45 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setSelectedRepairer, selectedRepairer, repairers, setRepairers, currentPage, setCurrentPage,
         repairerTypeSelected, setRepairerTypeSelected, orderBy, setOrderBy, sortChosen, setSortChosen, totalItems, setTotalItems} = useContext(SearchRepairerContext);
 
+    const fetchRepairers = useCallback(async (): Promise<void> => {
+
+        if (!selectedBike || !cityInput) {
+            return;
+        }
+
+        setPendingSearchCity(true)
+
+        let params = {
+            city: city ? city.name : cityInput,
+            itemsPerPage: 20,
+            'bikeTypesSupported.id': selectedBike.id,
+            'page': `${currentPage ?? 1}`,
+            'sort': 'random'
+        };
+
+        params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
+
+        if (orderBy) {
+            const { key, value } = orderBy;
+            params = {...params, [key]: value}
+        } else {
+            params = {...{'availability': 'ASC'}, ...params}
+        }
+
+        const response = await repairerResource.getAll(params);
+        setRepairers(response['hydra:member']);
+        setTotalItems(response['hydra:totalItems']);
+        setPendingSearchCity(false);
+        setAlreadyFetchApi(true);
+    }, [city, cityInput, currentPage, orderBy, selectedBike, setRepairers, setTotalItems]);
+
     useEffect(() => {
         if (isMobile && city && selectedBike) {
             fetchRepairers();
         }
-    }, [city, selectedBike, orderBy]);
+    }, [city, fetchRepairers, isMobile, selectedBike]);
 
-    useEffect(() => {fetchRepairers();scrollToTop()},[currentPage]);
+    useEffect(() => {fetchRepairers();scrollToTop()},[currentPage, fetchRepairers]);
 
     useEffect(() => {
         if (sortChosen === 'repairersType') {
@@ -55,7 +96,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                 'value': repairerTypeSelected
             })
         }
-    }, [repairerTypeSelected]);
+    }, [repairerTypeSelected, setOrderBy, sortChosen]);
 
     useEffect(() => {
         if (cityInput === '') return;
@@ -69,7 +110,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         }, 350);
 
         setTimeoutId(newTimeoutId);
-    }, [cityInput]);
+    }, [cityInput, timeoutId, useNominatim]);
 
     const handleCityChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
         setCityInput(event.target.value);
@@ -117,38 +158,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         if (listContainerRef.current) {
             listContainerRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-    };
-
-    const fetchRepairers = async (): Promise<void> => {
-
-        if (!selectedBike || !cityInput) {
-            return;
-        }
-
-        setPendingSearchCity(true)
-
-        let params = {
-            city: city ? city.name : cityInput,
-            itemsPerPage: 20,
-            'bikeTypesSupported.id': selectedBike.id,
-            'page': `${currentPage ?? 1}`,
-            'sort': 'random'
-        };
-
-        params = city ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params} : params;
-
-        if (orderBy) {
-            const { key, value } = orderBy;
-            params = {...params, [key]: value}
-        } else {
-            params = {...{'availability': 'ASC'}, ...params}
-        }
-
-        const response = await repairerResource.getAll(params);
-        setRepairers(response['hydra:member']);
-        setTotalItems(response['hydra:totalItems']);
-        setPendingSearchCity(false);
-        setAlreadyFetchApi(true);
     };
 
     return (

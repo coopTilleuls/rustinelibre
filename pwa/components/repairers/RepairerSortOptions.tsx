@@ -33,7 +33,7 @@ const RepairerSortOptions = ({handleChangeSort, isMobile}: RepairerSortOptionsPr
         }
 
         fetchRepairerTypes();
-    }, []);
+    }, [setRepairerTypeSelected]);
 
     const handleSelectSortOption = (event: SelectChangeEvent) => {
         handleChangeSort(event.target.value);

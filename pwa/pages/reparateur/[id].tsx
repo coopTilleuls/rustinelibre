@@ -14,6 +14,7 @@ import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import Link from "next/link";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
+import Image from "next/image";
 
 const RepairerPage: NextPageWithLayout = () => {
 
@@ -67,7 +68,7 @@ const RepairerPage: NextPageWithLayout = () => {
                                     >
                                         {repairer.name}
                                     </Typography>
-                                    {repairer.thumbnail && <img alt="Photo de profil du réparateur" width="100" height="100" src={apiImageUrl(repairer.thumbnail.contentUrl)} />}
+                                    {repairer.thumbnail && <Image src={apiImageUrl(repairer.thumbnail.contentUrl)} alt={'Photo de profil du réparateur'} width={100} height={100}></Image>}
                                     <Button variant="outlined" style={{marginLeft: '30%'}}>{repairer.repairerType?.name}</Button>
                                     <Typography paragraph variant="h5" align="left" color="text.secondary" style={{marginTop: '10px'}}>
                                         <FmdGoodIcon /> {repairer.street} - {repairer.postcode} {repairer.city}
