@@ -72,10 +72,6 @@ const RepairerInformations: NextPageWithLayout = () => {
     }, [repairer]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-
-        console.log('update');
-
-
         event.preventDefault();
         if (!repairer || !name || !selectedBikeTypes || !repairerTypeSelected || !street || Object.keys(selectedBikeTypes).length === 0) {
             return;
