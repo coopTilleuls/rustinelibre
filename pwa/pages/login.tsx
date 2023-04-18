@@ -124,7 +124,7 @@ const Login: NextPageWithLayout = ({}) => {
                                     </Grid>
                                     <Grid item>
                                         <Link href="#" variant="body2">
-                                            S'inscrire
+                                            S’inscrire
                                         </Link>
                                     </Grid>
                                 </Grid>
