@@ -34,7 +34,7 @@ const RepairerInformations: NextPageWithLayout = () => {
 
     const {name, setName, setDescription,street, setStreet, cityInput, setCityInput, city,
         pendingRegistration, setPendingRegistration, errorMessage, setErrorMessage, bikeTypes, selectedBikeTypes,
-        setOptionalPage, mobilePhone, setOpeningHours, repairerTypeSelected, setRepairerTypeSelected, setSelectedBikeTypes, setMobilePhone} = useContext(RepairerFormContext);
+        setOptionalPage, description, openingHours, optionalPage, mobilePhone, setOpeningHours, repairerTypeSelected, setRepairerTypeSelected, setSelectedBikeTypes, setMobilePhone} = useContext(RepairerFormContext);
 
 
     useEffect(() => {
@@ -73,8 +73,11 @@ const RepairerInformations: NextPageWithLayout = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
+        console.log('update');
+
+
         event.preventDefault();
-        if (!repairer || !city || !name || !selectedBikeTypes || !repairerTypeSelected || !street || Object.keys(selectedBikeTypes).length === 0) {
+        if (!repairer || !name || !selectedBikeTypes || !repairerTypeSelected || !street || Object.keys(selectedBikeTypes).length === 0) {
             return;
         }
 
@@ -90,6 +93,7 @@ const RepairerInformations: NextPageWithLayout = () => {
                 'mobilePhone': mobilePhone,
                 'name': name,
                 'street': street,
+                'description': description,
                 'bikeTypesSupported': selectedBikeTypeIRIs,
                 'repairerType': repairerTypeSelected ? repairerTypeSelected['@id'] : null,
             };
@@ -99,6 +103,16 @@ const RepairerInformations: NextPageWithLayout = () => {
                 bodyRequest['postcode'] = city.postcode;
                 bodyRequest['latitude'] = city.lat.toString();
                 bodyRequest['longitude'] = city.lon.toString();
+            }
+
+            if (optionalPage && optionalPage !== '') {
+                bodyRequest['optionalPage'] = optionalPage;
+            }
+            if (openingHours && openingHours !== '') {
+                bodyRequest['openingHours'] = openingHours;
+            }
+            if (mobilePhone && mobilePhone !== '') {
+                bodyRequest['mobilePhone'] = mobilePhone;
             }
 
             await repairerResource.put(repairer['@id'], bodyRequest)
