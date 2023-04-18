@@ -1,8 +1,7 @@
 import Head from "next/head";
-import React, {ChangeEvent, SyntheticEvent, useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Box from '@mui/material/Box';
 import DashboardLayout from "@components/dashboard/DashboardLayout";
-import {useRouter} from "next/router";
 import {NextPageWithLayout} from "../_app";
 import {Repairer} from "@interfaces/Repairer";
 import {RepairerFormContext} from "@contexts/RepairerFormContext";
@@ -16,7 +15,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ContactDetails from "@components/dashboard/informations/ContactDetails";
 import Description from "@components/dashboard/informations/Description";
-import {AuthContext, useAccount, useAuth} from "@contexts/AuthContext";
+import {useAccount} from "@contexts/AuthContext";
 import {RequestBody} from "@interfaces/Resource";
 import OptionalInfos from "@components/dashboard/informations/OptionalInfos";
 import DashboardInfosPhotos from "@components/dashboard/informations/Photos";

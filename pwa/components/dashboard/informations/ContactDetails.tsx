@@ -13,8 +13,7 @@ interface ContactDetailsProps {
 }
 
 export const ContactDetails = ({repairer}: ContactDetailsProps): JSX.Element => {
-
-
+    
     const {name, setName, mobilePhone, setMobilePhone,street, setStreet, cityInput, setCityInput, setCity, citiesList, setCitiesList,
         timeoutId, setTimeoutId} = useContext(RepairerFormContext);
 

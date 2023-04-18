@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from "react";
 import {Repairer} from "@interfaces/Repairer";
 import InputLabel from "@mui/material/InputLabel";
 import {RepairerFormContext} from "@contexts/RepairerFormContext";
-import dynamic from 'next/dynamic';
 import Box from "@mui/material/Box";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import Grid from "@mui/material/Grid";
