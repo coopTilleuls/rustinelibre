@@ -14,6 +14,14 @@ Plateforme de mise en relation avec des réparateurs de vélos
 - [Documentation de l'API (Swagger)](https://localhost/docs)
 - [Frontend](https://localhost/)
 
+## URL du projet déployé via la CD
+
+La branche main est déployée sur [main.nonprod.bikelib.preprod-tilleuls.ovh](https://main.nonprod.bikelib.preprod-tilleuls.ovh)
+
+Les PR sont déployées sur [pr-NN.nonprod.bikelib.preprod-tilleuls.ovh](https://pr-NN.nonprod.bikelib.preprod-tilleuls.ovh) (uniquement si le label deploy est ajouté sur la PR)
+
+Les tags/releases sont déployées sur [demo.bikelib.preprod-tilleuls.ovh](https://demo.bikelib.preprod-tilleuls.ovh)
+
 ## Installation / utilisation du projet
 
 ``` shell
