@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, ChangeEvent} from 'react';
+import React, {useState, ChangeEvent, useContext} from 'react';
 import Head from "next/head";
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,21 +17,17 @@ import PersonIcon from '@mui/icons-material/Person';
 import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
 import WebsiteLayout from "@components/layout/WebsiteLayout";
+import {UserFormContext} from "@contexts/UserFormContext";
 
 const Registration: NextPageWithLayout = ({}) => {
 
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
     const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [emailError, setEmailError] = useState<boolean>(false);
-    const [passwordError, setPasswordError] = useState<boolean>(false);
-    const [emailHelperText, setEmailHelperText] = useState<string>('');
-    const [passwordInfo, setPasswordInfo] = useState<string>('');
     const user = useAccount({redirectIfFound: '/'});
     const router = useRouter();
+
+    const {firstName, setFirstName, lastName, setLastName, email, setEmail, password, passwordError,
+        setPasswordError, setPassword, emailError, setEmailError, emailHelperText, setEmailHelperText, passwordInfo, setPasswordInfo} = useContext(UserFormContext);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 

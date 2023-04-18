@@ -6,6 +6,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  externals: {
+    'ckeditor': 'window.CKEDITOR',
+  },
   images: {
     remotePatterns: [
       {

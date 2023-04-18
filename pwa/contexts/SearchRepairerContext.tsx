@@ -2,7 +2,6 @@ import React, {createContext, ReactNode, useState} from 'react';
 import {Repairer} from "@interfaces/Repairer";
 import {City} from "@interfaces/City";
 import {BikeType} from "@interfaces/BikeType";
-import useBikeTypes from "@hooks/useBikeTypes";
 
 interface ProviderProps {
     children: ReactNode;
@@ -77,7 +76,6 @@ export const SearchRepairerProvider = ({ children }: ProviderProps): JSX.Element
     const [orderBy, setOrderBy] = useState<OrderByOption|null>(null);
     const [sortChosen, setSortChosen] = useState<string>('availability');
     const [totalItems, setTotalItems] = useState<number>(0);
-    const bikeTypes = useBikeTypes();
 
     return (
         <SearchRepairerContext.Provider

@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, ChangeEvent, useEffect, SyntheticEvent} from 'react';
+import React, {useState, ChangeEvent, useEffect, SyntheticEvent, useContext} from 'react';
 import Head from "next/head";
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,44 +18,31 @@ import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputLabel from "@mui/material/InputLabel";
-import useRepairerTypes from "@hooks/useRepairerTypes";
 import {RepairerType} from "@interfaces/RepairerType";
 import Select, {SelectChangeEvent} from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import useBikeTypes from "@hooks/useBikeTypes";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
-import {BikeType} from "@interfaces/BikeType";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
+import {RepairerFormContext} from "@contexts/RepairerFormContext";
+import {UserFormContext} from "@contexts/UserFormContext";
 
 const RepairerRegistration: NextPageWithLayout = ({}) => {
 
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
-    const [name, setName] = useState<string>('');
-    const [street, setStreet] = useState<string>('');
-    const [cityInput, setCityInput] = useState<string>('');
-    const [city, setCity] = useState<City | null>(null);
-    const [citiesList, setCitiesList] = useState<City[]>([]);
-    const [timeoutId, setTimeoutId] = useState<number | null>(null);
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
     const [comment, setComment] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [emailError, setEmailError] = useState<boolean>(false);
-    const [passwordError, setPasswordError] = useState<boolean>(false);
-    const [emailHelperText, setEmailHelperText] = useState<string>('');
-    const [passwordInfo, setPasswordInfo] = useState<string>('');
     const [repairerTypeSelected, setRepairerTypeSelected] = useState<RepairerType|null>(null);
-    const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
     const router = useRouter();
-    const repairerTypes: RepairerType[] = useRepairerTypes();
-    const bikeTypes: BikeType[] = useBikeTypes();
+
+    const {firstName, setFirstName, lastName, setLastName, email, setEmail, password, passwordError,
+        setPasswordError, setPassword, emailError, setEmailError, emailHelperText, setEmailHelperText, passwordInfo, setPasswordInfo} = useContext(UserFormContext);
+
+    const {name, setName, street, setStreet, cityInput, setCityInput, city, setCity, citiesList, setCitiesList,
+        timeoutId, setTimeoutId, pendingRegistration, setPendingRegistration, errorMessage, setErrorMessage,
+        repairerTypes, bikeTypes, selectedBikeTypes, setSelectedBikeTypes} = useContext(RepairerFormContext);
 
     useEffect(() => {
         if (cityInput === '') return;

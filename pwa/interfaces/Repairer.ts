@@ -21,6 +21,10 @@ export interface Repairer {
     latitude?: number;
     longitude?: number;
     firstSlotAvailable?: string,
+    comment?: string,
     bikeTypesSupported: BikeType[],
     repairerType: RepairerType,
+    enabled: boolean,
+    openingHours?: string
+    optionalPage?: string
 }
