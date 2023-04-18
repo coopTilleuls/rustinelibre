@@ -13,6 +13,13 @@ App\Entity\User:
     lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+  boss_2:
+    roles: [ "ROLE_BOSS" ]
+    email: "boss2@test.com"
+    firstName: <firstName()>
+    lastName: <lastName()>
+    plainPassword: "Test1passwordOk!"
+    emailConfirmed: true
   user_1:
     roles: ["ROLE_USER"]
     email: "user1@test.com"

@@ -4,6 +4,7 @@ import {BikeType} from "@interfaces/BikeType";
 import useBikeTypes from "@hooks/useBikeTypes";
 import {RepairerType} from "@interfaces/RepairerType";
 import useRepairerTypes from "@hooks/useRepairerTypes";
+import {MediaObject} from "@interfaces/MediaObject";
 
 interface ProviderProps {
     children: ReactNode;
@@ -15,6 +16,8 @@ interface RepairerFormContext {
     street: string,
     mobilePhone: string,
     cityInput: string,
+    latitude: string,
+    longitude: string,
     city: City|null,
     citiesList: City[],
     timeoutId: number|null,
@@ -26,11 +29,15 @@ interface RepairerFormContext {
     bikeTypes: BikeType[],
     openingHours: string,
     optionalPage: string,
+    thumbnail: MediaObject|null,
+    descriptionPicture: MediaObject|null,
     setName: (value: string) => void,
     setDescription: (value: string) => void,
     setStreet: (value: string) => void,
     setMobilePhone: (value: string) => void,
     setCityInput: (value: string) => void,
+    setLatitude: (value: string) => void,
+    setLongitude: (value: string) => void,
     setCity: (value: City|null) => void,
     setCitiesList: (value: City[]) => void,
     setTimeoutId: (value: number) => void,
@@ -40,6 +47,8 @@ interface RepairerFormContext {
     setSelectedBikeTypes: (value: string[]) => void,
     setOpeningHours: (value: string) => void,
     setOptionalPage: (value: string) => void,
+    setThumbnail: (value: MediaObject|null) => void,
+    setDescriptionPicture: (value: MediaObject|null) => void,
 }
 
 const initialValue = {
@@ -48,6 +57,8 @@ const initialValue = {
     description: '',
     street: '',
     cityInput: '',
+    latitude: '',
+    longitude: '',
     city: null,
     citiesList: [],
     timeoutId: 0,
@@ -59,11 +70,15 @@ const initialValue = {
     bikeTypes: [],
     openingHours: '',
     optionalPage: '',
+    thumbnail: null,
+    descriptionPicture: null,
     setName: () => null,
     setMobilePhone: () => null,
     setDescription: () => null,
     setStreet: () => null,
     setCityInput: () => null,
+    setLatitude: () => null,
+    setLongitude: () => null,
     setCity: () => null,
     setCitiesList: () => [],
     setTimeoutId: () => null,
@@ -72,7 +87,9 @@ const initialValue = {
     setErrorMessage: () => null,
     setSelectedBikeTypes: () => null,
     setOpeningHours: () => null,
-    setOptionalPage: () => null
+    setOptionalPage: () => null,
+    setThumbnail: () => null,
+    setDescriptionPicture: () => null,
 };
 
 export const RepairerFormContext = createContext<RepairerFormContext>(initialValue);
@@ -83,6 +100,8 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
     const [description, setDescription] = useState<string>('');
     const [street, setStreet] = useState<string>('');
     const [cityInput, setCityInput] = useState<string>('');
+    const [latitude, setLatitude] = useState<string>('');
+    const [longitude, setLongitude] = useState<string>('');
     const [city, setCity] = useState<City | null>(null);
     const [citiesList, setCitiesList] = useState<City[]>([]);
     const [timeoutId, setTimeoutId] = useState<number | null>(0);
@@ -92,6 +111,8 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
     const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
     const [openingHours, setOpeningHours] = useState<string>('');
     const [optionalPage, setOptionalPage] = useState<string>('');
+    const [thumbnail, setThumbnail] = useState<MediaObject | null>(null);
+    const [descriptionPicture, setDescriptionPicture] = useState<MediaObject | null>(null);
 
     const repairerTypes = useRepairerTypes();
     const bikeTypes = useBikeTypes();
@@ -104,6 +125,8 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 description,
                 street,
                 cityInput,
+                latitude,
+                longitude,
                 city,
                 citiesList,
                 timeoutId,
@@ -115,11 +138,15 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 bikeTypes,
                 openingHours,
                 optionalPage,
+                thumbnail,
+                descriptionPicture,
                 setName,
                 setMobilePhone,
                 setDescription,
                 setStreet,
                 setCityInput,
+                setLatitude,
+                setLongitude,
                 setCity,
                 setCitiesList,
                 setTimeoutId,
@@ -129,6 +156,8 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 setSelectedBikeTypes,
                 setOpeningHours,
                 setOptionalPage,
+                setThumbnail,
+                setDescriptionPicture,
             }}
         >
             {children}

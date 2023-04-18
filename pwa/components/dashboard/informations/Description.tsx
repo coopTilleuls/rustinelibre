@@ -1,22 +1,22 @@
-import React, {ChangeEvent, SyntheticEvent, useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect} from "react";
 import {Repairer} from "@interfaces/Repairer";
 import InputLabel from "@mui/material/InputLabel";
 import {RepairerFormContext} from "@contexts/RepairerFormContext";
-import {Browser} from "leaflet";
 import Select, {SelectChangeEvent} from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
-import Editor from "@components/form/Editor";
+import dynamic from 'next/dynamic';
+const Editor = dynamic(() => import("@components/form/Editor"), {
+    ssr: false
+});
 
 interface ContactDetailsProps {
     repairer: Repairer|null;
 }
 
 export const ContactDetails = ({repairer}: ContactDetailsProps): JSX.Element => {
-
-
     const {description, setDescription, bikeTypes, repairerTypes, setRepairerTypeSelected, selectedBikeTypes, setSelectedBikeTypes, repairerTypeSelected} = useContext(RepairerFormContext);
 
     useEffect(() => {
@@ -26,11 +26,9 @@ export const ContactDetails = ({repairer}: ContactDetailsProps): JSX.Element => 
     }, [repairer]);
 
     const handleChangeRepairerType = (event: SelectChangeEvent): void => {
-
         const selectedRepairerType = repairerTypes.find((rt) => rt.name === event.target.value);
         setRepairerTypeSelected(selectedRepairerType ? selectedRepairerType : null);
     };
-
     const handleChangeBikeRepaired = (event: SelectChangeEvent<typeof selectedBikeTypes>) => {
         const {target: { value },} = event;
         setSelectedBikeTypes(
@@ -72,9 +70,8 @@ export const ContactDetails = ({repairer}: ContactDetailsProps): JSX.Element => 
                 ))}
             </Select>
 
-
             <br />
-            <label>Description</label>
+            <InputLabel>Description</InputLabel>
             <Editor content={description} setContent={setDescription}/>
         </>
     );

@@ -24,6 +24,7 @@ class RruleValidatorTest extends AbstractTestCase
         $randomUser = $this->users[41];
 
         $this->createClientWithCredentials(['email' => $randomUser->email, 'password' => 'Test1passwordOk!'])->request('POST', '/repairers', ['json' => [
+            'name' => 'New workshop',
             'description' => 'Super atelier de vélo',
             'mobilePhone' => '0720397700',
             'street' => 'avenue Karl Marx',
@@ -42,13 +43,14 @@ class RruleValidatorTest extends AbstractTestCase
         $randomUser = $this->users[43];
 
         $this->createClientWithCredentials(['email' => $randomUser->email, 'password' => 'Test1passwordOk!'])->request('POST', '/repairers', ['json' => [
+            'name' => 'New workshop',
             'street' => 'avenue P. Poutou',
             'city' => 'Lille',
             'description' => 'Super atelier de vélo',
             'rrule' => 'BAD RULE',
         ]]);
 
-        $this->assertResponseStatusCodeSame(422);
+        $this->assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
         $this->assertJsonContains([

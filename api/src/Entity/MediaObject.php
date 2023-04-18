@@ -11,6 +11,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model;
 use App\Controller\CreateMediaObjectAction;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -56,7 +58,7 @@ class MediaObject
     public const MEDIA_OBJECT_READ = 'media_object:read';
 
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
     #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ])]
@@ -69,8 +71,15 @@ class MediaObject
     #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
 
-    public function getId(): ?int
+    #[ORM\OneToMany(targetEntity: Repairer::class, mappedBy: 'thumbnail')]
+    public Collection $repairersThumbnail;
+
+    #[ORM\OneToMany(targetEntity: Repairer::class, mappedBy: 'descriptionPicture')]
+    public Collection $repairersDescriptionPicture;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->repairersThumbnail = new ArrayCollection();
+        $this->repairersDescriptionPicture = new ArrayCollection();
     }
 }

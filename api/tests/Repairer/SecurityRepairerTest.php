@@ -143,12 +143,26 @@ class SecurityRepairerTest extends AbstractTestCase
                 'name' => 'Deuxième atelier du même boss',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(422);
+        $this->assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testOwnerCreatedByUser(): void
     {
-        $client = self::createClientWithUser($this->users[93]);
+        /** @var ?User $user */
+        $user = null;
+
+        foreach ($this->users as $userIteration) {
+            if (null === $userIteration->repairer) {
+                $user = $userIteration;
+                break;
+            }
+        }
+
+        if (null === $user) {
+            $this->fail('No user found without repairer');
+        }
+
+        $client = self::createClientWithUser($user);
 
         // simple user given
         $response = $client->request('POST', '/repairers', [
@@ -156,6 +170,8 @@ class SecurityRepairerTest extends AbstractTestCase
             'json' => [
                 'name' => 'Test create by user',
                 'description' => 'Test create by user',
+                'street' => '12 rue de Wazemmes',
+                'city' => 'Lille',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[1]->getId()],
                 'comment' => 'Je voulais juste ajouter un commentaire',
@@ -164,7 +180,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $response->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->assertSame($response['owner'], '/users/'.$this->users[93]->id);
+        $this->assertSame($response['owner'], '/users/'.$user->id);
         $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
     }
 

@@ -1,0 +1,19 @@
+App\Entity\Intervention:
+  intervention_admin_1:
+    description: "Changement d'une roue"
+    isAdmin: true
+  intervention_admin_2:
+    description: "Révision"
+    isAdmin: true
+  intervention_boss_1:
+    description: "Réglage des freins"
+    isAdmin: false
+  intervention_boss_2:
+    description: "Installation de lumières"
+    isAdmin: false
+  intervention_admin_3:
+    description: "Installation d'une béquille"
+    isAdmin: true
+  intervention_boss_3:
+    description: "Réglage du guidon"
+    isAdmin: false

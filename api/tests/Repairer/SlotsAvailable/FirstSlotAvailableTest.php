@@ -44,9 +44,11 @@ class FirstSlotAvailableTest extends AbstractTestCase
     {
         // Create a repairer
         $response = $this->createClientWithCredentials()->request('POST', '/repairers', ['json' => [
+            'name' => 'New workshop',
             'description' => 'Nouvel atelier de réparation',
             'mobilePhone' => '0720397799',
             'street' => 'avenue Nino Marchese',
+            'city' => 'Lille',
         ]]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);

@@ -55,12 +55,11 @@ export const useAccount = ({
   redirectIfFound?: string;
   redirectIfNotFound?: string;
 }) => {
-  const {user} = useAuth();
-
+  const {user, isLoading} = useAuth();
   useEffect(() => {
-    if (user && redirectIfFound) {
+    if (!isLoading && user && redirectIfFound) {
       Router.push(redirectIfFound);
-    } else if (!user && redirectIfNotFound) {
+    } else if (!isLoading && !user && redirectIfNotFound) {
       Router.push(redirectIfNotFound);
     }
   }, [redirectIfFound, redirectIfNotFound, user]);
@@ -88,8 +87,9 @@ const useProviderAuth = () => {
         }
       } catch (e) {
         logout();
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     loadUserFromSession();
