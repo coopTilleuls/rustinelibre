@@ -11,8 +11,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model;
 use App\Controller\CreateMediaObjectAction;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -70,16 +68,4 @@ class MediaObject
 
     #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
-
-    #[ORM\OneToMany(targetEntity: Repairer::class, mappedBy: 'thumbnail')]
-    public Collection $repairersThumbnail;
-
-    #[ORM\OneToMany(targetEntity: Repairer::class, mappedBy: 'descriptionPicture')]
-    public Collection $repairersDescriptionPicture;
-
-    public function __construct()
-    {
-        $this->repairersThumbnail = new ArrayCollection();
-        $this->repairersDescriptionPicture = new ArrayCollection();
-    }
 }
