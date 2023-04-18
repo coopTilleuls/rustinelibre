@@ -1,0 +1,17 @@
+App\Entity\RepairerIntervention:
+  repairer_intervention_1:
+    price: 5000
+    repairer: '@repairer_1'
+    intervention: '@intervention_admin_1'
+  repairer_intervention_2:
+    price: 10000
+    repairer: '@repairer_1'
+    intervention: '@intervention_boss_1'
+  repairer_intervention_3:
+    price: 10000
+    repairer: '@repairer_24'
+    intervention: '@intervention_boss_2'
+  repairer_intervention_{4..20}:
+    price: 15000
+    repairer: '@repairer_3'
+    intervention: '@intervention_boss_1'

@@ -203,6 +203,9 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     private ?string $comment = null;
 
+    #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerIntervention::class, orphanRemoval: true)]
+    private Collection $repairerInterventions;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
@@ -488,6 +491,32 @@ class Repairer
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getRepairerInterventions(): Collection
+    {
+        return $this->repairerInterventions;
+    }
+
+    public function addRepairerIntervention(RepairerIntervention $repairerIntervention): self
+    {
+        if (!$this->repairerInterventions->contains($repairerIntervention)) {
+            $this->repairerInterventions->add($repairerIntervention);
+            $repairerIntervention->repairer = $this;
+        }
+
+        return $this;
+    }
+
+    public function removeRepairerIntervention(RepairerIntervention $repairerIntervention): self
+    {
+        if ($this->repairerInterventions->removeElement($repairerIntervention)) {
+            if ($repairerIntervention->repairer === $this) {
+                unset($repairerIntervention->repairer);
+            }
+        }
 
         return $this;
     }
