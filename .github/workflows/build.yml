@@ -43,3 +43,4 @@ jobs:
         BUILD_TARGET: dev
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+        SECURITY_SCAN: false
