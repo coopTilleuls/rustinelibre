@@ -31,9 +31,9 @@ import RepairerSortOptions from "@components/repairers/RepairerSortOptions";
 import PaginationBlock from "@components/common/PaginationBlock";
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@hooks/useMediaQuery';
-import useBikeTypes from "@hooks/useBikeTypes";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
+import {RepairerFormContext} from "@contexts/RepairerFormContext";
 
 const SearchRepairer: NextPageWithLayout = ({}) => {
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
@@ -43,11 +43,11 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
     const isMobile = useMediaQuery('(max-width: 640px)');
     const listContainerRef = useRef<HTMLDivElement>(null);
-    const bikeTypes = useBikeTypes();
 
-    const {cityInput, setCityInput, city, setCity, selectedBike, setSelectedBike, showMap, setShowMap,
-        setSelectedRepairer, selectedRepairer, repairers, setRepairers, currentPage, setCurrentPage,
-        repairerTypeSelected, setRepairerTypeSelected, orderBy, setOrderBy, sortChosen, setSortChosen, totalItems, setTotalItems} = useContext(SearchRepairerContext);
+    const {bikeTypes}= useContext(RepairerFormContext);
+    const {cityInput, setCityInput, city, setCity, selectedBike, setSelectedBike,
+        repairers, setRepairers, currentPage, setCurrentPage, repairerTypeSelected, orderBy,
+        setOrderBy, sortChosen, setSortChosen, totalItems, setTotalItems} = useContext(SearchRepairerContext);
 
     const fetchRepairers = useCallback(async (): Promise<void> => {
 

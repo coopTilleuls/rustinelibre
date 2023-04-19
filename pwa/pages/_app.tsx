@@ -7,6 +7,8 @@ import {NextPage} from 'next';
 import type { ReactElement, ReactNode } from 'react'
 import {AuthProvider} from "@contexts/AuthContext";
 import {SearchRepairerProvider} from "@contexts/SearchRepairerContext";
+import {RepairerFormProvider} from "@contexts/RepairerFormContext";
+import {UserFormProvider} from "@contexts/UserFormContext";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode
@@ -20,17 +22,21 @@ function MyApp({ Component, pageProps }: AppProps<{dehydratedState: DehydratedSt
   return (
       <AuthProvider>
         <SearchRepairerProvider>
-          <>
-            <Head>
-              <meta
-                  name="viewport"
-                  charSet="utf-8"
-                  content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
-            </Head>
-            <Layout dehydratedState={pageProps.dehydratedState}>
-              <Component {...pageProps} />
-            </Layout>
-          </>
+            <RepairerFormProvider>
+                <UserFormProvider>
+                  <>
+                    <Head>
+                      <meta
+                          name="viewport"
+                          charSet="utf-8"
+                          content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
+                    </Head>
+                    <Layout dehydratedState={pageProps.dehydratedState}>
+                      <Component {...pageProps} />
+                    </Layout>
+                  </>
+                </UserFormProvider>
+            </RepairerFormProvider>
         </SearchRepairerProvider>
       </AuthProvider>
   )
