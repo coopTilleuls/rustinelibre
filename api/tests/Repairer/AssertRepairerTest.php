@@ -39,7 +39,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
@@ -67,7 +67,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
@@ -95,7 +95,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
@@ -123,7 +123,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
@@ -151,7 +151,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
@@ -177,7 +177,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
@@ -203,7 +203,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
@@ -230,7 +230,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
                 // comment type !== string
                 'comment' => true,
             ],
@@ -259,7 +259,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
                 // opening hours type !== string
                 'openingHours' => true,
             ],
@@ -288,7 +288,7 @@ class AssertRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
                 // optional page type !== string
                 'optionalPage' => true,
             ],

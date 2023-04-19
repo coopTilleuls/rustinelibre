@@ -37,7 +37,7 @@ class BikeType
     #[ORM\Column(type: 'integer')]
     #[ORM\Id, ORM\GeneratedValue()]
     #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ])]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(
@@ -46,39 +46,14 @@ class BikeType
     )]
     #[ORM\Column(length: 255)]
     #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ, self::BIKE_TYPE_WRITE])]
-    private ?string $name = null;
+    public ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Repairer::class, mappedBy: 'bikeTypesSupported')]
-    private Collection $repairers;
+    public Collection $repairers;
 
     public function __construct()
     {
         $this->repairers = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Repairer>
-     */
-    public function getRepairers(): Collection
-    {
-        return $this->repairers;
     }
 
     public function addRepairer(Repairer $repairer): self

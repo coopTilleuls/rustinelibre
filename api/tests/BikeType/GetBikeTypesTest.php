@@ -25,7 +25,7 @@ class GetBikeTypesTest extends AbstractTestCase
         $bikeTypeName = 'Vélo classique';
         $bikeType1 = $this->getObjectByClassNameAndValues(BikeTypeRepository::class, ['name' => $bikeTypeName]);
 
-        $response = static::createClient()->request('GET', '/bike_types/'.$bikeType1->getId());
+        $response = static::createClient()->request('GET', '/bike_types/'.$bikeType1->id);
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
         $this->assertIsArray($response);
@@ -39,7 +39,7 @@ class GetBikeTypesTest extends AbstractTestCase
         $bikeTypeName = 'Vélo électrique';
 
         $bikeType2 = $this->getObjectByClassNameAndValues(BikeTypeRepository::class, ['name' => $bikeTypeName]);
-        $response = static::createClient()->request('GET', '/bike_types/'.$bikeType2->getId());
+        $response = static::createClient()->request('GET', '/bike_types/'.$bikeType2->id);
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
         $this->assertIsArray($response);

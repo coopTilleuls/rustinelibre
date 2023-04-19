@@ -12,7 +12,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
     public function testGetBikeType(): void
     {
         $bikeType1 = $this->getObjectByClassNameAndValues(BikeTypeRepository::class, ['name' => 'Vélo classique']);
-        $this->createClientAuthAsUser()->request('GET', '/bike_types/'.$bikeType1->getId());
+        $this->createClientAuthAsUser()->request('GET', '/bike_types/'.$bikeType1->id);
         $this->assertResponseIsSuccessful();
     }
 
@@ -44,7 +44,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
     {
         $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo cargo']);
 
-        $this->createClientAuthAsAdmin()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
+        $this->createClientAuthAsAdmin()->request('PUT', '/bike_types/'.$bikeCargo->id, [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo hollandais',
@@ -58,7 +58,7 @@ class SecurityBikeTypeTest extends AbstractTestCase
     {
         $bikeCargo = static::getContainer()->get('doctrine')->getRepository(BikeType::class)->findOneBy(['name' => 'Vélo hollandais']);
 
-        $this->createClientAuthAsUser()->request('PUT', '/bike_types/'.$bikeCargo->getId(), [
+        $this->createClientAuthAsUser()->request('PUT', '/bike_types/'.$bikeCargo->id, [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Vélo hollandais',
