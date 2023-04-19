@@ -11,6 +11,7 @@ import {CircularProgress, FormControlLabel, Switch} from "@mui/material";
 import Container from "@mui/material/Container";
 import {useRouter} from 'next/router';
 import {repairerEmployeesResource} from "@resources/repairerEmployeesResource";
+import {RequestBody} from "@interfaces/Resource";
 import {UserFormContext} from "@contexts/UserFormContext";
 
 interface EmployeeEditFormProps {
@@ -45,22 +46,26 @@ export const EmployeeForm = ({repairerEmployee, edit}: EmployeeEditFormProps): J
 
         setErrorMessage(null);
         setPendingRegistration(true);
+        const bodyRequest: RequestBody = {
+            'firstName': firstName,
+            'lastName': lastName,
+            'email': email,
+        };
+
+        if (password && password !== '') {
+            bodyRequest['plainPassword'] = password;
+        }
+
         let newRepairerEmployee;
         try {
             if (edit && repairerEmployee) {
-                newRepairerEmployee = await repairerEmployeesResource.put(repairerEmployee['@id'], {
-                    'firstName': firstName,
-                    'lastName': lastName,
-                    'email': email,
-                    'plainPassword': password,
-                    'enabled': enabled
-                })
+                bodyRequest['enabled'] = enabled;
+                newRepairerEmployee = await repairerEmployeesResource.updateEmployeeAndUser(repairerEmployee['id'], bodyRequest)
             } else {
                 newRepairerEmployee = await repairerEmployeesResource.post({
                     'firstName': firstName,
                     'lastName': lastName,
                     'email': email,
-                    'plainPassword': password,
                 })
             }
 

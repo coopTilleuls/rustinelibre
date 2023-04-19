@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Employees\Dto\CreateUserEmployeeDto;
 use App\Employees\State\CreateUserEmployeeProcessor;
+use App\Employees\State\UpdateUserEmployeeProcessor;
 use App\Repository\RepairerEmployeeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,6 +29,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
     input: CreateUserEmployeeDto::class,
     processor: CreateUserEmployeeProcessor::class
+)]
+#[Put(
+    uriTemplate: '/employee_and_user/{id}',
+    security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer == user.repairer)",
+    input: CreateUserEmployeeDto::class,
+    processor: UpdateUserEmployeeProcessor::class
 )]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
 #[Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer == user.repairer)")]
