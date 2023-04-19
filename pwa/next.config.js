@@ -5,6 +5,7 @@ const nextConfig = {
   output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
+    dirs: ['components', 'contexts', 'helpers', 'hooks', 'interfaces', 'pages', 'resources', 'utils'],
   },
   images: {
     remotePatterns: [
