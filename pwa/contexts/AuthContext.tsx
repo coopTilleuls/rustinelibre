@@ -62,7 +62,7 @@ export const useAccount = ({
     } else if (!isLoading && !user && redirectIfNotFound) {
       Router.push(redirectIfNotFound);
     }
-  }, [redirectIfFound, redirectIfNotFound, user]);
+  }, [redirectIfFound, redirectIfNotFound, user, isLoading]);
 
   return user;
 };

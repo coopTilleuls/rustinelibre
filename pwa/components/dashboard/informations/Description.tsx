@@ -23,7 +23,7 @@ export const ContactDetails = ({repairer}: ContactDetailsProps): JSX.Element => 
         if (repairer) {
             setDescription(repairer.description ? repairer.description : '');
         }
-    }, [repairer]);
+    }, [repairer, setDescription]);
 
     const handleChangeRepairerType = (event: SelectChangeEvent): void => {
         const selectedRepairerType = repairerTypes.find((rt) => rt.name === event.target.value);

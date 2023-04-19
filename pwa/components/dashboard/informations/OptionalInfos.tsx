@@ -19,11 +19,11 @@ export const OptionalInfos = ({repairer}: OptionnalInfosProps): JSX.Element => {
             setOptionalPage(repairer.optionalPage ? repairer.optionalPage : '');
             setOpeningHours(repairer.openingHours ? repairer.openingHours : '');
         }
-    }, [repairer]);
+    }, [repairer, setOpeningHours, setOptionalPage]);
 
     return (
         <>
-            <InputLabel>Horaires d'ouverture</InputLabel>
+            <InputLabel>Horaires d&apos;ouverture</InputLabel>
             <Editor content={openingHours} setContent={setOpeningHours}/>
             <InputLabel>Informations complémentaires (page visible avant la prise de rendez vous)</InputLabel>
             <Editor content={optionalPage} setContent={setOptionalPage}/>

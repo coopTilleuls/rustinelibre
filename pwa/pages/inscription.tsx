@@ -32,7 +32,6 @@ const Registration: NextPageWithLayout = ({}) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
         event.preventDefault();
-
         if (passwordError || !email || !password || !firstName || !lastName) {
             return;
         }

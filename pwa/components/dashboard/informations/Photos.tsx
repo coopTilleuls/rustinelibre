@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import {getToken} from "@helpers/sessionHelper";
 import {MediaObject} from "@interfaces/MediaObject";
 import {repairerResource} from "@resources/repairerResource";
+import Image from "next/image";
 
 interface DashboardInfosPhotosProps {
     repairer: Repairer|null;
@@ -23,7 +24,7 @@ export const DashboardInfosPhotos = ({repairer}: DashboardInfosPhotosProps): JSX
             setThumbnail(repairer.thumbnail ? repairer.thumbnail : null);
             setDescriptionPicture(repairer.descriptionPicture ? repairer.descriptionPicture : null);
         }
-    }, [repairer]);
+    }, [repairer, setThumbnail, setDescriptionPicture]);
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>, pictureType: string) => {
         if (event.target.files && repairer) {
@@ -81,7 +82,7 @@ export const DashboardInfosPhotos = ({repairer}: DashboardInfosPhotosProps): JSX
                 <Grid container spacing={2} sx={{marginTop: '10'}}>
                     <Grid item>
                         {
-                            thumbnail && <img width="200" height="200" src={apiImageUrl(thumbnail.contentUrl)} />
+                            thumbnail && <img alt="thumbnail" width="200" height="200" src={apiImageUrl(thumbnail.contentUrl)} />
                         }
                     </Grid>
                     <Grid item>
@@ -102,7 +103,7 @@ export const DashboardInfosPhotos = ({repairer}: DashboardInfosPhotosProps): JSX
                 <Grid container spacing={2} sx={{marginTop: '10'}}>
                     <Grid item>
                         {
-                            descriptionPicture && <img width="200" height="200" src={apiImageUrl(descriptionPicture.contentUrl)} />
+                            descriptionPicture && <img alt="photo de description" width="200" height="200" src={apiImageUrl(descriptionPicture.contentUrl)} />
                         }
                     </Grid>
                     <Grid item>

@@ -34,7 +34,7 @@ export const EmployeeForm = ({repairerEmployee, edit}: EmployeeEditFormProps): J
             setFirstName(repairerEmployee.employee.firstName);
             setLastName(repairerEmployee.employee.lastName);
         }
-    }, [repairerEmployee]);
+    }, [repairerEmployee, setEmail, setFirstName, setLastName]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 

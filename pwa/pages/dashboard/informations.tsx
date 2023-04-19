@@ -69,7 +69,7 @@ const RepairerInformations: NextPageWithLayout = () => {
             })
             setSelectedBikeTypes(bikeTypesSupported);
         }
-    }, [repairer]);
+    }, [repairer, setDescription, setLoading, setName, setMobilePhone, setSelectedBikeTypes, setRepairerTypeSelected, setOpeningHours, setOptionalPage, setCityInput, setStreet]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();

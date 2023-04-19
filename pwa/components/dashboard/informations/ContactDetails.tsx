@@ -23,7 +23,7 @@ export const ContactDetails = ({repairer}: ContactDetailsProps): JSX.Element => 
             setStreet(repairer.street ? repairer.street :'');
             setCityInput(repairer.city ? repairer.city : '');
         }
-    }, [repairer]);
+    }, [repairer, setName, setStreet, setCityInput]);
 
     useEffect(() => {
         if (cityInput === '') return;
@@ -35,7 +35,7 @@ export const ContactDetails = ({repairer}: ContactDetailsProps): JSX.Element => 
         }, 350);
 
         setTimeoutId(newTimeoutId);
-    }, [cityInput]);
+    }, [cityInput, setCitiesList, timeoutId, setTimeoutId]);
 
     const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void => {
         setName(event.target.value);
