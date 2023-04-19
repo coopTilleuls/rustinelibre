@@ -18,6 +18,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EngineeringIcon from '@mui/icons-material/Engineering';
+import {useAccount} from "@contexts/AuthContext";
+import {useRouter} from 'next/router';
 
 const drawerWidth = 240;
 
@@ -93,6 +95,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function DashboardLayout() {
     const theme = useTheme();
     const open = true;
+    const user = useAccount({redirectIfNotFound: '/login'});
+    const router = useRouter();
+
+    if (user && !user.roles.includes('ROLE_BOSS')) {
+        router.push('/');
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>

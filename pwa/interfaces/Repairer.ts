@@ -18,9 +18,13 @@ export interface Repairer {
     descriptionPicture?: MediaObject;
     street?: string;
     rrule: string;
-    latitude?: number;
-    longitude?: number;
+    latitude?: string;
+    longitude?: string;
     firstSlotAvailable?: string,
+    comment?: string,
     bikeTypesSupported: BikeType[],
     repairerType: RepairerType,
+    enabled: boolean,
+    openingHours?: string
+    optionalPage?: string
 }
