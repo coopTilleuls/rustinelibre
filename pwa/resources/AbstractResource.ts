@@ -95,6 +95,25 @@ export abstract class AbstractResource<T> {
     return await this.getResult(doFetch);
   }
 
+  async putById(
+    id: string,
+    body: RequestBody = {},
+    headers?: RequestHeaders
+  ): Promise<T> {
+    const doFetch = async () => {
+      return await fetch(this.getUrl()+'/'+id, {
+        headers: {
+          ...this.getDefaultHeaders(),
+          ...headers,
+        },
+        method: 'PUT',
+        body: JSON.stringify(body),
+      });
+    };
+
+    return await this.getResult(doFetch);
+  }
+
   async delete(id: string, headers?: RequestHeaders): Promise<boolean> {
 
     const response = await fetch(this.getUrl(id), {
