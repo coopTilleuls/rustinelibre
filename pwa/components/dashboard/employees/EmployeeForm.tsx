@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useState} from "react";
 import {RepairerEmployee} from "@interfaces/RepairerEmployee";
 import {validateEmail} from "@utils/emailValidator";
 import {validatePassword} from "@utils/passwordValidator";
@@ -11,26 +11,30 @@ import {CircularProgress, FormControlLabel, Switch} from "@mui/material";
 import Container from "@mui/material/Container";
 import {useRouter} from 'next/router';
 import {repairerEmployeesResource} from "@resources/repairerEmployeesResource";
+import {UserFormContext} from "@contexts/UserFormContext";
 
 interface EmployeeEditFormProps {
-    employee: RepairerEmployee|null;
+    repairerEmployee: RepairerEmployee|null;
     edit: boolean;
 }
 
-export const EmployeeForm = ({employee, edit}: EmployeeEditFormProps): JSX.Element => {
+export const EmployeeForm = ({repairerEmployee, edit}: EmployeeEditFormProps): JSX.Element => {
 
-    const [email, setEmail] = useState<string>(employee ? employee.employee.email : '');
-    const [password, setPassword] = useState<string>('');
-    const [firstName, setFirstName] = useState<string>(employee ? employee.employee.firstName : '');
-    const [lastName, setLastName] = useState<string>(employee ? employee.employee.lastName : '');
-    const [enabled, setEnabled] = useState<boolean>(employee ? employee.enabled : true);
+    const [enabled, setEnabled] = useState<boolean>(repairerEmployee ? repairerEmployee.enabled : true);
     const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [emailError, setEmailError] = useState<boolean>(false);
-    const [passwordError, setPasswordError] = useState<boolean>(false);
-    const [emailHelperText, setEmailHelperText] = useState<string>('');
-    const [passwordInfo, setPasswordInfo] = useState<string>('');
     const router = useRouter();
+
+    const {firstName, setFirstName, lastName, setLastName, email, setEmail, password, passwordError,
+        setPasswordError, setPassword, emailError, setEmailError, emailHelperText, setEmailHelperText, passwordInfo, setPasswordInfo} = useContext(UserFormContext);
+
+    useEffect(() => {
+        if (repairerEmployee) {
+            setEmail(repairerEmployee.employee.email);
+            setFirstName(repairerEmployee.employee.firstName);
+            setLastName(repairerEmployee.employee.lastName);
+        }
+    }, [repairerEmployee, setEmail, setFirstName, setLastName]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
@@ -43,8 +47,8 @@ export const EmployeeForm = ({employee, edit}: EmployeeEditFormProps): JSX.Eleme
         setPendingRegistration(true);
         let newRepairerEmployee;
         try {
-            if (edit && employee) {
-                newRepairerEmployee = await repairerEmployeesResource.put(employee['@id'], {
+            if (edit && repairerEmployee) {
+                newRepairerEmployee = await repairerEmployeesResource.put(repairerEmployee['@id'], {
                     'firstName': firstName,
                     'lastName': lastName,
                     'email': email,

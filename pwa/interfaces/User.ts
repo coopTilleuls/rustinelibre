@@ -6,7 +6,7 @@ export interface User {
     lastName: string;
     email: string;
     roles: string[];
-    repairers: string[],
+    repairer: string,
     plainPassword: string;
     emailConfirmed: number;
 }
