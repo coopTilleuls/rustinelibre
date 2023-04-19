@@ -56,14 +56,6 @@ class BikeType
         $this->repairers = new ArrayCollection();
     }
 
-    /**
-     * @return Collection<int, Repairer>
-     */
-    public function getRepairers(): Collection
-    {
-        return $this->repairers;
-    }
-
     public function addRepairer(Repairer $repairer): self
     {
         if (!$this->repairers->contains($repairer)) {
