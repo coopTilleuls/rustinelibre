@@ -54,7 +54,7 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
         }, 350);
 
         setTimeoutId(newTimeoutId);
-    }, [cityInput]);
+    }, [cityInput, timeoutId, useNominatim]);
 
     const handleCityChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
         setCityInput(event.target.value);

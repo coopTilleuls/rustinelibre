@@ -181,7 +181,7 @@ const Registration: NextPageWithLayout = ({}) => {
                                 )}
                                 <Grid container>
                                     <Typography variant="body1" color="grey">
-                                        En vous inscrivant, vous acceptez les conditions d'utilisation de l'application Bikelib
+                                        En vous inscrivant, vous acceptez les conditions d’utilisation de l’application Bikelib
                                         et sa politique de confidentialité
                                     </Typography>
                                 </Grid>
