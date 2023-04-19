@@ -101,7 +101,7 @@ export abstract class AbstractResource<T> {
     headers?: RequestHeaders
   ): Promise<T> {
     const doFetch = async () => {
-      return await fetch(this.getUrl()+'/'+id, {
+      return await fetch(`${this.getUrl()}/${id}`, {
         headers: {
           ...this.getDefaultHeaders(),
           ...headers,

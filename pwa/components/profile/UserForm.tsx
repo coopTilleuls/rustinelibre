@@ -47,7 +47,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
         setPassword(event.target.value);
         if (!validatePassword(event.target.value)) {
             setPasswordError(true);
-            setPasswordInfo('Votre mot de passe doit contenir 12 caractères, une majuscule, un caractères et des chiffres.');
+            setPasswordInfo('Votre mot de passe doit contenir 12 caractères, une majuscule, un caractère spécial et des chiffres.');
         } else {
             setPasswordError(false);
             setPasswordInfo('');
