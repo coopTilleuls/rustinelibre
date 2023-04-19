@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model;
 use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
 use App\Repairers\Dto\CreateUserRepairerDto;
 use App\Repairers\Filter\AroundFilter;
@@ -43,11 +44,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection(
     uriTemplate: '/repairer_get_slots_available/{id}',
     requirements: ['id' => '\d+'],
+    openapi: new Model\Operation(
+        summary: 'Retrieves the collection of availabilities of a repairer',
+        description: 'Retrieves all the availabilities of a repairer'),
     provider: RepairerAvailableSlotsProvider::class,
 )]
 #[Post(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(
     uriTemplate: '/create_user_and_repairer',
+    openapi: new Model\Operation(
+        summary: 'Creates a repairer and its owner',
+        description: 'Creates a repairer, its owner and bind it'),
     description: 'Allows the simultaneous creation of a user (boss) and an inactive repairer waiting for validation',
     denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
     input: CreateUserRepairerDto::class,
