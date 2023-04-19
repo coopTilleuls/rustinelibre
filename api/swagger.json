@@ -946,6 +946,87 @@
             },
             "parameters": []
         },
+        "/employee_and_user/{id}": {
+            "put": {
+                "operationId": "api_employee_and_user_id_put",
+                "tags": [
+                    "RepairerEmployee"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "RepairerEmployee resource updated",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepairerEmployee.jsonld-employee_read"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepairerEmployee-employee_read"
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepairerEmployee-employee_read"
+                                }
+                            }
+                        },
+                        "links": {}
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "summary": "Replaces the RepairerEmployee resource.",
+                "description": "Replaces the RepairerEmployee resource.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "RepairerEmployee identifier",
+                        "required": true,
+                        "deprecated": false,
+                        "allowEmptyValue": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "explode": false,
+                        "allowReserved": false
+                    }
+                ],
+                "requestBody": {
+                    "description": "The updated RepairerEmployee resource",
+                    "content": {
+                        "application/ld+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RepairerEmployee.CreateUserEmployeeDto.jsonld-employee_write"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RepairerEmployee.CreateUserEmployeeDto-employee_write"
+                            }
+                        },
+                        "text/html": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RepairerEmployee.CreateUserEmployeeDto-employee_write"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "deprecated": false
+            },
+            "parameters": []
+        },
         "/interventions": {
             "get": {
                 "operationId": "api_interventions_get_collection",
@@ -5304,6 +5385,10 @@
                         "type": "string",
                         "nullable": true
                     },
+                    "enabled": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
                     "repairer": {
                         "type": "string",
                         "format": "iri-reference",
@@ -5338,6 +5423,10 @@
                     },
                     "lastName": {
                         "type": "string",
+                        "nullable": true
+                    },
+                    "enabled": {
+                        "type": "boolean",
                         "nullable": true
                     },
                     "repairer": {
