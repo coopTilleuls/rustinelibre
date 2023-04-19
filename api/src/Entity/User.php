@@ -131,7 +131,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRepairerEmployee(RepairerEmployee $repairerEmployee): self
     {
         // set the owning side of the relation if necessary
-        if ($repairerEmployee->getEmployee() !== $this) {
+        if ($repairerEmployee->employee !== $this) {
             $repairerEmployee->setEmployee($this);
         }
 
