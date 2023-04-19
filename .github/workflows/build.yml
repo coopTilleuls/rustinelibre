@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Build/Push
-      uses: coopTilleuls/action-docker-build-push@v4
+      uses: coopTilleuls/action-docker-build-push@main
       with:
         IMAGE_NAME: bikelib-pwa
         BUILD_CONTEXT: pwa

@@ -21,7 +21,7 @@ services:
   pwa:
     build:
       context: ./pwa
-      target: dev
+      target: prod
     volumes:
       - ./pwa:/srv/app
     environment:
