@@ -32,3 +32,6 @@ Makefile
 
 ###> Images
 /public/media/*
+
+###> openapi doc
+swagger.json
