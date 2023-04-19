@@ -36,7 +36,7 @@ class RepairerTypesTest extends AbstractTestCase
 
     public function testGet(): void
     {
-        $response = static::createClient()->request('GET', '/repairer_types/'.$this->repairerTypes[0]->getId());
+        $response = static::createClient()->request('GET', '/repairer_types/'.$this->repairerTypes[0]->id);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
@@ -69,7 +69,7 @@ class RepairerTypesTest extends AbstractTestCase
 
     public function testPutNotAllowed(): void
     {
-        $this->createClientAuthAsUser()->request('PUT', '/repairer_types/'.$this->repairerTypes[2]->getId(), ['json' => [
+        $this->createClientAuthAsUser()->request('PUT', '/repairer_types/'.$this->repairerTypes[2]->id, ['json' => [
             'name' => 'Nom mis à jour',
         ]]);
 
@@ -78,7 +78,7 @@ class RepairerTypesTest extends AbstractTestCase
 
     public function testPut(): void
     {
-        $response = $this->createClientAuthAsAdmin()->request('PUT', '/repairer_types/'.$this->repairerTypes[2]->getId(), ['json' => [
+        $response = $this->createClientAuthAsAdmin()->request('PUT', '/repairer_types/'.$this->repairerTypes[2]->id, ['json' => [
             'name' => 'Nom mis à jour',
         ]]);
 
