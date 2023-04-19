@@ -56,7 +56,7 @@ class MediaObject
     public const MEDIA_OBJECT_READ = 'media_object:read';
 
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
     #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ])]
@@ -68,9 +68,4 @@ class MediaObject
 
     #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 }

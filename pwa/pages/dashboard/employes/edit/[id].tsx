@@ -37,7 +37,7 @@ const EditEmployee: NextPageWithLayout = () => {
             </Head>
             <DashboardLayout />
             <Box component="main" sx={{ marginLeft: '20%', marginRight: '5%', marginTop: '100px' }}>
-                {loading ? <CircularProgress /> : <EmployeeForm employee={repairerEmployee} edit={true} />}
+                {loading ? <CircularProgress /> : <EmployeeForm repairerEmployee={repairerEmployee} edit={true} />}
             </Box>
         </>
     );

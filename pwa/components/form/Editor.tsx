@@ -4,7 +4,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 interface EditorProps {
     content: string|null;
-    setContent: React.Dispatch<React.SetStateAction<string>>;
+    setContent: (value: string) => void;
 }
 
 const Editor = ({content, setContent}: EditorProps): JSX.Element => {
@@ -14,16 +14,22 @@ const Editor = ({content, setContent}: EditorProps): JSX.Element => {
         setLoaded(true);
     }, []);
 
+
     if (loaded) {
         return (
-            <CKEditor
-                editor={ClassicEditor}
-                data={content}
-                onChange={(event, editor) => {
-                    const data: string = editor.getData();
-                    setContent(data);
-                }}
-            />
+            <div style={{ minHeight: '225px' }}>
+                <CKEditor
+                    editor={ClassicEditor}
+                    data={content}
+                    onChange={(event, editor) => {
+                        const data: string = editor.getData();
+                        setContent(data);
+                    }}
+                    config={{
+                        toolbar: ['heading', '|', 'bold', 'italic', 'blockQuote', 'link', 'numberedList', 'bulletedList', '|', 'undo', 'redo']
+                    }}
+                />
+            </div>
         );
     } else {
         return <p> Editor is loading </p>;
