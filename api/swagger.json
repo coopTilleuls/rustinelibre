@@ -455,52 +455,64 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User token created",
+                        "description": "Token created",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
                                         "token": {
-                                            "readOnly": true,
                                             "type": "string",
-                                            "nullable": false
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                                        },
+                                        "refresh_token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
                                         }
-                                    },
-                                    "required": [
-                                        "token"
-                                    ]
+                                    }
                                 }
                             }
                         }
-                    }
-                },
-                "summary": "Creates a user token.",
-                "requestBody": {
-                    "description": "The login data",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "email": {
-                                        "type": "string",
-                                        "nullable": false
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "nullable": false
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "integer",
+                                                    "example": 401
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Invalid credentials."
+                                                }
+                                            }
+                                        }
                                     }
-                                },
-                                "required": [
-                                    "email",
-                                    "password"
-                                ]
+                                }
                             }
                         }
                     },
-                    "required": true
-                }
+                    "422": {
+                        "description": "Unprocessable entity"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                },
+                "summary": "Creates a JWT token to access to Api",
+                "description": "Creates a JWT token with credentials to access to Api",
+                "security": [
+                    {
+                        "Bearer Token": []
+                    }
+                ]
             },
             "parameters": []
         },
@@ -906,8 +918,8 @@
                         "description": "Unprocessable entity"
                     }
                 },
-                "summary": "Creates a Repairer resource.",
-                "description": "Creates a Repairer resource.",
+                "summary": "Creates a repairer and its owner",
+                "description": "Creates a repairer, its owner and bind it",
                 "parameters": [],
                 "requestBody": {
                     "description": "The new Repairer resource",
@@ -930,6 +942,404 @@
                     },
                     "required": true
                 },
+                "deprecated": false
+            },
+            "parameters": []
+        },
+        "/interventions": {
+            "get": {
+                "operationId": "api_interventions_get_collection",
+                "tags": [
+                    "Intervention"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Intervention collection",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "hydra:member": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Intervention.jsonld-intervention_read"
+                                            }
+                                        },
+                                        "hydra:totalItems": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        },
+                                        "hydra:view": {
+                                            "type": "object",
+                                            "properties": {
+                                                "@id": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "@type": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:first": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:last": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:previous": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                },
+                                                "hydra:next": {
+                                                    "type": "string",
+                                                    "format": "iri-reference"
+                                                }
+                                            },
+                                            "example": {
+                                                "@id": "string",
+                                                "type": "string",
+                                                "hydra:first": "string",
+                                                "hydra:last": "string",
+                                                "hydra:previous": "string",
+                                                "hydra:next": "string"
+                                            }
+                                        },
+                                        "hydra:search": {
+                                            "type": "object",
+                                            "properties": {
+                                                "@type": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:template": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:variableRepresentation": {
+                                                    "type": "string"
+                                                },
+                                                "hydra:mapping": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "@type": {
+                                                                "type": "string"
+                                                            },
+                                                            "variable": {
+                                                                "type": "string"
+                                                            },
+                                                            "property": {
+                                                                "type": "string",
+                                                                "nullable": true
+                                                            },
+                                                            "required": {
+                                                                "type": "boolean"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "hydra:member"
+                                    ]
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Intervention-intervention_read"
+                                    }
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Intervention-intervention_read"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "Retrieves the collection of Intervention resources.",
+                "description": "Retrieves the collection of Intervention resources.",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The collection page number",
+                        "required": false,
+                        "deprecated": false,
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "style": "form",
+                        "explode": false,
+                        "allowReserved": false
+                    },
+                    {
+                        "name": "isAdmin",
+                        "in": "query",
+                        "description": "",
+                        "required": false,
+                        "deprecated": false,
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "style": "form",
+                        "explode": false,
+                        "allowReserved": false
+                    },
+                    {
+                        "name": "isAdmin[]",
+                        "in": "query",
+                        "description": "",
+                        "required": false,
+                        "deprecated": false,
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "boolean"
+                            }
+                        },
+                        "style": "form",
+                        "explode": true,
+                        "allowReserved": false
+                    }
+                ],
+                "deprecated": false
+            },
+            "post": {
+                "operationId": "api_interventions_post",
+                "tags": [
+                    "Intervention"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Intervention resource created",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention.jsonld-intervention_read"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention-intervention_read"
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention-intervention_read"
+                                }
+                            }
+                        },
+                        "links": {}
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                },
+                "summary": "Creates a Intervention resource.",
+                "description": "Creates a Intervention resource.",
+                "parameters": [],
+                "requestBody": {
+                    "description": "The new Intervention resource",
+                    "content": {
+                        "application/ld+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Intervention.CreateInterventionRepairerDto.jsonld-intervention_write"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Intervention.CreateInterventionRepairerDto-intervention_write"
+                            }
+                        },
+                        "text/html": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Intervention.CreateInterventionRepairerDto-intervention_write"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "deprecated": false
+            },
+            "parameters": []
+        },
+        "/interventions/{id}": {
+            "get": {
+                "operationId": "api_interventions_id_get",
+                "tags": [
+                    "Intervention"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Intervention resource",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention.jsonld-intervention_read"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention-intervention_read"
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention-intervention_read"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "summary": "Retrieves a Intervention resource.",
+                "description": "Retrieves a Intervention resource.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Intervention identifier",
+                        "required": true,
+                        "deprecated": false,
+                        "allowEmptyValue": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "explode": false,
+                        "allowReserved": false
+                    }
+                ],
+                "deprecated": false
+            },
+            "put": {
+                "operationId": "api_interventions_id_put",
+                "tags": [
+                    "Intervention"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Intervention resource updated",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention.jsonld-intervention_read"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention-intervention_read"
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Intervention-intervention_read"
+                                }
+                            }
+                        },
+                        "links": {}
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "summary": "Replaces the Intervention resource.",
+                "description": "Replaces the Intervention resource.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Intervention identifier",
+                        "required": true,
+                        "deprecated": false,
+                        "allowEmptyValue": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "explode": false,
+                        "allowReserved": false
+                    }
+                ],
+                "requestBody": {
+                    "description": "The updated Intervention resource",
+                    "content": {
+                        "application/ld+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Intervention.jsonld-intervention_write"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Intervention-intervention_write"
+                            }
+                        },
+                        "text/html": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Intervention-intervention_write"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "operationId": "api_interventions_id_delete",
+                "tags": [
+                    "Intervention"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Intervention resource deleted"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                },
+                "summary": "Removes the Intervention resource.",
+                "description": "Removes the Intervention resource.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Intervention identifier",
+                        "required": true,
+                        "deprecated": false,
+                        "allowEmptyValue": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "explode": false,
+                        "allowReserved": false
+                    }
+                ],
                 "deprecated": false
             },
             "parameters": []
@@ -965,8 +1375,8 @@
                         "description": "Resource not found"
                     }
                 },
-                "summary": "Retrieves a User resource.",
-                "description": "Retrieves a User resource.",
+                "summary": "Retrieves the current User ressource",
+                "description": "Retrieves the current User ressource",
                 "parameters": [],
                 "deprecated": false
             },
@@ -1711,8 +2121,8 @@
                         }
                     }
                 },
-                "summary": "Retrieves the collection of Repairer resources.",
-                "description": "Retrieves the collection of Repairer resources.",
+                "summary": "Retrieves the collection of availabilities of a repairer",
+                "description": "Retrieves all the availabilities of a repairer",
                 "parameters": [
                     {
                         "name": "id",
@@ -1920,6 +2330,69 @@
                         "allowReserved": false
                     }
                 ],
+                "deprecated": false
+            },
+            "parameters": []
+        },
+        "/repairer_interventions": {
+            "post": {
+                "operationId": "api_repairer_interventions_post",
+                "tags": [
+                    "RepairerIntervention"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "RepairerIntervention resource created",
+                        "content": {
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepairerIntervention.jsonld"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepairerIntervention"
+                                }
+                            },
+                            "text/html": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepairerIntervention"
+                                }
+                            }
+                        },
+                        "links": {}
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                },
+                "summary": "Creates a RepairerIntervention resource.",
+                "description": "Creates a RepairerIntervention resource.",
+                "parameters": [],
+                "requestBody": {
+                    "description": "The new RepairerIntervention resource",
+                    "content": {
+                        "application/ld+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RepairerIntervention.jsonld-repairer_intervention_write"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RepairerIntervention-repairer_intervention_write"
+                            }
+                        },
+                        "text/html": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RepairerIntervention-repairer_intervention_write"
+                            }
+                        }
+                    },
+                    "required": true
+                },
                 "deprecated": false
             },
             "parameters": []
@@ -3585,6 +4058,131 @@
                     }
                 }
             },
+            "Intervention-intervention_read": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "properties": {
+                    "id": {
+                        "readOnly": true,
+                        "type": "integer"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "isAdmin": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "Intervention-intervention_write": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Intervention.CreateInterventionRepairerDto-intervention_write": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "required": [
+                    "description"
+                ],
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "minimum": 0,
+                        "type": "integer",
+                        "nullable": true
+                    }
+                }
+            },
+            "Intervention.CreateInterventionRepairerDto.jsonld-intervention_write": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "required": [
+                    "description"
+                ],
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "minimum": 0,
+                        "type": "integer",
+                        "nullable": true
+                    }
+                }
+            },
+            "Intervention.jsonld-intervention_read": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "properties": {
+                    "@context": {
+                        "readOnly": true,
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "@vocab": {
+                                        "type": "string"
+                                    },
+                                    "hydra": {
+                                        "type": "string",
+                                        "enum": [
+                                            "http://www.w3.org/ns/hydra/core#"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "@vocab",
+                                    "hydra"
+                                ],
+                                "additionalProperties": true
+                            }
+                        ]
+                    },
+                    "@id": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "@type": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "id": {
+                        "readOnly": true,
+                        "type": "integer"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "isAdmin": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "Intervention.jsonld-intervention_write": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
             "MediaObject-media_object.read": {
                 "type": "object",
                 "description": "",
@@ -3838,6 +4436,13 @@
                     "comment": {
                         "type": "string",
                         "nullable": true
+                    },
+                    "repairerInterventions": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "iri-reference"
+                        }
                     }
                 },
                 "required": [
@@ -4354,6 +4959,13 @@
                     "comment": {
                         "type": "string",
                         "nullable": true
+                    },
+                    "repairerInterventions": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "iri-reference"
+                        }
                     }
                 },
                 "required": [
@@ -4823,6 +5435,143 @@
                     "sinceDate": {
                         "type": "string",
                         "format": "date-time",
+                        "nullable": true
+                    }
+                }
+            },
+            "RepairerIntervention": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "properties": {
+                    "id": {
+                        "readOnly": true,
+                        "type": "integer"
+                    },
+                    "price": {
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "type": "integer"
+                    },
+                    "repairer": {
+                        "type": "string",
+                        "format": "iri-reference",
+                        "nullable": true
+                    },
+                    "intervention": {
+                        "type": "string",
+                        "format": "iri-reference",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "price",
+                    "intervention"
+                ]
+            },
+            "RepairerIntervention-repairer_intervention_write": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "required": [
+                    "price",
+                    "intervention"
+                ],
+                "properties": {
+                    "price": {
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "type": "integer"
+                    },
+                    "intervention": {
+                        "type": "string",
+                        "format": "iri-reference",
+                        "nullable": true
+                    }
+                }
+            },
+            "RepairerIntervention.jsonld": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "properties": {
+                    "@context": {
+                        "readOnly": true,
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "@vocab": {
+                                        "type": "string"
+                                    },
+                                    "hydra": {
+                                        "type": "string",
+                                        "enum": [
+                                            "http://www.w3.org/ns/hydra/core#"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "@vocab",
+                                    "hydra"
+                                ],
+                                "additionalProperties": true
+                            }
+                        ]
+                    },
+                    "@id": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "@type": {
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "id": {
+                        "readOnly": true,
+                        "type": "integer"
+                    },
+                    "price": {
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "type": "integer"
+                    },
+                    "repairer": {
+                        "type": "string",
+                        "format": "iri-reference",
+                        "nullable": true
+                    },
+                    "intervention": {
+                        "type": "string",
+                        "format": "iri-reference",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "price",
+                    "intervention"
+                ]
+            },
+            "RepairerIntervention.jsonld-repairer_intervention_write": {
+                "type": "object",
+                "description": "",
+                "deprecated": false,
+                "required": [
+                    "price",
+                    "intervention"
+                ],
+                "properties": {
+                    "price": {
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "type": "integer"
+                    },
+                    "intervention": {
+                        "type": "string",
+                        "format": "iri-reference",
                         "nullable": true
                     }
                 }
