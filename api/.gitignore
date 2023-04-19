@@ -1,4 +1,5 @@
 /docker/db/data
+.idea/
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -35,3 +36,4 @@ Makefile
 
 ###> openapi doc
 swagger.json
+
