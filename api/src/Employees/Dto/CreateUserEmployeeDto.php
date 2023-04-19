@@ -26,6 +26,10 @@ final class CreateUserEmployeeDto
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?string $lastName = null;
 
+    #[Assert\Type('boolean')]
+    #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
+    public ?bool $enabled = null;
+
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?Repairer $repairer = null;
 }
