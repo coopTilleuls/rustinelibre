@@ -47,8 +47,8 @@ class GetAvailableSlotsTest extends AbstractTestCase
 
         // Create a new appointment between 20/03 and 30/03
         $appointment = new Appointment();
-        $appointment->setRepairer($this->repairer);
-        $appointment->setSlotTime(new \DateTimeImmutable('2023-03-23T14:00:00'));
+        $appointment->repairer = $this->repairer;
+        $appointment->slotTime = new \DateTimeImmutable('2023-03-23T14:00:00');
         $doctrine->getManager()->persist($appointment);
         $doctrine->getManager()->flush();
 

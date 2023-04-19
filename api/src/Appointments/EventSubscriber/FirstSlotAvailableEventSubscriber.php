@@ -51,6 +51,6 @@ class FirstSlotAvailableEventSubscriber implements EventSubscriber
             return;
         }
 
-        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($entity->getRepairer());
+        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($entity->repairer);
     }
 }
