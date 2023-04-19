@@ -26,7 +26,7 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
     /**
      * @param CreateUserEmployeeDto $data
      */
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): RepairerEmployee
     {
         $user = new User();
         $user->firstName = $data->firstName;
