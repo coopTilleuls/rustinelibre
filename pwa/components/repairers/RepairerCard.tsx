@@ -22,7 +22,7 @@ export const RepairerCard = ({repairer, isSelect}: RepairerProps): JSX.Element =
                 <CardMedia
                     component="img"
                     sx={{ width: 151 }}
-                    // image={repairer.thumbnail ? apiImageUrl(repairer.thumbnail.contentUrl) : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'}
+                    image={repairer.thumbnail ? apiImageUrl(repairer.thumbnail.contentUrl) : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'}
                     alt="Photo du réparateur"
                 />
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
