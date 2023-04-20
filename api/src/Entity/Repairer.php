@@ -472,7 +472,7 @@ class Repairer
     {
         if (!$this->repairerEmployees->contains($repairerEmployee)) {
             $this->repairerEmployees->add($repairerEmployee);
-            $repairerEmployee->setRepairer($this);
+            $repairerEmployee->repairer = $this;
         }
 
         return $this;
@@ -482,8 +482,8 @@ class Repairer
     {
         if ($this->repairerEmployees->removeElement($repairerEmployee)) {
             // set the owning side to null (unless already changed)
-            if ($repairerEmployee->getRepairer() === $this) {
-                $repairerEmployee->setRepairer(null);
+            if ($repairerEmployee->repairer === $this) {
+                $repairerEmployee->repairer = null;
             }
         }
 

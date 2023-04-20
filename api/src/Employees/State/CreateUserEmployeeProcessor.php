@@ -44,18 +44,18 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
 
         // Create a new employee
         $repairerEmployee = new RepairerEmployee();
-        $repairerEmployee->setEmployee($user);
+        $repairerEmployee->employee = $user;
 
         // If the current user is not an admin, inject automatically its repairer shop
         if ($currentUser->isAdmin() && !$currentUser->repairer) {
-            $repairerEmployee->setRepairer($data->repairer);
+            $repairerEmployee->repairer = $data->repairer;
         } else {
             $currentRepairer = $currentUser->repairer;
             if (!$currentRepairer) {
                 throw new BadRequestHttpException('You cannot add en employee if you dont have any repairer shop');
             }
 
-            $repairerEmployee->setRepairer($currentRepairer);
+            $repairerEmployee->repairer = $currentRepairer;
         }
 
         // Validate the new entity

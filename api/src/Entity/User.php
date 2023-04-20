@@ -129,18 +129,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = null;
     }
 
-    public function setRepairerEmployee(RepairerEmployee $repairerEmployee): self
-    {
-        // set the owning side of the relation if necessary
-        if ($repairerEmployee->employee !== $this) {
-            $repairerEmployee->setEmployee($this);
-        }
-
-        $this->repairerEmployee = $repairerEmployee;
-
-        return $this;
-    }
-
     public function isAdmin(): bool
     {
         if (in_array('ROLE_ADMIN', $this->roles)) {
