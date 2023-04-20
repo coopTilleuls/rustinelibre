@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Link from "next/link";
+import {apiImageUrl} from "@helpers/apiImagesHelper";
 
 interface RepairerProps {
     repairer: Repairer;
@@ -21,7 +22,7 @@ export const RepairerCard = ({repairer, isSelect}: RepairerProps): JSX.Element =
                 <CardMedia
                     component="img"
                     sx={{ width: 151 }}
-                    image="https://les-tilleuls.coop/_next/image?url=https%3A%2F%2Fapi.les-tilleuls.coop%2Fwp-content%2Fuploads%2F2021%2F08%2Fhome-tilleuls-scop-1024x783.jpeg&w=3840&q=75"
+                    image={repairer.thumbnail ? apiImageUrl(repairer.thumbnail.contentUrl) : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'}
                     alt="Photo du réparateur"
                 />
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>

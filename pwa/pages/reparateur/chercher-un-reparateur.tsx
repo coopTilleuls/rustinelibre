@@ -49,6 +49,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         repairers, setRepairers, currentPage, setCurrentPage, repairerTypeSelected, orderBy,
         setOrderBy, sortChosen, setSortChosen, totalItems, setTotalItems} = useContext(SearchRepairerContext);
 
+
     const fetchRepairers = useCallback(async (): Promise<void> => {
 
         if (!selectedBike || !cityInput) {
@@ -85,9 +86,9 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         if (isMobile && city && selectedBike) {
             fetchRepairers();
         }
-    }, [city, fetchRepairers, isMobile, selectedBike]);
+    }, [city, isMobile, selectedBike]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {fetchRepairers();scrollToTop()},[currentPage, fetchRepairers]);
+    useEffect((): void => {fetchRepairers();scrollToTop()},[currentPage]);// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (sortChosen === 'repairersType') {
@@ -97,6 +98,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             })
         }
     }, [repairerTypeSelected, setOrderBy, sortChosen]);
+
 
     useEffect(() => {
         if (cityInput === '') return;
@@ -110,7 +112,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         }, 350);
 
         setTimeoutId(newTimeoutId);
-    }, [cityInput, timeoutId, useNominatim]);
+    }, [cityInput, useNominatim]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleCityChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
         setCityInput(event.target.value);

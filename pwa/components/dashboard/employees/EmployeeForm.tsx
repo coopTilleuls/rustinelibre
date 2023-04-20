@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {CircularProgress, FormControlLabel, Switch} from "@mui/material";
+import {Alert, CircularProgress, FormControlLabel, Switch} from "@mui/material";
 import Container from "@mui/material/Container";
 import {useRouter} from 'next/router';
 import {repairerEmployeesResource} from "@resources/repairerEmployeesResource";
@@ -23,6 +23,7 @@ export const EmployeeForm = ({repairerEmployee, edit}: EmployeeEditFormProps): J
 
     const [enabled, setEnabled] = useState<boolean>(repairerEmployee ? repairerEmployee.enabled : true);
     const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
+    const [updateSuccess, setUpdateSuccess] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const router = useRouter();
 
@@ -74,6 +75,7 @@ export const EmployeeForm = ({repairerEmployee, edit}: EmployeeEditFormProps): J
         }
 
         if (newRepairerEmployee) {
+            setUpdateSuccess(true);
             await router.push('/dashboard/employes');
         }
 
@@ -197,6 +199,8 @@ export const EmployeeForm = ({repairerEmployee, edit}: EmployeeEditFormProps): J
                             {errorMessage}
                         </Typography>
                     )}
+
+                    {updateSuccess && <Alert severity="success">Employé mis à jour</Alert>}
                 </Box>
             </Box>
         </Container>
