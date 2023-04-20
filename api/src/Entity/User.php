@@ -44,6 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private const EMAIL_MAX_LENGTH = 180;
     public const USER_READ = 'user_read';
     public const USER_WRITE = 'user_write';
+    public const PASSWORD_REGEX = '/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*#?.+=;\\\:\\/,_"&])[A-Za-z\d@$!%*#?.+=;,\\\:\\/_"&]{12,}$/i';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -71,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     public ?string $password = null;
 
-    #[Assert\Regex("/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&\\/])[A-Za-z\d@$!%*?&\\/]{12,}$/i")]
+    #[Assert\Regex(self::PASSWORD_REGEX)]
     #[Groups([self::USER_READ, self::USER_WRITE])]
     public ?string $plainPassword = null;
 

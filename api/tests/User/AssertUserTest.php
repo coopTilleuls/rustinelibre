@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\User;
 
+use App\Entity\User;
 use App\Tests\AbstractTestCase;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -212,5 +213,61 @@ class AssertUserTest extends AbstractTestCase
             'hydra:title' => 'An error occurred',
             'hydra:description' => 'lastName: This value is too long. It should have 50 characters or less.',
         ]);
+    }
+
+    public function testPasswordRegex(): void
+    {
+        $pattern = User::PASSWORD_REGEX;
+
+        //Password should contain at least 12 characters, 1 uppercase, 1 lowercase, 1 special character and 1 number
+        $result= preg_match($pattern, "badpassword");
+        self::assertSame(0, $result);
+        $result= preg_match($pattern, "shortpass1,");
+        self::assertSame(0, $result);
+        $result= preg_match($pattern, "Badpassword");
+        self::assertSame(0, $result);
+        $result= preg_match($pattern, "Badpassword1WithoutSpecial");
+        self::assertSame(0, $result);
+        $result= preg_match($pattern, "BadPasswordWithoutNumber.");
+        self::assertSame(0, $result);
+        $result= preg_match($pattern, "Goodpassword2,");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2;");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "goodPassword2!");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2@");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2/");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2\\");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2#");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2?");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2=");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2$");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2%");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2*");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2+");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2:");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2_");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2&");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2\"");
+        self::assertSame(1, $result);
+        $result= preg_match($pattern, "Goodpassword2.");
+        self::assertSame(1, $result);
+        //Test with multiple characters
+        $result= preg_match($pattern, "Multiple/;.Password223");
+        self::assertSame(1, $result);
     }
 }
