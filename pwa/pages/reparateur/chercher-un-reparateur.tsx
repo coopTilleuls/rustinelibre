@@ -49,7 +49,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         repairers, setRepairers, currentPage, setCurrentPage, repairerTypeSelected, orderBy,
         setOrderBy, sortChosen, setSortChosen, totalItems, setTotalItems} = useContext(SearchRepairerContext);
 
-
     const fetchRepairers = useCallback(async (): Promise<void> => {
 
         if (!selectedBike || !cityInput) {
@@ -81,6 +80,10 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setPendingSearchCity(false);
         setAlreadyFetchApi(true);
     }, [city, cityInput, currentPage, orderBy, selectedBike, setRepairers, setTotalItems]);
+
+    useEffect((): void => {
+            console.log(selectedBike)
+        },[])
 
     useEffect(() => {
         if (isMobile && city && selectedBike) {
@@ -143,7 +146,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     }
 
     const handleBikeChange = (event: SelectChangeEvent): void => {
-        const selectedBikeType = bikeTypes.find((bt) => bt.id === Number(event.target.value));
+        const selectedBikeType = bikeTypes.find((bt) => bt.name === event.target.value);
         setSelectedBike(selectedBikeType ? selectedBikeType : null);
     };
 
@@ -180,32 +183,36 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                             >
                                 <MenuItem disabled value="">Choisissez un type de vélo</MenuItem>
                                 {bikeTypes.map((bike) => (
-                                    <MenuItem key={bike.id} value={bike.id}>{bike.name}</MenuItem>
+                                    <MenuItem key={bike.id} value={bike.name}>{bike.name}</MenuItem>
                                 ))}
                             </Select>
                         </div>
-                        <div style={{marginBottom: "14px"}} ref={listContainerRef}>
-                            <InputLabel htmlFor="city">Ville</InputLabel>
-                            <Autocomplete
-                                freeSolo
-                                value={cityInput}
-                                options={citiesList.map((optionCity) => optionCity.name)}
-                                onChange={(event, values) => handleCitySelect(event, values)}
-                                renderInput={(params) =>
-                                    <TextField
-                                        {...params}
-                                        value={cityInput}
-                                        onChange={(e) => handleCityChange(e)}
-                                    />
-                                }
-                            />
-                        </div>
+                        {selectedBike &&
+                            <div style={{marginBottom: "14px"}} ref={listContainerRef}>
+                                <InputLabel htmlFor="city">Ville</InputLabel>
+                                <Autocomplete
+                                    freeSolo
+                                    value={cityInput}
+                                    options={citiesList.map((optionCity) => optionCity.name)}
+                                    onChange={(event, values) => handleCitySelect(event, values)}
+                                    renderInput={(params) =>
+                                        <TextField
+                                            {...params}
+                                            value={cityInput}
+                                            onChange={(e) => handleCityChange(e)}
+                                        />
+                                    }
+                                />
+                            </div>
+                        }
 
-                        <RepairerSortOptions handleChangeSort={handleChangeSort} isMobile={isMobile} />
+                        {city && <RepairerSortOptions handleChangeSort={handleChangeSort} isMobile={isMobile} />}
 
-                        <div className="hidden md:block">
-                            <Button fullWidth type="submit" variant="outlined">Chercher</Button>
-                        </div>
+                        {
+                            selectedBike && city && <div className="hidden md:block">
+                                <Button fullWidth type="submit" variant="outlined">Chercher</Button>
+                            </div>
+                        }
                     </form>
 
                     <div style={{margin: "12px 0"}}>
