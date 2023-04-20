@@ -71,6 +71,7 @@ jobs:
             --set=ingress.tls[0].hosts[0]=${URL} \
             --set=postgresql.global.auth.password=changeme \
             --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
+            --set=php.corsAllowOrigin="https?://.*?\.bikelib.preprod-tilleuls.ovh$" \
             --values ./helm/chart/values-prod.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
           echo "URL=$URL" >> $GITHUB_OUTPUT
