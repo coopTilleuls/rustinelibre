@@ -40,7 +40,7 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
             return;
         }
 
-        $userEmployee = $entity->getEmployee();
+        $userEmployee = $entity->employee;
         $email = (new Email())
             ->from($this->mailerSender)
             ->to($userEmployee->email)
@@ -48,7 +48,7 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
             ->html($this->twig->render('mail/employee_send_password.html.twig', [
                 'webAppUrl' => $this->webAppUrl,
                 'employee' => $userEmployee,
-                'repairer' => $entity->getRepairer(),
+                'repairer' => $entity->repairer,
             ]));
 
         try {

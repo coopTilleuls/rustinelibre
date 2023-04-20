@@ -47,7 +47,7 @@ class RepairerEmployee
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups([self::EMPLOYEE_READ])]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'repairerEmployees')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -57,71 +57,18 @@ class RepairerEmployee
     #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
-    private ?User $employee = null;
+    public ?User $employee = null;
 
     #[ORM\Column]
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
-    private ?bool $enabled = true;
+    public ?bool $enabled = true;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
-    private ?\DateTimeInterface $sinceDate;
+    public ?\DateTimeInterface $sinceDate;
 
     public function __construct()
     {
         $this->sinceDate = new \DateTimeImmutable();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getRepairer(): ?Repairer
-    {
-        return $this->repairer;
-    }
-
-    public function setRepairer(?Repairer $repairer): self
-    {
-        $this->repairer = $repairer;
-
-        return $this;
-    }
-
-    public function getEmployee(): ?User
-    {
-        return $this->employee;
-    }
-
-    public function setEmployee(User $employee): self
-    {
-        $this->employee = $employee;
-
-        return $this;
-    }
-
-    public function isEnabled(): ?bool
-    {
-        return $this->enabled;
-    }
-
-    public function setEnabled(bool $enabled): self
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    public function getSinceDate(): ?\DateTimeInterface
-    {
-        return $this->sinceDate;
-    }
-
-    public function setSinceDate(?\DateTimeInterface $sinceDate): self
-    {
-        $this->sinceDate = $sinceDate;
-
-        return $this;
     }
 }

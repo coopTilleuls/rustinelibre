@@ -30,7 +30,7 @@ class RetrieveEmployeesTest extends AbstractTestCase
 
     public function testGetRepairerEmployeeAsUser(): void
     {
-        $this->createClientAuthAsUser()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
+        $this->createClientAuthAsUser()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->id);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -44,21 +44,21 @@ class RetrieveEmployeesTest extends AbstractTestCase
 
     public function testGetRepairerEmployeeAsAdmin(): void
     {
-        $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
+        $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->id);
         $this->assertResponseIsSuccessful();
     }
 
     public function testGetRepairerEmployeeAsBadBoss(): void
     {
         // Boss of repairer 1 try to get an employee of repairer 2
-        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/'.$this->repairerEmployees[2]->getId());
+        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/'.$this->repairerEmployees[2]->id);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testGetRepairerEmployeeAsGoodBoss(): void
     {
         // Boss of repairer 1 try to get an employee of repairer 1
-        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
+        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->id);
         $this->assertResponseIsSuccessful();
     }
 

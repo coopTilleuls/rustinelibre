@@ -96,20 +96,20 @@ class CreateEmployeeTest extends AbstractTestCase
 
     public function testRemoveEmployeeNotAuth(): void
     {
-        $this->createClient()->request('DELETE', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
+        $this->createClient()->request('DELETE', '/repairer_employees/'.$this->repairerEmployees[0]->id);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testRemoveEmployeeAsUser(): void
     {
-        $this->createClientAuthAsUser()->request('DELETE', '/repairer_employees/'.$this->repairerEmployees[0]->getId());
+        $this->createClientAuthAsUser()->request('DELETE', '/repairer_employees/'.$this->repairerEmployees[0]->id);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testRemoveEmployeeAsBadBoss(): void
     {
         $repairerEmployee5 = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[3];
-        $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee5->getId());
+        $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee5->id);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -119,14 +119,14 @@ class CreateEmployeeTest extends AbstractTestCase
         $boss = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'boss@test.com']);
         $repairer = $boss->repairer;
         $repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $repairer]);
-        $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee->getId());
+        $this->createClientAuthAsBoss()->request('DELETE', '/repairer_employees/'.$repairerEmployee->id);
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testRemoveEmployeeAsAdmin(): void
     {
         $repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll()[0];
-        $this->createClientAuthAsAdmin()->request('DELETE', '/repairer_employees/'.$repairerEmployee->getId());
+        $this->createClientAuthAsAdmin()->request('DELETE', '/repairer_employees/'.$repairerEmployee->id);
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 }
