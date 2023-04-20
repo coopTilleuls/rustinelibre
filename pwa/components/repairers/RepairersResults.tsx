@@ -52,7 +52,7 @@ export const RepairersResults = (): JSX.Element => {
                                     position={[Number(repairer.latitude), Number(repairer.longitude)]}
                                     eventHandlers={{
                                         mouseover: (event) => event.target.openPopup(),
-                                        click: (event) => {handleClipMapPin(event, repairer)}
+                                        // click: (event) => {handleClipMapPin(event, repairer)}
                                     }}
                                 >
                                     <Popup>{repairer.name}</Popup>

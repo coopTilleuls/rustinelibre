@@ -7,7 +7,7 @@ import {Repairer} from "@interfaces/Repairer";
 import {RepairerFormContext} from "@contexts/RepairerFormContext";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {CircularProgress} from "@mui/material";
+import {Alert, CircularProgress} from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import {repairerResource} from "@resources/repairerResource";
@@ -25,6 +25,7 @@ const RepairerInformations: NextPageWithLayout = () => {
 
     const [repairer, setRepairer] = useState<Repairer|null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [success, setSuccess] = useState<boolean>(false);
     const [tabValue, setTabValue] = React.useState<number>(0);
     const user = useAccount({});
 
@@ -113,7 +114,10 @@ const RepairerInformations: NextPageWithLayout = () => {
 
             await repairerResource.put(repairer['@id'], bodyRequest)
         } catch (e) {
-            setErrorMessage('Inscription impossible');
+            setErrorMessage('Mise à jour impossible');
+        } finally {
+            setSuccess(true);
+            setTimeout(() => {setSuccess(false);}, 2000);
         }
 
         setPendingRegistration(false);
@@ -179,6 +183,8 @@ const RepairerInformations: NextPageWithLayout = () => {
                                     )}
                                 </div>
                             }
+
+                            {success && <Alert severity="success">Informations mises à jour</Alert>}
                         </Box>
                     </form>
                 </Container>
