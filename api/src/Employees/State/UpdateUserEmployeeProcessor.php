@@ -38,11 +38,11 @@ final class UpdateUserEmployeeProcessor implements ProcessorInterface
             throw new NotFoundHttpException('this repairer employee does not exist');
         }
 
-        $repairerEmployee->setEnabled(boolval($data->enabled));
+        $repairerEmployee->enabled = boolval($data->enabled);
         $this->validator->validate($repairerEmployee);
 
         /** @var User $user */
-        $user = $repairerEmployee->getEmployee();
+        $user = $repairerEmployee->employee;
 
         foreach (['firstName', 'lastName', 'email', 'plainPassword'] as $property) {
             if (!empty($data->$property)) {
