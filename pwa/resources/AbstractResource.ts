@@ -30,11 +30,10 @@ export abstract class AbstractResource<T> {
       });
     };
 
-    return await this.getResult(doFetch);
+    return await this.getResult(doFetch, withAuth);
   }
 
   async getById(id: string, withAuth: boolean = true, headers?: RequestHeaders): Promise<T> {
-
     const doFetch = async () => {
       return await fetch(this.getUrl()+'/'+id, {
         headers: {
@@ -44,7 +43,7 @@ export abstract class AbstractResource<T> {
       });
     };
 
-    return await this.getResult(doFetch);
+    return await this.getResult(doFetch, withAuth);
   }
 
   async getAll(
@@ -61,7 +60,7 @@ export abstract class AbstractResource<T> {
       });
     };
 
-    return await this.getResult(doFetch);
+    return await this.getResult(doFetch, withAuth);
   }
 
   async post(body: RequestBody = {}, headers?: RequestHeaders): Promise<T> {
@@ -141,50 +140,53 @@ export abstract class AbstractResource<T> {
       'Content-Type': 'application/ld+json',
     };
 
-    // if (withAuth) {
-    //   const currentToken = getToken();
-    //   if (!!currentToken) {
-    //     defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
-    //   }
-    // }
+    if (withAuth) {
+      const currentToken = getToken();
+      if (!!currentToken) {
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
+      }
+    }
 
     return defaultHeaders;
   }
 
-  protected async handleResponse(response: Response) {
+  protected async handleResponse(response: Response, withAuth: boolean = true) {
     if (response.status === 204) {
       return '';
     }
 
-    const refreshToken = await getRefreshToken();
+    if (withAuth) {
+      const refreshToken = await getRefreshToken();
 
-    // in case of bad authentication we try to refresh the token if refresh_token exists
-    if (response.status === 401 && !!refreshToken) {
-      // ask API for new tokens
-      const refreshResponse = await fetch(this.getUrl('/auth/refresh'), {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          refresh_token: getRefreshToken(),
-        }),
-      });
+      // in case of bad authentication we try to refresh the token if refresh_token exists
+      if (response.status === 401 && !!refreshToken) {
+        // ask API for new tokens
+        const refreshResponse = await fetch(this.getUrl('/auth/refresh'), {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            refresh_token: getRefreshToken(),
+          }),
+        });
 
-      if (refreshResponse.ok) {
-        // we store new tokens
-        const {token, refresh_token} = await refreshResponse.json();
-        setToken(token);
-        setRefreshToken(refresh_token);
-      } else {
-        // this is bad user needs to authentication
-        removeToken();
-        removeRefreshToken();
+        if (refreshResponse.ok) {
+          // we store new tokens
+          const {token, refresh_token} = await refreshResponse.json();
+          setToken(token);
+          setRefreshToken(refresh_token);
+        } else {
+          // this is bad user needs to authentication
+          removeToken();
+          removeRefreshToken();
+        }
+        throw 'unauthorized';
       }
-      throw 'unauthorized';
     }
 
     const result = await response.json();
+
     // handle response's error
     if (!response.ok) {
       throw new Error((result as ResponseError)['hydra:description']);
@@ -208,13 +210,13 @@ export abstract class AbstractResource<T> {
     return url.toString();
   }
 
-  protected async getResult(fetchFunction: () => Promise<Response>) {
+  protected async getResult(fetchFunction: () => Promise<Response>, withAuth = true) {
     let result;
 
     try {
       // first try
       const response = await fetchFunction();
-      result = await this.handleResponse(response);
+      result = await this.handleResponse(response, withAuth);
     } catch (e) {
       if (e !== 'unauthorized') {
         throw e;
@@ -222,7 +224,7 @@ export abstract class AbstractResource<T> {
       // something goes wrong about the first query, but token has been refresh, let's try again
       try {
         const response = await fetchFunction();
-        result = await this.handleResponse(response);
+        result = await this.handleResponse(response, withAuth);
       } catch (e) {
         if (e === 'unauthorized') {
           // even after token refresh, the query fail, user should be logout by force

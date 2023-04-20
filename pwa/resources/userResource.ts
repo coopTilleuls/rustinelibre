@@ -7,7 +7,8 @@ class UserResource extends AbstractResource<User> {
 
   async getCurrent(): Promise<User> {
     return await this.get(
-        '/me'
+        '/me',
+        true
     );
   }
 

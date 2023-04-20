@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import {getToken} from "@helpers/sessionHelper";
 import {MediaObject} from "@interfaces/MediaObject";
 import {repairerResource} from "@resources/repairerResource";
-import Image from "next/image";
+import {ENTRYPOINT} from "../../../config/entrypoint";
 
 interface DashboardInfosPhotosProps {
     repairer: Repairer|null;
@@ -54,7 +54,7 @@ export const DashboardInfosPhotos = ({repairer}: DashboardInfosPhotosProps): JSX
         const formData = new FormData();
         formData.append("file", file);
 
-        const response = await fetch(process.env.NEXT_PUBLIC_ENTRYPOINT+"/media_objects", {
+        const response = await fetch(ENTRYPOINT+"/media_objects", {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${getToken()}`,
