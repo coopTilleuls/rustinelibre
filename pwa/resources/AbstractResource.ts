@@ -14,6 +14,7 @@ import {
   setRefreshToken,
   setToken,
 } from '@helpers/sessionHelper';
+import {ENTRYPOINT} from "../config/entrypoint";
 
 export abstract class AbstractResource<T> {
   protected abstract endpoint: string;
@@ -190,7 +191,7 @@ export abstract class AbstractResource<T> {
 
   public getUrl(id?: string, params?: RequestParams): string {
     const url = new URL(
-      process.env.NEXT_PUBLIC_ENTRYPOINT +
+        ENTRYPOINT +
         (undefined !== id ? id : this.endpoint)
     );
 
