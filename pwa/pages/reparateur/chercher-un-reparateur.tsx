@@ -81,10 +81,6 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
         setAlreadyFetchApi(true);
     }, [city, cityInput, currentPage, orderBy, selectedBike, setRepairers, setTotalItems]);
 
-    useEffect((): void => {
-            console.log(selectedBike)
-        },[])
-
     useEffect(() => {
         if (isMobile && city && selectedBike) {
             fetchRepairers();
