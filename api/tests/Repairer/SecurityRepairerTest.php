@@ -57,7 +57,7 @@ class SecurityRepairerTest extends AbstractTestCase
     public function testDeleteRepairer(): void
     {
         $client = self::createClientAuthAsAdmin();
-        $client->request('DELETE', 'repairers/'.$this->repairers[23]->getId());
+        $client->request('DELETE', 'repairers/'.$this->repairers[23]->id);
         $this->assertResponseIsSuccessful();
     }
 
@@ -87,15 +87,15 @@ class SecurityRepairerTest extends AbstractTestCase
     {
         $client = self::createClientAuthAsUser();
         // classic user given
-        $response = $client->request('GET', '/repairers/'.$this->repairers[5]->getId());
+        $response = $client->request('GET', '/repairers/'.$this->repairers[5]->id);
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
         $this->assertIsArray($response);
-        $this->assertSame($response['name'], $this->repairers[5]->getName());
+        $this->assertSame($response['name'], $this->repairers[5]->name);
         $this->assertIsString($response['owner']);
-        $this->assertSame($response['repairerType']['@id'], '/repairer_types/'.$this->repairers[5]->getRepairerType()->id);
-        $this->assertSame($response['openingHours'], $this->repairers[5]->getOpeningHours());
-        $this->assertSame($response['optionalPage'], $this->repairers[5]->getOptionalPage());
+        $this->assertSame($response['repairerType']['@id'], '/repairer_types/'.$this->repairers[5]->repairerType->id);
+        $this->assertSame($response['openingHours'], $this->repairers[5]->openingHours);
+        $this->assertSame($response['optionalPage'], $this->repairers[5]->optionalPage);
         $this->assertArrayNotHasKey('enabled', $response);
     }
 
@@ -103,11 +103,11 @@ class SecurityRepairerTest extends AbstractTestCase
     {
         $client = self::createClientAuthAsAdmin();
         // admin user given
-        $response = $client->request('GET', '/repairers/'.$this->repairers[4]->getId());
+        $response = $client->request('GET', '/repairers/'.$this->repairers[4]->id);
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
         $this->assertIsArray($response);
-        $this->assertSame($response['name'], $this->repairers[4]->getName());
+        $this->assertSame($response['name'], $this->repairers[4]->name);
         $this->assertArrayHasKey('enabled', $response);
     }
 
@@ -213,7 +213,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $client = self::createClientAuthAsAdmin();
 
         // Valid admin role given
-        $response = $client->request('PUT', '/repairers/'.$this->repairers[20]->getId(), [
+        $response = $client->request('PUT', '/repairers/'.$this->repairers[20]->id, [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'enabled' => false,
@@ -230,14 +230,14 @@ class SecurityRepairerTest extends AbstractTestCase
         // Get a random repairer
         $repairer = $this->repairers[20];
         // Disabled it
-        $repairer->setEnabled(false);
+        $repairer->enabled = false;
         // Save it
         static::getContainer()->get(RepairerRepository::class)->save($repairer, true);
 
         // Owner try to enable it
         $client = self::createClientWithUser($repairer->owner);
         // Valid user role given
-        $client->request('PUT', '/repairers/'.$repairer->getId(), [
+        $client->request('PUT', '/repairers/'.$repairer->id, [
              'headers' => ['Content-Type' => 'application/json'],
              'json' => [
                  'description' => 'test put enabled failed',
@@ -248,7 +248,7 @@ class SecurityRepairerTest extends AbstractTestCase
 
         // Get the user 21 by admin to access to the enabled property
         $admin = self::createClientAuthAsAdmin();
-        $response2 = $admin->request('GET', '/repairers/'.$repairer->getId());
+        $response2 = $admin->request('GET', '/repairers/'.$repairer->id);
         $response2 = $response2->toArray();
         $this->assertSame($response2['description'], 'test put enabled failed');
         $this->assertSame($response2['enabled'], false);

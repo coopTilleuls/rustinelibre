@@ -31,11 +31,11 @@ final class AvailableSlotComputer
         $startDate = $startDate->setTime((int) $startDate->format('G') + 1, 0);
         $endDate = $endDate->setTime((int) $endDate->format('G'), 0);
 
-        $rule = new Rule($repairer->getRrule());
+        $rule = new Rule($repairer->rrule);
         $rule->setStartDate($startDate);
         $rule->setEndDate($endDate);
 
-        $fullSlots = $repairer->getId() ? $this->appointmentRepository->findFullSlots($repairer, $startDate, $endDate) : [];
+        $fullSlots = $repairer->id ? $this->appointmentRepository->findFullSlots($repairer, $startDate, $endDate) : [];
         $recurrences = (new ArrayTransformer(new ArrayTransformerConfig()))->transform(
             $rule,
             new BetweenConstraint($startDate, $endDate)

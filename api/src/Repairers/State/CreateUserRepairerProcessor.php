@@ -36,13 +36,13 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
 
         // Create a new employee
         $repairer = new Repairer();
-        $repairer->owner =$user;
+        $repairer->owner = $user;
         $repairer->name = $data->name;
         $repairer->city = $data->city;
-        $repairer->setComment($data->comment);
+        $repairer->comment = $data->comment;
         $repairer->postcode = $data->postcode;
         $repairer->street = $data->street;
-        $repairer->setRepairerType($data->repairerType);
+        $repairer->repairerType = $data->repairerType;
         foreach ($data->bikeTypesSupported as $bikeType) {
             $repairer->addBikeTypesSupported($bikeType);
         }

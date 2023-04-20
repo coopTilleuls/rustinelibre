@@ -219,61 +219,6 @@ class Repairer
         $this->repairerEmployees = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getRrule(): ?string
-    {
-        return $this->rrule;
-    }
-
-    public function setRrule(string $rrule): self
-    {
-        $this->rrule = $rrule;
-
-        return $this;
-    }
-
-    public function getLatitude(): ?string
-    {
-        return $this->latitude;
-    }
-
-    public function setLatitude(?string $latitude): void
-    {
-        $this->latitude = $latitude;
-    }
-
-    public function getLongitude(): ?string
-    {
-        return $this->longitude;
-    }
-
-    public function setLongitude(?string $longitude): void
-    {
-        $this->longitude = $longitude;
-    }
-
-    public function getFirstSlotAvailable(): ?\DateTimeInterface
-    {
-        return $this->firstSlotAvailable;
-    }
-
-    public function setFirstSlotAvailable(?\DateTimeInterface $firstSlotAvailable): void
-    {
-        $this->firstSlotAvailable = $firstSlotAvailable;
-    }
-
-    /**
-     * @return Collection<int, BikeType>
-     */
-    public function getBikeTypesSupported(): Collection
-    {
-        return $this->bikeTypesSupported;
-    }
-
     public function addBikeTypesSupported(BikeType $bikeTypesSupported): self
     {
         if (!$this->bikeTypesSupported->contains($bikeTypesSupported)) {
@@ -288,90 +233,6 @@ class Repairer
         $this->bikeTypesSupported->removeElement($bikeTypesSupported);
 
         return $this;
-    }
-
-    public function getGpsPoint(): ?string
-    {
-        return $this->gpsPoint;
-    }
-
-    public function setGpsPoint(?string $gpsPoint): void
-    {
-        $this->gpsPoint = $gpsPoint;
-    }
-
-    public function getRepairerType(): ?RepairerType
-    {
-        return $this->repairerType;
-    }
-
-    public function setRepairerType(?RepairerType $repairerType): void
-    {
-        $this->repairerType = $repairerType;
-    }
-
-    public function getOpeningHours(): ?string
-    {
-        return $this->openingHours;
-    }
-
-    public function setOpeningHours(?string $openingHours): self
-    {
-        $this->openingHours = $openingHours;
-
-        return $this;
-    }
-
-    public function getOptionalPage(): ?string
-    {
-        return $this->optionalPage;
-    }
-
-    public function setOptionalPage(?string $optionalPage): self
-    {
-        $this->optionalPage = $optionalPage;
-
-        return $this;
-    }
-
-    public function isEnabled(): ?bool
-    {
-        return $this->enabled;
-    }
-
-    public function setEnabled(bool $enabled): self
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?MediaObject
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(?MediaObject $thumbnail): void
-    {
-        $this->thumbnail = $thumbnail;
-    }
-
-    public function getDescriptionPicture(): ?MediaObject
-    {
-        return $this->descriptionPicture;
-    }
-
-    public function setDescriptionPicture(?MediaObject $descriptionPicture): void
-    {
-        $this->descriptionPicture = $descriptionPicture;
-    }
-
-    /**
-     * @return Collection<int, RepairerEmployee>
-     */
-    public function getRepairerEmployees(): Collection
-    {
-        return $this->repairerEmployees;
     }
 
     public function addRepairerEmployee(RepairerEmployee $repairerEmployee): self
@@ -394,23 +255,6 @@ class Repairer
         }
 
         return $this;
-    }
-
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?string $comment): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    public function getRepairerInterventions(): Collection
-    {
-        return $this->repairerInterventions;
     }
 
     public function addRepairerIntervention(RepairerIntervention $repairerIntervention): self
