@@ -103,10 +103,13 @@ const RepairerPage: NextPageWithLayout = (repairer) => {
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
 
-
     const id = params?.id;
-    const repairer: Repairer = await repairerResource.getById(id, false);
 
+    console.log(id);
+    //
+    const repairer: Repairer = await repairerResource.getById(id, false);
+    //
+    console.log(repairer);
 
     return {
         props: {
@@ -119,19 +122,9 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 
 export async function getStaticPaths() {
     // const repairers = await repairerResource.getAll(false);
-
-    // console.log(repairers);
-
     // const paths = repairers['hydra:member'].map((repairer) => ({
     //     params: { id: repairer.id },
     // }))
-
-    if (!ENTRYPOINT) {
-        return {
-            paths: [],
-            fallback: true,
-        };
-    }
 
     return {
         paths: [
