@@ -235,7 +235,7 @@ class SecurityRepairerTest extends AbstractTestCase
         static::getContainer()->get(RepairerRepository::class)->save($repairer, true);
 
         // Owner try to enable it
-        $client = self::createClientWithUser($repairer->getOwner());
+        $client = self::createClientWithUser($repairer->owner);
         // Valid user role given
         $client->request('PUT', '/repairers/'.$repairer->getId(), [
              'headers' => ['Content-Type' => 'application/json'],
