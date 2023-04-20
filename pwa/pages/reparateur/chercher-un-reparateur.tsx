@@ -83,13 +83,19 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     }, [city, cityInput, currentPage, orderBy, selectedBike, setRepairers, setTotalItems]);
 
     useEffect(() => {
-
         if (isMobile && city && selectedBike) {
             fetchRepairers();
         }
     }, [city, fetchRepairers, isMobile, selectedBike]);
 
-    useEffect(() => {fetchRepairers();scrollToTop()},[currentPage]);
+    const fetchRepairersWithPage = useCallback(async (): Promise<void> => {
+        await fetchRepairers();
+    }, [currentPage]);
+
+    useEffect((): void => {
+        fetchRepairersWithPage();
+        scrollToTop();
+    }, [fetchRepairersWithPage]);
 
     useEffect(() => {
         if (sortChosen === 'repairersType') {
