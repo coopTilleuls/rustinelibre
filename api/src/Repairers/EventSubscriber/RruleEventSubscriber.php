@@ -49,7 +49,7 @@ class RruleEventSubscriber implements EventSubscriber
 
         // Dont set next available slot if rrule does not change, or if at creation a first slot was already set
         if (('update' === $action && !array_key_exists('rrule', $changeSet)) ||
-            ('persist' === $action && $entity->getFirstSlotAvailable())) {
+            ('persist' === $action && $entity->firstSlotAvailable)) {
             return;
         }
 

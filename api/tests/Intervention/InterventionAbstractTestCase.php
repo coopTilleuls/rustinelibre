@@ -46,9 +46,9 @@ class InterventionAbstractTestCase extends AbstractTestCase
             if (
                 null !== $user->repairer &&
                 $user->isBoss() &&
-                0 < $user->repairer->getRepairerInterventions()->count()
+                0 < $user->repairer->repairerInterventions->count()
             ) {
-                foreach ($user->repairer->getRepairerInterventions() as $repairerIntervention) {
+                foreach ($user->repairer->repairerInterventions as $repairerIntervention) {
                     if (false === $repairerIntervention->intervention->isAdmin) {
                         return [$user, $repairerIntervention->intervention];
                     }

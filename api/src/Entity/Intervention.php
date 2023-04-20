@@ -101,7 +101,7 @@ class Intervention
         }
 
         foreach ($this->repairerInterventions as $repairerIntervention) {
-            if ($repairerIntervention->repairer->getOwner() === $user) {
+            if ($repairerIntervention->repairer->owner === $user) {
                 return true;
             }
         }

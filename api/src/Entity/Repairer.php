@@ -89,7 +89,7 @@ class Repairer
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups([self::REPAIRER_READ])]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -99,7 +99,7 @@ class Repairer
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?RepairerType $repairerType;
+    public ?RepairerType $repairerType;
 
     #[Assert\NotBlank]
     #[Assert\Length(
@@ -108,57 +108,57 @@ class Repairer
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $name = null;
+    public ?string $name = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $description = null;
+    public ?string $description = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $mobilePhone = null;
+    public ?string $mobilePhone = null;
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 800, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $street = null;
+    public ?string $street = null;
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $city = null;
+    public ?string $city = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $postcode = null;
+    public ?string $postcode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $country = null;
+    public ?string $country = null;
 
     #[AppAssert\Rrule]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_WRITE])]
-    private ?string $rrule = 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR';
+    public ?string $rrule = 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR';
 
     #[ORM\ManyToMany(targetEntity: BikeType::class, inversedBy: 'repairers')]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private Collection $bikeTypesSupported;
+    public Collection $bikeTypesSupported;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $latitude = null;
+    public ?string $latitude = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $longitude = null;
+    public ?string $longitude = null;
 
     #[ORM\Column(
         type: PostGISType::GEOGRAPHY,
@@ -172,200 +172,51 @@ class Repairer
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     #[Groups([self::REPAIRER_READ])]
-    private ?\DateTimeInterface $firstSlotAvailable = null;
+    public ?\DateTimeInterface $firstSlotAvailable = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $openingHours = null;
+    public ?string $openingHours = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $optionalPage = null;
+    public ?string $optionalPage = null;
 
     #[ORM\Column]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     #[ApiFilter(BooleanFilter::class)]
-    private ?bool $enabled = false;
+    public ?bool $enabled = false;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?MediaObject $thumbnail = null;
+    public ?MediaObject $thumbnail = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?MediaObject $descriptionPicture = null;
+    public ?MediaObject $descriptionPicture = null;
 
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerEmployee::class, orphanRemoval: true)]
-    private Collection $repairerEmployees;
+    public Collection $repairerEmployees;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
-    private ?string $comment = null;
+    public ?string $comment = null;
 
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerIntervention::class, orphanRemoval: true)]
-    private Collection $repairerInterventions;
+    public Collection $repairerInterventions;
 
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
         $this->repairerEmployees = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getMobilePhone(): ?string
-    {
-        return $this->mobilePhone;
-    }
-
-    public function setMobilePhone(?string $mobilePhone): self
-    {
-        $this->mobilePhone = $mobilePhone;
-
-        return $this;
-    }
-
-    public function getStreet(): ?string
-    {
-        return $this->street;
-    }
-
-    public function setStreet(?string $street): self
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    public function getPostcode(): ?string
-    {
-        return $this->postcode;
-    }
-
-    public function setPostcode(?string $postcode): self
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(?string $country): self
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    public function getRrule(): ?string
-    {
-        return $this->rrule;
-    }
-
-    public function setRrule(string $rrule): self
-    {
-        $this->rrule = $rrule;
-
-        return $this;
-    }
-
-    public function getLatitude(): ?string
-    {
-        return $this->latitude;
-    }
-
-    public function setLatitude(?string $latitude): void
-    {
-        $this->latitude = $latitude;
-    }
-
-    public function getLongitude(): ?string
-    {
-        return $this->longitude;
-    }
-
-    public function setLongitude(?string $longitude): void
-    {
-        $this->longitude = $longitude;
-    }
-
-    public function getFirstSlotAvailable(): ?\DateTimeInterface
-    {
-        return $this->firstSlotAvailable;
-    }
-
-    public function setFirstSlotAvailable(?\DateTimeInterface $firstSlotAvailable): void
-    {
-        $this->firstSlotAvailable = $firstSlotAvailable;
-    }
-
-    /**
-     * @return Collection<int, BikeType>
-     */
-    public function getBikeTypesSupported(): Collection
-    {
-        return $this->bikeTypesSupported;
     }
 
     public function addBikeTypesSupported(BikeType $bikeTypesSupported): self
@@ -382,90 +233,6 @@ class Repairer
         $this->bikeTypesSupported->removeElement($bikeTypesSupported);
 
         return $this;
-    }
-
-    public function getGpsPoint(): ?string
-    {
-        return $this->gpsPoint;
-    }
-
-    public function setGpsPoint(?string $gpsPoint): void
-    {
-        $this->gpsPoint = $gpsPoint;
-    }
-
-    public function getRepairerType(): ?RepairerType
-    {
-        return $this->repairerType;
-    }
-
-    public function setRepairerType(?RepairerType $repairerType): void
-    {
-        $this->repairerType = $repairerType;
-    }
-
-    public function getOpeningHours(): ?string
-    {
-        return $this->openingHours;
-    }
-
-    public function setOpeningHours(?string $openingHours): self
-    {
-        $this->openingHours = $openingHours;
-
-        return $this;
-    }
-
-    public function getOptionalPage(): ?string
-    {
-        return $this->optionalPage;
-    }
-
-    public function setOptionalPage(?string $optionalPage): self
-    {
-        $this->optionalPage = $optionalPage;
-
-        return $this;
-    }
-
-    public function isEnabled(): ?bool
-    {
-        return $this->enabled;
-    }
-
-    public function setEnabled(bool $enabled): self
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?MediaObject
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(?MediaObject $thumbnail): void
-    {
-        $this->thumbnail = $thumbnail;
-    }
-
-    public function getDescriptionPicture(): ?MediaObject
-    {
-        return $this->descriptionPicture;
-    }
-
-    public function setDescriptionPicture(?MediaObject $descriptionPicture): void
-    {
-        $this->descriptionPicture = $descriptionPicture;
-    }
-
-    /**
-     * @return Collection<int, RepairerEmployee>
-     */
-    public function getRepairerEmployees(): Collection
-    {
-        return $this->repairerEmployees;
     }
 
     public function addRepairerEmployee(RepairerEmployee $repairerEmployee): self
@@ -488,23 +255,6 @@ class Repairer
         }
 
         return $this;
-    }
-
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?string $comment): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    public function getRepairerInterventions(): Collection
-    {
-        return $this->repairerInterventions;
     }
 
     public function addRepairerIntervention(RepairerIntervention $repairerIntervention): self

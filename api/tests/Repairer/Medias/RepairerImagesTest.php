@@ -28,7 +28,7 @@ class RepairerImagesTest extends AbstractTestCase
         $imageIri = $response->toArray()['@id'];
 
         $repairer = static::getContainer()->get(RepairerRepository::class)->findAll()[0];
-        $responseRepairer = $this->createClientAuthAsAdmin()->request('PUT', '/repairers/'.$repairer->getId(), ['json' => [
+        $responseRepairer = $this->createClientAuthAsAdmin()->request('PUT', '/repairers/'.$repairer->id, ['json' => [
             'thumbnail' => $imageIri,
             'descriptionPicture' => $imageIri,
         ]]);

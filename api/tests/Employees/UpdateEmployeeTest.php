@@ -33,13 +33,13 @@ class UpdateEmployeeTest extends AbstractTestCase
 
     public function testUpdateAsBadBoss(): void
     {
-        $this->createClientWithUser($this->repairerEmployees[3]->repairer->getOwner())->request('PUT', sprintf('/employee_and_user/%s', $this->repairerEmployees[0]->id));
+        $this->createClientWithUser($this->repairerEmployees[3]->repairer->owner)->request('PUT', sprintf('/employee_and_user/%s', $this->repairerEmployees[0]->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testUpdateAsGoodBoss(): void
     {
-        $response = $this->createClientWithUser($this->repairerEmployees[3]->repairer->getOwner())->request('PUT', sprintf('/employee_and_user/%s', $this->repairerEmployees[3]->id), [
+        $response = $this->createClientWithUser($this->repairerEmployees[3]->repairer->owner)->request('PUT', sprintf('/employee_and_user/%s', $this->repairerEmployees[3]->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'michel@test.com',
@@ -59,7 +59,7 @@ class UpdateEmployeeTest extends AbstractTestCase
 
     public function testUpdateAsAdmin(): void
     {
-        $response = $this->createClientAuthAsAdmin($this->repairerEmployees[3]->repairer->getOwner())->request('PUT', sprintf('/employee_and_user/%s', $this->repairerEmployees[3]->id), [
+        $response = $this->createClientAuthAsAdmin($this->repairerEmployees[3]->repairer->owner)->request('PUT', sprintf('/employee_and_user/%s', $this->repairerEmployees[3]->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'firstName' => 'Michel Michel',
