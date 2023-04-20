@@ -16,7 +16,7 @@ class GetInterventionTest extends InterventionAbstractTestCase
         // get all interventions from user
         $expectedInterventions = array_map(static function (RepairerIntervention $repairerIntervention) {
             return $repairerIntervention->intervention->id;
-        }, $user->repairer->getRepairerInterventions()->toArray());
+        }, $user->repairer->repairerInterventions->toArray());
 
         $client = $this->createClientAuthAsBoss();
         $response = $client->request('GET', sprintf('/interventions?owner=%s', $user->id))->toArray();

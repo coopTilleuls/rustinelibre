@@ -32,7 +32,7 @@ class CreateEmployeeTest extends AbstractTestCase
             'plainPassword' => 'Test1passwordOk!',
             'firstName' => 'Michel',
             'lastName' => 'Michel',
-            'repairer' => '/repairers/'.$this->repairers[0]->getId(),
+            'repairer' => '/repairers/'.$this->repairers[0]->id,
         ];
     }
 
@@ -55,7 +55,7 @@ class CreateEmployeeTest extends AbstractTestCase
     public function testCreateEmployeeAsAdmin(): void
     {
         $jsonRequest = $this->jsonNewEmployee;
-        $secondRepairerIri = '/repairers/'.$this->repairers[1]->getId();
+        $secondRepairerIri = '/repairers/'.$this->repairers[1]->id;
         $jsonRequest['repairer'] = $secondRepairerIri;
 
         $response = $this->createClientAuthAsAdmin()->request('POST', '/repairer_employees', ['json' => $jsonRequest]);
@@ -87,7 +87,7 @@ class CreateEmployeeTest extends AbstractTestCase
 
         $responseData = $response->toArray();
         $this->assertEquals('RepairerEmployee', $responseData['@type']);
-        $this->assertEquals('/repairers/'.$currentRepairer->getId(), $responseData['repairer']);
+        $this->assertEquals('/repairers/'.$currentRepairer->id, $responseData['repairer']);
         $this->assertArrayHasKey('employee', $responseData);
         $this->assertArrayHasKey('email', $responseData['employee']);
         $this->assertArrayHasKey('lastName', $responseData['employee']);

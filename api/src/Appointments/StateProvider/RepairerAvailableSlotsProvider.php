@@ -32,7 +32,7 @@ final class RepairerAvailableSlotsProvider implements ProviderInterface
             throw new NotFoundHttpException(sprintf('This repairer id (%s) does not exist', $uriVariables['id']));
         }
 
-        if (!$repairer->getRrule()) {
+        if (!$repairer->rrule) {
             return [];
         }
 
