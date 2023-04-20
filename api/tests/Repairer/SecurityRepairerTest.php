@@ -47,7 +47,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId(), '/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
         $this->assertResponseIsSuccessful();
@@ -75,7 +75,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id],
                 'latitude' => '50.6365654',
                 'longitude' => '3.0635282',
             ],
@@ -93,7 +93,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertIsArray($response);
         $this->assertSame($response['name'], $this->repairers[5]->getName());
         $this->assertIsString($response['owner']);
-        $this->assertSame($response['repairerType']['@id'], '/repairer_types/'.$this->repairers[5]->getRepairerType()->getId());
+        $this->assertSame($response['repairerType']['@id'], '/repairer_types/'.$this->repairers[5]->getRepairerType()->id);
         $this->assertSame($response['openingHours'], $this->repairers[5]->getOpeningHours());
         $this->assertSame($response['optionalPage'], $this->repairers[5]->getOptionalPage());
         $this->assertArrayNotHasKey('enabled', $response);
@@ -173,7 +173,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'street' => '12 rue de Wazemmes',
                 'city' => 'Lille',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[1]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[1]->id],
                 'comment' => 'Je voulais juste ajouter un commentaire',
             ],
         ]);
@@ -199,7 +199,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->getId()],
+                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id],
             ],
         ]);
         $response = $response->toArray();

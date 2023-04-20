@@ -32,7 +32,7 @@ class RepairerType
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ])]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(
@@ -41,22 +41,5 @@ class RepairerType
     )]
     #[ORM\Column(length: 255)]
     #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, self::REPAIRER_TYPE_WRITE])]
-    private ?string $name = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
+    public ?string $name = null;
 }

@@ -11,6 +11,7 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import TableContainer from "@mui/material/TableContainer";
 import {User} from "@interfaces/User";
 import EmployeesListActions from "@components/dashboard/employees/EmployeesListActions";
+import {CircularProgress} from "@mui/material";
 
 interface EmployeesListProps {
     currentBoss: User|null;
@@ -18,14 +19,17 @@ interface EmployeesListProps {
 
 export const EmployeesList = ({currentBoss}: EmployeesListProps): JSX.Element => {
 
+    const [loadingList, setLoadingList] = useState<boolean>(false);
     const [employees, setEmployees] = useState<RepairerEmployee[]>([]);
 
     async function fetchEmployees() {
         const response = await repairerEmployeesResource.getAll({});
         setEmployees(response['hydra:member']);
+        setLoadingList(false);
     }
 
     useEffect(() => {
+        setLoadingList(true);
         fetchEmployees();
     }, []);
 
@@ -55,6 +59,7 @@ export const EmployeesList = ({currentBoss}: EmployeesListProps): JSX.Element =>
                                 <TableCell align="right"></TableCell>
                             </TableRow>
                         }
+                        {loadingList && <CircularProgress />}
                         {employees.map((repairerEmployee) => (
                             <TableRow
                                 key={repairerEmployee.employee.firstName+' '+repairerEmployee.employee.lastName}
