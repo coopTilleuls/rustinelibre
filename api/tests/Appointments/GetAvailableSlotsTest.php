@@ -23,7 +23,7 @@ class GetAvailableSlotsTest extends AbstractTestCase
     public function testGetSlotsAvailable(): void
     {
         // No need to be authenticated
-        $response = static::createClientAuthAsAdmin()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $this->repairer->getId()));
+        $response = static::createClientAuthAsAdmin()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $this->repairer->id));
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
@@ -52,7 +52,7 @@ class GetAvailableSlotsTest extends AbstractTestCase
         $doctrine->getManager()->persist($appointment);
         $doctrine->getManager()->flush();
 
-        $response = static::createClient()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $this->repairer->getId()));
+        $response = static::createClient()->request('GET', sprintf('/repairer_get_slots_available/%s?date[after]=20-03-2023&date[before]=30-03-2023', $this->repairer->id));
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 

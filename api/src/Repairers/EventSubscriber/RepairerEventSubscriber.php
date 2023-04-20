@@ -48,7 +48,7 @@ final class RepairerEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $object->setOwner($user);
+        $object->owner = $user;
         $this->validator->validate($object);
     }
 }

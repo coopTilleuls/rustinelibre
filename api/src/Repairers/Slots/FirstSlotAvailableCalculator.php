@@ -23,6 +23,6 @@ final class FirstSlotAvailableCalculator
             $firstSlotAvailable = array_shift($slotsAvailable)->getStart();
         }
 
-        $repairer->setFirstSlotAvailable($firstSlotAvailable ?? null);
+        $repairer->firstSlotAvailable = $firstSlotAvailable ?? null;
     }
 }

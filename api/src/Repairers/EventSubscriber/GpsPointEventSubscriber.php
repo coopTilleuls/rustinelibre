@@ -44,14 +44,14 @@ final class GpsPointEventSubscriber implements EventSubscriber
 
         $changeSet = $this->entityManager->getUnitOfWork()->getEntityChangeSet($entity);
         if (('update' === $action && !array_key_exists('latitude', $changeSet) && !array_key_exists('longitude', $changeSet))
-            || !$entity->getLongitude() || !$entity->getLatitude()) {
+            || !$entity->longitude || !$entity->latitude) {
             return;
         }
 
-        $entity->setGpsPoint(sprintf(
+        $entity->gpsPoint = sprintf(
             'POINT(%s %s)',
-            $entity->getLatitude(),
-            $entity->getLongitude()
-        ));
+            $entity->latitude,
+            $entity->longitude
+        );
     }
 }
