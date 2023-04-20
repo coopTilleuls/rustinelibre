@@ -32,7 +32,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
                     <BottomNavigationAction label="Rendez-vous" icon={<ListIcon />} />
                     <BottomNavigationAction label="Mes vélos" icon={<DirectionsBikeIcon />} />
                     <BottomNavigationAction label="Messages" icon={<ChatBubbleIcon />} />
-                    <BottomNavigationAction href={user ? '/' : '/login'} label={user ? 'Profil' : 'Connexion'} icon={<AccountCircleIcon />} />
+                    <BottomNavigationAction href={user ? '/profil/mon-profil' : '/login'} label={user ? 'Profil' : 'Connexion'} icon={<AccountCircleIcon />} />
                 </BottomNavigation>
             </Paper>
         </Box>
