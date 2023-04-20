@@ -15,33 +15,41 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import Link from "next/link";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import Image from "next/image";
+import {GetStaticProps} from "next";
+import { ENTRYPOINT } from "../../config/entrypoint";
+import {QueryClient} from "react-query";
 
-const RepairerPage: NextPageWithLayout = () => {
+const RepairerPage: NextPageWithLayout = (repairer) => {
 
-    const router = useRouter();
-    const { id } = router.query;
-    const [repairer, setRepairer] = useState<Repairer|null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    useEffect(() => {
-        async function fetchRepairer() {
-            if (typeof id === 'string' && id.length > 0) {
-                setLoading(true);
-                const repairerFetch: Repairer = await repairerResource.getById(id);
-                setRepairer(repairerFetch);
-                setLoading(false);
-            }
-        }
-        if (id) {
-            fetchRepairer();
-        }
-    }, [id]);
+    console.log(repairer);
+    // const router = useRouter();
+    // const { id } = router.query;
+    // const [repairer, setRepairer] = useState<Repairer|null>(null);
+    // const [loading, setLoading] = useState<boolean>(false);
+    //
+    // useEffect(() => {
+    //     async function fetchRepairer() {
+    //
+    //         // const repairers = await repairerResource.getAll(false);
+    //         // console.log(repairers);
+    //
+    //         // if (typeof id === 'string' && id.length > 0) {
+    //         //     setLoading(true);
+    //         //     const repairerFetch: Repairer = await repairerResource.getById(id, false);
+    //         //     setRepairer(repairerFetch);
+    //         //     setLoading(false);
+    //         // }
+    //     }
+    //     if (id) {
+    //         fetchRepairer();
+    //     }
+    // }, [id]);
 
     return (
         <>
             <div style={{width: "100vw", overflowX: "hidden"}}>
                 <Head>
-                    <title>Réparateur {repairer?.name}</title>
+                    {/*<title>Réparateur {repairer?.name}</title>*/}
                 </Head>
                 <WebsiteLayout />
                 <Link href={`/reparateur/chercher-un-reparateur`} passHref>
@@ -55,42 +63,86 @@ const RepairerPage: NextPageWithLayout = () => {
                             pb: 6,
                         }}
                     >
-                        {loading && <CircularProgress />}
-                        {
-                            repairer &&
-                                <Container maxWidth="sm">
-                                    <Typography
-                                        component="h1"
-                                        variant="h2"
-                                        align="center"
-                                        color="text.primary"
-                                        gutterBottom
-                                    >
-                                        {repairer.name}
-                                    </Typography>
-                                    {repairer.thumbnail && <Image src={apiImageUrl(repairer.thumbnail.contentUrl)} alt={'Photo de profil du réparateur'} width={100} height={100}></Image>}
-                                    <Button variant="outlined" style={{marginLeft: '30%'}}>{repairer.repairerType?.name}</Button>
-                                    <Typography paragraph variant="h5" align="left" color="text.secondary" style={{marginTop: '10px'}}>
-                                        <FmdGoodIcon /> {repairer.street} - {repairer.postcode} {repairer.city}
-                                    </Typography>
-                                    <Typography paragraph variant="h5" align="left" color="text.secondary" style={{marginTop: '10px'}}>
-                                        <PhoneAndroidIcon /> {repairer.mobilePhone}
-                                    </Typography>
+                        {/*{loading && <CircularProgress />}*/}
+                        {/*{*/}
+                        {/*    repairer &&*/}
+                        {/*        <Container maxWidth="sm">*/}
+                        {/*            <Typography*/}
+                        {/*                component="h1"*/}
+                        {/*                variant="h2"*/}
+                        {/*                align="center"*/}
+                        {/*                color="text.primary"*/}
+                        {/*                gutterBottom*/}
+                        {/*            >*/}
+                        {/*                {repairer.name}*/}
+                        {/*            </Typography>*/}
+                        {/*            {repairer.thumbnail && <Image src={apiImageUrl(repairer.thumbnail.contentUrl)} alt={'Photo de profil du réparateur'} width={100} height={100}></Image>}*/}
+                        {/*            <Button variant="outlined" style={{marginLeft: '30%'}}>{repairer.repairerType?.name}</Button>*/}
+                        {/*            <Typography paragraph variant="h5" align="left" color="text.secondary" style={{marginTop: '10px'}}>*/}
+                        {/*                <FmdGoodIcon /> {repairer.street} - {repairer.postcode} {repairer.city}*/}
+                        {/*            </Typography>*/}
+                        {/*            <Typography paragraph variant="h5" align="left" color="text.secondary" style={{marginTop: '10px'}}>*/}
+                        {/*                <PhoneAndroidIcon /> {repairer.mobilePhone}*/}
+                        {/*            </Typography>*/}
 
-                                    <Button variant="outlined" style={{marginLeft: '30%', marginTop: '20px', backgroundColor: 'lightblue', color: 'white'}}>
-                                        Je réserve
-                                    </Button>
+                        {/*            <Button variant="outlined" style={{marginLeft: '30%', marginTop: '20px', backgroundColor: 'lightblue', color: 'white'}}>*/}
+                        {/*                Je réserve*/}
+                        {/*            </Button>*/}
 
-                                    <Typography paragraph variant="h5" align="justify" color="text.secondary" style={{marginTop: '30px'}}>
-                                        {repairer.description}
-                                    </Typography>
-                                </Container>
-                        }
+                        {/*            <Typography paragraph variant="h5" align="justify" color="text.secondary" style={{marginTop: '30px'}}>*/}
+                        {/*                {repairer.description}*/}
+                        {/*            </Typography>*/}
+                        {/*        </Container>*/}
+                        {/*}*/}
                     </Box>
                 </main>
             </div>
         </>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({params}) => {
+
+
+    const id = params?.id;
+    const repairer: Repairer = await repairerResource.getById(id, false);
+
+
+    return {
+        props: {
+            repairer,
+            error: null
+        },
+        revalidate: 10 // Revalidate the data every 1 second
+    };
+}
+
+export async function getStaticPaths() {
+    // const repairers = await repairerResource.getAll(false);
+
+    // console.log(repairers);
+
+    // const paths = repairers['hydra:member'].map((repairer) => ({
+    //     params: { id: repairer.id },
+    // }))
+
+    if (!ENTRYPOINT) {
+        return {
+            paths: [],
+            fallback: true,
+        };
+    }
+
+    return {
+        paths: [
+            { params: { id: '56' } },
+            { params: { id: '57' } },
+            { params: { id: '58' } }
+        ],
+        fallback: 'blocking'
+    }
+
+    // return { paths, fallback: 'blocking' }
+}
 
 export default RepairerPage;

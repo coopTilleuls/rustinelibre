@@ -15,14 +15,16 @@ import {
   setToken,
 } from '@helpers/sessionHelper';
 
+import { ENTRYPOINT } from "../config/entrypoint";
+
 export abstract class AbstractResource<T> {
   protected abstract endpoint: string;
 
-  async get(id: string, headers?: RequestHeaders): Promise<T> {
+  async get(id: string, withAuth: boolean = true, headers?: RequestHeaders): Promise<T> {
     const doFetch = async () => {
       return await fetch(this.getUrl(id), {
         headers: {
-          ...this.getDefaultHeaders(),
+          ...this.getDefaultHeaders(withAuth),
           ...headers,
         },
       });
@@ -31,12 +33,12 @@ export abstract class AbstractResource<T> {
     return await this.getResult(doFetch);
   }
 
-  async getById(id: string, headers?: RequestHeaders): Promise<T> {
+  async getById(id: string, withAuth: boolean = true, headers?: RequestHeaders): Promise<T> {
 
     const doFetch = async () => {
       return await fetch(this.getUrl()+'/'+id, {
         headers: {
-          ...this.getDefaultHeaders(),
+          ...this.getDefaultHeaders(withAuth),
           ...headers,
         },
       });
@@ -46,13 +48,14 @@ export abstract class AbstractResource<T> {
   }
 
   async getAll(
+    withAuth: boolean = true,
     params?: RequestParams,
     headers?: RequestHeaders
   ): Promise<Collection<T>> {
     const doFetch = async () => {
       return await fetch(this.getUrl(undefined, params), {
         headers: {
-          ...this.getDefaultHeaders(),
+          ...this.getDefaultHeaders(withAuth),
           ...headers,
         },
       });
@@ -132,16 +135,18 @@ export abstract class AbstractResource<T> {
     return response.ok;
   }
 
-  protected getDefaultHeaders(): Record<string, string> {
+  protected getDefaultHeaders(withAuth: boolean = true): Record<string, string> {
     const defaultHeaders: Record<string, string> = {
       Accept: 'application/ld+json',
       'Content-Type': 'application/ld+json',
     };
 
-    const currentToken = getToken();
-    if (!!currentToken) {
-      defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
-    }
+    // if (withAuth) {
+    //   const currentToken = getToken();
+    //   if (!!currentToken) {
+    //     defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
+    //   }
+    // }
 
     return defaultHeaders;
   }
@@ -190,7 +195,7 @@ export abstract class AbstractResource<T> {
 
   public getUrl(id?: string, params?: RequestParams): string {
     const url = new URL(
-      process.env.NEXT_PUBLIC_ENTRYPOINT +
+      ENTRYPOINT +
         (undefined !== id ? id : this.endpoint)
     );
 

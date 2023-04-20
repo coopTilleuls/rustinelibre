@@ -7,7 +7,7 @@ function useBikeTypes(): BikeType[] {
     const [bikes, setBikes] = useState<BikeType[]>([]);
 
     async function fetchBikes() {
-        const response = await bikeTypeResource.getAll({});
+        const response = await bikeTypeResource.getAll(false);
         setBikes(response['hydra:member']);
     }
 

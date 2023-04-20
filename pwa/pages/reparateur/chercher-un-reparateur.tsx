@@ -74,7 +74,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
             params = {...{'availability': 'ASC'}, ...params}
         }
 
-        const response = await repairerResource.getAll(params);
+        const response = await repairerResource.getAll(false, params);
         setRepairers(response['hydra:member']);
         setTotalItems(response['hydra:totalItems']);
         setPendingSearchCity(false);

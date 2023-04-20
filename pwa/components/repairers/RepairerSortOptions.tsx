@@ -25,7 +25,7 @@ const RepairerSortOptions = ({handleChangeSort, isMobile}: RepairerSortOptionsPr
 
     useEffect(() => {
         async function fetchRepairerTypes() {
-            const response = await repairerTypeResource.getAll({});
+            const response = await repairerTypeResource.getAll(false);
             setRepairerTypes(response['hydra:member']);
             if (response['hydra:totalItems'] > 0) {
                 setRepairerTypeSelected((response['hydra:member'][0].id.toString()));
