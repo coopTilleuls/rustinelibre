@@ -219,55 +219,55 @@ class AssertUserTest extends AbstractTestCase
     {
         $pattern = User::PASSWORD_REGEX;
 
-        //Password should contain at least 12 characters, 1 uppercase, 1 lowercase, 1 special character and 1 number
-        $result= preg_match($pattern, "badpassword");
+        // Password should contain at least 12 characters, 1 uppercase, 1 lowercase, 1 special character and 1 number
+        $result = preg_match($pattern, 'badpassword');
         self::assertSame(0, $result);
-        $result= preg_match($pattern, "shortpass1,");
+        $result = preg_match($pattern, 'shortpass1,');
         self::assertSame(0, $result);
-        $result= preg_match($pattern, "Badpassword");
+        $result = preg_match($pattern, 'Badpassword');
         self::assertSame(0, $result);
-        $result= preg_match($pattern, "Badpassword1WithoutSpecial");
+        $result = preg_match($pattern, 'Badpassword1WithoutSpecial');
         self::assertSame(0, $result);
-        $result= preg_match($pattern, "BadPasswordWithoutNumber.");
+        $result = preg_match($pattern, 'BadPasswordWithoutNumber.');
         self::assertSame(0, $result);
-        $result= preg_match($pattern, "Goodpassword2,");
+        $result = preg_match($pattern, 'Goodpassword2,');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2;");
+        $result = preg_match($pattern, 'Goodpassword2;');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "goodPassword2!");
+        $result = preg_match($pattern, 'goodPassword2!');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2@");
+        $result = preg_match($pattern, 'Goodpassword2@');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2/");
+        $result = preg_match($pattern, 'Goodpassword2/');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2\\");
+        $result = preg_match($pattern, 'Goodpassword2\\');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2#");
+        $result = preg_match($pattern, 'Goodpassword2#');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2?");
+        $result = preg_match($pattern, 'Goodpassword2?');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2=");
+        $result = preg_match($pattern, 'Goodpassword2=');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2$");
+        $result = preg_match($pattern, 'Goodpassword2$');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2%");
+        $result = preg_match($pattern, 'Goodpassword2%');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2*");
+        $result = preg_match($pattern, 'Goodpassword2*');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2+");
+        $result = preg_match($pattern, 'Goodpassword2+');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2:");
+        $result = preg_match($pattern, 'Goodpassword2:');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2_");
+        $result = preg_match($pattern, 'Goodpassword2_');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2&");
+        $result = preg_match($pattern, 'Goodpassword2&');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2\"");
+        $result = preg_match($pattern, 'Goodpassword2"');
         self::assertSame(1, $result);
-        $result= preg_match($pattern, "Goodpassword2.");
+        $result = preg_match($pattern, 'Goodpassword2.');
         self::assertSame(1, $result);
-        //Test with multiple characters
-        $result= preg_match($pattern, "Multiple/;.Password223");
+        // Test with multiple characters
+        $result = preg_match($pattern, 'Multiple/;.Password223');
         self::assertSame(1, $result);
     }
 }
