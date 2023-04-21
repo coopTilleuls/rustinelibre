@@ -29,7 +29,7 @@ import {validatePassword} from '@utils/passwordValidator';
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 import {RepairerFormContext} from "@contexts/RepairerFormContext";
 import {UserFormContext} from "@contexts/UserFormContext";
-import {ENTRYPOINT} from "../../config/entrypoint";
+import {ENTRYPOINT} from "@config/entrypoint";
 
 const RepairerRegistration: NextPageWithLayout = ({}) => {
 

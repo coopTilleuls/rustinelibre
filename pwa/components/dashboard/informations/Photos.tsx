@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import {getToken} from "@helpers/sessionHelper";
 import {MediaObject} from "@interfaces/MediaObject";
 import {repairerResource} from "@resources/repairerResource";
-import {ENTRYPOINT} from "../../../config/entrypoint";
+import {ENTRYPOINT} from "@config/entrypoint";
 
 interface DashboardInfosPhotosProps {
     repairer: Repairer|null;
