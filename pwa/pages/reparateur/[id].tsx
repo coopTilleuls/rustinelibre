@@ -24,12 +24,11 @@ type RepairerPageProps = {
 
 const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairer}) => {
 
+    const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
 
     if (!repairer) {
-        const router = useRouter();
         const { id } = router.query;
-
         if (typeof id === 'string' && id.length > 0) {
             setLoading(true);
             const repairer = repairerResource.getById(id);
