@@ -7,7 +7,7 @@ function useRepairerTypes(): RepairerType[] {
     const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
 
     async function fetchRepairerTypes() {
-        const response = await repairerTypeResource.getAll({});
+        const response = await repairerTypeResource.getAll(false);
         setRepairerTypes(response['hydra:member']);
     }
 
