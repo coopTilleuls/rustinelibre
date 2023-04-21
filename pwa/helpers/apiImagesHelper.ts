@@ -1,4 +1,4 @@
-import {ENTRYPOINT} from "../config/entrypoint";
+import {ENTRYPOINT} from "@config/entrypoint";
 
 export const apiImageUrl = (imagePath: string): string => {
 
