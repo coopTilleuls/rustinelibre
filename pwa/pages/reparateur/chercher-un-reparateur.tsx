@@ -51,7 +51,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypes}) =>
     const isMobile = useMediaQuery('(max-width: 640px)');
     const listContainerRef = useRef<HTMLDivElement>(null);
 
-    // const {bikeTypes}= useContext(RepairerFormContext);
     const {cityInput, setCityInput, city, setCity, selectedBike, setSelectedBike,
         repairers, setRepairers, currentPage, setCurrentPage, repairerTypeSelected, orderBy,
         setOrderBy, sortChosen, setSortChosen, totalItems, setTotalItems} = useContext(SearchRepairerContext);
