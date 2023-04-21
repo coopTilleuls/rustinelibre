@@ -198,7 +198,7 @@ export abstract class AbstractResource<T> {
   public getUrl(id?: string, params?: RequestParams): string {
     const url = new URL(
         ENTRYPOINT +
-   g     (undefined !== id ? id : this.endpoint)
+        (undefined !== id ? id : this.endpoint)
     );
 
     if (undefined !== params) {
