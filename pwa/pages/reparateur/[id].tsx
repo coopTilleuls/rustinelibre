@@ -15,14 +15,26 @@ import Link from "next/link";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import Image from "next/image";
 import {GetStaticProps} from "next";
+import {ENTRYPOINT} from "@config/entrypoint";
+import {useRouter} from "next/router";
 
 type RepairerPageProps = {
-    repairer: Repairer;
+    repairer: Repairer|null;
 };
 
 const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairer}) => {
 
+    const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
+
+    if (!repairer) {
+        const { id } = router.query;
+        if (typeof id === 'string' && id.length > 0) {
+            setLoading(true);
+            const repairer = repairerResource.getById(id);
+            setLoading(false);
+        }
+    }
 
     return (
         <>
@@ -82,6 +94,12 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairer}) => {
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
 
+    if (!ENTRYPOINT) {
+        return {
+            props: {},
+        };
+    }
+
     if (!params) {
         return {
             notFound: true
@@ -106,6 +124,14 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 }
 
 export async function getStaticPaths() {
+
+    if (!ENTRYPOINT) {
+        return {
+            paths: [],
+            fallback: true,
+        };
+    }
+
     const repairers = await repairerResource.getAll(false,{itemsPerPage: false});
     const paths = repairers['hydra:member'].map((repairer) => ({
         params: { id: repairer.id.toString() },

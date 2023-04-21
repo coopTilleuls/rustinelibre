@@ -19,9 +19,19 @@ import {useAccount} from "@contexts/AuthContext";
 import {RequestBody} from "@interfaces/Resource";
 import OptionalInfos from "@components/dashboard/informations/OptionalInfos";
 import DashboardInfosPhotos from "@components/dashboard/informations/Photos";
+import {GetStaticProps} from "next";
+import {ENTRYPOINT} from "@config/entrypoint";
+import {bikeTypeResource} from "@resources/bikeTypeResource";
+import {BikeType} from "@interfaces/BikeType";
+import {repairerTypeResource} from "@resources/repairerTypeResource";
+import {RepairerType} from "@interfaces/RepairerType";
 
+type RepairerInformationsProps = {
+    bikeTypes: BikeType[];
+    repairerTypes: RepairerType[];
+};
 
-const RepairerInformations: NextPageWithLayout = () => {
+const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bikeTypes= [], repairerTypes = []}) => {
 
     const [repairer, setRepairer] = useState<Repairer|null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -34,8 +44,9 @@ const RepairerInformations: NextPageWithLayout = () => {
     };
 
     const {name, setName, setDescription,street, setStreet, cityInput, setCityInput, city,
-        pendingRegistration, setPendingRegistration, errorMessage, setErrorMessage, bikeTypes, selectedBikeTypes,
-        setOptionalPage, description, openingHours, optionalPage, mobilePhone, setOpeningHours, repairerTypeSelected, setRepairerTypeSelected, setSelectedBikeTypes, setMobilePhone} = useContext(RepairerFormContext);
+        pendingRegistration, setPendingRegistration, errorMessage, setErrorMessage, selectedBikeTypes,
+        setOptionalPage, description, openingHours, optionalPage, mobilePhone, setOpeningHours, repairerTypeSelected,
+        setRepairerTypeSelected, setSelectedBikeTypes, setMobilePhone} = useContext(RepairerFormContext);
 
 
     useEffect(() => {
@@ -156,7 +167,7 @@ const RepairerInformations: NextPageWithLayout = () => {
                                     !loading && tabValue === 0 && <ContactDetails repairer={repairer} />
                                 }
                                 {
-                                    !loading && tabValue === 1 && <Description repairer={repairer} />
+                                    !loading && tabValue === 1 && <Description repairer={repairer}  bikeTypes={bikeTypes} repairerTypes={repairerTypes} />
                                 }
                                 {
                                     !loading && tabValue === 2 && <DashboardInfosPhotos repairer={repairer} />
@@ -192,5 +203,28 @@ const RepairerInformations: NextPageWithLayout = () => {
         </div>
     )
 };
+
+export const getStaticProps: GetStaticProps = async () => {
+
+    if (!ENTRYPOINT) {
+        return {
+            props: {},
+        };
+    }
+
+    const bikeTypesCollection = await bikeTypeResource.getAll(false);
+    const bikeTypes = bikeTypesCollection['hydra:member'];
+
+    const repairerTypesCollection = await repairerTypeResource.getAll(false);
+    const repairerTypes = repairerTypesCollection['hydra:member'];
+
+    return {
+        props: {
+            bikeTypes,
+            repairerTypes
+        },
+        revalidate: 10
+    };
+}
 
 export default RepairerInformations;

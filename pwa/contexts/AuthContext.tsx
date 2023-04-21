@@ -74,10 +74,8 @@ const useProviderAuth = () => {
 
   const fetchUser = async (): Promise<User | null> => {
     const currentToken = getToken();
-    if (currentToken) {
-      const user = await userResource.getCurrent();
-      setUser(user);
-    }
+    const user = await userResource.getCurrent();
+    setUser(user);
 
     return user || null;
   };
