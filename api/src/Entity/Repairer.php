@@ -23,7 +23,6 @@ use App\Repairers\Filter\FirstAvailableSlotFilter;
 use App\Repairers\Filter\ProximityFilter;
 use App\Repairers\Filter\RandomFilter;
 use App\Repairers\State\CreateUserRepairerProcessor;
-use App\Repairers\StateProvider\RepairersIdProvider;
 use App\Repository\RepairerRepository;
 use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -42,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     paginationClientItemsPerPage: true,
 )]
 #[Get(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
-#[GetCollection(normalizationContext: ['groups'=> [self::REPAIRER_COLLECTION_READ]])]
+#[GetCollection(normalizationContext: ['groups' => [self::REPAIRER_COLLECTION_READ]])]
 #[GetCollection(
     uriTemplate: '/repairer_get_slots_available/{id}',
     requirements: ['id' => '\d+'],
@@ -85,7 +84,7 @@ class Repairer
 {
     public const REPAIRER_READ = 'repairer_read';
     public const REPAIRER_WRITE = 'repairer_write';
-    const REPAIRER_COLLECTION_READ = 'repairer_collection_read';
+    public const REPAIRER_COLLECTION_READ = 'repairer_collection_read';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -101,7 +100,7 @@ class Repairer
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?RepairerType $repairerType;
 
     #[Assert\NotBlank]

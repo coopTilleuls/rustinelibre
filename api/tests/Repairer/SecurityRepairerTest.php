@@ -134,6 +134,19 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $response->toArray();
         // On 25 repairers -> 3 aren't enabled
         $this->assertCount(22, $response['hydra:member']);
+
+        $response = $response['hydra:member'];
+        // test collection normalization groups
+        foreach ($response as $repairer) {
+            $this->assertArrayNotHasKey('description', $repairer);
+            $this->assertArrayNotHasKey('mobilePhone', $repairer);
+            $this->assertArrayNotHasKey('owner', $repairer);
+            $this->assertArrayHasKey('name', $repairer);
+            $this->assertArrayHasKey('latitude', $repairer);
+            $this->assertArrayHasKey('longitude', $repairer);
+            $this->assertArrayHasKey('firstSlotAvailable', $repairer);
+            $this->assertArrayHasKey('repairerType', $repairer);
+        }
     }
 
     public function testUniqueOwner(): void
