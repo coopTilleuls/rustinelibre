@@ -36,6 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
+    paginationClientEnabled: true,
     denormalizationContext: ['groups' => ['admin_only']],
     paginationClientItemsPerPage: true,
 )]

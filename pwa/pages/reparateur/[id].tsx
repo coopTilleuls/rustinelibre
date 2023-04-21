@@ -96,7 +96,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
         };
     }
 
-    const repairer: Repairer = await repairerResource.getById(id.toString(), false);
+    const repairer: Repairer = await repairerResource.getById(id.toString(), false, true);
 
     return {
         props: {
@@ -107,7 +107,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 }
 
 export async function getStaticPaths() {
-    const repairers = await repairerResource.getAll(false, {itemsPerPage: 100});
+    const repairers = await repairerResource.getAll(false, true,{itemsPerPage: false});
     const paths = repairers['hydra:member'].map((repairer) => ({
         params: { id: repairer.id.toString() },
     }));
