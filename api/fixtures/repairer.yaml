@@ -86,6 +86,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
     enabled: true
+    openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
     optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_6:
     name: 'Rafael'
