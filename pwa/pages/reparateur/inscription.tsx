@@ -39,7 +39,7 @@ type RepairerRegistrationProps = {
     bikeTypes: BikeType[];
     repairerTypes: RepairerType[];
 };
-const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({bikeTypes, repairerTypes}) => {
+const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({bikeTypes = [], repairerTypes = []}) => {
 
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
     const [comment, setComment] = useState<string>('');

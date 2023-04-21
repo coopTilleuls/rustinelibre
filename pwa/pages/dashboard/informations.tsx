@@ -31,7 +31,7 @@ type RepairerInformationsProps = {
     repairerTypes: RepairerType[];
 };
 
-const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bikeTypes, repairerTypes}) => {
+const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bikeTypes= [], repairerTypes = []}) => {
 
     const [repairer, setRepairer] = useState<Repairer|null>(null);
     const [loading, setLoading] = useState<boolean>(true);

@@ -42,7 +42,7 @@ type SearchRepairerProps = {
     bikeTypes: BikeType[];
 };
 
-const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypes}) => {
+const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypes = []}) => {
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
     const [citiesList, setCitiesList] = useState<City[]>([]);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
