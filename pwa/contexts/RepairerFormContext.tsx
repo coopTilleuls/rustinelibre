@@ -1,9 +1,6 @@
 import React, {createContext, ReactNode, useState} from 'react';
 import {City} from "@interfaces/City";
-import {BikeType} from "@interfaces/BikeType";
-import useBikeTypes from "@hooks/useBikeTypes";
 import {RepairerType} from "@interfaces/RepairerType";
-import useRepairerTypes from "@hooks/useRepairerTypes";
 import {MediaObject} from "@interfaces/MediaObject";
 
 interface ProviderProps {
@@ -25,8 +22,6 @@ interface RepairerFormContext {
     pendingRegistration: boolean,
     errorMessage: string|null,
     selectedBikeTypes: string[],
-    repairerTypes: RepairerType[],
-    bikeTypes: BikeType[],
     openingHours: string,
     optionalPage: string,
     thumbnail: MediaObject|null,
@@ -66,8 +61,6 @@ const initialValue = {
     pendingRegistration: false,
     errorMessage: null,
     selectedBikeTypes: [],
-    repairerTypes: [],
-    bikeTypes: [],
     openingHours: '',
     optionalPage: '',
     thumbnail: null,
@@ -114,9 +107,6 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
     const [thumbnail, setThumbnail] = useState<MediaObject | null>(null);
     const [descriptionPicture, setDescriptionPicture] = useState<MediaObject | null>(null);
 
-    const repairerTypes = useRepairerTypes();
-    const bikeTypes = useBikeTypes();
-
     return (
         <RepairerFormContext.Provider
             value={{
@@ -134,8 +124,6 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 pendingRegistration,
                 errorMessage,
                 selectedBikeTypes,
-                repairerTypes,
-                bikeTypes,
                 openingHours,
                 optionalPage,
                 thumbnail,
