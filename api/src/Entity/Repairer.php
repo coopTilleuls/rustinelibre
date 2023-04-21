@@ -214,6 +214,10 @@ class Repairer
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerIntervention::class, orphanRemoval: true)]
     public Collection $repairerInterventions;
 
+    #[Groups([self::REPAIRER_READ])]
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $slug = null;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();

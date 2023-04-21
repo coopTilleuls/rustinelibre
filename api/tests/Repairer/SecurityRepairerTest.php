@@ -36,7 +36,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $client = self::createClientWithUser($this->users[55]);
 
         // Valid boss role given
-        $client->request('POST', '/repairers', [
+        $response = $client->request('POST', '/repairers', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Chez Jojo',
@@ -52,6 +52,9 @@ class SecurityRepairerTest extends AbstractTestCase
         ]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $response = $response->toArray();
+        // Check the slug on create
+        $this->assertSame($response['slug'], 'chez-jojo');
     }
 
     public function testDeleteRepairer(): void
@@ -240,6 +243,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $client->request('PUT', '/repairers/'.$repairer->id, [
              'headers' => ['Content-Type' => 'application/json'],
              'json' => [
+                 'name' => 'New Name',
                  'description' => 'test put enabled failed',
                  'enabled' => true,
              ],
@@ -252,5 +256,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $response2 = $response2->toArray();
         $this->assertSame($response2['description'], 'test put enabled failed');
         $this->assertSame($response2['enabled'], false);
+        // test slug on update
+        $this->assertSame($response2['slug'], 'new-name');
     }
 }
