@@ -20,7 +20,7 @@ import {ENTRYPOINT} from "../config/entrypoint";
 export abstract class AbstractResource<T> {
   protected abstract endpoint: string;
 
-  async get(id: string, withAuth: boolean = true, isSSR: boolean = false, headers?: RequestHeaders): Promise<T> {
+  async get(id: string, withAuth: boolean = true, headers?: RequestHeaders): Promise<T> {
     const doFetch = async () => {
       return await fetch(this.getUrl(id), {
         headers: {
@@ -33,7 +33,7 @@ export abstract class AbstractResource<T> {
     return await this.getResult(doFetch, withAuth);
   }
 
-  async getById(id: string, withAuth: boolean = true, isSSR: boolean = false, headers?: RequestHeaders): Promise<T> {
+  async getById(id: string, withAuth: boolean = true, headers?: RequestHeaders): Promise<T> {
     const doFetch = async () => {
       return await fetch(this.getUrl()+'/'+id, {
         headers: {
@@ -48,12 +48,11 @@ export abstract class AbstractResource<T> {
 
   async getAll(
     withAuth: boolean = true,
-    isSSR: boolean = false,
     params?: RequestParams,
     headers?: RequestHeaders
   ): Promise<Collection<T>> {
     const doFetch = async () => {
-      return await fetch(this.getUrl(undefined, params), {
+      return await fetch(this.getUrl( undefined, params), {
         headers: {
           ...this.getDefaultHeaders(withAuth),
           ...headers,
@@ -197,10 +196,11 @@ export abstract class AbstractResource<T> {
   }
 
   public getUrl(id?: string, params?: RequestParams): string {
+
     const url = new URL(
         ENTRYPOINT +
-        (undefined !== id ? id : this.endpoint)
-    );
+          (undefined !== id ? id : this.endpoint)
+      );
 
     if (undefined !== params) {
       Object.keys(params).forEach((key) => {

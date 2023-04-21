@@ -6,7 +6,7 @@ class RepairerResource extends AbstractResource<Repairer> {
     protected endpoint = '/repairers';
 
     async getSlotsAvailable(id: string, filters: {[key: string]: string}): Promise<any> {
-        const url = this.getUrl('/repairer_get_slots_available/')+id+(new URLSearchParams(filters).toString());
+        const url = this.getUrl(false, '/repairer_get_slots_available/')+id+(new URLSearchParams(filters).toString());
         const response = await fetch(url, {
             headers: {
                 ...this.getDefaultHeaders(),
@@ -21,7 +21,7 @@ class RepairerResource extends AbstractResource<Repairer> {
     }
 
     async postRepairerAndUser(body: RequestBody = {}, headers?: RequestHeaders): Promise<any> {
-        const url = this.getUrl('/create_user_and_repairer');
+        const url = this.getUrl(false, '/create_user_and_repairer');
 
         const doFetch = async () => {
             return await fetch(url, {
