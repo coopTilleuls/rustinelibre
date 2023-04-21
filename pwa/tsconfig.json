@@ -23,7 +23,8 @@
       "@helpers/*": ["helpers/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
-      "@resources/*": ["resources/*"]
+      "@resources/*": ["resources/*"],
+      "@config/*": ["config/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

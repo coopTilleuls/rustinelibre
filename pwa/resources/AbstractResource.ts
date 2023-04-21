@@ -15,7 +15,7 @@ import {
   setToken,
 } from '@helpers/sessionHelper';
 
-import {ENTRYPOINT} from "../config/entrypoint";
+import {ENTRYPOINT} from "@config/entrypoint";
 
 export abstract class AbstractResource<T> {
   protected abstract endpoint: string;
