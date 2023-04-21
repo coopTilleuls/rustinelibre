@@ -7,6 +7,7 @@ namespace App\Repairers\EventSubscriber;
 use App\Entity\Repairer;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -26,27 +27,22 @@ readonly class SlugEventSubscriber implements EventSubscriber
 
     public function prePersist(BaseLifecycleEventArgs $args): void
     {
-        $entity = $args->getObject();
-        if (!$entity instanceof Repairer) {
-            return;
-        }
-
-        $this->updateSlug($entity);
+        $this->updateSlug('persist', $args);
     }
 
     public function preUpdate(BaseLifecycleEventArgs $args): void
     {
-        $entity = $args->getObject();
+        $this->updateSlug('update', $args);
+    }
 
-        if (!$entity instanceof Repairer) {
+    private function updateSlug(string $action, LifecycleEventArgs $args): void
+    {
+        $repairer = $args->getObject();
+
+        if (!$repairer instanceof Repairer) {
             return;
         }
 
-        $this->updateSlug($entity);
-    }
-
-    private function updateSlug(Repairer $repairer): void
-    {
         $slug = (string) $this->slugger->slug($repairer->name);
         $repairer->slug = $slug;
     }
