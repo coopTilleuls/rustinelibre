@@ -43,7 +43,7 @@ readonly class SlugEventSubscriber implements EventSubscriber
             return;
         }
 
-        $slug = (string) $this->slugger->slug($repairer->name);
+        $slug = (string) $this->slugger->slug(strtolower($repairer->name));
         $repairer->slug = $slug;
     }
 }

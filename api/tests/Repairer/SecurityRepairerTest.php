@@ -54,7 +54,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $response = $response->toArray();
         // Check the slug on create
-        $this->assertSame($response['slug'], 'Chez-Jojo');
+        $this->assertSame($response['slug'], 'chez-jojo');
     }
 
     public function testDeleteRepairer(): void
@@ -243,7 +243,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $client->request('PUT', '/repairers/'.$repairer->id, [
              'headers' => ['Content-Type' => 'application/json'],
              'json' => [
-                 'name' => 'new name',
+                 'name' => 'New Name',
                  'description' => 'test put enabled failed',
                  'enabled' => true,
              ],
