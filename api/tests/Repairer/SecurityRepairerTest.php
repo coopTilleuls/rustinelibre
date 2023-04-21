@@ -141,11 +141,11 @@ class SecurityRepairerTest extends AbstractTestCase
             $this->assertArrayNotHasKey('description', $repairer);
             $this->assertArrayNotHasKey('mobilePhone', $repairer);
             $this->assertArrayNotHasKey('owner', $repairer);
+            $this->assertArrayNotHasKey('repairerType', $repairer);
             $this->assertArrayHasKey('name', $repairer);
             $this->assertArrayHasKey('latitude', $repairer);
             $this->assertArrayHasKey('longitude', $repairer);
             $this->assertArrayHasKey('firstSlotAvailable', $repairer);
-            $this->assertArrayHasKey('repairerType', $repairer);
         }
     }
 

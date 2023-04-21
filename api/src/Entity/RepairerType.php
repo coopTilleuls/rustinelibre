@@ -31,7 +31,7 @@ class RepairerType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ])]
     public ?int $id = null;
 
     #[Assert\NotBlank]
@@ -40,6 +40,6 @@ class RepairerType
         max : 50,
     )]
     #[ORM\Column(length: 255)]
-    #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, self::REPAIRER_TYPE_WRITE,  Repairer::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, self::REPAIRER_TYPE_WRITE])]
     public ?string $name = null;
 }

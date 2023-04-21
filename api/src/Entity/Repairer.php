@@ -100,7 +100,7 @@ class Repairer
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?RepairerType $repairerType;
 
     #[Assert\NotBlank]
