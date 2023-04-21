@@ -30,8 +30,16 @@ import WebsiteLayout from "@components/layout/WebsiteLayout";
 import {RepairerFormContext} from "@contexts/RepairerFormContext";
 import {UserFormContext} from "@contexts/UserFormContext";
 import {ENTRYPOINT} from "@config/entrypoint";
+import {GetStaticProps} from "next";
+import {bikeTypeResource} from "@resources/bikeTypeResource";
+import {repairerTypeResource} from "@resources/repairerTypeResource";
+import {BikeType} from "@interfaces/BikeType";
 
-const RepairerRegistration: NextPageWithLayout = ({}) => {
+type RepairerRegistrationProps = {
+    bikeTypes: BikeType[];
+    repairerTypes: RepairerType[];
+};
+const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({bikeTypes, repairerTypes}) => {
 
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
     const [comment, setComment] = useState<string>('');
@@ -43,7 +51,7 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
 
     const {name, setName, street, setStreet, cityInput, setCityInput, city, setCity, citiesList, setCitiesList,
         timeoutId, setTimeoutId, pendingRegistration, setPendingRegistration, errorMessage, setErrorMessage,
-        repairerTypes, bikeTypes, selectedBikeTypes, setSelectedBikeTypes} = useContext(RepairerFormContext);
+        selectedBikeTypes, setSelectedBikeTypes} = useContext(RepairerFormContext);
 
     useEffect(() => {
         if (cityInput === '') return;
@@ -343,5 +351,28 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
         </>
     );
 };
+
+export const getStaticProps: GetStaticProps = async () => {
+
+    if (!ENTRYPOINT) {
+        return {
+            props: {},
+        };
+    }
+
+    const bikeTypesCollection = await bikeTypeResource.getAll(false);
+    const bikeTypes = bikeTypesCollection['hydra:member'];
+
+    const repairerTypesCollection = await repairerTypeResource.getAll(false);
+    const repairerTypes = repairerTypesCollection['hydra:member'];
+
+    return {
+        props: {
+            bikeTypes,
+            repairerTypes
+        },
+        revalidate: 10
+    };
+}
 
 export default RepairerRegistration;
