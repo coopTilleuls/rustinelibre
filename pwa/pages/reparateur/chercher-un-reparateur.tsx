@@ -33,9 +33,16 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@hooks/useMediaQuery';
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
-import {RepairerFormContext} from "@contexts/RepairerFormContext";
+import {GetStaticProps} from "next";
+import {bikeTypeResource} from "@resources/bikeTypeResource";
+import {BikeType} from "@interfaces/BikeType";
+import {ENTRYPOINT} from "@config/entrypoint";
 
-const SearchRepairer: NextPageWithLayout = ({}) => {
+type SearchRepairerProps = {
+    bikeTypes: BikeType[];
+};
+
+const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypes}) => {
     const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
     const [citiesList, setCitiesList] = useState<City[]>([]);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
@@ -44,7 +51,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
     const isMobile = useMediaQuery('(max-width: 640px)');
     const listContainerRef = useRef<HTMLDivElement>(null);
 
-    const {bikeTypes}= useContext(RepairerFormContext);
+    // const {bikeTypes}= useContext(RepairerFormContext);
     const {cityInput, setCityInput, city, setCity, selectedBike, setSelectedBike,
         repairers, setRepairers, currentPage, setCurrentPage, repairerTypeSelected, orderBy,
         setOrderBy, sortChosen, setSortChosen, totalItems, setTotalItems} = useContext(SearchRepairerContext);
@@ -222,7 +229,7 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                     </div>
 
                     <div style={{marginTop: "12px"}}>
-                        {Object.keys(repairers).length > 0 &&
+                        {!pendingSearchCity && Object.keys(repairers).length > 0 &&
                             <RepairersResults />
                         }
 
@@ -231,11 +238,30 @@ const SearchRepairer: NextPageWithLayout = ({}) => {
                         }
                     </div>
 
-                    {totalItems > 20 && <PaginationBlock onPageChange={handlePageChange} />}
+                    {!pendingSearchCity && totalItems > 20 && <PaginationBlock onPageChange={handlePageChange} />}
                 </div>
             </div>
         </>
     );
 };
+
+export const getStaticProps: GetStaticProps = async () => {
+
+    if (!ENTRYPOINT) {
+        return {
+            props: {},
+        };
+    }
+
+    const bikeTypesCollection = await bikeTypeResource.getAll(false);
+    const bikeTypes = bikeTypesCollection['hydra:member'];
+
+    return {
+        props: {
+            bikeTypes
+        },
+        revalidate: 10
+    };
+}
 
 export default SearchRepairer;

@@ -14,55 +14,55 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Pull images
         run: docker compose pull --ignore-pull-failures || true
-#      - name: pre-build api/app_php
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: "api"
-#          file: "api/Dockerfile"
-#          target: "app_php_dev"
-#          cache-from: type=gha,scope=app_php_dev
-#          cache-to: type=gha,mode=max,scope=app_php_dev
-#          push: false
-#          load: true
-#      - name: pre-build api/app_caddy
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: "api"
-#          file: "api/Dockerfile"
-#          target: "app_caddy"
-#          cache-from: |
-#            type=gha,scope=app_php_dev
-#            type=gha,scope=app_caddy
-#          cache-to: type=gha,mode=max,scope=app_caddy
-#          push: false
-#          load: true
-#          tags: caddy
-#      - name: pre-build pwa_dev
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: "pwa"
-#          file: "pwa/Dockerfile"
-#          target: "dev"
-#          cache-from: type=gha,scope=pwa_dev
-#          cache-to: type=gha,mode=max,scope=pwa_dev
-#          push: false
-#          load: true
-#      - name: pre-build pwa prod
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: "pwa"
-#          file: "pwa/Dockerfile"
-#          target: "prod"
-#          cache-from: type=gha,scope=pwa_prod
-#          cache-to: type=gha,mode=max,scope=pwa_prod
-#          push: false
-#          load: true
+      - name: pre-build api/app_php
+        uses: docker/build-push-action@v2
+        with:
+          context: "api"
+          file: "api/Dockerfile"
+          target: "app_php_dev"
+          cache-from: type=gha,scope=app_php_dev
+          cache-to: type=gha,mode=max,scope=app_php_dev
+          push: false
+          load: true
+      - name: pre-build api/app_caddy
+        uses: docker/build-push-action@v2
+        with:
+          context: "api"
+          file: "api/Dockerfile"
+          target: "app_caddy"
+          cache-from: |
+            type=gha,scope=app_php_dev
+            type=gha,scope=app_caddy
+          cache-to: type=gha,mode=max,scope=app_caddy
+          push: false
+          load: true
+          tags: caddy
+      - name: pre-build pwa_dev
+        uses: docker/build-push-action@v2
+        with:
+          context: "pwa"
+          file: "pwa/Dockerfile"
+          target: "dev"
+          cache-from: type=gha,scope=pwa_dev
+          cache-to: type=gha,mode=max,scope=pwa_dev
+          push: false
+          load: true
+      - name: pre-build pwa prod
+        uses: docker/build-push-action@v2
+        with:
+          context: "pwa"
+          file: "pwa/Dockerfile"
+          target: "prod"
+          cache-from: type=gha,scope=pwa_prod
+          cache-to: type=gha,mode=max,scope=pwa_prod
+          push: false
+          load: true
       - name: Start services
-        run: docker compose up --build -d
+        run: docker compose up -d
       - name: Wait for services
         run: |
           while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do

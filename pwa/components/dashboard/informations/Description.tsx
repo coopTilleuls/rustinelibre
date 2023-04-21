@@ -8,16 +8,20 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import dynamic from 'next/dynamic';
+import {BikeType} from "@interfaces/BikeType";
+import {RepairerType} from "@interfaces/RepairerType";
 const Editor = dynamic(() => import("@components/form/Editor"), {
     ssr: false
 });
 
 interface ContactDetailsProps {
     repairer: Repairer|null;
+    bikeTypes: BikeType[];
+    repairerTypes: RepairerType[];
 }
 
-export const ContactDetails = ({repairer}: ContactDetailsProps): JSX.Element => {
-    const {description, setDescription, bikeTypes, repairerTypes, setRepairerTypeSelected, selectedBikeTypes, setSelectedBikeTypes, repairerTypeSelected} = useContext(RepairerFormContext);
+export const ContactDetails = ({repairer, bikeTypes, repairerTypes}: ContactDetailsProps): JSX.Element => {
+    const {description, setDescription, setRepairerTypeSelected, selectedBikeTypes, setSelectedBikeTypes, repairerTypeSelected} = useContext(RepairerFormContext);
 
     useEffect(() => {
         if (repairer) {

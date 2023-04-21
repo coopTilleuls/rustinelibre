@@ -15,6 +15,7 @@ import Link from "next/link";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import Image from "next/image";
 import {GetStaticProps} from "next";
+import {ENTRYPOINT} from "@config/entrypoint";
 
 type RepairerPageProps = {
     repairer: Repairer;
@@ -82,6 +83,12 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairer}) => {
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
 
+    if (!ENTRYPOINT) {
+        return {
+            props: {},
+        };
+    }
+
     if (!params) {
         return {
             notFound: true
@@ -106,6 +113,14 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 }
 
 export async function getStaticPaths() {
+
+    if (!ENTRYPOINT) {
+        return {
+            paths: [],
+            fallback: true,
+        };
+    }
+
     const repairers = await repairerResource.getAll(false,{itemsPerPage: false});
     const paths = repairers['hydra:member'].map((repairer) => ({
         params: { id: repairer.id.toString() },
