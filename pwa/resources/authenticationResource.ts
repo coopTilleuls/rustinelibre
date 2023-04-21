@@ -14,7 +14,7 @@ class AuthenticationResource extends AbstractResource<AuthenticationResponse> {
 
   async authenticate(body: RequestBody = {}): Promise<AuthenticationResponse> {
     const doFetch = async () => {
-      return await fetch(this.getUrl(false, '/auth'), {
+      return await fetch(this.getUrl('/auth'), {
         headers: {
           'Content-Type': 'application/json',
         },

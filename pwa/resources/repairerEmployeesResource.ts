@@ -6,7 +6,7 @@ class RepairerEmployeesResource extends AbstractResource<RepairerEmployee> {
     protected endpoint = '/repairer_employees';
 
     async updateEmployeeAndUser(id: string, body: RequestBody = {}, headers?: RequestHeaders): Promise<any> {
-        const url = this.getUrl(false, `/employee_and_user/${id}`);
+        const url = this.getUrl(`/employee_and_user/${id}`);
 
         const doFetch = async () => {
             return await fetch(url, {
