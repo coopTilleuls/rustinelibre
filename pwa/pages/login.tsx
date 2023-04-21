@@ -35,6 +35,8 @@ const Login: NextPageWithLayout = ({}) => {
             'password': password
         });
 
+        console.log(user);
+
         if (!!user) {
             await router.push('/');
         } else {
