@@ -23,7 +23,7 @@ export const EmployeesList = ({currentBoss}: EmployeesListProps): JSX.Element =>
     const [employees, setEmployees] = useState<RepairerEmployee[]>([]);
 
     async function fetchEmployees() {
-        const response = await repairerEmployeesResource.getAll({});
+        const response = await repairerEmployeesResource.getAll();
         setEmployees(response['hydra:member']);
         setLoadingList(false);
     }

@@ -1,8 +1,7 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState} from 'react';
 import Head from "next/head";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
-import {useRouter} from "next/router";
 import {Repairer} from "@interfaces/Repairer";
 import {repairerResource} from "@resources/repairerResource";
 import Button from '@mui/material/Button';
@@ -15,27 +14,15 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import Link from "next/link";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import Image from "next/image";
+import {GetStaticProps} from "next";
 
-const RepairerPage: NextPageWithLayout = () => {
+type RepairerPageProps = {
+    repairer: Repairer;
+};
 
-    const router = useRouter();
-    const { id } = router.query;
-    const [repairer, setRepairer] = useState<Repairer|null>(null);
+const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairer}) => {
+
     const [loading, setLoading] = useState<boolean>(false);
-
-    useEffect(() => {
-        async function fetchRepairer() {
-            if (typeof id === 'string' && id.length > 0) {
-                setLoading(true);
-                const repairerFetch: Repairer = await repairerResource.getById(id);
-                setRepairer(repairerFetch);
-                setLoading(false);
-            }
-        }
-        if (id) {
-            fetchRepairer();
-        }
-    }, [id]);
 
     return (
         <>
@@ -92,5 +79,42 @@ const RepairerPage: NextPageWithLayout = () => {
         </>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({params}) => {
+
+    if (!params) {
+        return {
+            notFound: true
+        };
+    }
+
+    const { id } = params;
+    if (!id) {
+        return {
+            notFound: true
+        };
+    }
+
+    const repairer: Repairer = await repairerResource.getById(id.toString(), false);
+
+    return {
+        props: {
+            repairer,
+        },
+        revalidate: 10
+    };
+}
+
+export async function getStaticPaths() {
+    const repairers = await repairerResource.getAll(false,{itemsPerPage: false});
+    const paths = repairers['hydra:member'].map((repairer) => ({
+        params: { id: repairer.id.toString() },
+    }));
+
+    return {
+        paths: paths,
+        fallback: 'blocking',
+    }
+}
 
 export default RepairerPage;

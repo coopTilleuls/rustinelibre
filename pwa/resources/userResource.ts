@@ -7,13 +7,14 @@ class UserResource extends AbstractResource<User> {
 
   async getCurrent(): Promise<User> {
     return await this.get(
-        '/me'
+        '/me',
+        true
     );
   }
 
   async register(body: RequestBody = {}): Promise<User> {
     const doFetch = async () => {
-      return await fetch(this.getUrl('/users'), {
+      return await fetch(this.getUrl( '/users'), {
         headers: {
           'Content-Type': 'application/json',
         },
