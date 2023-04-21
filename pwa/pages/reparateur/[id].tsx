@@ -36,7 +36,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairer}) => {
             setLoading(false);
         }
     }
-g
+
     return (
         <>
             <div style={{width: "100vw", overflowX: "hidden"}}>
