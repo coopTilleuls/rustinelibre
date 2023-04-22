@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Head from "next/head";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 import {Repairer} from "@interfaces/Repairer";
@@ -19,22 +19,31 @@ import {ENTRYPOINT} from "@config/entrypoint";
 import {useRouter} from "next/router";
 
 type RepairerPageProps = {
-    repairer: Repairer|null;
+    repairerProps: Repairer|null;
 };
 
-const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairer}) => {
+const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
 
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
+    const [repairer, setRepairer] = useState<Repairer|null>(repairerProps);
 
-    if (!repairer) {
+    // If no repairerProps loaded
+    async function fetchRepairer() {
         const { id } = router.query;
-        if (typeof id === 'string' && id.length > 0) {
-            setLoading(true);
-            const repairer = repairerResource.getById(id);
+        if (id) {
+            const repairer = await repairerResource.getById(id.toString());
             setLoading(false);
+            setRepairer(repairer)
         }
     }
+
+    useEffect(() => {
+        if (!repairer) {
+            setLoading(true);
+            fetchRepairer();
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
@@ -113,11 +122,10 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
         };
     }
 
-    const repairer: Repairer = await repairerResource.getById(id.toString(), false);
-
+    const repairerProps: Repairer = await repairerResource.getById(id.toString(), false);
     return {
         props: {
-            repairer,
+            repairerProps,
         },
         revalidate: 10
     };
