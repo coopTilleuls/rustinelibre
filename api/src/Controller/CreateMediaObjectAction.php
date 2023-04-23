@@ -27,7 +27,7 @@ final class CreateMediaObjectAction extends AbstractController
 
         $mediaObject = new MediaObject();
         $mediaObject->file = $uploadedFile;
-        $mediaObject->owner = $this->security->getToken() ?? $this->security->getToken()->getUser();
+        $mediaObject->owner = $this->security->getToken() ? $this->security->getToken()->getUser() : null;
 
         return $mediaObject;
     }
