@@ -1,4 +1,4 @@
-import { NextPageWithLayout } from 'pages/_app';
+import {NextPageWithLayout} from 'pages/_app';
 import React, {
   useState,
   useEffect,
@@ -10,20 +10,20 @@ import React, {
   useCallback,
 } from 'react';
 import Head from 'next/head';
-import { repairerResource } from '@resources/repairerResource';
-import { ButtonShowMap } from '@components/repairers/ButtonShowMap';
+import {repairerResource} from '@resources/repairerResource';
+import {ButtonShowMap} from '@components/repairers/ButtonShowMap';
 import {
   createCitiesWithGouvAPI,
   createCitiesWithNominatimAPI,
   City,
 } from '@interfaces/City';
-import { City as NominatimCity } from '@interfaces/Nominatim';
-import { City as GouvCity } from '@interfaces/Gouv';
-import { searchCity } from '@utils/apiCity';
+import {City as NominatimCity} from '@interfaces/Nominatim';
+import {City as GouvCity} from '@interfaces/Gouv';
+import {searchCity} from '@utils/apiCity';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
@@ -38,13 +38,13 @@ import PaginationBlock from '@components/common/PaginationBlock';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@hooks/useMediaQuery';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import { SearchRepairerContext } from '@contexts/SearchRepairerContext';
-import { GetStaticProps } from 'next';
-import { bikeTypeResource } from '@resources/bikeTypeResource';
-import { BikeType } from '@interfaces/BikeType';
-import { ENTRYPOINT } from '@config/entrypoint';
+import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
+import {GetStaticProps} from 'next';
+import {bikeTypeResource} from '@resources/bikeTypeResource';
+import {BikeType} from '@interfaces/BikeType';
+import {ENTRYPOINT} from '@config/entrypoint';
 import Box from '@mui/material/Box';
-import { CircularProgress } from '@mui/material';
+import {CircularProgress} from '@mui/material';
 
 type SearchRepairerProps = {
   bikeTypes: BikeType[];
@@ -97,14 +97,14 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     };
 
     params = city
-      ? { ...{ 'around[5000]': `${city.lat},${city.lon}` }, ...params }
+      ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params}
       : params;
 
     if (orderBy) {
-      const { key, value } = orderBy;
-      params = { ...params, [key]: value };
+      const {key, value} = orderBy;
+      params = {...params, [key]: value};
     } else {
-      params = { ...{ availability: 'ASC' }, ...params };
+      params = {...{availability: 'ASC'}, ...params};
     }
 
     const response = await repairerResource.getAll(false, params);
@@ -211,18 +211,18 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
   const scrollToTop = (): void => {
     if (listContainerRef.current) {
-      listContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+      listContainerRef.current.scrollIntoView({behavior: 'smooth'});
     }
   };
 
   return (
     <>
-      <div style={{ width: '100vw', overflowX: 'hidden' }}>
+      <div style={{width: '100vw', overflowX: 'hidden'}}>
         <Head>
           <title>Chercher un réparateur</title>
         </Head>
         <WebsiteLayout />
-        <div style={{ width: '100vw', marginBottom: '100px' }}>
+        <div style={{width: '100vw', marginBottom: '100px'}}>
           <form
             onSubmit={handleSubmit}
             style={{
@@ -231,16 +231,14 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
               display: 'grid',
               gap: '24px',
               gridTemplateColumns: '1fr 1fr',
-            }}
-          >
-            <div style={{ marginBottom: '14px' }}>
-              <InputLabel htmlFor='bikeType'>Type de Vélo</InputLabel>
+            }}>
+            <div style={{marginBottom: '14px'}}>
+              <InputLabel htmlFor="bikeType">Type de Vélo</InputLabel>
               <Select
                 onChange={handleBikeChange}
                 value={selectedBike?.name}
-                style={{ width: '100%' }}
-              >
-                <MenuItem disabled value=''>
+                style={{width: '100%'}}>
+                <MenuItem disabled value="">
                   Choisissez un type de vélo
                 </MenuItem>
                 {bikeTypes.map((bike) => (
@@ -251,8 +249,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
               </Select>
             </div>
             {selectedBike && (
-              <div style={{ marginBottom: '14px' }} ref={listContainerRef}>
-                <InputLabel htmlFor='city'>Ville</InputLabel>
+              <div style={{marginBottom: '14px'}} ref={listContainerRef}>
+                <InputLabel htmlFor="city">Ville</InputLabel>
                 <Autocomplete
                   freeSolo
                   value={cityInput}
@@ -277,23 +275,23 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
             )}
 
             {selectedBike && city && (
-              <Box sx={{ display: { xs: 'hidden', md: 'block' } }}>
-                <Button fullWidth type='submit' variant='outlined'>
+              <Box sx={{display: {xs: 'hidden', md: 'block'}}}>
+                <Button fullWidth type="submit" variant="outlined">
                   Chercher
                 </Button>
               </Box>
             )}
           </form>
 
-          <div style={{ margin: '12px 0' }}>
+          <div style={{margin: '12px 0'}}>
             {pendingSearchCity && <CircularProgress />}
           </div>
 
-          <Box sx={{ marginTop: '12px', display: { md: 'hidden' } }}>
+          <Box sx={{marginTop: '12px', display: {md: 'hidden'}}}>
             {Object.keys(repairers).length > 0 && isMobile && <ButtonShowMap />}
           </Box>
 
-          <div style={{ marginTop: '12px' }}>
+          <div style={{marginTop: '12px'}}>
             {!pendingSearchCity && Object.keys(repairers).length > 0 && (
               <RepairersResults />
             )}
