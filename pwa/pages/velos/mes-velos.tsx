@@ -2,60 +2,63 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useEffect, useState} from 'react';
 import Head from "next/head";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
-import {Repairer} from "@interfaces/Repairer";
-import {repairerResource} from "@resources/repairerResource";
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {CircularProgress} from "@mui/material";
-import FmdGoodIcon from '@mui/icons-material/FmdGood';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import Link from "next/link";
-import {apiImageUrl} from "@helpers/apiImagesHelper";
-import Image from "next/image";
+import {useAccount} from "@contexts/AuthContext";
+import {Bike} from "@interfaces/Bike";
+import {bikeResource} from "@resources/bikeResource";
+import Typography from "@mui/material/Typography";
+import { useRouter } from 'next/router'
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import Modal from '@mui/material/Modal';
+import ModalAddBike from "@components/bike/ModalAddBike";
 import {GetStaticProps} from "next";
 import {ENTRYPOINT} from "@config/entrypoint";
-import {useRouter} from "next/router";
-import {useAccount} from "@contexts/AuthContext";
+import {bikeTypeResource} from "@resources/bikeTypeResource";
+import {BikeType} from "@interfaces/BikeType";
 
-type RepairerPageProps = {
-    repairerProps: Repairer|null;
+type MyBikesProps = {
+    bikeTypes: BikeType[];
 };
 
-const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
+const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
 
     const user = useAccount({});
+    const [openModal, setOpenModal] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [bikes, setBikes] = useState<Bike|null>(null);
+    const [bikes, setBikes] = useState<Bike[]>([]);
+    const router = useRouter()
 
     // If no repairerProps loaded
-    async function fetchRepairer() {
-        const { id } = router.query;
-        if (id) {
-            const repairer = await repairerResource.getById(id.toString());
-            setLoading(false);
-            setRepairer(repairer)
-        }
+    async function fetchBikes() {
+        const bikesFetched = await bikeResource.getAll();
+        setLoading(false);
+        setBikes(bikesFetched['hydra:member']);
     }
 
     useEffect(() => {
-        if (!repairer) {
+        if (user) {
             setLoading(true);
-            fetchRepairer();
+            fetchBikes();
         }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const handleLogin = (): void => {
+        router.push('/login?next=' + encodeURIComponent(router.asPath))
+    }
+
+    const handleOpenModal = (): void => setOpenModal(true);
+    const handleCloseModal = (): void => setOpenModal(false);
 
     return (
         <>
             <div style={{width: "100vw", overflowX: "hidden"}}>
                 <Head>
-                    <title>Réparateur {repairer?.name}</title>
+                    <title>Mes vélos</title>
                 </Head>
                 <WebsiteLayout />
-                <Link href={`/reparateur/chercher-un-reparateur`} passHref>
-                    <Button variant="outlined">Retour</Button>
-                </Link>
                 <main>
                     <Box
                         sx={{
@@ -64,37 +67,21 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
                             pb: 6,
                         }}
                     >
+                        {!user && <Typography><span onClick={handleLogin} style={{cursor: 'pointer'}}><u>Connectez vous</u></span> pour accéder à la liste de vos vélos</Typography>}
                         {loading && <CircularProgress />}
                         {
-                            repairer &&
+                            bikes.length > 0 && !loading &&
                             <Container maxWidth="sm">
-                                <Typography
-                                    component="h1"
-                                    variant="h2"
-                                    align="center"
-                                    color="text.primary"
-                                    gutterBottom
-                                >
-                                    {repairer.name}
-                                </Typography>
-                                {repairer.thumbnail && <Image src={apiImageUrl(repairer.thumbnail.contentUrl)} alt={'Photo de profil du réparateur'} width={100} height={100}></Image>}
-                                <Button variant="outlined" style={{marginLeft: '30%'}}>{repairer.repairerType?.name}</Button>
-                                <Typography paragraph variant="h5" align="left" color="text.secondary" style={{marginTop: '10px'}}>
-                                    <FmdGoodIcon /> {repairer.street} - {repairer.postcode} {repairer.city}
-                                </Typography>
-                                <Typography paragraph variant="h5" align="left" color="text.secondary" style={{marginTop: '10px'}}>
-                                    <PhoneAndroidIcon /> {repairer.mobilePhone}
-                                </Typography>
-
-                                <Button variant="outlined" style={{marginLeft: '30%', marginTop: '20px', backgroundColor: 'lightblue', color: 'white'}}>
-                                    Je réserve
-                                </Button>
-
-                                <Typography paragraph variant="h5" align="justify" color="text.secondary" style={{marginTop: '30px'}}>
-                                    {repairer.description}
-                                </Typography>
+                                Hello !
                             </Container>
                         }
+
+                        <Button variant="outlined" style={{marginBottom: '15px'}} onClick={handleOpenModal}>
+                            <AddIcon />
+                            Ajouter un vélo
+                        </Button>
+
+                        <ModalAddBike openModal={openModal} handleCloseModal={handleCloseModal} bikeTypes={bikeTypes} />
                     </Box>
                 </main>
             </div>
@@ -102,7 +89,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
     );
 };
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
+export const getStaticProps: GetStaticProps = async () => {
 
     if (!ENTRYPOINT) {
         return {
@@ -110,46 +97,15 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
         };
     }
 
-    if (!params) {
-        return {
-            notFound: true
-        };
-    }
+    const bikeTypesCollection = await bikeTypeResource.getAll(false);
+    const bikeTypes = bikeTypesCollection['hydra:member'];
 
-    const { id } = params;
-    if (!id) {
-        return {
-            notFound: true
-        };
-    }
-
-    const repairerProps: Repairer = await repairerResource.getById(id.toString(), false);
     return {
         props: {
-            repairerProps,
+            bikeTypes
         },
         revalidate: 10
     };
 }
 
-export async function getStaticPaths() {
-
-    if (!ENTRYPOINT) {
-        return {
-            paths: [],
-            fallback: true,
-        };
-    }
-
-    const repairers = await repairerResource.getAll(false,{itemsPerPage: false});
-    const paths = repairers['hydra:member'].map((repairer) => ({
-        params: { id: repairer.id.toString() },
-    }));
-
-    return {
-        paths: paths,
-        fallback: 'blocking',
-    }
-}
-
-export default RepairerPage;
+export default MyBikes;

@@ -4,6 +4,8 @@ import {RequestBody, RequestHeaders} from "@interfaces/Resource";
 
 class MediaObjectResource extends AbstractResource<MediaObject> {
     protected endpoint = '/media_objects';
+
+
 }
 
 export const mediaObjectResource = new MediaObjectResource();
