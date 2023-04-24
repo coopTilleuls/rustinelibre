@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -23,6 +24,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     types: ['https://schema.org/MediaObject'],
     operations: [
         new Get(),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN') or object.owner == user"
+        ),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(
             controller: CreateMediaObjectAction::class,
@@ -57,6 +61,10 @@ class MediaObject
 
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     public ?int $id = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    public ?User $owner = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
     #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ])]
