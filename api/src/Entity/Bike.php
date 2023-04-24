@@ -19,6 +19,10 @@ class Bike
     #[ORM\Column]
     public ?int $id = null;
 
+    #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    public ?User $owner = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     public ?string $brand = null;
 
