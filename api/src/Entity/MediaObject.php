@@ -67,7 +67,7 @@ class MediaObject
     public ?User $owner = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ])]
+    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Bike::REPAIRER_READ])]
     public ?string $contentUrl = null;
 
     #[Vich\UploadableField(mapping: 'media_object', fileNameProperty: 'filePath')]
