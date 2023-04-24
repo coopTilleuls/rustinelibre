@@ -27,8 +27,6 @@ services:
     build:
       context: ./pwa
       target: prod
-    environment:
-      NEXT_PUBLIC_ENTRYPOINT: http://caddy
 
   caddy:
     build:

@@ -1,0 +1,12 @@
+dependencies:
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami/
+  version: 11.9.13
+- name: external-dns
+  repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+  version: 5.4.16
+- name: maildev
+  repository: https://pando85.github.io/helm-maildev/
+  version: 0.3.1
+digest: sha256:f326e76db2f4a40a50cad5af80bcc6da467f1248f7ca4a369100c1e7241be09d
+generated: "2023-04-11T09:56:31.235680363+02:00"

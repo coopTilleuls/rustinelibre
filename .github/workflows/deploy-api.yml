@@ -1,0 +1,88 @@
+name: Deploy API
+
+on:
+  workflow_call:
+    secrets:
+      kubeconfig:
+        description: kubeconfig stored as a base64 encrypted secret
+        required: true
+    inputs:
+      url:
+        type: "string"
+        description: URL used in deployment
+        required: true 
+      release_name:
+        type: "string"
+        description: Helm release name
+        required: true
+      context:
+        type: "string"
+        description: "Kube context (prod/nonprod)"
+        required: true
+      image_tag:
+        type: "string"
+        description: "Image tag"
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      URL: ${{ inputs.url }}
+      CONTEXT: ${{ inputs.context }}
+      RELEASE_NAME: ${{ inputs.release_name }}
+      IMAGE_TAG: ${{ inputs.image_tag }}
+    timeout-minutes: 15
+    #permissions:
+    #  contents: 'read'
+    #  id-token: 'write'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set kubeconfig
+        run: |
+          mkdir ~/.kube
+          echo ${{ secrets.kubeconfig }} | base64 -d > ~/.kube/config
+          kubectl config view
+
+      # https://github.com/helm/helm/issues/8036
+      - name: Build helm dependencies
+        run: |
+          set -o pipefail
+          # add all repos
+          if [ -f "./helm/api/Chart.lock" ]; then
+            yq --indent 0 '.dependencies | map(["helm", "repo", "add", .name, .repository] | join(" ")) | .[]' "./helm/api/Chart.lock"  | sh --;
+          fi
+          helm dependency build ./helm/api
+
+      - name: Deploy on namespace
+        id: deploy
+
+        run: |
+          set -o pipefail
+          helm upgrade --install ${RELEASE_NAME}-api ./helm/api \
+            --atomic \
+            --debug \
+            --kube-context $CONTEXT \
+            --values ./helm/api/values.yml \
+            --values ./helm/api/values-prod.yml \
+            --set=php.image.tag=${IMAGE_TAG} \
+            --set=caddy.image.tag=${IMAGE_TAG} \
+            --set=pwa.image.tag=${IMAGE_TAG} \
+            --set=ingress.hosts[0].host=${URL} \
+            --set=ingress.tls[0].secretName=${RELEASE_NAME}-tls \
+            --set=ingress.tls[0].hosts[0]=${URL} \
+            --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
+            --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
+            --set=php.corsAllowOrigin="https?://${URL}$" \
+            --set=php.trustedHosts="^127\\.0\\.0\\.1|localhost|${URL}$" \
+            --set=php.jwt.secretKey="$JWT_SECRET_KEY" \
+            --set=php.jwt.publicKey="$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)" \
+            --set=php.jwt.passphrase=$JWT_PASSPHRASE \
+            --set=php.host=${URL} \
+            --set=caddy.pwaUpstream="${RELEASE_NAME}-pwa-bikelib-pwa:3000" \
+            | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
+            # TODO: do something about PostgreSQL password
+            # --set=postgresql.global.auth.password=$(openssl rand -base64 32 | tr -d "=+/") \

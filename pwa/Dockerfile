@@ -41,14 +41,19 @@ FROM builder_base AS builder
 COPY --link . .
 COPY --from=deps --link /srv/app/node_modules ./node_modules
 
-RUN pnpm run build
+# For building using API deployment
+ARG next_public_entrypoint
+ENV NEXT_PUBLIC_ENTRYPOINT $next_public_entrypoint
 
+# Build and fetch data from API
+RUN pnpm run build
 
 # Production image, copy all the files and run next
 FROM node:18-alpine AS prod
 WORKDIR /srv/app
 
 ENV NODE_ENV production
+
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 

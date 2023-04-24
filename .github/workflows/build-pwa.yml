@@ -1,0 +1,23 @@
+name: Build PWA
+
+on:
+  workflow_call:
+    inputs:
+      url:
+        type: string
+        description: URL of deployment
+        required: true
+
+jobs:
+  build-push-pwa:
+    runs-on: ubuntu-latest      
+    steps:
+    - name: Build/Push
+      uses: coopTilleuls/action-docker-build-push@feat/support-build-arg
+      with:
+        IMAGE_NAME: bikelib-pwa
+        BUILD_CONTEXT: pwa
+        BUILD_TARGET: prod
+        BUILD_ARG: "next_public_entrypoint=https://${{ inputs.url }}"
+        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
