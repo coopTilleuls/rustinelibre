@@ -16,6 +16,11 @@ import {BikeType} from "@interfaces/BikeType";
 import {MediaObject} from "@interfaces/MediaObject";
 import {repairerResource} from "@resources/repairerResource";
 import { uploadFile } from "@helpers/uploadFile";
+import BuildIcon from "@mui/icons-material/Build";
+import Avatar from "@mui/material/Avatar";
+import {apiImageUrl} from "@helpers/apiImagesHelper";
+import {mediaObjectResource} from "@resources/mediaObjectResource";
+import {bikeResource} from "@resources/bikeResource";
 
 
 const style = {
@@ -53,37 +58,39 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
         event.preventDefault();
-        // if (passwordError || !email || !password || !firstName || !lastName) {
-        //     return;
-        // }
-        //
-        // setErrorMessage(null);
-        // setPendingRegistration(true);
-        //
-        // let newUser;
-        // try {
-        //     newUser = await userResource.register({
-        //         'firstName': firstName,
-        //         'lastName': lastName,
-        //         'email': email,
-        //         'plainPassword': password,
-        //     })
-        // } catch (e) {
-        //     setErrorMessage('Inscription impossible');
-        // }
-        //
-        // if (newUser) {
-        //     await router.push('/login');
-        // }
-        //
-        // setPendingRegistration(false);
+        if (!name || !selectedBike) {
+            return;
+        }
+
+        setErrorMessage(null);
+        setPendingAdd(true);
+
+        let newBike;
+        try {
+            newBike = await bikeResource.post({
+                'name': name,
+                'selectedBike': selectedBike['@id'],
+            })
+        } catch (e) {
+            setErrorMessage('Ajout du vélo impossible');
+        }
+
+        if (newBike) {
+            handleCloseModal();
+        }
+
+        setPendingAdd(false);
     };
 
     const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void => {
         setName(event.target.value);
     };
 
-    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+        if (photo) {
+            await mediaObjectResource.delete(photo['@id']);
+        }
+
         if (event.target.files) {
             setLoadingPhoto(true);
 
@@ -107,6 +114,7 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Ajouter un vélo
                 </Typography>
+                {photo && <img width="300" src={apiImageUrl(photo.contentUrl)}/>}
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
@@ -121,6 +129,7 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
                         onChange={handleChangeName}
                     />
                     <Select
+                        required
                         onChange={handleBikeChange}
                         value={selectedBike?.name}
                         style={{width: '100%'}}
@@ -131,11 +140,16 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
                         ))}
                     </Select>
                     <Button
-                        fullWidth
                         variant="outlined"
-                        sx={{ mt: 3, mb: 2 }}
+                        component="label"
+                        sx={{ mt: 2, mb: 2 }}
                     >
-                        Ajouter une photo
+                        {loadingPhoto ? <CircularProgress /> : (photo ? 'Changer de photo' : 'Ajouter une photo')}
+                        <input
+                            type="file"
+                            hidden
+                            onChange={(e) => handleFileChange(e)}
+                        />
                     </Button>
                     <Button
                         type="submit"

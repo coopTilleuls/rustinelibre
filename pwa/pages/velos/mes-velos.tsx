@@ -12,12 +12,12 @@ import Typography from "@mui/material/Typography";
 import { useRouter } from 'next/router'
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import Modal from '@mui/material/Modal';
 import ModalAddBike from "@components/bike/ModalAddBike";
 import {GetStaticProps} from "next";
 import {ENTRYPOINT} from "@config/entrypoint";
 import {bikeTypeResource} from "@resources/bikeTypeResource";
 import {BikeType} from "@interfaces/BikeType";
+import BikeCard from "@components/bike/BikeCard";
 
 type MyBikesProps = {
     bikeTypes: BikeType[];
@@ -29,6 +29,7 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [bikes, setBikes] = useState<Bike[]>([]);
+    const [selectedBike, setSelectedBike] = useState<Bike|null>(null);
     const router = useRouter()
 
     // If no repairerProps loaded
@@ -50,7 +51,10 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
     }
 
     const handleOpenModal = (): void => setOpenModal(true);
-    const handleCloseModal = (): void => setOpenModal(false);
+    const handleCloseModal = (): void => {
+        setOpenModal(false)
+        fetchBikes();
+    };
 
     return (
         <>
@@ -65,20 +69,23 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
                             bgcolor: 'background.paper',
                             pt: 8,
                             pb: 6,
+                            ml: 5,
                         }}
                     >
                         {!user && <Typography><span onClick={handleLogin} style={{cursor: 'pointer'}}><u>Connectez vous</u></span> pour accéder à la liste de vos vélos</Typography>}
                         {loading && <CircularProgress />}
                         {
                             bikes.length > 0 && !loading &&
-                            <Container maxWidth="sm">
-                                Hello !
-                            </Container>
+                            bikes.map(bike => <BikeCard bike={bike} setSelectedBike={setSelectedBike} />)
                         }
 
-                        <Button variant="outlined" style={{marginBottom: '15px'}} onClick={handleOpenModal}>
+                        <Button variant="outlined" sx={{mb: 3, mt: 5}} onClick={handleOpenModal}>
                             <AddIcon />
                             Ajouter un vélo
+                        </Button>
+
+                        <Button variant="outlined" sx={{mb: 3, mt: 5}} disabled={selectedBike}>
+                            Suivant
                         </Button>
 
                         <ModalAddBike openModal={openModal} handleCloseModal={handleCloseModal} bikeTypes={bikeTypes} />
