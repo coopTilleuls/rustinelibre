@@ -19,8 +19,8 @@ class Bike
     #[ORM\Column]
     public ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'bikes')]
+    #[ORM\JoinColumn(nullable: false)]
     public ?User $owner = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -56,7 +56,6 @@ class Bike
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
     public ?MediaObject $transmissionPicture = null;
-
 
     public function __construct()
     {

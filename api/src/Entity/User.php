@@ -14,6 +14,8 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
 use App\Repository\UserRepository;
 use App\User\StateProvider\CurrentUserProvider;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -101,6 +103,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
     #[Groups([self::USER_READ])]
     public ?RepairerEmployee $repairerEmployee = null;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Bike::class, cascade: ['persist', 'remove'])]
+    #[Groups([self::USER_READ])]
+    public Collection $bikes;
+
+    public function __construct()
+    {
+        $this->bikes = new ArrayCollection();
+    }
 
     /**
      * A visual identifier that represents this user.
