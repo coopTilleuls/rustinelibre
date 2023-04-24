@@ -132,10 +132,18 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $client->request('GET', '/repairers?enabled=true');
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
-        // On 25 repairers -> 3 aren't enabled
-        $this->assertCount(22, $response['hydra:member']);
-
+        $enabledRepairers = static::getContainer()->get(RepairerRepository::class)->findBy(['enabled' => true]);
         $response = $response['hydra:member'];
+        $this->assertEquals(count($enabledRepairers), count($response));
+
+        // test first array key result for enabled filter
+        $firstRepairer = $client->request('GET', sprintf('/repairers/%d', $response[0]['id']))->toArray();
+        $this->assertSame(true, $firstRepairer['enabled']);
+
+        // test last array key result for enabled filter
+        $lastRepairer = $client->request('GET', sprintf('/repairers/%d', end($response)['id']))->toArray();
+        $this->assertSame(true, $lastRepairer['enabled']);
+
         // test collection normalization groups
         foreach ($response as $repairer) {
             $this->assertArrayNotHasKey('description', $repairer);
