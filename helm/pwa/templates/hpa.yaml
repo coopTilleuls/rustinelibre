@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "bikelib.fullname" . }}
+  name: {{ include "bikelib-pwa.fullname" . }}
   labels:
-    {{- include "bikelib.labels" . | nindent 4 }}
+    {{- include "bikelib-pwa.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "bikelib.fullname" . }}
+    name: {{ include "bikelib-pwa.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

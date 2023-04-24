@@ -22,17 +22,99 @@ jobs:
           labels: |
             deploy
 
-  build:
-    name: Build
-    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
-    uses: ./.github/workflows/build.yml
+  deploy-args:
+    name: Generate deploy args
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.deploy-args.outputs.url }}
+      release_name: ${{ steps.deploy-args.outputs.release_name }}
+      image_tag: ${{ steps.deploy-args.outputs.image_tag }}
+      context: ${{ steps.deploy-args.outputs.context }}
+    steps:
+      - id: deploy-args
+        run: |
+          DOMAIN=bikelib.preprod-tilleuls.ovh
+          if [[ "${{ github.ref }}" == *"tag"* ]]; then
+              # Tags are deployed in prod
+              CONTEXT=prod
+              IMAGE_TAG=${{ github.ref_name }}
+              RELEASE_NAME=demo
+              URL=demo.${DOMAIN}; 
+          else
+              CONTEXT=nonprod
+              IMAGE_TAG=sha-${GITHUB_SHA::7}
+              if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+                  RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+              else
+                  RELEASE_NAME=${{ github.ref_name }}
+              fi
+              URL=${RELEASE_NAME}.nonprod.${DOMAIN}
+          fi
+          echo "url=${URL}" >> "$GITHUB_OUTPUT"
+          echo "release_name=${RELEASE_NAME}" >> "$GITHUB_OUTPUT"
+          echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+          echo "context=${CONTEXT}" >> "$GITHUB_OUTPUT"
+          cat $GITHUB_OUTPUT
 
-  deploy:
-    name: Deploy
+  build-api:
+    name: Build API
     if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
-    needs: [ build ]
-    uses: ./.github/workflows/deploy.yml
-    concurrency: ${{ github.ref }}-deploy
+    uses: ./.github/workflows/build-api.yml
+
+  deploy-api:
+    name: Deploy API
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
+    needs: [ deploy-args, build-api ]
+    uses: ./.github/workflows/deploy-api.yml
+    concurrency: ${{ github.ref }}-deploy-api
     secrets:
       kubeconfig: ${{ secrets.KUBECONFIG }}
-      domain: ${{ secrets.DOMAIN }}
+    with:
+      url: ${{needs.deploy-args.outputs.url}}
+      release_name: ${{ needs.deploy-args.outputs.release_name }}
+      image_tag: ${{ needs.deploy-args.outputs.image_tag }}
+      context: ${{ needs.deploy-args.outputs.context }}
+
+  build-pwa:
+    needs: [ deploy-args, deploy-api ]
+    name: Build PWA
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
+    uses: ./.github/workflows/build-pwa.yml
+    with:
+      url: ${{needs.deploy-args.outputs.url}}
+
+  deploy-pwa:
+    name: Deploy PWA
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
+    needs: [ deploy-args, build-pwa ]
+    uses: ./.github/workflows/deploy-pwa.yml
+    concurrency: ${{ github.ref }}-deploy-pwa
+    secrets:
+      kubeconfig: ${{ secrets.KUBECONFIG }}
+    with:
+      url: ${{needs.deploy-args.outputs.url}}
+      release_name: ${{ needs.deploy-args.outputs.release_name }}
+      image_tag: ${{ needs.deploy-args.outputs.image_tag }}
+      context: ${{ needs.deploy-args.outputs.context }}
+  
+  output-deployment-url:
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
+    needs: [ deploy-args, deploy-pwa ]
+    name: Output deployment URL
+    runs-on: ubuntu-latest
+    steps:
+    - name: Output deployment URL
+      uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      env:
+        URL: ${{needs.deploy-args.outputs.url}}
+      with:
+        script: |
+          const { URL } = process.env
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `Chart has been deployed with this url:\n\`\`\`\n${URL}\n\`\`\``
+          })

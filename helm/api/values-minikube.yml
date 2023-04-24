@@ -15,7 +15,8 @@ caddy:
     repository: bikelib-caddy
     tag: latest
 
-pwa:
-  image:
-    repository: bikelib-pwa
-    tag: latest
+service:
+  type: NodePort
+
+external-dns:
+  enabled: false

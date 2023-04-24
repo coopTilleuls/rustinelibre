@@ -1,8 +1,8 @@
 apiVersion: v2
-name: bikelib
-description: A Helm chart for the bikelib project
-# home: https://bikelib.dev
-# icon: https://bikelib.dev/logo-250x250.png
+name: bikelib-api
+description: A Helm chart for the bikelib-api project
+# home: https://bikelib-api.dev
+# icon: https://bikelib-api.dev/logo-250x250.png
 
 # A chart can be either an 'application' or a 'library' chart.
 #

@@ -1,0 +1,7 @@
+pwa:
+  image:
+    repository: bikelib-pwa
+    tag: latest
+
+service:
+  type: NodePort
