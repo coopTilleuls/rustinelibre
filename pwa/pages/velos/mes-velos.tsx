@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import Head from "next/head";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import {CircularProgress} from "@mui/material";
 import {useAccount} from "@contexts/AuthContext";
 import {Bike} from "@interfaces/Bike";
@@ -18,6 +17,7 @@ import {ENTRYPOINT} from "@config/entrypoint";
 import {bikeTypeResource} from "@resources/bikeTypeResource";
 import {BikeType} from "@interfaces/BikeType";
 import BikeCard from "@components/bike/BikeCard";
+import Container from "@mui/material/Container";
 
 type MyBikesProps = {
     bikeTypes: BikeType[];
@@ -34,6 +34,7 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
 
     // If no repairerProps loaded
     async function fetchBikes() {
+        setLoading(true);
         const bikesFetched = await bikeResource.getAll();
         setLoading(false);
         setBikes(bikesFetched['hydra:member']);
@@ -41,7 +42,6 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
 
     useEffect(() => {
         if (user) {
-            setLoading(true);
             fetchBikes();
         }
     }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -56,6 +56,13 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
         fetchBikes();
     };
 
+    const handleClickFollow = () => {
+        if (!selectedBike) {
+            return;
+        }
+        router.push(`/velos/${selectedBike.id}`);
+    }
+
     return (
         <>
             <div style={{width: "100vw", overflowX: "hidden"}}>
@@ -63,34 +70,36 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
                     <title>Mes vélos</title>
                 </Head>
                 <WebsiteLayout />
-                <main>
-                    <Box
-                        sx={{
-                            bgcolor: 'background.paper',
-                            pt: 8,
-                            pb: 6,
-                            ml: 5,
-                        }}
-                    >
-                        {!user && <Typography><span onClick={handleLogin} style={{cursor: 'pointer'}}><u>Connectez vous</u></span> pour accéder à la liste de vos vélos</Typography>}
-                        {loading && <CircularProgress />}
-                        {
-                            bikes.length > 0 && !loading &&
-                            bikes.map(bike => <BikeCard key={bike.id} bike={bike} setSelectedBike={setSelectedBike} />)
-                        }
+                <div style={{width: "100vw", marginBottom: '100px'}}>
+                    <Container component="main" maxWidth="xs">
+                        <Box
+                            sx={{
+                                marginTop: 4,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
+                        >
+                            {!user && <Typography><span onClick={handleLogin} style={{cursor: 'pointer'}}><u>Connectez vous</u></span> pour accéder à la liste de vos vélos</Typography>}
+                            {loading && <CircularProgress />}
+                            {
+                                bikes.length > 0 && !loading &&
+                                bikes.map(bike => <BikeCard key={bike.id} bike={bike} setSelectedBike={setSelectedBike} />)
+                            }
 
-                        <Button variant="outlined" sx={{mb: 3, mt: 5}} onClick={handleOpenModal}>
-                            <AddIcon />
-                            Ajouter un vélo
-                        </Button>
+                            <Button variant="outlined" sx={{mb: 3, mt: 5}} onClick={handleOpenModal}>
+                                <AddIcon />
+                                Ajouter un vélo
+                            </Button>
 
-                        <Button variant="outlined" sx={{mb: 3, mt: 5}} disabled={!selectedBike}>
-                            Suivant
-                        </Button>
+                            <Button variant="outlined" sx={{mb: 3, mt: 5}} disabled={!selectedBike} onClick={handleClickFollow}>
+                                Suivant
+                            </Button>
 
-                        <ModalAddBike openModal={openModal} handleCloseModal={handleCloseModal} bikeTypes={bikeTypes} />
-                    </Box>
-                </main>
+                            <ModalAddBike openModal={openModal} handleCloseModal={handleCloseModal} bikeTypes={bikeTypes} />
+                        </Box>
+                    </Container>
+                </div>
             </div>
         </>
     );

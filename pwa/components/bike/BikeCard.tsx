@@ -21,14 +21,13 @@ const BikeCard = ({bike, setSelectedBike}: BikeCardProps): JSX.Element => {
     };
 
     return (
-        <Card sx={{ maxWidth: 345, cursor: 'pointer', mt: 2 }} onClick={handleClickCard}>
+        <Card sx={{ width: 300, maxWidth: 600, cursor: 'pointer', mt: 2 }} onClick={handleClickCard}>
             {bike.picture ? <CardMedia
                 component="img"
                 alt="bike_picture"
                 height="140"
                 image={apiImageUrl(bike.picture?.contentUrl)}
             /> : <DirectionsBikeIcon />}
-
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                     {bike.name}

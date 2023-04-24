@@ -22,6 +22,7 @@ import {apiImageUrl} from "@helpers/apiImagesHelper";
 import {mediaObjectResource} from "@resources/mediaObjectResource";
 import {bikeResource} from "@resources/bikeResource";
 import {RequestBody} from "@interfaces/Resource";
+import useMediaQuery from "@hooks/useMediaQuery";
 
 
 const style = {
@@ -50,6 +51,7 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
     const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
     const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
     const [photo, setPhoto] = useState<MediaObject|null>(null);
+    const isMobile = useMediaQuery('(max-width: 640px)');
 
     const handleBikeChange = (event: SelectChangeEvent): void => {
         const selectedBikeType = bikeTypes.find((bt) => bt.name === event.target.value);
@@ -70,16 +72,11 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
         try {
             let bodyRequest: RequestBody = {
                 'name': name,
-                'selectedBike': selectedBike['@id'],
+                'bikeType': selectedBike['@id'],
             };
-
             if (photo) {
                 bodyRequest['picture'] = photo['@id'];
             }
-
-            console.log(photo);
-            console.log(bodyRequest);
-
             newBike = await bikeResource.post(bodyRequest)
         } catch (e) {
             setErrorMessage('Ajout du vélo impossible');
@@ -127,7 +124,7 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Ajouter un vélo
                 </Typography>
-                {photo && <img width="80%" src={apiImageUrl(photo.contentUrl)}/>}
+                {photo && <img width={isMobile ? "80%" : "200"} src={apiImageUrl(photo.contentUrl)}/>}
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
