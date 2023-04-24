@@ -5,5 +5,4 @@ App\Entity\Bike:
         bikeType: '@biketype_*'
         name: 'name <current()>'
         description: 'description <current()>'
-        details: 'details <current()>'
         createdAt: <(new DateTimeImmutable("now"))>
