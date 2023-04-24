@@ -1,17 +1,17 @@
-import {NextPageWithLayout} from 'pages/_app';
+import { NextPageWithLayout } from 'pages/_app';
 import React from 'react';
-import Head from "next/head";
-import WebsiteLayout from "@components/layout/WebsiteLayout";
+import Head from 'next/head';
+import WebsiteLayout from '@components/layout/WebsiteLayout';
 
 const CreateMaintenanceBook: NextPageWithLayout = () => {
-    return (
-        <div className="w-full overflow-x-hidden">
-            <Head>
-                <title>Mon carnet d’entretien</title>
-            </Head>
-            <WebsiteLayout />
-        </div>
-    );
+  return (
+    <>
+      <Head>
+        <title>Mon carnet d’entretien</title>
+      </Head>
+      <WebsiteLayout />
+    </>
+  );
 };
 
 export default CreateMaintenanceBook;

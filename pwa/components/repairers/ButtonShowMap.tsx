@@ -1,22 +1,19 @@
-import React, {useContext} from "react";
+import React, { useContext } from 'react';
 import Button from '@mui/material/Button';
-import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
+import { SearchRepairerContext } from '@contexts/SearchRepairerContext';
 
 export const ButtonShowMap = (): JSX.Element => {
-    const {showMap, setShowMap} = useContext(SearchRepairerContext);
+  const { showMap, setShowMap } = useContext(SearchRepairerContext);
 
-    return (
-        <>
-            <div className="ml-4">
-                <Button
-                    onClick={() => setShowMap(!showMap)}
-                    variant="outlined"
-                >
-                    {showMap ? 'Voir les résultats' : 'Voir sur la carte'}
-                </Button>
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div>
+        <Button onClick={() => setShowMap(!showMap)} variant='outlined'>
+          {showMap ? 'Voir les résultats' : 'Voir sur la carte'}
+        </Button>
+      </div>
+    </>
+  );
 };
 
 export default ButtonShowMap;
