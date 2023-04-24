@@ -24,7 +24,7 @@ readonly class BikeOwnerEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function linkRepairerToAdminIntervention(ViewEvent $event): void
+    public function injectOwner(ViewEvent $event): void
     {
         $object = $event->getControllerResult();
 
