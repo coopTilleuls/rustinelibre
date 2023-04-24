@@ -87,12 +87,12 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
                                 bikes.map(bike => <BikeCard key={bike.id} bike={bike} setSelectedBike={setSelectedBike} />)
                             }
 
-                            <Button variant="outlined" sx={{mb: 3, mt: 5}} onClick={handleOpenModal}>
+                            <Button variant="outlined" sx={{mb: 3, mt: 2}} onClick={handleOpenModal}>
                                 <AddIcon />
                                 Ajouter un vélo
                             </Button>
 
-                            <Button variant="outlined" sx={{mb: 3, mt: 5}} disabled={!selectedBike} onClick={handleClickFollow}>
+                            <Button variant="outlined" sx={{mb: 3, mt: 2}} disabled={!selectedBike} onClick={handleClickFollow}>
                                 Suivant
                             </Button>
 

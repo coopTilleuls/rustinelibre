@@ -97,6 +97,7 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
     };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+
         if (photo) {
             await mediaObjectResource.delete(photo['@id']);
         }
