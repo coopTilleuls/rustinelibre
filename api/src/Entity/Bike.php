@@ -36,6 +36,9 @@ class Bike
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $description = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    public ?string $details = null;
+
     #[ORM\Column(nullable: true)]
     public ?\DateTimeImmutable $createdAt = null;
 
@@ -53,6 +56,7 @@ class Bike
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
     public ?MediaObject $transmissionPicture = null;
+
 
     public function __construct()
     {
