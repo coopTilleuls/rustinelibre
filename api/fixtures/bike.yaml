@@ -1,0 +1,9 @@
+App\Entity\Bike:
+    bike_{1..20}:
+        owner: '@user_*'
+        brand: 'brand <current()>'
+        bikeType: '@biketype_*'
+        name: 'name <current()>'
+        description: 'description <current()>'
+        details: 'details <current()>'
+        createdAt: <(new DateTimeImmutable("now"))>
