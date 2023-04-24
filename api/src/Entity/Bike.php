@@ -34,7 +34,7 @@ class Bike
     public ?int $id = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'bikes')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::READ])]
     public ?User $owner = null;
 
