@@ -22,13 +22,7 @@ class SecurityDisabledRepairerTest extends AbstractTestCase
 
     public function testDeleteByRepairerDisabledFail(): void
     {
-        self::createClientWithUser($this->disabledRepairer->owner)->request('DELETE', sprintf('/repairers/%s', $this->disabledRepairer->id), [
-            'headers' => ['Content-Type' => 'application/json'],
-            'json' => [
-                'name' => 'test delete',
-                'description' => 'test delete disabled failed',
-            ],
-        ]);
+        self::createClientWithUser($this->disabledRepairer->owner)->request('DELETE', sprintf('/repairers/%s', $this->disabledRepairer->id));
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
