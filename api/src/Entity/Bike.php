@@ -6,7 +6,9 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\BikeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,6 +19,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => [self::READ]],
     denormalizationContext: ['groups' => [self::WRITE]]
 )]
+#[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 class Bike
 {
     public const READ = 'bike_read';
@@ -30,8 +35,8 @@ class Bike
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'bikes')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups([self::READ, self::WRITE])]
-    public ?User $owner = null;
+    #[Groups([self::READ])]
+    pubglic ?User $owner = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::READ, self::WRITE])]
@@ -49,10 +54,6 @@ class Bike
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::READ, self::WRITE])]
     public ?string $description = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::READ, self::WRITE])]
-    public ?string $details = null;
 
     #[ORM\Column(nullable: true)]
     public ?\DateTimeImmutable $createdAt = null;
