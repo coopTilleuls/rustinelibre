@@ -21,6 +21,7 @@ import Avatar from "@mui/material/Avatar";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import {mediaObjectResource} from "@resources/mediaObjectResource";
 import {bikeResource} from "@resources/bikeResource";
+import {RequestBody} from "@interfaces/Resource";
 
 
 const style = {
@@ -28,7 +29,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 600,
+    width: '80%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -67,15 +68,27 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
 
         let newBike;
         try {
-            newBike = await bikeResource.post({
+            let bodyRequest: RequestBody = {
                 'name': name,
                 'selectedBike': selectedBike['@id'],
-            })
+            };
+
+            if (photo) {
+                bodyRequest['picture'] = photo['@id'];
+            }
+
+            console.log(photo);
+            console.log(bodyRequest);
+
+            newBike = await bikeResource.post(bodyRequest)
         } catch (e) {
             setErrorMessage('Ajout du vélo impossible');
         }
 
         if (newBike) {
+            setPhoto(null);
+            setName('');
+            setSelectedBike(null);
             handleCloseModal();
         }
 
@@ -114,7 +127,7 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Ajouter un vélo
                 </Typography>
-                {photo && <img width="300" src={apiImageUrl(photo.contentUrl)}/>}
+                {photo && <img width="80%" src={apiImageUrl(photo.contentUrl)}/>}
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"

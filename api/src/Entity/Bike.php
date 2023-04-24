@@ -59,19 +59,19 @@ class Bike
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?MediaObject $picture = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?MediaObject $wheelPicture = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?MediaObject $transmissionPicture = null;
 
     public function __construct()

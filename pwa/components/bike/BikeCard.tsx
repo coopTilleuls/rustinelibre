@@ -21,7 +21,7 @@ const BikeCard = ({bike, setSelectedBike}: BikeCardProps): JSX.Element => {
     };
 
     return (
-        <Card sx={{ maxWidth: 345, cursor: 'pointer' }} onClick={handleClickCard}>
+        <Card sx={{ maxWidth: 345, cursor: 'pointer', mt: 2 }} onClick={handleClickCard}>
             {bike.picture ? <CardMedia
                 component="img"
                 alt="bike_picture"
