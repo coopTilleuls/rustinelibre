@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Repairer;
 
 use App\Entity\Repairer;
@@ -9,25 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SecurityDisabledRepairerTest extends AbstractTestCase
 {
-    /** @var Repairer[] */
-    private array $repairers = [];
+    private Repairer $disabledRepairer;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->repairers = static::getContainer()->get(RepairerRepository::class)->findAll();
+        $this->disabledRepairer = static::getContainer()->get(RepairerRepository::class)->findOneBy(['enabled' => false]);
     }
 
     public function testDeleteByRepairerDisabledFail(): void
     {
-        // Get a disabled repairer
-        $falseRepairer = static::getContainer()->get(RepairerRepository::class)->findBy(['enabled' => false]);
-        $repairer = $falseRepairer[0];
-
-        // Create request with his owner
-        $client = self::createClientWithUser($repairer->owner);
-        $client->request('PUT', '/repairers/'.$repairer->id, [
+        self::createClientWithUser($this->disabledRepairer->owner)->request('DELETE', sprintf('/repairers/%s', $this->disabledRepairer->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'test delete',
@@ -38,15 +33,21 @@ class SecurityDisabledRepairerTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
+    public function testRepairerDisabledCannotEnabledFail(): void
+    {
+        self::createClientWithUser($this->disabledRepairer->owner)->request('PUT', sprintf('/repairers/%s', $this->disabledRepairer->id), [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'enabled' => true,
+            ],
+        ]);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
     public function testPutByRepairerDisabledFail(): void
     {
-        // Get a disabled repairer
-        $falseRepairer = static::getContainer()->get(RepairerRepository::class)->findBy(['enabled' => false]);
-        $repairer = $falseRepairer[0];
-
-        // Create request with his owner
-        $client = self::createClientWithUser($repairer->owner);
-        $client->request('PUT', '/repairers/'.$repairer->id, [
+        self::createClientWithUser($this->disabledRepairer->owner)->request('PUT', sprintf('/repairers/%s', $this->disabledRepairer->id), [
              'headers' => ['Content-Type' => 'application/json'],
              'json' => [
                  'name' => 'New Name',
@@ -59,13 +60,7 @@ class SecurityDisabledRepairerTest extends AbstractTestCase
 
     public function testPatchByRepairerDisabledFail(): void
     {
-        // Get a disabled repairer
-        $falseRepairer = static::getContainer()->get(RepairerRepository::class)->findBy(['enabled' => false]);
-        $repairer = $falseRepairer[0];
-
-        // Create request with his owner
-        $client = self::createClientWithUser($repairer->owner);
-        $client->request('PATCH', '/repairers/'.$repairer->id, [
+        self::createClientWithUser($this->disabledRepairer->owner)->request('PATCH', sprintf('/repairers/%s', $this->disabledRepairer->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'patched Name',

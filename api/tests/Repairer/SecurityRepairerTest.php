@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Repairer;
 
 use App\Entity\Repairer;
@@ -213,10 +215,8 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testPutEnabledByAdmin(): void
     {
-        $client = self::createClientAuthAsAdmin();
-
         // Valid admin role given
-        $response = $client->request('PUT', '/repairers/'.$this->repairers[20]->id, [
+        $response = self::createClientAuthAsAdmin()->request('PUT', sprintf('/repairers/%s', $this->repairers[20]->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'enabled' => false,
@@ -237,10 +237,8 @@ class SecurityRepairerTest extends AbstractTestCase
         // Save it
         static::getContainer()->get(RepairerRepository::class)->save($repairer, true);
 
-        // Owner try to enable it
-        $client = self::createClientWithUser($repairer->owner);
         // Valid user role given
-        $response = $client->request('PUT', '/repairers/'.$repairer->id, [
+        $response = self::createClientWithUser($repairer->owner)->request('PUT', sprintf('/repairers/%s', $repairer->id), [
              'headers' => ['Content-Type' => 'application/json'],
              'json' => [
                  'name' => 'New Name',

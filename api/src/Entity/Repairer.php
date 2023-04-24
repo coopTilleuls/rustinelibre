@@ -36,8 +36,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
-    paginationClientEnabled: true,
     denormalizationContext: ['groups' => ['admin_only']],
+    paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
 )]
 #[Get(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
@@ -61,9 +61,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     input: CreateUserRepairerDto::class,
     processor: CreateUserRepairerProcessor::class
 )]
-#[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or object.owner == user and object.enabled == true")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user and object.enabled == true")]
-#[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user and object.enabled == true")]
+#[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
+#[Patch(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(FirstAvailableSlotFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
