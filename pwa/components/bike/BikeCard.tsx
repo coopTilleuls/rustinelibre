@@ -22,12 +22,12 @@ const BikeCard = ({bike, setSelectedBike}: BikeCardProps): JSX.Element => {
         <Card sx={{ width: 300, maxWidth: 600, cursor: 'pointer', mt: 2 }} onClick={handleClickCard}>
             {bike.picture ? <CardMedia
                 component="img"
-                alt="bike_picture"
+                alt="Photo du vélo"
                 height="140"
                 image={apiImageUrl(bike.picture?.contentUrl)}
             /> : <DirectionsBikeIcon />}
             <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography gutterBottom variant="h5">
                     {bike.name}
                 </Typography>
             </CardContent>

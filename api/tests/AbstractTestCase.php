@@ -11,9 +11,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractTestCase extends ApiTestCase
 {
+    protected Client $adminClient;
+
     protected function setUp(): void
     {
         self::bootKernel();
+        $this->adminClient = $this->createClientAuthAsAdmin();
     }
 
     protected function createClientAuthAsAdmin(): Client
@@ -87,9 +90,6 @@ abstract class AbstractTestCase extends ApiTestCase
         return static::getContainer()->get($repositoryClassName)->findOneBy($data);
     }
 
-    /*
-     * @return string IRI of the media
-     */
     protected function addMedia(string $path = null): string
     {
         if (null === $path) {
@@ -97,7 +97,7 @@ abstract class AbstractTestCase extends ApiTestCase
         }
 
         $file = new UploadedFile($path, 'ratpi.png');
-        $response = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
+        $response = $this->adminClient->request('POST', '/media_objects', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
                 'files' => [
@@ -110,6 +110,8 @@ abstract class AbstractTestCase extends ApiTestCase
             self::fail('Unable to add media');
         }
 
-        return $id;
+        $parts = explode('/', $id);
+
+        return end($parts);
     }
 }

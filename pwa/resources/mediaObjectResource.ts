@@ -1,6 +1,5 @@
 import {AbstractResource} from '@resources/AbstractResource';
 import {MediaObject} from '@interfaces/MediaObject';
-import {RequestBody, RequestHeaders} from "@interfaces/Resource";
 
 class MediaObjectResource extends AbstractResource<MediaObject> {
     protected endpoint = '/media_objects';

@@ -36,12 +36,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
-    paginationClientEnabled: true,
     denormalizationContext: ['groups' => ['admin_only']],
+    paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
 )]
 #[Get(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
-#[GetCollection(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
+#[GetCollection(normalizationContext: ['groups' => [self::REPAIRER_COLLECTION_READ]])]
 #[GetCollection(
     uriTemplate: '/repairer_get_slots_available/{id}',
     requirements: ['id' => '\d+'],
@@ -61,9 +61,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     input: CreateUserRepairerDto::class,
     processor: CreateUserRepairerProcessor::class
 )]
-#[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or object.owner == user")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
-#[Patch(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
+#[Patch(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(FirstAvailableSlotFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
@@ -84,12 +84,13 @@ class Repairer
 {
     public const REPAIRER_READ = 'repairer_read';
     public const REPAIRER_WRITE = 'repairer_write';
+    public const REPAIRER_COLLECTION_READ = 'repairer_collection_read';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::REPAIRER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ])]
     public ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
@@ -108,7 +109,7 @@ class Repairer
         max : 80,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?string $name = null;
 
     #[Assert\Type('string')]
@@ -124,18 +125,18 @@ class Repairer
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 800, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?string $street = null;
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?string $city = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?string $postcode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -153,12 +154,12 @@ class Repairer
 
     #[Assert\Type('string')]
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?string $latitude = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?string $longitude = null;
 
     #[ORM\Column(
@@ -172,7 +173,7 @@ class Repairer
     public ?string $gpsPoint;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Groups([self::REPAIRER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ])]
     public ?\DateTimeInterface $firstSlotAvailable = null;
 
     #[Assert\Type('string')]
@@ -194,7 +195,7 @@ class Repairer
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?MediaObject $thumbnail = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]

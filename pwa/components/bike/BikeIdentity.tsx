@@ -138,6 +138,7 @@ const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
                             placeholder="Description de votre vélo"
                             multiline
                             fullWidth
+                            value={description}
                             rows={3}
                             maxRows={6}
                             onChange={handleChangeDescription}

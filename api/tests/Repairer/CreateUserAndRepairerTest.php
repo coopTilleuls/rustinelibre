@@ -49,7 +49,7 @@ class CreateUserAndRepairerTest extends AbstractTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $jsonMissingFields,
         ]);
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(422);
     }
 
     public function testPostRepairerAndUser(): void
