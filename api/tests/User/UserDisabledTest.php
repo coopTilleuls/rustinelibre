@@ -27,6 +27,13 @@ class UserDisabledTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
+    public function testGetUserNotConfirmedOnCustomUrlFail(): void
+    {
+        self::createClientWithUser($this->user)->request('GET', '/me');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
     public function testPutUserNotConfirmedFail(): void
     {
         self::createClientWithUser($this->user)->request('PUT', sprintf('/users/%d', $this->user->id), [
