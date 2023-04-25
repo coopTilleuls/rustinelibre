@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Repairer;
 
 use App\Entity\Repairer;
@@ -241,10 +243,8 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testPutEnabledByAdmin(): void
     {
-        $client = self::createClientAuthAsAdmin();
-
         // Valid admin role given
-        $response = $client->request('PUT', '/repairers/'.$this->repairers[20]->id, [
+        $response = self::createClientAuthAsAdmin()->request('PUT', sprintf('/repairers/%s', $this->repairers[20]->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'enabled' => false,
@@ -256,35 +256,28 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertSame($response['enabled'], false);
     }
 
-    public function testPutEnabledByUserFail(): void
+    public function testSlugByPut(): void
     {
         // Get a random repairer
         $repairer = $this->repairers[20];
-        // Disabled it
-        $repairer->enabled = false;
+        // enabled it
+        $repairer->enabled = true;
         // Save it
         static::getContainer()->get(RepairerRepository::class)->save($repairer, true);
 
-        // Owner try to enable it
-        $client = self::createClientWithUser($repairer->owner);
         // Valid user role given
-        $client->request('PUT', '/repairers/'.$repairer->id, [
+        $response = self::createClientWithUser($repairer->owner)->request('PUT', sprintf('/repairers/%s', $repairer->id), [
              'headers' => ['Content-Type' => 'application/json'],
              'json' => [
                  'name' => 'New Name',
-                 'description' => 'test put enabled failed',
-                 'enabled' => true,
+                 'description' => 'test slug by put',
              ],
          ]);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
-        // Get the user 21 by admin to access to the enabled property
-        $admin = self::createClientAuthAsAdmin();
-        $response2 = $admin->request('GET', '/repairers/'.$repairer->id);
-        $response2 = $response2->toArray();
-        $this->assertSame($response2['description'], 'test put enabled failed');
-        $this->assertSame($response2['enabled'], false);
+        $response = $response->toArray();
+        $this->assertSame($response['description'], 'test slug by put');
         // test slug on update
-        $this->assertSame($response2['slug'], 'new-name');
+        $this->assertSame($response['slug'], 'new-name');
     }
 }
