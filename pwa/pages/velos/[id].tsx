@@ -1,8 +1,8 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import Head from "next/head";
 import Box from "@mui/material/Box";
-import {useRouter} from "next/router";
+import {NextRouter, useRouter} from "next/router";
 import {CircularProgress} from "@mui/material";
 import {bikeResource} from "@resources/bikeResource";
 import {Bike} from "@interfaces/Bike";
@@ -17,7 +17,7 @@ import {GetStaticProps} from "next";
 import {ENTRYPOINT} from "@config/entrypoint";
 import {bikeTypeResource} from "@resources/bikeTypeResource";
 import {BikeType} from "@interfaces/BikeType";
-import {repairerResource} from "@resources/repairerResource";
+import {Collection} from "@interfaces/Resource";
 
 type EditBikeProps = {
     bikeTypes: BikeType[];
@@ -25,7 +25,7 @@ type EditBikeProps = {
 
 const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypes = []}) => {
 
-    const router = useRouter();
+    const router: NextRouter = useRouter();
     const { id } = router.query;
     const [bike, setBike] = useState<Bike|null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -90,8 +90,8 @@ export const getStaticProps: GetStaticProps = async () => {
         };
     }
 
-    const bikeTypesCollection = await bikeTypeResource.getAll(false);
-    const bikeTypes = bikeTypesCollection['hydra:member'];
+    const bikeTypesCollection: Collection<BikeType> = await bikeTypeResource.getAll(false);
+    const bikeTypes: BikeType[] = bikeTypesCollection['hydra:member'];
 
     return {
         props: {

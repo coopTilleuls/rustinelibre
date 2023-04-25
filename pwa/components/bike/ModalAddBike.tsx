@@ -1,29 +1,20 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import React, {ChangeEvent, useState} from "react";
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import UserForm from "@components/profile/UserForm";
 import Button from "@mui/material/Button";
 import {CircularProgress} from "@mui/material";
-import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import {userResource} from "@resources/userResource";
 import MenuItem from "@mui/material/MenuItem";
 import Select, {SelectChangeEvent} from "@mui/material/Select";
 import {BikeType} from "@interfaces/BikeType";
 import {MediaObject} from "@interfaces/MediaObject";
-import {repairerResource} from "@resources/repairerResource";
 import { uploadFile } from "@helpers/uploadFile";
-import BuildIcon from "@mui/icons-material/Build";
-import Avatar from "@mui/material/Avatar";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import {mediaObjectResource} from "@resources/mediaObjectResource";
 import {bikeResource} from "@resources/bikeResource";
 import {RequestBody} from "@interfaces/Resource";
 import useMediaQuery from "@hooks/useMediaQuery";
-
 
 const style = {
     position: 'absolute' as 'absolute',
