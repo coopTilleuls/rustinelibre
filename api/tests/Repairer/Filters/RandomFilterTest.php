@@ -69,16 +69,21 @@ class RandomFilterTest extends AbstractTestCase
         $idsFromSecondResponse = [];
 
         foreach ($firstResponse as $repairer) {
-            $this->assertEquals('Réparateur à vélo', $repairer['repairerType']['name']);
             $idsFromFirstResponse[] = $repairer['@id'];
         }
 
         foreach ($secondResponse as $repairer) {
-            $this->assertEquals('Réparateur à vélo', $repairer['repairerType']['name']);
             $idsFromSecondResponse[] = $repairer['@id'];
         }
 
         $this->assertNotSame($idsFromFirstResponse, $idsFromSecondResponse);
+
+        // Check repairer type
+        $firstRepairer = static::createClient()->request('GET', $idsFromFirstResponse[0])->toArray();
+        $this->assertEquals('Réparateur à vélo', $firstRepairer['repairerType']['name']);
+
+        $SecondRepairer = static::createClient()->request('GET', $idsFromSecondResponse[0])->toArray();
+        $this->assertEquals('Réparateur à vélo', $firstRepairer['repairerType']['name']);
     }
 
     public function testRandomFilterWorkWithAroundFilter(): void

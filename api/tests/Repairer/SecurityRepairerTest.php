@@ -47,6 +47,8 @@ class SecurityRepairerTest extends AbstractTestCase
                 'street' => '8 rue de la clé',
                 'city' => 'Lille',
                 'postcode' => '59000',
+                'latitude' => '50.62544631958008',
+                'longitude' => '3.0352721214294434',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
@@ -134,8 +136,29 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $client->request('GET', '/repairers?enabled=true');
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
-        // On 25 repairers -> 3 aren't enabled
-        $this->assertCount(22, $response['hydra:member']);
+        $enabledRepairers = static::getContainer()->get(RepairerRepository::class)->findBy(['enabled' => true]);
+        $response = $response['hydra:member'];
+        $this->assertEquals(count($enabledRepairers), count($response));
+
+        // test first array key result for enabled filter
+        $firstRepairer = $client->request('GET', sprintf('/repairers/%d', $response[0]['id']))->toArray();
+        $this->assertSame(true, $firstRepairer['enabled']);
+
+        // test last array key result for enabled filter
+        $lastRepairer = $client->request('GET', sprintf('/repairers/%d', end($response)['id']))->toArray();
+        $this->assertSame(true, $lastRepairer['enabled']);
+
+        // test collection normalization groups
+        foreach ($response as $repairer) {
+            $this->assertArrayNotHasKey('description', $repairer);
+            $this->assertArrayNotHasKey('mobilePhone', $repairer);
+            $this->assertArrayNotHasKey('owner', $repairer);
+            $this->assertArrayNotHasKey('repairerType', $repairer);
+            $this->assertArrayHasKey('name', $repairer);
+            $this->assertArrayHasKey('latitude', $repairer);
+            $this->assertArrayHasKey('longitude', $repairer);
+            $this->assertArrayHasKey('firstSlotAvailable', $repairer);
+        }
     }
 
     public function testUniqueOwner(): void
@@ -177,6 +200,9 @@ class SecurityRepairerTest extends AbstractTestCase
                 'description' => 'Test create by user',
                 'street' => '12 rue de Wazemmes',
                 'city' => 'Lille',
+                'postcode' => '59000',
+                'latitude' => '50.62285232543945',
+                'longitude' => '3.0607175827026367',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[1]->id],
                 'comment' => 'Je voulais juste ajouter un commentaire',
@@ -202,6 +228,8 @@ class SecurityRepairerTest extends AbstractTestCase
                 'street' => '8 rue de la clé',
                 'city' => 'Lille',
                 'postcode' => '59000',
+                'latitude' => '50.6365654',
+                'longitude' => '3.0635282',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id],
