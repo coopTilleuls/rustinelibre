@@ -11,6 +11,6 @@ export interface Maintenance {
     bike: Bike;
     name: string;
     description?: string;
-    repairDate?: DateObject;
+    repairDate?: string;
     photo?: MediaObject;
 }

@@ -13,6 +13,13 @@ import {RequestBody} from "@interfaces/Resource";
 import useMediaQuery from "@hooks/useMediaQuery";
 import {maintenanceResource} from "@resources/MaintenanceResource";
 import {Bike} from "@interfaces/Bike";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateField } from '@mui/x-date-pickers';
+import dayjs, {Dayjs} from "dayjs";
+import InputLabel from "@mui/material/InputLabel";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -41,6 +48,12 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
     const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
     const [photo, setPhoto] = useState<MediaObject|null>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const date = event.target.value;
+        setSelectedDate(date ? new Date(date) : new Date());
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
@@ -60,6 +73,9 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
             };
             if (description) {
                 bodyRequest['description'] = description;
+            }
+            if (selectedDate) {
+                bodyRequest['repairDate'] = selectedDate.toISOString();
             }
             if (photo) {
                 bodyRequest['photo'] = photo['@id'];
@@ -129,6 +145,14 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
                         autoFocus
                         value={name}
                         onChange={handleChangeName}
+                    />
+                    <InputLabel>Date de la réparation</InputLabel>
+                    <input
+                        style={{height: '1.4375em'}}
+                        id="date"
+                        type="date"
+                        value={selectedDate?.toISOString().substr(0, 10) || ''}
+                        onChange={handleDateChange}
                     />
                     <TextField
                         margin="normal"
