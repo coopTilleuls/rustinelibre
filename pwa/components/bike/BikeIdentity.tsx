@@ -1,14 +1,11 @@
-import React, {ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import {Bike} from "@interfaces/Bike";
 import Box from "@mui/material/Box";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import {BikeType} from "@interfaces/BikeType";
-import {MediaObject} from "@interfaces/MediaObject";
-import useMediaQuery from "@hooks/useMediaQuery";
 import Select, {SelectChangeEvent} from "@mui/material/Select";
 import {RequestBody} from "@interfaces/Resource";
 import {bikeResource} from "@resources/bikeResource";
@@ -16,7 +13,6 @@ import AddIcon from "@mui/icons-material/Add";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import SaveIcon from '@mui/icons-material/Save';
-import Editor from "@components/form/Editor";
 import {Alert, CircularProgress} from "@mui/material";
 import BikeIdentityPhoto from "@components/bike/BikeIdentityPhoto";
 

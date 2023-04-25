@@ -1,10 +1,8 @@
-import React, {ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import Typography from '@mui/material/Typography';
-import Button from "@mui/material/Button";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import {Bike} from "@interfaces/Bike";
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
