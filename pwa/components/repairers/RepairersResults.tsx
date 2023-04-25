@@ -83,7 +83,6 @@ export const RepairersResults = (): JSX.Element => {
                 ]}
                 eventHandlers={{
                   mouseover: (event) => event.target.openPopup(),
-                  // click: (event) => {handleClipMapPin(event, repairer)}
                 }}
               >
                 <Popup>{repairer.name}</Popup>
@@ -92,44 +91,6 @@ export const RepairersResults = (): JSX.Element => {
           </MapContainer>
         </Box>
       </Box>
-      {/* <div className='grid gap-4 md:grid-cols-2 min-h-screen'>
-        <div className={`${showMap && 'hidden'} md:block ml-4`}>
-          {repairers.map((repairer) => {
-            return (
-              <RepairerCard
-                key={repairer.id}
-                repairer={repairer}
-                isSelect={repairer.id === selectedRepairer}
-              />
-            );
-          })}
-        </div>
-        <div className={`${!showMap && 'hidden'} md:block`}>
-          <MapContainer
-            center={mapCenter}
-            zoom={13}
-            scrollWheelZoom={false}
-            style={{ height: '50vh', width: '100%' }}
-          >
-            <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
-            {repairers.map((repairer) => (
-              <Marker
-                key={repairer.id}
-                position={[
-                  Number(repairer.latitude),
-                  Number(repairer.longitude),
-                ]}
-                eventHandlers={{
-                  mouseover: (event) => event.target.openPopup(),
-                  // click: (event) => {handleClipMapPin(event, repairer)}
-                }}
-              >
-                <Popup>{repairer.name}</Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-        </div>
-      </div> */}
     </>
   );
 };
