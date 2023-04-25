@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {NextLinkComposed} from '@components/common/link/Link';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
