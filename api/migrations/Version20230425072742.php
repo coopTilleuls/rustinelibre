@@ -7,7 +7,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20230424151350 extends AbstractMigration
+final class Version20230425072742 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -27,9 +27,9 @@ final class Version20230424151350 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN bike.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('ALTER TABLE bike ADD CONSTRAINT FK_4CBC37807E3C61F9 FOREIGN KEY (owner_id) REFERENCES "user" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE bike ADD CONSTRAINT FK_4CBC37807FF015AE FOREIGN KEY (bike_type_id) REFERENCES bike_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE bike ADD CONSTRAINT FK_4CBC3780EE45BDBF FOREIGN KEY (picture_id) REFERENCES media_object (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE bike ADD CONSTRAINT FK_4CBC378093E0DCF6 FOREIGN KEY (wheel_picture_id) REFERENCES media_object (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE bike ADD CONSTRAINT FK_4CBC37806B1E0CCD FOREIGN KEY (transmission_picture_id) REFERENCES media_object (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE bike ADD CONSTRAINT FK_4CBC3780EE45BDBF FOREIGN KEY (picture_id) REFERENCES media_object (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE bike ADD CONSTRAINT FK_4CBC378093E0DCF6 FOREIGN KEY (wheel_picture_id) REFERENCES media_object (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE bike ADD CONSTRAINT FK_4CBC37806B1E0CCD FOREIGN KEY (transmission_picture_id) REFERENCES media_object (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     public function down(Schema $schema): void
