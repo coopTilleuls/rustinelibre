@@ -35,10 +35,9 @@ const Login: NextPageWithLayout = ({}) => {
             'password': password
         });
 
-        console.log(user);
-
         if (!!user) {
-            await router.push('/');
+            const next = Array.isArray(router.query.next) ? router.query.next.join('') : router.query.next || '/'
+            router.push(next)
         } else {
             setErrorMessage(
                 "Ces identifiants de connexion ne sont pas valides"

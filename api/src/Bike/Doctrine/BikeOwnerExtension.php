@@ -14,7 +14,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 /**
  * This extension prevents getting bikes from other users.
  */
-final class BikeExtension implements QueryCollectionExtensionInterface
+final class BikeOwnerExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(private readonly Security $security)
     {

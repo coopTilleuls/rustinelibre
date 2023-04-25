@@ -97,6 +97,36 @@ export abstract class AbstractResource<T> {
     return await this.getResult(doFetch);
   }
 
+  async patch(
+    id: string,
+    body: RequestBody = {},
+    headers?: RequestHeaders
+  ): Promise<T> {
+    const doFetch = async () => {
+
+      const defaultHeaders: Record<string, string> = {
+        Accept: 'application/ld+json',
+        'Content-Type': 'application/merge-patch+json',
+      };
+
+      const currentToken = getToken();
+      if (!!currentToken) {
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
+      }
+
+      return await fetch(this.getUrl(id), {
+        headers: {
+          ...defaultHeaders,
+          ...headers,
+        },
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      });
+    };
+
+    return await this.getResult(doFetch);
+  }
+
   async putById(
     id: string,
     body: RequestBody = {},
