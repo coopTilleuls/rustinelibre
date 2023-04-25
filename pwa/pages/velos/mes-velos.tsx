@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import {CircularProgress} from "@mui/material";
 import {useAccount} from "@contexts/AuthContext";
 import {Bike} from "@interfaces/Bike";
-import {bikeResource} from "@resources/bikeResource";
 import Typography from "@mui/material/Typography";
 import { useRouter } from 'next/router'
 import Button from "@mui/material/Button";
@@ -18,6 +17,14 @@ import {bikeTypeResource} from "@resources/bikeTypeResource";
 import {BikeType} from "@interfaces/BikeType";
 import BikeCard from "@components/bike/BikeCard";
 import Container from "@mui/material/Container";
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import BuildIcon from '@mui/icons-material/Build';
+import {bikeResource} from "@resources/bikeResource";
 
 type MyBikesProps = {
     bikeTypes: BikeType[];
@@ -80,11 +87,47 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
                                 alignItems: 'center',
                             }}
                         >
+                            <Typography variant="h2">
+                                Mes vélos
+                            </Typography>
                             {!user && <Typography><span onClick={handleLogin} style={{cursor: 'pointer'}}><u>Connectez vous</u></span> pour accéder à la liste de vos vélos</Typography>}
                             {loading && <CircularProgress />}
                             {
                                 bikes.length > 0 && !loading &&
                                 bikes.map(bike => <BikeCard key={bike.id} bike={bike} setSelectedBike={setSelectedBike} />)
+                            }
+
+                            {
+                                bikes.length == 0 && !loading && user &&
+                                <Box>
+                                    <Typography>
+                                        Vous n'avez pas encore de vélos enregistrés
+                                    </Typography>
+                                    <List
+                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                                        component="nav"
+                                        aria-labelledby="nested-list-subheader"
+                                    >
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <DirectionsBikeIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Enregistrez votre vélo" />
+                                        </ListItemButton>
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <FactCheckIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Remplissez sa fiche d'identité" />
+                                        </ListItemButton>
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <BuildIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Créeez un historique des réparations" />
+                                        </ListItemButton>
+                                    </List>
+                                </Box>
                             }
 
                             <Button variant="outlined" sx={{mb: 3, mt: 2}} onClick={handleOpenModal}>
