@@ -33,6 +33,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import ModalAddBike from "@components/bike/ModalAddBike";
+import ModalAddMaintenance from "@components/bike/ModalAddMaintenance";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import ListItemText from "@mui/material/ListItemText";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
+import BuildIcon from "@mui/icons-material/Build";
+import List from "@mui/material/List";
+import Divider from '@mui/material/Divider';
+
 
 type BikeMaintenanceProps = {
     bike: Bike;
@@ -58,48 +69,64 @@ const BikeMaintenance = ({bike}: BikeMaintenanceProps): JSX.Element => {
         fetchMaintenance();
     }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return (
-        <>
-            <div style={{width: "100vw", overflowX: "hidden"}}>
-                <Head>
-                    <title>{bike?.name}</title>
-                </Head>
-                <WebsiteLayout />
-                <div style={{width: "100vw", marginBottom: '100px'}}>
-                    <Container component="main" maxWidth="xs">
-                        <Box
-                            sx={{
-                                marginTop: 4,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                            }}
-                        >
-                            {loading && <CircularProgress />}
+    const handleOpenModal = (): void => setOpenModal(true);
+    const handleCloseModal = (): void => {
+        setOpenModal(false)
+        fetchMaintenance();
+    };
 
-                            <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableBody>
-                                        {maintenances.map((maintenance) => (
-                                            <TableRow
-                                                key={maintenance.id}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell component="th" scope="row">
-                                                    {maintenance.repairDate ? maintenance.repairDate.date : ''}
-                                                </TableCell>
-                                                <TableCell align="right">{maintenance.name}</TableCell>
-                                                <TableCell align="right">Détail</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Box>
-                    </Container>
-                </div>
-            </div>
-        </>
+    return (
+        <Box
+            sx={{
+                marginTop: 4,
+            }}
+        >
+            {loading && <CircularProgress />}
+
+
+            <List
+                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+            >
+                {maintenances.map((maintenance) => (
+                    <div key={maintenance.id}>
+                        <ListItemButton key={maintenance.id}>
+                            <ListItemText primary={maintenance.repairDate ? maintenance.repairDate.date : ''} />
+                            <ListItemText primary={maintenance.name} />
+                            <ListItemText primary={<Button variant="outlined">Détails</Button>} />
+                        </ListItemButton>
+                        <Divider />
+                    </div>
+                ))}
+            </List>
+
+            {/*<TableContainer component={Paper}>*/}
+            {/*    <Table sx={{ minWidth: 650 }} aria-label="simple table">*/}
+            {/*        <TableBody>*/}
+            {/*            {maintenances.map((maintenance) => (*/}
+            {/*                <TableRow*/}
+            {/*                    key={maintenance.id}*/}
+            {/*                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}*/}
+            {/*                >*/}
+            {/*                    <TableCell component="th" scope="row">*/}
+            {/*                        {maintenance.repairDate ? maintenance.repairDate.date : ''}*/}
+            {/*                    </TableCell>*/}
+            {/*                    <TableCell align="right">{maintenance.name}</TableCell>*/}
+            {/*                    <TableCell align="right">Détail</TableCell>*/}
+            {/*                </TableRow>*/}
+            {/*            ))}*/}
+            {/*        </TableBody>*/}
+            {/*    </Table>*/}
+            {/*</TableContainer>*/}
+
+            <Button c sx={{mb: 3, mt: 2}} onClick={handleOpenModal}>
+                <AddIcon />
+                Ajouter une réparation
+            </Button>
+
+            <ModalAddMaintenance bike={bike} openModal={openModal} handleCloseModal={handleCloseModal} />
+        </Box>
     )
 }
 

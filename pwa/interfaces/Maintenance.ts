@@ -12,5 +12,5 @@ export interface Maintenance {
     name: string;
     description?: string;
     repairDate?: DateObject;
-    image?: MediaObject;
+    photo?: MediaObject;
 }

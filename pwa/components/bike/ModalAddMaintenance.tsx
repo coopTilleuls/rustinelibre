@@ -5,17 +5,14 @@ import Box from '@mui/material/Box';
 import Button from "@mui/material/Button";
 import {CircularProgress} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Select, {SelectChangeEvent} from "@mui/material/Select";
-import {BikeType} from "@interfaces/BikeType";
 import {MediaObject} from "@interfaces/MediaObject";
 import { uploadFile } from "@helpers/uploadFile";
 import {apiImageUrl} from "@helpers/apiImagesHelper";
 import {mediaObjectResource} from "@resources/mediaObjectResource";
-import {bikeResource} from "@resources/bikeResource";
 import {RequestBody} from "@interfaces/Resource";
 import useMediaQuery from "@hooks/useMediaQuery";
 import {maintenanceResource} from "@resources/MaintenanceResource";
+import {Bike} from "@interfaces/Bike";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -29,27 +26,26 @@ const style = {
     p: 4,
 };
 
-type ModalAddBikeProps = {
-    bikeTypes: BikeType[];
+type ModalAddMaintenanceProps = {
+    bike: Bike;
     openModal: boolean;
     handleCloseModal: () => void;
 };
 
-const Modz = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProps): JSX.Element => {
+const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMaintenanceProps): JSX.Element => {
 
     const [pendingAdd, setPendingAdd] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [name, setName] = useState<string | null>(null);
     const [description, setDescription] = useState<string | null>(null);
-    const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
     const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
-    const [image, setImage] = useState<MediaObject|null>(null);
+    const [photo, setPhoto] = useState<MediaObject|null>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
         event.preventDefault();
-        if (!name || !selectedBike) {
+        if (!name) {
             return;
         }
 
@@ -60,20 +56,23 @@ const Modz = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProps): JSX.
         try {
             let bodyRequest: RequestBody = {
                 'name': name,
-                'description': description,
+                'bike': bike['@id']
             };
+            if (description) {
+                bodyRequest['description'] = description;
+            }
             if (photo) {
-                bodyRequest['picture'] = photo['@id'];
+                bodyRequest['photo'] = photo['@id'];
             }
             newMaintenance = await maintenanceResource.post(bodyRequest)
         } catch (e) {
-            setErrorMessage('Ajout du vélo impossible');
+            setErrorMessage('Ajout de cette réparation impossible');
         }
 
         if (newMaintenance) {
             setName('');
             setDescription('');
-            setSelectedBike(null);
+            setPhoto(null);
             handleCloseModal();
         }
 
@@ -82,6 +81,10 @@ const Modz = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProps): JSX.
 
     const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void => {
         setName(event.target.value);
+    };
+
+    const handleChangeDescription = (event: ChangeEvent<HTMLInputElement>): void => {
+        setDescription(event.target.value);
     };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
@@ -111,7 +114,7 @@ const Modz = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProps): JSX.
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Ajouter un vélo
+                    Ajouter une réparation
                 </Typography>
                 {photo && <img width={isMobile ? "80%" : "200"} src={apiImageUrl(photo.contentUrl)}/>}
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -127,17 +130,15 @@ const Modz = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProps): JSX.
                         value={name}
                         onChange={handleChangeName}
                     />
-                    <Select
-                        required
-                        onChange={handleBikeChange}
-                        value={selectedBike?.name}
-                        style={{width: '100%'}}
-                    >
-                        <MenuItem disabled value="">Choisissez un type de vélo</MenuItem>
-                        {bikeTypes.map((bike) => (
-                            <MenuItem key={bike.id} value={bike.name}>{bike.name}</MenuItem>
-                        ))}
-                    </Select>
+                    <TextField
+                        margin="normal"
+                        placeholder="Description de votre réparation"
+                        multiline
+                        fullWidth
+                        rows={3}
+                        maxRows={6}
+                        onChange={handleChangeDescription}
+                    />
                     <Button
                         variant="outlined"
                         component="label"
@@ -156,7 +157,7 @@ const Modz = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProps): JSX.
                         variant="outlined"
                         sx={{ mt: 3, mb: 2 }}
                     >
-                        {!pendingAdd ? 'Ajouter ce vélo' : <CircularProgress size={20} />}
+                        {!pendingAdd ? 'Ajouter cette réparation' : <CircularProgress size={20} />}
                     </Button>
                     {errorMessage && (
                         <Typography variant="body1" color="error">
@@ -169,4 +170,4 @@ const Modz = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProps): JSX.
     )
 }
 
-export default ModalAddBike;
+export default ModalAddMaintenance;

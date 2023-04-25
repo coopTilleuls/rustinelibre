@@ -5,6 +5,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import BikeIdentity from "@components/bike/BikeIdentity";
 import {BikeType} from "@interfaces/BikeType";
+import BikeMaintenance from "@components/bike/BikeMaintenance";
 
 type BikeTabsProps = {
     bike: Bike;
@@ -32,6 +33,9 @@ const BikeTabs = ({bike, bikeTypes}: BikeTabsProps): JSX.Element => {
             <Box sx={{ marginTop: 2 }}>
                 {tabValue === 0 && (
                     <BikeIdentity bike={bike} bikeTypes={bikeTypes} />
+                )}
+                {tabValue === 1 && (
+                    <BikeMaintenance bike={bike} />
                 )}
             </Box>
         </Box>
