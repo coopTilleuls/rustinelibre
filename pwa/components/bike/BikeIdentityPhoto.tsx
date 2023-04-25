@@ -79,7 +79,12 @@ const BikeIdentityPhoto = ({bike, photo, propertyName, title}: BikeIdentityPhoto
             <Card sx={{ minWidth: 275 }}>
                 <CardContent>
                     {loading && <CircularProgress />}
-                    {photoDisplay && !loading && <img src={photoDisplay.contentUrl} />}
+                    {photoDisplay && !loading && <Box>
+                        <Typography variant="h5" sx={{textAlign: 'center'}}>
+                            {title}
+                        </Typography>
+                        <img src={photoDisplay.contentUrl} />
+                    </Box>}
                     {!photoDisplay && !loading &&
                         <Box>
                             <label htmlFor="fileUpload">

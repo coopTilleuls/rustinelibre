@@ -34,16 +34,16 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
 
     // If no repairerProps loaded
     async function fetchBikes() {
-        setLoading(true);
-        const bikesFetched = await bikeResource.getAll();
-        setLoading(false);
-        setBikes(bikesFetched['hydra:member']);
+        if (user) {
+            setLoading(true);
+            const bikesFetched = await bikeResource.getAll(true, {owner: user.id});
+            setLoading(false);
+            setBikes(bikesFetched['hydra:member']);
+        }
     }
 
     useEffect(() => {
-        if (user) {
-            fetchBikes();
-        }
+        fetchBikes();
     }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleLogin = (): void => {
