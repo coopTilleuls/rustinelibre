@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     provider: CurrentUserProvider::class,
 )]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
