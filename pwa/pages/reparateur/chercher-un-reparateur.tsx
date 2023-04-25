@@ -143,7 +143,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   }, [repairerTypeSelected, setOrderBy, sortChosen]);
 
   useEffect(() => {
-    if (cityInput === '') return;
+    if (cityInput === '' || cityInput.length <= 2) return;
 
     if (timeoutId) clearTimeout(timeoutId);
 
