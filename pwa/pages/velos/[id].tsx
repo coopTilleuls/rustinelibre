@@ -71,7 +71,7 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypes = []}) => {
                                 </Typography>
                             }
                             {bike && bike.picture && <Box sx={{marginTop: '20px'}}>
-                                <img src={apiImageUrl(bike.picture.contentUrl)} />
+                                <img src={apiImageUrl(bike.picture.contentUrl)} alt="Photo du vélo" />
                             </Box>}
                             {bike && <BikeTabs bike={bike} bikeTypes={bikeTypes} />}
                         </Box>

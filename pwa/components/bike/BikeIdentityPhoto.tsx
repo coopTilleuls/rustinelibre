@@ -83,7 +83,7 @@ const BikeIdentityPhoto = ({bike, photo, propertyName, title}: BikeIdentityPhoto
                         <Typography variant="h5" sx={{textAlign: 'center'}}>
                             {title}
                         </Typography>
-                        <img src={photoDisplay.contentUrl} />
+                        <img src={photoDisplay.contentUrl} alt="Photo du vélo" />
                     </Box>}
                     {!photoDisplay && !loading &&
                         <Box>
