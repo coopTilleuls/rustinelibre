@@ -16,7 +16,12 @@ class SearchFilterTest extends AbstractTestCase
 
         $responseData = $response->toArray();
         $this->assertEquals(15, $responseData['hydra:totalItems']);
-        $this->assertStringContainsString('atelier', strtolower($responseData['hydra:member'][0]['repairerType']['name']));
-        $this->assertStringContainsString('atelier', strtolower($responseData['hydra:member'][1]['repairerType']['name']));
+
+        // test if first and second repairers have the "atelier" repairer bike type
+        $firstRepairer = static::createClient()->request('GET', $responseData['hydra:member'][0]['@id'])->toArray();
+        $secondRepairer = static::createClient()->request('GET', $responseData['hydra:member'][1]['@id'])->toArray();
+
+        $this->assertStringContainsString('atelier', strtolower($firstRepairer['repairerType']['name']));
+        $this->assertStringContainsString('atelier', strtolower($secondRepairer['repairerType']['name']));
     }
 }

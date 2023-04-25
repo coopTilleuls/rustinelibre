@@ -15,6 +15,16 @@ const theme = createTheme({
         },
       ],
     },
+    MuiBottomNavigationAction: {
+      styleOverrides: {
+        label: {
+          fontSize: 14,
+          '&.Mui-selected': {
+            fontSize: 14,
+          },
+        },
+      },
+    },
   },
 });
 
