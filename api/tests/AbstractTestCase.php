@@ -90,9 +90,6 @@ abstract class AbstractTestCase extends ApiTestCase
         return static::getContainer()->get($repositoryClassName)->findOneBy($data);
     }
 
-    /*
-     * @return string IRI of the media
-     */
     protected function addMedia(string $path = null): string
     {
         if (null === $path) {
