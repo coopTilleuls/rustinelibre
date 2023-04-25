@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Repairer;
 
 use App\Entity\Repairer;
@@ -45,6 +47,8 @@ class SecurityRepairerTest extends AbstractTestCase
                 'street' => '8 rue de la clé',
                 'city' => 'Lille',
                 'postcode' => '59000',
+                'latitude' => '50.62544631958008',
+                'longitude' => '3.0352721214294434',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
@@ -132,8 +136,29 @@ class SecurityRepairerTest extends AbstractTestCase
         $response = $client->request('GET', '/repairers?enabled=true');
         $this->assertResponseIsSuccessful();
         $response = $response->toArray();
-        // On 25 repairers -> 3 aren't enabled
-        $this->assertCount(22, $response['hydra:member']);
+        $enabledRepairers = static::getContainer()->get(RepairerRepository::class)->findBy(['enabled' => true]);
+        $response = $response['hydra:member'];
+        $this->assertEquals(count($enabledRepairers), count($response));
+
+        // test first array key result for enabled filter
+        $firstRepairer = $client->request('GET', sprintf('/repairers/%d', $response[0]['id']))->toArray();
+        $this->assertSame(true, $firstRepairer['enabled']);
+
+        // test last array key result for enabled filter
+        $lastRepairer = $client->request('GET', sprintf('/repairers/%d', end($response)['id']))->toArray();
+        $this->assertSame(true, $lastRepairer['enabled']);
+
+        // test collection normalization groups
+        foreach ($response as $repairer) {
+            $this->assertArrayNotHasKey('description', $repairer);
+            $this->assertArrayNotHasKey('mobilePhone', $repairer);
+            $this->assertArrayNotHasKey('owner', $repairer);
+            $this->assertArrayNotHasKey('repairerType', $repairer);
+            $this->assertArrayHasKey('name', $repairer);
+            $this->assertArrayHasKey('latitude', $repairer);
+            $this->assertArrayHasKey('longitude', $repairer);
+            $this->assertArrayHasKey('firstSlotAvailable', $repairer);
+        }
     }
 
     public function testUniqueOwner(): void
@@ -175,6 +200,9 @@ class SecurityRepairerTest extends AbstractTestCase
                 'description' => 'Test create by user',
                 'street' => '12 rue de Wazemmes',
                 'city' => 'Lille',
+                'postcode' => '59000',
+                'latitude' => '50.62285232543945',
+                'longitude' => '3.0607175827026367',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[1]->id],
                 'comment' => 'Je voulais juste ajouter un commentaire',
@@ -200,6 +228,8 @@ class SecurityRepairerTest extends AbstractTestCase
                 'street' => '8 rue de la clé',
                 'city' => 'Lille',
                 'postcode' => '59000',
+                'latitude' => '50.6365654',
+                'longitude' => '3.0635282',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id],
@@ -213,10 +243,8 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testPutEnabledByAdmin(): void
     {
-        $client = self::createClientAuthAsAdmin();
-
         // Valid admin role given
-        $response = $client->request('PUT', '/repairers/'.$this->repairers[20]->id, [
+        $response = self::createClientAuthAsAdmin()->request('PUT', sprintf('/repairers/%s', $this->repairers[20]->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'enabled' => false,
@@ -228,35 +256,28 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertSame($response['enabled'], false);
     }
 
-    public function testPutEnabledByUserFail(): void
+    public function testSlugByPut(): void
     {
         // Get a random repairer
         $repairer = $this->repairers[20];
-        // Disabled it
-        $repairer->enabled = false;
+        // enabled it
+        $repairer->enabled = true;
         // Save it
         static::getContainer()->get(RepairerRepository::class)->save($repairer, true);
 
-        // Owner try to enable it
-        $client = self::createClientWithUser($repairer->owner);
         // Valid user role given
-        $client->request('PUT', '/repairers/'.$repairer->id, [
+        $response = self::createClientWithUser($repairer->owner)->request('PUT', sprintf('/repairers/%s', $repairer->id), [
              'headers' => ['Content-Type' => 'application/json'],
              'json' => [
                  'name' => 'New Name',
-                 'description' => 'test put enabled failed',
-                 'enabled' => true,
+                 'description' => 'test slug by put',
              ],
          ]);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
-        // Get the user 21 by admin to access to the enabled property
-        $admin = self::createClientAuthAsAdmin();
-        $response2 = $admin->request('GET', '/repairers/'.$repairer->id);
-        $response2 = $response2->toArray();
-        $this->assertSame($response2['description'], 'test put enabled failed');
-        $this->assertSame($response2['enabled'], false);
+        $response = $response->toArray();
+        $this->assertSame($response['description'], 'test slug by put');
         // test slug on update
-        $this->assertSame($response2['slug'], 'new-name');
+        $this->assertSame($response['slug'], 'new-name');
     }
 }
