@@ -71,80 +71,78 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
     }
 
     return (
-        <>
-            <div style={{width: "100vw", overflowX: "hidden"}}>
-                <Head>
-                    <title>Mes vélos</title>
-                </Head>
-                <WebsiteLayout />
-                <div style={{width: "100vw", marginBottom: '100px'}}>
-                    <Container component="main" maxWidth="xs">
-                        <Box
-                            sx={{
-                                marginTop: 4,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Typography variant="h2">
-                                Mes vélos
-                            </Typography>
-                            {!user && <Typography><span onClick={handleLogin} style={{cursor: 'pointer'}}><u>Connectez vous</u></span> pour accéder à la liste de vos vélos</Typography>}
-                            {loading && <CircularProgress />}
-                            {
-                                bikes.length > 0 && !loading &&
-                                bikes.map(bike => <BikeCard key={bike.id} bike={bike} setSelectedBike={setSelectedBike} />)
-                            }
+        <div style={{width: "100vw", overflowX: "hidden"}}>
+            <Head>
+                <title>Mes vélos</title>
+            </Head>
+            <WebsiteLayout />
+            <div style={{width: "100vw", marginBottom: '100px'}}>
+                <Container component="main" maxWidth="xs">
+                    <Box
+                        sx={{
+                            marginTop: 4,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Typography variant="h2">
+                            Mes vélos
+                        </Typography>
+                        {!user && <Typography><span onClick={handleLogin} style={{cursor: 'pointer'}}><u>Connectez vous</u></span> pour accéder à la liste de vos vélos</Typography>}
+                        {loading && <CircularProgress />}
+                        {
+                            bikes.length > 0 && !loading &&
+                            bikes.map(bike => <BikeCard key={bike.id} bike={bike} setSelectedBike={setSelectedBike} />)
+                        }
 
-                            {
-                                bikes.length == 0 && !loading && user &&
-                                <Box>
-                                    <Typography>
-                                        Vous n'avez pas encore de vélos enregistrés
-                                    </Typography>
-                                    <List
-                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                                        component="nav"
-                                        aria-labelledby="nested-list-subheader"
-                                    >
-                                        <ListItemButton>
-                                            <ListItemIcon>
-                                                <DirectionsBikeIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Enregistrez votre vélo" />
-                                        </ListItemButton>
-                                        <ListItemButton>
-                                            <ListItemIcon>
-                                                <FactCheckIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Remplissez sa fiche d'identité" />
-                                        </ListItemButton>
-                                        <ListItemButton>
-                                            <ListItemIcon>
-                                                <BuildIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Créeez un historique des réparations" />
-                                        </ListItemButton>
-                                    </List>
-                                </Box>
-                            }
+                        {
+                            bikes.length == 0 && !loading && user &&
+                            <Box>
+                                <Typography>
+                                    Vous n'avez pas encore de vélos enregistrés
+                                </Typography>
+                                <List
+                                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                                    component="nav"
+                                    aria-labelledby="nested-list-subheader"
+                                >
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <DirectionsBikeIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Enregistrez votre vélo" />
+                                    </ListItemButton>
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <FactCheckIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Remplissez sa fiche d'identité" />
+                                    </ListItemButton>
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <BuildIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Créeez un historique des réparations" />
+                                    </ListItemButton>
+                                </List>
+                            </Box>
+                        }
 
-                            <Button variant="outlined" sx={{mb: 3, mt: 2}} onClick={handleOpenModal}>
-                                <AddIcon />
-                                Ajouter un vélo
-                            </Button>
+                        <Button variant="outlined" sx={{mb: 3, mt: 2}} onClick={handleOpenModal}>
+                            <AddIcon />
+                            Ajouter un vélo
+                        </Button>
 
-                            <Button variant="outlined" sx={{mb: 3, mt: 2}} disabled={!selectedBike} onClick={handleClickFollow}>
-                                Suivant
-                            </Button>
+                        <Button variant="outlined" sx={{mb: 3, mt: 2}} disabled={!selectedBike} onClick={handleClickFollow}>
+                            Suivant
+                        </Button>
 
-                            <ModalAddBike openModal={openModal} handleCloseModal={handleCloseModal} bikeTypes={bikeTypes} />
-                        </Box>
-                    </Container>
-                </div>
+                        <ModalAddBike openModal={openModal} handleCloseModal={handleCloseModal} bikeTypes={bikeTypes} />
+                    </Box>
+                </Container>
             </div>
-        </>
+        </div>
     );
 };
 
