@@ -45,7 +45,7 @@ class RepairerSerializationTest extends AbstractTestCase
     public function testGetRepairerCollectionByDisconnectedUser(): void
     {
         // disconnected user given
-        $response = self::createClientAuthAsUser()->request('GET', '/repairers')->toArray();
+        $response = self::createClient()->request('GET', '/repairers')->toArray();
         $this->assertResponseIsSuccessful();
         $response = $response['hydra:member'];
 
