@@ -66,7 +66,7 @@ class Bike
     public ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class)]
-    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::READ, self::WRITE])]
     public ?MediaObject $picture = null;
