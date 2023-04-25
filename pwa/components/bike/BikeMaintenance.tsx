@@ -1,50 +1,18 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Bike} from "@interfaces/Bike";
 import Box from "@mui/material/Box";
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import {BikeType} from "@interfaces/BikeType";
-import Select, {SelectChangeEvent} from "@mui/material/Select";
-import {Collection, RequestBody} from "@interfaces/Resource";
-import {bikeResource} from "@resources/bikeResource";
 import AddIcon from "@mui/icons-material/Add";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import SaveIcon from '@mui/icons-material/Save';
-import {Alert, CircularProgress} from "@mui/material";
-import BikeIdentityPhoto from "@components/bike/BikeIdentityPhoto";
-import {maintenanceResource} from "@resources/MaintenanceResource";
+import {CircularProgress} from "@mui/material";
 import {Maintenance} from "@interfaces/Maintenance";
-import {useAccount} from "@contexts/AuthContext";
-import Head from "next/head";
-import WebsiteLayout from "@components/layout/WebsiteLayout";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Link from "next/link";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {apiImageUrl} from "@helpers/apiImagesHelper";
-import BikeTabs from "@components/bike/BikeTabs";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ModalAddBike from "@components/bike/ModalAddBike";
 import ModalAddMaintenance from "@components/bike/ModalAddMaintenance";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
-import ListItemText from "@mui/material/ListItemText";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
-import BuildIcon from "@mui/icons-material/Build";
-import List from "@mui/material/List";
-import Divider from '@mui/material/Divider';
 import {formatDate} from "@helpers/dateHelper";
-
 
 type BikeMaintenanceProps = {
     bike: Bike;
@@ -55,7 +23,6 @@ type BikeMaintenanceProps = {
 
 const BikeMaintenance = ({bike, maintenances, loading, fetchMaintenance}: BikeMaintenanceProps): JSX.Element => {
 
-    const user = useAccount({});
     const [openModal, setOpenModal] = useState<boolean>(false);
 
     const handleOpenModal = (): void => setOpenModal(true);
