@@ -24,7 +24,7 @@ jobs:
 
     steps:
     - name: Build/Push
-      uses: coopTilleuls/action-docker-build-push@v4
+      uses: coopTilleuls/action-docker-build-push@v5
       with:
         IMAGE_NAME: bikelib-caddy
         BUILD_CONTEXT: api
@@ -36,10 +36,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Build/Push
-      uses: coopTilleuls/action-docker-build-push@v4
+      uses: coopTilleuls/action-docker-build-push@v5
       with:
         IMAGE_NAME: bikelib-pwa
         BUILD_CONTEXT: pwa
         BUILD_TARGET: prod
+        SECURITY_SCAN: ${{ false }}
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
