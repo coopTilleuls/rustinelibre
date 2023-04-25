@@ -33,8 +33,7 @@ final class BossExtension implements QueryCollectionExtensionInterface
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder->leftJoin(sprintf('%s.repairer', $rootAlias), 'orep');
-        $queryBuilder->leftJoin('orep.owner', 'orepo');
-        $queryBuilder->andWhere('orepo.id = :current_user');
+        $queryBuilder->andWhere('orep.owner = :current_user');
         $queryBuilder->setParameter('current_user', $user->id);
     }
 }
