@@ -132,7 +132,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Ajouter une réparation
                 </Typography>
-                {photo && <img width={isMobile ? "80%" : "200"} src={apiImageUrl(photo.contentUrl)}/>}
+                {photo && <img width={isMobile ? "80%" : "200"} src={apiImageUrl(photo.contentUrl)} alt="Photo de la réparation" />}
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
