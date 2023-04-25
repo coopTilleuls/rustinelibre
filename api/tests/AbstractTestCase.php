@@ -116,5 +116,5 @@ abstract class AbstractTestCase extends ApiTestCase
         $parts = explode('/', $id);
 
         return end($parts);
-    }g
+    }
 }
