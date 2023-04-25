@@ -116,7 +116,7 @@ const ModalAddBike = ({bikeTypes, openModal, handleCloseModal}: ModalAddBikeProp
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Ajouter un vélo
                 </Typography>
-                {photo && <img width={isMobile ? "80%" : "200"} src={apiImageUrl(photo.contentUrl)}/>}
+                {photo && <img width={isMobile ? "80%" : "200"} src={apiImageUrl(photo.contentUrl)} alt="Photo du vélo" />}
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"

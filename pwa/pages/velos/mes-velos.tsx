@@ -100,7 +100,7 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
                             bikes.length == 0 && !loading && user &&
                             <Box>
                                 <Typography>
-                                    Vous n'avez pas encore de vélos enregistrés
+                                    Vous n&apos;avez pas encore de vélos enregistrés
                                 </Typography>
                                 <List
                                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
