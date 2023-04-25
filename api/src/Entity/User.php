@@ -26,19 +26,19 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::USER_READ]],
     denormalizationContext: ['groups' => [self::USER_WRITE]]
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or object == user")]
+#[Get(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
 #[Post(security: "is_granted('ROLE_ADMIN') or !user")]
-#[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
+#[Put(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
 #[Get(
     uriTemplate: '/me',
     openapi: new Model\Operation(
         summary: 'Retrieves the current User ressource',
         description: 'Retrieves the current User ressource'),
-    security: "is_granted('IS_AUTHENTICATED_FULLY')",
+    security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)",
     provider: CurrentUserProvider::class,
 )]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object == user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
