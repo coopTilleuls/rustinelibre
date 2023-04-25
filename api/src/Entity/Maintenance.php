@@ -61,7 +61,7 @@ class Maintenance
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::READ, self::WRITE])]
-    public ?MediaObject $image = null;
+    public ?MediaObject $photo = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups([self::READ, self::WRITE])]
