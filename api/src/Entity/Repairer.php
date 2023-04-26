@@ -219,10 +219,14 @@ class Repairer
     #[ORM\Column(length: 255, nullable: true)]
     public ?string $slug = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
         $this->repairerEmployees = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function addBikeTypesSupported(BikeType $bikeTypesSupported): self
