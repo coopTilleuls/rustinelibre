@@ -30,7 +30,7 @@ const BikeTabs = ({bike, bikeTypes}: BikeTabsProps): JSX.Element => {
     async function fetchMaintenance() {
         if (user) {
             setLoading(true);
-            const maintenanceCollection: Collection<Maintenance> = await maintenanceResource.getAll(true, {owner: user.id, 'order[repairDate]': 'DESC'});
+            const maintenanceCollection: Collection<Maintenance> = await maintenanceResource.getAll(true, {bike: bike.id, 'order[repairDate]': 'DESC'});
             setMaintenances(maintenanceCollection['hydra:member']);
             setLoading(false);
         }

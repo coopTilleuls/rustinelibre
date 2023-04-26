@@ -83,16 +83,16 @@ const BikeIdentityPhoto = ({bike, photo, propertyName, title}: BikeIdentityPhoto
                         <Typography variant="h5" sx={{textAlign: 'center'}}>
                             {title}
                         </Typography>
-                        <img src={photoDisplay.contentUrl} alt="Photo du vélo" />
+                        <img src={photoDisplay.contentUrl} alt="Photo du vélo" style={{marginLeft: '30%'}} />
                     </Box>}
                     {!photoDisplay && !loading &&
                         <Box>
                             <label htmlFor="fileUpload">
-                                <Typography variant="h4" sx={{cursor:'pointer'}}>
+                                <Typography variant="h4" sx={{cursor:'pointer', textAlign: 'center'}}>
                                     {title}
                                 </Typography>
-                                <Typography>
-                                    <AddAPhotoIcon sx={{fontSize: "2em", marginLeft: "20%", cursor: 'pointer'}} />
+                                <Typography sx={{textAlign: 'center'}}>
+                                    <AddAPhotoIcon sx={{fontSize: "3em", cursor: 'pointer', marginBottom: '20px'}} />
                                     <br />
                                     Ajouter une photo (taille maximum 10mo)
                                 </Typography>
