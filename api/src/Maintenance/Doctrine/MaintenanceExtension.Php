@@ -12,7 +12,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
- * This extension prevents getting bikes from other users.
+ * This extension prevents getting maintenances from other users.
  */
 final class MaintenanceExtension implements QueryCollectionExtensionInterface
 {
@@ -27,14 +27,12 @@ final class MaintenanceExtension implements QueryCollectionExtensionInterface
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        dd('toto');
         if (Maintenance::class !== $resourceClass || $this->security->isGranted('ROLE_ADMIN') || null === $user = $this->security->getUser()) {
             return;
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
-        $queryBuilder->leftJoin(sprintf('%s.bike', $rootAlias), 'ob');
-        $queryBuilder->andWhere('ob.owner = :current_user');
-        $queryBuilder->setParameter('current_user', $user->id);
+        $queryBuilder->andWhere(sprintf('%s.owner = :owner', $rootAlias));
+        $queryBuilder->setParameter('owner', $user->id);
     }
 }
