@@ -219,8 +219,8 @@ class Repairer
     #[ORM\Column(length: 255, nullable: true)]
     public ?string $slug = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    public ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    public ?\DateTimeInterface $createdAt = null;
 
     public function __construct()
     {
