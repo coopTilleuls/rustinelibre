@@ -57,4 +57,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $this->save($user, true);
     }
+
+    public function getUserWithoutRepairer(): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.repairer', 'r')
+            ->where('r.id IS NULL')
+            ->andWhere('CAST(u.roles AS TEXT) LIKE :role')
+            ->setParameter('role', '%ROLE_USER%')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

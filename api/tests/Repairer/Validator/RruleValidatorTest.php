@@ -21,9 +21,20 @@ class RruleValidatorTest extends AbstractTestCase
 
     public function testCreateRepairer(): void
     {
-        $randomUser = $this->users[41];
+        $user = null;
 
-        $this->createClientWithCredentials(['email' => $randomUser->email, 'password' => 'Test1passwordOk!'])->request('POST', '/repairers', ['json' => [
+        foreach ($this->users as $userIteration) {
+            if (null === $userIteration->repairer && !in_array('ROLE_ADMIN', $userIteration->roles, true)) {
+                $user = $userIteration;
+                break;
+            }
+        }
+
+        if (null === $user) {
+            self::fail('No user without repairer found');
+        }
+
+        $this->createClientWithUser($user)->request('POST', '/repairers', ['json' => [
             'name' => 'New workshop',
             'description' => 'Super atelier de vélo',
             'mobilePhone' => '0720397700',
@@ -34,8 +45,8 @@ class RruleValidatorTest extends AbstractTestCase
             'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
         ]]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        self::assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 
     public function testCreateInvalidRrule(): void

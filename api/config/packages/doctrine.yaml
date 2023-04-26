@@ -19,6 +19,8 @@ doctrine:
         dql:
             numeric_functions:
                 Random: Qbbr\PgsqlDoctrineRandomFunction\DQL\RandomFunction
+            string_functions:
+                cast: Oro\ORM\Query\AST\Functions\Cast
 
 when@test:
     doctrine:
