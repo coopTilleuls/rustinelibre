@@ -137,7 +137,7 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
                         }
 
                         {
-                            user && <Button variant="outlined" sx={{mb: 3, mt: 2}} disabled={!selectedBike} onClick={handleClickFollow}>
+                            user && bikes.length > 0 && <Button variant="outlined" sx={{mb: 3, mt: 2}} disabled={!selectedBike} onClick={handleClickFollow}>
                                 Suivant
                             </Button>
                         }
