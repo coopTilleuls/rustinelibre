@@ -129,14 +129,18 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
                             </Box>
                         }
 
-                        <Button variant="outlined" sx={{mb: 3, mt: 2}} onClick={handleOpenModal}>
-                            <AddIcon />
-                            Ajouter un vélo
-                        </Button>
+                        {
+                            user && <Button variant="outlined" sx={{mb: 3, mt: 2}} onClick={handleOpenModal}>
+                                <AddIcon />
+                                Ajouter un vélo
+                            </Button>
+                        }
 
-                        <Button variant="outlined" sx={{mb: 3, mt: 2}} disabled={!selectedBike} onClick={handleClickFollow}>
-                            Suivant
-                        </Button>
+                        {
+                            user && <Button variant="outlined" sx={{mb: 3, mt: 2}} disabled={!selectedBike} onClick={handleClickFollow}>
+                                Suivant
+                            </Button>
+                        }
 
                         <ModalAddBike openModal={openModal} handleCloseModal={handleCloseModal} bikeTypes={bikeTypes} />
                     </Box>
