@@ -10,6 +10,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FirstSlotAvailableTest extends AbstractTestCase
 {
+    private UserRepository $userRepository;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->userRepository = static::getContainer()->get(UserRepository::class);
+    }
+
     public function testGetOrderBySlotAvailable(): void
     {
         $randomUser = $this->getObjectByClassNameAndValues(UserRepository::class, ['email' => 'user1@test.com']);
@@ -43,7 +51,13 @@ class FirstSlotAvailableTest extends AbstractTestCase
     public function testNewRepairerShouldHaveFirstSlotValue(): void
     {
         // Create a repairer
-        $response = $this->createClientWithCredentials()->request('POST', '/repairers', ['json' => [
+        $user = $this->userRepository->getUserWithoutRepairer();
+
+        if (null === $user) {
+            self::fail('No user without repairer found');
+        }
+
+        $response = $this->createClientWithUser($user)->request('POST', '/repairers', ['json' => [
             'name' => 'New workshop',
             'description' => 'Nouvel atelier de réparation',
             'mobilePhone' => '0720397799',

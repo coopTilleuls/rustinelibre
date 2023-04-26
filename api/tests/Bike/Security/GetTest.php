@@ -4,13 +4,23 @@ declare(strict_types=1);
 
 namespace App\Tests\Bike\Security;
 
-use App\Tests\Bike\BikeAbstractTestCase;
+use App\Repository\BikeRepository;
+use App\Tests\AbstractTestCase;
+use App\Tests\Trait\BikeTrait;
 
-class GetTest extends BikeAbstractTestCase
+class GetTest extends AbstractTestCase
 {
+    use BikeTrait;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->bikeRepository = self::getContainer()->get(BikeRepository::class);
+    }
+
     public function testAdminCanGetBike(): void
     {
-        $bike = $this->bikes[0];
+        $bike = $this->getBike();
         $response = $this->createClientAuthAsAdmin()->request('GET', sprintf('/bikes/%d', $bike->id))->toArray();
         self::assertResponseStatusCodeSame(200);
         self::assertArrayHasKey('id', $response);
@@ -23,21 +33,21 @@ class GetTest extends BikeAbstractTestCase
 
     public function testOwnerCanGetHisBike(): void
     {
-        $bike = $this->bikes[0];
+        $bike = $this->getBike();
         $this->createClientWithUser($bike->owner)->request('GET', sprintf('/bikes/%d', $bike->id));
         self::assertResponseStatusCodeSame(200);
     }
 
     public function testUserCannotGetOtherBike(): void
     {
-        $bike = $this->bikes[0];
+        $bike = $this->getBike();
         $this->createClientAuthAsUser()->request('GET', sprintf('/bikes/%d', $bike->id));
         self::assertResponseStatusCodeSame(403);
     }
 
     public function testOwnerGetCollectionOfHisBikes(): void
     {
-        $bike = $this->bikes[0];
+        $bike = $this->getBike();
         $response = $this->createClientWithUser($bike->owner)->request('GET', '/bikes')->toArray();
 
         self::assertResponseStatusCodeSame(200);
@@ -57,7 +67,6 @@ class GetTest extends BikeAbstractTestCase
 
     public function testAdminGetCollectionOfBikes(): void
     {
-        $bike = $this->bikes[0];
         $response = $this->createClientAuthAsAdmin()->request('GET', '/bikes')->toArray();
 
         self::assertResponseStatusCodeSame(200);
