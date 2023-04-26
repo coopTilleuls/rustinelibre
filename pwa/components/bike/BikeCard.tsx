@@ -25,9 +25,9 @@ const BikeCard = ({bike, setSelectedBike}: BikeCardProps): JSX.Element => {
                 alt="Photo du vélo"
                 height="140"
                 image={apiImageUrl(bike.picture?.contentUrl)}
-            /> : <DirectionsBikeIcon />}
+            /> : <DirectionsBikeIcon sx={{marginLeft: '40%', fontSize: '3em'}} />}
             <CardContent>
-                <Typography gutterBottom variant="h5">
+                <Typography gutterBottom variant="h5" sx={{textAlign: 'center'}}>
                     {bike.name}
                 </Typography>
             </CardContent>

@@ -24,7 +24,6 @@ function MyApp({
   Component,
   pageProps,
 }: AppProps<{dehydratedState: DehydratedState}>) {
-  console.log(theme);
   return (
     <AuthProvider>
       <SearchRepairerProvider>
