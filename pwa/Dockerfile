@@ -37,13 +37,13 @@ ENV PORT 3000
 CMD ["sh", "-c", "pnpm install -r --offline; pnpm dev"]
 
 
-FROM builder_base AS builder
-COPY --link . .
-COPY --from=deps --link /srv/app/node_modules ./node_modules
+#FROM builder_base AS builder
+#COPY --link . .
+#COPY --from=deps --link /srv/app/node_modules ./node_modules
 
 
 ## Production image, keep builder image, run build at startup to preload pages
-FROM builder AS prod
+FROM deps AS prod
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
