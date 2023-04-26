@@ -51,7 +51,7 @@ const BikeMaintenance = ({bike, maintenances, loading, fetchMaintenance}: BikeMa
                             <BuildIcon sx={{fontWeight: '3em'}} />
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            Vous n'avez pas de réparations enregistrées pour le moment
+                            Vous n&apos;avez pas de réparations enregistrées pour le moment
                         </Typography>
                     </CardContent>
                 </CardActionArea>
