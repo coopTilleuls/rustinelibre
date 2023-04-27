@@ -74,7 +74,7 @@ helm upgrade --install ${RELEASE_NAME}-pwa ./helm/pwa \
   --debug \
   -f ./helm/pwa/values-minikube.yml \
   --set=pwa.image.tag=${pwa_sha} \
-  --set=pwa.nextPublicEntrypoint=https://${RELEASE_NAME}-api-bikelib-api:80
+  --set=pwa.nextPublicEntrypoint=http://${RELEASE_NAME}-api-bikelib-api:80
 
 # Global
 MINIKUBE_IP=$(minikube ip)
