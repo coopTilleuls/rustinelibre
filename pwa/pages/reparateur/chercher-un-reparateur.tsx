@@ -79,6 +79,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setSortChosen,
     totalItems,
     setTotalItems,
+    showMap,
+    setShowMap,
   } = useContext(SearchRepairerContext);
 
   const fetchRepairers = useCallback(async (): Promise<void> => {
@@ -93,7 +95,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       itemsPerPage: 20,
       'bikeTypesSupported.id': selectedBike.id,
       page: `${currentPage ?? 1}`,
-      sort: 'random',
     };
 
     params = city
@@ -286,10 +287,22 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
             )}
           </Stack>
           {city && (
-            <Box width="100%" sx={{py: 2}}>
+            <Box
+              width="100%"
+              sx={{py: 2}}
+              display="flex"
+              justifyContent="space-between">
               <Button type="submit" variant="contained">
                 Chercher
               </Button>
+              {repairers.length ? (
+                <Button
+                  sx={{display: {lg: 'none'}}}
+                  onClick={() => setShowMap(!showMap)}
+                  variant="outlined">
+                  {showMap ? 'Voir les résultats' : 'Voir sur la carte'}
+                </Button>
+              ) : null}
             </Box>
           )}
         </form>
