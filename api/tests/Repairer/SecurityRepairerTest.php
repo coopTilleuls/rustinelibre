@@ -8,7 +8,6 @@ use App\Entity\Repairer;
 use App\Entity\User;
 use App\Repository\BikeTypeRepository;
 use App\Repository\RepairerRepository;
-use App\Repository\RepairerTypeRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +17,11 @@ class SecurityRepairerTest extends AbstractTestCase
     private array $bikeTypes = [];
     /** @var Repairer[] */
     private array $repairers = [];
-    private array $repairerTypes = [];
 
     /** @var User[] */
     private array $users = [];
+
+    private UserRepository $userRepository;
 
     public function setUp(): void
     {
@@ -30,12 +30,18 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->users = static::getContainer()->get(UserRepository::class)->findAll();
         $this->repairers = static::getContainer()->get(RepairerRepository::class)->findAll();
         $this->bikeTypes = static::getContainer()->get(BikeTypeRepository::class)->findAll();
-        $this->repairerTypes = static::getContainer()->get(RepairerTypeRepository::class)->findAll();
+        $this->userRepository = static::getContainer()->get(UserRepository::class);
     }
 
     public function testPostRepairer(): void
     {
-        $client = self::createClientWithUser($this->users[55]);
+        $user = $this->userRepository->getUserWithoutRepairer();
+
+        if (null === $user) {
+            self::fail('No user without repairer found');
+        }
+
+        $client = $this->createClientWithUser($user);
 
         // Valid boss role given
         $response = $client->request('POST', '/repairers', [
@@ -164,21 +170,13 @@ class SecurityRepairerTest extends AbstractTestCase
 
     public function testOwnerCreatedByUser(): void
     {
-        /** @var ?User $user */
-        $user = null;
-
-        foreach ($this->users as $userIteration) {
-            if (null === $userIteration->repairer) {
-                $user = $userIteration;
-                break;
-            }
-        }
+        $user = $this->userRepository->getUserWithoutRepairer();
 
         if (null === $user) {
             $this->fail('No user found without repairer');
         }
 
-        $client = self::createClientWithUser($user);
+        $client = $this->createClientWithUser($user);
 
         // simple user given
         $response = $client->request('POST', '/repairers', [
@@ -201,32 +199,6 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $this->assertSame($response['owner'], '/users/'.$user->id);
         $this->assertSame($response['comment'], 'Je voulais juste ajouter un commentaire');
-    }
-
-    public function testOwnerSecurity(): void
-    {
-        $client = self::createClientWithUser($this->users[56]);
-        // simple user given who try to assigne other owner
-        $response = $client->request('POST', '/repairers', [
-            'headers' => ['Content-Type' => 'application/json'],
-            'json' => [
-                'name' => 'Test owner security',
-                'description' => 'Test owner security',
-                'mobilePhone' => '0720596321',
-                'street' => '8 rue de la clé',
-                'city' => 'Lille',
-                'postcode' => '59000',
-                'latitude' => '50.6365654',
-                'longitude' => '3.0635282',
-                'country' => 'France',
-                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id],
-            ],
-        ]);
-        $response = $response->toArray();
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->assertSame($response['owner'], '/users/'.$this->users[56]->id);
     }
 
     public function testPutEnabledByAdmin(): void

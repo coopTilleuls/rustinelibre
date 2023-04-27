@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MaintenanceRepository::class)]
-
 #[ApiResource(
     normalizationContext: ['groups' => [self::READ]],
     denormalizationContext: ['groups' => [self::WRITE]]
@@ -32,7 +31,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
 #[ApiFilter(SearchFilter::class, properties: ['owner' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'repairDate'], arguments: ['orderParameterName' => 'order'])]
-
 class Maintenance
 {
     public const READ = 'maintenance_read';
