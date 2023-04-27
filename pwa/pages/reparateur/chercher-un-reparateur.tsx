@@ -44,7 +44,7 @@ import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {BikeType} from '@interfaces/BikeType';
 import {ENTRYPOINT} from '@config/entrypoint';
 import Box from '@mui/material/Box';
-import {CircularProgress} from '@mui/material';
+import {CircularProgress, Container, Stack} from '@mui/material';
 
 type SearchRepairerProps = {
   bikeTypes: BikeType[];
@@ -217,27 +217,27 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
   return (
     <>
-      <div style={{width: '100vw', overflowX: 'hidden'}}>
-        <Head>
-          <title>Chercher un réparateur</title>
-        </Head>
-        <WebsiteLayout />
-        <div style={{width: '100vw', marginBottom: '100px'}}>
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              margin: '6px',
-              padding: '36px 24px 48px',
-              display: 'grid',
-              gap: '24px',
-              gridTemplateColumns: '1fr 1fr',
-            }}>
-            <div style={{marginBottom: '14px'}}>
-              <InputLabel htmlFor="bikeType">Type de Vélo</InputLabel>
+      <Head>
+        <title>Chercher un réparateur</title>
+      </Head>
+      <WebsiteLayout />
+      <Container sx={{py: 5}}>
+        <form onSubmit={handleSubmit}>
+          <Stack
+            direction={{xs: 'column', md: 'row'}}
+            alignItems={{md: 'center'}}
+            spacing={2}>
+            <Box
+              sx={{
+                width: {xs: '100%', md: '50%'},
+              }}>
+              <InputLabel htmlFor="bikeType" sx={{fontSize: {xs: 10, md: 16}}}>
+                Type de Vélo
+              </InputLabel>
               <Select
+                fullWidth
                 onChange={handleBikeChange}
-                value={selectedBike?.name}
-                style={{width: '100%'}}>
+                value={selectedBike?.name}>
                 <MenuItem disabled value="">
                   Choisissez un type de vélo
                 </MenuItem>
@@ -247,10 +247,16 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                   </MenuItem>
                 ))}
               </Select>
-            </div>
+            </Box>
             {selectedBike && (
-              <div style={{marginBottom: '14px'}} ref={listContainerRef}>
-                <InputLabel htmlFor="city">Ville</InputLabel>
+              <Box
+                sx={{
+                  width: {xs: '100%', md: '50%'},
+                }}
+                ref={listContainerRef}>
+                <InputLabel htmlFor="city" sx={{fontSize: {xs: 10, md: 16}}}>
+                  Ville
+                </InputLabel>
                 <Autocomplete
                   freeSolo
                   value={cityInput}
@@ -264,48 +270,47 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                     />
                   )}
                 />
-              </div>
+              </Box>
             )}
-
+          </Stack>
+          <Stack
+            pt={2}
+            direction={{xs: 'column', md: 'row'}}
+            alignItems={{md: 'center'}}
+            spacing={2}>
             {city && (
               <RepairerSortOptions
                 handleChangeSort={handleChangeSort}
                 isMobile={isMobile}
               />
             )}
-
-            {selectedBike && city && (
-              <Box sx={{display: {xs: 'hidden', md: 'block'}}}>
-                <Button fullWidth type="submit" variant="outlined">
-                  Chercher
-                </Button>
-              </Box>
-            )}
-          </form>
-
-          <div style={{margin: '12px 0'}}>
-            {pendingSearchCity && <CircularProgress />}
-          </div>
-
-          <Box sx={{marginTop: '12px', display: {md: 'hidden'}}}>
-            {Object.keys(repairers).length > 0 && isMobile && <ButtonShowMap />}
-          </Box>
-
-          <div style={{marginTop: '12px'}}>
-            {!pendingSearchCity && Object.keys(repairers).length > 0 && (
-              <RepairersResults />
-            )}
-
-            {Object.keys(repairers).length === 0 && alreadyFetchApi && (
-              <Typography>Pas de réparateurs disponibles</Typography>
-            )}
-          </div>
-
-          {!pendingSearchCity && totalItems > 20 && (
-            <PaginationBlock onPageChange={handlePageChange} />
+          </Stack>
+          {city && (
+            <Box width="100%" sx={{py: 2}}>
+              <Button type="submit" variant="contained">
+                Chercher
+              </Button>
+            </Box>
           )}
-        </div>
-      </div>
+        </form>
+
+        <Box textAlign="center" pt={2}>
+          {pendingSearchCity && <CircularProgress />}
+        </Box>
+
+        <Box width={'full'}>
+          {!pendingSearchCity && repairers.length ? <RepairersResults /> : null}
+          {repairers.length === 0 && alreadyFetchApi && (
+            <Typography>
+              Pas de réparateurs disponibles dans votre ville.
+            </Typography>
+          )}
+        </Box>
+      </Container>
+
+      {!pendingSearchCity && totalItems > 20 && (
+        <PaginationBlock onPageChange={handlePageChange} />
+      )}
     </>
   );
 };

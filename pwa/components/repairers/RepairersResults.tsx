@@ -1,14 +1,15 @@
-import { Repairer } from '@interfaces/Repairer';
-import React, { useContext, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { RepairerCard } from 'components/repairers/RepairerCard';
+import {Repairer} from '@interfaces/Repairer';
+import React, {useContext, useState} from 'react';
+import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
+import {RepairerCard} from 'components/repairers/RepairerCard';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import { LeafletMouseEvent } from 'leaflet';
-import { SearchRepairerContext } from '@contexts/SearchRepairerContext';
-import Grid from '@mui/material/Grid';
+import {LeafletMouseEvent} from 'leaflet';
+import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import Box from '@mui/material/Box';
+import {Paper, Stack, Typography} from '@mui/material';
+import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 export const RepairersResults = (): JSX.Element => {
   const {
@@ -18,6 +19,7 @@ export const RepairersResults = (): JSX.Element => {
     repairers,
     setRepairers,
   } = useContext(SearchRepairerContext);
+
   const [mapCenter, setMapCenter] = useState<[number, number]>([
     Number(repairers[0].latitude),
     Number(repairers[0].longitude),
@@ -40,40 +42,19 @@ export const RepairersResults = (): JSX.Element => {
   };
 
   return (
-    <>
-      <Box sx={{ display: 'flex' }}>
-        <Box
-          sx={{
-            width: { xs: '100%', md: '50%' },
-            marginLeft: 4,
-            marginRight: 2,
-          }}
-        >
-          {repairers.map((repairer) => {
-            return (
-              <RepairerCard
-                key={repairer.id}
-                repairer={repairer}
-                isSelect={repairer.id === selectedRepairer}
-              />
-            );
-          })}
-        </Box>
-        <Box
-          sx={{
-            width: '50%',
-            marginLeft: 2,
-            marginRight: 4,
-            display: { xs: 'hidden', md: 'block' },
-          }}
-        >
+    <Stack spacing={4} sx={{display: 'flex', flexDirection: 'column'}}>
+      <Box
+        sx={{
+          width: '100%',
+          display: {xs: 'none', md: 'block'},
+        }}>
+        <Paper elevation={4}>
           <MapContainer
             center={mapCenter}
             zoom={13}
             scrollWheelZoom={false}
-            style={{ height: '50vh', width: '100%' }}
-          >
-            <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+            style={{height: 300, width: '100%'}}>
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {repairers.map((repairer) => (
               <Marker
                 key={repairer.id}
@@ -83,15 +64,28 @@ export const RepairersResults = (): JSX.Element => {
                 ]}
                 eventHandlers={{
                   mouseover: (event) => event.target.openPopup(),
-                }}
-              >
+                }}>
                 <Popup>{repairer.name}</Popup>
               </Marker>
             ))}
           </MapContainer>
-        </Box>
+        </Paper>
       </Box>
-    </>
+      <Grid2
+        container
+        spacing={2}
+        sx={{
+          width: '100%',
+        }}>
+        {repairers.map((repairer) => {
+          return (
+            <Grid2 key={repairer.id} xs={12} md={6} lg={4}>
+              <RepairerCard repairer={repairer} />
+            </Grid2>
+          );
+        })}
+      </Grid2>
+    </Stack>
   );
 };
 
