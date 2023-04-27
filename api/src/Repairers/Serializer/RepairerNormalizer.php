@@ -6,6 +6,7 @@ namespace App\Repairers\Serializer;
 
 use App\Entity\Repairer;
 use App\Repairers\Calculator\DistanceCalculator;
+use App\Repository\RepairerRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -17,7 +18,9 @@ final class RepairerNormalizer implements NormalizerInterface, NormalizerAwareIn
 
     private const ALREADY_CALLED = 'REPAIRER_NORMALIZER_ALREADY_CALLED';
 
-    public function __construct(private readonly DistanceCalculator $distanceCalculator, private readonly RequestStack $requestStack)
+    public function __construct(private readonly DistanceCalculator $distanceCalculator,
+                                private readonly RepairerRepository $repairerRepository,
+                                private readonly RequestStack $requestStack)
     {
     }
 
@@ -28,10 +31,13 @@ final class RepairerNormalizer implements NormalizerInterface, NormalizerAwareIn
     {
         $context[self::ALREADY_CALLED] = true;
 
+
+
         if ($this->requestStack->getCurrentRequest()->query->has('around')) {
             $coordinates = explode(',', reset($this->requestStack->getCurrentRequest()->query->all()['around']));
-            $distance = $this->distanceCalculator->distanceBetween2Coordinates((float) $object->latitude, (float) $object->longitude, (float) $coordinates[0], (float) $coordinates[1]);
-            $object->distance = round($distance, 2);
+
+            $distance = $this->repairerRepository->calculateDistanceInMeters($object, $coordinates[0], $coordinates[1]);
+            $object->distance = $distance;
         }
 
         return $this->normalizer->normalize($object, $format, $context);
