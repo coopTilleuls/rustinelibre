@@ -13,6 +13,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
+        "hautelook/alice-bundle": "^2.12",
         "jsor/doctrine-postgis": "^2.1",
         "league/flysystem-bundle": "^3.1",
         "lexik/jwt-authentication-bundle": "^2.18",
@@ -40,8 +41,7 @@
         "symfony/uid": "6.2.*",
         "symfony/validator": "6.2.*",
         "symfony/yaml": "6.2.*",
-        "vich/uploader-bundle": "^2.1",
-        "hautelook/alice-bundle": "^2.11"
+        "vich/uploader-bundle": "^2.1"
     },
     "require-dev": {
         "api-platform/schema-generator": "^5.0",
