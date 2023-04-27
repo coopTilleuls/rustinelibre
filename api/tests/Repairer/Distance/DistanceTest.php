@@ -14,10 +14,10 @@ class DistanceTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $responseCollection = $response->toArray()['hydra:member'];
 
-        $this->assertTrue($this->isIntOrFloat($responseCollection[0]['distance']));
-        $this->assertTrue($this->isIntOrFloat($responseCollection[1]['distance']));
-        $this->assertTrue($this->isIntOrFloat($responseCollection[2]['distance']));
-        $this->assertTrue($this->isIntOrFloat($responseCollection[3]['distance']));
+        $this->assertIsInt($responseCollection[0]['distance']);
+        $this->assertIsInt($responseCollection[1]['distance']);
+        $this->assertIsInt($responseCollection[2]['distance']);
+        $this->assertIsInt($responseCollection[3]['distance']);
         $this->assertTrue(0 <= $responseCollection[0]['distance']);
         $this->assertTrue(0 <= $responseCollection[1]['distance']);
         $this->assertTrue(0 <= $responseCollection[2]['distance']);
@@ -34,10 +34,5 @@ class DistanceTest extends AbstractTestCase
         $this->assertArrayNotHasKey('distance', $responseCollection[1]);
         $this->assertArrayNotHasKey('distance', $responseCollection[2]);
         $this->assertArrayNotHasKey('distance', $responseCollection[3]);
-    }
-
-    private function isIntOrFloat($value): bool
-    {
-        return is_int($value) || is_float($value);
     }
 }
