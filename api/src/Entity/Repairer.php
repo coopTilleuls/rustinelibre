@@ -222,6 +222,9 @@ class Repairer
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     public ?\DateTimeInterface $createdAt = null;
 
+    #[Groups([self::REPAIRER_COLLECTION_READ])]
+    public ?float $distance = null;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
