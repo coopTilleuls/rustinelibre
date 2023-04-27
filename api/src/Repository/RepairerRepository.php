@@ -41,7 +41,7 @@ class RepairerRepository extends ServiceEntityRepository
         }
     }
 
-    public function calculateDistanceInMeters(Repairer $repairer, string $latitude, string $longitude): int
+    public function calculateDistanceBetweenRepairerAndCoordinates(Repairer $repairer, string $latitude, string $longitude): int
     {
         $queryBuilder = $this->createQueryBuilder('r');
         $queryBuilder->select('ST_DistanceSphere(:gpsPoint, ST_SetSRID(ST_MakePoint(:latitude, :longitude), 4326)) as distance');
