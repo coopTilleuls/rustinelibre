@@ -34,6 +34,7 @@ spec:
             set -ex;
             bin/console doctrine:schema:drop --full-database --force;
             bin/console doctrine:migrations:migrate --no-interaction;
+            bin/console hautelook:fixtures:load --no-interaction --purge-with-truncate;
           ']
           env:
             - name: API_ENTRYPOINT_HOST
