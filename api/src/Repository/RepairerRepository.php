@@ -40,4 +40,16 @@ class RepairerRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function calculateDistanceBetweenRepairerAndCoordinates(Repairer $repairer, string $latitude, string $longitude): int
+    {
+        $queryBuilder = $this->createQueryBuilder('r');
+        $queryBuilder->select('ST_DistanceSphere(:gpsPoint, ST_SetSRID(ST_MakePoint(:latitude, :longitude), 4326)) as distance');
+        $queryBuilder->setMaxResults(1);
+        $queryBuilder->setParameter('gpsPoint', $repairer->gpsPoint);
+        $queryBuilder->setParameter('latitude', $latitude);
+        $queryBuilder->setParameter('longitude', $longitude);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

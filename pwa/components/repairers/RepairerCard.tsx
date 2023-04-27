@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import {formatDate} from 'helpers/dateHelper';
 import Box from '@mui/material/Box';
@@ -9,12 +9,16 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {Paper, Stack} from '@mui/material';
+import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 
 interface RepairerProps {
   repairer: Repairer;
 }
 
 export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
+  const {sortChosen} = useContext(SearchRepairerContext);
+
   return (
     <Link href={`/reparateur/${repairer.id}`} style={{textDecoration: 'none'}}>
       <Paper elevation={4}>
@@ -35,21 +39,38 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
           />
           <CardContent sx={{display: 'flex', flexDirection: 'column', p: 2}}>
             <Stack spacing={2}>
-              <Typography
-                fontSize={{xs: 14, md: 24}}
-                fontWeight={600}
-                sx={{textDecoration: 'none'}}>
-                {repairer.name}
-              </Typography>
-              <Box>
-                <Typography color="text.secondary">
+              <div>
+                <Typography fontSize={{xs: 18, md: 24}} fontWeight={600}>
+                  {repairer.name}
+                </Typography>
+                {sortChosen === 'proximity' && (
+                  <Typography
+                    fontSize={{xs: 12, md: 14}}
+                    color="primary"
+                    display="flex"
+                    alignItems="center">
+                    <FmdGoodIcon /> {repairer.distance} m
+                  </Typography>
+                )}
+              </div>
+              <div>
+                <Typography
+                  color="text.secondary"
+                  fontSize={{xs: 14, md: 16}}
+                  fontWeight={600}>
+                  Adresse :
+                </Typography>
+                <Typography color="text.secondary" fontSize={{xs: 14, md: 16}}>
                   {repairer.street}
                 </Typography>
-                <Typography color="text.secondary">
-                  {repairer.postcode} {repairer.city}
+                <Typography
+                  color="text.secondary"
+                  textTransform="capitalize"
+                  fontSize={{xs: 14, md: 16}}>
+                  {repairer.postcode} - {repairer.city}
                 </Typography>
-              </Box>
-              <Box>
+              </div>
+              <div>
                 <Typography
                   color="text.secondary"
                   fontSize={{xs: 14, md: 16}}
@@ -64,7 +85,7 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
                     ? formatDate(repairer.firstSlotAvailable)
                     : 'Pas de créneau indiqué'}
                 </Typography>
-              </Box>
+              </div>
             </Stack>
           </CardContent>
         </Card>
