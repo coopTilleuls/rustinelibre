@@ -69,5 +69,5 @@ jobs:
             --values ./helm/pwa/values.yml \
             --values ./helm/pwa/values-prod.yml \
             --set=pwa.image.tag=${IMAGE_TAG} \
-            --set=pwa.nextPublicEntrypoint=https://${RELEASE_NAME}-api-bikelib-api:80 \
+            --set=pwa.nextPublicEntrypoint=http://${RELEASE_NAME}-api-bikelib-api:80 \
           | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
