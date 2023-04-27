@@ -37,7 +37,7 @@ class CreateTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testUserCanCreateMaintenanceForOtherBike(): void
+    public function testUserCannotCreateMaintenanceForOtherBike(): void
     {
         $maintenance = $this->maintenances[0];
         $this->createClientAuthAsUser()->request('POST', '/maintenances', [
@@ -54,7 +54,7 @@ class CreateTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'bike: The bike should be your bike to add maintenance',
+            'hydra:description' => 'bike: The bike should be your bike to modify it',
         ]);
     }
 }

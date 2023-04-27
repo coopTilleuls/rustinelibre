@@ -39,10 +39,18 @@ class GetTest extends AbstractTestCase
         // check that admin get all collection
         $this->assertSameSize($response['hydra:member'], $this->maintenances);
 
-        // Check order filter
+        // Check order filter by id
 
         $this->assertGreaterThan($response['hydra:member'][0]['id'], $response['hydra:member'][1]['id']);
-        $this->assertGreaterThanOrEqual($response['hydra:member'][0]['repairDate'], $response['hydra:member'][1]['repairDate']);
+    }
+
+    public function testGetMaintenanceCollectionOrderByRepairDate(): void
+    {
+        $response = $this->createClientAuthAsAdmin()->request('GET', '/maintenances?order[repairDate]=desc&order[id]=asc')->toArray();
+
+        $this->assertResponseIsSuccessful();
+        // Check order filter by date
+        $this->assertGreaterThanOrEqual($response['hydra:member'][2]['repairDate'], $response['hydra:member'][1]['repairDate']);
     }
 
     public function testUserCanGetOneMaintenance(): void
