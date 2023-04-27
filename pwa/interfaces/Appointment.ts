@@ -1,5 +1,6 @@
 import {User} from '@interfaces/User';
 import {Repairer} from '@interfaces/Repairer';
+import {AutoDiagnostic} from "@interfaces/AutoDiagnostic";
 
 export interface Appointment {
     '@id': string;
@@ -7,5 +8,6 @@ export interface Appointment {
     id: string;
     customer: User;
     repairer: Repairer;
+    autoDiagnostic?: AutoDiagnostic;
     slotTime: string;
 }
