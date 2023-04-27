@@ -4,39 +4,34 @@ declare(strict_types=1);
 
 namespace App\Tests\Maintenance\Security;
 
-
-use App\Entity\Bike;
 use App\Entity\Maintenance;
-use App\Entity\User;
-use App\Repository\BikeRepository;
 use App\Repository\MaintenanceRepository;
-use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateTest extends AbstractTestCase
 {
-    /** @var Bike[] */
-    protected array $bikes = [];
+    /** @var Maintenance[] */
+    protected array $maintenances = [];
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->bikes = static::getContainer()->get(BikeRepository::class)->findAll();
-
+        $this->maintenances = static::getContainer()->get(MaintenanceRepository::class)->findAll();
     }
+
     public function testUserCanCreateMaintenanceForOwnBike(): void
     {
-        $bike = $this->bikes[0];
+        $maintenance = $this->maintenances[0];
 
-        $this->createClientWithUser($bike->owner)->request('POST', '/maintenances',[
+        $this->createClientWithUser($maintenance->bike->owner)->request('POST', '/maintenances', [
         'headers' => ['Content-Type' => 'application/json'],
         'json' => [
             'name' => 'Test',
             'description' => 'test description',
-            'bike' => sprintf('/bikes/%d',$bike->id)
-            ]
+            'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+            ],
             ]);
 
         $this->assertResponseIsSuccessful();
@@ -44,14 +39,14 @@ class CreateTest extends AbstractTestCase
 
     public function testUserCanCreateMaintenanceForOtherBike(): void
     {
-        $bike = $this->bikes[0];
-        $this->createClientAuthAsUser()->request('POST', '/maintenances',[
+        $maintenance = $this->maintenances[0];
+        $this->createClientAuthAsUser()->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d',$bike->id)
-            ]
+                'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+            ],
         ]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -59,7 +54,7 @@ class CreateTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'The bike should be your bike to add maintenance',
+            'hydra:description' => 'bike: The bike should be your bike to add maintenance',
         ]);
     }
 }

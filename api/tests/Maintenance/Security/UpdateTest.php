@@ -4,53 +4,49 @@ declare(strict_types=1);
 
 namespace App\Tests\Maintenance\Security;
 
-use App\Entity\Bike;
-use App\Repository\BikeRepository;
+use App\Entity\Maintenance;
 use App\Repository\MaintenanceRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class UpdateTest extends AbstractTestCase
 {
-    /** @var Bike[] */
-    protected array $bikes = [];
+    /** @var Maintenance[] */
+    protected array $maintenances = [];
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->bikes = static::getContainer()->get(BikeRepository::class)->findAll();
-
+        $this->maintenances = static::getContainer()->get(MaintenanceRepository::class)->findAll();
     }
+
     public function testUserCanUpdateMaintenanceForOwnBike(): void
     {
-        $bike = $this->bikes[0];
-        $maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy(['bike' => $bike->id]);
+        $maintenance = $this->maintenances[0];
 
-        $this->createClientWithUser($bike->owner)->request('PUT', '/maintenances/'.$maintenance->id,[
+        $this->createClientWithUser($maintenance->bike->owner)->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'put name',
                 'description' => 'put description',
-                'bike' => sprintf('/bikes/%d',$bike->id)
-            ]
+                'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+            ],
         ]);
 
         $this->assertResponseIsSuccessful();
     }
 
-    public function testAdminCanUpdateMaintenanceForOwnBike(): void
+    public function testAdminCanUpdateMaintenanceForBike(): void
     {
-        $bike = $this->bikes[0];
-        $maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy(['bike' => $bike->id]);
-
-        $this->createClientAuthAsAdmin()->request('PUT', '/maintenances/'.$maintenance->id,[
+        $maintenance = $this->maintenances[0];
+        $this->createClientAuthAsAdmin()->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'put by admin name',
                 'description' => 'put description',
-                'bike' => sprintf('/bikes/%d',$bike->id)
-            ]
+                'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+            ],
         ]);
 
         $this->assertResponseIsSuccessful();
@@ -58,18 +54,16 @@ class UpdateTest extends AbstractTestCase
 
     public function testUserCannotUpdateMaintenanceForOtherBike(): void
     {
-        $bike = $this->bikes[0];
-        $maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy(['bike' => $bike->id]);
-        $this->createClientAuthAsUser()->request('PUT', '/maintenances/'.$maintenance->id,[
+        $maintenance = $this->maintenances[0];
+        $this->createClientAuthAsUser()->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'put name',
                 'description' => 'put description',
-                'bike' => sprintf('/bikes/%d',$bike->id)
-            ]
+                'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+            ],
         ]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
-
 }

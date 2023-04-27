@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
-#[ApiFilter(SearchFilter::class, properties: ['owner' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['bike' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'repairDate'], arguments: ['orderParameterName' => 'order'])]
 class Maintenance
 {
