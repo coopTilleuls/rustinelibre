@@ -63,6 +63,10 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?Repairer $repairer = null;
 
+    #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    public ?AutoDiagnostic $autoDiagnostic = null;
+
     #[ORM\Column]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?\DateTimeImmutable $slotTime = null;
