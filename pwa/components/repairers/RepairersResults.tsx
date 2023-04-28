@@ -22,8 +22,6 @@ export const RepairersResults = (): JSX.Element => {
     Number(repairers[0].longitude),
   ]);
 
-  const isMobile = useMediaQuery('(max-width: 640px)');
-
   const handleSelectRepairer = (id: string) => {
     setSelectedRepairer(id);
     const index = repairers.findIndex((repairer) => repairer.id === id);
