@@ -77,7 +77,7 @@ const AppointmentSummary: NextPageWithLayout = () => {
 
                                 <Link href="/">
                                     <Button variant="outlined" sx={{marginTop:'30px', marginLeft: '40%'}}>
-                                        Retour à l'accueil
+                                        Retour à l&apos;accueil
                                     </Button><br/>
                                 </Link>
                             </Box>

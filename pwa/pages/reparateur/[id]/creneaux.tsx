@@ -110,7 +110,7 @@ const RepairerSlots: NextPageWithLayout = () => {
                                                 </Button>
 
                                                 <Button onClick={handleRegistration} variant="outlined" sx={{marginTop:'30px'}}>
-                                                    S'inscrire
+                                                    S&apos;inscrire
                                                 </Button>
                                             </Box>
                                         }

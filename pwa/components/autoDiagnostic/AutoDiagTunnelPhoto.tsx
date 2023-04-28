@@ -89,7 +89,7 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
                             Sélectionner la photo de votre vélo
                         </Typography>
                         <AddAPhotoIcon sx={{marginLeft:'30%', fontSize: '3em'}} />
-                    </Box> : <img src={apiImageUrl(photo.contentUrl)} style={{cursor: 'pointer'}} />
+                    </Box> : <img alt="Photo du diagnostic" src={apiImageUrl(photo.contentUrl)} style={{cursor: 'pointer'}} />
                     }
                 </label>}
                 <input
