@@ -6,4 +6,4 @@ App\Entity\Appointment:
   appointment_{2..20}:
     customer: '@user_<numberBetween(10, 20)>'
     repairer: '@repairer_<numberBetween(2, 20)>'
-    slotTime: <(new DateTimeImmutable("2023-03-22T10:00:00"))>
+    slotTime: <dateTimeImmutableBetweenThreeYearsAgoAndNow()>

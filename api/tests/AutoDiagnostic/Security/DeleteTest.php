@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\AutoDiagnostic\Security;
 
 use App\Entity\AutoDiagnostic;
@@ -19,7 +21,7 @@ class DeleteTest extends AbstractTestCase
         $this->autoDiagnostics = static::getContainer()->get(AutoDiagnosticRepository::class)->findAll();
     }
 
-    public function testUserCanDeleteMaintenanceForOwnBike(): void
+    public function testUserCanDeleteAutoDiagnostic(): void
     {
         $autoDiagnostic = $this->autoDiagnostics[0];
 
@@ -28,7 +30,7 @@ class DeleteTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testAdminCanDeleteMaintenanceForUserBike(): void
+    public function testAdminCanDeleteAutoDiagnostic(): void
     {
         $autoDiagnostic = $this->autoDiagnostics[0];
 
