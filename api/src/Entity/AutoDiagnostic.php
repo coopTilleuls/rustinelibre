@@ -20,11 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::READ]],
     denormalizationContext: ['groups' => [self::WRITE]]
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or object.appointment.customer == user or object.appointment.repairer.owner == user")]
+#[Get(security: "is_granted('ROLE_ADMIN') or (object.appointment.customer == user) or (object.appointment.repairer.owner == user)")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Put(security: "is_granted('ROLE_ADMIN') or object.appointment.customer == user")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.appointment.customer == user")]
+#[Put(security: "is_granted('ROLE_ADMIN') or (object.appointment.customer == user)")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or (object.appointment.customer == user)")]
 class AutoDiagnostic
 {
     public const READ = 'autodiag_read';
