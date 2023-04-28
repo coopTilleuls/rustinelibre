@@ -123,21 +123,10 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
                 </Typography>
               </>
             )}
-            {repairer.optionalPage && (
-              <>
-                <Typography fontSize={{xs: 16, md: 18}} fontWeight={600}>
-                  Informations complémentaires :
-                </Typography>
-                <Typography
-                  paragraph
-                  fontSize={{xs: 16, md: 18}}
-                  color="text.secondary">
-                  {repairer.optionalPage}
-                </Typography>
-              </>
-            )}
           </Box>
-          <Button variant="contained">Je réserve</Button>
+          <Link href={`/reparateur/${repairer.id}/creneaux`} style={{textDecoration: 'none'}}>
+            <Button variant="contained">Je réserve</Button>
+          </Link>
         </Stack>
       </Paper>
     </Container>
