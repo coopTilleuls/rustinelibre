@@ -120,10 +120,12 @@ const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
             onChange={handleChangeName}
           />
           <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-            <InputLabel htmlFor="bikeType">Type de vélo</InputLabel>
+            <InputLabel id="bike-type-label">Type de vélo</InputLabel>
             <Select
               label="Type de vélo"
               required
+              id="bike-type"
+              labelId="bike-type-label"
               onChange={handleBikeChange}
               value={selectedBike?.name}
               style={{width: '100%'}}>
