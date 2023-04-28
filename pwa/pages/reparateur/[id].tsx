@@ -15,9 +15,7 @@ type RepairerPageProps = {
   repairerProps: Repairer | null;
 };
 
-const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
-  repairerProps,
-}) => {
+const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [repairer, setRepairer] = useState<Repairer | null>(repairerProps);
