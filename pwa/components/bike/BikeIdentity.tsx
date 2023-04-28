@@ -10,6 +10,8 @@ import {
   CircularProgress,
   MenuItem,
   TextField,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
@@ -117,20 +119,24 @@ const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
             value={name}
             onChange={handleChangeName}
           />
-          <Select
-            required
-            onChange={handleBikeChange}
-            value={selectedBike?.name}
-            style={{width: '100%'}}>
-            <MenuItem disabled value="">
-              Choisissez un type de vélo
-            </MenuItem>
-            {bikeTypes.map((bike) => (
-              <MenuItem key={bike.id} value={bike.name}>
-                {bike.name}
+          <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
+            <InputLabel htmlFor="bikeType">Type de vélo</InputLabel>
+            <Select
+              label="Type de vélo"
+              required
+              onChange={handleBikeChange}
+              value={selectedBike?.name}
+              style={{width: '100%'}}>
+              <MenuItem disabled value="">
+                Choisissez un type de vélo
               </MenuItem>
-            ))}
-          </Select>
+              {bikeTypes.map((bike) => (
+                <MenuItem key={bike.id} value={bike.name}>
+                  {bike.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             margin="normal"
             required

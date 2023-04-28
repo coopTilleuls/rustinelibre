@@ -87,7 +87,6 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
           <Paper
             elevation={4}
             sx={{
-              backgroundColor: 'grey.100',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
