@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import {CircularProgress} from '@mui/material';
+import {CircularProgress, FormControl, InputLabel} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
@@ -148,20 +148,25 @@ const ModalAddBike = ({
             value={name}
             onChange={handleChangeName}
           />
-          <Select
-            required
-            onChange={handleBikeChange}
-            value={selectedBike?.name}
-            style={{width: '100%'}}>
-            <MenuItem disabled value="">
-              Choisissez un type de vélo
-            </MenuItem>
-            {bikeTypes.map((bike) => (
-              <MenuItem key={bike.id} value={bike.name}>
-                {bike.name}
+          <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
+            <InputLabel id="bike_type">Type de velo</InputLabel>
+            <Select
+              required
+              label="Type de velo"
+              onChange={handleBikeChange}
+              value={selectedBike?.name}
+              style={{width: '100%'}}>
+              <MenuItem disabled value="">
+                Choisissez un type de vélo
               </MenuItem>
-            ))}
-          </Select>
+              {bikeTypes.map((bike) => (
+                <MenuItem key={bike.id} value={bike.name}>
+                  {bike.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <Button variant="outlined" component="label" sx={{mt: 2, mb: 2}}>
             {loadingPhoto ? (
               <CircularProgress />

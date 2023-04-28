@@ -13,7 +13,7 @@ const Home = () => {
       </Head>
       <WebsiteLayout />
       <Container>
-        <Stack spacing={{xs: 4, md: 8}} sx={{mt: {xs: 4, md: 8}, mb: 12}}>
+        <Stack spacing={{xs: 2, md: 4}} sx={{mt: {xs: 2, md: 6}, mb: 12}}>
           <HomeCard
             title="Besoin d'une réparation sur ton vélo ?"
             subTitle="Trouve un rendez vous chez un réparateur"
