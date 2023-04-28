@@ -366,9 +366,13 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                 )}
               />
               <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-                <InputLabel htmlFor="bikeType">Type de réparateur</InputLabel>
+                <InputLabel id="repairer-type-label">
+                  Type de réparateur
+                </InputLabel>
                 <Select
                   required
+                  id="repairer-type"
+                  labelId="repairer-type-label"
                   label="Type de réparateur"
                   onChange={handleChangeRepairerType}
                   value={repairerTypeSelected?.name}
@@ -381,13 +385,11 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                 </Select>
               </FormControl>
               <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-                <InputLabel id="demo-multiple-checkbox-label">
-                  Vélos réparés
-                </InputLabel>
+                <InputLabel id="bike-type-label">Vélos réparés</InputLabel>
                 <Select
                   required
-                  labelId="multiple_bikes_repaired"
-                  id="multiple_bikes_repaired"
+                  labelId="bike-type-label"
+                  id="bike-type"
                   multiple
                   fullWidth
                   value={selectedBikeTypes}
