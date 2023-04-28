@@ -12,11 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DeleteMediaTest extends AbstractTestCase
 {
-    public const IMAGE_NAME = 'ratpi.png';
-
     public function testFileRemoveIfMediaDeleted(): void
     {
-        $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, self::IMAGE_NAME), self::IMAGE_NAME);
+        $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, MediasTest::IMAGE_NAME), MediasTest::IMAGE_NAME);
 
         $response = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
@@ -44,7 +42,7 @@ class DeleteMediaTest extends AbstractTestCase
     public function testMediaRemoveIfBikeRemove(): void
     {
         $dirPublicPath = sprintf('%s/../../public', __DIR__);
-        $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, self::IMAGE_NAME), self::IMAGE_NAME);
+        $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, MediasTest::IMAGE_NAME), MediasTest::IMAGE_NAME);
 
         $mediaResponse = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
@@ -81,7 +79,7 @@ class DeleteMediaTest extends AbstractTestCase
     public function testMediaRemoveIfMaintenanceRemove(): void
     {
         $dirPublicPath = sprintf('%s/../../public', __DIR__);
-        $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, self::IMAGE_NAME), self::IMAGE_NAME);
+        $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, MediasTest::IMAGE_NAME), MediasTest::IMAGE_NAME);
 
         $mediaResponse = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
