@@ -10,20 +10,19 @@ import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import Box from '@mui/material/Box';
 import {Paper, Stack, Typography} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
+import useMediaQuery from '@hooks/useMediaQuery';
 
 export const RepairersResults = (): JSX.Element => {
-  const {
-    showMap,
-    setSelectedRepairer,
-    selectedRepairer,
-    repairers,
-    setRepairers,
-  } = useContext(SearchRepairerContext);
+  const {showMap, setSelectedRepairer, repairers, setRepairers} = useContext(
+    SearchRepairerContext
+  );
 
   const [mapCenter, setMapCenter] = useState<[number, number]>([
     Number(repairers[0].latitude),
     Number(repairers[0].longitude),
   ]);
+
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   const handleSelectRepairer = (id: string) => {
     setSelectedRepairer(id);
@@ -46,7 +45,7 @@ export const RepairersResults = (): JSX.Element => {
       <Box
         sx={{
           width: '100%',
-          display: {xs: 'none', md: 'block'},
+          display: {xs: showMap ? 'block' : 'none', lg: 'block'},
         }}>
         <Paper elevation={4}>
           <MapContainer
@@ -71,20 +70,22 @@ export const RepairersResults = (): JSX.Element => {
           </MapContainer>
         </Paper>
       </Box>
-      <Grid2
-        container
-        spacing={2}
-        sx={{
-          width: '100%',
-        }}>
-        {repairers.map((repairer) => {
-          return (
-            <Grid2 key={repairer.id} xs={12} md={6} lg={4}>
-              <RepairerCard repairer={repairer} />
-            </Grid2>
-          );
-        })}
-      </Grid2>
+      {!showMap && (
+        <Grid2
+          container
+          spacing={2}
+          sx={{
+            width: '100%',
+          }}>
+          {repairers.map((repairer) => {
+            return (
+              <Grid2 key={repairer.id} xs={12} md={6} lg={4}>
+                <RepairerCard repairer={repairer} />
+              </Grid2>
+            );
+          })}
+        </Grid2>
+      )}
     </Stack>
   );
 };

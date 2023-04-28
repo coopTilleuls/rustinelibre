@@ -17,7 +17,7 @@ class AssertUserTest extends AbstractTestCase
     {
         $client = self::createClient();
 
-        $response = $client->request('POST', '/users', [
+        $client->request('POST', '/users', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'bad@les-tilleuls',

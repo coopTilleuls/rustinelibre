@@ -51,3 +51,5 @@ services:
         decorates: 'lexik_jwt_authentication.api_platform.openapi.factory'
         arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]
         autoconfigure: false
+
+    App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
