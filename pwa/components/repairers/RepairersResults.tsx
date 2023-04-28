@@ -63,6 +63,7 @@ export const RepairersResults = (): JSX.Element => {
                 ]}
                 eventHandlers={{
                   mouseover: (event) => event.target.openPopup(),
+                  click: (event) => {handleClipMapPin(event, repairer)}
                 }}>
                 <Popup>{repairer.name}</Popup>
               </Marker>

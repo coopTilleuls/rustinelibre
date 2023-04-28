@@ -17,7 +17,7 @@ interface RepairerProps {
 }
 
 export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
-  const {sortChosen} = useContext(SearchRepairerContext);
+  const {sortChosen, selectedRepairer} = useContext(SearchRepairerContext);
 
   return (
     <Link href={`/reparateur/${repairer.id}`} style={{textDecoration: 'none'}}>
@@ -26,6 +26,7 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
+            backgroundColor: repairer.id === selectedRepairer ? 'lightgreen' : 'white'
           }}>
           <CardMedia
             component="img"
