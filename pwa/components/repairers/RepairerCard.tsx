@@ -25,7 +25,7 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            backgroundColor: repairer.id === selectedRepairer ? 'lightgreen' : 'white'
+            backgroundColor: repairer.id === selectedRepairer ? 'lightblue' : 'white'
           }}>
           <CardMedia
             component="img"
