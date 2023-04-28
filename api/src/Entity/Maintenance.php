@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\MaintenanceRepository;
+use App\Validator as BikeAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -23,11 +24,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => [self::READ]],
     denormalizationContext: ['groups' => [self::WRITE]]
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Get(security: "is_granted('ROLE_ADMIN') or (object.bike.owner == user)")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
 #[ApiFilter(SearchFilter::class, properties: ['bike' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'repairDate'], arguments: ['orderParameterName' => 'order'])]
 class Maintenance
@@ -43,11 +44,7 @@ class Maintenance
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups([self::READ])]
-    public ?User $owner = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[BikeAssert\BikeOwner]
     #[Groups([self::READ, self::WRITE])]
     public ?Bike $bike = null;
 
