@@ -6,7 +6,7 @@ import {repairerResource} from '@resources/repairerResource';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {Repairer} from '@interfaces/Repairer';
 import Link from "next/link";
-import {Container, CircularProgress, Box, Typography, Paper, Stack, Button} from '@mui/material';
+import {Container, CircularProgress, Box, Typography, Paper, Stack, Button, Icon} from '@mui/material';
 import useMediaQuery from "@hooks/useMediaQuery";
 import {appointmentResource} from "@resources/appointmentResource";
 import {useAccount} from "@contexts/AuthContext";
@@ -17,16 +17,24 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
-import Select from "@mui/material/Select";
+import Select, {SelectChangeEvent} from "@mui/material/Select";
+import {MediaObject} from "@interfaces/MediaObject";
+import {uploadFile} from "@helpers/uploadFile";
+import {bikeResource} from "@resources/bikeResource";
+import {mediaObjectResource} from "@resources/mediaObjectResource";
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import {apiImageUrl} from "@helpers/apiImagesHelper";
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 const AutoDiag: NextPageWithLayout = () => {
     const router = useRouter();
     const [tunnelStep, setTunnelStep] = useState<string>('yesOrNo');
-    const [prestation, setPrestation] = useState<string>('');
+    const [prestation, setPrestation] = useState<string>('Entretien classique');
     const [slotSelected, setSlotSelected] = useState<string|null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [appointment, setAppointment] = useState<Appointment | null>(null);
     const [autoDiagnostic, setAutoDiagnostic] = useState<AutoDiagnostic | null>(null);
+    const [photo, setPhoto] = useState<MediaObject|null>(null);
     const isMobile = useMediaQuery('(max-width: 1024px)');
     const {id} = router.query;
     const user = useAccount({});
@@ -43,11 +51,20 @@ const AutoDiag: NextPageWithLayout = () => {
             }
 
             if (appointmentFetched.autoDiagnostic) {
-                setTunnelStep('prestation');
                 setAutoDiagnostic(appointmentFetched.autoDiagnostic);
+                setPrestation(appointmentFetched.autoDiagnostic.prestation);
+                setTunnelStep('photo')
+                if (appointmentFetched.autoDiagnostic.photo) {
+                    setPhoto(photo);
+                    setTunnelStep('recap')
+                }
             }
         }
     }
+
+    const handleChangePrestation = (event: SelectChangeEvent) => {
+        setPrestation(event.target.value as string);
+    };
 
     useEffect(() => {
         fetchAppointment();
@@ -56,6 +73,70 @@ const AutoDiag: NextPageWithLayout = () => {
     const handleClickYesOrNo = (autodiagChoice: boolean) => {
         if (autodiagChoice) setTunnelStep('prestation');
     }
+
+    const handleClickNextPrestation = async() => {
+        if (!appointment) {
+            return;
+        }
+
+        if (!autoDiagnostic) {
+            const newAutodiag = await autoDiagnosticResource.post({
+                'prestation': prestation,
+                'appointment': appointment['@id']
+            })
+
+            if (newAutodiag) setAutoDiagnostic(newAutodiag);
+        } else {
+            await autoDiagnosticResource.put(autoDiagnostic['@id'], {
+                'prestation' : prestation
+            })
+        }
+
+        setTunnelStep('autoDiagPhoto');
+    }
+
+    const handleClickNextPhoto = async() => {
+        if (!appointment || !autoDiagnostic) {
+            return;
+        }
+
+        if (photo) {
+            const autodiag = await autoDiagnosticResource.put(autoDiagnostic['@id'], {
+                'photo' : photo['@id']
+            })
+            setAutoDiagnostic(autodiag);
+        }
+
+        setTunnelStep('recap');
+    }
+
+    const handleConfirm = () => {
+        router.push('/')
+    }
+
+    const handleCancel = () => {
+        if (appointment) {
+            appointmentResource.delete(appointment['@id']);
+        }
+        if (autoDiagnostic) {
+            autoDiagnosticResource.delete(autoDiagnostic['@id']);
+        }
+        if (photo) {
+            mediaObjectResource.delete(photo['@id']);
+        }
+    }
+
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+        if (event.target.files) {
+            // Upload new picture
+            const response = await uploadFile(event.target.files[0]);
+            const mediaObjectResponse = await response?.json() as MediaObject;
+            if (mediaObjectResponse) {
+                // Display new photo
+                setPhoto(mediaObjectResponse);
+            }
+        }
+    };
 
     return (
         <div style={{width: '100vw', overflowX: 'hidden'}}>
@@ -97,46 +178,87 @@ const AutoDiag: NextPageWithLayout = () => {
                                     </Box>
                                     }
                                     {tunnelStep == 'prestation' && <Box>
+                                        <Typography
+                                            component="p"
+                                            align="center"
+                                            sx={{mt: 2}}>
+                                            De quelle prestation as tu besoin ?
+                                        </Typography>
                                         <Select
-                                            labelId="select_prestation"
-                                            id="select_prestation"
-                                            fullWidth
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
                                             value={prestation}
-                                            // onChange={handleChangePrestation}
+                                            label="Prestation"
+                                            onChange={handleChangePrestation}
                                         >
-                                                <MenuItem key="test" value="test">
-                                                    <ListItemText primary="test" />
-                                                </MenuItem>
-                                        </Select>
+                                            <MenuItem value="Entretien classique">Entretien classique</MenuItem>
+                                            <MenuItem value="Électrifier mon vélo">Électrifier mon vélo</MenuItem>
+                                            <MenuItem value="Problème de frein">Problème de frein</MenuItem>
+                                            <MenuItem value="Problème de pneu">Problème de pneu</MenuItem>
+                                            <MenuItem value="Problème de roue">Problème de roue</MenuItem>
+                                            <MenuItem value="Problème de vitesse">Problème de vitesse</MenuItem>
+                                            <MenuItem value="Autre prestation">Autre prestation</MenuItem>
+                                        </Select> <br />
+
+                                        <Button variant="outlined" sx={{marginTop:'30px'}} onClick={handleClickNextPrestation}>
+                                            Suivant
+                                        </Button>
+                                    </Box>
+                                    }
+                                    {tunnelStep == 'autoDiagPhoto' && <Box>
+                                        <Typography
+                                            component="p"
+                                            align="center"
+                                            sx={{mt: 2}}>
+                                            Ajouter une photo
+                                        </Typography>
+                                        <Box sx={{border: '1px solid black', padding: '10px', cursor: 'pointer'}}>
+                                            <label htmlFor="fileUpload">
+                                                {!photo ? <Box>
+                                                    <Typography
+                                                        component="p"
+                                                        align="center"
+                                                        sx={{mt: 2}}>
+                                                        Sélectionner la photo de votre vélo
+                                                    </Typography>
+                                                    <AddAPhotoIcon sx={{marginLeft:'30%', fontSize: '3em'}} />
+                                                </Box> : <img src={apiImageUrl(photo.contentUrl)} />
+                                                }
+                                            </label>
+                                            <input
+                                                id="fileUpload"
+                                                name="fileUpload"
+                                                type="file"
+                                                hidden
+                                                onChange={(e) => handleFileChange(e)}
+                                            />
+                                        </Box>
+
+                                        <Button variant="outlined" sx={{marginTop:'30px'}} onClick={handleClickNextPhoto}>
+                                            Suivant
+                                        </Button>
+                                    </Box>
+                                    }
+                                    {tunnelStep == 'recap' && <Box sx={{border: '1px solid black', padding: '10px'}}>
+                                        <Typography
+                                            component="p"
+                                            align="center"
+                                            sx={{mt: 2}}>
+                                            Votre demande de rendez vous
+                                        </Typography>
+                                        <Box sx={{border: '1px solid black', padding: '10px', cursor: 'pointer'}}>
+                                            <EventAvailableIcon sx={{marginLeft: '30%'}} />
+                                        </Box>
+
+                                        <Button variant="outlined" sx={{marginTop:'30px'}} onClick={handleConfirm}>
+                                            Envoyer la demander
+                                        </Button><br/>
+                                        <Button variant="outlined" sx={{marginTop:'30px'}} onClick={handleCancel}>
+                                            Annuler
+                                        </Button>
                                     </Box>
                                     }
 
-                                {/*        <Button onClick={handleRegistration} variant="outlined" sx={{marginTop:'30px'}}>*/}
-                                {/*            S'inscrire*/}
-                                {/*        </Button>*/}
-                                {/*    </Box>*/}
-                                {/*    }*/}
-                                {/*    {user && tunnelStep == 'slots' &&*/}
-                                {/*        <Box>*/}
-                                {/*            <Typography*/}
-                                {/*                component="h2"*/}
-                                {/*                align="center"*/}
-                                {/*                fontSize={{xs: 34, md: 50}}*/}
-                                {/*                fontWeight={600}*/}
-                                {/*                sx={{mt: 2}}>*/}
-                                {/*                Choisissez votre créneau*/}
-                                {/*            </Typography>*/}
-                                {/*            <Button variant="outlined" value="2023-04-24T10:00:00">*/}
-                                {/*                10H30*/}
-                                {/*            </Button>*/}
-                                {/*            <Button variant="outlined" value="2023-04-24T11:00:00">*/}
-                                {/*                11H00*/}
-                                {/*            </Button>*/}
-                                {/*            <Button variant="outlined" value="2023-04-24T12:00:00">*/}
-                                {/*                11H30*/}
-                                {/*            </Button>*/}
-                                {/*        </Box>*/}
-                                {/*    }*/}
                                 </Stack>
                             </Paper>
                         </Container>

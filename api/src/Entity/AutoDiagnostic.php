@@ -43,7 +43,6 @@ class AutoDiagnostic
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::READ, self::WRITE])]
     #[AutoDiagAssert\AutoDiagnosticAppointment]
-    #[Assert\Unique]
     public ?Appointment $appointment = null;
 
     #[ORM\Column(length: 255)]
