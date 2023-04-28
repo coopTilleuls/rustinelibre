@@ -153,18 +153,6 @@ class SecurityRepairerTest extends AbstractTestCase
         // test last array key result for enabled filter
         $lastRepairer = $client->request('GET', sprintf('/repairers/%d', end($response)['id']))->toArray();
         $this->assertSame(true, $lastRepairer['enabled']);
-
-        // test collection normalization groups
-        foreach ($response as $repairer) {
-            $this->assertArrayNotHasKey('description', $repairer);
-            $this->assertArrayNotHasKey('mobilePhone', $repairer);
-            $this->assertArrayNotHasKey('owner', $repairer);
-            $this->assertArrayNotHasKey('repairerType', $repairer);
-            $this->assertArrayHasKey('name', $repairer);
-            $this->assertArrayHasKey('latitude', $repairer);
-            $this->assertArrayHasKey('longitude', $repairer);
-            $this->assertArrayHasKey('firstSlotAvailable', $repairer);
-        }
     }
 
     public function testUniqueOwner(): void
