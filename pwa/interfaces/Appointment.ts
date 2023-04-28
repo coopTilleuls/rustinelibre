@@ -8,6 +8,6 @@ export interface Appointment {
     id: string;
     customer: User;
     repairer: Repairer;
-    autoDiagnostic?: AutoDiagnostic;
+    autoDiagnostic: AutoDiagnostic;
     slotTime: string;
 }

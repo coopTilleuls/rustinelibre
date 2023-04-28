@@ -54,7 +54,7 @@ const RepairerSlots: NextPageWithLayout = () => {
         });
 
         if (newAppointment) {
-            router.push(`/rendez-vous/${newAppointment.id}/auto-diag`)
+            router.push(`/rendez-vous/${newAppointment.id}/auto-diagnostic`)
         }
     }
 

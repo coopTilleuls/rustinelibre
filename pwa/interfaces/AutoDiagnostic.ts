@@ -7,5 +7,5 @@ export interface AutoDiagnostic {
     id: string;
     appointment: Appointment;
     prestation: string;
-    photo?: MediaObject;
+    photo: MediaObject;
 }
