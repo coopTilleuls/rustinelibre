@@ -22,7 +22,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: MaintenanceRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => [self::READ]],
-    denormalizationContext: ['groups' => [self::WRITE]]
+    denormalizationContext: ['groups' => [self::WRITE]],
+    paginationClientEnabled: true,
+    paginationClientItemsPerPage: true,
 )]
 #[Get(security: "is_granted('ROLE_ADMIN') or (object.bike.owner == user)")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
