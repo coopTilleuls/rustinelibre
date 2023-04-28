@@ -25,14 +25,14 @@ const Home = () => {
             title="Mon carnet d'entretien"
             subTitle="Envie de bichonner votre monture ? Créez lui un carnet d'entretien"
             buttonName="Je créé mon carnet"
-            pageLink="/carnet/creer-mon-carnet"
+            pageLink="/velos/mes-velos"
             backgroundColor="grey.200"
           />
           <HomeCard
             title="Tu es réparateur ?"
             subTitle="Rejoins notre collectif de réparateurs sur la plateforme"
             buttonName="Je rejoins le collectif"
-            pageLink="/reparateur/rejoindre-le-collectif"
+            pageLink="/reparateur/inscription"
             backgroundColor="grey.300"
           />
         </Stack>

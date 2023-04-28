@@ -9,7 +9,7 @@ export const pagesNotLogged = [
     },
     {
         'name': 'Liste des réparateurs',
-        'link': '/',
+        'link': '/reparateur/chercher-un-reparateur',
     },
     {
         'name': 'FAQ',
@@ -27,7 +27,7 @@ export const pagesLogged = [
     },
     {
         'name': 'Liste des réparateurs',
-        'link': '/',
+        'link': '/reparateur/chercher-un-reparateur',
     },
     {
         'name': 'FAQ',
