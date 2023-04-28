@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import {formatDate} from 'helpers/dateHelper';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -17,7 +16,7 @@ interface RepairerProps {
 }
 
 export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
-  const {sortChosen} = useContext(SearchRepairerContext);
+  const {sortChosen, selectedRepairer} = useContext(SearchRepairerContext);
 
   return (
     <Link href={`/reparateur/${repairer.id}`} style={{textDecoration: 'none'}}>
@@ -26,6 +25,7 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
+            backgroundColor: repairer.id === selectedRepairer ? 'lightblue' : 'white'
           }}>
           <CardMedia
             component="img"

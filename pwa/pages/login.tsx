@@ -121,7 +121,7 @@ const Login: NextPageWithLayout = ({}) => {
                   <Link href="#" variant="body2">
                     Mot de passe oublié ?
                   </Link>
-                  <Link href="#" variant="body2">
+                  <Link href="/inscription" variant="body2">
                     S’inscrire
                   </Link>
                 </Box>
