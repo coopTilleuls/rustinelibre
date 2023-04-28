@@ -149,9 +149,11 @@ const ModalAddBike = ({
             onChange={handleChangeName}
           />
           <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-            <InputLabel id="bike_type">Type de velo</InputLabel>
+            <InputLabel id="bike-type-label">Type de velo</InputLabel>
             <Select
               required
+              id="bike-type"
+              labelId="bike-type-label"
               label="Type de velo"
               onChange={handleBikeChange}
               value={selectedBike?.name}
