@@ -50,7 +50,7 @@ class GetTest extends AbstractTestCase
 
         $this->assertResponseIsSuccessful();
         // Check order filter by date
-        $this->assertGreaterThanOrEqual($response['hydra:member'][2]['repairDate'], $response['hydra:member'][1]['repairDate']);
+        $this->assertGreaterThanOrEqual($response['hydra:member'][1]['repairDate'], $response['hydra:member'][0]['repairDate']);
     }
 
     public function testUserCanGetOneMaintenance(): void
