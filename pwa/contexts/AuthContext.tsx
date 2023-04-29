@@ -27,7 +27,7 @@ interface AuthContextType {
   user: User | null;
   login: (data: AuthenticationValues) => Promise<User | null>;
   logout: () => void;
-  isLoading?: boolean;
+  isLoadingFetchUser?: boolean;
   fetchUser: () => void;
 }
 
@@ -56,33 +56,31 @@ export const useAccount = ({
   redirectIfFound?: string;
   redirectIfNotFound?: string;
 }) => {
-  const {user, isLoading} = useAuth();
+  const {user, isLoadingFetchUser} = useAuth();
+
   useEffect(() => {
-    if (!isLoading && user && redirectIfFound) {
+    if (!isLoadingFetchUser && user && redirectIfFound) {
       Router.push(redirectIfFound);
-    } else if (!isLoading && !user && redirectIfNotFound) {
+    } else if (!isLoadingFetchUser && !user && redirectIfNotFound) {
       Router.push(redirectIfNotFound);
     }
-  }, [redirectIfFound, redirectIfNotFound, user, isLoading]);
+  }, [redirectIfFound, redirectIfNotFound, user, isLoadingFetchUser]);
 
-  return user;
+  return {user, isLoadingFetchUser};
 };
 
 // Provider hook that creates auth object and handles state
 const useProviderAuth = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoadingFetchUser, setLoadingFetchUser] = useState(true);
 
   const fetchUser = async (): Promise<User | null> => {
     const currentToken = getToken();
+
     if (currentToken) {
       const user = await userResource.getCurrent();
-    } else {
-      const currentRefreshToken = getRefreshToken();
-
+      setUser(user);
     }
-
-    setUser(user);
 
     return user || null;
   };
@@ -94,9 +92,9 @@ const useProviderAuth = () => {
           await fetchUser();
         }
       } catch (e) {
-        // logout();
+        logout();
       } finally {
-        setLoading(false);
+        setLoadingFetchUser(false);
       }
     }
 
@@ -128,7 +126,7 @@ const useProviderAuth = () => {
     login,
     logout,
     isAuthenticated: !!user,
-    isLoading,
+    isLoadingFetchUser,
     fetchUser,
   };
 };
