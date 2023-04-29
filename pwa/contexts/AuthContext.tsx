@@ -10,6 +10,7 @@ import {userResource} from '@resources/userResource';
 import {authenticationResource} from '@resources/authenticationResource';
 import { User } from 'interfaces/User';
 import {
+  getRefreshToken,
   getToken,
   removeRefreshToken,
   removeToken,
@@ -74,7 +75,13 @@ const useProviderAuth = () => {
 
   const fetchUser = async (): Promise<User | null> => {
     const currentToken = getToken();
-    const user = await userResource.getCurrent();
+    if (currentToken) {
+      const user = await userResource.getCurrent();
+    } else {
+      const currentRefreshToken = getRefreshToken();
+
+    }
+
     setUser(user);
 
     return user || null;
@@ -87,7 +94,7 @@ const useProviderAuth = () => {
           await fetchUser();
         }
       } catch (e) {
-        logout();
+        // logout();
       } finally {
         setLoading(false);
       }
