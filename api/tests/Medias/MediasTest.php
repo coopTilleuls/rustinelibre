@@ -16,7 +16,7 @@ class MediasTest extends AbstractTestCase
     {
         $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, self::IMAGE_NAME), self::IMAGE_NAME);
 
-        $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
+        $response = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
                 'files' => [
@@ -27,20 +27,10 @@ class MediasTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertMatchesResourceItemJsonSchema(MediaObject::class);
 
-        $dirPath = sprintf('%s/../../public/media', __DIR__);
-        $this->assertDirectoryExists($dirPath);
-        $this->assertTrue($this->checkFileNameExistInDir($dirPath, self::IMAGE_NAME));
-    }
+        $dirPublicPath = sprintf('%s/../../public', __DIR__);
 
-    private function checkFileNameExistInDir(string $dir, string $filename): bool
-    {
-        $files = scandir($dir);
-        foreach ($files as $file) {
-            if (str_contains($file, $filename)) {
-                return true;
-            }
-        }
-
-        return false;
+        // Check file exist
+        $this->assertDirectoryExists($dirPublicPath);
+        $this->assertFileExists(sprintf('%s%s', $dirPublicPath, $response->toArray()['contentUrl']));
     }
 }
