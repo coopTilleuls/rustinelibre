@@ -36,7 +36,7 @@ type MyBikesProps = {
 
 const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
 
-  const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/'});
+  const {user, isLoadingFetchUser} = useAccount({});
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [bikes, setBikes] = useState<Bike[]>([]);
