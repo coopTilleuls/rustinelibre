@@ -109,7 +109,7 @@ class Repairer
         max : 80,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
     public ?string $name = null;
 
     #[Assert\Type('string')]
@@ -192,14 +192,14 @@ class Repairer
     #[ApiFilter(BooleanFilter::class)]
     public ?bool $enabled = false;
 
-    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?MediaObject $thumbnail = null;
 
-    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?MediaObject $descriptionPicture = null;

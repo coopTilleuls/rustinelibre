@@ -1,8 +1,3 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
 services:
@@ -47,7 +42,13 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
+    App\Medias\EventSubscriber\RemoveFileEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
+
     App\OpenApi\OpenApiFactory:
         decorates: 'lexik_jwt_authentication.api_platform.openapi.factory'
         arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]
         autoconfigure: false
+
+    App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
