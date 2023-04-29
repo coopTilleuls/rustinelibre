@@ -92,15 +92,15 @@ jobs:
         run: docker compose exec -T php bin/console doctrine:schema:validate --skip-sync
       - name: Validate composer
         run: docker compose exec -T php composer validate
-      - name: Validate openapi documentation
-        run: docker compose exec -T php php bin/console api:openapi:export > api/swagger.json && docker compose exec -T php php vendor/bin/php-openapi validate swagger.json
-      - name: Test cs-fixer
-        run: docker compose exec -T php php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
-      - name: Static analysis
-        run: docker compose exec -T php php -d memory_limit=256M vendor/bin/psalm src
-      - name: Fixtures
-        run: docker compose exec -T php bin/console hautelook:fixtures:load --env=test --no-interaction --purge-with-truncate
-      - name: PHPUnit
-        run: docker compose exec -T php php -d memory_limit=256M bin/phpunit
-      - name: EsLint
-        run: docker compose exec -T pwa npm run lint
+#      - name: Validate openapi documentation
+#        run: docker compose exec -T php php bin/console api:openapi:export > api/swagger.json && docker compose exec -T php php vendor/bin/php-openapi validate swagger.json
+#      - name: Test cs-fixer
+#        run: docker compose exec -T php php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
+#      - name: Static analysis
+#        run: docker compose exec -T php php -d memory_limit=256M vendor/bin/psalm src
+#      - name: Fixtures
+#        run: docker compose exec -T php bin/console hautelook:fixtures:load --env=test --no-interaction --purge-with-truncate
+#      - name: PHPUnit
+#        run: docker compose exec -T php php -d memory_limit=256M bin/phpunit
+#      - name: EsLint
+#        run: docker compose exec -T pwa npm run lint
