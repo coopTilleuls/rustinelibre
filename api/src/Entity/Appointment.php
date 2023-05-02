@@ -34,6 +34,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
         ),
+        new Put(
+            uriTemplate: '/appointments/{id}/toggle',
+            denormalizationContext: ['groups' => [self::APPOINTMENT_TOGGLE]],
+            security: "is_granted('ROLE_ADMIN') or object.repairer.owner == user",
+        ),
         new Delete(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
         ),
@@ -45,6 +50,7 @@ class Appointment
 {
     public const APPOINTMENT_READ = 'appointment_read';
     public const APPOINTMENT_WRITE = 'appointment_write';
+    public const APPOINTMENT_TOGGLE = 'appointment_toggle';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -75,5 +81,6 @@ class Appointment
     public ?int $duration = 60;
 
     #[ORM\Column]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_TOGGLE])]
     public bool $accepted = false;
 }
