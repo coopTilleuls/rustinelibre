@@ -3,4 +3,3 @@ when@dev: &dev
         fixtures_path: fixtures
 
 when@test: *dev
-when@prod: *dev
