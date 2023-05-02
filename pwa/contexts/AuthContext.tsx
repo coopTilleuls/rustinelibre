@@ -99,7 +99,7 @@ const useProviderAuth = () => {
     }
 
     loadUserFromSession();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const login = async (data: {email: string; password: string}) => {
     try {
