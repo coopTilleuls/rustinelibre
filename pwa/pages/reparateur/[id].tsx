@@ -12,17 +12,19 @@ import {CircularProgress} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 
 type RepairerPageProps = {
-  repairerProps: Repairer | null;
+  // repairerProps: Repairer | null;
 };
 
-const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
-  const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [repairer, setRepairer] = useState<Repairer | null>(repairerProps);
+const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
+                                                                 // repairerProps
+}) => {
+    const router = useRouter();
+    const {id} = router.query;
+    const [loading, setLoading] = useState<boolean>(false);
+    const [repairer, setRepairer] = useState<Repairer | null>(null);
 
   // If no repairerProps loaded
   async function fetchRepairer() {
-    const {id} = router.query;
     if (id) {
       setLoading(true);
       const repairer = await repairerResource.getById(id.toString());
@@ -35,7 +37,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
     if (!repairer) {
       fetchRepairer();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div style={{width: '100vw', overflowX: 'hidden'}}>
@@ -57,56 +59,56 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
     </div>
   );
 };
-
-export const getStaticProps: GetStaticProps = async ({params}) => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-    };
-  }
-
-  if (!params) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const {id} = params;
-  if (!id) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const repairerProps: Repairer = await repairerResource.getById(
-    id.toString(),
-    false
-  );
-  return {
-    props: {
-      repairerProps,
-    },
-    revalidate: 10,
-  };
-};
-
-export async function getStaticPaths() {
-  if (!ENTRYPOINT) {
-    return {
-      paths: [],
-      fallback: true,
-    };
-  }
-
-  const repairers = await repairerResource.getAll(false, {itemsPerPage: false});
-  const paths = repairers['hydra:member'].map((repairer) => ({
-    params: {id: repairer.id.toString()},
-  }));
-
-  return {
-    paths: paths,
-    fallback: 'blocking',
-  };
-}
+//
+// export const getStaticProps: GetStaticProps = async ({params}) => {
+//   if (!ENTRYPOINT) {
+//     return {
+//       props: {},
+//     };
+//   }
+//
+//   if (!params) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+//
+//   const {id} = params;
+//   if (!id) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+//
+//   const repairerProps: Repairer = await repairerResource.getById(
+//     id.toString(),
+//     false
+//   );
+//   return {
+//     props: {
+//       repairerProps,
+//     },
+//     revalidate: 10,
+//   };
+// };
+//
+// export async function getStaticPaths() {
+//   if (!ENTRYPOINT) {
+//     return {
+//       paths: [],
+//       fallback: true,
+//     };
+//   }
+//
+//   const repairers = await repairerResource.getAll(false, {itemsPerPage: false});
+//   const paths = repairers['hydra:member'].map((repairer) => ({
+//     params: {id: repairer.id.toString()},
+//   }));
+//
+//   return {
+//     paths: paths,
+//     fallback: 'blocking',
+//   };
+// }
 
 export default RepairerPage;
