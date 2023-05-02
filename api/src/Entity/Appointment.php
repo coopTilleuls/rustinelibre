@@ -32,12 +32,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
         ),
         new Put(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
-        ),
-        new Put(
-            uriTemplate: '/appointments/{id}/toggle',
-            denormalizationContext: ['groups' => [self::APPOINTMENT_TOGGLE]],
-            security: "is_granted('ROLE_ADMIN') or object.repairer.owner == user",
+            denormalizationContext: ['groups' => [self::APPOINTMENT_OWNER]],
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('APPOINTMENT_EDIT', object)"
         ),
         new Delete(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
@@ -50,7 +46,7 @@ class Appointment
 {
     public const APPOINTMENT_READ = 'appointment_read';
     public const APPOINTMENT_WRITE = 'appointment_write';
-    public const APPOINTMENT_TOGGLE = 'appointment_toggle';
+    public const APPOINTMENT_OWNER = 'appointment_owner';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -80,7 +76,7 @@ class Appointment
     #[ORM\Column(nullable: true)]
     public ?int $duration = 60;
 
-    #[ORM\Column]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_TOGGLE])]
-    public bool $accepted = false;
+    #[ORM\Column(nullable: true)]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_OWNER])]
+    public ?bool $accepted = null;
 }

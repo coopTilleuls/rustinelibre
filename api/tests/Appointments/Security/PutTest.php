@@ -32,7 +32,7 @@ class PutTest extends AbstractTestCase
 
         $this->createClientAuthAsAdmin()->request(
             'PUT',
-            sprintf('/appointments/%d/toggle', $this->appointment->id),
+            sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
                     'accepted' => !$accepted,
@@ -51,7 +51,7 @@ class PutTest extends AbstractTestCase
 
         $this->createClientWithUser($this->appointment->repairer->owner)->request(
             'PUT',
-            sprintf('/appointments/%d/toggle', $this->appointment->id),
+            sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
                     'accepted' => !$accepted,
@@ -70,7 +70,7 @@ class PutTest extends AbstractTestCase
 
         $this->createClientAuthAsUser()->request(
             'PUT',
-            sprintf('/appointments/%d/toggle', $this->appointment->id),
+            sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
                     'accepted' => !$accepted,
