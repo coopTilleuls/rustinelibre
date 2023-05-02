@@ -49,6 +49,7 @@ import {
   Stack,
   Box,
 } from '@mui/material';
+import useBikeTypes from "@hooks/useBikeTypes";
 
 type SearchRepairerProps = {
   bikeTypes: BikeType[];
@@ -64,6 +65,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const listContainerRef = useRef<HTMLDivElement>(null);
+  const bikesTypesFetched = useBikeTypes();
 
   const {
     cityInput,
@@ -86,6 +88,12 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     showMap,
     setShowMap,
   } = useContext(SearchRepairerContext);
+
+  useEffect(() => { // @todo remove it when SSR OK
+    if (bikeTypes.length === 0) {
+      bikeTypes = bikesTypesFetched; // eslint-disable-line react-hooks/exhaustive-deps
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairers = useCallback(async (): Promise<void> => {
     if (!selectedBike || !cityInput) {
