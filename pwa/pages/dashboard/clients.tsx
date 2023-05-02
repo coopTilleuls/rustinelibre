@@ -9,10 +9,9 @@ const Customers = () => {
       <Head>
         <title>Clients</title>
       </Head>
-      <DashboardLayout />
-      <Box component='main' sx={{ marginLeft: '20%', marginTop: '100px' }}>
-        Ici mes clients
-      </Box>
+      <DashboardLayout>
+        <Box component="main">Ici mes clients</Box>
+      </DashboardLayout>
     </>
   );
 };
