@@ -17,8 +17,8 @@ final class DateTimeImmutableProvider extends Base
     public static function dateTimeImmutableBetweenGivenDateAndNow($GivenDate): \DateTimeImmutable
     {
         $today = new \DateTimeImmutable();
-        $DateInterval = \DateInterval::createFromDateString($GivenDate);
-        $timeAgo = $today->sub($DateInterval);
+        $dateInterval = \DateInterval::createFromDateString($GivenDate);
+        $timeAgo = $today->sub($dateInterval);
         $diffInSeconds = $today->getTimestamp() - $timeAgo->getTimestamp();
         $randomSeconds = rand(0, $diffInSeconds);
 
