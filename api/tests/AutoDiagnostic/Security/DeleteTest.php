@@ -47,4 +47,13 @@ class DeleteTest extends AbstractTestCase
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
+
+    public function testDisconnectedUserCannotDeleteAutoDiagnostic(): void
+    {
+        $autoDiagnostic = $this->autoDiagnostics[0];
+
+        $this->createClient()->request('DELETE', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
 }

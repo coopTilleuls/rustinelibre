@@ -60,4 +60,14 @@ class AppointmentRepository extends ServiceEntityRepository
 
         return array_column($query->getArrayResult(), 'appointment_time');
     }
+
+    public function getAppointmentWithoutAutoDiagnostic(): ?Appointment
+    {
+        return $this->createQueryBuilder('ap')
+            ->leftJoin('ap.autoDiagnostic', 'ad')
+            ->where('ad IS NULL')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

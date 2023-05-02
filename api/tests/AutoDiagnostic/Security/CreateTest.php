@@ -6,6 +6,7 @@ namespace App\Tests\AutoDiagnostic\Security;
 
 use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,17 +15,18 @@ class CreateTest extends AbstractTestCase
     /** @var Appointment[] */
     protected array $appointments = [];
 
+    private AppointmentRepository $appointmentRepository;
+
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->appointments = static::getContainer()->get(AppointmentRepository::class)->findAll();
+        $this->appointmentRepository = static::getContainer()->get(AppointmentRepository::class);
     }
 
     public function testUserCanCreateAutoDiagnostic(): void
     {
-        // The ten first appointments are already filled with fixtures
-        $appointment = $this->appointments[11];
+        $appointment = $this->appointmentRepository->getAppointmentWithoutAutoDiagnostic();
 
         $this->createClientWithUser($appointment->customer)->request('POST', '/auto_diagnostics', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -39,7 +41,7 @@ class CreateTest extends AbstractTestCase
 
     public function testUserDisconnectedCannotCreateAutoDiagnostic(): void
     {
-        $appointment = $this->appointments[12];
+        $appointment = $this->appointmentRepository->getAppointmentWithoutAutoDiagnostic();
 
         $this->createClient()->request('POST', '/auto_diagnostics', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -50,5 +52,28 @@ class CreateTest extends AbstractTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function testUserCannotCreateAutoDiagnosticIfNotOwner(): void
+    {
+        // According to the fixtures, the first appointment is assigned to the user_1 (id:4)
+        $appointment = $this->appointmentRepository->find(1);
+        $user = static::getContainer()->get(UserRepository::class)->find(10);
+
+        $this->createClientWithUser($user)->request('POST', '/auto_diagnostics', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'appointment' => sprintf('/appointments/%d', $appointment->id),
+                'prestation' => 'test prestation',
+            ],
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            'hydra:description' => 'appointment: This appointment does not belong to you.',
+        ]);
     }
 }

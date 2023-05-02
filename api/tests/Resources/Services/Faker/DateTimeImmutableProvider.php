@@ -14,13 +14,14 @@ final class DateTimeImmutableProvider extends Base
         parent::__construct($generator);
     }
 
-    public static function dateTimeImmutableBetweenThreeYearsAgoAndNow(): \DateTimeImmutable
+    public static function dateTimeImmutableBetweenGivenDateAndNow($GivenDate): \DateTimeImmutable
     {
         $today = new \DateTimeImmutable();
-        $threeYearsAgo = $today->sub(new \DateInterval('P3Y'));
-        $diffInSeconds = $today->getTimestamp() - $threeYearsAgo->getTimestamp();
+        $DateInterval = \DateInterval::createFromDateString($GivenDate);
+        $timeAgo = $today->sub($DateInterval);
+        $diffInSeconds = $today->getTimestamp() - $timeAgo->getTimestamp();
         $randomSeconds = rand(0, $diffInSeconds);
 
-        return $threeYearsAgo->add(new \DateInterval('PT'.$randomSeconds.'S'));
+        return $timeAgo->add(new \DateInterval('PT'.$randomSeconds.'S'));
     }
 }
