@@ -26,7 +26,7 @@ const BikeIdentityPhoto = ({bike, photo, propertyName, title}: BikeIdentityPhoto
 
     const [photoDisplay, setPhotoDisplay] = useState<MediaObject|null>(photo);
     const [loading, setLoading] = useState<boolean>(false);
-    const user = useAccount({redirectIfNotFound: '/velo/mes-velos'});
+    const {user} = useAccount({redirectIfNotFound: '/velo/mes-velos'});
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         if (event.target.files) {

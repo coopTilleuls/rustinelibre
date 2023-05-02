@@ -1,10 +1,10 @@
 import {NextPageWithLayout} from 'pages/_app';
 import {ENTRYPOINT} from '@config/entrypoint';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {GetStaticProps} from 'next';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {useAccount} from '@contexts/AuthContext';
+import {AuthContext, useAccount, useAuth} from '@contexts/AuthContext';
 import {bikeResource} from '@resources/bikeResource';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {
@@ -35,11 +35,13 @@ type MyBikesProps = {
 };
 
 const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
-  const user = useAccount({});
+
+  const {user, isLoadingFetchUser} = useAccount({});
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [bikes, setBikes] = useState<Bike[]>([]);
   const router = useRouter();
+
 
   // If no repairerProps loaded
   async function fetchBikes() {
@@ -83,11 +85,11 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
         <Typography fontSize={{xs: 24, md: 40}} fontWeight={600}>
           Mes vélos
         </Typography>
-        {!user ? (
+
+        {(!user && !isLoadingFetchUser) ? (
           <Paper
             elevation={4}
             sx={{
-              backgroundColor: 'grey.100',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -103,8 +105,8 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
           </Paper>
         ) : (
           <>
-            {loading && <CircularProgress />}
-            {bikes.length === 0 && !loading && (
+            {(loading || isLoadingFetchUser) && <CircularProgress />}
+            {bikes.length === 0 && !loading && !isLoadingFetchUser && (
               <Box>
                 <Typography>
                   Vous n&apos;avez pas encore de vélos enregistrés

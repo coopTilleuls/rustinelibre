@@ -58,7 +58,7 @@ class Maintenance
     #[Groups([self::READ, self::WRITE])]
     public ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::READ, self::WRITE])]

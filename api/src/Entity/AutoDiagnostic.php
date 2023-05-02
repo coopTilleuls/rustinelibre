@@ -48,7 +48,7 @@ class AutoDiagnostic
     #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ])]
     public ?string $prestation = null;
 
-    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ])]

@@ -49,12 +49,12 @@ const RepairerSortOptions = ({
   return (
     <>
       <FormControl sx={{width: {xs: '100%', md: '50%'}}}>
-        <InputLabel id="select_sort_option" sx={{fontSize: {xs: 14, md: 16}}}>
+        <InputLabel id="sort-results-label" sx={{fontSize: {xs: 14, md: 16}}}>
           Filtrer vos résultats
         </InputLabel>
         <Select
-          labelId="select_sort_option"
-          id="select_sort_option"
+          labelId="sort-results-label"
+          id="sort-results"
           label="Filtrer vos résultats"
           onChange={handleSelectSortOption}
           value={sortChosen}>
@@ -68,13 +68,13 @@ const RepairerSortOptions = ({
       {sortChosen === 'repairersType' && (
         <FormControl sx={{width: {xs: '100%', md: '50%'}}}>
           <InputLabel
-            id="select_sort_type_option"
+            id="repairer-type-label"
             sx={{fontSize: {xs: 14, md: 16}}}>
             Choisissez un type de réparateur
           </InputLabel>
           <Select
-            labelId="select_sort_type_option"
-            id="select_sort_type_option"
+            labelId="repairer-type-label"
+            id="repairer-type"
             label="Choisissez un type de réparateur"
             onChange={handleSelectRepairerType}
             value={repairerTypeSelected}>

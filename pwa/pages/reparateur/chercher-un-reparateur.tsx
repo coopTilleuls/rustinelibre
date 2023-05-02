@@ -11,7 +11,6 @@ import React, {
 } from 'react';
 import Head from 'next/head';
 import {repairerResource} from '@resources/repairerResource';
-import {ButtonShowMap} from '@components/repairers/ButtonShowMap';
 import {
   createCitiesWithGouvAPI,
   createCitiesWithNominatimAPI,
@@ -43,8 +42,13 @@ import {GetStaticProps} from 'next';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {BikeType} from '@interfaces/BikeType';
 import {ENTRYPOINT} from '@config/entrypoint';
-import Box from '@mui/material/Box';
-import {CircularProgress, Container, Stack} from '@mui/material';
+import {
+  CircularProgress,
+  Container,
+  FormControl,
+  Stack,
+  Box,
+} from '@mui/material';
 
 type SearchRepairerProps = {
   bikeTypes: BikeType[];
@@ -232,22 +236,27 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
               sx={{
                 width: {xs: '100%', md: '50%'},
               }}>
-              <InputLabel htmlFor="bikeType" sx={{fontSize: {xs: 10, md: 16}}}>
-                Type de Vélo
-              </InputLabel>
-              <Select
-                fullWidth
-                onChange={handleBikeChange}
-                value={selectedBike?.name}>
-                <MenuItem disabled value="">
-                  Choisissez un type de vélo
-                </MenuItem>
-                {bikeTypes.map((bike) => (
-                  <MenuItem key={bike.id} value={bike.name}>
-                    {bike.name}
+              <FormControl fullWidth required sx={{mt: 1, mb: 1}}>
+                <InputLabel
+                  htmlFor="bikeType"
+                  sx={{fontSize: {xs: 10, md: 16}}}>
+                  Type de Vélo
+                </InputLabel>
+                <Select
+                  label="Type de vélo"
+                  fullWidth
+                  onChange={handleBikeChange}
+                  value={selectedBike?.name}>
+                  <MenuItem disabled value="">
+                    Choisissez un type de vélo
                   </MenuItem>
-                ))}
-              </Select>
+                  {bikeTypes.map((bike) => (
+                    <MenuItem key={bike.id} value={bike.name}>
+                      {bike.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
             {selectedBike && (
               <Box
@@ -255,9 +264,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                   width: {xs: '100%', md: '50%'},
                 }}
                 ref={listContainerRef}>
-                <InputLabel htmlFor="city" sx={{fontSize: {xs: 10, md: 16}}}>
-                  Ville
-                </InputLabel>
                 <Autocomplete
                   freeSolo
                   value={cityInput}
@@ -265,6 +271,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                   onChange={(event, values) => handleCitySelect(event, values)}
                   renderInput={(params) => (
                     <TextField
+                      label="Ville"
                       {...params}
                       value={cityInput}
                       onChange={(e) => handleCityChange(e)}
