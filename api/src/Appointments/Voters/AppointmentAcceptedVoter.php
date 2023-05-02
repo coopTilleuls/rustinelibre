@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class ToggleAcceptedVoter extends Voter
+class AppointmentAcceptedVoter extends Voter
 {
     public function __construct(
         private readonly RequestStack $requestStack,
@@ -29,11 +29,9 @@ class ToggleAcceptedVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        if ('APPOINTMENT_EDIT' === $attribute) {
-            $content = json_decode($this->requestStack->getCurrentRequest()?->getContent(), true, 512, JSON_THROW_ON_ERROR);
-            if (isset($content['accepted']) && ($this->security->getUser() === $subject->repairer->owner || $this->security->isGranted('ROLE_ADMIN'))) {
-                return true;
-            }
+        $content = json_decode($this->requestStack->getCurrentRequest()?->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if (isset($content['accepted']) && ($this->security->getUser() === $subject->repairer->owner || $this->security->isGranted('ROLE_ADMIN'))) {
+            return true;
         }
 
         return false;
