@@ -1,97 +1,126 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, useContext} from 'react';
-import Head from "next/head";
-import WebsiteLayout from "@components/layout/WebsiteLayout";
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import {Alert, CircularProgress} from "@mui/material";
-import {useAccount} from "@contexts/AuthContext";
-import {UserFormContext} from "@contexts/UserFormContext";
-import {userResource} from "@resources/userResource";
-import UserForm from "@components/profile/UserForm";
-import {RequestBody} from "@interfaces/Resource";
+import React, {useState, useContext} from 'react';
+import Head from 'next/head';
+import {
+  Button,
+  Typography,
+  Box,
+  Alert,
+  CircularProgress,
+  Container,
+  Paper,
+} from '@mui/material';
+import {useAccount} from '@contexts/AuthContext';
+import {UserFormContext} from '@contexts/UserFormContext';
+import {userResource} from '@resources/userResource';
+import WebsiteLayout from '@components/layout/WebsiteLayout';
+import UserForm from '@components/profile/UserForm';
+import {RequestBody} from '@interfaces/Resource';
 
 const MyProfile: NextPageWithLayout = () => {
+  const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
+  const [success, setSuccess] = useState<boolean>(false);
+  const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const {firstName, lastName, email, password, passwordError} =
+    useContext(UserFormContext);
 
-    const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
-    const [success, setSuccess] = useState<boolean>(false);
-    const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    event.preventDefault();
+    if (passwordError || !firstName || !lastName || !user) {
+      return;
+    }
 
-    const {firstName, lastName, email, password, passwordError} = useContext(UserFormContext);
+    setErrorMessage(null);
+    setPendingUpdate(true);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    let newUser;
+    try {
+      const bodyRequest: RequestBody = {
+        firstName: firstName,
+        lastName: lastName,
+      };
+      if (password && password !== '') {
+        bodyRequest['plainPassword'] = password;
+      }
+      newUser = await userResource.putById(user.id, bodyRequest);
+    } catch (e) {
+      setErrorMessage('Mise à jour impossible');
+    }
 
-        event.preventDefault();
-        if (passwordError || !firstName || !lastName || !user) {
-            return;
-        }
+    if (newUser) {
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    }
 
-        setErrorMessage(null);
-        setPendingUpdate(true);
+    setPendingUpdate(false);
+  };
 
-        let newUser;
-        try {
-            const bodyRequest: RequestBody = {
-                'firstName': firstName,
-                'lastName': lastName,
-            };
-            if (password && password !== '') {
-                bodyRequest['plainPassword'] = password;
-            }
-            newUser = await userResource.putById(user.id, bodyRequest)
-        } catch (e) {
-            setErrorMessage('Mise à jour impossible');
-        }
-
-        if (newUser) {
-            setSuccess(true);
-            setTimeout(() => {setSuccess(false);}, 3000);
-        }
-
-        setPendingUpdate(false);
-    };
-
-    return (
-        <>
-            <div style={{width: "100vw", overflowX: "hidden"}}>
-                <Head>
-                    <title>Mon profil</title>
-                </Head>
-                <WebsiteLayout />
-                <main>
-                    <Box
-                        sx={{
-                            bgcolor: 'background.paper',
-                            paddingTop: 8,
-                            marginLeft: '10%',
-                        }}
-                    >
-                        {
-                            !isLoadingFetchUser && <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                                <UserForm user={user} />
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="outlined"
-                                    sx={{ mt: 3, mb: 2, width: '50%' }}
-                                >
-                                    {!pendingUpdate ? 'Mettre à jour mon profil' : <CircularProgress size={20} />}
-                                </Button>
-                                {errorMessage && (
-                                    <Typography variant="body1" color="error">
-                                        {errorMessage}
-                                    </Typography>
-                                )}
-                                {success && <Alert sx={{width: '50%'}} severity="success">Profil mis à jour</Alert>}
-                            </Box>
-                        }
-                    </Box>
-                </main>
-            </div>
-        </>
-    );
+  return (
+    <>
+      <Head>
+        <title>Mon profil</title>
+      </Head>
+      <WebsiteLayout />
+      <Container sx={{width: {xs: '100%', md: '50%'}}}>
+        {isLoadingFetchUser ? (
+          <Box display={'flex'} justifyContent={'center'} my={10}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Paper
+            elevation={4}
+            sx={{maxWidth: 400, p: 4, mt: 4, mb: {xs: 10, md: 12}, mx: 'auto'}}>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
+              <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+                Mon profil
+              </Typography>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{mt: 1}}>
+                <UserForm user={user} />
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{mt: 3, mb: 2, width: '50%'}}>
+                    {!pendingUpdate ? (
+                      'Enregistrer'
+                    ) : (
+                      <CircularProgress size={20} />
+                    )}
+                  </Button>
+                </Box>
+                {errorMessage && (
+                  <Typography variant="body1" color="error">
+                    {errorMessage}
+                  </Typography>
+                )}
+                {success && (
+                  <Alert sx={{width: '50%'}} severity="success">
+                    Profil mis à jour
+                  </Alert>
+                )}
+              </Box>
+            </Box>
+          </Paper>
+        )}
+      </Container>
+    </>
+  );
 };
 
 export default MyProfile;
