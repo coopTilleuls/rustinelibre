@@ -12,14 +12,16 @@ import {CircularProgress} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 
 type RepairerPageProps = {
-  repairerProps: Repairer | null;
+  // repairerProps: Repairer | null;
 };
 
-const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
-  const router = useRouter();
-  const {id} = router.query;
-  const [loading, setLoading] = useState<boolean>(false);
-  const [repairer, setRepairer] = useState<Repairer | null>(repairerProps);
+const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
+                                                                 // repairerProps
+}) => {
+    const router = useRouter();
+    const {id} = router.query;
+    const [loading, setLoading] = useState<boolean>(false);
+    const [repairer, setRepairer] = useState<Repairer | null>(null);
 
   // If no repairerProps loaded
   async function fetchRepairer() {
@@ -61,15 +63,13 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
 export const getStaticProps: GetStaticProps = async ({params}) => {
   if (!ENTRYPOINT) {
     return {
-      notFound: true,
-      revalidate: 0
+      props: {},
     };
   }
 
   if (!params) {
     return {
       notFound: true,
-      revalidate: 10
     };
   }
 
@@ -77,7 +77,6 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
   if (!id) {
     return {
       notFound: true,
-      revalidate: 10
     };
   }
 
@@ -85,7 +84,6 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
     id.toString(),
     false
   );
-
   return {
     props: {
       repairerProps,
@@ -95,9 +93,21 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 };
 
 export async function getStaticPaths() {
+  if (!ENTRYPOINT) {
+    return {
+      paths: [],
+      fallback: true,
+    };
+  }
+
+  const repairers = await repairerResource.getAll(false, {itemsPerPage: false});
+  const paths = repairers['hydra:member'].map((repairer) => ({
+    params: {id: repairer.id.toString()},
+  }));
+
   return {
-    paths: [],
-    fallback: true,
+    paths: paths,
+    fallback: 'blocking',
   };
 }
 
