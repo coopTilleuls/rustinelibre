@@ -9,10 +9,9 @@ const Agenda = () => {
       <Head>
         <title>Agenda</title>
       </Head>
-      <DashboardLayout />
-      <Box component='main' sx={{ marginLeft: '20%', marginTop: '100px' }}>
-        Ici mon agenda
-      </Box>
+      <DashboardLayout>
+        <Box>Ici mon agenda</Box>
+      </DashboardLayout>
     </>
   );
 };
