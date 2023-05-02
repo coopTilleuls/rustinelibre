@@ -101,7 +101,7 @@ const MobileNavbar = ({
                 sx={{textAlign: 'center'}}
                 key="dashboard_boss"
                 onClick={handleClose}>
-                <Typography textAlign="center">Dashboard</Typography>
+                <Typography textAlign="center">Tableau de bord</Typography>
               </MenuItem>
             </Link>
           )}
