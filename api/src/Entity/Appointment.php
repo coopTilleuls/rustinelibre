@@ -73,4 +73,7 @@ class Appointment
 
     #[ORM\Column(nullable: true)]
     public ?int $duration = 60;
+
+    #[ORM\Column]
+    public bool $accepted = false;
 }
