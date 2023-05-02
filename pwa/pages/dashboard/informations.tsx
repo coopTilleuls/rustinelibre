@@ -39,7 +39,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [success, setSuccess] = useState<boolean>(false);
   const [tabValue, setTabValue] = React.useState<number>(0);
-  const user = useAccount({});
+  const {user} = useAccount({});
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);

@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import AddIcon from '@mui/icons-material/Add';
 
 const Employees = () => {
-    const user = useAccount({});
+    const {user} = useAccount({});
 
     return (
         <div>
