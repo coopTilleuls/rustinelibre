@@ -1,18 +1,25 @@
 import * as React from 'react';
-import {useRouter} from 'next/router';
 import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
-import {Box, Toolbar, List, Divider, ListItem, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
 import DashboardSidebarListItem from '@components/dashboard/DashboardSidebarListItem';
 import HomeIcon from '@mui/icons-material/Home';
 import ForumIcon from '@mui/icons-material/Forum';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import InfoIcon from '@mui/icons-material/Info';
+import {Link, ListItem, Typography} from '@mui/material';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import {useAccount} from '@contexts/AuthContext';
+import {useRouter} from 'next/router';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import useMediaQuery from '@hooks/useMediaQuery';
 
 const drawerWidth = 240;
@@ -92,17 +99,18 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({children}: DashboardLayoutProps) => {
   const theme = useTheme();
-  const {user} = useAccount({redirectIfNotFound: '/login'});
+  const open = true;
+  const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
   const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 640px)');
 
-  if (user && !user.roles.includes('ROLE_BOSS')) {
+  if (!isLoadingFetchUser && (user && !user.roles.includes('ROLE_BOSS'))) {
     router.push('/');
   }
 
   return (
     <>
-      <AppBar position="sticky" open={isMobile ? false : true}>
+      <AppBar position="sticky">
         <Toolbar>
           <List>
             <ListItem key="1" disablePadding>
@@ -116,38 +124,38 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
       <Box sx={{display: 'flex'}}>
         <Drawer
           variant={'permanent'}
-          open={isMobile ? false : true}
+          open={isMobile ? !open : open}
           anchor="left">
           <DrawerHeader></DrawerHeader>
           <Divider />
           <List>
             <DashboardSidebarListItem
               text="Tableau de bord"
-              open={true}
+              open={open}
               icon={<HomeIcon />}
               path="/dashboard"
             />
             <DashboardSidebarListItem
               text="Agenda"
-              open={true}
+              open={open}
               icon={<CalendarMonthIcon />}
               path="/dashboard/agenda"
             />
             <DashboardSidebarListItem
               text="Messages"
-              open={true}
+              open={open}
               icon={<ForumIcon />}
               path="/dashboard/messagerie"
             />
             <DashboardSidebarListItem
               text="Clients"
-              open={true}
+              open={open}
               icon={<FolderSharedIcon />}
               path="/dashboard/clients"
             />
             <DashboardSidebarListItem
               text="Employés"
-              open={true}
+              open={open}
               icon={<EngineeringIcon />}
               path="/dashboard/employes"
             />
@@ -156,13 +164,13 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
           <List>
             <DashboardSidebarListItem
               text="Informations"
-              open={true}
+              open={open}
               icon={<InfoIcon />}
               path="/dashboard/informations"
             />
             <DashboardSidebarListItem
               text="Retourner sur le site"
-              open={true}
+              open={open}
               icon={<ArrowBackIcon />}
               path="/"
             />
