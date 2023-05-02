@@ -29,17 +29,22 @@ import WebsiteLayout from '@components/layout/WebsiteLayout';
 import BikeCard from '@components/bike/BikeCard';
 import {Bike} from '@interfaces/Bike';
 import {BikeType} from '@interfaces/BikeType';
+import useBikeTypes from "@hooks/useBikeTypes";
 
 type MyBikesProps = {
-  bikeTypes: BikeType[];
+  // bikeTypes: BikeType[];
 };
 
-const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
+const MyBikes: NextPageWithLayout<MyBikesProps> = ({
+                                                     // bikeTypes = []
+}) => {
   const user = useAccount({});
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [bikes, setBikes] = useState<Bike[]>([]);
   const router = useRouter();
+  const bikeTypes = useBikeTypes();
+
 
   // If no repairerProps loaded
   async function fetchBikes() {
@@ -164,22 +169,22 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-    };
-  }
-
-  const bikeTypesCollection = await bikeTypeResource.getAll(false);
-  const bikeTypes = bikeTypesCollection['hydra:member'];
-
-  return {
-    props: {
-      bikeTypes,
-    },
-    revalidate: 10,
-  };
-};
+// export const getStaticProps: GetStaticProps = async () => {
+//   if (!ENTRYPOINT) {
+//     return {
+//       props: {},
+//     };
+//   }
+//
+//   const bikeTypesCollection = await bikeTypeResource.getAll(false);
+//   const bikeTypes = bikeTypesCollection['hydra:member'];
+//
+//   return {
+//     props: {
+//       bikeTypes,
+//     },
+//     revalidate: 10,
+//   };
+// };
 
 export default MyBikes;

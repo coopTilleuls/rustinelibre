@@ -20,12 +20,16 @@ import {BikeType} from '@interfaces/BikeType';
 import {Collection} from '@interfaces/Resource';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModalDeleteBike from '@components/bike/ModalDeleteBike';
+import useBikeTypes from "@hooks/useBikeTypes";
+import useRepairerTypes from "@hooks/useRepairerTypes";
 
 type EditBikeProps = {
-  bikeTypes: BikeType[];
+  // bikeTypes: BikeType[];
 };
 
-const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypes = []}) => {
+const EditBike: NextPageWithLayout<EditBikeProps> = ({
+                                                       // bikeTypes = []
+}) => {
   const router: NextRouter = useRouter();
   const {id} = router.query;
   const [bike, setBike] = useState<Bike | null>(null);
@@ -33,6 +37,8 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypes = []}) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
+  const bikeTypes = useBikeTypes(); // @todo remove when SSR OK
+  
   useEffect(() => {
     async function fetchBike() {
       if (typeof id === 'string' && id.length > 0) {
@@ -111,30 +117,30 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypes = []}) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-    };
-  }
+// export const getStaticProps: GetStaticProps = async () => {
+//   if (!ENTRYPOINT) {
+//     return {
+//       props: {},
+//     };
+//   }
+//
+//   const bikeTypesCollection: Collection<BikeType> =
+//     await bikeTypeResource.getAll(false);
+//   const bikeTypes: BikeType[] = bikeTypesCollection['hydra:member'];
+//
+//   return {
+//     props: {
+//       bikeTypes,
+//     },
+//     revalidate: 10,
+//   };
+// };
 
-  const bikeTypesCollection: Collection<BikeType> =
-    await bikeTypeResource.getAll(false);
-  const bikeTypes: BikeType[] = bikeTypesCollection['hydra:member'];
-
-  return {
-    props: {
-      bikeTypes,
-    },
-    revalidate: 10,
-  };
-};
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
-  };
-}
+// export async function getStaticPaths() {
+//   return {
+//     paths: [],
+//     fallback: true,
+//   };
+// }
 
 export default EditBike;

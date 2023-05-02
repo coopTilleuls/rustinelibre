@@ -47,21 +47,26 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
 import {searchCity} from '@utils/apiCity';
+import useBikeTypes from "@hooks/useBikeTypes";
+import useRepairerTypes from "@hooks/useRepairerTypes";
 
 type RepairerRegistrationProps = {
-  bikeTypes: BikeType[];
-  repairerTypes: RepairerType[];
+  // bikeTypes: BikeType[];
+  // repairerTypes: RepairerType[];
 };
 
 const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
-  bikeTypes = [],
-  repairerTypes = [],
+  // bikeTypes = [],
+  // repairerTypes = [],
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [comment, setComment] = useState<string>('');
   const [repairerTypeSelected, setRepairerTypeSelected] =
     useState<RepairerType | null>(null);
   const router = useRouter();
+
+  const bikeTypes = useBikeTypes(); // @todo remove when SSR OK
+  const repairerTypes = useRepairerTypes(); // @todo remove when SSR OK
 
   const {
     firstName,
@@ -444,26 +449,26 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-    };
-  }
-
-  const bikeTypesCollection = await bikeTypeResource.getAll(false);
-  const bikeTypes = bikeTypesCollection['hydra:member'];
-
-  const repairerTypesCollection = await repairerTypeResource.getAll(false);
-  const repairerTypes = repairerTypesCollection['hydra:member'];
-
-  return {
-    props: {
-      bikeTypes,
-      repairerTypes,
-    },
-    revalidate: 10,
-  };
-};
+// export const getStaticProps: GetStaticProps = async () => {
+//   if (!ENTRYPOINT) {
+//     return {
+//       props: {},
+//     };
+//   }
+//
+//   const bikeTypesCollection = await bikeTypeResource.getAll(false);
+//   const bikeTypes = bikeTypesCollection['hydra:member'];
+//
+//   const repairerTypesCollection = await repairerTypeResource.getAll(false);
+//   const repairerTypes = repairerTypesCollection['hydra:member'];
+//
+//   return {
+//     props: {
+//       bikeTypes,
+//       repairerTypes,
+//     },
+//     revalidate: 10,
+//   };
+// };
 
 export default RepairerRegistration;

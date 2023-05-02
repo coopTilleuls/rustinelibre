@@ -52,7 +52,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
             mt: {md: 8},
             mb: 10,
           }}>
-          {loading && <CircularProgress />}
+          {loading && <CircularProgress sx={{marginLeft: '20%'}} />}
           {repairer && <RepairerPresentation repairer={repairer} />}
         </Box>
       </main>
