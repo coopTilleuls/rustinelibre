@@ -59,48 +59,56 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
     </div>
   );
 };
-
-export const getStaticProps: GetStaticProps = async ({params}) => {
-  if (!ENTRYPOINT) {
-    return {
-      notFound: true,
-      revalidate: 0
-    };
-  }
-
-  if (!params) {
-    return {
-      notFound: true,
-      revalidate: 10
-    };
-  }
-
-  const {id} = params;
-  if (!id) {
-    return {
-      notFound: true,
-      revalidate: 10
-    };
-  }
-
-  const repairerProps: Repairer = await repairerResource.getById(
-    id.toString(),
-    false
-  );
-
-  return {
-    props: {
-      repairerProps,
-    },
-    revalidate: 10,
-  };
-};
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
-  };
-}
+//
+// export const getStaticProps: GetStaticProps = async ({params}) => {
+//   if (!ENTRYPOINT) {
+//     return {
+//       props: {},
+//     };
+//   }
+//
+//   if (!params) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+//
+//   const {id} = params;
+//   if (!id) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+//
+//   const repairerProps: Repairer = await repairerResource.getById(
+//     id.toString(),
+//     false
+//   );
+//   return {
+//     props: {
+//       repairerProps,
+//     },
+//     revalidate: 10,
+//   };
+// };
+//
+// export async function getStaticPaths() {
+//   if (!ENTRYPOINT) {
+//     return {
+//       paths: [],
+//       fallback: true,
+//     };
+//   }
+//
+//   const repairers = await repairerResource.getAll(false, {itemsPerPage: false});
+//   const paths = repairers['hydra:member'].map((repairer) => ({
+//     params: {id: repairer.id.toString()},
+//   }));
+//
+//   return {
+//     paths: paths,
+//     fallback: 'blocking',
+//   };
+// }
 
 export default RepairerPage;
