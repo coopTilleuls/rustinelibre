@@ -14,10 +14,10 @@ final class DateTimeImmutableProvider extends Base
         parent::__construct($generator);
     }
 
-    public static function dateTimeImmutableBetweenGivenDateAndNow($GivenDate): \DateTimeImmutable
+    public static function dateTimeImmutableBetweenGivenPastIntervalAndNow($interval): \DateTimeImmutable
     {
         $today = new \DateTimeImmutable();
-        $dateInterval = \DateInterval::createFromDateString($GivenDate);
+        $dateInterval = \DateInterval::createFromDateString($interval);
         $timeAgo = $today->sub($dateInterval);
         $diffInSeconds = $today->getTimestamp() - $timeAgo->getTimestamp();
         $randomSeconds = rand(0, $diffInSeconds);
