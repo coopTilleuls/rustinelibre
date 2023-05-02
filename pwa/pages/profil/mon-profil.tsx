@@ -14,7 +14,7 @@ import {RequestBody} from "@interfaces/Resource";
 
 const MyProfile: NextPageWithLayout = () => {
 
-    const user = useAccount({redirectIfNotFound: '/login'});
+    const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
     const [success, setSuccess] = useState<boolean>(false);
     const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -68,23 +68,25 @@ const MyProfile: NextPageWithLayout = () => {
                             marginLeft: '10%',
                         }}
                     >
-                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                            <UserForm user={user} />
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="outlined"
-                                sx={{ mt: 3, mb: 2, width: '50%' }}
-                            >
-                                {!pendingUpdate ? 'Mettre à jour mon profil' : <CircularProgress size={20} />}
-                            </Button>
-                            {errorMessage && (
-                                <Typography variant="body1" color="error">
-                                    {errorMessage}
-                                </Typography>
-                            )}
-                            {success && <Alert sx={{width: '50%'}} severity="success">Profil mis à jour</Alert>}
-                        </Box>
+                        {
+                            !isLoadingFetchUser && <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                                <UserForm user={user} />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="outlined"
+                                    sx={{ mt: 3, mb: 2, width: '50%' }}
+                                >
+                                    {!pendingUpdate ? 'Mettre à jour mon profil' : <CircularProgress size={20} />}
+                                </Button>
+                                {errorMessage && (
+                                    <Typography variant="body1" color="error">
+                                        {errorMessage}
+                                    </Typography>
+                                )}
+                                {success && <Alert sx={{width: '50%'}} severity="success">Profil mis à jour</Alert>}
+                            </Box>
+                        }
                     </Box>
                 </main>
             </div>
