@@ -23,9 +23,10 @@ class CreateTest extends AbstractTestCase
 
     public function testUserCanCreateAutoDiagnostic(): void
     {
-        $appointment = $this->appointments[0];
+        // The ten first appointments are already filled with fixtures
+        $appointment = $this->appointments[11];
 
-        $this->createClientAuthAsUser()->request('POST', '/auto_diagnostics', [
+        $this->createClientWithUser($appointment->customer)->request('POST', '/auto_diagnostics', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'appointment' => sprintf('/appointments/%d', $appointment->id),
@@ -38,7 +39,7 @@ class CreateTest extends AbstractTestCase
 
     public function testUserDisconnectedCannotCreateAutoDiagnostic(): void
     {
-        $appointment = $this->appointments[0];
+        $appointment = $this->appointments[12];
 
         $this->createClient()->request('POST', '/auto_diagnostics', [
             'headers' => ['Content-Type' => 'application/json'],
