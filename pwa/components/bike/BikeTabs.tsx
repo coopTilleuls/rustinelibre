@@ -17,7 +17,7 @@ type BikeTabsProps = {
 };
 
 const BikeTabs = ({bike, bikeTypes}: BikeTabsProps): JSX.Element => {
-  const user = useAccount({});
+  const {user} = useAccount({});
   const [tabValue, setTabValue] = useState<number>(0);
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [loading, setLoading] = useState<boolean>(false);

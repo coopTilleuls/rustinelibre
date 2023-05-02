@@ -95,7 +95,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function DashboardLayout() {
     const theme = useTheme();
     const open = true;
-    const user = useAccount({redirectIfNotFound: '/login'});
+    const {user} = useAccount({redirectIfNotFound: '/login'});
     const router = useRouter();
 
     if (user && !user.roles.includes('ROLE_BOSS')) {

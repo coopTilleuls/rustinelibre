@@ -6,7 +6,6 @@ import {NextRouter, useRouter} from 'next/router';
 import {Button, CircularProgress} from '@mui/material';
 import {bikeResource} from '@resources/bikeResource';
 import {Bike} from '@interfaces/Bike';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
@@ -22,6 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ModalDeleteBike from '@components/bike/ModalDeleteBike';
 import useBikeTypes from "@hooks/useBikeTypes";
 import useRepairerTypes from "@hooks/useRepairerTypes";
+import {useAccount} from "@contexts/AuthContext";
 
 type EditBikeProps = {
   // bikeTypes: BikeType[];
@@ -31,10 +31,10 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
                                                        // bikeTypes = []
 }) => {
   const router: NextRouter = useRouter();
+  const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/velos/mes-velos'});
   const {id} = router.query;
   const [bike, setBike] = useState<Bike | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const bikeTypes = useBikeTypes(); // @todo remove when SSR OK
@@ -48,10 +48,10 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
         setLoading(false);
       }
     }
-    if (id) {
+    if (id && user) {
       fetchBike();
     }
-  }, [id]);
+  }, [id, user]);
 
   //   const handleOpenModal = () => setOpenModal(true);
 
@@ -73,7 +73,7 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
           flexDirection: 'column',
           alignItems: 'center',
         }}>
-        {loading && <CircularProgress />}
+        {(loading || isLoadingFetchUser) && <CircularProgress />}
         {bike && (
           <Box width={{xs: '100%', md: '50%'}}>
             <Box width={'100%'} display="flex" justifyContent="space-between">

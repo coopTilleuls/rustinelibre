@@ -109,7 +109,7 @@ const Login: NextPageWithLayout = ({}) => {
                   {!pendingLogin ? (
                     'Se connecter'
                   ) : (
-                    <CircularProgress size={20} />
+                    <CircularProgress size={20} sx={{color:'white'}} />
                   )}
                 </Button>
                 {errorMessage && (
