@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\Appointment;
 use App\Entity\Repairer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -69,5 +70,15 @@ class AppointmentRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getAppointmentCustomersIdsQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.customer', 'ac')
+            ->select('ac.id')
+            ->andWhere('a.repairer = :repairer')
+            ->addGroupBy('ac.id')
+        ;
     }
 }

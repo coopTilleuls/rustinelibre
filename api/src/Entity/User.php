@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -14,6 +16,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
 use App\Repository\UserRepository;
 use App\User\StateProvider\CurrentUserProvider;
+use App\User\StateProvider\CustomersProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,9 +41,18 @@ use Symfony\Component\Validator\Constraints as Assert;
     provider: CurrentUserProvider::class,
 )]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
+#[GetCollection(
+    uriTemplate: '/customers',
+    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
+    provider: CustomersProvider::class,
+    openapi: new Model\Operation(
+        summary: 'Retrieves customers from my repair\'s shop',
+        description: 'Retrieves customers from my repair\'s shop'),
+)]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ApiFilter(SearchFilter::class, properties: ['firstName' => 'ipartial', 'lastName' => 'ipartial'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private const EMAIL_MAX_LENGTH = 180;
