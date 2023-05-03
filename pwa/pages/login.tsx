@@ -2,7 +2,7 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, ChangeEvent} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {useAuth} from 'contexts/AuthContext';
+import {useAccount, useAuth} from 'contexts/AuthContext';
 import {
   Container,
   Box,
@@ -22,6 +22,7 @@ const Login: NextPageWithLayout = ({}) => {
   const [password, setPassword] = useState<string>('');
   const [pendingLogin, setPendingLogin] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const {user} = useAccount({redirectIfFound: '/'});
   const {login} = useAuth();
   const router = useRouter();
 
@@ -109,7 +110,7 @@ const Login: NextPageWithLayout = ({}) => {
                   {!pendingLogin ? (
                     'Se connecter'
                   ) : (
-                    <CircularProgress size={20} />
+                    <CircularProgress size={20} sx={{color: 'white'}} />
                   )}
                 </Button>
                 {errorMessage && (
