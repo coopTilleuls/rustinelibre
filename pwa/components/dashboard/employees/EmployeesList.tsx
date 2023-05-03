@@ -72,7 +72,7 @@ export const EmployeesList = ({
           {loadingList && <CircularProgress />}
           {employees.map((repairerEmployee) => (
             <TableRow
-              key={repairerEmployee.employee.id}
+              key={repairerEmployee.id}
               sx={{'&:last-child td, &:last-child th': {border: 0}}}>
               <TableCell component="th" scope="row">
                 {repairerEmployee.employee.firstName}{' '}
