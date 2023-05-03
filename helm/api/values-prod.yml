@@ -15,7 +15,14 @@ ingress:
       hosts:
         - toset
 
+php:
+  medias:
+    persistence:
+      storageClass: "standard"
+
 postgresql:
   persistence:
     enabled: true
     storageClass: "regionalpd-sc-euwest1"
+
+

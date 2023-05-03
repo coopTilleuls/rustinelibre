@@ -23,7 +23,12 @@ php:
     secretKey: ""
     publicKey: ""
     passphrase: ""
-
+  medias:
+    persistence:
+      enabled: true
+      size: 1Gi
+      storageClass: "standard"
+  
 maildev:
   enabled: false
 
