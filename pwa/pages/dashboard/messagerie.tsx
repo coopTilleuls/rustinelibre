@@ -9,10 +9,9 @@ const DashboardMessages = () => {
       <Head>
         <title>Messagerie</title>
       </Head>
-      <DashboardLayout />
-      <Box component='main' sx={{ marginLeft: '20%', marginTop: '100px' }}>
-        Ici mes messages
-      </Box>
+      <DashboardLayout>
+        <Box component="main">Ici mes messages</Box>
+      </DashboardLayout>
     </>
   );
 };

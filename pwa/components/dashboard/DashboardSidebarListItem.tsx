@@ -1,51 +1,67 @@
-import React, {ChangeEvent} from "react";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import {useState} from 'react';
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import ListItemText from "@mui/material/ListItemText";
-import ListItem from "@mui/material/ListItem";
-import { useRouter } from 'next/router';
+import React from 'react';
+import {useRouter} from 'next/router';
+import {
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  ListItem,
+  Typography,
+} from '@mui/material';
 
 interface DashboardSidebarListItemProps {
-    text: string;
-    open: boolean;
-    icon: any;
-    path: string;
+  text: string;
+  open: boolean;
+  icon: any;
+  path: string;
 }
 
-const DashboardSidebarListItem = ({text, open, icon, path}: DashboardSidebarListItemProps): JSX.Element => {
+const DashboardSidebarListItem = ({
+  text,
+  open,
+  icon,
+  path,
+}: DashboardSidebarListItemProps): JSX.Element => {
+  const router = useRouter();
 
-    const router = useRouter();
+  const handleMenuClick = () => {
+    router.push(path);
+  };
 
-    const handleMenuClick = () => {
-        router.push(path);
-    };
-
-    return (
-        <ListItem key={text} disablePadding sx={{ display: 'block' }} onClick={() => handleMenuClick()}>
-            <ListItemButton
-                sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                }}
-            >
-                <ListItemIcon
-                    sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                    }}
-                >
-                    {icon}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-        </ListItem>
-    );
+  return (
+    <ListItem
+      key={text}
+      disablePadding
+      sx={{display: 'block'}}
+      onClick={() => handleMenuClick()}>
+      <ListItemButton
+        sx={{
+          minHeight: 48,
+          justifyContent: open ? 'initial' : 'center',
+          px: 2.5,
+        }}>
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            mr: open ? 2 : 'auto',
+            justifyContent: 'center',
+            color: 'primary.main',
+          }}>
+          {icon}
+        </ListItemIcon>
+        <ListItemText
+          disableTypography
+          primary={
+            <Typography
+              sx={{
+                color: path === router.pathname ? 'primary.main' : 'grey.600',
+              }}>
+              {text}
+            </Typography>
+          }
+        />
+      </ListItemButton>
+    </ListItem>
+  );
 };
 
 export default DashboardSidebarListItem;
