@@ -315,6 +315,7 @@ spec:
         volumeMounts:
         - name: php-medias
           mountPath: /srv/app/public/media/
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
