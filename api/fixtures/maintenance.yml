@@ -3,4 +3,4 @@ App\Entity\Maintenance:
     bike: '@bike_*'
     name: 'name <current()>'
     description: 'description <current()>'
-    repairDate: <dateTimeImmutableFromIntervalInterval('-3 years')>
+    repairDate: <dateTimeImmutableFromInterval('-3 years')>

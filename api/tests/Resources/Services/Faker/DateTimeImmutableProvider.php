@@ -14,7 +14,7 @@ final class DateTimeImmutableProvider extends Base
         parent::__construct($generator);
     }
 
-    public static function dateTimeImmutableFromIntervalInterval($intervalStr): \DateTimeImmutable
+    public static function dateTimeImmutableFromInterval(string $intervalStr): \DateTimeImmutable
     {
         $today = new \DateTimeImmutable();
         $interval = \DateInterval::createFromDateString($intervalStr);
