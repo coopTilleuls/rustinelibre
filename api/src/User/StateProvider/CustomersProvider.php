@@ -6,7 +6,6 @@ namespace App\User\StateProvider;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Extension\QueryResultCollectionExtensionInterface;
-use ApiPlatform\Doctrine\Orm\Paginator;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -29,7 +28,7 @@ final class CustomersProvider implements ProviderInterface
         #[TaggedIterator('api_platform.doctrine.orm.query_extension.collection')] private readonly iterable $collectionExtensions = []
     ) {
     }
-g
+
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|null|object
     {
         /** @var User $user */
