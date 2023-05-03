@@ -29,8 +29,8 @@ final class CustomersProvider implements ProviderInterface
         #[TaggedIterator('api_platform.doctrine.orm.query_extension.collection')] private readonly iterable $collectionExtensions = []
     ) {
     }
-
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): Paginator
+g
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|null|object
     {
         /** @var User $user */
         $user = $this->security->getUser();
