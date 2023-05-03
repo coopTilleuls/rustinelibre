@@ -4,7 +4,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {GetStaticProps} from 'next';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {AuthContext, useAccount, useAuth} from '@contexts/AuthContext';
+import {useAccount} from '@contexts/AuthContext';
 import {bikeResource} from '@resources/bikeResource';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {
@@ -31,17 +31,28 @@ import {Bike} from '@interfaces/Bike';
 import {BikeType} from '@interfaces/BikeType';
 
 type MyBikesProps = {
-  bikeTypes: BikeType[];
+  bikeTypesFetched: BikeType[];
 };
 
-const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
+const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
 
   const {user, isLoadingFetchUser} = useAccount({});
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [bikes, setBikes] = useState<Bike[]>([]);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const router = useRouter();
 
+  async function fetchBikeTypes() {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  }
+
+  useEffect(() => {
+    if (bikeTypes.length === 0) {
+      fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // If no repairerProps loaded
   async function fetchBikes() {
@@ -168,6 +179,7 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypes = []}) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
+
   if (!ENTRYPOINT) {
     return {
       props: {},
@@ -175,11 +187,11 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
-  const bikeTypes = bikeTypesCollection['hydra:member'];
+  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
   return {
     props: {
-      bikeTypes,
+      bikeTypesFetched,
     },
     revalidate: 10,
   };
