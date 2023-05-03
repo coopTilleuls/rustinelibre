@@ -115,24 +115,13 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   if (!ENTRYPOINT) {
-//     return {
-//       props: {},
-//     };
-//   }
-//
-//   const bikeTypesCollection: Collection<BikeType> =
-//     await bikeTypeResource.getAll(false);
-//   const bikeTypes: BikeType[] = bikeTypesCollection['hydra:member'];
-//
-//   return {
-//     props: {
-//       bikeTypes,
-//     },
-//     revalidate: 10,
-//   };
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  if (!ENTRYPOINT) {
+    return {
+      props: {},
+      revalidate: 0
+    };
+  }
 
 // export async function getStaticPaths() {
 //   return {
