@@ -49,19 +49,22 @@ import {
   Stack,
   Box,
 } from '@mui/material';
+import useBikeTypes from "@hooks/useBikeTypes";
+import {Bike} from "@interfaces/Bike";
 
 type SearchRepairerProps = {
-  bikeTypes: BikeType[];
+  bikeTypesFetched: BikeType[];
 };
 
 const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
-  bikeTypes = [],
+  bikeTypesFetched = [],
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [timeoutId, setTimeoutId] = useState<number | null>(null);
   const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
   const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const listContainerRef = useRef<HTMLDivElement>(null);
 
@@ -86,6 +89,17 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     showMap,
     setShowMap,
   } = useContext(SearchRepairerContext);
+
+  async function fetchBikeTypes() {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  }
+
+  useEffect(() => {
+    if (bikeTypes.length == 0) {
+      fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairers = useCallback(async (): Promise<void> => {
     if (!selectedBike || !cityInput) {
@@ -336,6 +350,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
+
   if (!ENTRYPOINT) {
     return {
       props: {},
@@ -343,11 +358,11 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
-  const bikeTypes = bikeTypesCollection['hydra:member'];
+  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
   return {
     props: {
-      bikeTypes,
+      bikeTypesFetched,
     },
     revalidate: 10,
   };

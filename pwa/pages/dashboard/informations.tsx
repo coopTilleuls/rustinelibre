@@ -27,23 +27,47 @@ import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {RepairerType} from '@interfaces/RepairerType';
 
 type RepairerInformationsProps = {
-  bikeTypes: BikeType[];
-  repairerTypes: RepairerType[];
+  bikeTypesFetched: BikeType[];
+  repairerTypesFetched: RepairerType[];
 };
 
 const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
-  bikeTypes = [],
-  repairerTypes = [],
+  bikeTypesFetched = [],
+  repairerTypesFetched = [],
 }) => {
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [success, setSuccess] = useState<boolean>(false);
   const [tabValue, setTabValue] = React.useState<number>(0);
   const {user} = useAccount({});
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
+  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+
+  async function fetchRepairerTypes() {
+    const responseRepairerTypes = await repairerTypeResource.getAll(false);
+    setRepairerTypes(responseRepairerTypes['hydra:member']);
+  }
+
+  useEffect(() => {
+    if (repairerTypes.length == 0) {
+      fetchRepairerTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function fetchBikeTypes() {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  }
+
+  useEffect(() => {
+    if (bikeTypes.length == 0) {
+      fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     name,
@@ -271,15 +295,15 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
-  const bikeTypes = bikeTypesCollection['hydra:member'];
+  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
   const repairerTypesCollection = await repairerTypeResource.getAll(false);
-  const repairerTypes = repairerTypesCollection['hydra:member'];
+  const repairerTypesFetched = repairerTypesCollection['hydra:member'];
 
   return {
     props: {
-      bikeTypes,
-      repairerTypes,
+      bikeTypesFetched,
+      repairerTypesFetched,
     },
     revalidate: 10,
   };
