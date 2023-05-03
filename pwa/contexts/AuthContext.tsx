@@ -25,7 +25,7 @@ type AuthenticationValues = {
 
 interface AuthContextType {
   user: User | null;
-  login: (data: AuthenticationValues) => Promise<User | null>;
+  login: (data: AuthenticationValues) => Promise<boolean|null>;
   logout: () => void;
   isLoadingFetchUser?: boolean;
   fetchUser: () => void;
@@ -108,8 +108,9 @@ const useProviderAuth = () => {
       );
       setToken(token);
       setRefreshToken(refresh_token);
+      await fetchUser();
 
-      return await fetchUser();
+      return !!token;
     } catch (e) {
       return null;
     }
