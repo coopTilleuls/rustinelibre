@@ -298,6 +298,23 @@ spec:
           {{- end }}
           - name: php-socket
             emptyDir: {}
+      initContainers:
+      {{- if .Values.php.medias.persistence.enabled }}
+      - name: chown-mountpoint
+        image: "{{ .Values.php.image.repository }}:{{ .Values.php.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.php.image.pullPolicy }}
+        securityContext:
+          runAsUser: 0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -e
+            echo "changing mountpoint ownership"
+            chown www-data:www-data /srv/app/public/media/
+        volumeMounts:
+        - name: php-medias
+          mountPath: /srv/app/public/media/
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
