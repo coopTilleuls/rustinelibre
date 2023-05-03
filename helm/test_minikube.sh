@@ -10,8 +10,9 @@ RELEASE_NAME=test
 #######
 # API #
 #######
-JWT_PASSPHRASE=$(openssl rand -base64 32)
-JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+export JWT_PASSPHRASE=$(openssl rand -base64 32)
+export JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+export JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)
 
 docker compose -f docker-compose.yml build php caddy
 
@@ -33,7 +34,7 @@ helm upgrade --install ${RELEASE_NAME}-api ./helm/api \
   --atomic \
   --wait \
   --debug \
-  -f ./helm/api/values.yaml \
+  -f ./helm/api/values.yml \
   -f ./helm/api/values-minikube.yml \
   --set=php.image.tag=${php_sha} \
   --set=caddy.image.tag=${caddy_sha} \
@@ -46,9 +47,8 @@ helm upgrade --install ${RELEASE_NAME}-api ./helm/api \
   --set=php.trustedHosts="^127\\.0\\.0\\.1|localhost|${URL}$" \
   --set=php.jwt.secretKey="$JWT_SECRET_KEY" \
   --set=php.jwt.publicKey="$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)" \
-  --set=php.jwt.passphrase=$JWT_PASSPHRASE \
+  --set=php.jwt.passphrase="$JWT_PASSPHRASE" \
   --set=php.host=${URL} \
-  --set=postgresql.global.auth.password=$(openssl rand -base64 32 | tr -d "=+/") \
   --set=caddy.pwaUpstream="${RELEASE_NAME}-pwa-bikelib-pwa:3000"
 
 #######
