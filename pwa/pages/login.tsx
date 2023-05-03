@@ -2,7 +2,7 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, ChangeEvent} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {useAuth} from 'contexts/AuthContext';
+import {useAccount, useAuth} from 'contexts/AuthContext';
 import {
   Container,
   Box,
@@ -22,6 +22,7 @@ const Login: NextPageWithLayout = ({}) => {
   const [password, setPassword] = useState<string>('');
   const [pendingLogin, setPendingLogin] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const {user} = useAccount({redirectIfFound: '/'});
   const {login} = useAuth();
   const router = useRouter();
 
@@ -29,15 +30,15 @@ const Login: NextPageWithLayout = ({}) => {
     event.preventDefault();
     setErrorMessage(null);
     setPendingLogin(true);
-    const user = await login({
+    const connectionSuccess = await login({
       email: email,
       password: password,
     });
 
-    if (!!user) {
+    if (connectionSuccess) {
       const next = Array.isArray(router.query.next)
-        ? router.query.next.join('')
-        : router.query.next || '/';
+          ? router.query.next.join('')
+          : router.query.next || '/';
       router.push(next);
     } else {
       setErrorMessage('Ces identifiants de connexion ne sont pas valides');
@@ -109,7 +110,7 @@ const Login: NextPageWithLayout = ({}) => {
                   {!pendingLogin ? (
                     'Se connecter'
                   ) : (
-                    <CircularProgress size={20} />
+                    <CircularProgress size={20} sx={{color: 'white'}} />
                   )}
                 </Button>
                 {errorMessage && (
