@@ -61,13 +61,15 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
 export const getStaticProps: GetStaticProps = async ({params}) => {
   if (!ENTRYPOINT) {
     return {
-      props: {},
+      notFound: true,
+      revalidate: 0
     };
   }
 
   if (!params) {
     return {
       notFound: true,
+      revalidate: 10
     };
   }
 
@@ -75,6 +77,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
   if (!id) {
     return {
       notFound: true,
+      revalidate: 10
     };
   }
 
@@ -82,6 +85,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
     id.toString(),
     false
   );
+
   return {
     props: {
       repairerProps,
@@ -91,21 +95,9 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 };
 
 export async function getStaticPaths() {
-  if (!ENTRYPOINT) {
-    return {
-      paths: [],
-      fallback: true,
-    };
-  }
-
-  const repairers = await repairerResource.getAll(false, {itemsPerPage: false});
-  const paths = repairers['hydra:member'].map((repairer) => ({
-    params: {id: repairer.id.toString()},
-  }));
-
   return {
-    paths: paths,
-    fallback: 'blocking',
+    paths: [],
+    fallback: true,
   };
 }
 
