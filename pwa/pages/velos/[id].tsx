@@ -126,6 +126,7 @@ export const getStaticProps: GetStaticProps = async () => {
   if (!ENTRYPOINT) {
     return {
       props: {},
+      revalidate: 0
     };
   }
 
