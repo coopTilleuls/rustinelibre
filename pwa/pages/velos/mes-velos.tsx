@@ -4,7 +4,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {GetStaticProps} from 'next';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {AuthContext, useAccount, useAuth} from '@contexts/AuthContext';
+import {useAccount} from '@contexts/AuthContext';
 import {bikeResource} from '@resources/bikeResource';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {
