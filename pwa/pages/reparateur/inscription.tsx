@@ -110,7 +110,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   }
 
   useEffect(() => {
-    if (repairerTypes.length == 0) {
+    if (repairerTypes.length === 0) {
       fetchRepairerTypes();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -121,7 +121,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   }
 
   useEffect(() => {
-    if (bikeTypes.length == 0) {
+    if (bikeTypes.length === 0) {
       fetchBikeTypes();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

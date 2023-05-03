@@ -96,7 +96,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   }
 
   useEffect(() => {
-    if (bikeTypes.length == 0) {
+    if (bikeTypes.length === 0) {
       fetchBikeTypes();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

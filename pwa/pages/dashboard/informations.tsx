@@ -53,7 +53,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
   }
 
   useEffect(() => {
-    if (repairerTypes.length == 0) {
+    if (repairerTypes.length === 0) {
       fetchRepairerTypes();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -64,7 +64,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
   }
 
   useEffect(() => {
-    if (bikeTypes.length == 0) {
+    if (bikeTypes.length === 0) {
       fetchBikeTypes();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
