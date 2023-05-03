@@ -60,6 +60,8 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypesFetched = []}) =>
         }
     }, [id, user]);
 
+    //   const handleOpenModal = () => setOpenModal(true);
+
     const handleCloseModal = () => {
         setOpenModal(false);
     };
