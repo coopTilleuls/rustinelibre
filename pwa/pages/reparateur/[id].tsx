@@ -17,13 +17,14 @@ type RepairerPageProps = {
 
 const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
   const router = useRouter();
+  const {id} = router.query;
   const [loading, setLoading] = useState<boolean>(false);
   const [repairer, setRepairer] = useState<Repairer | null>(repairerProps);
 
   // If no repairerProps loaded
   async function fetchRepairer() {
-    const {id} = router.query;
     if (id) {
+      setLoading(true);
       const repairer = await repairerResource.getById(id.toString());
       setLoading(false);
       setRepairer(repairer);
@@ -32,10 +33,9 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
 
   useEffect(() => {
     if (!repairer) {
-      setLoading(true);
       fetchRepairer();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div style={{width: '100vw', overflowX: 'hidden'}}>

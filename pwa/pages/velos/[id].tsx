@@ -22,17 +22,29 @@ import ModalDeleteBike from '@components/bike/ModalDeleteBike';
 import {useAccount} from "@contexts/AuthContext";
 
 type EditBikeProps = {
-  bikeTypes: BikeType[];
+  bikeTypesFetched: BikeType[];
 };
 
-const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypes = []}) => {
+const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypesFetched = []}) => {
 
   const router: NextRouter = useRouter();
   const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/velos/mes-velos'});
   const {id} = router.query;
   const [bike, setBike] = useState<Bike | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [openModal, setOpenModal] = useState<boolean>(false);
+
+  async function fetchBikeTypes() {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  }
+
+  useEffect(() => {
+    if (bikeTypes.length === 0) {
+      fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     async function fetchBike() {
@@ -119,13 +131,12 @@ export const getStaticProps: GetStaticProps = async () => {
     };
   }
 
-  const bikeTypesCollection: Collection<BikeType> =
-    await bikeTypeResource.getAll(false);
-  const bikeTypes: BikeType[] = bikeTypesCollection['hydra:member'];
+  const bikeTypesCollection: Collection<BikeType> = await bikeTypeResource.getAll(false);
+  const bikeTypesFetched: BikeType[] = bikeTypesCollection['hydra:member'];
 
   return {
     props: {
-      bikeTypes,
+      bikeTypesFetched,
     },
     revalidate: 10,
   };
