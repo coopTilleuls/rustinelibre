@@ -12,16 +12,14 @@ import {CircularProgress} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 
 type RepairerPageProps = {
-  // repairerProps: Repairer | null;
+  repairerProps: Repairer | null;
 };
 
-const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
-                                                                 // repairerProps
-}) => {
-    const router = useRouter();
-    const {id} = router.query;
-    const [loading, setLoading] = useState<boolean>(false);
-    const [repairer, setRepairer] = useState<Repairer | null>(null);
+const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
+  const router = useRouter();
+  const {id} = router.query;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [repairer, setRepairer] = useState<Repairer | null>(repairerProps);
 
   // If no repairerProps loaded
   async function fetchRepairer() {
@@ -59,56 +57,56 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
     </div>
   );
 };
-//
-// export const getStaticProps: GetStaticProps = async ({params}) => {
-//   if (!ENTRYPOINT) {
-//     return {
-//       props: {},
-//     };
-//   }
-//
-//   if (!params) {
-//     return {
-//       notFound: true,
-//     };
-//   }
-//
-//   const {id} = params;
-//   if (!id) {
-//     return {
-//       notFound: true,
-//     };
-//   }
-//
-//   const repairerProps: Repairer = await repairerResource.getById(
-//     id.toString(),
-//     false
-//   );
-//   return {
-//     props: {
-//       repairerProps,
-//     },
-//     revalidate: 10,
-//   };
-// };
-//
-// export async function getStaticPaths() {
-//   if (!ENTRYPOINT) {
-//     return {
-//       paths: [],
-//       fallback: true,
-//     };
-//   }
-//
-//   const repairers = await repairerResource.getAll(false, {itemsPerPage: false});
-//   const paths = repairers['hydra:member'].map((repairer) => ({
-//     params: {id: repairer.id.toString()},
-//   }));
-//
-//   return {
-//     paths: paths,
-//     fallback: 'blocking',
-//   };
-// }
+
+export const getStaticProps: GetStaticProps = async ({params}) => {
+  if (!ENTRYPOINT) {
+    return {
+      props: {},
+    };
+  }
+
+  if (!params) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const {id} = params;
+  if (!id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const repairerProps: Repairer = await repairerResource.getById(
+    id.toString(),
+    false
+  );
+  return {
+    props: {
+      repairerProps,
+    },
+    revalidate: 10,
+  };
+};
+
+export async function getStaticPaths() {
+  if (!ENTRYPOINT) {
+    return {
+      paths: [],
+      fallback: true,
+    };
+  }
+
+  const repairers = await repairerResource.getAll(false, {itemsPerPage: false});
+  const paths = repairers['hydra:member'].map((repairer) => ({
+    params: {id: repairer.id.toString()},
+  }));
+
+  return {
+    paths: paths,
+    fallback: 'blocking',
+  };
+}
 
 export default RepairerPage;

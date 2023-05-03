@@ -29,22 +29,30 @@ import WebsiteLayout from '@components/layout/WebsiteLayout';
 import BikeCard from '@components/bike/BikeCard';
 import {Bike} from '@interfaces/Bike';
 import {BikeType} from '@interfaces/BikeType';
-import useBikeTypes from "@hooks/useBikeTypes";
 
 type MyBikesProps = {
-  // bikeTypes: BikeType[];
+  bikeTypesFetched: BikeType[];
 };
 
-const MyBikes: NextPageWithLayout<MyBikesProps> = ({
-                                                     // bikeTypes = []
-}) => {
+const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
 
   const {user, isLoadingFetchUser} = useAccount({});
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [bikes, setBikes] = useState<Bike[]>([]);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const router = useRouter();
-  const bikeTypes = useBikeTypes();
+
+  async function fetchBikeTypes() {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  }
+
+  useEffect(() => {
+    if (bikeTypes.length === 0) {
+      fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // If no repairerProps loaded
   async function fetchBikes() {
@@ -170,22 +178,23 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   if (!ENTRYPOINT) {
-//     return {
-//       props: {},
-//     };
-//   }
-//
-//   const bikeTypesCollection = await bikeTypeResource.getAll(false);
-//   const bikeTypes = bikeTypesCollection['hydra:member'];
-//
-//   return {
-//     props: {
-//       bikeTypes,
-//     },
-//     revalidate: 10,
-//   };
-// };
+export const getStaticProps: GetStaticProps = async () => {
+
+  if (!ENTRYPOINT) {
+    return {
+      props: {},
+    };
+  }
+
+  const bikeTypesCollection = await bikeTypeResource.getAll(false);
+  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
+
+  return {
+    props: {
+      bikeTypesFetched,
+    },
+    revalidate: 10,
+  };
+};
 
 export default MyBikes;
