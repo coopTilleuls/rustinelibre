@@ -63,8 +63,8 @@ jobs:
         run: |
           set -o pipefail
           export JWT_PASSPHRASE=$(openssl rand -base64 32)
-          export JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 | tr -d '\n')
-          export JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout | tr -d '\n')
+          export JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+          export JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)
           helm upgrade --install ${RELEASE_NAME}-api ./helm/api \
             --atomic \
             --debug \
