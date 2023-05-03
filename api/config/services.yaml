@@ -52,3 +52,5 @@ services:
         autoconfigure: false
 
     App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
+
+    App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~

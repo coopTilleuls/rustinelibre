@@ -1,0 +1,4 @@
+App\Entity\AutoDiagnostic:
+  autoDiagnostic_{1..10}:
+    appointment: '@appointment_<current()>'
+    prestation: <autoDiagnosticRandomPrestation()>
