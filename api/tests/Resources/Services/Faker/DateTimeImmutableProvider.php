@@ -14,14 +14,18 @@ final class DateTimeImmutableProvider extends Base
         parent::__construct($generator);
     }
 
-    public static function dateTimeImmutableBetweenGivenPastIntervalAndNow($interval): \DateTimeImmutable
+    public static function dateTimeImmutableFromIntervalInterval($intervalStr): \DateTimeImmutable
     {
         $today = new \DateTimeImmutable();
-        $dateInterval = \DateInterval::createFromDateString($interval);
-        $timeAgo = $today->sub($dateInterval);
-        $diffInSeconds = $today->getTimestamp() - $timeAgo->getTimestamp();
+        $interval = \DateInterval::createFromDateString($intervalStr);
+        if (str_starts_with($intervalStr, '-')) {
+            $futureDateTime = $today->sub($interval);
+        } else {
+            $futureDateTime = $today->add($interval);
+        }
+        $diffInSeconds = abs($today->getTimestamp() - $futureDateTime->getTimestamp());
         $randomSeconds = rand(0, $diffInSeconds);
 
-        return $timeAgo->add(new \DateInterval('PT'.$randomSeconds.'S'));
+        return $futureDateTime->add(new \DateInterval('PT'.$randomSeconds.'S'));
     }
 }
