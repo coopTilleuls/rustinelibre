@@ -26,8 +26,7 @@ class GetTest extends AbstractTestCase
         $repairerRepository = static::getContainer()->get(RepairerRepository::class);
 
         // repairer id with at least 2 customers given
-        $repairerIdArray = $repairerRepository->getRepairerIdWithMultipleCustomerAppointments();
-        $this->repairer = $repairerRepository->find($repairerIdArray[0]);
+        $this->repairer = $repairerRepository->getRepairerIdWithMultipleCustomerAppointments();
     }
 
     public function testRepairerCanGetOwnCustomersCollection(): void
