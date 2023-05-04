@@ -50,13 +50,14 @@ import {
   Box,
 } from '@mui/material';
 import useBikeTypes from "@hooks/useBikeTypes";
+import {Bike} from "@interfaces/Bike";
 
 type SearchRepairerProps = {
-  // bikeTypes: BikeType[];
+  bikeTypesFetched: BikeType[];
 };
 
 const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
-  // bikeTypes = [],
+  bikeTypesFetched = [],
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
@@ -66,7 +67,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const listContainerRef = useRef<HTMLDivElement>(null);
-  const bikeTypes = useBikeTypes();
 
   const {
     cityInput,
@@ -90,11 +90,16 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setShowMap,
   } = useContext(SearchRepairerContext);
 
-  // useEffect(() => { // @todo remove it when SSR OK
-  //   if (bikeTypes.length === 0) {
-  //     bikeTypes = bikesTypesFetched; // eslint-disable-line react-hooks/exhaustive-deps
-  //   }
-  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  async function fetchBikeTypes() {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  }
+
+  useEffect(() => {
+    if (bikeTypes.length === 0) {
+      fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairers = useCallback(async (): Promise<void> => {
     if (!selectedBike || !cityInput) {
@@ -344,22 +349,23 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   if (!ENTRYPOINT) {
-//     return {
-//       props: {},
-//     };
-//   }
-//
-//   const bikeTypesCollection = await bikeTypeResource.getAll(false);
-//   const bikeTypes = bikeTypesCollection['hydra:member'];
-//
-//   return {
-//     props: {
-//       bikeTypes,
-//     },
-//     revalidate: 10,
-//   };
-// };
+export const getStaticProps: GetStaticProps = async () => {
+
+  if (!ENTRYPOINT) {
+    return {
+      props: {},
+    };
+  }
+
+  const bikeTypesCollection = await bikeTypeResource.getAll(false);
+  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
+
+  return {
+    props: {
+      bikeTypesFetched,
+    },
+    revalidate: 10,
+  };
+};
 
 export default SearchRepairer;
