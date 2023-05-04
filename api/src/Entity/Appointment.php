@@ -15,7 +15,6 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Appointments\Validator\AppointmentAccepted;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
@@ -33,11 +32,7 @@ use App\Appointments\Validator\AppointmentAccepted;
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
         ),
         new Put(
-//            security: "is_granted('ACCEPTED_TOGGLE', object)"
-            security: "is_granted('IS_AUTHENTICATED_FULLY')"
-            // denormalizationContext: ['groups' => [self::APPOINTMENT_OWNER]],
-            // security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('APPOINTMENT_EDIT', object)"
-            // security: "is_granted('ROLE_BOSS') or is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user"
         ),
         new Delete(
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
@@ -50,7 +45,6 @@ class Appointment
 {
     public const APPOINTMENT_READ = 'appointment_read';
     public const APPOINTMENT_WRITE = 'appointment_write';
-    // public const APPOINTMENT_OWNER = 'appointment_owner';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -83,6 +77,5 @@ class Appointment
     #[ORM\Column(nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     #[ApiProperty(securityPostDenormalize: "is_granted('ACCEPTED_TOGGLE', object)")]
-//    #[AppointmentAccepted]
     public ?bool $accepted = null;
 }

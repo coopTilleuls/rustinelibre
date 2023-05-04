@@ -33,7 +33,7 @@ class AppointmentAcceptedVoter extends Voter
         /** @var ?User $currentUser */
         $currentUser = $token->getUser();
 
-        if(!$currentUser || $this->requestStack->getCurrentRequest()?->getMethod() !== Request::METHOD_PUT) {
+        if (!$currentUser || Request::METHOD_PUT !== $this->requestStack->getCurrentRequest()?->getMethod()) {
             return false;
         }
 
