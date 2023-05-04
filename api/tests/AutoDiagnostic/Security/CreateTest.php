@@ -6,12 +6,14 @@ namespace App\Tests\AutoDiagnostic\Security;
 
 use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
-use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use App\Tests\Trait\AppointmentTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateTest extends AbstractTestCase
 {
+    use AppointmentTrait;
+
     /** @var Appointment[] */
     protected array $appointments = [];
 
@@ -57,10 +59,12 @@ class CreateTest extends AbstractTestCase
     public function testUserCannotCreateAutoDiagnosticIfNotOwner(): void
     {
         // According to the fixtures, the first appointment is assigned to the user_1 (id:4)
-        $appointment = $this->appointmentRepository->find(1);
-        $user = static::getContainer()->get(UserRepository::class)->find(10);
+        $appointment = $this->getAppointment();
+        if (null === $appointment) {
+            self::fail('Appointment not found');
+        }
 
-        $this->createClientWithUser($user)->request('POST', '/auto_diagnostics', [
+        $this->createClientAuthAsUser()->request('POST', '/auto_diagnostics', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'appointment' => sprintf('/appointments/%d', $appointment->id),
