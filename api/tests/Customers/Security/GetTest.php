@@ -7,6 +7,7 @@ namespace App\Tests\Customers\Security;
 use App\Entity\Appointment;
 use App\Entity\Repairer;
 use App\Repository\AppointmentRepository;
+use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,21 +17,28 @@ class GetTest extends AbstractTestCase
     /** @var Appointment[] */
     protected array $appointments = [];
 
+    private AppointmentRepository $appointmentRepository;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->appointments = static::getContainer()->get(AppointmentRepository::class)->findAll();
+        $this->appointmentRepository = static::getContainer()->get(AppointmentRepository::class);
     }
 
     public function testRepairerCanGetOwnCustomersCollection(): void
     {
-        // appointment with at least 2 customers expected according to fixtures
-        $appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['repairer' => 13]);
-        $response = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/customers')->toArray();
+        // repairer with at least 2 customers expected according to fixtures
+        $repairerIdArray = $this->appointmentRepository->getRepairerWithMultipleCustomerAppointments();
+
+        $repairer = static::getContainer()->get(RepairerRepository::class)->find($repairerIdArray[0]);
+
+        $response = $this->createClientWithUser($repairer->owner)->request('GET', '/customers')->toArray();
 
         $this->assertResponseIsSuccessful();
         $this->assertGreaterThanOrEqual(2, count($response['hydra:member']));
+        $this->assertLessThanOrEqual(count($this->appointments), count($response['hydra:member']));
     }
 
     public function testAdminCanGetCustomersCollection(): void
@@ -42,26 +50,30 @@ class GetTest extends AbstractTestCase
 
     public function testRepairerCanGetCustomersByFirstName(): void
     {
-        // appointment with at least 2 customers for a repairer expected according to fixtures
-        $appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['repairer' => 13]);
-        $response = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/customers')->toArray();
+        // repairer with at least 2 customers expected according to fixtures
+        $repairerIdArray = $this->appointmentRepository->getRepairerWithMultipleCustomerAppointments();
+
+        $repairer = static::getContainer()->get(RepairerRepository::class)->find($repairerIdArray[0]);
+        $response = $this->createClientWithUser($repairer->owner)->request('GET', '/customers')->toArray();
 
         $customerFirstName = $response['hydra:member'][0]['firstName'];
 
-        $response2 = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/customers?firstName='.$customerFirstName)->toArray();
+        $response2 = $this->createClientWithUser($repairer->owner)->request('GET', '/customers?firstName='.$customerFirstName)->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertLessThanOrEqual(count($response['hydra:member']), count($response2['hydra:member']));
     }
 
     public function testRepairerCanGetCustomersByLastName(): void
     {
-        // appointment with at least 2 customers for a repairer expected according to fixtures
-        $appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['repairer' => 13]);
-        $response = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/customers')->toArray();
+        // repairer with at least 2 customers expected according to fixtures
+        $repairerIdArray = $this->appointmentRepository->getRepairerWithMultipleCustomerAppointments();
+
+        $repairer = static::getContainer()->get(RepairerRepository::class)->find($repairerIdArray[0]);
+        $response = $this->createClientWithUser($repairer->owner)->request('GET', '/customers')->toArray();
 
         $customerLastName = $response['hydra:member'][0]['lastName'];
 
-        $response2 = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/customers?lastName='.$customerLastName)->toArray();
+        $response2 = $this->createClientWithUser($repairer->owner)->request('GET', '/customers?lastName='.$customerLastName)->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertLessThanOrEqual(count($response['hydra:member']), count($response2['hydra:member']));
     }

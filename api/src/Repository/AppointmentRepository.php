@@ -81,4 +81,16 @@ class AppointmentRepository extends ServiceEntityRepository
             ->addGroupBy('ac.id')
         ;
     }
+
+    public function getRepairerWithMultipleCustomerAppointments(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('r.id')
+            ->leftJoin('a.repairer', 'r')
+            ->groupBy('r.id')
+            ->having('COUNT(DISTINCT a.customer) > 1')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
 }

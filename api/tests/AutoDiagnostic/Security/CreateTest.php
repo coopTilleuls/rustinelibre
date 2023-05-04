@@ -26,7 +26,8 @@ class CreateTest extends AbstractTestCase
 
     public function testUserCanCreateAutoDiagnostic(): void
     {
-        $appointment = $this->appointmentRepository->getAppointmentWithoutAutoDiagnostic();
+        $customer = $this->appointmentRepository->getAppointmentCustomersIdsQueryBuilder();
+        $appointment = $this->appointmentRepository->getAppointmentWithoutAutoDiagnostic($customer);
 
         $this->createClientWithUser($appointment->customer)->request('POST', '/auto_diagnostics', [
             'headers' => ['Content-Type' => 'application/json'],
