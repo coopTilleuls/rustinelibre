@@ -1,1 +1,1 @@
-export * from './sessionHelper';
+export * from './localHelper';
