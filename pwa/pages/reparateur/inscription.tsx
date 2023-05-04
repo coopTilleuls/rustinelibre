@@ -197,7 +197,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       });
 
       if (newRepairer) {
-        await router.push('/');
+        router.push('/');
       }
     } catch (e) {
       setErrorMessage('Inscription impossible');

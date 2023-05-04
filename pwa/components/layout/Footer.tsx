@@ -37,24 +37,24 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             icon={<HomeIcon />}
             value="/"
           />
-          <BottomNavigationAction
-            component={NextLinkComposed}
-            to={{pathname: '/'}}
-            label={!isMobile && 'Rendez-vous'}
-            icon={<CalendarMonthIcon />}
-          />
+          {/*<BottomNavigationAction*/}
+          {/*  component={NextLinkComposed}*/}
+          {/*  to={{pathname: '/'}}*/}
+          {/*  label={!isMobile && 'Rendez-vous'}*/}
+          {/*  icon={<CalendarMonthIcon />}*/}
+          {/*/>*/}
           <BottomNavigationAction
             component={NextLinkComposed}
             to={{pathname: '/velos/mes-velos'}}
             label={!isMobile && 'Mes vélos'}
             icon={<DirectionsBikeIcon />}
           />
-          <BottomNavigationAction
-            component={NextLinkComposed}
-            to={{pathname: '/'}}
-            label={!isMobile && 'Messages'}
-            icon={<ChatBubbleIcon />}
-          />
+          {/*<BottomNavigationAction*/}
+          {/*  component={NextLinkComposed}*/}
+          {/*  to={{pathname: '/'}}*/}
+          {/*  label={!isMobile && 'Messages'}*/}
+          {/*  icon={<ChatBubbleIcon />}*/}
+          {/*/>*/}
           {user ? (
             <BottomNavigationAction
               component={NextLinkComposed}
