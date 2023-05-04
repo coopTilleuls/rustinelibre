@@ -61,7 +61,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   const [comment, setComment] = useState<string>('');
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
-  const [repairerTypeSelected, setRepairerTypeSelected] = useState<RepairerType | null>(null);
+  const [repairerTypeSelected, setRepairerTypeSelected] = useState<RepairerType | null>(repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null);
   const router = useRouter();
 
   const {
@@ -107,6 +107,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   async function fetchRepairerTypes() {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
     setRepairerTypes(responseRepairerTypes['hydra:member']);
+    setRepairerTypeSelected(responseRepairerTypes['hydra:member'][0])
   }
 
   useEffect(() => {
@@ -197,7 +198,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       });
 
       if (newRepairer) {
-        router.push('/');
+        router.push('/reparateur/demande-recue');
       }
     } catch (e) {
       setErrorMessage('Inscription impossible');
@@ -450,7 +451,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                   {!pendingRegistration ? (
                     'Créer mon compte'
                   ) : (
-                    <CircularProgress size={20} />
+                    <CircularProgress size={20} sx={{color: 'white'}} />
                   )}
                 </Button>
               </Box>
