@@ -108,7 +108,7 @@ const useProviderAuth = () => {
       );
       setToken(token);
       setRefreshToken(refresh_token);
-      await fetchUser();
+      fetchUser();
 
       return !!token;
     } catch (e) {
