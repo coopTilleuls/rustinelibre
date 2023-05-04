@@ -1,30 +1,40 @@
 import React, {useContext, useEffect, useState} from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
-import {RepairerType} from '@interfaces/RepairerType';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
+import {
+  Box,
+  Button,
+  Typography,
+  FormControl,
+  MenuItem,
+  InputLabel,
+} from '@mui/material';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
+import {RepairerType} from '@interfaces/RepairerType';
 
 const sortOptions: Record<string, string> = {
-  availability: 'Par disponibilité',
-  repairersType: 'Par type de réparateur',
-  proximity: 'Par proximité',
+  availability: 'Disponibilité',
+  proximity: 'Proximité',
+  repairersType: 'Réparateur',
 };
 
 interface RepairerSortOptionsProps {
-  handleChangeSort: (newSortSelected: string) => void;
   isMobile: boolean;
 }
 
 const RepairerSortOptions = ({
-  handleChangeSort,
   isMobile,
 }: RepairerSortOptionsProps): JSX.Element => {
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
-  const {repairerTypeSelected, setRepairerTypeSelected, sortChosen} =
-    useContext(SearchRepairerContext);
+  const {
+    city,
+
+    repairerTypeSelected,
+    setRepairerTypeSelected,
+    setOrderBy,
+    sortChosen,
+    setSortChosen,
+  } = useContext(SearchRepairerContext);
 
   useEffect(() => {
     async function fetchRepairerTypes() {
@@ -38,54 +48,76 @@ const RepairerSortOptions = ({
     fetchRepairerTypes();
   }, [setRepairerTypeSelected]);
 
-  const handleSelectSortOption = (event: SelectChangeEvent) => {
-    handleChangeSort(event.target.value);
-  };
-
   const handleSelectRepairerType = (event: SelectChangeEvent) => {
     setRepairerTypeSelected(event.target.value);
   };
 
+  const handleChangeSort = (sortOption: string): void => {
+    setSortChosen(sortOption);
+
+    let value = '';
+    if (sortOption === 'repairersType') {
+      value = repairerTypeSelected;
+    } else if (sortOption === 'availability') {
+      value = 'ASC';
+    } else if (sortOption === 'proximity') {
+      value = `${city?.lat},${city?.lon}`;
+    }
+
+    setOrderBy({
+      key: sortOption,
+      value: value,
+    });
+  };
+
   return (
     <>
-      <FormControl sx={{width: {xs: '100%', md: '50%'}}}>
-        <InputLabel id="sort-results-label" sx={{fontSize: {xs: 14, md: 16}}}>
-          Filtrer vos résultats
-        </InputLabel>
-        <Select
-          labelId="sort-results-label"
-          id="sort-results"
-          label="Filtrer vos résultats"
-          onChange={handleSelectSortOption}
-          value={sortChosen}>
+      <Typography
+        id="sort-results-label"
+        sx={{mt: {xs: 2, md: 0}, fontSize: {xs: 14, md: 16}}}>
+        Filtrer vos résultats par :
+      </Typography>
+      <Box
+        display="flex"
+        flexDirection={{xs: 'column', md: 'row'}}
+        alignItems="center">
+        <Box display="flex" alignItems="center">
           {Object.entries(sortOptions).map(([key, option]) => (
-            <MenuItem key={key} value={key}>
+            <Button
+              type="submit"
+              variant={sortChosen === key ? 'contained' : 'outlined'}
+              sx={{textTransform: 'capitalize', mr: 1, my: 1}}
+              key={key}
+              value={key}
+              onClick={() => handleChangeSort(key)}>
               {option}
-            </MenuItem>
+            </Button>
           ))}
-        </Select>
-      </FormControl>
-      {sortChosen === 'repairersType' && (
-        <FormControl sx={{width: {xs: '100%', md: '50%'}}}>
-          <InputLabel
-            id="repairer-type-label"
-            sx={{fontSize: {xs: 14, md: 16}}}>
-            Choisissez un type de réparateur
-          </InputLabel>
-          <Select
-            labelId="repairer-type-label"
-            id="repairer-type"
-            label="Choisissez un type de réparateur"
-            onChange={handleSelectRepairerType}
-            value={repairerTypeSelected}>
-            {repairerTypes.map((repairerType) => (
-              <MenuItem key={repairerType.id} value={repairerType.id}>
-                {repairerType.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      )}
+        </Box>
+        {sortChosen === 'repairersType' && (
+          <FormControl
+            sx={{mt: {xs: 1, md: 0}, width: {xs: '100%', md: '20%'}}}>
+            <InputLabel
+              id="repairer-type-label"
+              sx={{fontSize: {xs: 14, md: 16}}}>
+              Choisissez un type de réparateur
+            </InputLabel>
+            <Select
+              size="small"
+              labelId="repairer-type-label"
+              id="repairer-type"
+              label="Choisissez un type de réparateur"
+              onChange={handleSelectRepairerType}
+              value={repairerTypeSelected}>
+              {repairerTypes.map((repairerType) => (
+                <MenuItem key={repairerType.id} value={repairerType.id}>
+                  {repairerType.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
+      </Box>
     </>
   );
 };

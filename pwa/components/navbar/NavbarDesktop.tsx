@@ -24,13 +24,12 @@ const NavbarDesktop = ({
   logOut,
 }: NavbarDesktopProps): JSX.Element => {
   return (
-    <Container
-      sx={{
-        display: {xs: 'none', md: 'flex'},
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        my: 2,
-      }}>
+    <Box
+      width="100%"
+      display={{xs: 'none', md: 'flex'}}
+      justifyContent="space-between"
+      alignItems="center"
+      my={2}>
       <Link href="/" style={{textDecoration: 'none'}}>
         <Box
           sx={{
@@ -38,14 +37,13 @@ const NavbarDesktop = ({
             alignItems: 'center',
             color: 'white',
           }}>
-          <DirectionsBikeIcon sx={{mr: 1}} fontSize="large" />
           <Typography
             sx={{
               mr: 2,
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: 900,
             }}>
-            Bikelib
+            La Rustine Libre
           </Typography>
         </Box>
       </Link>
@@ -121,7 +119,7 @@ const NavbarDesktop = ({
           </Button>
         )}
       </Box>
-    </Container>
+    </Box>
   );
 };
 

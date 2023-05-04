@@ -8,7 +8,7 @@ import {
 import Router from 'next/router';
 import {userResource} from '@resources/userResource';
 import {authenticationResource} from '@resources/authenticationResource';
-import { User } from 'interfaces/User';
+import {User} from 'interfaces/User';
 import {
   getRefreshToken,
   getToken,
@@ -25,7 +25,7 @@ type AuthenticationValues = {
 
 interface AuthContextType {
   user: User | null;
-  login: (data: AuthenticationValues) => Promise<boolean|null>;
+  login: (data: AuthenticationValues) => Promise<boolean | null>;
   logout: () => void;
   isLoadingFetchUser?: boolean;
   fetchUser: () => void;
@@ -50,9 +50,9 @@ export const AuthProvider = ({children}: PropsWithChildren): JSX.Element => {
 };
 
 export const useAccount = ({
-                             redirectIfFound,
-                             redirectIfNotFound,
-                           }: {
+  redirectIfFound,
+  redirectIfNotFound,
+}: {
   redirectIfFound?: string;
   redirectIfNotFound?: string;
 }) => {

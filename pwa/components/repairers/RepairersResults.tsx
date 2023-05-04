@@ -1,15 +1,14 @@
-import {Repairer} from '@interfaces/Repairer';
 import React, {useContext, useState} from 'react';
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
-import {RepairerCard} from 'components/repairers/RepairerCard';
+import {LeafletMouseEvent} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import {LeafletMouseEvent} from 'leaflet';
-import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
+import {RepairerCard} from 'components/repairers/RepairerCard';
 import Box from '@mui/material/Box';
-import {Paper, Stack} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
+import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
+import {Repairer} from '@interfaces/Repairer';
 
 export const RepairersResults = (): JSX.Element => {
   const {showMap, setSelectedRepairer, repairers, setRepairers} = useContext(
@@ -38,53 +37,58 @@ export const RepairersResults = (): JSX.Element => {
   };
 
   return (
-    <Stack spacing={4} sx={{display: 'flex', flexDirection: 'column'}}>
+    <Box display="flex" sx={{mb: 8}}>
+      {!showMap && (
+        <Box
+          sx={{
+            overflow: 'auto',
+            pl: 1,
+            pr: 2,
+            width: {xs: '100%', md: '50%'},
+            maxHeight: '100vh',
+          }}>
+          <Grid2 container spacing={{xs: 2, md: 4}}>
+            {repairers.map((repairer) => {
+              return (
+                <Grid2 key={repairer.id} xs={12}>
+                  <RepairerCard repairer={repairer} />
+                </Grid2>
+              );
+            })}
+          </Grid2>
+        </Box>
+      )}
       <Box
         sx={{
-          width: '100%',
           display: {xs: showMap ? 'block' : 'none', lg: 'block'},
+          width: {xs: '100%', md: '50%'},
         }}>
-        <Paper elevation={4}>
-          <MapContainer
-            center={mapCenter}
-            zoom={13}
-            scrollWheelZoom={false}
-            style={{height: 300, width: '100%'}}>
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            {repairers.map((repairer) => (
-              <Marker
-                key={repairer.id}
-                position={[
-                  Number(repairer.latitude),
-                  Number(repairer.longitude),
-                ]}
-                eventHandlers={{
-                  mouseover: (event) => event.target.openPopup(),
-                  click: (event) => {handleClipMapPin(event, repairer)}
-                }}>
-                <Popup>{repairer.name}</Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-        </Paper>
-      </Box>
-      {!showMap && (
-        <Grid2
-          container
-          spacing={2}
-          sx={{
-            width: '100%',
+        <MapContainer
+          center={mapCenter}
+          zoom={13}
+          scrollWheelZoom={false}
+          style={{
+            zIndex: 1,
+            height: 700,
+            borderRadius: 5,
           }}>
-          {repairers.map((repairer) => {
-            return (
-              <Grid2 key={repairer.id} xs={12} md={6} lg={4}>
-                <RepairerCard repairer={repairer} />
-              </Grid2>
-            );
-          })}
-        </Grid2>
-      )}
-    </Stack>
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          {repairers.map((repairer) => (
+            <Marker
+              key={repairer.id}
+              position={[Number(repairer.latitude), Number(repairer.longitude)]}
+              eventHandlers={{
+                mouseover: (event) => event.target.openPopup(),
+                click: (event) => {
+                  handleClipMapPin(event, repairer);
+                },
+              }}>
+              <Popup>{repairer.name}</Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </Box>
+    </Box>
   );
 };
 
