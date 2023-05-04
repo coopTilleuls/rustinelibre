@@ -30,6 +30,7 @@ const Login: NextPageWithLayout = ({}) => {
     event.preventDefault();
     setErrorMessage(null);
     setPendingLogin(true);
+
     const connectionSuccess = await login({
       email: email,
       password: password,
@@ -39,7 +40,8 @@ const Login: NextPageWithLayout = ({}) => {
       const next = Array.isArray(router.query.next)
           ? router.query.next.join('')
           : router.query.next || '/';
-      router.push(next);
+
+      router.push(next)
     } else {
       setErrorMessage('Ces identifiants de connexion ne sont pas valides');
     }
