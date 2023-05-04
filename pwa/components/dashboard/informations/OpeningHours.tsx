@@ -16,7 +16,7 @@ export const OpeningHours = ({repairer}: OpeningHoursProps): JSX.Element => {
 
     useEffect(() => {
         if (repairer) {
-            setOpeningHours(repairer.openingHours ? repairer.openingHours : '');
+            setOpeningHours(repairer.openingHours ?? '');
         }
     }, [repairer, setOpeningHours]);
 
