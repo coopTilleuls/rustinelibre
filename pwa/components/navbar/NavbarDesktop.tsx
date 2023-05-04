@@ -94,12 +94,13 @@ const NavbarDesktop = ({
                   backgroundColor: 'rgba(255, 255, 255, 0.1)',
                 },
               }}>
-              Tableau de bord
+              Accès réparateur
             </Button>
           </Link>
         )}
         {user && (
           <Button
+            variant="outlined"
             key="logout"
             onClick={logOut}
             sx={{
@@ -111,8 +112,9 @@ const NavbarDesktop = ({
               fontSize: 16,
               fontWeight: 600,
               borderRadius: 20,
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
               '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'rgba(255, 255, 255, 0.4)',
               },
             }}>
             Déconnexion
