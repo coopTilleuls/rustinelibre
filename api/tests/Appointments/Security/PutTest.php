@@ -98,7 +98,7 @@ class PutTest extends AbstractTestCase
         );
 
         $appointmentUpdated = $this->appointmentRepository->find($this->appointment->id);
-        self::assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(403);
         self::assertSame($accepted, $appointmentUpdated->accepted);
     }
 }
