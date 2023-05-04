@@ -52,4 +52,17 @@ class RepairerRepository extends ServiceEntityRepository
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
+
+    public function getRepairerIdWithMultipleCustomerAppointments(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->from('App\Entity\Appointment', 'a')
+            ->leftJoin('a.repairer', 'ar')
+            ->select('ar.id')
+            ->groupBy('ar.id')
+            ->having('COUNT(DISTINCT a.customer) > 1')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
 }
