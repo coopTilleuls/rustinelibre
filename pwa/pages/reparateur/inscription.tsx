@@ -54,14 +54,18 @@ type RepairerRegistrationProps = {
 };
 
 const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
-     bikeTypesFetched = [],
-     repairerTypesFetched = [],
+  bikeTypesFetched = [],
+  repairerTypesFetched = [],
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [comment, setComment] = useState<string>('');
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
-  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
-  const [repairerTypeSelected, setRepairerTypeSelected] = useState<RepairerType | null>(repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null);
+  const [repairerTypes, setRepairerTypes] =
+    useState<RepairerType[]>(repairerTypesFetched);
+  const [repairerTypeSelected, setRepairerTypeSelected] =
+    useState<RepairerType | null>(
+      repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null
+    );
   const router = useRouter();
 
   const {
@@ -107,7 +111,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   async function fetchRepairerTypes() {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
     setRepairerTypes(responseRepairerTypes['hydra:member']);
-    setRepairerTypeSelected(responseRepairerTypes['hydra:member'][0])
+    setRepairerTypeSelected(responseRepairerTypes['hydra:member'][0]);
   }
 
   useEffect(() => {
