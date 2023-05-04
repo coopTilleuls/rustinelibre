@@ -47,27 +47,26 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
 import {searchCity} from '@utils/apiCity';
-import useBikeTypes from "@hooks/useBikeTypes";
-import useRepairerTypes from "@hooks/useRepairerTypes";
 
 type RepairerRegistrationProps = {
-  // bikeTypes: BikeType[];
-  // repairerTypes: RepairerType[];
+  bikeTypesFetched: BikeType[];
+  repairerTypesFetched: RepairerType[];
 };
 
 const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
-  // bikeTypes = [],
-  // repairerTypes = [],
+  bikeTypesFetched = [],
+  repairerTypesFetched = [],
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [comment, setComment] = useState<string>('');
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
-  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
-  const [repairerTypeSelected, setRepairerTypeSelected] = useState<RepairerType | null>(repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null);
+  const [repairerTypes, setRepairerTypes] =
+    useState<RepairerType[]>(repairerTypesFetched);
+  const [repairerTypeSelected, setRepairerTypeSelected] =
+    useState<RepairerType | null>(
+      repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null
+    );
   const router = useRouter();
-
-  const bikeTypes = useBikeTypes(); // @todo remove when SSR OK
-  const repairerTypes = useRepairerTypes(); // @todo remove when SSR OK
 
   const {
     firstName,
@@ -112,7 +111,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   async function fetchRepairerTypes() {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
     setRepairerTypes(responseRepairerTypes['hydra:member']);
-    setRepairerTypeSelected(responseRepairerTypes['hydra:member'][0])
+    setRepairerTypeSelected(responseRepairerTypes['hydra:member'][0]);
   }
 
   useEffect(() => {
@@ -473,26 +472,26 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   if (!ENTRYPOINT) {
-//     return {
-//       props: {},
-//     };
-//   }
-//
-//   const bikeTypesCollection = await bikeTypeResource.getAll(false);
-//   const bikeTypes = bikeTypesCollection['hydra:member'];
-//
-//   const repairerTypesCollection = await repairerTypeResource.getAll(false);
-//   const repairerTypes = repairerTypesCollection['hydra:member'];
-//
-//   return {
-//     props: {
-//       bikeTypes,
-//       repairerTypes,
-//     },
-//     revalidate: 10,
-//   };
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  if (!ENTRYPOINT) {
+    return {
+      props: {},
+    };
+  }
+
+  const bikeTypesCollection = await bikeTypeResource.getAll(false);
+  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
+
+  const repairerTypesCollection = await repairerTypeResource.getAll(false);
+  const repairerTypesFetched = repairerTypesCollection['hydra:member'];
+
+  return {
+    props: {
+      bikeTypesFetched,
+      repairerTypesFetched,
+    },
+    revalidate: 10,
+  };
+};
 
 export default RepairerRegistration;

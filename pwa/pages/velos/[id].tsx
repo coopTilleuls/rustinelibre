@@ -19,16 +19,14 @@ import {BikeType} from '@interfaces/BikeType';
 import {Collection} from '@interfaces/Resource';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModalDeleteBike from '@components/bike/ModalDeleteBike';
-import useBikeTypes from "@hooks/useBikeTypes";
-import useRepairerTypes from "@hooks/useRepairerTypes";
+import {useAccount} from "@contexts/AuthContext";
 
 type EditBikeProps = {
-  // bikeTypes: BikeType[];
+  bikeTypesFetched: BikeType[];
 };
 
-const EditBike: NextPageWithLayout<EditBikeProps> = ({
-                                                       // bikeTypes = []
-}) => {
+const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypesFetched = []}) => {
+
   const router: NextRouter = useRouter();
   const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/velos/mes-velos'});
   const {id} = router.query;
@@ -37,8 +35,17 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const bikeTypes = useBikeTypes(); // @todo remove when SSR OK
-  
+  async function fetchBikeTypes() {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  }
+
+  useEffect(() => {
+    if (bikeTypes.length === 0) {
+      fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     async function fetchBike() {
       if (typeof id === 'string' && id.length > 0) {
@@ -115,30 +122,30 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
   );
 };
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   if (!ENTRYPOINT) {
-//     return {
-//       props: {},
-//     };
-//   }
-//
-//   const bikeTypesCollection: Collection<BikeType> =
-//     await bikeTypeResource.getAll(false);
-//   const bikeTypes: BikeType[] = bikeTypesCollection['hydra:member'];
-//
-//   return {
-//     props: {
-//       bikeTypes,
-//     },
-//     revalidate: 10,
-//   };
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  if (!ENTRYPOINT) {
+    return {
+      props: {},
+      revalidate: 0
+    };
+  }
 
-// export async function getStaticPaths() {
-//   return {
-//     paths: [],
-//     fallback: true,
-//   };
-// }
+  const bikeTypesCollection: Collection<BikeType> = await bikeTypeResource.getAll(false);
+  const bikeTypesFetched: BikeType[] = bikeTypesCollection['hydra:member'];
+
+  return {
+    props: {
+      bikeTypesFetched,
+    },
+    revalidate: 10,
+  };
+};
+
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: true,
+  };
+}
 
 export default EditBike;
