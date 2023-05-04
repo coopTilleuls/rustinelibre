@@ -26,6 +26,7 @@ import {RequestBody} from '@interfaces/Resource';
 import {RepairerType} from '@interfaces/RepairerType';
 import {Repairer} from '@interfaces/Repairer';
 import {BikeType} from '@interfaces/BikeType';
+import OpeningHours from "@components/dashboard/informations/OpeningHours";
 
 type RepairerInformationsProps = {
   bikeTypesFetched: BikeType[];
@@ -214,13 +215,14 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
         <title>Informations</title>
       </Head>
       <DashboardLayout>
-        <Box component="main" maxWidth={700}>
+        <Box component="main" maxWidth={900}>
           <form onSubmit={handleSubmit}>
             <Tabs value={tabValue} onChange={handleChangeTab}>
               <Tab label="Coordonnées" />
               <Tab label="Description" />
               <Tab label="Photos" />
               <Tab label="Horaires" />
+              <Tab label="Informations complémentaires" />
             </Tabs>
 
             <Box sx={{marginTop: 3}}>
@@ -244,6 +246,9 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
                 <DashboardInfosPhotos repairer={repairer} />
               )}
               {!loading && tabValue === 3 && (
+                <OpeningHours repairer={repairer} />
+              )}
+              {!loading && tabValue === 4 && (
                 <OptionalInfos repairer={repairer} />
               )}
             </Box>
@@ -254,7 +259,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
                   {!pendingRegistration ? (
                     'Enregistrer mes informations'
                   ) : (
-                    <CircularProgress size={20} />
+                    <CircularProgress size={20} sx={{color: 'white'}} />
                   )}
                 </Button>
                 {errorMessage && (
