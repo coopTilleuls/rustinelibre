@@ -43,11 +43,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[GetCollection(
     uriTemplate: '/customers',
-    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
-    provider: CustomersProvider::class,
     openapi: new Model\Operation(
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
+    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
+    provider: CustomersProvider::class,
 )]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
