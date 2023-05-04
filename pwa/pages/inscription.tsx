@@ -91,7 +91,7 @@ const Registration: NextPageWithLayout = ({}) => {
                 {!pendingRegistration ? (
                   'Créer mon compte'
                 ) : (
-                  <CircularProgress size={20} />
+                  <CircularProgress size={20} sx={{color: 'white'}} />
                 )}
               </Button>
               {errorMessage && (
