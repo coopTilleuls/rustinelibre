@@ -16,7 +16,7 @@ const RepairerInscriptionConfirm: NextPageWithLayout = ({}) => {
     return (
         <>
             <Head>
-                <title>Demande d'inscription reçue</title>
+                <title>Demande d&apos;inscription reçue</title>
             </Head>
             <WebsiteLayout />
             <Container sx={{width: {xs: '100%', md: '50%'}}}>
@@ -24,12 +24,12 @@ const RepairerInscriptionConfirm: NextPageWithLayout = ({}) => {
                     elevation={4}
                     sx={{maxWidth: 400, p: 4, mt: 4, mb: {xs: 10, md: 12}, mx: 'auto'}}>
                     <Box>
-                        Votre demande d'inscription a bien été enregistrée. Elle est désormais en attente de validation
+                        Votre demande d&apos;inscription a bien été enregistrée. Elle est désormais en attente de validation
                         et sera rapidement traitée.
 
                         <Link href="/">
                             <Button variant="outlined" sx={{marginTop: '30px'}}>
-                                Retour à l'accueil
+                                Retour à l&apos;accueil
                             </Button>
                         </Link>
                     </Box>
