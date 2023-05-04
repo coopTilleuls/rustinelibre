@@ -171,7 +171,7 @@ const ModalAddBike = ({
 
           <Button variant="outlined" component="label" sx={{mt: 2, mb: 2}}>
             {loadingPhoto ? (
-              <CircularProgress />
+              <CircularProgress sx={{color: 'white'}} />
             ) : photo ? (
               'Changer de photo'
             ) : (
