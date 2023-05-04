@@ -82,7 +82,7 @@ class AppointmentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getRepairerWithMultipleCustomerAppointments(): array
+    public function getRepairerIdWithMultipleCustomerAppointments(): array
     {
         return $this->createQueryBuilder('a')
             ->select('r.id')
