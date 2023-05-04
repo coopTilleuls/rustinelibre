@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Appointments\Validator\AppointmentAccepted;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
@@ -32,6 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
         ),
         new Put(
+//            security: "is_granted('ACCEPTED_TOGGLE', object)"
             security: "is_granted('IS_AUTHENTICATED_FULLY')"
             // denormalizationContext: ['groups' => [self::APPOINTMENT_OWNER]],
             // security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('APPOINTMENT_EDIT', object)"
@@ -80,6 +82,7 @@ class Appointment
 
     #[ORM\Column(nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    #[ApiProperty(security: "is_granted('ACCEPTED_TOGGLE', object)")]
+    #[ApiProperty(securityPostDenormalize: "is_granted('ACCEPTED_TOGGLE', object)")]
+//    #[AppointmentAccepted]
     public ?bool $accepted = null;
 }

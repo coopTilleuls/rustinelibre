@@ -64,6 +64,25 @@ class PutTest extends AbstractTestCase
         self::assertSame(!$accepted, $appointmentUpdated->accepted);
     }
 
+    public function testToggleAcceptedWithCustomer(): void
+    {
+        $accepted = $this->appointment->accepted;
+
+        $this->createClientWithUser($this->appointment->customer)->request(
+            'PUT',
+            sprintf('/appointments/%d', $this->appointment->id),
+            [
+                'json' => [
+                    'accepted' => !$accepted,
+                ],
+            ]
+        );
+
+        $appointmentUpdated = $this->appointmentRepository->find($this->appointment->id);
+        self::assertResponseStatusCodeSame(200);
+        self::assertSame($accepted, $appointmentUpdated->accepted);
+    }
+
     public function testToggleAcceptedWithOtherUser(): void
     {
         $accepted = $this->appointment->accepted;
@@ -79,7 +98,7 @@ class PutTest extends AbstractTestCase
         );
 
         $appointmentUpdated = $this->appointmentRepository->find($this->appointment->id);
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(200);
         self::assertSame($accepted, $appointmentUpdated->accepted);
     }
 }
