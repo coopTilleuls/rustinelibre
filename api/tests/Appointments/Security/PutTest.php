@@ -35,6 +35,8 @@ class PutTest extends AbstractTestCase
             sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
+                    'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                    'repairer' => sprintf('/repairers/%d', $this->appointment->repairer->id),
                     'accepted' => !$accepted,
                 ],
             ]
@@ -54,6 +56,8 @@ class PutTest extends AbstractTestCase
             sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
+                    'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                    'repairer' => sprintf('/repairers/%d', $this->appointment->repairer->id),
                     'accepted' => !$accepted,
                 ],
             ]
@@ -73,6 +77,8 @@ class PutTest extends AbstractTestCase
             sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
+                    'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                    'repairer' => sprintf('/repairers/%d', $this->appointment->repairer->id),
                     'accepted' => !$accepted,
                 ],
             ]
@@ -92,6 +98,8 @@ class PutTest extends AbstractTestCase
             sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
+                    'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                    'repairer' => sprintf('/repairers/%d', $this->appointment->repairer->id),
                     'accepted' => !$accepted,
                 ],
             ]
