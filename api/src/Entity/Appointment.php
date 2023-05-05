@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -41,6 +44,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
 )]
+#[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
 class Appointment
 {
     public const APPOINTMENT_READ = 'appointment_read';

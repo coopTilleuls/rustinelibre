@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -29,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::USER_READ]],
     denormalizationContext: ['groups' => [self::USER_WRITE]]
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
+#[Get(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object))")]
 #[Post(security: "is_granted('ROLE_ADMIN') or !user")]
 #[Put(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
 #[Get(
@@ -40,8 +41,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)",
     provider: CurrentUserProvider::class,
 )]
-#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
+#[GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
 #[GetCollection(
+    name: 'Get customers list',
     uriTemplate: '/customers',
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
     provider: CustomersProvider::class,
@@ -53,10 +55,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiFilter(SearchFilter::class, properties: ['firstName' => 'ipartial', 'lastName' => 'ipartial'])]
+#[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private const EMAIL_MAX_LENGTH = 180;
     public const USER_READ = 'user_read';
+    public const CUSTOMER_READ = 'customer_read';
     public const USER_WRITE = 'user_write';
     public const PASSWORD_REGEX = '/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*#?.+=;\\\:\\/,_"&])[A-Za-z\d@$!%*#?.+=;,\\\:\\/_"&]{12,}$/i';
 
@@ -64,14 +68,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
-    #[Groups([self::USER_READ])]
+    #[Groups([self::USER_READ, self::CUSTOMER_READ])]
     public int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ])]
     public ?string $email = null;
 
     #[ORM\Column]
@@ -100,7 +104,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
     public ?string $lastName = null;
 
     #[Assert\NotBlank]
@@ -109,7 +113,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
     public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
