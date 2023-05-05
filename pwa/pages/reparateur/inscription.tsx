@@ -9,7 +9,6 @@ import React, {
 } from 'react';
 import {GetStaticProps} from 'next';
 import Head from 'next/head';
-import {useRouter} from 'next/router';
 import {
   Avatar,
   Box,
@@ -47,6 +46,7 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
 import {searchCity} from '@utils/apiCity';
+import Link from "next/link";
 
 type RepairerRegistrationProps = {
   bikeTypesFetched: BikeType[];
@@ -59,6 +59,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [comment, setComment] = useState<string>('');
+  const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [repairerTypes, setRepairerTypes] =
     useState<RepairerType[]>(repairerTypesFetched);
@@ -66,7 +67,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     useState<RepairerType | null>(
       repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null
     );
-  const router = useRouter();
 
   const {
     firstName,
@@ -132,7 +132,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (cityInput === '') return;
+    if (cityInput === '' || cityInput.length < 3) return;
     if (timeoutId) clearTimeout(timeoutId);
     const newTimeoutId = window.setTimeout(async () => {
       const citiesResponse = await searchCity(cityInput, useNominatim);
@@ -164,6 +164,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
+
     if (
       !firstName ||
       !lastName ||
@@ -180,14 +181,12 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setErrorMessage(null);
     setPendingRegistration(true);
 
-    // Create a new repairer and an user
-    let newRepairer;
     try {
       const selectedBikeTypeIRIs: string[] = bikeTypes
-        .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
-        .map((bikeType) => bikeType['@id']);
+          .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
+          .map((bikeType) => bikeType['@id']);
 
-      newRepairer = await repairerResource.postRepairerAndUser({
+      await repairerResource.postRepairerAndUser({
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -200,15 +199,13 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
         comment: comment,
       });
+      setPendingRegistration(false);
 
-      if (newRepairer) {
-        router.push('/reparateur/demande-recue');
-      }
     } catch (e) {
       setErrorMessage('Inscription impossible');
+    } finally {
+      setInscriptionSuccess(true);
     }
-
-    setPendingRegistration(false);
   };
 
   const handleChangeFirstName = (
@@ -280,7 +277,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       </Head>
       <WebsiteLayout />
       <Container sx={{width: {xs: '100%', md: '50%'}}}>
-        <Paper
+        {!inscriptionSuccess && <Paper
           elevation={4}
           sx={{maxWidth: 400, p: 4, mt: 4, mb: {xs: 10, md: 12}, mx: 'auto'}}>
           <Box
@@ -466,7 +463,22 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
               )}
             </Box>
           </Box>
-        </Paper>
+        </Paper>}
+        {inscriptionSuccess &&
+          <Paper
+              elevation={4}
+              sx={{maxWidth: 400, p: 4, mt: 4, mb: {xs: 10, md: 12}, mx: 'auto'}}>
+            <Box>
+              Votre demande d&apos;inscription a bien été enregistrée. Elle est désormais en attente de validation
+              et sera rapidement traitée.
+
+              <Link href="/">
+                <Button variant="outlined" sx={{marginTop: '30px'}}>
+                  Retour à l&apos;accueil
+                </Button>
+              </Link>
+            </Box>
+          </Paper>}
       </Container>
     </>
   );
