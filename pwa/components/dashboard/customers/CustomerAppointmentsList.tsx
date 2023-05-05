@@ -9,7 +9,6 @@ import {
     TableContainer,
     CircularProgress,
 } from '@mui/material';
-import Link from "next/link";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
@@ -21,6 +20,7 @@ import {formatDate} from 'helpers/dateHelper';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import CustomerAppointmentModal from "@components/dashboard/customers/CustomerAppointmentModal";
 
 interface CustomerAppointmentsListProps {
     customer: Customer
@@ -29,8 +29,18 @@ interface CustomerAppointmentsListProps {
 export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListProps): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
+    const [appointmentSelected, setAppointmentSelected] = useState<Appointment|null>(null);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [openModal, setOpenModal] = React.useState(false);
+
+    const handleOpen = () => setOpenModal(true);
+    const handleClose = () => setOpenModal(false);
+
+    const handleShow = (appointment: Appointment) => {
+        setAppointmentSelected(appointment);
+        handleOpen();
+    }
 
     const fetchAppointments = async () => {
         setLoadingList(true);
@@ -48,7 +58,7 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
 
     useEffect(() => {
         fetchAppointments();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect((): void => {
         fetchAppointments();
@@ -102,16 +112,13 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
                                     align="left"
                                     sx={{cursor: 'pointer'}}
                                 >
-                                    {/*<Link href={`/dashboard/clients/${customer.id}`}>*/}
-                                        <RemoveRedEyeIcon color="info" />
-                                    {/*</Link>*/}
+                                    <RemoveRedEyeIcon onClick={() => handleShow(appointment)} color="info" />
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-
             {
                 totalPages > 1 && <Stack spacing={2} sx={{marginTop: '20px'}}>
                     <Pagination
@@ -125,6 +132,8 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
                     />
                 </Stack>
             }
+
+            <CustomerAppointmentModal appointment={appointmentSelected} openModal={openModal} handleCloseModal={handleClose} />
         </Box>
     );
 };

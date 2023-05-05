@@ -38,7 +38,7 @@ export const CustomersList = (): JSX.Element => {
 
     useEffect(() => {
         fetchCustomers();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect((): void => {
         fetchCustomers();

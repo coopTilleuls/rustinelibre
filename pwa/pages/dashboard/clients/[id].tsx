@@ -8,6 +8,7 @@ import {CircularProgress} from '@mui/material';
 import CustomerDetail from "@components/dashboard/customers/CustomerDetail";
 import {customerResource} from "@resources/customerResource";
 import {Customer} from "@interfaces/Customer";
+import {userResource} from "@resources/userResource";
 
 const CustomerShow: NextPageWithLayout = () => {
     const router = useRouter();
@@ -19,7 +20,7 @@ const CustomerShow: NextPageWithLayout = () => {
         async function fetchCustomer() {
             if (typeof id === 'string' && id.length > 0) {
                 setLoading(true);
-                const customerFetch: Customer = await customerResource.getById(id);
+                const customerFetch: Customer = await userResource.getById(id);
                 setCustomer(customerFetch);
                 setLoading(false);
             }

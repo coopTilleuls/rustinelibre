@@ -12,12 +12,6 @@ const Customers = () => {
       </Head>
         <DashboardLayout>
             <Box component="main">
-                {/*<Link href={'/dashboard/employes/ajouter'}>*/}
-                {/*    <Button variant="contained" sx={{marginBottom: 2}}>*/}
-                {/*        <AddIcon />*/}
-                {/*        Ajouter un réparateur*/}
-                {/*    </Button>*/}
-                {/*</Link>*/}
                 <CustomersList />
             </Box>
         </DashboardLayout>

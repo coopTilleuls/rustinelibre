@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::USER_READ]],
     denormalizationContext: ['groups' => [self::USER_WRITE]]
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
+#[Get(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object))")]
 #[Post(security: "is_granted('ROLE_ADMIN') or !user")]
 #[Put(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
 #[Get(
@@ -43,20 +43,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")] //@todo add voter
 #[GetCollection(
+    name: 'Get customers list',
     uriTemplate: '/customers',
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
     provider: CustomersProvider::class,
     openapi: new Model\Operation(
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
-)]
-#[Get(
-    uriTemplate: '/customers/{id}',
-    openapi: new Model\Operation(
-        summary: 'Retrieves an user which is customer',
-        description: 'Retrieves an user which is customer'),
-    security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object))",
-    normalizationContext: ['groups' => [self::CUSTOMER_READ]]
 )]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -111,7 +104,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
     public ?string $lastName = null;
 
     #[Assert\NotBlank]
@@ -120,7 +113,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
     public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
