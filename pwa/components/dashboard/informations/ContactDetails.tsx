@@ -41,7 +41,7 @@ export const ContactDetails = ({
   }, [repairer, setName, setStreet, setCityInput]);
 
   useEffect(() => {
-    if (cityInput === '') return;
+    if (cityInput === '' || cityInput.length < 3) return;
     if (timeoutId) clearTimeout(timeoutId);
     const newTimeoutId = window.setTimeout(async () => {
       const citiesResponse = await searchCity(cityInput);

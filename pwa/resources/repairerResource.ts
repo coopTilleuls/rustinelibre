@@ -20,7 +20,7 @@ class RepairerResource extends AbstractResource<Repairer> {
         return response.json();
     }
 
-    async postRepairerAndUser(body: RequestBody = {}, headers?: RequestHeaders): Promise<any> {
+    async postRepairerAndUser(body: RequestBody = {}, headers?: RequestHeaders): Promise<Repairer> {
         const url = this.getUrl('/create_user_and_repairer');
 
         const doFetch = async () => {
