@@ -1,5 +1,3 @@
-import {Appointment} from '@interfaces/Appointment';
-
 export interface Customer {
     '@id': string;
     '@type': string;
