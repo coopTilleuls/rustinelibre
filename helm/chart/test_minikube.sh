@@ -22,19 +22,35 @@ for image in bikelib-php:$php_sha bikelib-caddy:$caddy_sha bikelib-pwa:$pwa_sha;
   minikube image ls | grep $image || minikube image load $image
 done
 
+URL=bikelib.chart-example.local
+RELEASE_NAME=test
+JWT_PASSPHRASE=$(openssl rand -base64 32)
+JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)
+
 # install or update deployment on minikube
-helm upgrade --install demo ./helm/chart \
+helm upgrade --install ${RELEASE_NAME} ./helm/chart \
   --kube-context minikube \
   --namespace bikelib --create-namespace \
   --atomic \
   --wait \
   --debug \
-  -f ./helm/chart/values-minikube.yml \
-  --set   php.image.tag=$php_sha \
-  --set caddy.image.tag=$caddy_sha \
-  --set pwa.image.tag=$pwa_sha \
-  --set dailyCronjobDbReset.enabled=true \
-  --set=php.corsAllowOrigin="https?://.*?\.bikelib.chart-example\.local$" \
+  --set=php.image.tag=${php_sha} \
+  --set=caddy.image.tag=${caddy_sha} \
+  --set=pwa.image.tag=${pwa_sha} \
+  --set=ingress.hosts[0].host=${URL} \
+  --set=ingress.tls[0].secretName=${RELEASE_NAME}-api-tls \
+  --set=ingress.tls[0].hosts[0]=${URL} \
+  --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
+  --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
+  --set=php.corsAllowOrigin="https?://${URL}$" \
+  --set=php.trustedHosts="^127\\.0\\.0\\.1|localhost|${URL}$" \
+  --set=php.jwt.secretKey="$JWT_SECRET_KEY" \
+  --set=php.jwt.publicKey="$JWT_PUBLIC_KEY" \
+  --set=php.jwt.passphrase="$JWT_PASSPHRASE" \
+  --set=php.host=${URL} \
+  -f ./helm/chart/values.yml \
+  -f ./helm/chart/values-minikube.yml
 
 MINIKUBE_IP=$(minikube ip)
 if ! grep -E "^$MINIKUBE_IP\s+(.+\s+)?bikelib.chart-example.local" /etc/hosts; then

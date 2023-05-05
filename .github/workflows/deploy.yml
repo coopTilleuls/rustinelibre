@@ -58,7 +58,9 @@ jobs:
               fi
               URL=${RELEASE_NAME}.nonprod.${{ secrets.domain }}
           fi
-          REGISTRY_IMAGE_URL=ghcr.io/cooptilleuls \
+          export JWT_PASSPHRASE=$(openssl rand -base64 32)
+          export JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+          export JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)
           helm upgrade --install $RELEASE_NAME ./helm/chart \
             --atomic \
             --debug \
@@ -69,9 +71,15 @@ jobs:
             --set=ingress.hosts[0].host=${URL} \
             --set=ingress.tls[0].secretName=${RELEASE_NAME}-tls \
             --set=ingress.tls[0].hosts[0]=${URL} \
-            --set=postgresql.global.auth.password=changeme \
+            --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
             --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
-            --set=php.corsAllowOrigin="https?://.*?\.bikelib.preprod-tilleuls.ovh$" \
+            --set=php.corsAllowOrigin="https?://${URL}$" \
+            --set=php.trustedHosts="^127\\.0\\.0\\.1|localhost|${URL}$" \
+            --set=php.jwt.secretKey="${JWT_SECRET_KEY}" \
+            --set=php.jwt.publicKey="${JWT_PUBLIC_KEY}" \
+            --set=php.jwt.passphrase=${JWT_PASSPHRASE} \
+            --set=php.host=${URL} \
+            --values ./helm/chart/values.yml \
             --values ./helm/chart/values-prod.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
           echo "URL=$URL" >> $GITHUB_OUTPUT

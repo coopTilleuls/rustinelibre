@@ -61,6 +61,10 @@ spec:
               containerPort: 2019
               protocol: TCP
           volumeMounts:
+            {{- if .Values.php.medias.persistence.enabled }}
+            - mountPath: /srv/app/public/media
+              name: php-medias
+            {{- end }}          
             - mountPath: /var/run/php
               name: php-socket
           lifecycle:
@@ -161,6 +165,10 @@ spec:
                   name: {{ include "bikelib.fullname" . }}
                   key: mercure-jwt-secret
           volumeMounts:
+            {{- if .Values.php.medias.persistence.enabled }}
+            - mountPath: /srv/app/public/media
+              name: php-medias
+            {{- end }}
             - mountPath: /var/run/php
               name: php-socket
           lifecycle:
@@ -280,8 +288,31 @@ spec:
             {{- toYaml .Values.resources.consumer | nindent 12 }}
         {{- end }}
       volumes:
+      {{- if .Values.php.medias.persistence.enabled }}
+      - name: php-medias
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-php-medias-pvc
+       {{- end }}
       - name: php-socket
         emptyDir: {}
+      initContainers:
+      {{- if .Values.php.medias.persistence.enabled }}
+      - name: chown-mountpoint
+        image: "{{ .Values.php.image.repository }}:{{ .Values.php.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.php.image.pullPolicy }}
+        securityContext:
+          runAsUser: 0
+        command:
+        - sh
+        - "-c"
+        - |
+          set -e
+            echo "changing mountpoint ownership"
+            chown www-data:www-data /srv/app/public/media/
+        volumeMounts:
+        - name: php-medias
+          mountPath: /srv/app/public/media/
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

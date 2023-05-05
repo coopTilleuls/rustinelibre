@@ -32,8 +32,7 @@ spec:
           command: ['/bin/sh', '-c']
           args: ['
             set -ex;
-            bin/console doctrine:schema:drop --full-database --force;
-            bin/console doctrine:migrations:migrate --no-interaction;
+            echo "fixtures job"
           ']
           env:
             - name: API_ENTRYPOINT_HOST
