@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)",
     provider: CurrentUserProvider::class,
 )]
-#[GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")] //@todo add voter
+#[GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
 #[GetCollection(
     name: 'Get customers list',
     uriTemplate: '/customers',
