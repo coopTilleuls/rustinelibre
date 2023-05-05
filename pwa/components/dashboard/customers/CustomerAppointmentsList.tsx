@@ -133,7 +133,7 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
                 </Stack>
             }
 
-            <CustomerAppointmentModal appointment={appointmentSelected} openModal={openModal} handleCloseModal={handleClose} />
+            <CustomerAppointmentModal customer={customer} appointment={appointmentSelected} openModal={openModal} handleCloseModal={handleClose} />
         </Box>
     );
 };

@@ -13,15 +13,18 @@ import {apiImageUrl} from "@helpers/apiImagesHelper";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import BuildIcon from '@mui/icons-material/Build';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import {Customer} from "@interfaces/Customer";
 
 type ModalAddBikeProps = {
     appointment: Appointment|null;
+    customer: Customer;
     openModal: boolean;
     handleCloseModal: () => void;
 };
 
 const CustomerAppointmentModal = ({
                           appointment,
+                          customer,
                           openModal,
                           handleCloseModal,
                       }: ModalAddBikeProps): JSX.Element => {
@@ -47,7 +50,7 @@ const CustomerAppointmentModal = ({
                 }}>
                 {appointment &&
                     <Typography id="modal-modal-title" fontSize={20} fontWeight={600}>
-                        Rendez vous : {`${appointment.customer.firstName} ${appointment.customer.lastName}`}
+                        Rendez vous : {`${customer.firstName} ${customer.lastName}`}
                     </Typography>
                 }
                 {
@@ -66,7 +69,7 @@ const CustomerAppointmentModal = ({
                                 <AlternateEmailIcon />
                             </ListItemIcon>
                             <ListItemText
-                                primary={`${appointment.customer.email}`}
+                                primary={customer.email}
                             />
                         </ListItem>
                         <ListItem>
