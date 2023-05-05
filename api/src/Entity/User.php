@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -49,14 +50,24 @@ use Symfony\Component\Validator\Constraints as Assert;
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
 )]
+#[Get(
+    uriTemplate: '/customers/{id}',
+    openapi: new Model\Operation(
+        summary: 'Retrieves an user which is customer',
+        description: 'Retrieves an user which is customer'),
+    security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object))",
+    normalizationContext: ['groups' => [self::CUSTOMER_READ]]
+)]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiFilter(SearchFilter::class, properties: ['firstName' => 'ipartial', 'lastName' => 'ipartial'])]
+#[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private const EMAIL_MAX_LENGTH = 180;
     public const USER_READ = 'user_read';
+    public const CUSTOMER_READ = 'customer_read';
     public const USER_WRITE = 'user_write';
     public const PASSWORD_REGEX = '/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*#?.+=;\\\:\\/,_"&])[A-Za-z\d@$!%*#?.+=;,\\\:\\/_"&]{12,}$/i';
 
@@ -64,14 +75,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
-    #[Groups([self::USER_READ])]
+    #[Groups([self::USER_READ, self::CUSTOMER_READ])]
     public int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ])]
     public ?string $email = null;
 
     #[ORM\Column]
@@ -100,7 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ])]
     public ?string $lastName = null;
 
     #[Assert\NotBlank]
@@ -109,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ])]
     public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]

@@ -9,39 +9,49 @@ import {
     TableContainer,
     CircularProgress,
 } from '@mui/material';
-import {customerResource} from "@resources/customerResource";
 import Link from "next/link";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import {Customer} from "@interfaces/Customer";
+import {Appointment} from "@interfaces/Appointment";
+import {appointmentResource} from "@resources/appointmentResource";
+import {formatDate} from 'helpers/dateHelper';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
-export const CustomersList = (): JSX.Element => {
+interface CustomerAppointmentsListProps {
+    customer: Customer
+}
+
+export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListProps): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
-    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const fetchCustomers = async () => {
+    const fetchAppointments = async () => {
         setLoadingList(true);
         let params = {
             page: `${currentPage ?? 1}`,
             itemsPerPage: 20,
-            'order[id]': 'DESC'
+            'order[id]': 'DESC',
+            customer: customer.id
         };
-        const response = await customerResource.getAll(true, params);
-        setCustomers(response['hydra:member']);
+        const response = await appointmentResource.getAll(true, params);
+        setAppointments(response['hydra:member']);
         setTotalPages(Math.ceil(response['hydra:totalItems'] / 20))
         setLoadingList(false);
     };
 
     useEffect(() => {
-        fetchCustomers();
+        fetchAppointments();
     }, []);
 
     useEffect((): void => {
-        fetchCustomers();
+        fetchAppointments();
     }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
@@ -60,32 +70,41 @@ export const CustomersList = (): JSX.Element => {
                             },
                         }}>
                         <TableRow>
-                            <TableCell align="left">Nom</TableCell>
-                            <TableCell align="left">Prénom</TableCell>
-                            <TableCell align="left">Email</TableCell>
+                            <TableCell align="left">Date</TableCell>
+                            <TableCell align="left">Prestation</TableCell>
+                            <TableCell align="left">Accepté</TableCell>
                             <TableCell align="left"></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {loadingList && <CircularProgress />}
-                        {customers.map((customer) => (
+                        {appointments.map((appointment) => (
                             <TableRow
-                                key={customer.id}
+                                key={appointment.id}
                                 sx={{
                                     '&:last-child td, &:last-child th': {border: 0},
                                 }}>
                                 <TableCell align="left" component="th" scope="row">
-                                    {customer.lastName}
+                                    {formatDate(appointment.slotTime)}
                                 </TableCell>
-                                <TableCell align="left">{customer.firstName}</TableCell>
-                                <TableCell align="left">{customer.email}</TableCell>
+                                <TableCell align="left">
+                                    {appointment.autoDiagnostic?.prestation}
+                                </TableCell>
+                                <TableCell align="left">
+                                    {appointment.accepted === undefined
+                                        ? <HourglassBottomIcon color="disabled" />
+                                        : appointment.accepted
+                                            ? <CheckCircleOutlineIcon color="success" />
+                                            : <DoNotDisturbIcon color="error" />
+                                    }
+                                </TableCell>
                                 <TableCell
                                     align="left"
                                     sx={{cursor: 'pointer'}}
                                 >
-                                    <Link href={`/dashboard/clients/${customer.id}`}>
+                                    {/*<Link href={`/dashboard/clients/${customer.id}`}>*/}
                                         <RemoveRedEyeIcon color="info" />
-                                    </Link>
+                                    {/*</Link>*/}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -110,4 +129,4 @@ export const CustomersList = (): JSX.Element => {
     );
 };
 
-export default CustomersList;
+export default CustomerAppointmentsList;
