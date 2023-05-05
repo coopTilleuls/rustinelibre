@@ -11,8 +11,7 @@ const nominatimCities = async (search: string) => {
 const gouvCities = async (search: string) => {
 
     search = encodeURIComponent(search);
-    const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${search}&type=municipality`, {
-    });
+    const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${search}&type=municipality`);
 
     return await response.json()
         .then((data) => {
