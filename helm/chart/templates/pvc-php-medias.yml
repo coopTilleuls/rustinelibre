@@ -1,0 +1,13 @@
+{{- if .Values.php.medias.persistence.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-php-medias-pvc
+spec:
+  storageClassName: {{ .Values.php.medias.persistence.storageClass }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.php.medias.persistence.size }}
+{{- end }}
