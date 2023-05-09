@@ -1,5 +1,5 @@
 api_platform:
-    title: Bikelib
+    title: La rustine libre
     version: 1.0.0
     # Mercure integration, remove if unwanted
     mercure: ~

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Employees\EventSubscriber;
+namespace App\Appointments\EventSubscriber;
 
-use App\Entity\RepairerEmployee;
+use App\Entity\Appointment;
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
 use Psr\Log\LoggerInterface;
@@ -14,11 +15,11 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
-final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
+final class AppointmentAcceptedEventSubscriber implements EventSubscriber
 {
     public function __construct(private readonly MailerInterface $mailer,
                                 private readonly string $mailerSender,
-                                private readonly string $webAppUrl,
+                                private readonly EntityManagerInterface $entityManager,
                                 private readonly KernelInterface $kernel,
                                 private readonly LoggerInterface $logger,
                                 private readonly Environment $twig)
@@ -28,35 +29,35 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
     public function getSubscribedEvents(): array
     {
         return [
-            Events::postPersist,
+            Events::postUpdate,
         ];
     }
 
-    public function postPersist(BaseLifecycleEventArgs $args): void
+    public function postUpdate(BaseLifecycleEventArgs $args): void
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof RepairerEmployee || in_array($this->kernel->getEnvironment(), ['dev', 'test'])) {
+        if (!$entity instanceof Appointment || in_array($this->kernel->getEnvironment(), ['dev', 'test'])) {
             return;
         }
 
-        $userEmployee = $entity->employee;
+        $changeSet = $this->entityManager->getUnitOfWork()->getEntityChangeSet($entity);
+        if (!array_key_exists('accepted', $changeSet) || true !== $changeSet['accepted'][1]) {
+            return;
+        }
+
         $email = (new Email())
             ->from($this->mailerSender)
-            ->to($userEmployee->email)
-            ->subject('Votre compte sur La rustine libre vient d\'être créé')
-            ->html($this->twig->render('mail/employee_send_password.html.twig', [
-                'webAppUrl' => $this->webAppUrl,
-                'employee' => $userEmployee,
-                'repairer' => $entity->repairer,
+            ->to($entity->customer->email)
+            ->subject('Votre rendez-vous a été accepté')
+            ->html($this->twig->render('mail/appointment_accepted.html.twig', [
+                'appointment' => $entity,
             ]));
 
         try {
             $this->mailer->send($email);
         } catch (\Exception $e) {
-            $this->logger->alert(sprintf('New employee password email not send, error: %s', $e->getMessage()));
+            $this->logger->alert(sprintf('Accepted appointment mail not send: %s', $e->getMessage()));
         }
-
-        $userEmployee->eraseCredentials();
     }
 }
