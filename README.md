@@ -77,3 +77,33 @@ MAILER_DSN
 ```
 
 All the documentation is available here : https://symfony.com/doc/current/mailer.html
+
+
+## Pour se connecter 
+
+En tant qu'admin
+
+```
+mail:       clement@les-tilleuls.coop
+password:   Test1passwordOk!   
+```
+
+
+En tant que boss d'une solution de réparation
+
+```
+mail:       boss@test.com
+password:   Test1passwordOk!   
+```
+Ou
+
+```
+mail:       boss2@test.com
+password:   Test1passwordOk!   
+```
+
+Pour se connecter en tant que cycliste
+```
+mail:       user1@test.com
+password:   Test1passwordOk!   
+```
