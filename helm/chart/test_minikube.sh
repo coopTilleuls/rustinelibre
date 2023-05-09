@@ -45,7 +45,7 @@ helm upgrade --install ${RELEASE_NAME} ./helm/chart \
   --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
   --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
   --set=php.corsAllowOrigin="https?://${URL}$" \
-  --set=php.trustedHosts="${TRUSTED_HOSTS//./\\.}" \
+  --set=php.trustedHosts="${TRUSTED_HOSTS//./\\\\.}" \
   --set=php.jwt.secretKey="$JWT_SECRET_KEY" \
   --set=php.jwt.publicKey="$JWT_PUBLIC_KEY" \
   --set=php.jwt.passphrase="$JWT_PASSPHRASE" \
