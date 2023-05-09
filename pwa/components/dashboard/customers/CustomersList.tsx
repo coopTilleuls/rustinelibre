@@ -7,7 +7,7 @@ import {
     TableCell,
     TableBody,
     TableContainer,
-    CircularProgress,
+    CircularProgress, TextField,
 } from '@mui/material';
 import {customerResource} from "@resources/customerResource";
 import Link from "next/link";
@@ -16,12 +16,15 @@ import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import {Customer} from "@interfaces/Customer";
+import SearchIcon from '@mui/icons-material/Search';
+import { InputAdornment } from '@mui/material';
 
 export const CustomersList = (): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [searchTerm, setSearchTerm] = useState<string>('');
 
     const fetchCustomers = async () => {
         setLoadingList(true);
@@ -30,6 +33,11 @@ export const CustomersList = (): JSX.Element => {
             itemsPerPage: 20,
             'order[id]': 'DESC'
         };
+
+        if ('' !== searchTerm) {
+            params = {...{userSearch: searchTerm}, ...params};
+        }
+
         const response = await customerResource.getAll(true, params);
         setCustomers(response['hydra:member']);
         setTotalPages(Math.ceil(response['hydra:totalItems'] / 20))
@@ -48,9 +56,33 @@ export const CustomersList = (): JSX.Element => {
         setCurrentPage(page);
     };
 
+    const handleSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter') {
+            fetchCustomers();
+        }
+    };
+
     return (
         <Box>
-            <TableContainer elevation={4} component={Paper}>
+            <TextField
+                label="Chercher..."
+                value={searchTerm}
+                onChange={handleSearchTermChange}
+                onKeyPress={handleKeyPress}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                }}
+            />
+
+            <TableContainer elevation={4} component={Paper} sx={{marginTop: '10px'}}>
                 <Table aria-label="employees">
                     <TableHead
                         sx={{
