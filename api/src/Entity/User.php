@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
 use App\Repository\UserRepository;
+use App\User\Filter\UserSearchFilter;
 use App\User\StateProvider\CurrentUserProvider;
 use App\User\StateProvider\CustomersProvider;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -54,6 +55,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ApiFilter(UserSearchFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: ['firstName' => 'ipartial', 'lastName' => 'ipartial'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
