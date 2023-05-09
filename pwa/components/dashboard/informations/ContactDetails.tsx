@@ -1,13 +1,14 @@
-import React, {ChangeEvent, SyntheticEvent, useContext, useEffect} from 'react';
+import React, {ChangeEvent, SyntheticEvent, useCallback, useContext, useEffect} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from '@mui/material/Autocomplete';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {searchCity} from '@utils/apiCity';
-import {City, createCitiesWithGouvAPI} from '@interfaces/City';
+import {City, createCitiesWithGouvAPI, createCitiesWithNominatimAPI} from '@interfaces/City';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {FormControl} from '@mui/material';
+import {City as NominatimCity} from "@interfaces/Nominatim";
 
 interface ContactDetailsProps {
   repairer: Repairer | null;
@@ -28,9 +29,8 @@ export const ContactDetails = ({
     setCity,
     citiesList,
     setCitiesList,
-    timeoutId,
-    setTimeoutId,
   } = useContext(RepairerFormContext);
+  const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
   useEffect(() => {
     if (repairer) {
@@ -40,19 +40,19 @@ export const ContactDetails = ({
     }
   }, [repairer, setName, setStreet, setCityInput]);
 
-  useEffect(() => {
-    if (cityInput === '' || cityInput.length < 3) return;
-    if (timeoutId) clearTimeout(timeoutId);
-    const newTimeoutId = window.setTimeout(async () => {
-      const citiesResponse = await searchCity(cityInput);
-      const cities: City[] = createCitiesWithGouvAPI(
-        citiesResponse as GouvCity[]
-      );
-      setCitiesList(cities);
-    }, 350);
+  const fetchCitiesResult = useCallback(async (cityStr: string) => {
+    const citiesResponse = await searchCity(cityStr, useNominatim);
+    const cities: City[] = useNominatim
+        ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[])
+        : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
+    setCitiesList(cities);
+  }, [setCitiesList, useNominatim]);
 
-    setTimeoutId(newTimeoutId);
-  }, [cityInput, setCitiesList, timeoutId, setTimeoutId]);
+  useEffect(() => {
+    if (cityInput === '' || cityInput.length < 3) {
+      setCitiesList([]);
+    } else fetchCitiesResult(cityInput);
+  }, [setCitiesList, fetchCitiesResult, cityInput]);
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void => {
     setName(event.target.value);

@@ -49,8 +49,6 @@ import {
   Stack,
   Box,
 } from '@mui/material';
-import useBikeTypes from "@hooks/useBikeTypes";
-import {Bike} from "@interfaces/Bike";
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -161,21 +159,19 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     }
   }, [repairerTypeSelected, setOrderBy, sortChosen]);
 
-  useEffect(() => {
-    if (cityInput === '' || cityInput.length <= 2) return;
-
-    if (timeoutId) clearTimeout(timeoutId);
-
-    const newTimeoutId = window.setTimeout(async () => {
-      const citiesResponse = await searchCity(cityInput, useNominatim);
-      const cities: City[] = useNominatim
+  const fetchCitiesResult = useCallback(async (cityStr: string) => {
+    const citiesResponse = await searchCity(cityStr, useNominatim);
+    const cities: City[] = useNominatim
         ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[])
         : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
-      setCitiesList(cities);
-    }, 350);
+    setCitiesList(cities);
+  }, [setCitiesList, useNominatim]);
 
-    setTimeoutId(newTimeoutId);
-  }, [cityInput, useNominatim]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (cityInput === '' || cityInput.length < 3) {
+      setCitiesList([]);
+    } else fetchCitiesResult(cityInput);
+  }, [setCitiesList, fetchCitiesResult, cityInput]);
 
   const handleCityChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
