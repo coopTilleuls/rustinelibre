@@ -61,6 +61,7 @@ jobs:
           export JWT_PASSPHRASE=$(openssl rand -base64 32)
           export JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
           export JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)
+          export TRUSTED_HOSTS="^127.0.0.1|localhost|${URL}|${RELEASE_NAME}-bikelib$"
           helm upgrade --install $RELEASE_NAME ./helm/chart \
             --atomic \
             --debug \
@@ -74,7 +75,7 @@ jobs:
             --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
             --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
             --set=php.corsAllowOrigin="https?://${URL}$" \
-            --set=php.trustedHosts="^127\\.0\\.0\\.1|localhost|${URL}$" \
+            --set=php.trustedHosts="${TRUSTED_HOSTS//./\\\\.}" \
             --set=php.jwt.secretKey="${JWT_SECRET_KEY}" \
             --set=php.jwt.publicKey="${JWT_PUBLIC_KEY}" \
             --set=php.jwt.passphrase=${JWT_PASSPHRASE} \
