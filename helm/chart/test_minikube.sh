@@ -27,6 +27,7 @@ RELEASE_NAME=test
 JWT_PASSPHRASE=$(openssl rand -base64 32)
 JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
 JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)
+TRUSTED_HOSTS="^127.0.0.1|localhost|${URL}|${RELEASE_NAME}-bikelib$"
 
 # install or update deployment on minikube
 helm upgrade --install ${RELEASE_NAME} ./helm/chart \
@@ -44,7 +45,7 @@ helm upgrade --install ${RELEASE_NAME} ./helm/chart \
   --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
   --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
   --set=php.corsAllowOrigin="https?://${URL}$" \
-  --set=php.trustedHosts="^127\\.0\\.0\\.1|localhost|${URL}$" \
+  --set=php.trustedHosts="${TRUSTED_HOSTS//./\\.}" \
   --set=php.jwt.secretKey="$JWT_SECRET_KEY" \
   --set=php.jwt.publicKey="$JWT_PUBLIC_KEY" \
   --set=php.jwt.passphrase="$JWT_PASSPHRASE" \
