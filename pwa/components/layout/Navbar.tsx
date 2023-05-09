@@ -9,7 +9,7 @@ import MobileNavbar from '@components/navbar/NavbarMobile';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
-import {getRoles} from '@helpers/sessionHelper';
+import {getRoles} from '@helpers/localHelper';
 import {User} from '@interfaces/User';
 
 interface NavbarProps {
