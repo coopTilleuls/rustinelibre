@@ -61,14 +61,14 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
 export const getStaticProps: GetStaticProps = async ({params}) => {
   if (!ENTRYPOINT) {
     return {
-      props: {},
+      notFound: true,
       revalidate: 0
     };
   }
 
   if (!params) {
     return {
-      props: {},
+      notFound: true,
       revalidate: 10
     };
   }
@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
   const {id} = params;
   if (!id) {
     return {
-      props: {},
+      notFound: true,
       revalidate: 10
     };
   }
