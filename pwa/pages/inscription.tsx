@@ -17,12 +17,14 @@ import {
 import PersonIcon from '@mui/icons-material/Person';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import UserForm from '@components/profile/UserForm';
+import Link from "next/link";
 
 const Registration: NextPageWithLayout = ({}) => {
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const user = useAccount({redirectIfFound: '/'});
+  const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
   const router = useRouter();
 
   const {firstName, lastName, email, password, passwordError} =
@@ -39,9 +41,8 @@ const Registration: NextPageWithLayout = ({}) => {
     setErrorMessage(null);
     setPendingRegistration(true);
 
-    let newUser;
     try {
-      newUser = await userResource.register({
+      await userResource.register({
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -49,10 +50,8 @@ const Registration: NextPageWithLayout = ({}) => {
       });
     } catch (e) {
       setErrorMessage('Inscription impossible');
-    }
-
-    if (newUser) {
-      await router.push('/login');
+    } finally {
+      setInscriptionSuccess(true);
     }
 
     setPendingRegistration(false);
@@ -65,7 +64,7 @@ const Registration: NextPageWithLayout = ({}) => {
       </Head>
       <WebsiteLayout />
       <Container sx={{width: {xs: '100%', md: '50%'}}}>
-        <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
+        {!inscriptionSuccess && <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
           <Box
             sx={{
               display: 'flex',
@@ -105,7 +104,22 @@ const Registration: NextPageWithLayout = ({}) => {
               l’application Bikelib et sa politique de confidentialité
             </Typography>
           </Box>
-        </Paper>
+        </Paper>}
+
+        {inscriptionSuccess &&
+            <Paper
+                elevation={4}
+                sx={{maxWidth: 400, p: 4, mt: 4, mb: {xs: 10, md: 12}, mx: 'auto', textAlign: 'justify'}}>
+              <Box>
+                Veuillez désormais cliquer sur le lien de confirmation envoyé par email pour finaliser votre inscription.
+                <br />
+                <Link href="/login">
+                  <Button variant="outlined" sx={{marginTop: '30px', marginLeft: '30%'}}>
+                    Se connecter
+                  </Button>
+                </Link>
+              </Box>
+            </Paper>}
       </Container>
     </>
   );
