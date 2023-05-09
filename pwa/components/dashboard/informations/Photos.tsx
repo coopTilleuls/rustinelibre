@@ -3,7 +3,7 @@ import {ENTRYPOINT} from '@config/entrypoint';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {repairerResource} from '@resources/repairerResource';
 import {InputLabel, Box, Grid, Button} from '@mui/material';
-import {getToken} from '@helpers/sessionHelper';
+import {getToken} from '@helpers/localHelper';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {MediaObject} from '@interfaces/MediaObject';
 import {Repairer} from '@interfaces/Repairer';
