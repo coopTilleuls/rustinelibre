@@ -102,7 +102,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
   return (
     <>
-      <AppBar position="sticky" open={isMobile ? false : true}>
+      <AppBar position="sticky" open={!isMobile}>
         <Toolbar>
           <List>
             <ListItem key="1" disablePadding>
@@ -116,7 +116,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
       <Box sx={{display: 'flex'}}>
         <Drawer
           variant={'permanent'}
-          open={isMobile ? false : true}
+          open={!isMobile}
           anchor="left">
           <DrawerHeader></DrawerHeader>
           <Divider />
