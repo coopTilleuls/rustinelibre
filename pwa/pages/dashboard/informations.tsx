@@ -34,6 +34,7 @@ const MapPosition = dynamic(
       ssr: false,
     }
 );
+import WarningIcon from '@mui/icons-material/Warning';
 
 type RepairerInformationsProps = {
   bikeTypesFetched: BikeType[];
@@ -230,7 +231,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
         <title>Informations</title>
       </Head>
       <DashboardLayout>
-        <Box component="main" maxWidth="100%">
+        <Box component="main" maxWidth="1200">
           <form onSubmit={handleSubmit}>
             <Tabs value={tabValue} onChange={handleChangeTab}>
               <Tab label="Coordonnées" />
@@ -238,7 +239,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
               <Tab label="Photos" />
               <Tab label="Horaires" />
               <Tab label="Informations complémentaires" />
-              <Tab label={`${!repairer?.latitude ? '⚠️' : ''} Position sur la carte`} />
+              <Tab label={`Position sur la carte`} />
             </Tabs>
 
             <Box sx={{marginTop: 3}}>
