@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import {MapContainer, Marker, TileLayer, useMapEvents} from "react-leaflet";
 import {LeafletEvent, LeafletMouseEvent} from "leaflet";
@@ -6,9 +6,8 @@ import Box from "@mui/material/Box";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import {Alert, Button, CircularProgress, Typography} from "@mui/material";
+import {Alert, Button, CircularProgress} from "@mui/material";
 import {RepairerFormContext} from "@contexts/RepairerFormContext";
-import {repairerResource} from "@resources/repairerResource";
 import {RequestBody} from "@interfaces/Resource";
 
 interface MapPositionProps {

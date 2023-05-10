@@ -34,7 +34,6 @@ const MapPosition = dynamic(
       ssr: false,
     }
 );
-import WarningIcon from '@mui/icons-material/Warning';
 
 type RepairerInformationsProps = {
   bikeTypesFetched: BikeType[];
