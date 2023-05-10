@@ -36,6 +36,7 @@ export const EmployeesListActions = ({
     setDeleteDialogOpen(false);
     try {
       await repairerEmployeesResource.delete(employee['@id']);
+      setRemovePending(false);
     } finally {
       setRemovePending(false);
     }

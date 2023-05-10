@@ -8,9 +8,8 @@ import 'leaflet-defaulticon-compatibility';
 import {LeafletMouseEvent} from 'leaflet';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import Box from '@mui/material/Box';
-import {Paper, Stack, Typography} from '@mui/material';
+import {Paper, Stack} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
-import useMediaQuery from '@hooks/useMediaQuery';
 
 export const RepairersResults = (): JSX.Element => {
   const {showMap, setSelectedRepairer, repairers, setRepairers} = useContext(
