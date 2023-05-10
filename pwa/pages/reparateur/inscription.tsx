@@ -200,11 +200,9 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         comment: comment,
       });
       setPendingRegistration(false);
-
+      setInscriptionSuccess(true);
     } catch (e) {
       setErrorMessage('Inscription impossible');
-    } finally {
-      setInscriptionSuccess(true);
     }
   };
 

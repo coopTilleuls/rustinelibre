@@ -27,6 +27,14 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {Repairer} from '@interfaces/Repairer';
 import {BikeType} from '@interfaces/BikeType';
 import OpeningHours from "@components/dashboard/informations/OpeningHours";
+import dynamic from "next/dynamic";
+const MapPosition = dynamic(
+    () => import('@components/dashboard/informations/MapPosition'),
+    {
+      ssr: false,
+    }
+);
+import WarningIcon from '@mui/icons-material/Warning';
 
 type RepairerInformationsProps = {
   bikeTypesFetched: BikeType[];
@@ -162,52 +170,60 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
       return;
     }
 
+    const selectedBikeTypeIRIs: string[] = bikeTypes
+      .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
+      .map((bikeType) => bikeType['@id']);
+
+    const bodyRequest: RequestBody = {
+      mobilePhone: mobilePhone,
+      name: name,
+      street: street,
+      description: description,
+      bikeTypesSupported: selectedBikeTypeIRIs,
+      repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
+    };
+
+    if (city) {
+      bodyRequest['city'] = city.name;
+      bodyRequest['postcode'] = city.postcode;
+      bodyRequest['latitude'] = city.lat.toString();
+      bodyRequest['longitude'] = city.lon.toString();
+    }
+
+    if (optionalPage && optionalPage !== '') {
+      bodyRequest['optionalPage'] = optionalPage;
+    }
+    if (openingHours && openingHours !== '') {
+      bodyRequest['openingHours'] = openingHours;
+    }
+    if (mobilePhone && mobilePhone !== '') {
+      bodyRequest['mobilePhone'] = mobilePhone;
+    }
+
+    await uploadRepairer(bodyRequest);
+  };
+
+  const uploadRepairer = async(bodyRequest: RequestBody) => {
+    if (!repairer) {
+      return;
+    }
+
     setErrorMessage(null);
     setPendingRegistration(true);
 
     try {
-      const selectedBikeTypeIRIs: string[] = bikeTypes
-        .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
-        .map((bikeType) => bikeType['@id']);
-
-      const bodyRequest: RequestBody = {
-        mobilePhone: mobilePhone,
-        name: name,
-        street: street,
-        description: description,
-        bikeTypesSupported: selectedBikeTypeIRIs,
-        repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
-      };
-
-      if (city) {
-        bodyRequest['city'] = city.name;
-        bodyRequest['postcode'] = city.postcode;
-        bodyRequest['latitude'] = city.lat.toString();
-        bodyRequest['longitude'] = city.lon.toString();
-      }
-
-      if (optionalPage && optionalPage !== '') {
-        bodyRequest['optionalPage'] = optionalPage;
-      }
-      if (openingHours && openingHours !== '') {
-        bodyRequest['openingHours'] = openingHours;
-      }
-      if (mobilePhone && mobilePhone !== '') {
-        bodyRequest['mobilePhone'] = mobilePhone;
-      }
-
-      await repairerResource.put(repairer['@id'], bodyRequest);
-    } catch (e) {
-      setErrorMessage('Mise à jour impossible');
-    } finally {
+      const repairerUpdated = await repairerResource.put(repairer['@id'], bodyRequest);
+      setRepairer(repairerUpdated);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
-      }, 2000);
+      }, 3000);
+    } catch (e) {
+      setErrorMessage('Mise à jour impossible');
     }
 
     setPendingRegistration(false);
-  };
+  }
 
   return (
     <>
@@ -215,7 +231,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
         <title>Informations</title>
       </Head>
       <DashboardLayout>
-        <Box component="main" maxWidth={900}>
+        <Box component="main" maxWidth="1200">
           <form onSubmit={handleSubmit}>
             <Tabs value={tabValue} onChange={handleChangeTab}>
               <Tab label="Coordonnées" />
@@ -223,6 +239,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
               <Tab label="Photos" />
               <Tab label="Horaires" />
               <Tab label="Informations complémentaires" />
+              <Tab label={`Position sur la carte`} />
             </Tabs>
 
             <Box sx={{marginTop: 3}}>
@@ -251,9 +268,12 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
               {!loading && tabValue === 4 && (
                 <OptionalInfos repairer={repairer} />
               )}
+              {!loading && tabValue === 5 && repairer && (
+                <MapPosition repairer={repairer} uploadRepairer={uploadRepairer} />
+              )}
             </Box>
 
-            {!loading && tabValue !== 2 && (
+            {!loading && tabValue !== 2 && tabValue !== 5 && (
               <div>
                 <Button type="submit" variant="contained" sx={{my: 2}}>
                   {!pendingRegistration ? (
@@ -262,15 +282,17 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
                     <CircularProgress size={20} sx={{color: 'white'}} />
                   )}
                 </Button>
-                {errorMessage && (
-                  <Typography variant="body1" color="error">
-                    {errorMessage}
-                  </Typography>
-                )}
               </div>
             )}
+
+            {!loading && errorMessage && (
+                <Typography variant="body1" color="error">
+                  {errorMessage}
+                </Typography>
+            )}
+
             {success && (
-              <Alert severity="success">Informations mises à jour</Alert>
+              <Alert sx={{marginTop: '65px'}} severity="success">Informations mises à jour</Alert>
             )}
           </form>
         </Box>

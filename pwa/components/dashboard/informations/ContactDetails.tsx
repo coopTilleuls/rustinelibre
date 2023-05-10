@@ -1,13 +1,11 @@
 import React, {ChangeEvent, SyntheticEvent, useCallback, useContext, useEffect} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from '@mui/material/Autocomplete';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {searchCity} from '@utils/apiCity';
 import {City, createCitiesWithGouvAPI, createCitiesWithNominatimAPI} from '@interfaces/City';
 import {City as GouvCity} from '@interfaces/Gouv';
-import {FormControl} from '@mui/material';
 import {City as NominatimCity} from "@interfaces/Nominatim";
 
 interface ContactDetailsProps {

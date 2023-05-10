@@ -39,6 +39,7 @@ export const EmployeesListActions = ({
     } finally {
       setRemovePending(false);
     }
+
     await fetchEmployees();
   };
 
