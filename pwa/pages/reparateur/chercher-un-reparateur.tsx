@@ -2,9 +2,7 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {
   useState,
   useEffect,
-  ChangeEvent,
   useRef,
-  SyntheticEvent,
   FormEvent,
   useContext,
   useCallback,
@@ -46,9 +44,10 @@ import {
   CircularProgress,
   Container,
   FormControl,
-  Stack,
   Box,
+  Divider,
 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -81,7 +80,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     orderBy,
     setOrderBy,
     sortChosen,
-    setSortChosen,
     totalItems,
     setTotalItems,
     showMap,
@@ -103,7 +101,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     if (!selectedBike || !cityInput) {
       return;
     }
-
     setPendingSearchCity(true);
 
     let params = {
@@ -159,52 +156,22 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     }
   }, [repairerTypeSelected, setOrderBy, sortChosen]);
 
-  const fetchCitiesResult = useCallback(async (cityStr: string) => {
-    const citiesResponse = await searchCity(cityStr, useNominatim);
-    const cities: City[] = useNominatim
+  const fetchCitiesResult = useCallback(
+    async (cityStr: string) => {
+      const citiesResponse = await searchCity(cityStr, useNominatim);
+      const cities: City[] = useNominatim
         ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[])
         : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
-    setCitiesList(cities);
-  }, [setCitiesList, useNominatim]);
+      setCitiesList(cities);
+    },
+    [setCitiesList, useNominatim]
+  );
 
   useEffect(() => {
     if (cityInput === '' || cityInput.length < 3) {
       setCitiesList([]);
     } else fetchCitiesResult(cityInput);
   }, [setCitiesList, fetchCitiesResult, cityInput]);
-
-  const handleCityChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): Promise<void> => {
-    setCityInput(event.target.value);
-  };
-
-  const handleChangeSort = (sortOption: string): void => {
-    setSortChosen(sortOption);
-
-    let value = '';
-    if (sortOption === 'repairersType') {
-      value = repairerTypeSelected;
-    } else if (sortOption === 'availability') {
-      value = 'ASC';
-    } else if (sortOption === 'proximity') {
-      value = `${city?.lat},${city?.lon}`;
-    }
-
-    setOrderBy({
-      key: sortOption,
-      value: value,
-    });
-  };
-
-  const handleCitySelect = (
-    event: SyntheticEvent<Element, Event>,
-    value: string | null
-  ) => {
-    const selectedCity = citiesList.find((city) => city.name === value);
-    setCity(selectedCity ?? null);
-    setCityInput(value ?? '');
-  };
 
   const handleBikeChange = (event: SelectChangeEvent): void => {
     const selectedBikeType = bikeTypes.find(
@@ -238,27 +205,27 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       <WebsiteLayout />
       <Container sx={{py: 5}}>
         <form onSubmit={handleSubmit}>
-          <Stack
-            direction={{xs: 'column', md: 'row'}}
-            alignItems={{md: 'center'}}
-            spacing={2}>
-            <Box
-              sx={{
-                width: {xs: '100%', md: '50%'},
-              }}>
-              <FormControl fullWidth required sx={{mt: 1, mb: 1}}>
-                <InputLabel
-                  htmlFor="bikeType"
-                  sx={{fontSize: {xs: 10, md: 16}}}>
-                  Type de Vélo
-                </InputLabel>
+          <Box
+            mx="auto"
+            width={{xs: '100%', md: '50%'}}
+            display="flex"
+            flexDirection={{xs: 'column', md: 'row'}}
+            justifyContent="space-between"
+            alignItems={{xs: 'left', md: 'center'}}
+            sx={{
+              p: 2,
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: '10px',
+            }}>
+            <Box width={{xs: '100%', md: '50%'}}>
+              <FormControl required fullWidth size="small">
+                <InputLabel id="bikeType-label">Type de vélo</InputLabel>
                 <Select
                   label="Type de vélo"
-                  fullWidth
-                  onChange={handleBikeChange}
-                  value={selectedBike?.name}>
+                  value={selectedBike?.name}
+                  onChange={handleBikeChange}>
                   <MenuItem disabled value="">
-                    Choisissez un type de vélo
+                    <em>Type de vélo</em>
                   </MenuItem>
                   {bikeTypes.map((bike) => (
                     <MenuItem key={bike.id} value={bike.name}>
@@ -268,76 +235,74 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                 </Select>
               </FormControl>
             </Box>
-            {selectedBike && (
-              <Box
-                sx={{
-                  width: {xs: '100%', md: '50%'},
-                }}
-                ref={listContainerRef}>
-                <Autocomplete
-                  freeSolo
-                  value={cityInput}
-                  options={citiesList.map((optionCity) => optionCity.name)}
-                  onChange={(event, values) => handleCitySelect(event, values)}
-                  renderInput={(params) => (
-                    <TextField
-                      label="Ville"
-                      {...params}
-                      value={cityInput}
-                      onChange={(e) => handleCityChange(e)}
-                    />
-                  )}
-                />
-              </Box>
-            )}
-          </Stack>
-          <Stack
-            pt={2}
-            direction={{xs: 'column', md: 'row'}}
-            alignItems={{md: 'center'}}
-            spacing={2}>
-            {city && (
-              <RepairerSortOptions
-                handleChangeSort={handleChangeSort}
-                isMobile={isMobile}
+            <Divider
+              orientation="vertical"
+              variant="middle"
+              flexItem
+              sx={{
+                mx: 2,
+                my: {xs: 1, md: 0},
+                orientation: {xs: 'horizontal', md: 'vertical'},
+              }}
+            />
+            <Box width={{xs: '100%', md: '50%'}} ref={listContainerRef}>
+              <Autocomplete
+                freeSolo
+                value={city}
+                options={citiesList}
+                getOptionLabel={(city) =>
+                  typeof city === 'string' ? city : city.name
+                }
+                onChange={(event, value) => setCity(value as City)}
+                onInputChange={(event, value) => setCityInput(value)}
+                renderInput={(params) => (
+                  <TextField label="Ville" {...params} size="small" />
+                )}
               />
-            )}
-          </Stack>
-          {city && (
-            <Box
-              width="100%"
-              sx={{py: 2}}
-              display="flex"
-              justifyContent="space-between">
-              <Button type="submit" variant="contained">
-                Chercher
+            </Box>
+            <Box display="flex" alignItems="center" sx={{mt: {xs: 2, md: 0}}}>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  borderRadius: '5px',
+                  height: '100%',
+                  ml: {xs: 0, md: 1},
+                }}>
+                <SearchIcon sx={{color: 'white'}} />
               </Button>
               {repairers.length ? (
                 <Button
-                  sx={{display: {lg: 'none'}}}
+                  sx={{ml: 2, display: {md: 'none'}}}
                   onClick={() => setShowMap(!showMap)}
                   variant="outlined">
                   {showMap ? 'Voir les résultats' : 'Voir sur la carte'}
                 </Button>
               ) : null}
             </Box>
-          )}
+          </Box>
+          <Box width="full">
+            {repairers.length ? (
+              <RepairerSortOptions isMobile={isMobile} />
+            ) : null}
+          </Box>
         </form>
 
         <Box textAlign="center" pt={2}>
-          {pendingSearchCity && <CircularProgress />}
-        </Box>
-
-        <Box width={'full'}>
-          {!pendingSearchCity && repairers.length ? <RepairersResults /> : null}
           {repairers.length === 0 && alreadyFetchApi && (
             <Typography>
               Pas de réparateurs disponibles dans votre ville.
             </Typography>
           )}
         </Box>
-      </Container>
 
+        <Box width="full" sx={{overflow: 'auto'}}>
+          {!pendingSearchCity && repairers.length ? <RepairersResults /> : null}
+        </Box>
+        <Box textAlign="center" pt={2}>
+          {pendingSearchCity && <CircularProgress />}
+        </Box>
+      </Container>
       {!pendingSearchCity && totalItems > 20 && (
         <PaginationBlock onPageChange={handlePageChange} />
       )}
@@ -346,7 +311,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-
   if (!ENTRYPOINT) {
     return {
       props: {},
