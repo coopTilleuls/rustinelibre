@@ -46,7 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     uriTemplate: '/repairer_get_slots_available/{id}',
     requirements: ['id' => '\d+'],
     openapi: new Model\Operation(
-        summary: 'Retrieves the collection of availabilities of a repairer',
+        summary: 'Retrieves the collection of availabilities of a repairer for 7 next days',
         description: 'Retrieves all the availabilities of a repairer'),
     provider: RepairerAvailableSlotsProvider::class,
 )]
@@ -224,6 +224,12 @@ class Repairer
 
     #[Groups([self::REPAIRER_COLLECTION_READ])]
     public ?int $distance = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?int $durationSlot = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?int $numberOfSlots = null;
 
     public function __construct()
     {
