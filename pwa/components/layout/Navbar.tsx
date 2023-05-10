@@ -1,14 +1,10 @@
-import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
+import {menuLogged, menuNotLogged} from '@data/menu';
 import {useAuth} from '@contexts/AuthContext';
-import {pagesLogged} from '@components/layout/NavbarMenuLogged';
-import {pagesNotLogged} from '@components/layout/NavbarMenuLogged';
 import NavbarDesktop from '@components/navbar/NavbarDesktop';
 import MobileNavbar from '@components/navbar/NavbarMobile';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Container from '@mui/material/Container';
+import {AppBar, Toolbar} from '@mui/material';
 import {getRoles} from '@helpers/localHelper';
 import {User} from '@interfaces/User';
 
@@ -18,10 +14,8 @@ interface NavbarProps {
 
 const Navbar = ({user}: NavbarProps): JSX.Element => {
   const router = useRouter();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const pages = user ? pagesLogged : pagesNotLogged;
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const pages = user ? menuLogged : menuNotLogged;
   const [boss, setBoss] = useState<boolean>(false);
   const [employee, setEmployee] = useState<boolean>(false);
   const [admin, setAdmin] = useState<boolean>(false);

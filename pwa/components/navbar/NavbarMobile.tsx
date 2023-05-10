@@ -1,15 +1,15 @@
-import * as React from 'react';
 import Link from 'next/link';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
+import {
+  Box,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Container,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import {Page} from '@interfaces/Page';
 import {User} from '@interfaces/User';
-import Container from '@mui/material/Container';
 
 interface MobileNavbarProps {
   pages: Page[];
@@ -43,7 +43,6 @@ const MobileNavbar = ({
           display: {xs: 'flex', md: 'none'},
           alignItems: 'center',
         }}>
-        <DirectionsBikeIcon sx={{mr: 1}} />
         <Link href="/" style={{textDecoration: 'none'}}>
           <Typography
             color="white"
@@ -51,7 +50,7 @@ const MobileNavbar = ({
               fontSize: 18,
               fontWeight: 600,
             }}>
-            Bikelib
+            La Rustine Libre
           </Typography>
         </Link>
       </Box>
@@ -83,13 +82,16 @@ const MobileNavbar = ({
           sx={{
             display: {xs: 'block', md: 'none'},
           }}>
-          {pages.map((page) => (
+          {pages.map(({name, link, disabled}) => (
             <Link
-              key={page.name}
-              href={page.link}
+              key={name}
+              href={disabled ? '' : link}
               style={{textDecoration: 'none', color: 'black'}}>
-              <MenuItem sx={{textAlign: 'center'}} onClick={handleClose}>
-                <Typography textAlign="center">{page.name}</Typography>
+              <MenuItem
+                disabled={disabled}
+                sx={{textAlign: 'center'}}
+                onClick={handleClose}>
+                <Typography textAlign="center">{name}</Typography>
               </MenuItem>
             </Link>
           ))}
