@@ -50,26 +50,24 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <NavbarDesktop
-            pages={pages}
-            boss={boss}
-            user={user}
-            handleClose={handleCloseNavMenu}
-            logOut={clickLogOut}
-          />
-          <MobileNavbar
-            pages={pages}
-            boss={boss}
-            user={user}
-            handleClose={handleCloseNavMenu}
-            handleOpen={handleOpenNavMenu}
-            logOut={clickLogOut}
-            anchorElNav={anchorElNav}
-          />
-        </Toolbar>
-      </Container>
+      <Toolbar>
+        <NavbarDesktop
+          pages={pages}
+          boss={boss}
+          user={user}
+          handleClose={handleCloseNavMenu}
+          logOut={clickLogOut}
+        />
+        <MobileNavbar
+          pages={pages}
+          boss={boss}
+          user={user}
+          handleClose={handleCloseNavMenu}
+          handleOpen={handleOpenNavMenu}
+          logOut={clickLogOut}
+          anchorElNav={anchorElNav}
+        />
+      </Toolbar>
     </AppBar>
   );
 };
