@@ -4,121 +4,125 @@ import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {
   Box,
   Button,
-  Typography,
   FormControl,
   MenuItem,
   InputLabel,
+  Select,
+  SelectChangeEvent,
 } from '@mui/material';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {RepairerType} from '@interfaces/RepairerType';
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
+import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 
 const sortOptions: Record<string, string> = {
   availability: 'Disponibilité',
   proximity: 'Proximité',
-  repairersType: 'Réparateur',
 };
 
 interface RepairerSortOptionsProps {
   isMobile: boolean;
+  handleSelectSortOption: (event: SelectChangeEvent) => Promise<void>;
+  handleSelectFilterOption: (event: SelectChangeEvent) => Promise<void>;
 }
 
 const RepairerSortOptions = ({
-  isMobile,
+  handleSelectSortOption,
+  handleSelectFilterOption,
 }: RepairerSortOptionsProps): JSX.Element => {
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
   const {
-    city,
-
+    repairers,
     repairerTypeSelected,
     setRepairerTypeSelected,
-    setOrderBy,
     sortChosen,
-    setSortChosen,
+    showMap,
+    setShowMap,
   } = useContext(SearchRepairerContext);
 
   useEffect(() => {
-    async function fetchRepairerTypes() {
+    const fetchRepairerTypes = async () => {
       const response = await repairerTypeResource.getAll(false);
       setRepairerTypes(response['hydra:member']);
       if (response['hydra:totalItems'] > 0) {
         setRepairerTypeSelected(response['hydra:member'][0].id.toString());
       }
-    }
+    };
 
     fetchRepairerTypes();
   }, [setRepairerTypeSelected]);
 
-  const handleSelectRepairerType = (event: SelectChangeEvent) => {
-    setRepairerTypeSelected(event.target.value);
-  };
-
-  const handleChangeSort = (sortOption: string): void => {
-    setSortChosen(sortOption);
-
-    let value = '';
-    if (sortOption === 'repairersType') {
-      value = repairerTypeSelected;
-    } else if (sortOption === 'availability') {
-      value = 'ASC';
-    } else if (sortOption === 'proximity') {
-      value = `${city?.lat},${city?.lon}`;
-    }
-
-    setOrderBy({
-      key: sortOption,
-      value: value,
-    });
-  };
-
   return (
-    <>
-      <Typography
-        id="sort-results-label"
-        sx={{mt: {xs: 2, md: 0}, fontSize: {xs: 14, md: 16}}}>
-        Filtrer vos résultats par :
-      </Typography>
-      <Box
-        display="flex"
-        flexDirection={{xs: 'column', md: 'row'}}
-        alignItems="center">
-        <Box display="flex" alignItems="center">
+    <Box
+      display="flex"
+      justifyContent={{xs: 'space-between', md: 'start'}}
+      alignItems="center"
+      width="100%"
+      pt={{xs: 2, md: 5}}>
+      <FormControl sx={{width: {xs: '30%', md: '20%'}}} size="small">
+        <InputLabel id="sort-results-label">Trier</InputLabel>
+        <Select
+          sx={{
+            '& .MuiSelect-select': {fontSize: {xs: 12, md: 16}},
+          }}
+          label="trier"
+          labelId="sort-results-label"
+          id="sort-results"
+          onChange={handleSelectSortOption}
+          value={sortChosen}>
+          <MenuItem disabled value="">
+            <em>Trier</em>
+          </MenuItem>
           {Object.entries(sortOptions).map(([key, option]) => (
-            <Button
-              type="submit"
-              variant={sortChosen === key ? 'contained' : 'outlined'}
-              sx={{textTransform: 'capitalize', mr: 1, my: 1}}
-              key={key}
-              value={key}
-              onClick={() => handleChangeSort(key)}>
+            <MenuItem key={key} value={key}>
               {option}
-            </Button>
+            </MenuItem>
           ))}
-        </Box>
-        {sortChosen === 'repairersType' && (
-          <FormControl
-            sx={{mt: {xs: 1, md: 0}, width: {xs: '100%', md: '20%'}}}>
-            <InputLabel
-              id="repairer-type-label"
-              sx={{fontSize: {xs: 14, md: 16}}}>
-              Choisissez un type de réparateur
-            </InputLabel>
-            <Select
-              size="small"
-              labelId="repairer-type-label"
-              id="repairer-type"
-              label="Choisissez un type de réparateur"
-              onChange={handleSelectRepairerType}
-              value={repairerTypeSelected}>
-              {repairerTypes.map((repairerType) => (
-                <MenuItem key={repairerType.id} value={repairerType.id}>
-                  {repairerType.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-      </Box>
-    </>
+        </Select>
+      </FormControl>
+      <FormControl
+        sx={{width: {xs: '30%', md: '20%'}, ml: {md: 2}}}
+        size="small">
+        <InputLabel id="filter-results-label">Filtrer</InputLabel>
+        <Select
+          sx={{
+            '& .MuiSelect-select': {fontSize: {xs: 12, md: 16}},
+          }}
+          label="Filtrer"
+          labelId="filter-results-label"
+          id="filter-results"
+          onChange={handleSelectFilterOption}
+          value={repairerTypeSelected}>
+          <MenuItem disabled value="">
+            <em>Filtrer</em>
+          </MenuItem>
+          {repairerTypes.map((repairerType) => (
+            <MenuItem key={repairerType.id} value={repairerType.id}>
+              {repairerType.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      {repairers.length ? (
+        <Button
+          sx={{
+            border: '2px solid',
+            borderColor: 'primary.main',
+            fontSize: {xs: 12, md: 16},
+            borderRadius: '5px',
+            width: '30%',
+            display: {md: 'none'},
+            textTransform: 'capitalize',
+          }}
+          onClick={() => setShowMap(!showMap)}
+          variant="contained">
+          {showMap ? (
+            <FormatListBulletedOutlinedIcon sx={{color: 'white'}} />
+          ) : (
+            <MapOutlinedIcon sx={{color: 'white'}} />
+          )}
+        </Button>
+      ) : null}
+    </Box>
   );
 };
 

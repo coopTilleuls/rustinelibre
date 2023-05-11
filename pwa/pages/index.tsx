@@ -12,7 +12,7 @@ const Home = () => {
         <title>Bienvenue sur la page d’accueil!</title>
       </Head>
       <WebsiteLayout />
-      <Container>
+      <Container sx={{pt: 10}}>
         <Stack spacing={{xs: 2, md: 4}} sx={{mt: {xs: 2, md: 6}, mb: 12}}>
           <HomeCard
             title="Besoin d'une réparation sur ton vélo ?"

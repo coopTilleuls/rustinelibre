@@ -23,6 +23,7 @@ interface SearchRepairerContext {
   repairerTypeSelected: string;
   sortChosen: string;
   orderBy: OrderByOption | null;
+  filterBy: OrderByOption | null;
   totalItems: number;
   setRepairers: (repairers: Repairer[]) => void;
   setCityInput: (value: string) => void;
@@ -33,6 +34,7 @@ interface SearchRepairerContext {
   setCity: (value: City | null) => void;
   setRepairerTypeSelected: (value: string) => void;
   setOrderBy: (value: OrderByOption) => void;
+  setFilterBy: (value: OrderByOption) => void;
   setSortChosen: (value: string) => void;
   setTotalItems: (value: number) => void;
 }
@@ -47,6 +49,7 @@ const initialValue = {
   currentPage: 1,
   repairerTypeSelected: '',
   orderBy: null,
+  filterBy: null,
   sortChosen: 'availability',
   totalItems: 0,
   setRepairers: () => [],
@@ -58,6 +61,7 @@ const initialValue = {
   setCurrentPage: () => null,
   setRepairerTypeSelected: () => null,
   setOrderBy: () => null,
+  setFilterBy: () => null,
   setSortChosen: () => null,
   setTotalItems: () => null,
 };
@@ -77,6 +81,7 @@ export const SearchRepairerProvider = ({
   const [repairerTypeSelected, setRepairerTypeSelected] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [orderBy, setOrderBy] = useState<OrderByOption | null>(null);
+  const [filterBy, setFilterBy] = useState<OrderByOption | null>(null);
   const [sortChosen, setSortChosen] = useState<string>('availability');
   const [totalItems, setTotalItems] = useState<number>(0);
 
@@ -92,6 +97,7 @@ export const SearchRepairerProvider = ({
         currentPage,
         repairerTypeSelected,
         orderBy,
+        filterBy,
         sortChosen,
         totalItems,
         setRepairers,
@@ -103,6 +109,7 @@ export const SearchRepairerProvider = ({
         setCurrentPage,
         setRepairerTypeSelected,
         setOrderBy,
+        setFilterBy,
         setSortChosen,
         setTotalItems,
       }}>

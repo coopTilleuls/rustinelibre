@@ -36,5 +36,6 @@ export const menuLogged = [
   {
     name: 'FAQ',
     link: '/',
+    disabled: true,
   },
 ];

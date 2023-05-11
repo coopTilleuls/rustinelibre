@@ -38,10 +38,10 @@ const Login: NextPageWithLayout = ({}) => {
 
     if (connectionSuccess) {
       const next = Array.isArray(router.query.next)
-          ? router.query.next.join('')
-          : router.query.next || '/';
+        ? router.query.next.join('')
+        : router.query.next || '/';
 
-      router.push(next)
+      router.push(next);
     } else {
       setErrorMessage('Ces identifiants de connexion ne sont pas valides');
     }
@@ -63,7 +63,7 @@ const Login: NextPageWithLayout = ({}) => {
         <title>Se connecter</title>
       </Head>
       <WebsiteLayout />
-      <Container sx={{width: {xs: '100%', md: '50%'}}}>
+      <Container sx={{pt: 10, width: {xs: '100%', md: '50%'}}}>
         <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
           <Box
             sx={{
