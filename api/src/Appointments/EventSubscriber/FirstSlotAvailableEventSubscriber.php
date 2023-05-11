@@ -7,7 +7,6 @@ namespace App\Appointments\EventSubscriber;
 use App\Entity\Appointment;
 use App\Repairers\Slots\FirstSlotAvailableCalculator;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
@@ -15,7 +14,6 @@ class FirstSlotAvailableEventSubscriber implements EventSubscriber
 {
     public function __construct(
         private readonly FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
-        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -51,6 +49,6 @@ class FirstSlotAvailableEventSubscriber implements EventSubscriber
             return;
         }
 
-        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($entity->repairer);
+        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($entity->repairer, true);
     }
 }

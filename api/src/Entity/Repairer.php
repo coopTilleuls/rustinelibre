@@ -16,7 +16,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
-use App\Appointments\StateProvider\RepairerAvailableSlotsProvider;
+use App\Controller\BuildRepairerSlotsAvailableAction;
 use App\Repairers\Dto\CreateUserRepairerDto;
 use App\Repairers\Filter\AroundFilter;
 use App\Repairers\Filter\FirstAvailableSlotFilter;
@@ -45,10 +45,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection(
     uriTemplate: '/repairer_get_slots_available/{id}',
     requirements: ['id' => '\d+'],
+    controller: BuildRepairerSlotsAvailableAction::class,
     openapi: new Model\Operation(
-        summary: 'Retrieves the collection of availabilities of a repairer for 7 next days',
-        description: 'Retrieves all the availabilities of a repairer'),
-    provider: RepairerAvailableSlotsProvider::class,
+        summary: 'Retrieves the collection of availabilities of a repairer for 60 next days',
+        description: 'Retrieves all the availabilities of a repairer')
 )]
 #[Post(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(
@@ -226,10 +226,10 @@ class Repairer
     public ?int $distance = null;
 
     #[ORM\Column(nullable: true)]
-    public ?int $durationSlot = null;
+    public ?int $durationSlot = 60;
 
     #[ORM\Column(nullable: true)]
-    public ?int $numberOfSlots = null;
+    public ?int $numberOfSlots = 1;
 
     public function __construct()
     {

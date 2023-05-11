@@ -21,6 +21,7 @@
         "phpdocumentor/reflection-docblock": "^5.3",
         "qbbr/pgsql-doctrine-random-function": "^1.0",
         "simshaun/recurr": "^5.0",
+        "spatie/opening-hours": "^2.13",
         "symfony/asset": "6.2.*",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",

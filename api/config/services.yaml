@@ -34,10 +34,6 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
-    App\Repairers\EventSubscriber\RruleEventSubscriber:
-        tags:
-            - { name: doctrine.event_subscriber }
-
     App\Repairers\EventSubscriber\SlugEventSubscriber:
         tags:
             - { name: doctrine.event_subscriber }

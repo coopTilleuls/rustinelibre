@@ -77,9 +77,6 @@ class Appointment
     public ?\DateTimeImmutable $slotTime = null;
 
     #[ORM\Column(nullable: true)]
-    public ?int $duration = 60;
-
-    #[ORM\Column(nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     #[ApiProperty(securityPostDenormalize: "is_granted('ACCEPTED_TOGGLE', object)")]
     public ?bool $accepted = null;

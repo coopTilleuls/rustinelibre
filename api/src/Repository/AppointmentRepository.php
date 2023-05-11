@@ -43,8 +43,13 @@ class AppointmentRepository extends ServiceEntityRepository
         }
     }
 
-    public function findFullSlots(Repairer $repairer, \DateTimeInterface $start, \DateTimeInterface $end): array
+    public function findFullSlots(Repairer $repairer, ?\DateTimeInterface $start = new \DateTime(), ?\DateTimeInterface $end = null): array
     {
+        if (!$end) {
+            $end = new \DateTime();
+            $end->add(new \DateInterval('P60D'));
+        }
+
         $query = $this->getEntityManager()->createQuery(<<<DQL
             SELECT a.slotTime AS appointment_time
             FROM {$this->getClassName()} a
