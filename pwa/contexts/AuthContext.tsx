@@ -10,7 +10,6 @@ import {userResource} from '@resources/userResource';
 import {authenticationResource} from '@resources/authenticationResource';
 import {User} from 'interfaces/User';
 import {
-  getRefreshToken,
   getToken,
   removeRefreshToken,
   removeToken,

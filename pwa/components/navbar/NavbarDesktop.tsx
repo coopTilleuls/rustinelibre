@@ -1,10 +1,5 @@
-import * as React from 'react';
 import Link from 'next/link';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import {Container} from '@mui/material';
-import Box from '@mui/material/Box';
+import {Button, Typography, Box} from '@mui/material';
 import {Page} from '@interfaces/Page';
 import {User} from '@interfaces/User';
 
@@ -48,13 +43,17 @@ const NavbarDesktop = ({
         </Box>
       </Link>
       <Box sx={{display: 'flex', justifyContent: 'center'}}>
-        {pages.map((page) => {
+        {pages.map(({name, link, disabled}) => {
           return (
             <Link
-              key={page.name}
-              href={page.link}
-              style={{textDecoration: 'none'}}>
+              key={name}
+              href={disabled ? '' : link}
+              style={{
+                textDecoration: 'none',
+                cursor: disabled ? 'default' : 'pointer',
+              }}>
               <Button
+                disabled={disabled}
                 onClick={handleClose}
                 sx={{
                   display: 'flex',
@@ -69,7 +68,7 @@ const NavbarDesktop = ({
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   },
                 }}>
-                {page.name}
+                {name}
               </Button>
             </Link>
           );
