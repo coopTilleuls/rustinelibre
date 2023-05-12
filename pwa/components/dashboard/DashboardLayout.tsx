@@ -14,6 +14,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import {useAccount} from '@contexts/AuthContext';
 import useMediaQuery from '@hooks/useMediaQuery';
+import HandymanIcon from '@mui/icons-material/Handyman';
 
 const drawerWidth = 240;
 
@@ -144,6 +145,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
               open={true}
               icon={<FolderSharedIcon />}
               path="/dashboard/clients"
+            />
+            <DashboardSidebarListItem
+              text="Paramètres Agenda"
+              open={true}
+              icon={<HandymanIcon />}
+              path="/dashboard/agenda/parametres"
             />
             <DashboardSidebarListItem
               text="Employés"
