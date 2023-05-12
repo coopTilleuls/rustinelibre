@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -24,6 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection]
 #[Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.repairer.owner == user)")]
+#[ApiFilter(SearchFilter::class, properties: ['repairer' => 'exact'])]
 #[RepairerOpenings]
 class RepairerOpeningHours
 {
