@@ -30,7 +30,7 @@ dependencies:
     version: 5.11.15(@emotion/react@11.10.6)(@emotion/styled@11.10.6)(@types/react@18.0.35)(react-dom@18.2.0)(react@18.2.0)
   '@mui/x-date-pickers':
     specifier: ^6.2.1
-    version: 6.2.1(@emotion/react@11.10.6)(@emotion/styled@11.10.6)(@mui/base@5.0.0-alpha.123)(@mui/material@5.11.15)(@mui/system@5.11.15)(dayjs@1.11.7)(react-dom@18.2.0)(react@18.2.0)
+    version: 6.2.1(@emotion/react@11.10.6)(@emotion/styled@11.10.6)(@mui/base@5.0.0-alpha.123)(@mui/material@5.11.15)(@mui/system@5.11.15)(dayjs@1.11.7)(moment@2.29.4)(react-dom@18.2.0)(react@18.2.0)
   '@types/leaflet':
     specifier: ^1.9.3
     version: 1.9.3
@@ -55,6 +55,9 @@ dependencies:
   leaflet-geosearch:
     specifier: ^3.7.0
     version: 3.7.0
+  moment:
+    specifier: ^2.29.4
+    version: 2.29.4
   next:
     specifier: ^13.2.4
     version: 13.2.4(@babel/core@7.21.4)(react-dom@18.2.0)(react@18.2.0)
@@ -652,7 +655,7 @@ packages:
       '@date-io/core': 2.16.0
     dev: false
 
-  /@date-io/hijri@2.16.1:
+  /@date-io/hijri@2.16.1(moment@2.29.4):
     resolution: {integrity: sha512-6BxY0mtnqj5cBiXluRs3uWN0mSJwGw0AB2ZxqtEHvBFoiSYEojW51AETnfPIWpdvDsBn+WAC7QrfBvQZnoyIkQ==}
     peerDependencies:
       moment-hijri: ^2.1.2
@@ -660,12 +663,12 @@ packages:
       moment-hijri:
         optional: true
     dependencies:
-      '@date-io/moment': 2.16.1
+      '@date-io/moment': 2.16.1(moment@2.29.4)
     transitivePeerDependencies:
       - moment
     dev: false
 
-  /@date-io/jalaali@2.16.1:
+  /@date-io/jalaali@2.16.1(moment@2.29.4):
     resolution: {integrity: sha512-GLw87G/WJ1DNrQHW8p/LqkqAqTUSqBSRin0H1pRPwCccB5Fh7GT64sadjzEvjW56lPJ0aq2vp5yI2eIjZajfrw==}
     peerDependencies:
       moment-jalaali: ^0.7.4 || ^0.8.0 || ^0.9.0
@@ -673,7 +676,7 @@ packages:
       moment-jalaali:
         optional: true
     dependencies:
-      '@date-io/moment': 2.16.1
+      '@date-io/moment': 2.16.1(moment@2.29.4)
     transitivePeerDependencies:
       - moment
     dev: false
@@ -689,7 +692,7 @@ packages:
       '@date-io/core': 2.16.0
     dev: false
 
-  /@date-io/moment@2.16.1:
+  /@date-io/moment@2.16.1(moment@2.29.4):
     resolution: {integrity: sha512-JkxldQxUqZBfZtsaCcCMkm/dmytdyq5pS1RxshCQ4fHhsvP5A7gSqPD22QbVXMcJydi3d3v1Y8BQdUKEuGACZQ==}
     peerDependencies:
       moment: ^2.24.0
@@ -698,6 +701,7 @@ packages:
         optional: true
     dependencies:
       '@date-io/core': 2.16.0
+      moment: 2.29.4
     dev: false
 
   /@digitalbazaar/http-client@3.3.0:
@@ -1107,7 +1111,7 @@ packages:
       react-is: 18.2.0
     dev: false
 
-  /@mui/x-date-pickers@6.2.1(@emotion/react@11.10.6)(@emotion/styled@11.10.6)(@mui/base@5.0.0-alpha.123)(@mui/material@5.11.15)(@mui/system@5.11.15)(dayjs@1.11.7)(react-dom@18.2.0)(react@18.2.0):
+  /@mui/x-date-pickers@6.2.1(@emotion/react@11.10.6)(@emotion/styled@11.10.6)(@mui/base@5.0.0-alpha.123)(@mui/material@5.11.15)(@mui/system@5.11.15)(dayjs@1.11.7)(moment@2.29.4)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-pLSqzxJWgO2MV6so8A4LEGr1nDQuKJugKKP32Ej/YXGqUfW3CS1bHoYeuavO+Y/5JH4qnf7BPvcGEVXIjqTGTA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -1149,10 +1153,10 @@ packages:
       '@date-io/core': 2.16.0
       '@date-io/date-fns': 2.16.0
       '@date-io/date-fns-jalali': 2.16.0
-      '@date-io/hijri': 2.16.1
-      '@date-io/jalaali': 2.16.1
+      '@date-io/hijri': 2.16.1(moment@2.29.4)
+      '@date-io/jalaali': 2.16.1(moment@2.29.4)
       '@date-io/luxon': 2.16.1
-      '@date-io/moment': 2.16.1
+      '@date-io/moment': 2.16.1(moment@2.29.4)
       '@emotion/react': 11.10.6(@types/react@18.0.35)(react@18.2.0)
       '@emotion/styled': 11.10.6(@emotion/react@11.10.6)(@types/react@18.0.35)(react@18.2.0)
       '@mui/base': 5.0.0-alpha.123(@types/react@18.0.35)(react-dom@18.2.0)(react@18.2.0)
@@ -1162,6 +1166,7 @@ packages:
       '@types/react-transition-group': 4.4.5
       clsx: 1.2.1
       dayjs: 1.11.7
+      moment: 2.29.4
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -3067,6 +3072,10 @@ packages:
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
     dev: true
+
+  /moment@2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: false
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
