@@ -13,7 +13,7 @@ import ContactDetails from '@components/dashboard/informations/ContactDetails';
 import {Repairer} from '@interfaces/Repairer';
 import {NextPageWithLayout} from "../../_app";
 import OpeningHours from "@components/dashboard/agenda/OpeningHours";
-
+import ExceptionalClosure from "@components/dashboard/agenda/ExceptionalClosure";
 
 const AgendaParameters: NextPageWithLayout = () => {
     const [repairer, setRepairer] = useState<Repairer | null>(null);
@@ -59,8 +59,8 @@ const AgendaParameters: NextPageWithLayout = () => {
                         {!loading && repairer && tabValue === 0 && (
                             <OpeningHours repairer={repairer} />
                         )}
-                        {!loading && user && tabValue === 1 && (
-                           <></>
+                        {!loading && repairer && tabValue === 1 && (
+                           <ExceptionalClosure repairer={repairer} />
                         )}
 
                     </Box>

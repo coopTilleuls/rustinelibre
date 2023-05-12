@@ -14,6 +14,10 @@ import useMediaQuery from "@hooks/useMediaQuery";
 import {maintenanceResource} from "@resources/MaintenanceResource";
 import {Bike} from "@interfaces/Bike";
 import InputLabel from "@mui/material/InputLabel";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Moment } from 'moment';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -42,12 +46,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
     const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
     const [photo, setPhoto] = useState<MediaObject|null>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
-    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const date = event.target.value;
-        setSelectedDate(date ? new Date(date) : new Date());
-    };
+    const [selectedDate, setSelectedDate] = useState<string|null>(null);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
@@ -69,7 +68,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
                 bodyRequest['description'] = description;
             }
             if (selectedDate) {
-                bodyRequest['repairDate'] = selectedDate.toISOString();
+                bodyRequest['repairDate'] = selectedDate;
             }
             if (photo) {
                 bodyRequest['photo'] = photo['@id'];
@@ -83,6 +82,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
             setName('');
             setDescription('');
             setPhoto(null);
+            setSelectedDate(null)
             handleCloseModal();
         }
 
@@ -140,14 +140,15 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
                         value={name}
                         onChange={handleChangeName}
                     />
-                    <InputLabel>Date de la réparation</InputLabel>
-                    <input
-                        style={{height: '1.4375em'}}
-                        id="date"
-                        type="date"
-                        value={selectedDate?.toISOString().substr(0, 10) || ''}
-                        onChange={handleDateChange}
-                    />
+                    <InputLabel id="demo-simple-select-label">Date de la réparation</InputLabel>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            format="DD-MM-YYYY"
+                            label="Date"
+                            value={selectedDate}
+                            onChange={(newValue: string|Moment|null) => setSelectedDate(newValue && typeof newValue !== 'string' ? newValue.format('YYYY-MM-DD') : null)}
+                        />
+                    </LocalizationProvider>
                     <TextField
                         margin="normal"
                         placeholder="Description de votre réparation"
