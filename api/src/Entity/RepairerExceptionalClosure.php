@@ -35,6 +35,7 @@ class RepairerExceptionalClosure
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([self::READ])]
     public ?int $id = null;
 
     #[ORM\ManyToOne]

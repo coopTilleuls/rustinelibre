@@ -45,8 +45,8 @@ const RepairerSlots: NextPageWithLayout = () => {
     fetchRepairer();
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSelectSlot = (): void => {
-    setSlotSelected('2023-05-24T12:00:00+00:00'); // @todo click select real slot
+  const handleSelectSlot = (day: string, time: string): void => {
+    setSlotSelected(day + 'T' + time + ':00.000Z');
     setTunnelStep('optionalPage');
   };
 
@@ -147,8 +147,8 @@ const RepairerSlots: NextPageWithLayout = () => {
                         </Button>
                       </Stack>
                     )}
-                    {user && tunnelStep == 'slots' && (
-                      <SlotsStep handleSelectSlot={handleSelectSlot} />
+                    {user && repairer && tunnelStep == 'slots' && (
+                      <SlotsStep handleSelectSlot={handleSelectSlot} repairer={repairer} />
                     )}
                     {user && tunnelStep == 'optionalPage' && (
                       <OptionalStep
