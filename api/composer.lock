@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "caf43956f266268ede8a7b5bc2c055df",
+    "content-hash": "d82434b90c3d0039208300e99cb31481",
     "packages": [
         {
             "name": "api-platform/core",
@@ -3069,36 +3069,30 @@
             "time": "2016-03-12T11:10:05+00:00"
         },
         {
-            "name": "simshaun/recurr",
-            "version": "v5.0.1",
+            "name": "spatie/opening-hours",
+            "version": "2.13.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/simshaun/recurr.git",
-                "reference": "6887b7bd7075de97c8c69835e0939ff68d23c47e"
+                "url": "https://github.com/spatie/opening-hours.git",
+                "reference": "befffe986db3e439a2985033694d4175f80c581e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simshaun/recurr/zipball/6887b7bd7075de97c8c69835e0939ff68d23c47e",
-                "reference": "6887b7bd7075de97c8c69835e0939ff68d23c47e",
+                "url": "https://api.github.com/repos/spatie/opening-hours/zipball/befffe986db3e439a2985033694d4175f80c581e",
+                "reference": "befffe986db3e439a2985033694d4175f80c581e",
                 "shasum": ""
             },
             "require": {
-                "doctrine/collections": "~1.6",
-                "php": "^7.2||^8.0"
+                "php": "^7.0 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.5.16",
-                "symfony/yaml": "^5.3"
+                "kylekatarnls/multi-tester": "^1.1",
+                "phpunit/phpunit": "^6.5"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "Recurr\\": "src/Recurr/"
+                    "Spatie\\OpeningHours\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3107,25 +3101,26 @@
             ],
             "authors": [
                 {
-                    "name": "Shaun Simmons",
-                    "email": "shaun@shaun.pub",
-                    "homepage": "https://shaun.pub"
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
                 }
             ],
-            "description": "PHP library for working with recurrence rules",
-            "homepage": "https://github.com/simshaun/recurr",
+            "description": "A helper to query and format a set of opening hours",
+            "homepage": "https://github.com/spatie/opening-hours",
             "keywords": [
-                "dates",
-                "events",
-                "recurrence",
-                "recurring",
-                "rrule"
+                "hours",
+                "opening",
+                "opening-hours",
+                "schedule",
+                "spatie"
             ],
             "support": {
-                "issues": "https://github.com/simshaun/recurr/issues",
-                "source": "https://github.com/simshaun/recurr/tree/v5.0.1"
+                "issues": "https://github.com/spatie/opening-hours/issues",
+                "source": "https://github.com/spatie/opening-hours/tree/2.13.0"
             },
-            "time": "2022-09-09T05:37:22+00:00"
+            "time": "2022-08-07T15:46:29+00:00"
         },
         {
             "name": "symfony/asset",
@@ -12199,5 +12194,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

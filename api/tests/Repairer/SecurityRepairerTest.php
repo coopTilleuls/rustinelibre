@@ -56,7 +56,6 @@ class SecurityRepairerTest extends AbstractTestCase
                 'latitude' => '50.62544631958008',
                 'longitude' => '3.0352721214294434',
                 'country' => 'France',
-                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
             ],
         ]);
@@ -87,7 +86,6 @@ class SecurityRepairerTest extends AbstractTestCase
                 'city' => 'Lille',
                 'postcode' => '59000',
                 'country' => 'France',
-                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id],
                 'latitude' => '50.6365654',
                 'longitude' => '3.0635282',
@@ -189,7 +187,6 @@ class SecurityRepairerTest extends AbstractTestCase
                 'postcode' => '59000',
                 'latitude' => '50.62285232543945',
                 'longitude' => '3.0607175827026367',
-                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
                 'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[1]->id],
                 'comment' => 'Je voulais juste ajouter un commentaire',
             ],
