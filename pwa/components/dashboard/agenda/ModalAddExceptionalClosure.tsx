@@ -9,7 +9,6 @@ import InputLabel from '@mui/material/InputLabel';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Moment } from 'moment';
 import {exceptionalClosureResource} from "@resources/exceptionalClosingResource";
@@ -94,28 +93,24 @@ const ModalAddExceptionalClosure = ({openModal, handleCloseModal}: ModalAddExcep
                         <Box>
                             <InputLabel id="demo-simple-select-label">Début de la fermeture</InputLabel>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['DatePicker']}>
-                                    <DatePicker
-                                        format="DD-MM-YYYY"
-                                        label="Début de la fermeture"
-                                        value={startDate}
-                                        onChange={(newValue: string|Moment|null) => setStartDate(newValue && typeof newValue !== 'string' ? newValue.format('YYYY-MM-DD') : null)}
-                                    />
-                                </DemoContainer>
+                                <DatePicker
+                                    format="DD-MM-YYYY"
+                                    label="Début de la fermeture"
+                                    value={startDate}
+                                    onChange={(newValue: string|Moment|null) => setStartDate(newValue && typeof newValue !== 'string' ? newValue.format('YYYY-MM-DD') : null)}
+                                />
                             </LocalizationProvider>
                         </Box>
 
                         <Box sx={{marginLeft: '90px'}}>
                             <InputLabel id="demo-simple-select-label">Fin de la fermeture (incluse)</InputLabel>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['DatePicker']}>
-                                    <DatePicker
-                                        format="DD-MM-YYYY"
-                                        label="Fin"
-                                        value={endDate}
-                                        onChange={(newValue: string|Moment|null) => setEndDate(newValue && typeof newValue !== 'string' ? newValue.format('YYYY-MM-DD') : null)}
-                                    />
-                                </DemoContainer>
+                                <DatePicker
+                                    format="DD-MM-YYYY"
+                                    label="Fin"
+                                    value={endDate}
+                                    onChange={(newValue: string|Moment|null) => setEndDate(newValue && typeof newValue !== 'string' ? newValue.format('YYYY-MM-DD') : null)}
+                                />
                             </LocalizationProvider>
                         </Box>
                     </Box>
