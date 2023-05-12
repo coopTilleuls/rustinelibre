@@ -38,7 +38,6 @@ class RepairerSerializationTest extends AbstractTestCase
             $this->assertArrayHasKey('name', $repairer);
             $this->assertArrayHasKey('latitude', $repairer);
             $this->assertArrayHasKey('longitude', $repairer);
-            $this->assertArrayHasKey('firstSlotAvailable', $repairer);
         }
     }
 
@@ -58,7 +57,6 @@ class RepairerSerializationTest extends AbstractTestCase
             $this->assertArrayHasKey('name', $repairer);
             $this->assertArrayHasKey('latitude', $repairer);
             $this->assertArrayHasKey('longitude', $repairer);
-            $this->assertArrayHasKey('firstSlotAvailable', $repairer);
         }
     }
 
@@ -75,7 +73,6 @@ class RepairerSerializationTest extends AbstractTestCase
         $this->assertArrayHasKey('name', $response);
         $this->assertArrayHasKey('latitude', $response);
         $this->assertArrayHasKey('longitude', $response);
-        $this->assertArrayHasKey('firstSlotAvailable', $response);
     }
 
     public function testGetRepairerByDisconnectedUser(): void
@@ -92,7 +89,6 @@ class RepairerSerializationTest extends AbstractTestCase
         $this->assertArrayHasKey('name', $response);
         $this->assertArrayHasKey('latitude', $response);
         $this->assertArrayHasKey('longitude', $response);
-        $this->assertArrayHasKey('firstSlotAvailable', $response);
     }
 
     public function testGetUnknownRepairer(): void

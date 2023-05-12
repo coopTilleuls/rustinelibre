@@ -13,7 +13,7 @@ use App\Repository\RepairerOpeningHoursRepository;
 use Spatie\OpeningHours\OpeningHours;
 use Spatie\OpeningHours\TimeRange;
 
-final class SlotsAvailableBuilder
+final class ComputeAvailableSlotsByRepairer
 {
     public function __construct(private RepairerOpeningHoursRepository $repairerOpeningHoursRepository,
                                 private AppointmentRepository $appointmentRepository,
@@ -67,13 +67,12 @@ final class SlotsAvailableBuilder
 
         /** @var \DateTime $appointment */
         foreach ($appointments as $appointment) {
-
             $appointmentDay = $appointment->format('Y-m-d');
             if (array_key_exists($appointmentDay, $slots)) {
                 $slotTime = $appointment->format('H:i');
                 if (in_array($slotTime, $slots[$appointmentDay])) {
                     $key = array_search($slotTime, $slots[$appointmentDay]);
-                    if ($key !== false) {
+                    if (false !== $key) {
                         unset($slots[$appointmentDay][$key]);
                         $slots[$appointmentDay] = array_values($slots[$appointmentDay]);
                     }
@@ -93,7 +92,6 @@ final class SlotsAvailableBuilder
 
         // Loop on each day of week to get the opening hours from the given repairer
         foreach (RepairerOpeningHours::DAYS_OF_WEEK as $dayOfWeek) {
-
             // No opening hours available for this day
             if (!array_key_exists($dayOfWeek, $availabilitiesByDays)) {
                 $openingHoursData[$dayOfWeek] = [];
@@ -113,19 +111,17 @@ final class SlotsAvailableBuilder
         //  Build slots by day
         $data = [];
         foreach ($next60days as $day) {
-
             $dateByDay = new \DateTime($day);
             $openingHoursForDay = $openingHours->forDate($dateByDay);
 
             /** @var TimeRange $timeRange */
             foreach ($openingHoursForDay as $timeRange) {
-
                 // Get end of the time range
-                $endTimeRange = clone($dateByDay);
+                $endTimeRange = clone $dateByDay;
                 $endTimeRange = $endTimeRange->setTime($timeRange->end()->hours(), $timeRange->end()->minutes());
 
                 // Get the first slot available of the day
-                $slot = clone($dateByDay);
+                $slot = clone $dateByDay;
                 $slot = $slot->setTime($timeRange->start()->hours(), $timeRange->start()->minutes());
 
                 // Add slots until the time range stop

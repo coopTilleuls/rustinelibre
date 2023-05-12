@@ -23,8 +23,8 @@ use App\Repairers\Filter\FirstAvailableSlotFilter;
 use App\Repairers\Filter\ProximityFilter;
 use App\Repairers\Filter\RandomFilter;
 use App\Repairers\State\CreateUserRepairerProcessor;
+use App\Repairers\Validator\RepairerSlots;
 use App\Repository\RepairerRepository;
-use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -80,6 +80,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)]
 #[UniqueEntity('owner')]
+#[RepairerSlots]
 class Repairer
 {
     public const REPAIRER_READ = 'repairer_read';
@@ -142,11 +143,6 @@ class Repairer
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?string $country = null;
-
-    #[AppAssert\Rrule]
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_WRITE])]
-    public ?string $rrule = 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR';
 
     #[ORM\ManyToMany(targetEntity: BikeType::class, inversedBy: 'repairers')]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
@@ -226,9 +222,16 @@ class Repairer
     public ?int $distance = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
     public ?int $durationSlot = 60;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('integer')]
+    #[Assert\Range(
+        min: 1,
+        max: 10,
+        notInRangeMessage: 'You must have a number of slots between {{ min }} and {{ max }}',
+    )]
     public ?int $numberOfSlots = 1;
 
     public function __construct()

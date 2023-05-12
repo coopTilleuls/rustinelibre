@@ -9,10 +9,11 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Repairers\Validator\RepairerOpenings;
 use App\Repository\RepairerOpeningHoursRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerOpeningHoursRepository::class)]
 #[ApiResource(
@@ -23,6 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[GetCollection]
 #[Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.repairer.owner == user)")]
+#[RepairerOpenings]
 class RepairerOpeningHours
 {
     public const WRITE = 'repairer_availability_write';
@@ -44,12 +46,12 @@ class RepairerOpeningHours
     #[Groups([self::READ, self::WRITE])]
     public ?string $day = null;
 
-    #[Assert\Regex("/^([01]?[0-9]|2[0-3]):([03]0)$/")]
+    #[Assert\Regex('/^([01]?[0-9]|2[0-3]):([03]0)$/')]
     #[ORM\Column]
     #[Groups([self::READ, self::WRITE])]
     public ?string $startTime = null;
 
-    #[Assert\Regex("/^([01]?[0-9]|2[0-3]):([03]0)$/")]
+    #[Assert\Regex('/^([01]?[0-9]|2[0-3]):([03]0)$/')]
     #[ORM\Column]
     #[Groups([self::READ, self::WRITE])]
     public ?string $endTime = null;

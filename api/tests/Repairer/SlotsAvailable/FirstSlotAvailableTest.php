@@ -47,32 +47,4 @@ class FirstSlotAvailableTest extends AbstractTestCase
         $this->assertLessThanOrEqual($responseData2['hydra:member'][1]['firstSlotAvailable'], $responseData2['hydra:member'][0]['firstSlotAvailable']);
         $this->assertLessThanOrEqual($responseData2['hydra:member'][2]['firstSlotAvailable'], $responseData2['hydra:member'][1]['firstSlotAvailable']);
     }
-
-    public function testNewRepairerShouldHaveFirstSlotValue(): void
-    {
-        // Create a repairer
-        $user = $this->userRepository->getUserWithoutRepairer();
-
-        if (null === $user) {
-            self::fail('No user without repairer found');
-        }
-
-        $response = $this->createClientWithUser($user)->request('POST', '/repairers', ['json' => [
-            'name' => 'New workshop',
-            'description' => 'Nouvel atelier de réparation',
-            'mobilePhone' => '0720397799',
-            'street' => 'avenue Nino Marchese',
-            'city' => 'Lille',
-        ]]);
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $responseData = $response->toArray();
-        $this->assertNotNull($responseData['firstSlotAvailable']);
-
-        $response2 = $this->createClientAuthAsAdmin()->request('PUT', $responseData['@id'], ['json' => [
-            'rrule' => 'FREQ=MINUTELY;INTERVAL=90;BYHOUR=18,19;BYDAY=WE,TH,FR',
-        ]]);
-        $responseDataUpdate = $response2->toArray();
-        $this->assertNotEquals($responseData['firstSlotAvailable'], $responseDataUpdate['firstSlotAvailable']);
-    }
 }

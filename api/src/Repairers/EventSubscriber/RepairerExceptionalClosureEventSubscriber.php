@@ -7,7 +7,6 @@ namespace App\Repairers\EventSubscriber;
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\RepairerExceptionalClosure;
 use App\Entity\User;
-use App\Repairers\Slots\FirstSlotAvailableCalculator;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +15,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 readonly class RepairerExceptionalClosureEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private Security $security, private FirstSlotAvailableCalculator $firstSlotAvailableCalculator)
+    public function __construct(private Security $security)
     {
     }
 
@@ -24,13 +23,12 @@ readonly class RepairerExceptionalClosureEventSubscriber implements EventSubscri
     {
         return [
             KernelEvents::VIEW => [
-                ['injectRepairer', EventPriorities::PRE_WRITE],
-                ['setFirstSlotAvailable', EventPriorities::POST_WRITE]
+                ['injectCustomer', EventPriorities::PRE_WRITE],
             ],
         ];
     }
 
-    public function injectRepairer(ViewEvent $event): void
+    public function injectCustomer(ViewEvent $event): void
     {
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
@@ -46,22 +44,5 @@ readonly class RepairerExceptionalClosureEventSubscriber implements EventSubscri
         }
 
         $object->repairer = $currentUser->repairer;
-    }
-
-    public function setFirstSlotAvailable(ViewEvent $event): void
-    {
-        $object = $event->getControllerResult();
-        $method = $event->getRequest()->getMethod();
-
-        dump($method, $object);
-        die;
-
-        if (!$object instanceof RepairerExceptionalClosure) {
-            return;
-        }
-
-
-        // $this->repairerExceptionalClosure = $object
-        // $this->firstSlotAvailableCalculator->setFirstSlotAvailable($object->repairer, true);
     }
 }

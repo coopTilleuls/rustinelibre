@@ -55,13 +55,16 @@ class AppointmentRepository extends ServiceEntityRepository
             FROM {$this->getClassName()} a
             WHERE a.repairer = :repairer
             AND a.slotTime BETWEEN :start_date AND :end_date
+            AND a.accepted != false
             GROUP BY a.repairer, a.slotTime
+            HAVING COUNT(a.id) >= :numberOfSlots
             ORDER BY a.slotTime
         DQL
         )->setParameters([
             'repairer' => $repairer,
             'start_date' => $start,
             'end_date' => $end,
+            'numberOfSlots' => $repairer->numberOfSlots ?? 1,
         ]);
 
         return array_column($query->getArrayResult(), 'appointment_time');

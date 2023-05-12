@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Repairers\Slots;
 
-use App\Appointments\Services\AvailableSlotComputer;
-use App\Controller\BuildRepairerSlotsAvailableAction;
 use App\Entity\Repairer;
 use Doctrine\ORM\EntityManagerInterface;
-use Recurr\Recurrence;
 
 final class FirstSlotAvailableCalculator
 {
-    public function __construct(private readonly SlotsAvailableBuilder $slotsAvailableBuilder,
+    public function __construct(private readonly ComputeAvailableSlotsByRepairer $computeAvailableSlotsByRepairer,
                                 private EntityManagerInterface $entityManager)
     {
     }
@@ -20,7 +17,7 @@ final class FirstSlotAvailableCalculator
     public function setFirstSlotAvailable(Repairer $repairer, ?bool $flush = false): void
     {
         /** @var array<string, array<int, string>> $slotsAvailable */
-        $slotsAvailable = $this->slotsAvailableBuilder->buildArrayOfAvailableSlots($repairer);
+        $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($repairer);
 
         if (!empty($slotsAvailable)) {
             $day = key($slotsAvailable);

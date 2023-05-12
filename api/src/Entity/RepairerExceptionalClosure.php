@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Repairers\Validator\RepairerClosing;
 use App\Repository\RepairerExceptionalClosureRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[GetCollection]
 #[Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.repairer.owner == user)")]
+#[RepairerClosing]
 class RepairerExceptionalClosure
 {
     public const READ = 'repairer_exceptional_closure_read';
