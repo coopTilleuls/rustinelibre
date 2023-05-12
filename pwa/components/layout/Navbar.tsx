@@ -43,7 +43,7 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
         <NavbarDesktop
           pages={pages}

@@ -91,26 +91,32 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
                 {repairer.postcode} - {repairer.city}
               </Typography>
             </div>
-            <div>
-              <Typography
-                color="text.secondary"
-                fontSize={{xs: 14, md: 16}}
-                fontWeight={600}>
-                Prochaine disponibilité :
-              </Typography>
-              <Typography
-                paragraph
-                fontSize={{xs: 14, md: 16}}
-                color="text.secondary">
-                {repairer.firstSlotAvailable
-                  ? formatDate(repairer.firstSlotAvailable)
-                  : 'Pas de créneau indiqué'}
-              </Typography>
-            </div>
-            <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-              <Button variant="contained" sx={{textTransform: 'capitalize'}}>
-                Je réserve
-              </Button>
+            <Box
+              display="flex"
+              flexDirection={{xs: 'column', md: 'row'}}
+              justifyContent="space-between"
+              alignItems={{xs: 'start', md: 'center'}}>
+              <div>
+                <Typography
+                  color="text.secondary"
+                  fontSize={{xs: 14, md: 16}}
+                  fontWeight={600}>
+                  Prochaine disponibilité :
+                </Typography>
+                <Typography
+                  paragraph
+                  fontSize={{xs: 14, md: 16}}
+                  color="text.secondary">
+                  {repairer.firstSlotAvailable
+                    ? formatDate(repairer.firstSlotAvailable)
+                    : 'Pas de créneau indiqué'}
+                </Typography>
+              </div>
+              <div>
+                <Button variant="contained" sx={{textTransform: 'capitalize'}}>
+                  Je réserve
+                </Button>
+              </div>
             </Box>
           </Stack>
         </CardContent>
