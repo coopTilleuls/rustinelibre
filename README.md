@@ -46,7 +46,7 @@ bin/phpunit             # Lance les tests API
 
 
 ## Pour obtenir un token JWT (JsonWebToken)
-Make a POST request on URL : https://localhost/auth with body
+Faites une request POST sur cette URL : https://localhost/auth avec ce contenu
 ```
 {
     "email": "clement@les-tilleuls.coop", 
@@ -54,29 +54,29 @@ Make a POST request on URL : https://localhost/auth with body
 }
 ```
 
-To obtain the following token
+Pour obtenir le token suivant
 ```
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Nzk2NTQxOTgsImV4cCI6MTY3OTY1Nzc5OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImNsZW1lbnRAbGVzLXRpbGxldWxzLmNvb3AifQ.OmmLYlmeriqt-SSIgseyTDDYcAOFs_ws4p7FmbBbExpPn3JQOyrIQk3zs-NKOIupxT8grB42KPnCa_cm08i6Mu1p4Bm-lBWe2N95rNCTRAhazFirwVCx5Jgkp1QD2ICUElOyw6pid8oroTQ903XhtHJnK8tRADArDZqz64U3p4eHcMbappjyJCQhVeV50oYsqcmR3gPWkO5uNt-9lMz4prOasz4rRPXY3MIVrGX6NJTCGkQjQPD0ibcqofJxoXpWmYvzIMNfRw7Wb0yd7guQxm7rWRVAwjBWFiW1eLou4upuq_KREojGLJwcTHVODeCrJcsQyRPtW1SRvrtP-PJ3tA"
 }
 ```
 
-Then pass the JWT on your request's header as  `Authorization: Bearer {token}`
+Ensuite passer le token JWT en header à vos requêtes   `Authorization: Bearer {token}`
 
 
 ## Pour l'envoi des emails
-By default in this project we use symfony/mailer and mailgun to send our emails. 
-You are free to implement another solution for this task.
+Par défaut dans ce projet nous utilisons symfony/mailer et mailgun pour envoyer nos emails.
+Vous êtes libre d'implémenter une autre solution pour cette partie.
 
-You just have to change the following environment variables, and install the library compatible with symfony/mailer 
-(gmail, amazon, mailchimp, mailjet etc...)
+Vous avez juste à changer les variables d'environnement suivantes et installer la librairie
+compatible avec symfony/mailer  (gmail, amazon, mailchimp, mailjet etc...)
 
 ```
 MAILER_SENDER
 MAILER_DSN
 ```
 
-All the documentation is available here : https://symfony.com/doc/current/mailer.html
+Toute la documentation est disponible ici : https://symfony.com/doc/current/mailer.html
 
 
 ## Pour se connecter 
