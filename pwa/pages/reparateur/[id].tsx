@@ -15,7 +15,9 @@ type RepairerPageProps = {
   repairerProps: Repairer | null;
 };
 
-const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
+const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
+  repairerProps,
+}) => {
   const router = useRouter();
   const {id} = router.query;
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,6 +48,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) =>
       <main>
         <Box
           sx={{
+            pt: 10,
             bgcolor: 'background.paper',
             mt: {md: 8},
             mb: 10,
@@ -62,14 +65,14 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
   if (!ENTRYPOINT) {
     return {
       notFound: true,
-      revalidate: 0
+      revalidate: 0,
     };
   }
 
   if (!params) {
     return {
       notFound: true,
-      revalidate: 10
+      revalidate: 10,
     };
   }
 
@@ -77,7 +80,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
   if (!id) {
     return {
       notFound: true,
-      revalidate: 10
+      revalidate: 10,
     };
   }
 

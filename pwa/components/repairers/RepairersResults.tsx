@@ -37,17 +37,14 @@ export const RepairersResults = (): JSX.Element => {
   };
 
   return (
-    <Box display="flex" sx={{mb: 8}}>
+    <Box display="flex">
       {!showMap && (
         <Box
           sx={{
-            overflow: 'auto',
-            pl: 1,
-            pr: 2,
+            pr: {md: 2},
             width: {xs: '100%', md: '50%'},
-            maxHeight: '100vh',
           }}>
-          <Grid2 container spacing={{xs: 2, md: 4}}>
+          <Grid2 container spacing={2}>
             {repairers.map((repairer) => {
               return (
                 <Grid2 key={repairer.id} xs={12}>
@@ -60,8 +57,11 @@ export const RepairersResults = (): JSX.Element => {
       )}
       <Box
         sx={{
-          display: {xs: showMap ? 'block' : 'none', lg: 'block'},
+          display: {xs: showMap ? 'block' : 'none', md: 'block'},
           width: {xs: '100%', md: '50%'},
+          height: 'calc(100vh - 335px)',
+          position: 'sticky',
+          top: '253px',
         }}>
         <MapContainer
           center={mapCenter}
@@ -69,7 +69,7 @@ export const RepairersResults = (): JSX.Element => {
           scrollWheelZoom={false}
           style={{
             zIndex: 1,
-            height: 700,
+            height: '100%',
             borderRadius: 5,
           }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

@@ -35,7 +35,6 @@ type MyBikesProps = {
 };
 
 const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
-
   const {user, isLoadingFetchUser} = useAccount({});
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -92,12 +91,13 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
           alignItems: 'center',
           mt: 4,
           mb: 10,
+          pt: 10,
         }}>
         <Typography fontSize={{xs: 24, md: 40}} fontWeight={600}>
           Mes vélos
         </Typography>
 
-        {(!user && !isLoadingFetchUser) ? (
+        {!user && !isLoadingFetchUser ? (
           <Paper
             elevation={4}
             sx={{
@@ -179,7 +179,6 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-
   if (!ENTRYPOINT) {
     return {
       props: {},

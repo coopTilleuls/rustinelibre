@@ -114,10 +114,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
         </Toolbar>
       </AppBar>
       <Box sx={{display: 'flex'}}>
-        <Drawer
-          variant={'permanent'}
-          open={!isMobile}
-          anchor="left">
+        <Drawer variant={'permanent'} open={!isMobile} anchor="left">
           <DrawerHeader></DrawerHeader>
           <Divider />
           <List>

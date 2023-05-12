@@ -280,7 +280,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         <title>Inscription</title>
       </Head>
       <WebsiteLayout />
-      <Container sx={{width: {xs: '100%', md: '50%'}}}>
+      <Container sx={{pt: 10, width: {xs: '100%', md: '50%'}}}>
         {!inscriptionSuccess && (
           <Paper
             elevation={4}
