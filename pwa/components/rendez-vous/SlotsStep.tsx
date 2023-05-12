@@ -1,81 +1,38 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {Box, Typography, Button, Stack, Collapse, Divider} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {openingHoursResource} from "@resources/openingHours";
+import {Repairer} from "@interfaces/Repairer";
 
-const slots = [
-  {
-    id: 1,
-    day: '2023-05-05',
-    slots: [
-      {
-        id: 1,
-        slot: '10:00',
-      },
-      {
-        id: 2,
-        slot: '10:30',
-      },
-      {
-        id: 3,
-        slot: '11:00',
-      },
-    ],
-  },
-  {
-    id: 2,
-    day: '2023-05-06',
-    slots: [
-      {
-        id: 1,
-        slot: '09:00',
-      },
-      {
-        id: 2,
-        slot: '10:30',
-      },
-    ],
-  },
-  {
-    id: 3,
-    day: '2023-05-07',
-    slots: [
-      {
-        id: 1,
-        slot: '08:00',
-      },
-      {
-        id: 2,
-        slot: '08:30',
-      },
-      {
-        id: 3,
-        slot: '13:00',
-      },
-      {
-        id: 4,
-        slot: '14:00',
-      },
-      {
-        id: 5,
-        slot: '15:30',
-      },
-      {
-        id: 6,
-        slot: '16:00',
-      },
-    ],
-  },
-];
-
-interface SlotsStepProps {
-  handleSelectSlot: () => void;
+interface OpeningsObjectType {
+  [key: string]: string[];
 }
 
-const SlotsStep = ({handleSelectSlot}: SlotsStepProps) => {
+interface SlotsStepProps {
+  handleSelectSlot: (day: string, time: string) => void;
+  repairer: Repairer;
+}
+
+const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useMediaQuery('(max-width: 640px)');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [openingHours, setOpeningHours] = useState<OpeningsObjectType|null>(null);
+  const [displayCount, setDisplayCount] = useState<number>(7);
+
+  const fetchOpeningHours = async () => {
+    setLoading(true);
+    const openingHoursFetch = await openingHoursResource.getRepairerSlotsAvailable(repairer.id);
+    setOpeningHours(openingHoursFetch);
+    setLoading(false);
+  }
+
+
+  useEffect(() => {
+    fetchOpeningHours();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleExpand = (index: number) => {
     if (openIndex === index) {
@@ -95,14 +52,18 @@ const SlotsStep = ({handleSelectSlot}: SlotsStepProps) => {
         Choisissez votre créneau :
       </Typography>
       <Stack spacing={4} width={'100%'}>
-        {slots.map(({id, day, slots}, index) => {
-          const date = new Date(day).toLocaleString('fr-FR', {
+
+
+        {openingHours && Object.entries(openingHours).slice(0, displayCount).map(([day, hours], index) => {
+
+          const date: string = new Date(day).toLocaleString('fr-FR', {
             weekday: 'long',
             month: 'long',
             day: 'numeric',
           });
+
           return (
-            <Box key={id} sx={{backgroundColor: 'primary.light'}}>
+            <Box key={day} sx={{backgroundColor: 'primary.light'}}>
               <Box
                 display="flex"
                 alignItems="center"
@@ -139,10 +100,10 @@ const SlotsStep = ({handleSelectSlot}: SlotsStepProps) => {
                     direction="row"
                     justifyContent="start"
                     alignItems="center">
-                    {slots.map(({id, slot}) => (
-                      <Grid2 key={id} xs={4} textAlign="center">
+                    {hours.map(hour => (
+                      <Grid2 key={hour} xs={4} textAlign="center">
                         <Button
-                          onClick={handleSelectSlot}
+                          onClick={() => handleSelectSlot(day, hour)}
                           variant="contained"
                           sx={{
                             color: 'primary.main',
@@ -151,7 +112,7 @@ const SlotsStep = ({handleSelectSlot}: SlotsStepProps) => {
                               backgroundColor: 'grey.300',
                             },
                           }}>
-                          {slot}
+                          {hour}
                         </Button>
                       </Grid2>
                     ))}
@@ -161,6 +122,10 @@ const SlotsStep = ({handleSelectSlot}: SlotsStepProps) => {
             </Box>
           );
         })}
+
+        {openingHours && displayCount < Object.entries(openingHours).length && (
+            <Button variant="outlined" onClick={() => setDisplayCount(displayCount + 7)}>Voir plus de disponibilités</Button>
+        )}
       </Stack>
     </Box>
   );
