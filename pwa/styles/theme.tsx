@@ -8,6 +8,7 @@ const theme = createTheme({
           props: {},
           style: {
             borderRadius: 20,
+            fontWeight: 600,
           },
         },
       ],
