@@ -8,7 +8,6 @@ App\Entity\Repairer:
     city: "Lomme"
     postcode: "59160"
     country: "France"
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.621917'
     longitude: '3.063398'
@@ -25,7 +24,6 @@ App\Entity\Repairer:
     city: "Lille"
     postcode: "59000"
     country: "France"
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: [ '@biketype_elec', '@biketype_classic' ]
     latitude: '50.623932'
     longitude: '3.057561'
@@ -43,7 +41,6 @@ App\Entity\Repairer:
     city: "Lille"
     postcode: "59000"
     country: "France"
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: [ '@biketype_classic' ]
     latitude: '50.634658'
     longitude: '3.059621'
@@ -61,7 +58,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: [ '@biketype_elec', '@biketype_classic' ]
     latitude: '50.640847495690416'
     longitude: '3.063796139948392'
@@ -79,7 +75,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: [ '@biketype_elec', '@biketype_classic' ]
     latitude: '50.63205456634782'
     longitude: '3.086616668783799'
@@ -97,7 +92,6 @@ App\Entity\Repairer:
     city: 'Hellemmes'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: [ '@biketype_elec', '@biketype_classic' ]
     latitude: '50.62698476561278'
     longitude: '3.1073636687835653'
@@ -115,7 +109,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.63001647163023'
     longitude: '3.0558313974240985'
@@ -133,7 +126,6 @@ App\Entity\Repairer:
     city: 'Ronchin'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.60034646175558'
     longitude: '3.09824402625828'
@@ -151,7 +143,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.616066183283785'
     longitude: '3.030325812938165'
@@ -169,7 +160,6 @@ App\Entity\Repairer:
     city: 'La Madeleine'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.65310367163476'
     longitude: '3.0765575685896245'
@@ -187,7 +177,6 @@ App\Entity\Repairer:
     city: 'Marcq en Baroeul'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.667725871297016'
     longitude: '3.1022751550968466'
@@ -205,7 +194,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.6242419588088'
     longitude: '3.0693763550948643'
@@ -223,7 +211,6 @@ App\Entity\Repairer:
     city: 'La Madeleine'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.654100771635015'
     longitude: '3.0760502974252044'
@@ -241,7 +228,6 @@ App\Entity\Repairer:
     city: 'Lambersart'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.65312026049611'
     longitude: '3.0288867262606542'
@@ -259,7 +245,6 @@ App\Entity\Repairer:
     city: 'LIlle'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.641988375475094'
     longitude: '3.0569075262601735'
@@ -277,7 +262,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.62270127826345'
     longitude: '3.0328065262592943'
@@ -295,7 +279,6 @@ App\Entity\Repairer:
     city: 'LIlle'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.62474717162909'
     longitude: '3.0682853974238613'
@@ -313,7 +296,6 @@ App\Entity\Repairer:
     city: 'LIlle'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.6246672652801'
     longitude: '3.056235026259378'
@@ -331,7 +313,6 @@ App\Entity\Repairer:
     city: 'LIlle'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.61347335568944'
     longitude: '3.063150526258884'
@@ -348,7 +329,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.629869166034084'
     longitude: '3.067642855095133'
@@ -365,7 +345,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.63822554970996'
     longitude: '3.0771190974245197'
@@ -382,7 +361,6 @@ App\Entity\Repairer:
     city: 'Faches Thumesnil'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.60769378085438'
     longitude: '3.065552426428842'
@@ -399,7 +377,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.64148087163247'
     longitude: '3.0656641839311702'
@@ -415,7 +392,6 @@ App\Entity\Repairer:
     city: 'Marquette-lez-lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: ['@biketype_elec', '@biketype_classic']
     latitude: '50.67394149851168'
     longitude: '3.0665240417922486'
@@ -431,7 +407,6 @@ App\Entity\Repairer:
     city: 'Lille'
     postcode: '59000'
     country: 'France'
-    rrule: 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR'
     bikeTypesSupported: [ '@biketype_elec', '@biketype_classic' ]
     latitude: '50.67394149851168'
     longitude: '3.0665240417922486'
