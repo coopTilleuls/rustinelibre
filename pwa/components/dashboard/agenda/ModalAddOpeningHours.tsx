@@ -64,7 +64,7 @@ const ModalAddOpeningHours = ({day, openModal, handleCloseModal}: ModalAddOpenin
             setStartTime('09:00')
             setEndTime('18:00')
         } catch (e) {
-            setErrorMessage('Ajout de cette plage horaire impossible, vérifiez les heures indiquées (vos plages horaires ne peuvent pas se chevaucher');
+            setErrorMessage('Ajout de cette plage horaire impossible, vérifiez les heures indiquées (vos plages horaires ne peuvent pas se chevaucher)');
         }
 
         setPendingAdd(false);
