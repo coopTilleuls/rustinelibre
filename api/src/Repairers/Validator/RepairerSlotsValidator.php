@@ -20,7 +20,7 @@ class RepairerSlotsValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'repairer');
         }
 
-        if (!in_array($value->durationSlot, [30, 60, 90])) {
+        if ($value->durationSlot && !in_array($value->durationSlot, [30, 60, 90])) {
             $this->context->buildViolation($constraint->messageNotValidDurationSlot)->addViolation();
         }
     }

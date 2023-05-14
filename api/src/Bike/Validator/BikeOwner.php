@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Validator;
+namespace App\Bike\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
