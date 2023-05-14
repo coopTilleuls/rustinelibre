@@ -14,8 +14,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Bike\Validator\BikeOwner;
 use App\Repository\MaintenanceRepository;
-use App\Validator as BikeAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -46,7 +46,7 @@ class Maintenance
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[BikeAssert\BikeOwner]
+    #[BikeOwner]
     #[Groups([self::READ, self::WRITE])]
     public ?Bike $bike = null;
 
