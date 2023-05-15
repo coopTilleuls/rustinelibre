@@ -19,7 +19,7 @@ class GetTest extends AbstractTestCase
 
     public function testAdminCanGetAllAppointments(): void
     {
-        $this->createClientAuthAsAdmin()->request('GET', '/appointments')->toArray();
+        $this->createClientAuthAsAdmin()->request('GET', '/appointments');
 
         self::assertResponseIsSuccessful();
     }
@@ -37,7 +37,7 @@ class GetTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $response = $this->createClientWithUser($appointment->customer)->request('GET', '/appointments')->toArray();
         $customers = array_map(static function ($appointment) {
-            return $appointment['customer'];
+            return $appointment['customer']['@id'];
         }, $response['hydra:member']);
 
         self::assertResponseIsSuccessful();
@@ -50,7 +50,7 @@ class GetTest extends AbstractTestCase
         $response = $this->createClientWithUser($appointment->customer)->request('GET', sprintf('/appointments/%s', $appointment->id))->toArray();
 
         self::assertResponseIsSuccessful();
-        self::assertSame(sprintf('/users/%d', $appointment->customer->id), $response['customer']);
+        self::assertSame(sprintf('/users/%d', $appointment->customer->id), $response['customer']['@id']);
     }
 
     public function testCustomerCannotGetOtherAppointments(): void

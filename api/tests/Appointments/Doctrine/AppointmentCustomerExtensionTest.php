@@ -25,7 +25,7 @@ class AppointmentCustomerExtensionTest extends AbstractTestCase
 
         self::assertResponseIsSuccessful();
         foreach ($response['hydra:member'] as $result) {
-            self::assertSame(sprintf('/users/%d', $appointment->customer->id), $result['customer']);
+            self::assertSame(sprintf('/users/%d', $appointment->customer->id), $result['customer']['@id']);
         }
     }
 }
