@@ -7,7 +7,6 @@ namespace App\Tests\Appointments\Doctrine;
 use App\Repository\AppointmentRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\AppointmentTrait;
-use App\Tests\Trait\UserTrait;
 
 class AppointmentCustomerExtensionTest extends AbstractTestCase
 {

@@ -73,5 +73,4 @@ slotTime: This value should not be blank.',
             'hydra:description' => sprintf('slotTime: This value should be greater than %s.', (new \DateTimeImmutable('now'))->format('M j, Y, g:i A')),
         ]);
     }
-
 }

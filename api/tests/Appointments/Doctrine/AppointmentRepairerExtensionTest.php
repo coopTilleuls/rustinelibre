@@ -7,7 +7,6 @@ namespace App\Tests\Appointments\Doctrine;
 use App\Repository\AppointmentRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\AppointmentTrait;
-use App\Tests\Trait\UserTrait;
 
 class AppointmentRepairerExtensionTest extends AbstractTestCase
 {
@@ -23,12 +22,11 @@ class AppointmentRepairerExtensionTest extends AbstractTestCase
     {
         $appointment = $this->getAppointment();
 
-        if(!in_array('ROLE_BOSS', $appointment->repairer->owner->getRoles(), true)){
+        if (!in_array('ROLE_BOSS', $appointment->repairer->owner->getRoles(), true)) {
             self::fail('The user is not a boss');
         }
 
         $response = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/appointments')->toArray();
-
 
         self::assertResponseIsSuccessful();
         self::assertGreaterThan(0, count($response['hydra:member']));

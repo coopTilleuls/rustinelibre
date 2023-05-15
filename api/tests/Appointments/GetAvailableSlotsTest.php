@@ -20,7 +20,6 @@ class GetAvailableSlotsTest extends AbstractTestCase
 
     private Client $client;
 
-
     public function setUp(): void
     {
         parent::setUp();

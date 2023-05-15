@@ -16,8 +16,8 @@ readonly class AppointmentCustomerExtension implements QueryCollectionExtensionI
 {
     public function __construct(
         private Security $security
-    )
-    {}
+    ) {
+    }
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
