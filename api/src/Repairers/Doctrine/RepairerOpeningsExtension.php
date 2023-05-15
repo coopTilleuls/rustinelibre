@@ -7,7 +7,7 @@ namespace App\Repairers\Doctrine;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use App\Repairers\Validator\RepairerOpenings;
+use App\Entity\RepairerOpeningHours;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -24,7 +24,7 @@ final class RepairerOpeningsExtension implements QueryCollectionExtensionInterfa
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (RepairerOpenings::class !== $resourceClass
+        if (RepairerOpeningHours::class !== $resourceClass
             || $this->security->isGranted('ROLE_ADMIN')
             || null === $user = $this->security->getUser()) {
             return;
