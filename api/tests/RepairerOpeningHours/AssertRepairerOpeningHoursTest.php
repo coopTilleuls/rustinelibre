@@ -6,10 +6,11 @@ namespace App\Tests\RepairerOpeningHours;
 
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
+use App\Tests\Trait\RepairerTrait;
 
 class AssertRepairerOpeningHoursTest extends AbstractTestCase
 {
-    private RepairerRepository $repairerRepository;
+    use RepairerTrait;
 
     public function setUp(): void
     {
