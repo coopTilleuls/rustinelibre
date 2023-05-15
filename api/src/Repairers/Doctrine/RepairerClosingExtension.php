@@ -7,7 +7,7 @@ namespace App\Repairers\Doctrine;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use App\Repairers\Validator\RepairerClosing;
+use App\Entity\RepairerExceptionalClosure;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -24,7 +24,7 @@ final class RepairerClosingExtension implements QueryCollectionExtensionInterfac
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (RepairerClosing::class !== $resourceClass
+        if (RepairerExceptionalClosure::class !== $resourceClass
             || $this->security->isGranted('ROLE_ADMIN')
             || null === $user = $this->security->getUser()) {
             return;
