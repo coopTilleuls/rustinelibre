@@ -92,9 +92,9 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
                 <Typography
                   paragraph
                   fontSize={{xs: 16, md: 18}}
-                  color="text.secondary">
-                  {repairer.description}
-                </Typography>
+                  color="text.secondary"
+                  dangerouslySetInnerHTML={{__html: repairer.description}}
+                />
               </>
             )}
             {repairer.firstSlotAvailable && (
@@ -124,7 +124,9 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
               </>
             )}
           </Box>
-          <Link href={`/reparateur/${repairer.id}/creneaux`} style={{textDecoration: 'none'}}>
+          <Link
+            href={`/reparateur/${repairer.id}/creneaux`}
+            style={{textDecoration: 'none'}}>
             <Button variant="contained">Je réserve</Button>
           </Link>
         </Stack>
