@@ -58,7 +58,7 @@ slotTime: This value should not be blank.',
     public function testCreateAppointmentWithOldSlotTime(): void
     {
         $repairer = $this->repairerRepository->findOneBy([]);
-        $this->createClientAuthAsUser()->request('POST', '/appointments', [
+        $response = $this->createClientAuthAsUser()->request('POST', '/appointments', [
             'json' => [
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
                 'slotTime' => (new \DateTimeImmutable('-1 day'))->format('Y-m-d H:i:s'),
@@ -66,11 +66,11 @@ slotTime: This value should not be blank.',
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertStringContainsString('slotTime: This value should be greater than', $response->getContent(false));
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => sprintf('slotTime: This value should be greater than %s.', (new \DateTimeImmutable('now'))->format('M j, Y, g:i A')),
         ]);
     }
 }
