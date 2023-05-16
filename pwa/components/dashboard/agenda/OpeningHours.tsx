@@ -75,8 +75,7 @@ export const OpeningHours = ({repairer}: OpeningHoursProps): JSX.Element => {
                 <FormControl sx={{marginTop: '20px', width: '40%'}}>
                     <InputLabel id="demo-simple-select-label">Unité des créneaux</InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        id="select_duration_slot"
                         value={duration.toString()}
                         label="Unité des créneaux"
                         onChange={handleChangeDuration}
@@ -87,11 +86,10 @@ export const OpeningHours = ({repairer}: OpeningHoursProps): JSX.Element => {
                     </Select>
                 </FormControl>
 
-                <FormControl sx={{marginTop: '20px', marginLeft: '5%', width: '40%'}}>
+                <FormControl sx={{marginTop: '20px', marginLeft: '5%', width: '40%', paddingBottom: '20px'}}>
                     <InputLabel id="demo-simple-select-label">Nombre de RDV accepté par créneau</InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        id="select_number_slots"
                         value={numberOfSlots.toString()}
                         label="Nombre de RDV accepté par créneau"
                         onChange={handleChangeNumberOfSlots}
@@ -109,7 +107,6 @@ export const OpeningHours = ({repairer}: OpeningHoursProps): JSX.Element => {
                     </Select>
                 </FormControl>
 
-                <br />
                 <Button variant="outlined" onClick={updateRepaireSlots} sx={{marginTop: '20px', width: '80%'}}>
                     {!loading ? 'Mettre à jour' : <CircularProgress />}
                 </Button>
