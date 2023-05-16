@@ -45,7 +45,7 @@ const MobileNavbar = ({
         }}>
         <Link href="/" style={{textDecoration: 'none'}}>
           <Typography
-            color="white"
+            color="primary"
             sx={{
               fontSize: 18,
               fontWeight: 600,
@@ -61,7 +61,7 @@ const MobileNavbar = ({
           aria-controls="menu-appbar"
           aria-haspopup="true"
           onClick={handleOpen}
-          color="inherit"
+          color="primary"
           sx={{pr: 0}}>
           <MenuIcon />
         </IconButton>

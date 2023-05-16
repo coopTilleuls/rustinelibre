@@ -5,10 +5,6 @@ export const menuNotLogged = [
     disabled: true,
   },
   {
-    name: 'Inscription',
-    link: '/inscription',
-  },
-  {
     name: 'Liste des réparateurs',
     link: '/reparateur/chercher-un-reparateur',
   },

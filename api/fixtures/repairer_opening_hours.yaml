@@ -1,0 +1,7 @@
+App\Entity\RepairerOpeningHours:
+    opening_hours_repairer_{1..100}:
+        repairer: '@repairer_<numberBetween(1, 25)>'
+        day: day <current()>
+        startTime: <numberBetween(10, 18)>:00
+        endTime: <numberBetween(10, 18)>:00
+        
