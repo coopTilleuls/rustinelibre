@@ -26,13 +26,9 @@ const NavbarDesktop = ({
       alignItems="center"
       my={2}>
       <Link href="/" style={{textDecoration: 'none'}}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            color: 'white',
-          }}>
+        <Box display="flex" alignItems="center" height="100%">
           <Typography
+            color="primary"
             sx={{
               mr: 2,
               fontSize: 16,
@@ -42,7 +38,7 @@ const NavbarDesktop = ({
           </Typography>
         </Box>
       </Link>
-      <Box sx={{display: 'flex', justifyContent: 'center'}}>
+      <Box display="flex" justifyContent="flex">
         {pages.map(({name, link, disabled}) => {
           return (
             <Link
@@ -63,9 +59,8 @@ const NavbarDesktop = ({
                   fontSize: 16,
                   fontWeight: 600,
                   borderRadius: 20,
-                  color: 'white',
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backgroundColor: 'white',
                   },
                 }}>
                 {name}
@@ -86,18 +81,18 @@ const NavbarDesktop = ({
                 fontSize: 16,
                 fontWeight: 600,
                 borderRadius: 20,
-                color: 'white',
                 '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  color: 'primary.main',
+                  backgroundColor: 'white',
                 },
               }}>
               Accès réparateur
             </Button>
           </Link>
         )}
-        {user && (
+        {user ? (
           <Button
-            variant="outlined"
+            variant="contained"
             key="logout"
             onClick={logOut}
             sx={{
@@ -109,13 +104,40 @@ const NavbarDesktop = ({
               fontSize: 16,
               fontWeight: 600,
               borderRadius: 20,
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
               '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                color: 'primary.main',
+                backgroundColor: 'white',
               },
             }}>
             Déconnexion
           </Button>
+        ) : (
+          <Link
+            href="/inscription"
+            style={{
+              textDecoration: 'none',
+              cursor: 'pointer',
+            }}>
+            <Button
+              variant="contained"
+              onClick={handleClose}
+              sx={{
+                display: 'flex',
+                paddingX: 2,
+                marginX: 0.5,
+                textTransform: 'capitalize',
+                fontSize: 16,
+                fontWeight: 600,
+                borderRadius: 20,
+                color: 'white',
+                '&:hover': {
+                  color: 'primary.main',
+                  backgroundColor: 'white',
+                },
+              }}>
+              Inscription
+            </Button>
+          </Link>
         )}
       </Box>
     </Box>

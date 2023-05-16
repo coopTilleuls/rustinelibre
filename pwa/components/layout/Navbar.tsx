@@ -44,7 +44,7 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
 
   return (
     <AppBar position="fixed">
-      <Toolbar>
+      <Toolbar sx={{backgroundColor: 'white'}}>
         <NavbarDesktop
           pages={pages}
           boss={boss}
