@@ -35,7 +35,7 @@ class FirstSlotAvailableTest extends AbstractTestCase
         $this->createClientAuthAsAdmin()->request('POST', '/appointments', ['json' => [
             'customer' => '/users/'.$randomUser->id,
             'repairer' => '/repairers/'.$responseData['hydra:member'][0]['id'],
-            'slotTime' => '2023-03-22T11:00:00+00:00',
+            'slotTime' => (new \DateTimeImmutable('+1 day'))->format('Y-m-d H:i:s'),
         ]]);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
