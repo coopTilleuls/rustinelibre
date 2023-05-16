@@ -2,4 +2,4 @@ App\Entity\RepairerExceptionalClosure:
     repairer_exceptional_closure_{1..100}:
         repairer: '@repairer_<numberBetween(1, 25)>'
         startDate: '<(new \DateTime())>'
-        endDate: '<(new \DateTime())>'
+        endDate: '<(new \DateTime("+ 1 day"))>'
