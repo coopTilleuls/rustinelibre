@@ -40,8 +40,10 @@ const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppoin
     }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchAppointment = async () => {
+        setLoading(true);
         const appointmentsFetch = await appointmentResource.get(id, true);
         setAppointment(appointmentsFetch);
+        setLoading(false)
     }
 
     return (
@@ -57,10 +59,10 @@ const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppoin
                     {!loading && appointment &&
                         <Box>
                             {appointment.autoDiagnostic && <Typography variant="h5">{appointment.autoDiagnostic.prestation}</Typography>}
-                            Client : ${appointment.customer.firstName} ${appointment.customer.lastName}
+                            Client : {`${appointment.customer.firstName} ${appointment.customer.lastName}`}
+                            
                         </Box>
                     }
-
                 </Box>
             </Box>
         </Modal>

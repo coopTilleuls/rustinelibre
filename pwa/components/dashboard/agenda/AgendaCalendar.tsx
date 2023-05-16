@@ -77,6 +77,7 @@ export const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => 
     }
 
     const clickAppointment = (event: EventImpl) => {
+        setOpenModal(true);
         setSelectedId(event.id);
     }
 
