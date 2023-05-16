@@ -83,7 +83,7 @@ const ModalAddOpeningHours = ({day, openModal, handleCloseModal}: ModalAddOpenin
             open={openModal}
             onClose={() => handleCloseModal(false)}
             aria-labelledby="Ajouter une plage horaire"
-            aria-describedby="popup_add_bike"
+            aria-describedby="popup_add_opening"
         >
             <Box sx={style}>
                 <Box sx={{ mt: 1 }}>
