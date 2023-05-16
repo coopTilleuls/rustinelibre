@@ -7,6 +7,7 @@ namespace App\Tests\RepairerOpeningHours;
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\RepairerTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class AssertRepairerOpeningHoursTest extends AbstractTestCase
 {
@@ -30,7 +31,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertStringContainsString('startTime: This value is not valid.', $response->getContent(false));
     }
 
@@ -46,7 +47,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertStringContainsString('endTime: This value is not valid.', $response->getContent(false));
     }
 
@@ -62,7 +63,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertStringContainsString('The endTime cannot be before startTime', $response->getContent(false));
     }
 
@@ -78,7 +79,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertStringContainsString('This day is not available, should be one of : monday, tuesday, wednesday, thursday, friday, saturday, sunday', $response->getContent(false));
     }
 }

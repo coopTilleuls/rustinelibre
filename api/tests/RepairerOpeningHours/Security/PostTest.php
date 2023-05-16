@@ -7,6 +7,7 @@ namespace App\Tests\RepairerOpeningHours\Security;
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\RepairerTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostTest extends AbstractTestCase
 {
@@ -30,7 +31,7 @@ class PostTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(201);
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
     public function testBossCanCreateRepairerOpeningHours(): void
@@ -45,7 +46,7 @@ class PostTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(201);
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
     public function testUserCannotCreateRepairerOpeningHours(): void
@@ -60,6 +61,6 @@ class PostTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }

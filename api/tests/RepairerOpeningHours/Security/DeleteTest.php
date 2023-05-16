@@ -7,6 +7,7 @@ namespace App\Tests\RepairerOpeningHours\Security;
 use App\Entity\RepairerOpeningHours;
 use App\Repository\RepairerOpeningHoursRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class DeleteTest extends AbstractTestCase
 {
@@ -23,7 +24,7 @@ class DeleteTest extends AbstractTestCase
         $roh = $this->repairerOpeningHoursRepository->findOneBy([]);
         $this->createClientAuthAsAdmin()->request('DELETE', sprintf('/repairer_opening_hours/%d', $roh->id));
 
-        self::assertResponseStatusCodeSame(204);
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testOwnerCanDeleteHisRepairerOpeningHours(): void
@@ -32,7 +33,7 @@ class DeleteTest extends AbstractTestCase
         $roh = $this->repairerOpeningHoursRepository->findOneBy([]);
         $this->createClientWithUser($roh->repairer->owner)->request('DELETE', sprintf('/repairer_opening_hours/%d', $roh->id));
 
-        self::assertResponseStatusCodeSame(204);
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testBossCannotDeleteOtherRepairerOpeningHours(): void
@@ -41,6 +42,6 @@ class DeleteTest extends AbstractTestCase
         $roh = $this->repairerOpeningHoursRepository->findOneBy([]);
         $this->createClientAuthAsBoss()->request('DELETE', sprintf('/repairer_opening_hours/%d', $roh->id));
 
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }
