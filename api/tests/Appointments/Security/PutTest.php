@@ -8,6 +8,7 @@ use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\AppointmentTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class PutTest extends AbstractTestCase
 {
@@ -35,6 +36,8 @@ class PutTest extends AbstractTestCase
             sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
+                    'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                    'repairer' => sprintf('/repairers/%d', $this->appointment->repairer->id),
                     'accepted' => !$accepted,
                 ],
             ]
@@ -54,6 +57,8 @@ class PutTest extends AbstractTestCase
             sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
+                    'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                    'repairer' => sprintf('/repairers/%d', $this->appointment->repairer->id),
                     'accepted' => !$accepted,
                 ],
             ]
@@ -73,13 +78,15 @@ class PutTest extends AbstractTestCase
             sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
+                    'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                    'repairer' => sprintf('/repairers/%d', $this->appointment->repairer->id),
                     'accepted' => !$accepted,
                 ],
             ]
         );
 
         $appointmentUpdated = $this->appointmentRepository->find($this->appointment->id);
-        self::assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
         self::assertSame($accepted, $appointmentUpdated->accepted);
     }
 
@@ -92,13 +99,15 @@ class PutTest extends AbstractTestCase
             sprintf('/appointments/%d', $this->appointment->id),
             [
                 'json' => [
+                    'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                    'repairer' => sprintf('/repairers/%d', $this->appointment->repairer->id),
                     'accepted' => !$accepted,
                 ],
             ]
         );
 
         $appointmentUpdated = $this->appointmentRepository->find($this->appointment->id);
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         self::assertSame($accepted, $appointmentUpdated->accepted);
     }
 }

@@ -28,4 +28,6 @@ export interface Repairer {
   enabled: boolean;
   openingHours?: string;
   optionalPage?: string;
+  durationSlot?: number;
+  numberOfSlots?: number;
 }
