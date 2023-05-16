@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -23,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
+    paginationClientEnabled: true,
 )]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
@@ -31,6 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
+#[ApiFilter(DateFilter::class, properties: ['slotTime'])]
 class Appointment
 {
     public const APPOINTMENT_READ = 'appointment_read';
