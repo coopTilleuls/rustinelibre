@@ -24,14 +24,14 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
   const [repairer, setRepairer] = useState<Repairer | null>(repairerProps);
 
   // If no repairerProps loaded
-  async function fetchRepairer() {
+  const fetchRepairer = async () => {
     if (id) {
       setLoading(true);
       const repairer = await repairerResource.getById(id.toString());
       setLoading(false);
       setRepairer(repairer);
     }
-  }
+  };
 
   useEffect(() => {
     if (!repairer) {
