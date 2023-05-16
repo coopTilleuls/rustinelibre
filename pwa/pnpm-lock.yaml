@@ -22,6 +22,15 @@ dependencies:
   '@fontsource/roboto':
     specifier: ^4.5.8
     version: 4.5.8
+  '@fullcalendar/core':
+    specifier: ^6.1.7
+    version: 6.1.7
+  '@fullcalendar/daygrid':
+    specifier: ^6.1.7
+    version: 6.1.7(@fullcalendar/core@6.1.7)
+  '@fullcalendar/react':
+    specifier: ^6.1.7
+    version: 6.1.7(@fullcalendar/core@6.1.7)(react-dom@18.2.0)(react@18.2.0)
   '@mui/icons-material':
     specifier: ^5.11.11
     version: 5.11.11(@mui/material@5.11.15)(@types/react@18.0.35)(react@18.2.0)
@@ -874,6 +883,32 @@ packages:
 
   /@fontsource/roboto@4.5.8:
     resolution: {integrity: sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==}
+    dev: false
+
+  /@fullcalendar/core@6.1.7:
+    resolution: {integrity: sha512-Hc63ARSyABlNo10B3NkA0z8ndaDmq5MKpcBB2iQsGQyn8N8cyn/x6V284Je1EwDoKsBlbrZAj+j+efBO+QQf5g==}
+    dependencies:
+      preact: 10.12.1
+    dev: false
+
+  /@fullcalendar/daygrid@6.1.7(@fullcalendar/core@6.1.7):
+    resolution: {integrity: sha512-IB+QdRcs+TeTlsK8qJFtYZ/2GugmXEFC0C00/n1aLT7GLgFn3ueV1GN0EKvXv9HJ5ai8My65mYbSyQizY/Ishw==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.7
+    dependencies:
+      '@fullcalendar/core': 6.1.7
+    dev: false
+
+  /@fullcalendar/react@6.1.7(@fullcalendar/core@6.1.7)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-Pwe88D4zXwP/XQsYWOa1foroF/OpHSLet5CiE4crnaKvngEtzt3SBDIO01agQOpo+yE1KM/n3yE5ePbdJtVJIQ==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.7
+      react: ^16.7.0 || ^17 || ^18
+      react-dom: ^16.7.0 || ^17 || ^18
+    dependencies:
+      '@fullcalendar/core': 6.1.7
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@googlemaps/js-api-loader@1.15.1:
@@ -3352,6 +3387,10 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
+    dev: false
+
+  /preact@10.12.1:
+    resolution: {integrity: sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==}
     dev: false
 
   /prelude-ls@1.2.1:
