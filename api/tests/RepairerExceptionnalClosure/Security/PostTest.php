@@ -6,6 +6,7 @@ namespace App\Tests\RepairerExceptionnalClosure\Security;
 
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostTest extends AbstractTestCase
 {
@@ -30,7 +31,7 @@ class PostTest extends AbstractTestCase
             ]
         );
 
-        self::assertResponseStatusCodeSame(201);
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
     public function testBossCanCreate(): void
@@ -46,6 +47,6 @@ class PostTest extends AbstractTestCase
             ]
         );
 
-        self::assertResponseStatusCodeSame(201);
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 }

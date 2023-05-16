@@ -7,6 +7,7 @@ namespace App\Tests\RepairerExceptionnalClosure\Security;
 use App\Entity\RepairerExceptionalClosure;
 use App\Repository\RepairerExceptionalClosureRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class DeleteTest extends AbstractTestCase
 {
@@ -24,7 +25,7 @@ class DeleteTest extends AbstractTestCase
         $rec = $this->repairerExceptionalClosureRepository->findOneBy([]);
         $this->createClientAuthAsAdmin()->request('DELETE', sprintf('/repairer_exceptional_closures/%d', $rec->id));
 
-        self::assertResponseStatusCodeSame(204);
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testBossCanDeleteHisRepairerExceptionalClosure(): void
@@ -33,7 +34,7 @@ class DeleteTest extends AbstractTestCase
         $rec = $this->repairerExceptionalClosureRepository->findOneBy([]);
         $this->createClientWithUser($rec->repairer->owner)->request('DELETE', sprintf('/repairer_exceptional_closures/%d', $rec->id));
 
-        self::assertResponseStatusCodeSame(204);
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testBossCannotDeleteOtherRepairerExceptionalClosure(): void
@@ -42,6 +43,6 @@ class DeleteTest extends AbstractTestCase
         $rec = $this->repairerExceptionalClosureRepository->findOneBy([]);
         $this->createClientAuthAsUser()->request('DELETE', sprintf('/repairer_exceptional_closures/%d', $rec->id));
 
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }

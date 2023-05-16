@@ -6,6 +6,7 @@ namespace App\Tests\RepairerExceptionnalClosure;
 
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class AssertRepairerExceptionnalClosureTest extends AbstractTestCase
 {
@@ -30,7 +31,7 @@ class AssertRepairerExceptionnalClosureTest extends AbstractTestCase
             ]
         );
 
-        self::assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertStringContainsString('The endDate cannot be before startDate', $response->getContent(false));
     }
 }
