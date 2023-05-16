@@ -223,6 +223,7 @@ class Repairer
 
     #[ORM\Column(nullable: true)]
     #[Assert\Type('integer')]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?int $durationSlot = 60;
 
     #[ORM\Column(nullable: true)]
@@ -232,6 +233,7 @@ class Repairer
         max: 10,
         notInRangeMessage: 'You must have a number of slots between {{ min }} and {{ max }}',
     )]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?int $numberOfSlots = 1;
 
     public function __construct()
