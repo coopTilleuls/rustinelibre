@@ -1,10 +1,10 @@
-import { ReactNode, useState } from "react";
+import {ReactNode, useState} from 'react';
 import {
   DehydratedState,
   Hydrate,
   QueryClient,
   QueryClientProvider,
-} from "react-query";
+} from 'react-query';
 
 const Layout = ({
   children,

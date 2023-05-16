@@ -62,77 +62,81 @@ const Login: NextPageWithLayout = ({}) => {
       <Head>
         <title>Se connecter</title>
       </Head>
-      <WebsiteLayout />
-      <Container sx={{pt: 10, width: {xs: '100%', md: '50%'}}}>
-        <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}>
-            <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
-              Se connecter
-            </Typography>
+      <WebsiteLayout>
+        <Container sx={{width: {xs: '100%', md: '50%'}}}>
+          <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
             <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{mt: 1}}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Adresse email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={handleChangeEmail}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Mot de passe"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={handleChangePassword}
-              />
-              <Box display="flex" flexDirection="column" alignItems="center">
-                <Button type="submit" variant="contained" sx={{my: 2}}>
-                  {!pendingLogin ? (
-                    'Se connecter'
-                  ) : (
-                    <CircularProgress size={20} sx={{color: 'white'}} />
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
+              <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+                Se connecter
+              </Typography>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{mt: 1}}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Adresse email"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  value={email}
+                  onChange={handleChangeEmail}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Mot de passe"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={handleChangePassword}
+                />
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Button type="submit" variant="contained" sx={{my: 2}}>
+                    {!pendingLogin ? (
+                      'Se connecter'
+                    ) : (
+                      <CircularProgress size={20} sx={{color: 'white'}} />
+                    )}
+                  </Button>
+                  {errorMessage && (
+                    <Typography variant="body1" color="error">
+                      {errorMessage}
+                    </Typography>
                   )}
-                </Button>
-                {errorMessage && (
-                  <Typography variant="body1" color="error">
-                    {errorMessage}
-                  </Typography>
-                )}
-                <Box display="flex" justifyContent="space-between" width="100%">
-                  <Link href="#" variant="body2">
-                    Mot de passe oublié ?
-                  </Link>
-                  <Link href="/inscription" variant="body2">
-                    S’inscrire
-                  </Link>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    width="100%">
+                    <Link href="#" variant="body2">
+                      Mot de passe oublié ?
+                    </Link>
+                    <Link href="/inscription" variant="body2">
+                      S’inscrire
+                    </Link>
+                  </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
-        </Paper>
-      </Container>
+          </Paper>
+        </Container>
+      </WebsiteLayout>
     </>
   );
 };

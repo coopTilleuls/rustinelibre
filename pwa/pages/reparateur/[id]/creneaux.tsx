@@ -82,92 +82,96 @@ const RepairerSlots: NextPageWithLayout = () => {
       <Head>
         <title>Demande de rendez vous {repairer?.name}</title>
       </Head>
-      <WebsiteLayout />
-      <main>
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            mt: {md: 8},
-            mb: 10,
-          }}>
-          {loading && <CircularProgress sx={{marginLeft: '30%'}} />}
+      <WebsiteLayout>
+        <main>
+          <Box
+            sx={{
+              bgcolor: 'background.paper',
+              mt: {md: 8},
+              mb: 10,
+            }}>
+            {loading && <CircularProgress sx={{marginLeft: '30%'}} />}
 
-          {!loading && repairer && (
-            <Box>
-              <Container maxWidth="md" sx={{padding: {xs: 0}}}>
-                <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
-                  {tunnelStep == 'slots' && (
-                    <Link href={`/reparateur/${repairer.id}`}>
-                      <Button variant="outlined">Retour</Button>
-                    </Link>
-                  )}
-                  {tunnelStep == 'optionalPage' && (
-                    <Button
-                      variant="outlined"
-                      onClick={() => setTunnelStep('slots')}>
-                      Consulter les créneaux
-                    </Button>
-                  )}
-                  {tunnelStep == 'confirm' && (
-                    <Button
-                      variant="outlined"
-                      onClick={() => setTunnelStep('optionalPage')}>
-                      Précédent
-                    </Button>
-                  )}
-                  <Stack
-                    spacing={5}
-                    marginBottom={4}
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                    }}>
-                    {!user && (
-                      <Stack
-                        spacing={4}
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center">
-                        <Typography component="p" align="center" sx={{mt: 4}}>
-                          Connectez-vous ou inscrivez-vous pour envoyer la
-                          demande au réparateur.
-                        </Typography>
-                        <Button
-                          onClick={handleLogin}
-                          variant="contained"
-                          sx={{width: 150}}>
-                          Se connecter
-                        </Button>
-                        <Button
-                          onClick={handleRegistration}
-                          variant="outlined"
-                          sx={{width: 150}}>
-                          S&apos;inscrire
-                        </Button>
-                      </Stack>
+            {!loading && repairer && (
+              <Box>
+                <Container maxWidth="md" sx={{padding: {xs: 0}}}>
+                  <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
+                    {tunnelStep == 'slots' && (
+                      <Link href={`/reparateur/${repairer.id}`}>
+                        <Button variant="outlined">Retour</Button>
+                      </Link>
                     )}
-                    {user && repairer && tunnelStep == 'slots' && (
-                      <SlotsStep handleSelectSlot={handleSelectSlot} repairer={repairer} />
+                    {tunnelStep == 'optionalPage' && (
+                      <Button
+                        variant="outlined"
+                        onClick={() => setTunnelStep('slots')}>
+                        Consulter les créneaux
+                      </Button>
                     )}
-                    {user && tunnelStep == 'optionalPage' && (
-                      <OptionalStep
-                        optionalPage={repairer.optionalPage}
-                        confirmAppointmentRequest={confirmAppointmentRequest}
-                      />
+                    {tunnelStep == 'confirm' && (
+                      <Button
+                        variant="outlined"
+                        onClick={() => setTunnelStep('optionalPage')}>
+                        Précédent
+                      </Button>
                     )}
-                    {user && tunnelStep == 'confirm' && (
-                      <RecapStep
-                        handleConfirmAppointment={handleConfirmAppointment}
-                      />
-                    )}
-                  </Stack>
-                </Paper>
-              </Container>
-            </Box>
-          )}
-        </Box>
-      </main>
+                    <Stack
+                      spacing={5}
+                      marginBottom={4}
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}>
+                      {!user && (
+                        <Stack
+                          spacing={4}
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="center">
+                          <Typography component="p" align="center" sx={{mt: 4}}>
+                            Connectez-vous ou inscrivez-vous pour envoyer la
+                            demande au réparateur.
+                          </Typography>
+                          <Button
+                            onClick={handleLogin}
+                            variant="contained"
+                            sx={{width: 150}}>
+                            Se connecter
+                          </Button>
+                          <Button
+                            onClick={handleRegistration}
+                            variant="outlined"
+                            sx={{width: 150}}>
+                            S&apos;inscrire
+                          </Button>
+                        </Stack>
+                      )}
+                      {user && repairer && tunnelStep == 'slots' && (
+                        <SlotsStep
+                          handleSelectSlot={handleSelectSlot}
+                          repairer={repairer}
+                        />
+                      )}
+                      {user && tunnelStep == 'optionalPage' && (
+                        <OptionalStep
+                          optionalPage={repairer.optionalPage}
+                          confirmAppointmentRequest={confirmAppointmentRequest}
+                        />
+                      )}
+                      {user && tunnelStep == 'confirm' && (
+                        <RecapStep
+                          handleConfirmAppointment={handleConfirmAppointment}
+                        />
+                      )}
+                    </Stack>
+                  </Paper>
+                </Container>
+              </Box>
+            )}
+          </Box>
+        </main>
+      </WebsiteLayout>
     </div>
   );
 };
