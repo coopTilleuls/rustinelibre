@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\RepairerOpeningHours;
 
+use App\Repository\RepairerOpeningHoursRepository;
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\RepairerTrait;
@@ -13,10 +14,13 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
 {
     use RepairerTrait;
 
+    private RepairerOpeningHoursRepository $repairerOpeningHoursRepository;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->repairerRepository = self::getContainer()->get(RepairerRepository::class);
+        $this->repairerOpeningHoursRepository = self::getContainer()->get(RepairerOpeningHoursRepository::class);
     }
 
     public function testCreateWithBadFormattedStartTime(): void
@@ -81,5 +85,68 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertStringContainsString('This day is not available, should be one of : monday, tuesday, wednesday, thursday, friday, saturday, sunday', $response->getContent(false));
+    }
+
+    public function testCreateWithOverlappedHours(): void
+    {
+        $repairer = $this->repairerRepository->findOneBy([]);
+        $rohs = $this->repairerOpeningHoursRepository->findBy(['repairer' => $repairer->id]);
+
+        // reset repairer opening hours
+        foreach ($rohs as $roh) {
+            $this->repairerOpeningHoursRepository->remove($roh);
+        }
+
+        $this->createClientAuthAsAdmin()->request('POST', '/repairer_opening_hours', [
+            'json' => [
+                'repairer' => sprintf('/repairers/%d', $repairer->id),
+                'day' => 'monday',
+                'startTime' => '18:00',
+                'endTime' => '19:00',
+            ],
+        ]);
+
+        $response = $this->createClientAuthAsAdmin()->request('POST', '/repairer_opening_hours', [
+            'json' => [
+                'repairer' => sprintf('/repairers/%d', $repairer->id),
+                'day' => 'monday',
+                'startTime' => '18:30',
+                'endTime' => '19:00',
+            ],
+        ]);
+
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertStringContainsString('The hours are overlapped', $response->getContent(false));
+    }
+
+    public function testCreateWithNotOverlappedHours(): void
+    {
+        $repairer = $this->repairerRepository->findOneBy([]);
+        $rohs = $this->repairerOpeningHoursRepository->findBy(['repairer' => $repairer->id]);
+
+        // reset repairer opening hours
+        foreach ($rohs as $roh) {
+            $this->repairerOpeningHoursRepository->remove($roh);
+        }
+
+        $this->createClientAuthAsAdmin()->request('POST', '/repairer_opening_hours', [
+            'json' => [
+                'repairer' => sprintf('/repairers/%d', $repairer->id),
+                'day' => 'monday',
+                'startTime' => '18:00',
+                'endTime' => '19:00',
+            ],
+        ]);
+
+        $response = $this->createClientAuthAsAdmin()->request('POST', '/repairer_opening_hours', [
+            'json' => [
+                'repairer' => sprintf('/repairers/%d', $repairer->id),
+                'day' => 'monday',
+                'startTime' => '19:00',
+                'endTime' => '20:00',
+            ],
+        ]);
+
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 }
