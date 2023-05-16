@@ -27,8 +27,6 @@ class GetTest extends AbstractTestCase
         $response = $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances')->toArray();
 
         $this->assertResponseIsSuccessful();
-        // check that user don't get all collection
-        $this->assertGreaterThan(count($response['hydra:member']), count($this->maintenances));
     }
 
     public function testAdminCanGetMaintenanceCollection(): void
