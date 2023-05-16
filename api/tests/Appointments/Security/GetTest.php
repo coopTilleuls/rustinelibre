@@ -6,6 +6,7 @@ namespace App\Tests\Appointments\Security;
 
 use App\Repository\AppointmentRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class GetTest extends AbstractTestCase
 {
@@ -58,7 +59,7 @@ class GetTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $this->createClientAuthAsUser()->request('GET', sprintf('/appointments/%s', $appointment->id));
 
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testRepairerCanGetAllHisAppointments(): void
@@ -87,6 +88,6 @@ class GetTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $this->createClientAuthAsBoss()->request('GET', sprintf('/appointments/%s', $appointment->id));
 
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }

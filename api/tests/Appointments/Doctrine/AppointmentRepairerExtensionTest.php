@@ -18,7 +18,7 @@ class AppointmentRepairerExtensionTest extends AbstractTestCase
         $this->appointmentRepository = self::getContainer()->get(AppointmentRepository::class);
     }
 
-    public function testCustomerGetOnlyHisAppointments(): void
+    public function testRepairerGetOnlyHisAppointments(): void
     {
         $appointment = $this->getAppointment();
 

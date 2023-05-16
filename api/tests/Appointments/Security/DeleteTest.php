@@ -6,6 +6,7 @@ namespace App\Tests\Appointments\Security;
 
 use App\Repository\AppointmentRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class DeleteTest extends AbstractTestCase
 {
@@ -22,7 +23,7 @@ class DeleteTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $this->createClientAuthAsAdmin()->request('DELETE', sprintf('/appointments/%d', $appointment->id));
 
-        self::assertResponseStatusCodeSame(204);
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testCustomerCanDeleteHisAppointment(): void
@@ -30,7 +31,7 @@ class DeleteTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $this->createClientWithUser($appointment->customer)->request('DELETE', sprintf('/appointments/%d', $appointment->id));
 
-        self::assertResponseStatusCodeSame(204);
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testRepairerCanDeleteHisAppointment(): void
@@ -38,7 +39,7 @@ class DeleteTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $this->createClientWithUser($appointment->repairer->owner)->request('DELETE', sprintf('/appointments/%d', $appointment->id));
 
-        self::assertResponseStatusCodeSame(204);
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testCustomerCannotDeleteOtherAppointment(): void
@@ -46,7 +47,7 @@ class DeleteTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $this->createClientAuthAsUser()->request('DELETE', sprintf('/appointments/%d', $appointment->id));
 
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testRepairerCannotDeleteOtherAppointment(): void
@@ -54,6 +55,6 @@ class DeleteTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $this->createClientAuthAsBoss()->request('DELETE', sprintf('/appointments/%d', $appointment->id));
 
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }

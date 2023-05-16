@@ -8,6 +8,7 @@ use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\AppointmentTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class PutTest extends AbstractTestCase
 {
@@ -85,7 +86,7 @@ class PutTest extends AbstractTestCase
         );
 
         $appointmentUpdated = $this->appointmentRepository->find($this->appointment->id);
-        self::assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
         self::assertSame($accepted, $appointmentUpdated->accepted);
     }
 
@@ -106,7 +107,7 @@ class PutTest extends AbstractTestCase
         );
 
         $appointmentUpdated = $this->appointmentRepository->find($this->appointment->id);
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         self::assertSame($accepted, $appointmentUpdated->accepted);
     }
 }
