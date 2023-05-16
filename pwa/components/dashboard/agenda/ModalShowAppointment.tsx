@@ -1,16 +1,20 @@
 import React, {useEffect, useState} from "react";
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from "@mui/material/Button";
 import {CircularProgress} from "@mui/material";
-import {RequestBody} from "@interfaces/Resource";
-import {openingHoursResource} from "@resources/openingHours";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {appointmentResource} from "@resources/appointmentResource";
 import {Appointment} from "@interfaces/Appointment";
+import {formatDate} from "@helpers/dateHelper";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Grid from '@mui/material/Grid';
+import {apiImageUrl} from "@helpers/apiImagesHelper";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HandymanIcon from '@mui/icons-material/Handyman';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -27,12 +31,13 @@ const style = {
 type ModalShowAppointmentProps = {
     id: string;
     openModal: boolean;
-    handleCloseModal: () => void;
+    handleCloseModal: (refresh: boolean|undefined) => void;
 };
 
 const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppointmentProps): JSX.Element => {
 
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
     const [appointment, setAppointment] = useState<Appointment|null>(null);
 
     useEffect(() => {
@@ -46,10 +51,21 @@ const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppoin
         setLoading(false)
     }
 
+    const cancelAppointment = async () => {
+        if (!appointment) {
+            return;
+        }
+
+        setLoadingDelete(true);
+        await appointmentResource.delete(appointment['@id']);
+        setLoadingDelete(false);
+        handleCloseModal(true);
+    }
+
     return (
         <Modal
             open={openModal}
-            onClose={() => handleCloseModal()}
+            onClose={() => handleCloseModal(false)}
             aria-labelledby="Show appointment"
             aria-describedby="popup_show_appointment"
         >
@@ -58,9 +74,58 @@ const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppoin
                     {loading && <CircularProgress />}
                     {!loading && appointment &&
                         <Box>
-                            {appointment.autoDiagnostic && <Typography variant="h5">{appointment.autoDiagnostic.prestation}</Typography>}
-                            Client : {`${appointment.customer.firstName} ${appointment.customer.lastName}`}
-                            
+                            <List>
+                                {appointment.autoDiagnostic &&
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <HandymanIcon />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={appointment.autoDiagnostic.prestation}
+                                        />
+                                    </ListItem>
+                                }
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <AccountCircleIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={`${appointment.customer.firstName} ${appointment.customer.lastName}`}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <CalendarMonthIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={formatDate(appointment.slotTime, true)}
+                                    />
+                                </ListItem>
+                                {appointment.autoDiagnostic && appointment.autoDiagnostic.photo && <img alt="photo de la réparation" src={apiImageUrl(appointment.autoDiagnostic.photo.contentUrl)} />}
+                            </List>
+
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <Button variant="outlined">
+                                        Voir le carnet du vélo
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button variant="outlined">
+                                        Envoyer un message
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button variant="outlined" sx={{color: 'green'}}>
+                                        Modifier le rendez vous
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button variant="outlined" sx={{color: 'red'}} onClick={cancelAppointment}>
+                                        {!loadingDelete ? 'Annuler le rendez vous' : <CircularProgress />}
+                                    </Button>
+                                </Grid>
+                            </Grid>
                         </Box>
                     }
                 </Box>
