@@ -12,40 +12,25 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
-    operations: [
-        new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
-        ),
-        new GetCollection(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
-        ),
-        new Post(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')"
-        ),
-        new Patch(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
-        ),
-        new Put(
-            security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user"
-        ),
-        new Delete(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')" // @todo add voter
-        ),
-    ],
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
+#[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
+#[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
+#[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 class Appointment
 {
     public const APPOINTMENT_READ = 'appointment_read';
@@ -60,13 +45,14 @@ class Appointment
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    public ?User $customer = null;
+    #[Groups([self::APPOINTMENT_READ])]
+    public User $customer;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    public ?Repairer $repairer = null;
+    #[Assert\NotNull, Assert\NotBlank]
+    public Repairer $repairer;
 
     #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
@@ -74,6 +60,7 @@ class Appointment
 
     #[ORM\Column]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    #[Assert\NotNull, Assert\NotBlank, Assert\GreaterThan('now')]
     public ?\DateTimeImmutable $slotTime = null;
 
     #[ORM\Column(nullable: true)]
