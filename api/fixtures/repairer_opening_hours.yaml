@@ -1,7 +1,37 @@
 App\Entity\RepairerOpeningHours:
-    opening_hours_repairer_{1..100}:
+    opening_hours_repairer_{1..20}:
         repairer: '@repairer_<numberBetween(1, 25)>'
-        day: day <current()>
+        day: monday
+        startTime: <numberBetween(10, 18)>:00
+        endTime: <numberBetween(10, 18)>:00
+    opening_hours_repairer_{21..40}:
+        repairer: '@repairer_<numberBetween(1, 25)>'
+        day: tuesday
+        startTime: <numberBetween(10, 18)>:00
+        endTime: <numberBetween(10, 18)>:00
+    opening_hours_repairer_{41..60}:
+        repairer: '@repairer_<numberBetween(1, 25)>'
+        day: wednesday
+        startTime: <numberBetween(10, 18)>:00
+        endTime: <numberBetween(10, 18)>:00
+    opening_hours_repairer_{61..80}:
+        repairer: '@repairer_<numberBetween(1, 25)>'
+        day: thursday
+        startTime: <numberBetween(10, 18)>:00
+        endTime: <numberBetween(10, 18)>:00
+    opening_hours_repairer_{81..100}:
+        repairer: '@repairer_<numberBetween(1, 25)>'
+        day: friday
+        startTime: <numberBetween(10, 18)>:00
+        endTime: <numberBetween(10, 18)>:00
+    opening_hours_repairer_{101..120}:
+        repairer: '@repairer_<numberBetween(1, 25)>'
+        day: saturday
+        startTime: <numberBetween(10, 18)>:00
+        endTime: <numberBetween(10, 18)>:00
+    opening_hours_repairer_{121..140}:
+        repairer: '@repairer_<numberBetween(1, 25)>'
+        day: sunday
         startTime: <numberBetween(10, 18)>:00
         endTime: <numberBetween(10, 18)>:00
         
