@@ -329,7 +329,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     label="Nom"
                     name="lastName"
                     autoComplete="lastName"
-                    autoFocus
                     value={lastName}
                     onChange={handleChangeLastName}
                   />
@@ -343,7 +342,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     label="Email"
                     name="email"
                     autoComplete="email"
-                    autoFocus
                     value={email}
                     onChange={handleChangeEmail}
                   />
@@ -369,7 +367,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     label="Nom de votre enseigne"
                     name="name"
                     autoComplete="name"
-                    autoFocus
                     value={name}
                     onChange={handleChangeName}
                   />
@@ -381,7 +378,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     label="Numéro et rue"
                     name="street"
                     autoComplete="street"
-                    autoFocus
                     value={street}
                     onChange={handleChangeStreet}
                   />
