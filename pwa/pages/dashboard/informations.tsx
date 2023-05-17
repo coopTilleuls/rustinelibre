@@ -159,29 +159,38 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (
-      !repairer ||
-      !name ||
-      !selectedBikeTypes ||
-      !repairerTypeSelected ||
-      !street ||
-      Object.keys(selectedBikeTypes).length === 0
-    ) {
-      return;
-    }
+    if (!repairer) return;
+
 
     const selectedBikeTypeIRIs: string[] = bikeTypes
       .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
       .map((bikeType) => bikeType['@id']);
 
-    const bodyRequest: RequestBody = {
-      mobilePhone: mobilePhone,
-      name: name,
-      street: street,
-      description: description,
-      bikeTypesSupported: selectedBikeTypeIRIs,
-      repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
-    };
+    const bodyRequest: RequestBody = {};
+
+    if (mobilePhone) {
+      bodyRequest['mobilePhone'] = mobilePhone;
+    }
+
+    if (name && name !== '') {
+      bodyRequest['name'] = name;
+    }
+
+    if (street && street !== '') {
+      bodyRequest['street'] = street;
+    }
+
+    if (description && description !== '') {
+      bodyRequest['description'] = description;
+    }
+
+    if (repairerTypeSelected) {
+      bodyRequest['repairerType'] = repairerTypeSelected['@id'];
+    }
+
+    if (selectedBikeTypeIRIs.length > 0) {
+      bodyRequest['bikeTypesSupported'] = selectedBikeTypeIRIs;
+    }
 
     if (city) {
       bodyRequest['city'] = city.name;
