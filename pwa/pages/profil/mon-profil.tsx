@@ -65,60 +65,70 @@ const MyProfile: NextPageWithLayout = () => {
       <Head>
         <title>Mon profil</title>
       </Head>
-      <WebsiteLayout />
-      <Container sx={{width: {xs: '100%', md: '50%'}}}>
-        {isLoadingFetchUser ? (
-          <Box display={'flex'} justifyContent={'center'} my={10}>
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Paper
-            elevation={4}
-            sx={{maxWidth: 400, p: 4, mt: 4, mb: {xs: 10, md: 12}, mx: 'auto'}}>
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-              <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
-                Mon profil
-              </Typography>
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{mt: 1}}>
-                <UserForm user={user} />
-                <Box display="flex" flexDirection="column" alignItems="center">
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{mt: 3, mb: 2, width: '50%'}}>
-                    {!pendingUpdate ? (
-                      'Enregistrer'
-                    ) : (
-                      <CircularProgress size={20} sx={{color: 'white'}} />
-                    )}
-                  </Button>
-                </Box>
-                {errorMessage && (
-                  <Typography variant="body1" color="error">
-                    {errorMessage}
-                  </Typography>
-                )}
-                {success && (
-                  <Alert sx={{width: '50%'}} severity="success">
-                    Profil mis à jour
-                  </Alert>
-                )}
-              </Box>
+      <WebsiteLayout>
+        <Container sx={{width: {xs: '100%', md: '50%'}}}>
+          {isLoadingFetchUser ? (
+            <Box display={'flex'} justifyContent={'center'} my={10}>
+              <CircularProgress />
             </Box>
-          </Paper>
-        )}
-      </Container>
+          ) : (
+            <Paper
+              elevation={4}
+              sx={{
+                maxWidth: 400,
+                p: 4,
+                mt: 4,
+                mb: {xs: 10, md: 12},
+                mx: 'auto',
+              }}>
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+                  Mon profil
+                </Typography>
+                <Box
+                  component="form"
+                  onSubmit={handleSubmit}
+                  noValidate
+                  sx={{mt: 1}}>
+                  <UserForm user={user} />
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center">
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={{mt: 3, mb: 2, width: '50%'}}>
+                      {!pendingUpdate ? (
+                        'Enregistrer'
+                      ) : (
+                        <CircularProgress size={20} sx={{color: 'white'}} />
+                      )}
+                    </Button>
+                  </Box>
+                  {errorMessage && (
+                    <Typography variant="body1" color="error">
+                      {errorMessage}
+                    </Typography>
+                  )}
+                  {success && (
+                    <Alert sx={{width: '50%'}} severity="success">
+                      Profil mis à jour
+                    </Alert>
+                  )}
+                </Box>
+              </Box>
+            </Paper>
+          )}
+        </Container>
+      </WebsiteLayout>
     </>
   );
 };

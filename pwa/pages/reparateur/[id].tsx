@@ -44,19 +44,20 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
       <Head>
         <title>Réparateur {repairer?.name}</title>
       </Head>
-      <WebsiteLayout />
-      <main>
-        <Box
-          sx={{
-            pt: 10,
-            bgcolor: 'background.paper',
-            mt: {md: 8},
-            mb: 10,
-          }}>
-          {loading && <CircularProgress />}
-          {repairer && <RepairerPresentation repairer={repairer} />}
-        </Box>
-      </main>
+      <WebsiteLayout>
+        <main>
+          <Box
+            sx={{
+              pt: 10,
+              bgcolor: 'background.paper',
+              mt: {md: 8},
+              mb: 10,
+            }}>
+            {loading && <CircularProgress />}
+            {repairer && <RepairerPresentation repairer={repairer} />}
+          </Box>
+        </main>
+      </WebsiteLayout>
     </div>
   );
 };

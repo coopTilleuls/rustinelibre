@@ -23,19 +23,20 @@ const AutoDiagnostic: NextPageWithLayout = () => {
         <Head>
           <title>Auto diagnostic</title>
         </Head>
-        <WebsiteLayout />
-        <main>
-          <Box
-            sx={{
-              bgcolor: 'background.paper',
-              mt: {md: 8},
-              mb: 10,
-            }}>
-            {typeof id === 'string' && (
-              <AutoDiagnosticTunnel appointmentId={id} />
-            )}
-          </Box>
-        </main>
+        <WebsiteLayout>
+          <main>
+            <Box
+              sx={{
+                bgcolor: 'background.paper',
+                mt: {md: 8},
+                mb: 10,
+              }}>
+              {typeof id === 'string' && (
+                <AutoDiagnosticTunnel appointmentId={id} />
+              )}
+            </Box>
+          </main>
+        </WebsiteLayout>
       </div>
     </AutodiagProvider>
   );

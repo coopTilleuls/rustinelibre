@@ -49,7 +49,6 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
           pages={pages}
           boss={boss}
           user={user}
-          handleClose={handleCloseNavMenu}
           logOut={clickLogOut}
         />
         <MobileNavbar

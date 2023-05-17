@@ -19,16 +19,19 @@ import {BikeType} from '@interfaces/BikeType';
 import {Collection} from '@interfaces/Resource';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModalDeleteBike from '@components/bike/ModalDeleteBike';
-import {useAccount} from "@contexts/AuthContext";
+import {useAccount} from '@contexts/AuthContext';
 
 type EditBikeProps = {
   bikeTypesFetched: BikeType[];
 };
 
-const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypesFetched = []}) => {
-
+const EditBike: NextPageWithLayout<EditBikeProps> = ({
+  bikeTypesFetched = [],
+}) => {
   const router: NextRouter = useRouter();
-  const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/velos/mes-velos'});
+  const {user, isLoadingFetchUser} = useAccount({
+    redirectIfNotFound: '/velos/mes-velos',
+  });
   const {id} = router.query;
   const [bike, setBike] = useState<Bike | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -69,55 +72,56 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({bikeTypesFetched = []}) =>
       <Head>
         <title>{bike?.name}</title>
       </Head>
-      <WebsiteLayout />
-      <Container
-        sx={{
-          mt: {xs: 2, md: 6},
-          mb: {xs: 10, md: 18},
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
-        {(loading || isLoadingFetchUser) && <CircularProgress />}
-        {bike && (
-          <Box width={{xs: '100%', md: '50%'}}>
-            <Box width={'100%'} display="flex" justifyContent="space-between">
-              <Link href="/velos/mes-velos">
-                <Button variant="outlined" sx={{fontSize: 12}}>
-                  Retour
+      <WebsiteLayout>
+        <Container
+          sx={{
+            mt: {xs: 2, md: 6},
+            mb: {xs: 10, md: 18},
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          {(loading || isLoadingFetchUser) && <CircularProgress />}
+          {bike && (
+            <Box width={{xs: '100%', md: '50%'}}>
+              <Box width={'100%'} display="flex" justifyContent="space-between">
+                <Link href="/velos/mes-velos">
+                  <Button variant="outlined" sx={{fontSize: 12}}>
+                    Retour
+                  </Button>
+                </Link>
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{fontSize: 12, p: 1}}
+                  onClick={() => setOpenModal(true)}>
+                  <DeleteIcon />
                 </Button>
-              </Link>
-              <Button
-                variant="contained"
-                color="error"
-                sx={{fontSize: 12, p: 1}}
-                onClick={() => setOpenModal(true)}>
-                <DeleteIcon />
-              </Button>
+              </Box>
+              <Typography
+                fontSize={40}
+                fontWeight={600}
+                textTransform="capitalize"
+                sx={{pt: {xs: 2, md: 4}, pb: 1}}
+                textAlign="center">
+                {bike.name}
+              </Typography>
+              {bike.picture && (
+                <img
+                  src={apiImageUrl(bike.picture.contentUrl)}
+                  alt="Photo du vélo"
+                />
+              )}
+              <BikeTabs bike={bike} bikeTypes={bikeTypes} />
             </Box>
-            <Typography
-              fontSize={40}
-              fontWeight={600}
-              textTransform="capitalize"
-              sx={{pt: {xs: 2, md: 4}, pb: 1}}
-              textAlign="center">
-              {bike.name}
-            </Typography>
-            {bike.picture && (
-              <img
-                src={apiImageUrl(bike.picture.contentUrl)}
-                alt="Photo du vélo"
-              />
-            )}
-            <BikeTabs bike={bike} bikeTypes={bikeTypes} />
-          </Box>
-        )}
-        <ModalDeleteBike
-          openModal={openModal}
-          handleCloseModal={handleCloseModal}
-          bike={bike!}
-        />
-      </Container>
+          )}
+          <ModalDeleteBike
+            openModal={openModal}
+            handleCloseModal={handleCloseModal}
+            bike={bike!}
+          />
+        </Container>
+      </WebsiteLayout>
     </>
   );
 };
@@ -126,11 +130,12 @@ export const getStaticProps: GetStaticProps = async () => {
   if (!ENTRYPOINT) {
     return {
       props: {},
-      revalidate: 0
+      revalidate: 0,
     };
   }
 
-  const bikeTypesCollection: Collection<BikeType> = await bikeTypeResource.getAll(false);
+  const bikeTypesCollection: Collection<BikeType> =
+    await bikeTypeResource.getAll(false);
   const bikeTypesFetched: BikeType[] = bikeTypesCollection['hydra:member'];
 
   return {

@@ -59,70 +59,77 @@ const AppointmentSummary: NextPageWithLayout = () => {
       <Head>
         <title>Récapitulatif</title>
       </Head>
-      <WebsiteLayout />
-      <main>
-        <Container
-          sx={{
-            bgcolor: 'background.paper',
-            mt: {md: 8},
-            mb: 10,
-          }}>
-          {loading && <CircularProgress />}
-          {!loading && appointment && (
-            <Stack
-              spacing={4}
-              display="flex"
-              flexDirection="column"
-              alignItems="center">
-              <Typography
-                component="h2"
-                fontSize={18}
-                fontWeight={600}
-                my={{xs: 2}}>
-                Votre demande de rendez vous
-              </Typography>
-              <Box p={3} sx={{border: '3px solid grey', borderRadius: 1}}>
-                <Box display="flex" justifyContent="center">
-                  <EventAvailableIcon sx={{fontSize: '8em'}} color="primary" />
-                  <Stack
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="start"
-                    p={1}>
-                    <Typography
-                      align="center"
-                      textTransform="capitalize"
-                      fontSize={18}
-                      fontWeight={600}>
-                      {slotDate}
-                    </Typography>
-                    <Typography align="center">{slotTime}</Typography>
-                    <Box display="flex" alignItems="center">
-                      <Typography align="center">Chez</Typography>
-                      <Typography color="primary" fontWeight={600} sx={{ml: 1}}>
-                        {appointment.repairer.name}
+      <WebsiteLayout>
+        <main>
+          <Container
+            sx={{
+              bgcolor: 'background.paper',
+              mt: {md: 8},
+              mb: 10,
+            }}>
+            {loading && <CircularProgress />}
+            {!loading && appointment && (
+              <Stack
+                spacing={4}
+                display="flex"
+                flexDirection="column"
+                alignItems="center">
+                <Typography
+                  component="h2"
+                  fontSize={18}
+                  fontWeight={600}
+                  my={{xs: 2}}>
+                  Votre demande de rendez vous
+                </Typography>
+                <Box p={3} sx={{border: '3px solid grey', borderRadius: 1}}>
+                  <Box display="flex" justifyContent="center">
+                    <EventAvailableIcon
+                      sx={{fontSize: '8em'}}
+                      color="primary"
+                    />
+                    <Stack
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="start"
+                      p={1}>
+                      <Typography
+                        align="center"
+                        textTransform="capitalize"
+                        fontSize={18}
+                        fontWeight={600}>
+                        {slotDate}
+                      </Typography>
+                      <Typography align="center">{slotTime}</Typography>
+                      <Box display="flex" alignItems="center">
+                        <Typography align="center">Chez</Typography>
+                        <Typography
+                          color="primary"
+                          fontWeight={600}
+                          sx={{ml: 1}}>
+                          {appointment.repairer.name}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Box>
+                  {appointment.autoDiagnostic && (
+                    <Box pl={2}>
+                      <Typography align="left">
+                        Type de vélo : Type de vélo
+                      </Typography>
+                      <Typography align="left">
+                        Prestation : {appointment.autoDiagnostic.prestation}
                       </Typography>
                     </Box>
-                  </Stack>
+                  )}
                 </Box>
-                {appointment.autoDiagnostic && (
-                  <Box pl={2}>
-                    <Typography align="left">
-                      Type de vélo : Type de vélo
-                    </Typography>
-                    <Typography align="left">
-                      Prestation : {appointment.autoDiagnostic.prestation}
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
-              <Link href="/">
-                <Button variant="contained">Retour à l&apos;accueil</Button>
-              </Link>
-            </Stack>
-          )}
-        </Container>
-      </main>
+                <Link href="/">
+                  <Button variant="contained">Retour à l&apos;accueil</Button>
+                </Link>
+              </Stack>
+            )}
+          </Container>
+        </main>
+      </WebsiteLayout>
     </RepairerFormProvider>
   );
 };

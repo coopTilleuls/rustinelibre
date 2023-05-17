@@ -12,6 +12,9 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {User} from '@interfaces/User';
 import {useRouter} from 'next/router';
+import {Button, Link} from '@mui/material';
+import pages from 'pages';
+import {legalNoticesFooter} from '@data/legal-notices-footer';
 
 interface FooterProps {
   user?: User;
@@ -24,12 +27,20 @@ const Footer = ({user}: FooterProps): JSX.Element => {
     <Box
       sx={{
         position: 'fixed',
+        left: 0,
         bottom: 0,
         width: '100%',
         zIndex: 10,
       }}>
-      <Paper elevation={6} sx={{py: {md: 1}}}>
-        <BottomNavigation showLabels value={router.pathname}>
+      <Box
+        sx={{backgroundColor: 'grey.200'}}
+        py={{md: 1}}
+        width={'100%'}
+        height={'100%'}>
+        <BottomNavigation
+          showLabels
+          value={router.pathname}
+          sx={{backgroundColor: 'grey.200'}}>
           <BottomNavigationAction
             component={NextLinkComposed}
             to={{pathname: '/'}}
@@ -81,7 +92,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             />
           )}
         </BottomNavigation>
-      </Paper>
+      </Box>
     </Box>
   );
 };

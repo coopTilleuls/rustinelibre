@@ -83,97 +83,97 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
       <Head>
         <title>Mes vélos</title>
       </Head>
-      <WebsiteLayout />
-      <Container
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mt: 4,
-          mb: 10,
-          pt: 10,
-        }}>
-        <Typography fontSize={{xs: 24, md: 40}} fontWeight={600}>
-          Mes vélos
-        </Typography>
+      <WebsiteLayout>
+        <Container
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            mt: 4,
+            mb: 10,
+          }}>
+          <Typography fontSize={{xs: 24, md: 40}} fontWeight={600}>
+            Mes vélos
+          </Typography>
 
-        {!user && !isLoadingFetchUser ? (
-          <Paper
-            elevation={4}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              my: 4,
-              p: 4,
-            }}>
-            <Typography>
-              Connectez-vous pour accéder à la liste de vos vélos
-            </Typography>
-            <Button variant="contained" onClick={handleLogin} sx={{mt: 4}}>
-              Me Connecter
-            </Button>
-          </Paper>
-        ) : (
-          <>
-            {(loading || isLoadingFetchUser) && <CircularProgress />}
-            {bikes.length === 0 && !loading && !isLoadingFetchUser && (
-              <Box>
-                <Typography>
-                  Vous n&apos;avez pas encore de vélos enregistrés
-                </Typography>
-                <List
-                  sx={{
-                    width: '100%',
-                    maxWidth: 360,
-                    bgcolor: 'background.paper',
-                  }}
-                  component="nav"
-                  aria-labelledby="nested-list-subheader">
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <DirectionsBikeIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Enregistrez votre vélo" />
-                  </ListItemButton>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <FactCheckIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Remplissez sa fiche d'identité" />
-                  </ListItemButton>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <BuildIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Créeez un historique des réparations" />
-                  </ListItemButton>
-                </List>
-              </Box>
-            )}
-            <Grid2 container sx={{width: '100%', py: 6}} spacing={4}>
-              {bikes.length
-                ? !loading &&
-                  bikes.map((bike) => {
-                    return (
-                      <Grid2 key={bike.id} xs={12} md={6} lg={4}>
-                        <BikeCard bike={bike} />
-                      </Grid2>
-                    );
-                  })
-                : null}
-            </Grid2>
-            <Button variant="contained" onClick={handleOpenModal}>
-              <AddIcon /> Ajouter un vélo
-            </Button>
-            <ModalAddBike
-              openModal={openModal}
-              handleCloseModal={handleCloseModal}
-              bikeTypes={bikeTypes}
-            />
-          </>
-        )}
-      </Container>
+          {!user && !isLoadingFetchUser ? (
+            <Paper
+              elevation={4}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                my: 4,
+                p: 4,
+              }}>
+              <Typography>
+                Connectez-vous pour accéder à la liste de vos vélos
+              </Typography>
+              <Button variant="contained" onClick={handleLogin} sx={{mt: 4}}>
+                Me Connecter
+              </Button>
+            </Paper>
+          ) : (
+            <>
+              {(loading || isLoadingFetchUser) && <CircularProgress />}
+              {bikes.length === 0 && !loading && !isLoadingFetchUser && (
+                <Box>
+                  <Typography>
+                    Vous n&apos;avez pas encore de vélos enregistrés
+                  </Typography>
+                  <List
+                    sx={{
+                      width: '100%',
+                      maxWidth: 360,
+                      bgcolor: 'background.paper',
+                    }}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader">
+                    <ListItemButton>
+                      <ListItemIcon>
+                        <DirectionsBikeIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Enregistrez votre vélo" />
+                    </ListItemButton>
+                    <ListItemButton>
+                      <ListItemIcon>
+                        <FactCheckIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Remplissez sa fiche d'identité" />
+                    </ListItemButton>
+                    <ListItemButton>
+                      <ListItemIcon>
+                        <BuildIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Créeez un historique des réparations" />
+                    </ListItemButton>
+                  </List>
+                </Box>
+              )}
+              <Grid2 container sx={{width: '100%', py: 6}} spacing={4}>
+                {bikes.length
+                  ? !loading &&
+                    bikes.map((bike) => {
+                      return (
+                        <Grid2 key={bike.id} xs={12} md={6} lg={4}>
+                          <BikeCard bike={bike} />
+                        </Grid2>
+                      );
+                    })
+                  : null}
+              </Grid2>
+              <Button variant="contained" onClick={handleOpenModal}>
+                <AddIcon /> Ajouter un vélo
+              </Button>
+              <ModalAddBike
+                openModal={openModal}
+                handleCloseModal={handleCloseModal}
+                bikeTypes={bikeTypes}
+              />
+            </>
+          )}
+        </Container>
+      </WebsiteLayout>
     </>
   );
 };
