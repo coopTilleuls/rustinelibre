@@ -1,8 +1,7 @@
 import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
 import {AutodiagContext} from '@contexts/AutodiagContext';
 import {Box, Stack, Button, Typography, CircularProgress} from '@mui/material';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
+import {Radio, RadioGroup} from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -24,8 +23,6 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
     const [bikeTypeSelected, setBikeTypeSelected] = useState<string|null>(null);
     const {user} = useAccount({redirectIfNotFound: '/login'});
     const [openModal, setOpenModal] = useState<boolean>(false);
-
-    const handleOpenModal = () => setOpenModal(true);
 
     const handleCloseModal = () => {
         setOpenModal(false);
@@ -143,7 +140,7 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
                         </RadioGroup>
                     </FormControl>
                     <Box sx={{marginTop: '30px'}}>
-                        <Button variant="contained" onClick={handleOpenModal}>
+                        <Button variant="contained" onClick={() => setOpenModal(true)}>
                             Enregistrer ce vélo
                         </Button>
                         <Button variant="outlined" onClick={handleClickContinueNoRegister}>

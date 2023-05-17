@@ -165,9 +165,9 @@ const ModalAddBike = ({
                   <MenuItem disabled value="">
                     Choisissez un type de vélo
                   </MenuItem>
-                  {bikeTypes.map((bike) => (
-                      <MenuItem key={bike.id} value={bike.name}>
-                        {bike.name}
+                  {bikeTypes.map(({id, name}) => (
+                      <MenuItem key={id} value={name}>
+                        {name}
                       </MenuItem>
                   ))}
                 </Select>
