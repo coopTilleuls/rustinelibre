@@ -48,7 +48,6 @@ import {BikeType} from '@interfaces/BikeType';
 import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {searchCity} from '@utils/apiCity';
-import LegalNoticesFooter from '@components/layout/LegaNoticesFooter';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -157,6 +156,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
   useEffect((): void => {
     fetchRepairers();
+    scrollToTop();
   }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchCitiesResult = useCallback(
@@ -232,6 +232,16 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       fetchRepairers();
     }
   }, [orderBy, filterBy, fetchRepairers]);
+
+  const scrollToTop = (): void => {
+    if (listContainerRef.current) {
+      const headerHeight = '80px';
+      const containerTop =
+        listContainerRef.current.getBoundingClientRect().top +
+        window.pageYOffset;
+      window.scrollTo({top: containerTop - +headerHeight, behavior: 'smooth'});
+    }
+  };
 
   return (
     <>
@@ -346,7 +356,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
             </Container>
           </Box>
           <Container sx={{pt: 0}}>
-            <Box textAlign="center" pt={2}>
+            <Box textAlign="center">
               {repairers.length === 0 && alreadyFetchApi && (
                 <Typography>
                   Pas de réparateurs disponibles dans votre ville.
