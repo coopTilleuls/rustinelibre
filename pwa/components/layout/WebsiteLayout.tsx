@@ -17,7 +17,7 @@ const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
       <Navbar user={user ?? undefined} />
       <Box
         sx={{
-          minHeight: {xs: 'calc(100vh - 280px)', md: 'calc(100vh - 250px)'},
+          minHeight: {xs: 'calc(100vh - 280px)', md: 'calc(100vh - 300px)'},
         }}>
         {children}
       </Box>

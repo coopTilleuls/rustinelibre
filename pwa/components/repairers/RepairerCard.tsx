@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {PropsWithRef, useContext} from 'react';
 import Link from 'next/link';
 import {
   Box,
@@ -15,7 +15,7 @@ import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
 
-interface RepairerProps {
+interface RepairerProps extends PropsWithRef<any> {
   repairer: Repairer;
 }
 
