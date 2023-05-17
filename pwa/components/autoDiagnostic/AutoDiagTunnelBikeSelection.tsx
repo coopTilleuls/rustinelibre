@@ -139,7 +139,7 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
                             }
                         </RadioGroup>
                     </FormControl>
-                    <Box sx={{marginTop: '30px'}}>
+                    <Box mt={3}>
                         <Button variant="contained" onClick={() => setOpenModal(true)}>
                             Enregistrer ce vélo
                         </Button>
