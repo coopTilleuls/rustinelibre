@@ -16,10 +16,13 @@ import {useAccount} from "@contexts/AuthContext";
 import InputLabel from "@mui/material/InputLabel";
 import ModalAddBike from "@components/bike/ModalAddBike";
 import useBikeTypes from "@hooks/useBikeTypes";
+import {appointmentResource} from "@resources/appointmentResource";
 
 export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
     const {appointment, setTunnelStep} = useContext(AutodiagContext);
     const [loading, setLoading] = useState<boolean>(false);
+    const [pendingUpdateBike, setPendingUpdateBike] = useState<boolean>(false);
+    const [pendingUpdateBikeType, setPendingUpdateBikeType] = useState<boolean>(false);
     const bikeTypes = useBikeTypes();
     const [bikes, setBikes] = useState<Bike[]>([]);
     const [bikeSelected, setBikeSelected] = useState<string|null>(null);
@@ -68,6 +71,30 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
         setBikeTypeSelected(event.target.value);
     };
 
+    const handleClickNext = async() => {
+        if (!appointment || !bikeSelected) {
+            return;
+        }
+        setPendingUpdateBike(true);
+        await appointmentResource.put(appointment['@id'], {
+            bike: bikeSelected
+        });
+        setPendingUpdateBike(false);
+        setTunnelStep('choice');
+    }
+
+    const handleClickContinueNoRegister = async() => {
+        if (!appointment || !bikeTypeSelected) {
+            return;
+        }
+        setPendingUpdateBikeType(true);
+        await appointmentResource.put(appointment['@id'], {
+            bikeType: bikeTypeSelected
+        });
+        setPendingUpdateBikeType(false);
+        setTunnelStep('choice');
+    }
+
     return (
         <Stack
             spacing={4}
@@ -96,8 +123,8 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
             </Box>
             {!loading && bikeSelected !== 'other_bike' &&
                 <Box>
-                    <Button variant="outlined">
-                        Suivant
+                    <Button variant="outlined" onClick={handleClickNext}>
+                        {pendingUpdateBike ? <CircularProgress /> : 'Suivant'}
                     </Button>
                 </Box>
             }
@@ -124,8 +151,8 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
                         <Button variant="contained" onClick={handleOpenModal}>
                             Enregistrer ce vélo
                         </Button>
-                        <Button variant="outlined">
-                            Continuer sans enregistrer
+                        <Button variant="outlined" onClick={handleClickContinueNoRegister}>
+                            {pendingUpdateBikeType ? <CircularProgress /> : 'Continuer sans enregistrer'}
                         </Button>
                     </Box>
                 </Box>
