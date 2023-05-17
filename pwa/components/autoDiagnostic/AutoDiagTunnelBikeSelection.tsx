@@ -1,10 +1,6 @@
 import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
-import Link from 'next/link';
 import {AutodiagContext} from '@contexts/AutodiagContext';
-import useMediaQuery from '@hooks/useMediaQuery';
 import {Box, Stack, Button, Typography, CircularProgress} from '@mui/material';
-import {Appointment} from "@interfaces/Appointment";
-import {Repairer} from "@interfaces/Repairer";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -13,7 +9,6 @@ import FormLabel from '@mui/material/FormLabel';
 import {Bike} from "@interfaces/Bike";
 import {bikeResource} from "@resources/bikeResource";
 import {useAccount} from "@contexts/AuthContext";
-import InputLabel from "@mui/material/InputLabel";
 import ModalAddBike from "@components/bike/ModalAddBike";
 import useBikeTypes from "@hooks/useBikeTypes";
 import {appointmentResource} from "@resources/appointmentResource";
