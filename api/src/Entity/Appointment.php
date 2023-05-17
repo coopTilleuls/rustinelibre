@@ -70,4 +70,14 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     #[ApiProperty(securityPostDenormalize: "is_granted('ACCEPTED_TOGGLE', object)")]
     public ?bool $accepted = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    public ?Bike $bike = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    public ?BikeType $bikeType = null;
 }

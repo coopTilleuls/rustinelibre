@@ -20,12 +20,14 @@ type ModalAddBikeProps = {
   bikeTypes: BikeType[];
   openModal: boolean;
   handleCloseModal: () => void;
+  bikeTypeSelectedProps?: string|null
 };
 
 const ModalAddBike = ({
   bikeTypes,
   openModal,
   handleCloseModal,
+  bikeTypeSelectedProps = null
 }: ModalAddBikeProps): JSX.Element => {
   const [pendingAdd, setPendingAdd] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -46,7 +48,7 @@ const ModalAddBike = ({
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (!name || !selectedBike) {
+    if (!name || (!selectedBike && !bikeTypeSelectedProps)) {
       return;
     }
 
@@ -57,21 +59,22 @@ const ModalAddBike = ({
     try {
       let bodyRequest: RequestBody = {
         name: name,
-        bikeType: selectedBike['@id'],
       };
+      if (bikeTypeSelectedProps) {
+        bodyRequest['bikeType'] = bikeTypeSelectedProps;
+      } else if (selectedBike) {
+        bodyRequest['bikeType'] = selectedBike['@id'];
+      }
       if (photo) {
         bodyRequest['picture'] = photo['@id'];
       }
-      newBike = await bikeResource.post(bodyRequest);
-    } catch (e) {
-      setErrorMessage('Ajout du vélo impossible');
-    }
-
-    if (newBike) {
+      await bikeResource.post(bodyRequest);
       setPhoto(null);
       setName('');
       setSelectedBike(null);
       handleCloseModal();
+    } catch (e) {
+      setErrorMessage('Ajout du vélo impossible');
     }
 
     setPendingAdd(false);
@@ -148,26 +151,28 @@ const ModalAddBike = ({
             value={name}
             onChange={handleChangeName}
           />
-          <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-            <InputLabel id="bike-type-label">Type de velo</InputLabel>
-            <Select
-              required
-              id="bike-type"
-              labelId="bike-type-label"
-              label="Type de velo"
-              onChange={handleBikeChange}
-              value={selectedBike?.name}
-              style={{width: '100%'}}>
-              <MenuItem disabled value="">
-                Choisissez un type de vélo
-              </MenuItem>
-              {bikeTypes.map((bike) => (
-                <MenuItem key={bike.id} value={bike.name}>
-                  {bike.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          {!bikeTypeSelectedProps &&
+              <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
+                <InputLabel id="bike-type-label">Type de velo</InputLabel>
+                <Select
+                    required
+                    id="bike-type"
+                    labelId="bike-type-label"
+                    label="Type de velo"
+                    onChange={handleBikeChange}
+                    value={selectedBike?.name}
+                    style={{width: '100%'}}>
+                  <MenuItem disabled value="">
+                    Choisissez un type de vélo
+                  </MenuItem>
+                  {bikeTypes.map((bike) => (
+                      <MenuItem key={bike.id} value={bike.name}>
+                        {bike.name}
+                      </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+          }
 
           <Button variant="outlined" component="label" sx={{mt: 2, mb: 2}}>
             {loadingPhoto ? (
