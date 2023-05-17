@@ -4,18 +4,18 @@ import {BikeType} from "@interfaces/BikeType";
 
 function useBikeTypes(): BikeType[] {
 
-    const [bikes, setBikes] = useState<BikeType[]>([]);
+    const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
 
     async function fetchBikes() {
         const response = await bikeTypeResource.getAll(false);
-        setBikes(response['hydra:member']);
+        setBikeTypes(response['hydra:member']);
     }
 
     useEffect(() => {
         fetchBikes();
     }, []);
 
-    return bikes;
+    return bikeTypes;
 }
 
 export default useBikeTypes;

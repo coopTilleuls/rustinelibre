@@ -57,7 +57,9 @@ const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppoin
         }
 
         setLoadingDelete(true);
-        await appointmentResource.delete(appointment['@id']);
+        await appointmentResource.put(appointment['@id'], {
+            'accepted': false
+        });
         setLoadingDelete(false);
         handleCloseModal(true);
     }

@@ -36,7 +36,7 @@ const initialValue = {
 export const AutodiagContext = createContext<AutodiagContext>(initialValue);
 
 export const AutodiagProvider = ({ children }: ProviderProps): JSX.Element => {
-    const [tunnelStep, setTunnelStep] = useState<string>('choice');
+    const [tunnelStep, setTunnelStep] = useState<string>('bike_selection');
     const [prestation, setPrestation] = useState<string>('Entretien classique');
     const [appointment, setAppointment] = useState<Appointment|null>(null);
     const [autoDiagnostic, setAutoDiagnostic] = useState<AutoDiagnostic|null>(null);

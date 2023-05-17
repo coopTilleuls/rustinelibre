@@ -8,6 +8,7 @@ import {useRouter} from 'next/router';
 import AutoDiagTunnelPrestation from '@components/autoDiagnostic/AutodiagTunnelPrestation';
 import AutoDiagTunnelPhoto from '@components/autoDiagnostic/AutoDiagTunnelPhoto';
 import AutoDiagTunnelChoice from '@components/autoDiagnostic/AutoDiagTunnelChoice';
+import AutoDiagTunnelBikeSelection from "@components/autoDiagnostic/AutoDiagTunnelBikeSelection";
 
 interface AutoDiagnosticTunnelProps {
   appointmentId: string;
@@ -42,6 +43,7 @@ export const AutoDiagnosticTunnel = ({
         return router.push('/');
       }
 
+      // If autodiag still exist, go to 2nd step
       if (appointmentFetched.autoDiagnostic) {
         setLoading(false);
         setAutoDiagnostic(appointmentFetched.autoDiagnostic);
@@ -52,7 +54,12 @@ export const AutoDiagnosticTunnel = ({
           setPhoto(appointmentFetched.autoDiagnostic.photo);
         }
       } else {
-        setTunnelStep('choice');
+        // If no autodiag, check bike selection
+        if (!appointmentFetched.bike && !appointmentFetched.bikeType) {
+          setTunnelStep('bike_selection');
+        } else {
+          setTunnelStep('choice');
+        }
         setLoading(false);
       }
     }
@@ -61,6 +68,7 @@ export const AutoDiagnosticTunnel = ({
   useEffect(() => {
     fetchAppointment();
   }, [appointmentId]); // eslint-disable-line react-hooks/exhaustive-deps
+
 
   return (
     <Box>
@@ -76,9 +84,10 @@ export const AutoDiagnosticTunnel = ({
                   flexDirection: 'column',
                   alignItems: 'center',
                 }}>
-                {tunnelStep == 'choice' && <AutoDiagTunnelChoice />}
-                {tunnelStep == 'prestation' && <AutoDiagTunnelPrestation />}
-                {tunnelStep == 'photo' && <AutoDiagTunnelPhoto />}
+                {tunnelStep === 'bike_selection' && <AutoDiagTunnelBikeSelection />}
+                {tunnelStep === 'choice' && <AutoDiagTunnelChoice />}
+                {tunnelStep === 'prestation' && <AutoDiagTunnelPrestation />}
+                {tunnelStep === 'photo' && <AutoDiagTunnelPhoto />}
               </Stack>
             </Paper>
           </Container>
