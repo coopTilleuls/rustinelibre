@@ -455,7 +455,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     label="Commentaires"
                     name="comment"
                     autoComplete="comment"
-                    autoFocus
                     value={comment}
                     onChange={handleChangeComments}
                   />
