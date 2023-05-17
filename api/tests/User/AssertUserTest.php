@@ -270,4 +270,27 @@ class AssertUserTest extends AbstractTestCase
         $result = preg_match($pattern, 'Multiple/;.Password223');
         self::assertSame(1, $result);
     }
+
+    public function testUniqueEmail(): void
+    {
+        $client = self::createClient();
+
+        $client->request('POST', '/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'user1@test.com',
+                'plainPassword' => 'Test1passwordOk!',
+                'firstName' => 'Leon',
+                'lastName' => 'Bruxelles',
+            ],
+        ]);
+
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertJsonContains([
+            '@context' => '/contexts/ConstraintViolationList',
+            '@type' => 'ConstraintViolationList',
+            'hydra:title' => 'An error occurred',
+            'hydra:description' => 'email: This value is already used.',
+        ]);
+    }
 }
