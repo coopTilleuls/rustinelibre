@@ -279,215 +279,234 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       <Head>
         <title>Inscription</title>
       </Head>
-      <WebsiteLayout />
-      <Container sx={{pt: 10, width: {xs: '100%', md: '50%'}}}>
-        {!inscriptionSuccess && (
-          <Paper
-            elevation={4}
-            sx={{maxWidth: 400, p: 4, mt: 4, mb: {xs: 10, md: 12}, mx: 'auto'}}>
-            <Box
+      <WebsiteLayout>
+        <Container sx={{width: {xs: '100%', md: '50%'}}}>
+          {!inscriptionSuccess && (
+            <Paper
+              elevation={4}
               sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                maxWidth: 400,
+                p: 4,
+                mt: 4,
+                mb: {xs: 10, md: 12},
+                mx: 'auto',
               }}>
-              <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
-                <BuildIcon />
-              </Avatar>
-              <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
-                Tu es réparateur
-              </Typography>
               <Box
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{mt: 1}}>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="Prénom"
-                  name="firstName"
-                  autoComplete="firstName"
-                  autoFocus
-                  value={firstName}
-                  onChange={handleChangeFirstName}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Nom"
-                  name="lastName"
-                  autoComplete="lastName"
-                  autoFocus
-                  value={lastName}
-                  onChange={handleChangeLastName}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  error={emailError}
-                  helperText={emailHelperText}
-                  id="email"
-                  label="Email"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  value={email}
-                  onChange={handleChangeEmail}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  error={passwordError}
-                  helperText={passwordInfo}
-                  name="password"
-                  label="Mot de passe"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={handleChangePassword}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Nom de votre enseigne"
-                  name="name"
-                  autoComplete="name"
-                  autoFocus
-                  value={name}
-                  onChange={handleChangeName}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="street"
-                  label="Numéro et rue"
-                  name="street"
-                  autoComplete="street"
-                  autoFocus
-                  value={street}
-                  onChange={handleChangeStreet}
-                />
-                <Autocomplete
-                  sx={{mt: 2, mb: 1}}
-                  freeSolo
-                  value={cityInput}
-                  options={citiesList.map((optionCity) => optionCity.name)}
-                  onChange={(event, values) => handleCitySelect(event, values)}
-                  renderInput={(params) => (
-                    <TextField
-                      label="Ville"
-                      required
-                      {...params}
-                      value={cityInput}
-                      onChange={(e) => handleCityChange(e)}
-                    />
-                  )}
-                />
-                <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-                  <InputLabel id="repairer-type-label">
-                    Type de réparateur
-                  </InputLabel>
-                  <Select
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
+                  <BuildIcon />
+                </Avatar>
+                <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+                  Tu es réparateur
+                </Typography>
+                <Box
+                  component="form"
+                  onSubmit={handleSubmit}
+                  noValidate
+                  sx={{mt: 1}}>
+                  <TextField
+                    margin="normal"
                     required
-                    id="repairer-type"
-                    labelId="repairer-type-label"
-                    label="Type de réparateur"
-                    onChange={handleChangeRepairerType}
-                    value={repairerTypeSelected?.name}
-                    style={{width: '100%'}}>
-                    {repairerTypes.map((repairer) => (
-                      <MenuItem key={repairer.id} value={repairer.name}>
-                        {repairer.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-                  <InputLabel id="bike-type-label">Vélos réparés</InputLabel>
-                  <Select
-                    required
-                    labelId="bike-type-label"
-                    id="bike-type"
-                    multiple
                     fullWidth
-                    value={selectedBikeTypes}
-                    onChange={handleChangeBikeRepaired}
-                    input={<OutlinedInput label="Type de vélos" />}
-                    renderValue={(selected) => selected.join(', ')}>
-                    {bikeTypes.map((bikeType) => (
-                      <MenuItem key={bikeType.name} value={bikeType.name}>
-                        <Checkbox
-                          checked={
-                            selectedBikeTypes.indexOf(bikeType.name) > -1
-                          }
-                        />
-                        <ListItemText primary={bikeType.name} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <TextField
-                  multiline
-                  rows={3}
-                  margin="normal"
-                  fullWidth
-                  id="comment"
-                  label="Commentaires"
-                  name="comment"
-                  autoComplete="comment"
-                  autoFocus
-                  value={comment}
-                  onChange={handleChangeComments}
-                />
-                <Box display="flex" flexDirection="column" alignItems="center">
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{mt: 2, mx: 'auto'}}>
-                    {!pendingRegistration ? (
-                      'Créer mon compte'
-                    ) : (
-                      <CircularProgress size={20} sx={{color: 'white'}} />
+                    id="firstName"
+                    label="Prénom"
+                    name="firstName"
+                    autoComplete="firstName"
+                    autoFocus
+                    value={firstName}
+                    onChange={handleChangeFirstName}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="lastName"
+                    label="Nom"
+                    name="lastName"
+                    autoComplete="lastName"
+                    autoFocus
+                    value={lastName}
+                    onChange={handleChangeLastName}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    error={emailError}
+                    helperText={emailHelperText}
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    value={email}
+                    onChange={handleChangeEmail}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    error={passwordError}
+                    helperText={passwordInfo}
+                    name="password"
+                    label="Mot de passe"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={handleChangePassword}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Nom de votre enseigne"
+                    name="name"
+                    autoComplete="name"
+                    autoFocus
+                    value={name}
+                    onChange={handleChangeName}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="street"
+                    label="Numéro et rue"
+                    name="street"
+                    autoComplete="street"
+                    autoFocus
+                    value={street}
+                    onChange={handleChangeStreet}
+                  />
+                  <Autocomplete
+                    sx={{mt: 2, mb: 1}}
+                    freeSolo
+                    value={cityInput}
+                    options={citiesList.map((optionCity) => optionCity.name)}
+                    onChange={(event, values) =>
+                      handleCitySelect(event, values)
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        label="Ville"
+                        required
+                        {...params}
+                        value={cityInput}
+                        onChange={(e) => handleCityChange(e)}
+                      />
                     )}
-                  </Button>
+                  />
+                  <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
+                    <InputLabel id="repairer-type-label">
+                      Type de réparateur
+                    </InputLabel>
+                    <Select
+                      required
+                      id="repairer-type"
+                      labelId="repairer-type-label"
+                      label="Type de réparateur"
+                      onChange={handleChangeRepairerType}
+                      value={repairerTypeSelected?.name}
+                      style={{width: '100%'}}>
+                      {repairerTypes.map((repairer) => (
+                        <MenuItem key={repairer.id} value={repairer.name}>
+                          {repairer.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
+                    <InputLabel id="bike-type-label">Vélos réparés</InputLabel>
+                    <Select
+                      required
+                      labelId="bike-type-label"
+                      id="bike-type"
+                      multiple
+                      fullWidth
+                      value={selectedBikeTypes}
+                      onChange={handleChangeBikeRepaired}
+                      input={<OutlinedInput label="Type de vélos" />}
+                      renderValue={(selected) => selected.join(', ')}>
+                      {bikeTypes.map((bikeType) => (
+                        <MenuItem key={bikeType.name} value={bikeType.name}>
+                          <Checkbox
+                            checked={
+                              selectedBikeTypes.indexOf(bikeType.name) > -1
+                            }
+                          />
+                          <ListItemText primary={bikeType.name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    multiline
+                    rows={3}
+                    margin="normal"
+                    fullWidth
+                    id="comment"
+                    label="Commentaires"
+                    name="comment"
+                    autoComplete="comment"
+                    autoFocus
+                    value={comment}
+                    onChange={handleChangeComments}
+                  />
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center">
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{mt: 2, mx: 'auto'}}>
+                      {!pendingRegistration ? (
+                        'Créer mon compte'
+                      ) : (
+                        <CircularProgress size={20} sx={{color: 'white'}} />
+                      )}
+                    </Button>
+                  </Box>
+                  {errorMessage && (
+                    <Typography variant="body1" color="error">
+                      {errorMessage}
+                    </Typography>
+                  )}
                 </Box>
-                {errorMessage && (
-                  <Typography variant="body1" color="error">
-                    {errorMessage}
-                  </Typography>
-                )}
               </Box>
-            </Box>
-          </Paper>
-        )}
-        {inscriptionSuccess && (
-          <Paper
-            elevation={4}
-            sx={{maxWidth: 400, p: 4, mt: 4, mb: {xs: 10, md: 12}, mx: 'auto'}}>
-            <Box>
-              Votre demande d&apos;inscription a bien été enregistrée. Elle est
-              désormais en attente de validation et sera rapidement traitée.
-              <Link href="/">
-                <Button variant="outlined" sx={{marginTop: '30px'}}>
-                  Retour à l&apos;accueil
-                </Button>
-              </Link>
-            </Box>
-          </Paper>
-        )}
-      </Container>
+            </Paper>
+          )}
+          {inscriptionSuccess && (
+            <Paper
+              elevation={4}
+              sx={{
+                maxWidth: 400,
+                p: 4,
+                mt: 4,
+                mb: {xs: 10, md: 12},
+                mx: 'auto',
+              }}>
+              <Box>
+                Votre demande d&apos;inscription a bien été enregistrée. Elle
+                est désormais en attente de validation et sera rapidement
+                traitée.
+                <Link href="/">
+                  <Button variant="outlined" sx={{marginTop: '30px'}}>
+                    Retour à l&apos;accueil
+                  </Button>
+                </Link>
+              </Box>
+            </Paper>
+          )}
+        </Container>
+      </WebsiteLayout>
     </>
   );
 };

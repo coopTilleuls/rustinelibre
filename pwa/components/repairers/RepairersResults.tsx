@@ -61,7 +61,7 @@ export const RepairersResults = (): JSX.Element => {
           width: {xs: '100%', md: '50%'},
           height: 'calc(100vh - 335px)',
           position: 'sticky',
-          top: '253px',
+          top: '206px',
         }}>
         <MapContainer
           center={mapCenter}

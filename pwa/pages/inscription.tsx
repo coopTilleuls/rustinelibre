@@ -62,78 +62,79 @@ const Registration: NextPageWithLayout = ({}) => {
       <Head>
         <title>Inscription</title>
       </Head>
-      <WebsiteLayout />
-      <Container sx={{pt: 10, width: {xs: '100%', md: '50%'}}}>
-        {!inscriptionSuccess && (
-          <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-              <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
-                <PersonIcon />
-              </Avatar>
-              <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
-                Je créé mon compte
-              </Typography>
+      <WebsiteLayout>
+        <Container sx={{width: {xs: '100%', md: '50%'}}}>
+          {!inscriptionSuccess && (
+            <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
               <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{mt: 1}}>
-                <UserForm user={null} />
-                <Button type="submit" variant="contained" sx={{my: 2}}>
-                  {!pendingRegistration ? (
-                    'Créer mon compte'
-                  ) : (
-                    <CircularProgress size={20} sx={{color: 'white'}} />
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
+                  <PersonIcon />
+                </Avatar>
+                <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+                  Je créé mon compte
+                </Typography>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  component="form"
+                  onSubmit={handleSubmit}
+                  noValidate
+                  sx={{mt: 1}}>
+                  <UserForm user={null} />
+                  <Button type="submit" variant="contained" sx={{my: 2}}>
+                    {!pendingRegistration ? (
+                      'Créer mon compte'
+                    ) : (
+                      <CircularProgress size={20} sx={{color: 'white'}} />
+                    )}
+                  </Button>
+                  {errorMessage && (
+                    <Typography variant="body1" color="error">
+                      {errorMessage}
+                    </Typography>
                   )}
-                </Button>
-                {errorMessage && (
-                  <Typography variant="body1" color="error">
-                    {errorMessage}
-                  </Typography>
-                )}
+                </Box>
+                <Typography variant="body1" color="grey">
+                  En vous inscrivant, vous acceptez les conditions d’utilisation
+                  de l’application Bikelib et sa politique de confidentialité
+                </Typography>
               </Box>
-              <Typography variant="body1" color="grey">
-                En vous inscrivant, vous acceptez les conditions d’utilisation
-                de l’application Bikelib et sa politique de confidentialité
-              </Typography>
-            </Box>
-          </Paper>
-        )}
+            </Paper>
+          )}
 
-        {inscriptionSuccess && (
-          <Paper
-            elevation={4}
-            sx={{
-              maxWidth: 400,
-              p: 4,
-              mt: 4,
-              mb: {xs: 10, md: 12},
-              mx: 'auto',
-              textAlign: 'justify',
-            }}>
-            <Box>
-              Veuillez désormais cliquer sur le lien de confirmation envoyé par
-              email pour finaliser votre inscription.
-              <br />
-              <Link href="/login">
-                <Button
-                  variant="outlined"
-                  sx={{marginTop: '30px', marginLeft: '30%'}}>
-                  Se connecter
-                </Button>
-              </Link>
-            </Box>
-          </Paper>
-        )}
-      </Container>
+          {inscriptionSuccess && (
+            <Paper
+              elevation={4}
+              sx={{
+                maxWidth: 400,
+                p: 4,
+                mt: 4,
+                mb: {xs: 10, md: 12},
+                mx: 'auto',
+                textAlign: 'justify',
+              }}>
+              <Box>
+                Veuillez désormais cliquer sur le lien de confirmation envoyé
+                par email pour finaliser votre inscription.
+                <br />
+                <Link href="/login">
+                  <Button
+                    variant="outlined"
+                    sx={{marginTop: '30px', marginLeft: '30%'}}>
+                    Se connecter
+                  </Button>
+                </Link>
+              </Box>
+            </Paper>
+          )}
+        </Container>
+      </WebsiteLayout>
     </>
   );
 };

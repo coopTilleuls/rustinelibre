@@ -48,6 +48,7 @@ import {BikeType} from '@interfaces/BikeType';
 import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {searchCity} from '@utils/apiCity';
+import LegalNoticesFooter from '@components/layout/LegaNoticesFooter';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -156,7 +157,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
   useEffect((): void => {
     fetchRepairers();
-    scrollToTop();
   }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchCitiesResult = useCallback(
@@ -233,146 +233,141 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     }
   }, [orderBy, filterBy, fetchRepairers]);
 
-  const scrollToTop = (): void => {
-    if (listContainerRef.current) {
-      listContainerRef.current.scrollIntoView({behavior: 'smooth'});
-    }
-  };
-
   return (
     <>
       <Head>
         <title>Chercher un réparateur</title>
       </Head>
-      <WebsiteLayout />
-      <Box
-        height={{xs: 'calc(100vh - 55px)', md: 'calc(100vh - 70px)'}}
-        display="flex"
-        flexDirection="column"
-        overflow="auto">
+      <WebsiteLayout>
         <Box
-          position="sticky"
-          top={{xs: '55px', md: '70px'}}
-          width="100%"
-          bgcolor="white"
-          paddingY="10px"
-          zIndex="200"
-          boxShadow={25}>
-          <Container>
-            <form onSubmit={handleSubmit}>
-              <Box
-                mt={2}
-                mx="auto"
-                width={{xs: '100%', md: '50%'}}
-                display="flex"
-                flexDirection={{xs: 'column', md: 'row'}}
-                justifyContent="space-between"
-                alignItems={{xs: 'left', md: 'center'}}
-                sx={{
-                  p: 2,
-                  border: (theme) => `1px solid ${theme.palette.divider}`,
-                  borderRadius: '10px',
-                }}>
-                <Box width={{xs: '100%', md: '50%'}}>
-                  <FormControl required fullWidth size="small">
-                    <InputLabel id="bikeType-label">Type de vélo</InputLabel>
-                    <Select
-                      label="Type de vélo"
-                      value={selectedBike ? selectedBike.name : ''}
-                      onChange={handleBikeChange}>
-                      <MenuItem disabled value="">
-                        <em>Type de vélo</em>
-                      </MenuItem>
-                      {bikeTypes.map((bike) => (
-                        <MenuItem key={bike.id} value={bike.name}>
-                          {bike.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Divider
-                  orientation="vertical"
-                  variant="middle"
-                  flexItem
+          height={{xs: 'calc(100vh - 55px)', md: 'calc(100vh - 70px)'}}
+          display="flex"
+          flexDirection="column"
+          overflow="auto">
+          <Box
+            position="sticky"
+            top={0}
+            width="100%"
+            bgcolor="white"
+            paddingY="10px"
+            zIndex="200">
+            <Container>
+              <form onSubmit={handleSubmit}>
+                <Box
+                  mt={2}
+                  mx="auto"
+                  width={{xs: '100%', md: '50%'}}
+                  display="flex"
+                  flexDirection={{xs: 'column', md: 'row'}}
+                  justifyContent="space-between"
+                  alignItems={{xs: 'left', md: 'center'}}
                   sx={{
-                    mx: 2,
-                    my: {xs: 1, md: 0},
-                    orientation: {xs: 'horizontal', md: 'vertical'},
-                  }}
-                />
-                <Box width={{xs: '100%', md: '50%'}} ref={listContainerRef}>
-                  <Autocomplete
-                    freeSolo
-                    value={city}
-                    options={citiesList}
-                    getOptionLabel={(city) =>
-                      typeof city === 'string' ? city : city.name
-                    }
-                    onChange={(event, value) => setCity(value as City)}
-                    onInputChange={(event, value) => setCityInput(value)}
-                    renderInput={(params) => (
-                      <TextField
-                        required
-                        label="Ville"
-                        {...params}
-                        size="small"
-                      />
-                    )}
-                  />
-                </Box>
-                {!isMobile && (
-                  <Box
-                    display={{xs: 'none', md: 'flex'}}
-                    alignItems="center"
-                    sx={{mt: {xs: 2, md: 0}}}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      sx={{
-                        border: '2px solid',
-                        borderColor: 'primary.main',
-                        borderRadius: '5px',
-                        ml: {xs: 0, md: 2},
-                      }}>
-                      <SearchIcon sx={{color: 'white'}} />
-                    </Button>
+                    p: 2,
+                    border: (theme) => `1px solid ${theme.palette.divider}`,
+                    borderRadius: '10px',
+                  }}>
+                  <Box width={{xs: '100%', md: '50%'}}>
+                    <FormControl required fullWidth size="small">
+                      <InputLabel id="bikeType-label">Type de vélo</InputLabel>
+                      <Select
+                        label="Type de vélo"
+                        value={selectedBike ? selectedBike.name : ''}
+                        onChange={handleBikeChange}>
+                        <MenuItem disabled value="">
+                          <em>Type de vélo</em>
+                        </MenuItem>
+                        {bikeTypes.map((bike) => (
+                          <MenuItem key={bike.id} value={bike.name}>
+                            {bike.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Box>
-                )}
-              </Box>
-              <Box width="100%">
-                {repairers.length ? (
-                  <RepairerSortOptions
-                    isMobile={isMobile}
-                    handleSelectSortOption={handleSelectSortOption}
-                    handleSelectFilterOption={handleSelectFilterOption}
+                  <Divider
+                    orientation="vertical"
+                    variant="middle"
+                    flexItem
+                    sx={{
+                      mx: 2,
+                      my: {xs: 1, md: 0},
+                      orientation: {xs: 'horizontal', md: 'vertical'},
+                    }}
                   />
-                ) : null}
-              </Box>
-            </form>
+                  <Box width={{xs: '100%', md: '50%'}} ref={listContainerRef}>
+                    <Autocomplete
+                      freeSolo
+                      value={city}
+                      options={citiesList}
+                      getOptionLabel={(city) =>
+                        typeof city === 'string' ? city : city.name
+                      }
+                      onChange={(event, value) => setCity(value as City)}
+                      onInputChange={(event, value) => setCityInput(value)}
+                      renderInput={(params) => (
+                        <TextField
+                          required
+                          label="Ville"
+                          {...params}
+                          size="small"
+                        />
+                      )}
+                    />
+                  </Box>
+                  {!isMobile && (
+                    <Box
+                      display={{xs: 'none', md: 'flex'}}
+                      alignItems="center"
+                      sx={{mt: {xs: 2, md: 0}}}>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{
+                          border: '2px solid',
+                          borderColor: 'primary.main',
+                          borderRadius: '5px',
+                          ml: {xs: 0, md: 2},
+                        }}>
+                        <SearchIcon sx={{color: 'white'}} />
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
+                <Box width="100%">
+                  {repairers.length ? (
+                    <RepairerSortOptions
+                      isMobile={isMobile}
+                      handleSelectSortOption={handleSelectSortOption}
+                      handleSelectFilterOption={handleSelectFilterOption}
+                    />
+                  ) : null}
+                </Box>
+              </form>
+            </Container>
+          </Box>
+          <Container sx={{pt: 0}}>
+            <Box textAlign="center" pt={2}>
+              {repairers.length === 0 && alreadyFetchApi && (
+                <Typography>
+                  Pas de réparateurs disponibles dans votre ville.
+                </Typography>
+              )}
+            </Box>
+            <Box width="100%">
+              {repairers.length ? (
+                <>{!isLoading && <RepairersResults />}</>
+              ) : null}
+            </Box>
+            <Box textAlign="center" pt={2}>
+              {pendingSearchCity && <CircularProgress />}
+            </Box>
           </Container>
         </Box>
-        <Container sx={{pt: 8}}>
-          <Box textAlign="center" pt={2}>
-            {repairers.length === 0 && alreadyFetchApi && (
-              <Typography>
-                Pas de réparateurs disponibles dans votre ville.
-              </Typography>
-            )}
-          </Box>
-          <Box width="100%">
-            {repairers.length ? (
-              <>{!isLoading && <RepairersResults />}</>
-            ) : null}
-          </Box>
-          <Box textAlign="center" pt={2}>
-            {pendingSearchCity && <CircularProgress />}
-          </Box>
-        </Container>
-      </Box>
-      {!pendingSearchCity && totalItems > 20 && (
-        <PaginationBlock onPageChange={handlePageChange} />
-      )}
+
+        {!pendingSearchCity && totalItems > 20 && (
+          <PaginationBlock onPageChange={handlePageChange} />
+        )}
+      </WebsiteLayout>
     </>
   );
 };

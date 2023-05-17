@@ -7,7 +7,6 @@ interface NavbarDesktopProps {
   pages: Page[];
   boss: boolean;
   user?: User;
-  handleClose?: () => void;
   logOut?: () => void;
 }
 
@@ -15,16 +14,15 @@ const NavbarDesktop = ({
   pages,
   boss,
   user,
-  handleClose,
   logOut,
 }: NavbarDesktopProps): JSX.Element => {
   return (
     <Box
       width="100%"
+      height="80px"
       display={{xs: 'none', md: 'flex'}}
       justifyContent="space-between"
-      alignItems="center"
-      my={2}>
+      alignItems="center">
       <Link href="/" style={{textDecoration: 'none'}}>
         <Box display="flex" alignItems="center" height="100%">
           <Typography
@@ -50,7 +48,6 @@ const NavbarDesktop = ({
               }}>
               <Button
                 disabled={disabled}
-                onClick={handleClose}
                 sx={{
                   display: 'flex',
                   paddingX: 2,
@@ -72,7 +69,6 @@ const NavbarDesktop = ({
           <Link href="/dashboard" style={{textDecoration: 'none'}}>
             <Button
               key="dashboard"
-              onClick={handleClose}
               sx={{
                 display: 'flex',
                 paddingX: 2,
@@ -120,7 +116,6 @@ const NavbarDesktop = ({
             }}>
             <Button
               variant="contained"
-              onClick={handleClose}
               sx={{
                 display: 'flex',
                 paddingX: 2,
