@@ -221,8 +221,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     setPendingRegistration(true);
 
     try {
-      const repairerUpdated = await repairerResource.put(repairer['@id'], bodyRequest);
-      setRepairer(repairerUpdated);
+      await repairerResource.put(repairer['@id'], bodyRequest);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
