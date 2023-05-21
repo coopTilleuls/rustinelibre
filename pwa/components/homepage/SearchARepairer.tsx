@@ -58,6 +58,11 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   };
 
   useEffect(() => {
+    // reset search form
+    setCity(null);
+    setSelectedBike(null)
+    setCityInput('');
+
     if (bikeTypes.length === 0) {
       fetchBikeTypes();
     }
