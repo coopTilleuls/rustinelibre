@@ -15,6 +15,7 @@ import {apiImageUrl} from "@helpers/apiImagesHelper";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Link from "next/link";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -108,9 +109,14 @@ const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppoin
 
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
-                                    <Button variant="outlined">
-                                        Voir le carnet du vélo
-                                    </Button>
+                                    {appointment.bike ?
+                                        <Link href={`/dashboard/clients/velos/${appointment.bike.id}`}>
+                                            <Button variant="outlined">
+                                                Voir le carnet du vélo
+                                            </Button>
+                                        </Link> : <Button disabled variant="outlined">
+                                            Voir le carnet du vélo
+                                            </Button>}
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Button variant="outlined">
