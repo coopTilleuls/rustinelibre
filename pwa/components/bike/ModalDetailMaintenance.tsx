@@ -12,7 +12,11 @@ import {formatDate} from "@helpers/dateHelper";
 import EventIcon from '@mui/icons-material/Event';
 import ModeIcon from '@mui/icons-material/Mode';
 import {apiImageUrl} from "@helpers/apiImagesHelper";
-
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import {Button} from "@mui/material";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -79,6 +83,12 @@ const ModalDetailMaintenance = ({maintenance, openModal, handleCloseModal}: Moda
                     </List>
                 }
                 {maintenance && maintenance.photo && <img width="400" height="auto" alt="Image de la réparation" src={apiImageUrl(maintenance.photo.contentUrl)} />}
+
+                <Box>
+                    <Button variant="outlined" onClick={handleCloseModal} sx={{mt: 2, float: 'right'}}>
+                        Fermer
+                    </Button>
+                </Box>
             </Box>
         </Modal>
     )
