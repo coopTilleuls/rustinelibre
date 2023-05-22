@@ -50,7 +50,7 @@ const MobileNavbar = ({
               fontSize: 18,
               fontWeight: 600,
             }}>
-            La Rustine Libre
+            Rustine Libre
           </Typography>
         </Link>
       </Box>

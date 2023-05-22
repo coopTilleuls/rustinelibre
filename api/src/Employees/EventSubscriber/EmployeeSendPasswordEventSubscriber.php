@@ -44,7 +44,7 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
         $email = (new Email())
             ->from($this->mailerSender)
             ->to($userEmployee->email)
-            ->subject('Votre compte sur La rustine libre vient d\'être créé')
+            ->subject('Votre compte sur Rustine Libre vient d\'être créé')
             ->html($this->twig->render('mail/employee_send_password.html.twig', [
                 'webAppUrl' => $this->webAppUrl,
                 'employee' => $userEmployee,
