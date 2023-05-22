@@ -1,15 +1,15 @@
 api_platform:
-    title: La rustine libre
-    version: 1.0.0
-    # Mercure integration, remove if unwanted
-    mercure: ~
-    # Good cache defaults for REST APIs
-    defaults:
-        stateless: true
-        cache_headers:
-            vary: ['Content-Type', 'Authorization', 'Origin']
-    swagger:
-        api_keys:
-            JWT:
-                name: Authorization
-                type: header
+  title: Rustine Libre
+  version: 1.0.0
+  # Mercure integration, remove if unwanted
+  mercure: ~
+  # Good cache defaults for REST APIs
+  defaults:
+    stateless: true
+    cache_headers:
+      vary: ['Content-Type', 'Authorization', 'Origin']
+  swagger:
+    api_keys:
+      JWT:
+        name: Authorization
+        type: header
