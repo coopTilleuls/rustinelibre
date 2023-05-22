@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import {CircularProgress} from "@mui/material";
 import {appointmentResource} from "@resources/appointmentResource";
 import {Appointment} from "@interfaces/Appointment";
-import {formatDate} from "@helpers/dateHelper";
+import {formatDate, isPast} from "@helpers/dateHelper";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -110,15 +110,26 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
                         Envoyer un message
                     </Button>
                 </Grid>
+
                 <Grid item xs={6}>
-                    <Button variant="outlined" sx={{color: 'green'}}>
-                        Modifier le rendez vous
-                    </Button>
+                    {isPast(appointment.slotTime) ?
+                        <Button disabled variant="outlined">
+                            Modifier le rendez vous
+                        </Button> :
+                        <Button variant="outlined" sx={{color: 'green'}}>
+                            Modifier le rendez vous
+                        </Button>
+                    }
                 </Grid>
                 <Grid item xs={6}>
-                    <Button variant="outlined" sx={{color: 'red'}} onClick={cancelAppointment}>
-                        {!loadingDelete ? 'Annuler le rendez vous' : <CircularProgress />}
-                    </Button>
+                    {isPast(appointment.slotTime) ?
+                        <Button variant="outlined" disabled>
+                            Annuler le rendez vous
+                        </Button>:
+                        <Button variant="outlined" sx={{color: 'red'}} onClick={cancelAppointment}>
+                            {!loadingDelete ? 'Annuler le rendez vous' : <CircularProgress />}
+                        </Button>
+                    }
                 </Grid>
             </Grid>
         </Box>
