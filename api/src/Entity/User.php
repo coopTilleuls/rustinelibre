@@ -108,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ])]
     public ?string $lastName = null;
 
     #[Assert\NotBlank]
@@ -117,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ])]
     public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]

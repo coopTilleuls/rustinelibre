@@ -69,6 +69,10 @@ const CustomerBikes: NextPageWithLayout = () => {
                 sx={{marginLeft: '20%', marginRight: '5%', marginTop: '10px'}}>
 
                 {loading && <CircularProgress />}
+                {!loading && bike &&
+                    <h3>
+                        Carnet d'entretien : <u>{bike.name}</u> ({bike.owner.firstName} {bike.owner.lastName})
+                    </h3>}
                 {!loading && bike && maintenances.length > 0 &&
                     <TableContainer component={Paper}>
                         <Table sx={{minWidth: 300}} aria-label="simple table">

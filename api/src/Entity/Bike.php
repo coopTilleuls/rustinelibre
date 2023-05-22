@@ -57,7 +57,7 @@ class Bike
     public ?BikeType $bikeType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ, Maintenance::READ])]
     public ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
