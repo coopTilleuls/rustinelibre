@@ -40,4 +40,15 @@ class BikeRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function getBikeFromAnUser(): ?Bike
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.owner', 'bo')
+            ->andWhere('CAST(bo.roles AS TEXT) LIKE :role')
+            ->setParameter('role', '%ROLE_USER%')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

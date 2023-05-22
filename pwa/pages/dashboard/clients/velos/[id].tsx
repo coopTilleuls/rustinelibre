@@ -18,6 +18,7 @@ import {formatDate} from "@helpers/dateHelper";
 import Button from "@mui/material/Button";
 import TableContainer from "@mui/material/TableContainer";
 import ModalDetailMaintenance from "@components/bike/ModalDetailMaintenance";
+import ModalAddMaintenance from "@components/bike/ModalAddMaintenance";
 
 const CustomerBikes: NextPageWithLayout = () => {
     const router = useRouter();
@@ -27,30 +28,40 @@ const CustomerBikes: NextPageWithLayout = () => {
     const [maintenanceSelected, setMaintenanceSelected] = useState<Maintenance | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [openModal, setOpenModal] = useState<boolean>(false);
+    const [openModalAddMaintenance, setOpenModalAddMaintenance] = useState<boolean>(false);
+
     const handleOpenModal = (maintenance: Maintenance): void => {
         setMaintenanceSelected(maintenance);
         setOpenModal(true)
     };
     const handleCloseModal = (): void => setOpenModal(false);
 
+    const handleCloseModalAddMaintenance = async (): Promise<void> => {
+        setOpenModalAddMaintenance(false);
+        if (bike) {
+            await fetchMaintenances(bike.id);
+        }
+    };
+
+    const fetchMaintenances = async(bikeId: string) => {
+        setLoading(true);
+        const maintenancesFetch = await maintenanceResource.getAll(true,{
+            'bike': bikeId,
+            'order[repairDate]': 'DESC'
+        });
+        setMaintenances(maintenancesFetch['hydra:member']);
+        setLoading(false);
+    }
+
     useEffect(() => {
-        async function fetchBike() {
+         const fetchBike = async (): Promise<void> => {
             if (typeof id === 'string' && id.length > 0) {
                 setLoading(true);
                 const bikeFetch: Bike = await bikeResource.getById(id);
                 setBike(bikeFetch);
                 setLoading(false);
-                fetchMaintenances(bikeFetch.id);
+                await fetchMaintenances(bikeFetch.id);
             }
-        }
-
-        async function fetchMaintenances(bikeId: string) {
-            setLoading(true);
-            const maintenancesFetch = await maintenanceResource.getAll(true,{
-                'bike': bikeId
-            });
-            setMaintenances(maintenancesFetch['hydra:member']);
-            setLoading(false);
         }
 
         if (id) {
@@ -61,7 +72,7 @@ const CustomerBikes: NextPageWithLayout = () => {
     return (
         <>
             <Head>
-                <title>Carnet d'entretien</title>
+                <title>Carnet d&#39;entretien</title>
             </Head>
             <DashboardLayout />
             <Box
@@ -71,7 +82,11 @@ const CustomerBikes: NextPageWithLayout = () => {
                 {loading && <CircularProgress />}
                 {!loading && bike &&
                     <h3>
-                        Carnet d'entretien : <u>{bike.name}</u> ({bike.owner.firstName} {bike.owner.lastName})
+                        Carnet d&#39;entretien : <u>{bike.name}</u> ({bike.owner.firstName} {bike.owner.lastName})
+
+                        <Button variant="outlined" onClick={() => setOpenModalAddMaintenance(true)} sx={{float: 'right'}}>
+                            Ajouter une entrée au carnet d&#39;entretien
+                        </Button>
                     </h3>}
                 {!loading && bike && maintenances.length > 0 &&
                     <TableContainer component={Paper}>
@@ -94,6 +109,11 @@ const CustomerBikes: NextPageWithLayout = () => {
                         </Table>
                     </TableContainer>
                 }
+                {!loading && maintenances.length === 0 &&
+                    <Box sx={{mt: 10}}>
+                        Le carnet d&#39;entretien est vide
+                    </Box>
+                }
             </Box>
 
             <ModalDetailMaintenance
@@ -101,6 +121,14 @@ const CustomerBikes: NextPageWithLayout = () => {
                 openModal={openModal}
                 handleCloseModal={handleCloseModal}
             />
+
+            {bike &&
+                <ModalAddMaintenance
+                    bike={bike}
+                    openModal={openModalAddMaintenance}
+                    handleCloseModal={handleCloseModalAddMaintenance}
+                />
+            }
         </>
     );
 };

@@ -65,6 +65,7 @@ class Bike
     public ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups([self::READ, self::WRITE])]
     public ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]

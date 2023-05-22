@@ -12,10 +12,6 @@ import {formatDate} from "@helpers/dateHelper";
 import EventIcon from '@mui/icons-material/Event';
 import ModeIcon from '@mui/icons-material/Mode';
 import {apiImageUrl} from "@helpers/apiImagesHelper";
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import {Button} from "@mui/material";
 
 const style = {
@@ -72,14 +68,15 @@ const ModalDetailMaintenance = ({maintenance, openModal, handleCloseModal}: Moda
                                 primary={formatDate(maintenance.repairDate, false)}
                             />
                         </ListItem>
-                        <ListItem key="description">
-                            <ListItemIcon>
-                                <ModeIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={maintenance.description}
-                            />
-                        </ListItem>
+                        {maintenance.description &&
+                            <ListItem key="description">
+                                <ListItemIcon>
+                                    <ModeIcon />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={maintenance.description}
+                                />
+                            </ListItem>}
                     </List>
                 }
                 {maintenance && maintenance.photo && <img width="400" height="auto" alt="Image de la réparation" src={apiImageUrl(maintenance.photo.contentUrl)} />}
