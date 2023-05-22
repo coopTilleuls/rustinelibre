@@ -107,16 +107,15 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     setMobilePhone,
   } = useContext(RepairerFormContext);
 
+  const fetchRepairer = async () => {
+    if (user && user.repairer) {
+      setLoading(true);
+      const repairerFetch: Repairer = await repairerResource.get(user.repairer);
+      setRepairer(repairerFetch);
+    }
+  };
+
   useEffect(() => {
-    const fetchRepairer = async () => {
-      if (user && user.repairer) {
-        setLoading(true);
-        const repairerFetch: Repairer = await repairerResource.get(
-          user.repairer
-        );
-        setRepairer(repairerFetch);
-      }
-    };
     if (user) {
       fetchRepairer();
     }
@@ -269,7 +268,10 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
                 />
               )}
               {!loading && tabValue === 2 && (
-                <DashboardInfosPhotos repairer={repairer} />
+                <DashboardInfosPhotos
+                  repairer={repairer}
+                  fetchRepairer={fetchRepairer}
+                />
               )}
               {!loading && tabValue === 3 && (
                 <OpeningHours repairer={repairer} />
