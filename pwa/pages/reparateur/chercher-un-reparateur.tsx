@@ -218,16 +218,39 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     });
   };
 
-  const handleSelectFilterOption = async (
-    event: SelectChangeEvent
-  ): Promise<void> => {
-    setRepairerTypeSelected(event.target.value);
+  // const handleSelectFilterOption = async (
+  //   event: SelectChangeEvent
+  // ): Promise<void> => {
+  //   setRepairerTypeSelected(event.target.value);
 
-    setFilterBy({
-      key: 'repairerType.id',
-      value: repairerTypeSelected,
-    });
+  //   setFilterBy({
+  //     key: 'repairerType.id',
+  //     value: repairerTypeSelected,
+  //   });
+  // };
+
+  const handleSelectFilters = (event: any, filterId: any) => {
+    if (event.currentTarget.checked) {
+      setRepairerTypeSelected((prevSelectedFilters) => [
+        ...prevSelectedFilters,
+        filterId,
+      ]);
+      setFilterBy({
+        key: 'repairerType.id',
+        value: repairerTypeSelected,
+      });
+    } else {
+      setRepairerTypeSelected((prevSelectedFilters) =>
+        prevSelectedFilters.filter((filter) => filter !== filterId)
+      );
+      setFilterBy({
+        key: 'repairerType.id',
+        value: repairerTypeSelected,
+      });
+    }
   };
+
+  console.log(typeof repairerTypeSelected);
 
   useEffect(() => {
     if (orderBy) {
@@ -247,6 +270,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       window.scrollTo({top: containerTop - +headerHeight, behavior: 'smooth'});
     }
   };
+
+  console.log(repairerTypeSelected);
 
   return (
     <>
@@ -354,8 +379,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                   {repairers.length ? (
                     <RepairerSortOptions
                       isMobile={isMobile}
+                      handleSelectFilters={handleSelectFilters}
                       handleSelectSortOption={handleSelectSortOption}
-                      handleSelectFilterOption={handleSelectFilterOption}
                     />
                   ) : null}
                 </Box>

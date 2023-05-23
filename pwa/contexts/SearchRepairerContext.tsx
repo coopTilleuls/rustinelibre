@@ -20,7 +20,7 @@ interface SearchRepairerContext {
   selectedRepairer: string;
   city: City | null;
   currentPage: number;
-  repairerTypeSelected: string;
+  repairerTypeSelected: string | null;
   sortChosen: string;
   orderBy: OrderByOption | null;
   filterBy: OrderByOption | null;
@@ -47,7 +47,7 @@ const initialValue = {
   selectedBike: null,
   showMap: false,
   currentPage: 1,
-  repairerTypeSelected: '',
+  repairerTypeSelected: null,
   orderBy: null,
   filterBy: null,
   sortChosen: 'availability',
