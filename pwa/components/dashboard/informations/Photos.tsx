@@ -10,10 +10,12 @@ import {Repairer} from '@interfaces/Repairer';
 
 interface DashboardInfosPhotosProps {
   repairer: Repairer | null;
+  fetchRepairer: () => void;
 }
 
 export const DashboardInfosPhotos = ({
   repairer,
+  fetchRepairer,
 }: DashboardInfosPhotosProps): JSX.Element => {
   const {thumbnail, setThumbnail, descriptionPicture, setDescriptionPicture} =
     useContext(RepairerFormContext);
@@ -40,16 +42,16 @@ export const DashboardInfosPhotos = ({
       if (mediaObjectResponse) {
         if (pictureType === 'thumbnail') {
           setThumbnail(mediaObjectResponse);
-          repairerResource.put(repairer['@id'], {
+          await repairerResource.put(repairer['@id'], {
             thumbnail: mediaObjectResponse['@id'],
           });
         } else if (pictureType === 'description') {
           setDescriptionPicture(mediaObjectResponse);
-          repairerResource.put(repairer['@id'], {
+          await repairerResource.put(repairer['@id'], {
             descriptionPicture: mediaObjectResponse['@id'],
           });
         }
-
+        fetchRepairer();
         setLoading(false);
       }
     }
@@ -77,55 +79,53 @@ export const DashboardInfosPhotos = ({
   }
 
   return (
-    <>
-      <Box
-        sx={{
-          marginTop: 8,
-        }}>
-        <InputLabel>Photo de profil</InputLabel>
-        <Grid container spacing={2}>
-          <Grid item>
-            {thumbnail && (
-              <img
-                alt="thumbnail"
-                width="200"
-                height="200"
-                src={apiImageUrl(thumbnail.contentUrl)}
-              />
-            )}
-          </Grid>
+    <Box
+      sx={{
+        marginTop: 8,
+      }}>
+      <InputLabel>Photo de profil</InputLabel>
+      <Grid container spacing={2}>
+        <Grid item>
+          {thumbnail && (
+            <img
+              alt="thumbnail"
+              width="200"
+              height="200"
+              src={apiImageUrl(thumbnail.contentUrl)}
+            />
+          )}
         </Grid>
-        <Button variant="contained" component="label" sx={{my: 2}}>
-          Changer de photo de profil
-          <input
-            type="file"
-            hidden
-            onChange={(e) => handleFileChange(e, 'thumbnail')}
-          />
-        </Button>
-        <InputLabel sx={{mt: 4}}>Photo de description</InputLabel>
-        <Grid container spacing={2} sx={{marginTop: '10'}}>
-          <Grid item>
-            {descriptionPicture && (
-              <img
-                alt="photo de description"
-                width="200"
-                height="200"
-                src={apiImageUrl(descriptionPicture.contentUrl)}
-              />
-            )}
-          </Grid>
+      </Grid>
+      <Button variant="contained" component="label" sx={{my: 2}}>
+        Changer de photo de profil
+        <input
+          type="file"
+          hidden
+          onChange={(e) => handleFileChange(e, 'thumbnail')}
+        />
+      </Button>
+      <InputLabel sx={{mt: 4}}>Photo de description</InputLabel>
+      <Grid container spacing={2} sx={{marginTop: '10'}}>
+        <Grid item>
+          {descriptionPicture && (
+            <img
+              alt="photo de description"
+              width="200"
+              height="200"
+              src={apiImageUrl(descriptionPicture.contentUrl)}
+            />
+          )}
         </Grid>
-        <Button variant="contained" component="label" sx={{my: 2}}>
-          Changer de photo de description
-          <input
-            type="file"
-            hidden
-            onChange={(e) => handleFileChange(e, 'description')}
-          />
-        </Button>
-      </Box>
-    </>
+      </Grid>
+      <Button variant="contained" component="label" sx={{my: 2}}>
+        Changer de photo de description
+        <input
+          type="file"
+          hidden
+          onChange={(e) => handleFileChange(e, 'description')}
+        />
+      </Button>
+    </Box>
   );
 };
 
