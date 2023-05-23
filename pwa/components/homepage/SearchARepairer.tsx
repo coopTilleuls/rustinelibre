@@ -34,6 +34,7 @@ import {bikeTypeResource} from '@resources/bikeTypeResource';
 import SearchIcon from '@mui/icons-material/Search';
 import {useRouter} from 'next/router';
 import Link from 'next/link';
+import HomepageImagesGallery from './search-a-repairer/HomepageImagesGallery';
 
 const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
@@ -60,7 +61,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   useEffect(() => {
     // reset search form
     setCity(null);
-    setSelectedBike(null)
+    setSelectedBike(null);
     setCityInput('');
 
     if (bikeTypes.length === 0) {
@@ -220,13 +221,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
           </Button>
         </Link>
       </Box>
-      <Box display={{xs: 'none', md: 'flex'}} width="40%">
-        <Box width="50%" display="flex" flexDirection="column" pr={1}>
-          <Box height="45%" bgcolor="grey.300" borderRadius={10} mb={1} />
-          <Box height="65%" bgcolor="grey.300" borderRadius={10} />
-        </Box>
-        <Box width="50%" height="100%" bgcolor="grey.300" borderRadius={10} />
-      </Box>
+      <HomepageImagesGallery />
     </Box>
   );
 };
