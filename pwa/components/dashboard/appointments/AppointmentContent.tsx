@@ -46,8 +46,8 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
 
     return (
         <Box>
-            <Typography id="modal-modal-title" fontSize={20} fontWeight={600}>
-                Rendez vous : {`${appointment.customer.firstName} ${appointment.customer.lastName}`}
+            <Typography id="appointment_title" fontSize={20} fontWeight={600}>
+                Rendez-vous : {`${appointment.customer.firstName} ${appointment.customer.lastName}`}
             </Typography>
             <List>
                 <ListItem>
