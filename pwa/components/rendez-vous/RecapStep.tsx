@@ -24,7 +24,7 @@ const RecapStep = ({handleConfirmAppointment}: RecapStepProps) => {
 
       <Box>
         <Button onClick={handleConfirmAppointment} variant="contained">
-          Confirmer le rendez vous
+          Confirmer le rendez-vous
         </Button>
       </Box>
     </Stack>

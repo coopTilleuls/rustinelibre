@@ -15,4 +15,9 @@ trait BikeTrait
     {
         return $this->bikeRepository->findOneBy([]);
     }
+
+    public function getBikeFromAnUser(): ?Bike
+    {
+        return $this->bikeRepository->getBikeFromAnUser();
+    }
 }

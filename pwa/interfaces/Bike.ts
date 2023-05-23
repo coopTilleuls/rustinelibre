@@ -12,7 +12,7 @@ export interface Bike {
     bikeType?: BikeType;
     name?: string;
     description?: string;
-    createdAt?: DateObject;
+    createdAt?: string;
     picture?: MediaObject;
     wheelPicture?: MediaObject;
     transmissionPicture?: MediaObject;

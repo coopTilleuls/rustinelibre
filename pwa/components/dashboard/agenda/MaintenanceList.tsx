@@ -16,7 +16,8 @@ const MaintenanceList = ({bike}: MaintenanceListProps): JSX.Element => {
     const fetchMaintenances = async () => {
         setLoading(true);
         const maintenancesFetch = await maintenanceResource.getAll(true, {
-            bike: bike.id
+            bike: bike.id,
+            'order[repairDate]': 'DESC',
         });
         setMaintenances(maintenancesFetch['hydra:member']);
         setLoading(false);
