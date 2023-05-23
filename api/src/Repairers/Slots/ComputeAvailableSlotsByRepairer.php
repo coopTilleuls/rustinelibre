@@ -48,7 +48,10 @@ final class ComputeAvailableSlotsByRepairer
             $dayDate = new \DateTime($day);
 
             foreach ($exeptionalClosures as $exeptionalClosure) {
-                if ($dayDate >= $exeptionalClosure->startDate && $dayDate <= $exeptionalClosure->endDate) {
+                $startDate = $exeptionalClosure->startDate->format('Y-m-d');
+                $endDate = $exeptionalClosure->endDate->format('Y-m-d');
+                $dayFormatted = $dayDate->format('Y-m-d');
+                if ($dayFormatted >= $startDate && $dayFormatted <= $endDate) {
                     unset($slots[$day]);
                 }
             }
@@ -65,13 +68,13 @@ final class ComputeAvailableSlotsByRepairer
             return $slots;
         }
 
-        /** @var \DateTime $appointment */
+        /** @var \DateTimeImmutable $appointment */
         foreach ($appointments as $appointment) {
             $appointmentDay = $appointment->format('Y-m-d');
             if (array_key_exists($appointmentDay, $slots)) {
                 $slotTime = $appointment->format('H:i');
-                if (in_array($slotTime, $slots[$appointmentDay])) {
-                    $key = array_search($slotTime, $slots[$appointmentDay]);
+                if (in_array($slotTime, $slots[$appointmentDay], true)) {
+                    $key = array_search($slotTime, $slots[$appointmentDay], true);
                     if (false !== $key) {
                         unset($slots[$appointmentDay][$key]);
                         $slots[$appointmentDay] = array_values($slots[$appointmentDay]);

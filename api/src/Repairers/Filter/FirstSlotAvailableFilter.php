@@ -11,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
 
-class FirstAvailableSlotFilter extends AbstractFilter
+class FirstSlotAvailableFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'availability';
 

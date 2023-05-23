@@ -26,9 +26,14 @@ class PostTest extends AbstractTestCase
     {
         $user = $this->userRepository->getUserWithoutRepairer();
         $repairer = $this->repairerRepository->findOneBy([]);
-        $response = $this->createClientWithUser($user)->request('POST', '/appointments', [
+        $client = $this->createClientWithUser($user);
+
+        $slots = $client->request('GET', sprintf('/repairer_get_slots_available/%d', $repairer->id))->toArray();
+        $slotTime = sprintf('%s %s', array_key_first($slots), $slots[array_key_first($slots)][0]);
+
+        $response = $client->request('POST', '/appointments', [
             'json' => [
-                'slotTime' => (new \DateTimeImmutable('+ 1day'))->format('Y-m-d H:i:s'),
+                'slotTime' => \DateTimeImmutable::createFromFormat('Y-m-d H:i', $slotTime)->format('Y-m-d H:i:s'),
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
             ],
         ])->toArray();

@@ -72,4 +72,13 @@ class RepairerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findByOldFirstSlotAvailable(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.firstSlotAvailable < :date')
+            ->setParameter('date', new \DateTime('now'))
+            ->getQuery()
+            ->getResult();
+    }
 }
