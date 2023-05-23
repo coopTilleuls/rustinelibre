@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Maintenance\Security;
 
+use App\Entity\Appointment;
 use App\Entity\Maintenance;
+use App\Entity\Repairer;
+use App\Repository\AppointmentRepository;
 use App\Repository\MaintenanceRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +17,17 @@ class GetTest extends AbstractTestCase
     /** @var Maintenance[] */
     protected array $maintenances = [];
 
+    /** @var Repairer[] */
+    protected array $repairers = [];
+
+    protected Appointment $appointment;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->maintenances = static::getContainer()->get(MaintenanceRepository::class)->findAll();
+        $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy([]);
     }
 
     public function testUserCanGetMaintenanceForOwnBikes(): void
@@ -73,4 +82,13 @@ class GetTest extends AbstractTestCase
         $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances?bike='.$maintenance->bike->id)->toArray();
         $this->assertResponseIsSuccessful();
     }
+
+    public function testBossCanGetMaintenanceOfHisUser(): void
+    {
+        dd($this->appointment);
+        $response = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/maintenances')->toArray();
+        dd($response);
+        $this->assertResponseIsSuccessful();
+    }
+
 }

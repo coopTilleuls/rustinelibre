@@ -5,3 +5,9 @@ App\Entity\Bike:
     bikeType: '@biketype_*'
     name: 'name <current()>'
     description: 'description <current()>'
+  bike_21:
+    owner: '@user_1'
+    brand: 'brand 21'
+    bikeType: '@biketype_*'
+    name: 'name 21>'
+    description: 'description 21>'

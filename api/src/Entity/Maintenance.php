@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user or is_granted('MAINTENANCE_READ', object)")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
+#[Post(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
 #[ApiFilter(SearchFilter::class, properties: ['bike' => 'exact'])]
