@@ -7,6 +7,7 @@ namespace App\Tests\Bike\Security;
 use App\Repository\BikeRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\BikeTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class GetTest extends AbstractTestCase
 {
@@ -22,7 +23,7 @@ class GetTest extends AbstractTestCase
     {
         $bike = $this->getBike();
         $response = $this->createClientAuthAsAdmin()->request('GET', sprintf('/bikes/%d', $bike->id))->toArray();
-        self::assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
         self::assertArrayHasKey('id', $response);
         self::assertArrayHasKey('owner', $response);
         self::assertArrayHasKey('brand', $response);
@@ -35,29 +36,29 @@ class GetTest extends AbstractTestCase
     {
         $bike = $this->getBike();
         $this->createClientWithUser($bike->owner)->request('GET', sprintf('/bikes/%d', $bike->id));
-        self::assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     public function testUserCannotGetOtherBike(): void
     {
         $bike = $this->getBike();
         $this->createClientAuthAsUser()->request('GET', sprintf('/bikes/%d', $bike->id));
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testOwnerGetCollectionOfHisBikes(): void
     {
-        $bike = $this->getBike();
+        $bike = $this->getBikeFromAnUser();
         $response = $this->createClientWithUser($bike->owner)->request('GET', '/bikes')->toArray();
 
-        self::assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
         self::assertArrayHasKey('hydra:member', $response);
         self::assertArrayHasKey('hydra:totalItems', $response);
 
         foreach ($response['hydra:member'] as $bikeResponse) {
             self::assertArrayHasKey('id', $bikeResponse);
             self::assertArrayHasKey('owner', $bikeResponse);
-            self::assertSame(sprintf('/users/%d', $bike->owner->id), $bikeResponse['owner']);
+            self::assertSame(sprintf('/users/%d', $bike->owner->id), $bikeResponse['owner']['@id']);
             self::assertArrayHasKey('brand', $bikeResponse);
             self::assertArrayHasKey('bikeType', $bikeResponse);
             self::assertArrayHasKey('name', $bikeResponse);
@@ -77,7 +78,7 @@ class GetTest extends AbstractTestCase
         foreach ($response['hydra:member'] as $bikeResponse) {
             self::assertArrayHasKey('id', $bikeResponse);
             self::assertArrayHasKey('owner', $bikeResponse);
-            $owners[] = $bikeResponse['owner'];
+            $owners[] = $bikeResponse['owner']['@id'];
             self::assertArrayHasKey('brand', $bikeResponse);
             self::assertArrayHasKey('bikeType', $bikeResponse);
             self::assertArrayHasKey('name', $bikeResponse);

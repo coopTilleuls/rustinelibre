@@ -15,13 +15,15 @@ import {apiImageUrl} from "@helpers/apiImagesHelper";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Link from "next/link";
+import AppointmentContent from "@components/dashboard/appointments/AppointmentContent";
 
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '50%',
+    width: '80%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -51,17 +53,6 @@ const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppoin
         setLoading(false)
     }
 
-    const cancelAppointment = async () => {
-        if (!appointment) {
-            return;
-        }
-
-        setLoadingDelete(true);
-        await appointmentResource.delete(appointment['@id']);
-        setLoadingDelete(false);
-        handleCloseModal(true);
-    }
-
     return (
         <Modal
             open={openModal}
@@ -73,60 +64,7 @@ const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppoin
                 <Box sx={{ mt: 1 }}>
                     {loading && <CircularProgress />}
                     {!loading && appointment &&
-                        <Box>
-                            <List>
-                                {appointment.autoDiagnostic &&
-                                    <ListItem>
-                                        <ListItemIcon>
-                                            <HandymanIcon />
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={appointment.autoDiagnostic.prestation}
-                                        />
-                                    </ListItem>
-                                }
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <AccountCircleIcon />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={`${appointment.customer.firstName} ${appointment.customer.lastName}`}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <CalendarMonthIcon />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={formatDate(appointment.slotTime, true)}
-                                    />
-                                </ListItem>
-                                {appointment.autoDiagnostic && appointment.autoDiagnostic.photo && <img alt="photo de la réparation" src={apiImageUrl(appointment.autoDiagnostic.photo.contentUrl)} />}
-                            </List>
-
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
-                                    <Button variant="outlined">
-                                        Voir le carnet du vélo
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Button variant="outlined">
-                                        Envoyer un message
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Button variant="outlined" sx={{color: 'green'}}>
-                                        Modifier le rendez vous
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Button variant="outlined" sx={{color: 'red'}} onClick={cancelAppointment}>
-                                        {!loadingDelete ? 'Annuler le rendez vous' : <CircularProgress />}
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Box>
+                        <AppointmentContent appointment={appointment} handleCloseModal={handleCloseModal} />
                     }
                 </Box>
             </Box>

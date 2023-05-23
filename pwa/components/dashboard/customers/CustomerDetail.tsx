@@ -9,6 +9,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import {Customer} from "@interfaces/Customer";
 import {Tab, Tabs} from "@mui/material";
 import CustomerAppointmentsList from "@components/dashboard/customers/CustomerAppointmentsList";
+import CustomerBikesList from "@components/dashboard/customers/CustomerBikesList";
 
 interface CustomersDetailProps {
     customer: Customer
@@ -26,7 +27,8 @@ export const CustomersDetail = ({customer}: CustomersDetailProps): JSX.Element =
             <Box component="main" maxWidth={900}>
                 <Tabs value={tabValue} onChange={handleChangeTab}>
                     <Tab label="Coordonnées" />
-                    <Tab label="Rendez vous" />
+                    <Tab label="Rendez-vous" />
+                    <Tab label="Vélos" />
                 </Tabs>
 
                 <Box sx={{marginTop: 3}}>
@@ -52,6 +54,9 @@ export const CustomersDetail = ({customer}: CustomersDetailProps): JSX.Element =
                     )}
                     {tabValue === 1 && (
                         <CustomerAppointmentsList customer={customer} />
+                    )}
+                    {tabValue === 2 && (
+                        <CustomerBikesList customer={customer} />
                     )}
                 </Box>
             </Box>

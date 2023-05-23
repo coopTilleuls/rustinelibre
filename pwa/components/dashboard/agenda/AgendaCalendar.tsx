@@ -39,7 +39,7 @@ export const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => 
     const [selectedId, setSelectedId] = useState<string|null>(null);
     const [calendarEvents, setCalendarEvents] = useState<{ title: string; id: string }[]>([]);
     const [openModal, setOpenModal] = useState<boolean>(false);
-    const handleOpenModal = (): void => setOpenModal(true);
+
     const handleCloseModal = (refresh = true): void => {
         setOpenModal(false);
         if (refresh) {

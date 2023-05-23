@@ -58,6 +58,11 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   };
 
   useEffect(() => {
+    // reset search form
+    setCity(null);
+    setSelectedBike(null)
+    setCityInput('');
+
     if (bikeTypes.length === 0) {
       fetchBikeTypes();
     }
@@ -105,7 +110,9 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
             fontSize={{xs: 22, md: 64}}
             fontWeight={600}
             textAlign={{xs: 'center', md: 'start'}}>
-            Besoin de réparer ton vélo ?
+            Besoin de réparer
+            <br />
+            ton vélo ?
           </Typography>
           <Typography
             fontSize={{xs: 16, md: 24}}

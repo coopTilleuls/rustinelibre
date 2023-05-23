@@ -79,7 +79,7 @@ const AppointmentSummary: NextPageWithLayout = () => {
                   fontSize={18}
                   fontWeight={600}
                   my={{xs: 2}}>
-                  Votre demande de rendez vous
+                  Votre demande de rendez-vous
                 </Typography>
                 <Box p={3} sx={{border: '3px solid grey', borderRadius: 1}}>
                   <Box display="flex" justifyContent="center">

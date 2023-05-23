@@ -32,7 +32,7 @@ const NavbarDesktop = ({
               fontSize: 16,
               fontWeight: 900,
             }}>
-            La Rustine Libre
+            Rustine Libre
           </Typography>
         </Box>
       </Link>

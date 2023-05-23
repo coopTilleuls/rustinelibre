@@ -22,6 +22,7 @@ use App\User\StateProvider\CustomersProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -58,6 +59,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(UserSearchFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: ['firstName' => 'ipartial', 'lastName' => 'ipartial'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
+#[UniqueEntity('email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private const EMAIL_MAX_LENGTH = 180;
@@ -77,7 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
     public ?string $email = null;
 
     #[ORM\Column]
@@ -106,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ])]
     public ?string $lastName = null;
 
     #[Assert\NotBlank]
@@ -115,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max : 50,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ])]
     public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]

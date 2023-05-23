@@ -21,9 +21,7 @@ class MaintenanceVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        $supportsAttribute = in_array($attribute, ['MAINTENANCE_READ', 'MAINTENANCE_WRITE']);
-        $supportsSubject = $subject instanceof Maintenance;
-        return $supportsAttribute && $supportsSubject ;
+        return 'MAINTENANCE_REPAIRER_READ' === $attribute && $subject instanceof Maintenance;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool

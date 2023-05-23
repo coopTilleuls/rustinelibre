@@ -14,12 +14,14 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import BuildIcon from '@mui/icons-material/Build';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Customer} from "@interfaces/Customer";
+import {Button} from "@mui/material";
+import AppointmentContent from "@components/dashboard/appointments/AppointmentContent";
 
 type ModalAddBikeProps = {
     appointment: Appointment|null;
     customer: Customer;
     openModal: boolean;
-    handleCloseModal: () => void;
+    handleCloseModal: (refresh: boolean|undefined) => void;
 };
 
 const CustomerAppointmentModal = ({
@@ -33,7 +35,7 @@ const CustomerAppointmentModal = ({
     return (
         <Modal
             open={openModal}
-            onClose={handleCloseModal}
+            onClose={() => handleCloseModal(false)}
             aria-labelledby="Ajouter un vélo"
             aria-describedby="popup_add_bike">
             <Box
@@ -48,58 +50,8 @@ const CustomerAppointmentModal = ({
                     backgroundColor: 'background.paper',
                     transform: 'translate(-50%, -50%)',
                 }}>
-                {appointment &&
-                    <Typography id="modal-modal-title" fontSize={20} fontWeight={600}>
-                        Rendez vous : {`${customer.firstName} ${customer.lastName}`}
-                    </Typography>
-                }
-                {
-                    appointment &&
-                    <List>
-                        <ListItem>
-                            <ListItemIcon>
-                                <CalendarMonthIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={formatDate(appointment.slotTime)}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemIcon>
-                                <AlternateEmailIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={customer.email}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemIcon>
-                                <CheckCircleOutlineIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={appointment.accepted === undefined
-                                    ? 'En attente'
-                                    : appointment.accepted
-                                        ? 'Rendez vous accepté'
-                                        : 'Rendez vous refusé'
-                                }
-                            />
-                        </ListItem>
-                        {appointment.autoDiagnostic &&
-                            <ListItem>
-                                <ListItemIcon>
-                                    <BuildIcon />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={appointment.autoDiagnostic.prestation}
-                                />
-                            </ListItem>
-                        }
-                        {appointment.autoDiagnostic && appointment.autoDiagnostic.photo &&
-                            <img style={{marginTop: '20px', textAlign:'center'}} width="300" src={apiImageUrl(appointment.autoDiagnostic.photo.contentUrl)} alt="Photo autodiag" />
-                        }
-                    </List>
-                }
+
+                {appointment && <AppointmentContent appointment={appointment} handleCloseModal={handleCloseModal} />}
             </Box>
         </Modal>
     );

@@ -6,12 +6,12 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import 'leaflet-defaulticon-compatibility';
 import {RepairerCard} from 'components/repairers/RepairerCard';
 import Box from '@mui/material/Box';
-import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Grid2 from '@mui/material/Unstable_Grid2';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 
 export const RepairersResults = (): JSX.Element => {
-  const {showMap, setSelectedRepairer, repairers, setRepairers} = useContext(
+  const {showMap, setSelectedRepairer, repairers} = useContext(
     SearchRepairerContext
   );
 
@@ -22,10 +22,7 @@ export const RepairersResults = (): JSX.Element => {
 
   const handleSelectRepairer = (id: string) => {
     setSelectedRepairer(id);
-    const index = repairers.findIndex((repairer) => repairer.id === id);
-    const selectedRepairer = repairers.splice(index, 1)[0];
-    repairers.unshift(selectedRepairer);
-    setRepairers([...repairers]);
+    document.getElementById(id)?.scrollIntoView({behavior: 'smooth'});
   };
 
   const handleClipMapPin = (event: LeafletMouseEvent, repairer: Repairer) => {
@@ -41,13 +38,19 @@ export const RepairersResults = (): JSX.Element => {
       {!showMap && (
         <Box
           sx={{
+            pt: 2,
             pr: {md: 2},
             width: {xs: '100%', md: '50%'},
           }}>
           <Grid2 container spacing={2}>
             {repairers.map((repairer) => {
               return (
-                <Grid2 key={repairer.id} xs={12}>
+                <Grid2
+                  id={repairer.id}
+                  key={repairer.id}
+                  xs={12}
+                  pt="198px"
+                  mt="-198px">
                   <RepairerCard repairer={repairer} />
                 </Grid2>
               );
@@ -61,7 +64,7 @@ export const RepairersResults = (): JSX.Element => {
           width: {xs: '100%', md: '50%'},
           height: 'calc(100vh - 335px)',
           position: 'sticky',
-          top: '206px',
+          top: '198px',
         }}>
         <MapContainer
           center={mapCenter}

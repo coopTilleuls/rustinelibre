@@ -23,7 +23,7 @@ const Registration: NextPageWithLayout = ({}) => {
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const user = useAccount({redirectIfFound: '/'});
+  const {user} = useAccount({redirectIfFound: '/'});
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
   const router = useRouter();
 

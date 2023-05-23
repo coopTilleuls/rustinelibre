@@ -16,6 +16,7 @@ import {
   Button,
   Alert,
   CircularProgress,
+  Container,
 } from '@mui/material';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import ContactDetails from '@components/dashboard/informations/ContactDetails';
@@ -26,13 +27,13 @@ import {RequestBody} from '@interfaces/Resource';
 import {RepairerType} from '@interfaces/RepairerType';
 import {Repairer} from '@interfaces/Repairer';
 import {BikeType} from '@interfaces/BikeType';
-import OpeningHours from "@components/dashboard/informations/OpeningHours";
-import dynamic from "next/dynamic";
+import OpeningHours from '@components/dashboard/informations/OpeningHours';
+import dynamic from 'next/dynamic';
 const MapPosition = dynamic(
-    () => import('@components/dashboard/informations/MapPosition'),
-    {
-      ssr: false,
-    }
+  () => import('@components/dashboard/informations/MapPosition'),
+  {
+    ssr: false,
+  }
 );
 import WarningIcon from '@mui/icons-material/Warning';
 
@@ -58,10 +59,10 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     setTabValue(newValue);
   };
 
-  async function fetchRepairerTypes() {
+  const fetchRepairerTypes = async () => {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
     setRepairerTypes(responseRepairerTypes['hydra:member']);
-  }
+  };
 
   useEffect(() => {
     if (repairerTypes.length === 0) {
@@ -69,10 +70,10 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function fetchBikeTypes() {
+  const fetchBikeTypes = async () => {
     const responseBikeTypes = await bikeTypeResource.getAll(false);
     setBikeTypes(responseBikeTypes['hydra:member']);
-  }
+  };
 
   useEffect(() => {
     if (bikeTypes.length === 0) {
@@ -106,16 +107,15 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     setMobilePhone,
   } = useContext(RepairerFormContext);
 
-  useEffect(() => {
-    async function fetchRepairer() {
-      if (user && user.repairer) {
-        setLoading(true);
-        const repairerFetch: Repairer = await repairerResource.get(
-          user.repairer
-        );
-        setRepairer(repairerFetch);
-      }
+  const fetchRepairer = async () => {
+    if (user && user.repairer) {
+      setLoading(true);
+      const repairerFetch: Repairer = await repairerResource.get(user.repairer);
+      setRepairer(repairerFetch);
     }
+  };
+
+  useEffect(() => {
     if (user) {
       fetchRepairer();
     }
@@ -159,29 +159,37 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (
-      !repairer ||
-      !name ||
-      !selectedBikeTypes ||
-      !repairerTypeSelected ||
-      !street ||
-      Object.keys(selectedBikeTypes).length === 0
-    ) {
-      return;
-    }
+    if (!repairer) return;
 
     const selectedBikeTypeIRIs: string[] = bikeTypes
       .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
       .map((bikeType) => bikeType['@id']);
 
-    const bodyRequest: RequestBody = {
-      mobilePhone: mobilePhone,
-      name: name,
-      street: street,
-      description: description,
-      bikeTypesSupported: selectedBikeTypeIRIs,
-      repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
-    };
+    const bodyRequest: RequestBody = {};
+
+    if (mobilePhone) {
+      bodyRequest['mobilePhone'] = mobilePhone;
+    }
+
+    if (name && name !== '') {
+      bodyRequest['name'] = name;
+    }
+
+    if (street && street !== '') {
+      bodyRequest['street'] = street;
+    }
+
+    if (description && description !== '') {
+      bodyRequest['description'] = description;
+    }
+
+    if (repairerTypeSelected) {
+      bodyRequest['repairerType'] = repairerTypeSelected['@id'];
+    }
+
+    if (selectedBikeTypeIRIs.length > 0) {
+      bodyRequest['bikeTypesSupported'] = selectedBikeTypeIRIs;
+    }
 
     if (city) {
       bodyRequest['city'] = city.name;
@@ -203,27 +211,27 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     await uploadRepairer(bodyRequest);
   };
 
-  const uploadRepairer = async(bodyRequest: RequestBody) => {
+  const uploadRepairer = async (bodyRequest: RequestBody) => {
     if (!repairer) {
       return;
     }
-
     setErrorMessage(null);
     setPendingRegistration(true);
-
     try {
-      const repairerUpdated = await repairerResource.put(repairer['@id'], bodyRequest);
-      setRepairer(repairerUpdated);
+      await repairerResource.put(repairer['@id'], bodyRequest);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
+      const repairerFetch: Repairer = await repairerResource.get(
+        user!.repairer
+      );
+      setRepairer(repairerFetch);
     } catch (e) {
       setErrorMessage('Mise à jour impossible');
     }
-
     setPendingRegistration(false);
-  }
+  };
 
   return (
     <>
@@ -231,7 +239,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
         <title>Informations</title>
       </Head>
       <DashboardLayout>
-        <Box component="main" maxWidth="1200">
+        <Container component="main" sx={{ml: 0}}>
           <form onSubmit={handleSubmit}>
             <Tabs value={tabValue} onChange={handleChangeTab}>
               <Tab label="Coordonnées" />
@@ -260,7 +268,10 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
                 />
               )}
               {!loading && tabValue === 2 && (
-                <DashboardInfosPhotos repairer={repairer} />
+                <DashboardInfosPhotos
+                  repairer={repairer}
+                  fetchRepairer={fetchRepairer}
+                />
               )}
               {!loading && tabValue === 3 && (
                 <OpeningHours repairer={repairer} />
@@ -269,7 +280,10 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
                 <OptionalInfos repairer={repairer} />
               )}
               {!loading && tabValue === 5 && repairer && (
-                <MapPosition repairer={repairer} uploadRepairer={uploadRepairer} />
+                <MapPosition
+                  repairer={repairer}
+                  uploadRepairer={uploadRepairer}
+                />
               )}
             </Box>
 
@@ -286,16 +300,18 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
             )}
 
             {!loading && errorMessage && (
-                <Typography variant="body1" color="error">
-                  {errorMessage}
-                </Typography>
+              <Typography variant="body1" color="error">
+                {errorMessage}
+              </Typography>
             )}
 
             {success && (
-              <Alert sx={{marginTop: '65px'}} severity="success">Informations mises à jour</Alert>
+              <Alert sx={{marginTop: '65px'}} severity="success">
+                Informations mises à jour
+              </Alert>
             )}
           </form>
-        </Box>
+        </Container>
       </DashboardLayout>
     </>
   );

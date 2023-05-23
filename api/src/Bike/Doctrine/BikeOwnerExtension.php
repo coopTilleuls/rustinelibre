@@ -27,7 +27,7 @@ final class BikeOwnerExtension implements QueryCollectionExtensionInterface
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (Bike::class !== $resourceClass || $this->security->isGranted('ROLE_ADMIN') || null === $user = $this->security->getUser()) {
+        if (Bike::class !== $resourceClass || $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_BOSS') || null === ($user = $this->security->getUser())) {
             return;
         }
 
