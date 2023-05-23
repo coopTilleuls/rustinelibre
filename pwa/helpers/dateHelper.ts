@@ -21,3 +21,15 @@ export const formatDate = (dateString: string | undefined, withHour: boolean = t
 
   return `${day}/${month}/${year}`;
 };
+
+
+export const isPast = (targetDate: string): boolean => {
+  const currentDate = new Date();
+  const parsedTargetDate = new Date(targetDate);
+
+  if (isNaN(parsedTargetDate.getTime())) {
+    return false;
+  }
+
+  return parsedTargetDate < currentDate;
+}
