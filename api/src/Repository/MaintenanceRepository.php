@@ -38,5 +38,4 @@ class MaintenanceRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
 }

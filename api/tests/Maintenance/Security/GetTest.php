@@ -33,7 +33,7 @@ class GetTest extends AbstractTestCase
     public function testUserCanGetMaintenanceForOwnBikes(): void
     {
         $maintenance = $this->maintenances[0];
-        $response = $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances')->toArray();
+        $response = $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances');
 
         $this->assertResponseIsSuccessful();
     }
@@ -63,7 +63,7 @@ class GetTest extends AbstractTestCase
     public function testUserCanGetOneMaintenance(): void
     {
         $maintenance = $this->maintenances[0];
-        $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances/'.$maintenance->id)->toArray();
+        $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances/'.$maintenance->id);
 
         $this->assertResponseIsSuccessful();
     }
@@ -79,16 +79,20 @@ class GetTest extends AbstractTestCase
     public function testUserCanGetMaintenanceFilterByBike(): void
     {
         $maintenance = $this->maintenances[0];
-        $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances?bike='.$maintenance->bike->id)->toArray();
+        $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances?bike='.$maintenance->bike->id);
         $this->assertResponseIsSuccessful();
     }
 
-    public function testBossCanGetMaintenanceOfHisUser(): void
+    public function testBossCanGetMaintenanceCollection(): void
     {
-        dd($this->appointment);
-        $response = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/maintenances')->toArray();
-        dd($response);
+        $this->createClientWithUser($this->appointment->repairer->owner)->request('GET', '/maintenances');
         $this->assertResponseIsSuccessful();
     }
 
+    public function testBossCanGetMaintenanceOfAnUser(): void
+    {
+        $maintenance = $this->maintenances[0];
+        $this->createClientWithUser($this->appointment->repairer->owner)->request('GET', '/maintenances?bike='.$maintenance->bike->id);
+        $this->assertResponseIsSuccessful();
+    }
 }

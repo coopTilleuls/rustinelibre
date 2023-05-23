@@ -31,12 +31,22 @@ class MaintenanceCanWriteValidator extends ConstraintValidator
         $currentUser = $this->security->getUser();
         $bikeOwner = $value->bike->owner;
 
-        // The current user is the bike owner or an admin
-        if ($bikeOwner === $currentUser || $this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }
+        if ($this->security->isGranted('ROLE_EMPLOYEE')) {
+            $currentRepairer = $currentUser->repairerEmployee->repairer;
 
-        if ($this->security->isGranted('ROLE_BOSS')) {
+            if (!$currentRepairer) {
+                $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
+            }
+
+            $appointment = $this->appointmentRepository->findOneBy([
+                'customer' => $bikeOwner,
+                'repairer' => $currentRepairer,
+            ]);
+
+            if (!$appointment) {
+                $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
+            }
+        } elseif ($this->security->isGranted('ROLE_BOSS')) {
             $currentRepairer = $currentUser->repairer;
 
             if (!$currentRepairer) {
@@ -51,6 +61,8 @@ class MaintenanceCanWriteValidator extends ConstraintValidator
             if (!$appointment) {
                 $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
             }
+        } elseif ($bikeOwner !== $currentUser) {
+            $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
         }
     }
 }

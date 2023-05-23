@@ -89,5 +89,4 @@ class AppointmentRepository extends ServiceEntityRepository
             ->addGroupBy('ac.id')
         ;
     }
-
 }
