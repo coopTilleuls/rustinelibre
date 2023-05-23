@@ -104,7 +104,7 @@ class CreateTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testBossCannotCreateMaintenanceForOtherUsers(): void
+    public function testBossCannotCreateMaintenanceForOtherUser(): void
     {
         // boss add maintenance on other bike
         $maintenance = $this->maintenances[0];
@@ -143,7 +143,7 @@ class CreateTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testEmployeeCannotCreateMaintenanceForCustomer(): void
+    public function testEmployeeCannotCreateMaintenanceForOtherUser(): void
     {
         // Employee add maintenance on other bike
         $maintenance = $this->maintenances[0];
