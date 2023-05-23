@@ -55,7 +55,7 @@ class AppointmentRepository extends ServiceEntityRepository
             FROM {$this->getClassName()} a
             WHERE a.repairer = :repairer
             AND a.slotTime BETWEEN :start_date AND :end_date
-            AND (a.accepted = true OR a.accepted IS NULL)
+            AND a.status in (:excludeStates)
             GROUP BY a.repairer, a.slotTime
             HAVING COUNT(a.id) >= :numberOfSlots
             ORDER BY a.slotTime
@@ -65,6 +65,11 @@ class AppointmentRepository extends ServiceEntityRepository
             'start_date' => $start,
             'end_date' => $end,
             'numberOfSlots' => $repairer->numberOfSlots ?? 1,
+            'excludeStates' => [
+                Appointment::PENDING_CYCLIST,
+                Appointment::PENDING_REPAIRER,
+                Appointment::VALIDATED,
+            ]
         ]);
 
         return array_column($query->getArrayResult(), 'appointment_time');

@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Appointments\Validator\AppointmentState;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -34,10 +35,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Put(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[ApiFilter(DateFilter::class, properties: ['slotTime'])]
+#[AppointmentState]
 class Appointment
 {
     public const APPOINTMENT_READ = 'appointment_read';
     public const APPOINTMENT_WRITE = 'appointment_write';
+
+    public const PENDING_REPAIRER = 'pending_repairer';
+    public const PENDING_CYCLIST = 'pending_cyclist';
+    public const VALIDATED = 'validated';
+    public const REFUSED = 'refused';
+    public const CANCEL = 'cancel';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -68,8 +76,7 @@ class Appointment
 
     #[ORM\Column(nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    #[ApiProperty(securityPostDenormalize: "is_granted('ACCEPTED_TOGGLE', object)")]
-    public ?bool $accepted = null;
+    public ?string $status = self::PENDING_REPAIRER;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
