@@ -74,8 +74,8 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
                         primary={appointment.accepted === undefined
                             ? 'En attente'
                             : appointment.accepted
-                                ? 'Rendez vous accepté'
-                                : 'Rendez vous refusé'
+                                ? 'Rendez-vous accepté'
+                                : 'Rendez-vous refusé'
                         }
                     />
                 </ListItem>
@@ -114,20 +114,20 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
                 <Grid item xs={6}>
                     {isPast(appointment.slotTime) ?
                         <Button disabled variant="outlined">
-                            Modifier le rendez vous
+                            Modifier le rendez-vous
                         </Button> :
                         <Button variant="outlined" sx={{color: 'green'}}>
-                            Modifier le rendez vous
+                            Modifier le rendez-vous
                         </Button>
                     }
                 </Grid>
                 <Grid item xs={6}>
                     {isPast(appointment.slotTime) ?
                         <Button variant="outlined" disabled>
-                            Annuler le rendez vous
+                            Annuler le rendez-vous
                         </Button>:
                         <Button variant="outlined" sx={{color: 'red'}} onClick={cancelAppointment}>
-                            {!loadingDelete ? 'Annuler le rendez vous' : <CircularProgress />}
+                            {!loadingDelete ? 'Annuler le rendez-vous' : <CircularProgress />}
                         </Button>
                     }
                 </Grid>

@@ -27,7 +27,7 @@ export const CustomersDetail = ({customer}: CustomersDetailProps): JSX.Element =
             <Box component="main" maxWidth={900}>
                 <Tabs value={tabValue} onChange={handleChangeTab}>
                     <Tab label="Coordonnées" />
-                    <Tab label="Rendez vous" />
+                    <Tab label="Rendez-vous" />
                     <Tab label="Vélos" />
                 </Tabs>
 
