@@ -19,7 +19,7 @@ const LegalNotice: NextPageWithLayout = () => {
                     <Paper elevation={4} sx={{maxWidth: 800, p: 4, mt: 4, mx: 'auto'}}>
 
                         <Typography variant={"body1"}>
-                            Le site "La rustine libre" est édité par la société Les-Tilleuls.coop, société coopérative ouvrière de production,
+                            Le site &#34;La rustine libre&#34; est édité par la société Les-Tilleuls.coop, société coopérative ouvrière de production,
                             immatriculée au Registre du Commerce et des Sociétés sous le numéro XXXXXXXX.
 
                             <br /><br />
