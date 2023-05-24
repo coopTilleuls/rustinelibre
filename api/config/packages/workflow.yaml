@@ -1,0 +1,34 @@
+framework:
+    workflows:
+        appointment_acceptance:
+            type: 'state_machine'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: method
+                property: status
+            supports:
+                - App\Entity\Appointment
+            initial_marking: pending_repairer
+            places:
+                - pending_repairer
+                - pending_cyclist
+                - validated
+                - refused
+                - cancel
+            transitions:
+                accepted_by_repairer:
+                    from: pending_repairer
+                    to:   validated
+                refused:
+                    from: [pending_repairer, pending_cyclist]
+                    to:   refused
+                repairer_propose_another_slot:
+                    from: [pending_repairer, pending_cyclist, validated]
+                    to:   pending_cyclist
+                accepted_by_cyclist:
+                    from: pending_cyclist
+                    to:   validated
+                cancellation:
+                    from: [pending_repairer, pending_cyclist, validated]
+                    to:   cancel

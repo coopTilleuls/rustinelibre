@@ -20,17 +20,17 @@ use Symfony\Component\Workflow\WorkflowInterface;
 {
     public function __construct(
         // Symfony will inject the 'blog_publishing' workflow configured before
-        private WorkflowInterface $appointmentAcceptanceStateMachine,
+        // private WorkflowInterface $appointmentAcceptanceStateMachine,
     ) {
     }
 
     #[Route('/test', name: 'app_test')]
     public function testWorkflow(Request $request, AppointmentRepository $appointmentRepository)
     {
-        $appointment = $appointmentRepository->find(10);
-
-        $this->appointmentAcceptanceStateMachine->apply($appointment, 'accepted_by_repairer');
-
-        return new Response();
+        // $appointment = $appointmentRepository->find(10);
+        //
+        // $this->appointmentAcceptanceStateMachine->apply($appointment, 'accepted_by_repairer');
+        //
+        // return new Response();
     }
 }

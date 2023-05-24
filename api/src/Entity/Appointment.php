@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Appointments\Validator\AppointmentState;
+use App\Controller\RepairerAcceptAppointmentAction;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -32,6 +33,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
+#[Put(
+    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS') or is_granted('ROLE_EMPLOYEE')",
+    uriTemplate: "/appointment_repairer_accept/{id}",
+    requirements: ['id' => '\d+'],
+    controller: RepairerAcceptAppointmentAction::class
+)]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[ApiFilter(DateFilter::class, properties: ['slotTime'])]
@@ -87,4 +94,14 @@ class Appointment
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?BikeType $bikeType = null;
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): void
+    {
+        $this->status = $status;
+    }
 }

@@ -20,59 +20,29 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Workflow\Event\Event;
 use Twig\Environment;
 
 readonly class AppointmentEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private MailerInterface $mailer,
                                 private string $mailerSender,
-                                private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
                                 private KernelInterface $kernel,
                                 private LoggerInterface $logger,
-                                private EntityManagerInterface $entityManager,
-                                private Security $security,
                                 private Environment $twig)
     {
     }
 
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['updateAppointmentStatus', EventPriorities::PRE_WRITE],
+            'workflow.appointment_acceptance.transition.accepted_by_repairer' => 'onAcceptedByRepairer',
         ];
     }
 
-    public function updateAppointmentStatus(ViewEvent $event): void
+    public function onAcceptedByRepairer(Event $event): void
     {
-        $object = $event->getControllerResult();
-        $method = $event->getRequest()->getMethod();
-
-        if (!$object instanceof Appointment || Request::METHOD_PUT !== $method) {
-            return;
-        }
-
-        $originalStatus = $this->entityManager->getUnitOfWork()->getOriginalEntityData($object)['status'];
-        $newStatus = $object->status;
-
-        // Appointment acceptance
-        if (Appointment::PENDING_REPAIRER === $originalStatus && Appointment::VALIDATED === $newStatus) {
-            if (!$this->security->isGranted('ROLE_ADMIN') && !$this->security->isGranted('ROLE_BOSS') && !$this->security->isGranted('ROLE_EMPLOYEE')) {
-                throw new AccessDeniedHttpException('You cannot accept an appointment');
-            }
-
-            /** @var User $currentUser */
-            $currentUser = $this->security->getUser();
-            $currentUserIsBoss = $this->security->isGranted('ROLE_BOSS') && $currentUser->repairer !== $object->repairer;
-            $currentUserIsEmployee = $this->security->isGranted('ROLE_EMPLOYEE') && (!$currentUser->repairerEmployee || $currentUser->repairerEmployee->repairer !== $object->repairer);
-
-            if ($currentUserIsBoss || $currentUserIsEmployee) {
-                throw new AccessDeniedHttpException('You cannot accept this appointment');
-            }
-
-            $this->sendAcceptanceEmail($object);
-        }
-
-        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($object->repairer, true);
+        $this->sendAcceptanceEmail($event->getSubject());
     }
 
     private function sendAcceptanceEmail(Appointment $appointment): void
