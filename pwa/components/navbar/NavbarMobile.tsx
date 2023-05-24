@@ -97,7 +97,7 @@ const MobileNavbar = ({
           ))}
           {boss && user && (
             <Link
-              href="/dashboard"
+              href="/sradmin"
               style={{textDecoration: 'none', color: 'currentcolor'}}>
               <MenuItem
                 sx={{textAlign: 'center'}}

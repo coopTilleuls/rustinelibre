@@ -123,37 +123,37 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
               text="Tableau de bord"
               open={true}
               icon={<HomeIcon />}
-              path="/dashboard"
+              path="/sradmin"
             />
             <DashboardSidebarListItem
               text="Agenda"
               open={true}
               icon={<CalendarMonthIcon />}
-              path="/dashboard/agenda"
+              path="/sradmin/agenda"
             />
             <DashboardSidebarListItem
               text="Messages"
               open={true}
               icon={<ForumIcon />}
-              path="/dashboard/messagerie"
+              path="/sradmin/messagerie"
             />
             <DashboardSidebarListItem
               text="Clients"
               open={true}
               icon={<FolderSharedIcon />}
-              path="/dashboard/clients"
+              path="/sradmin/clients"
             />
             <DashboardSidebarListItem
               text="Paramètres Agenda"
               open={true}
               icon={<HandymanIcon />}
-              path="/dashboard/agenda/parametres"
+              path="/sradmin/agenda/parametres"
             />
             <DashboardSidebarListItem
               text="Employés"
               open={true}
               icon={<EngineeringIcon />}
-              path="/dashboard/employes"
+              path="/sradmin/employes"
             />
           </List>
           <Divider />
@@ -162,7 +162,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
               text="Informations"
               open={true}
               icon={<InfoIcon />}
-              path="/dashboard/informations"
+              path="/sradmin/informations"
             />
             <DashboardSidebarListItem
               text="Retourner sur le site"

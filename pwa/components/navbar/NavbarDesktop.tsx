@@ -66,7 +66,7 @@ const NavbarDesktop = ({
           );
         })}
         {boss && user && (
-          <Link href="/dashboard" style={{textDecoration: 'none'}}>
+          <Link href="/sradmin" style={{textDecoration: 'none'}}>
             <Button
               key="dashboard"
               sx={{
