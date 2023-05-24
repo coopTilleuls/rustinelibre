@@ -60,9 +60,9 @@ class RandomFilterTest extends AbstractTestCase
 
     public function testRandomFilterWorkWithSearchFilter(): void
     {
-        $firstResponse = static::createClient()->request('GET', '/repairers?sort=random&repairerType.name=Réparateur%20à%20vélo')->toArray()['hydra:member'];
+        $firstResponse = static::createClient()->request('GET', '/repairers?sort=random&repairerType.name=Réparateur%20itinérant')->toArray()['hydra:member'];
         self::assertResponseIsSuccessful();
-        $secondResponse = static::createClient()->request('GET', '/repairers?sort=random&repairerType.name=Réparateur%20à%20vélo')->toArray()['hydra:member'];
+        $secondResponse = static::createClient()->request('GET', '/repairers?sort=random&repairerType.name=Réparateur%20itinérant')->toArray()['hydra:member'];
         self::assertResponseIsSuccessful();
 
         $idsFromFirstResponse = [];
@@ -80,10 +80,10 @@ class RandomFilterTest extends AbstractTestCase
 
         // Check repairer type
         $firstRepairer = static::createClient()->request('GET', $idsFromFirstResponse[0])->toArray();
-        $this->assertEquals('Réparateur à vélo', $firstRepairer['repairerType']['name']);
+        $this->assertEquals('Réparateur itinérant', $firstRepairer['repairerType']['name']);
 
-        $SecondRepairer = static::createClient()->request('GET', $idsFromSecondResponse[0])->toArray();
-        $this->assertEquals('Réparateur à vélo', $firstRepairer['repairerType']['name']);
+        $firstRepairer = static::createClient()->request('GET', $idsFromSecondResponse[0])->toArray();
+        $this->assertEquals('Réparateur itinérant', $firstRepairer['repairerType']['name']);
     }
 
     public function testRandomFilterWorkWithAroundFilter(): void

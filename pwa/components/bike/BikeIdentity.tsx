@@ -174,22 +174,30 @@ const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
             <Button
               onClick={handleAddDescription}
               size="small"
+              sx={{padding: '10px'}}
               variant="contained">
               <AddIcon /> Ajouter une description
             </Button>
           )}
+        </CardActions>
+        <CardActions
+          sx={{
+            display: 'flex',
+            flexDirection: {xs: 'column', md: 'row'},
+            justifyContent: {md: 'center'},
+          }}>
           {pendingUpdate ? (
-            <CircularProgress />
+              <CircularProgress />
           ) : (
-            <Button
-              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-                handleSubmit(e)
-              }
-              size="small"
-              variant="contained"
-              sx={{my: 2}}>
-              <SaveIcon /> Enregistrer
-            </Button>
+              <Button
+                  onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                      handleSubmit(e)
+                  }
+                  size="small"
+                  variant="contained"
+                  sx={{my: 2, textAlign: 'center', padding: '10px'}}>
+                <SaveIcon /> Enregistrer
+              </Button>
           )}
         </CardActions>
       </Card>

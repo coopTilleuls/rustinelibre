@@ -6,12 +6,11 @@ export const menuNotLogged = [
   },
   {
     name: 'Liste des réparateurs',
-    link: '/reparateur/chercher-un-reparateur',
+    link: '/liste-des-reparateurs',
   },
   {
     name: 'FAQ',
-    link: '/',
-    disabled: true,
+    link: '/faq',
   },
   {
     name: 'Devenir réparateur',
@@ -27,11 +26,10 @@ export const menuLogged = [
   },
   {
     name: 'Liste des réparateurs',
-    link: '/reparateur/chercher-un-reparateur',
+    link: '/liste-des-reparateurs',
   },
   {
     name: 'FAQ',
-    link: '/',
-    disabled: true,
+    link: '/faq',
   },
 ];

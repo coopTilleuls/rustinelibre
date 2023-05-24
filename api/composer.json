@@ -20,6 +20,7 @@
         "oro/doctrine-extensions": "^2.0",
         "phpdocumentor/reflection-docblock": "^5.3",
         "qbbr/pgsql-doctrine-random-function": "^1.0",
+        "sensio/framework-extra-bundle": "^6.2",
         "spatie/opening-hours": "^2.13",
         "symfony/asset": "6.2.*",
         "symfony/console": "6.2.*",
@@ -39,6 +40,7 @@
         "symfony/twig-bundle": "6.2.*",
         "symfony/uid": "6.2.*",
         "symfony/validator": "6.2.*",
+        "symfony/workflow": "6.2.*",
         "symfony/yaml": "6.2.*",
         "vich/uploader-bundle": "^2.1"
     },

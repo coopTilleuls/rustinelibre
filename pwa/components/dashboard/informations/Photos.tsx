@@ -89,8 +89,8 @@ export const DashboardInfosPhotos = ({
           {thumbnail && (
             <img
               alt="thumbnail"
-              width="200"
-              height="200"
+              width="500"
+              height="auto"
               src={apiImageUrl(thumbnail.contentUrl)}
             />
           )}
@@ -110,8 +110,8 @@ export const DashboardInfosPhotos = ({
           {descriptionPicture && (
             <img
               alt="photo de description"
-              width="200"
-              height="200"
+              width="500"
+              height="auto"
               src={apiImageUrl(descriptionPicture.contentUrl)}
             />
           )}

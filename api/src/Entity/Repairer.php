@@ -64,6 +64,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
+#[ApiFilter(AroundFilter::class)] // Should always be first filter of the list
 #[ApiFilter(FirstAvailableSlotFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'city' => 'iexact',
@@ -75,9 +76,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'repairerType.id' => 'exact',
     'repairerType.name' => 'ipartial',
 ])]
-#[ApiFilter(AroundFilter::class)]
 #[ApiFilter(ProximityFilter::class)]
-#[ApiFilter(RandomFilter::class)]
+#[ApiFilter(RandomFilter::class)] // Should always be last filter of the list
 #[UniqueEntity('owner')]
 #[RepairerSlots]
 class Repairer
@@ -100,7 +100,7 @@ class Repairer
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?RepairerType $repairerType;
 
     #[Assert\NotBlank]

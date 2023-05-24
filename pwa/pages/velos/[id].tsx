@@ -108,6 +108,8 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
               </Typography>
               {bike.picture && (
                 <img
+                  width="500"
+                  height="auto"
                   src={apiImageUrl(bike.picture.contentUrl)}
                   alt="Photo du vélo"
                 />

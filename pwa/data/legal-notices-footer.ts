@@ -10,14 +10,19 @@ export const legalNoticesFooter = [
     disabled: true,
   },
   {
+    name: 'FAQ',
+    link: '/faq',
+    disabled: false,
+  },
+  {
     name: 'CGU',
     link: '/',
     disabled: true,
   },
   {
     name: 'Mentions légales',
-    link: '/',
-    disabled: true,
+    link: '/mentions-legales',
+    disabled: false,
   },
   {
     name: 'Protection des données',

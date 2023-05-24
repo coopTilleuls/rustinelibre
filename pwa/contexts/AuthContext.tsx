@@ -91,7 +91,7 @@ const useProviderAuth = () => {
           await fetchUser();
         }
       } catch (e) {
-        logout();
+        await logout();
       } finally {
         setLoadingFetchUser(false);
       }
