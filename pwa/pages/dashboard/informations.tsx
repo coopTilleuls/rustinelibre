@@ -35,7 +35,6 @@ const MapPosition = dynamic(
     ssr: false,
   }
 );
-import WarningIcon from '@mui/icons-material/Warning';
 
 type RepairerInformationsProps = {
   bikeTypesFetched: BikeType[];
@@ -119,7 +118,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     if (user) {
       fetchRepairer();
     }
-  }, [user]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (repairer) {
