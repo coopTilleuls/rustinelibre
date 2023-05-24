@@ -76,7 +76,11 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
           </Box>
           {repairer.thumbnail && (
             <>
-              <Button variant="contained">Je réserve</Button>
+              <Link
+                href={`/reparateur/${repairer.id}/creneaux`}
+                style={{textDecoration: 'none'}}>
+                <Button variant="contained">Je réserve</Button>
+              </Link>
               <Image
                 src={apiImageUrl(repairer.thumbnail.contentUrl)}
                 alt={'Photo de profil du réparateur'}
