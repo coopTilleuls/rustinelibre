@@ -19,11 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreateTest extends AbstractTestCase
 {
-    /** @var Maintenance[] */
-    protected array $maintenances = [];
+    protected Maintenance $maintenance;
 
-    /** @var Appointment[] */
-    protected array $appointments = [];
+    protected Appointment $appointment;
 
     protected Bike $bike;
 
@@ -39,19 +37,18 @@ class CreateTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->maintenances = static::getContainer()->get(MaintenanceRepository::class)->findAll();
-        $this->appointments = static::getContainer()->get(AppointmentRepository::class)->findAll();
-        $appointment = $this->appointments[0];
-        $this->repairerWithAppointment = $appointment->repairer;
+        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->find(1);
+        $this->appointment = static::getContainer()->get(AppointmentRepository::class)->find(1);
+        $this->repairerWithAppointment = $this->appointment->repairer;
         $this->boss = $this->repairerWithAppointment->owner;
-        $this->customer = $appointment->customer;
+        $this->customer = $this->appointment->customer;
         $this->repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $this->repairerWithAppointment]);
         $this->bike = static::getContainer()->get(BikeRepository::class)->findOneBy(['owner' => $this->customer]);
     }
 
     public function testUserCanCreateMaintenanceForOwnBike(): void
     {
-        $maintenance = $this->maintenances[0];
+        $maintenance = $this->maintenance;
 
         $this->createClientWithUser($maintenance->bike->owner)->request('POST', '/maintenances', [
         'headers' => ['Content-Type' => 'application/json'],
@@ -68,7 +65,7 @@ class CreateTest extends AbstractTestCase
 
     public function testUserCannotCreateMaintenanceForOtherBike(): void
     {
-        $maintenance = $this->maintenances[0];
+        $maintenance = $this->maintenance;
         $this->createClientAuthAsUser()->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
@@ -106,8 +103,8 @@ class CreateTest extends AbstractTestCase
 
     public function testBossCannotCreateMaintenanceForOtherUser(): void
     {
-        // boss add maintenance on other bike
-        $maintenance = $this->maintenances[0];
+        // boss add maintenance on other bike according to the fixtures
+        $maintenance = $this->maintenance;
         $this->createClientWithUser($this->boss)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
@@ -130,7 +127,6 @@ class CreateTest extends AbstractTestCase
     public function testEmployeeCanCreateMaintenanceForCustomer(): void
     {
         // Employee add maintenance on bike's customer
-
         $this->createClientWithUser($this->repairerEmployee->employee)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
@@ -146,7 +142,7 @@ class CreateTest extends AbstractTestCase
     public function testEmployeeCannotCreateMaintenanceForOtherUser(): void
     {
         // Employee add maintenance on other bike
-        $maintenance = $this->maintenances[0];
+        $maintenance = $this->maintenance;
         $this->createClientWithUser($this->repairerEmployee->employee)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Maintenance\Security;
 
 use App\Entity\Appointment;
+use App\Entity\Bike;
 use App\Entity\Maintenance;
 use App\Entity\Repairer;
+use App\Entity\User;
 use App\Repository\AppointmentRepository;
 use App\Repository\MaintenanceRepository;
 use App\Tests\AbstractTestCase;
@@ -14,13 +16,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GetTest extends AbstractTestCase
 {
-    /** @var Maintenance[] */
-    protected array $maintenances = [];
+    /** @var [] */
+    protected $maintenances = [];
 
     /** @var Repairer[] */
     protected array $repairers = [];
 
     protected Appointment $appointment;
+
+    protected Bike $bike;
+
+    protected User $owner;
+
+    protected MaintenanceRepository $maintenanceRepository;
+
+    protected Maintenance $userMaintenance;
 
     public function setUp(): void
     {
@@ -28,14 +38,20 @@ class GetTest extends AbstractTestCase
 
         $this->maintenances = static::getContainer()->get(MaintenanceRepository::class)->findAll();
         $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy([]);
+        $this->maintenanceRepository = static::getContainer()->get(MaintenanceRepository::class);
+        // According to the fixtures, maintenance of user with ROLE USER given
+        $this->userMaintenance = $this->maintenanceRepository->findOneBy(['bike' => 21]);
+        $this->owner = $this->userMaintenance->bike->owner;
     }
 
-    public function testUserCanGetMaintenanceForOwnBikes(): void
+    public function testUserCanGetMaintenancesForOwnBikes(): void
     {
-        $maintenance = $this->maintenances[0];
-        $response = $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances');
-
+        $response = $this->createClientWithUser($this->owner)->request('GET', '/maintenances')->toArray();
         $this->assertResponseIsSuccessful();
+        foreach ($response['hydra:member'] as $maintenanceResponse) {
+            $maintenanceCheck = $this->maintenanceRepository->find($maintenanceResponse['id']);
+            self::assertSame($maintenanceCheck->bike->owner->id, $this->userMaintenance->bike->owner->id);
+        }
     }
 
     public function testAdminCanGetMaintenanceCollection(): void
@@ -62,25 +78,29 @@ class GetTest extends AbstractTestCase
 
     public function testUserCanGetOneMaintenance(): void
     {
-        $maintenance = $this->maintenances[0];
-        $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances/'.$maintenance->id);
+        $response = $this->createClientWithUser($this->owner)->request('GET', sprintf('/maintenances/%d', $this->userMaintenance->id))->toArray();
 
         $this->assertResponseIsSuccessful();
+        $maintenanceCheck = $this->maintenanceRepository->find($response['id']);
+        self::assertSame($maintenanceCheck->bike->owner->id, $this->userMaintenance->bike->owner->id);
     }
 
     public function testUserCannotGetMaintenanceForOthersBikes(): void
     {
-        $maintenance = $this->maintenances[0];
-        $otherMaintenance = $this->maintenances[1];
-        $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances/'.$otherMaintenance->id);
+        $otherMaintenance = $this->maintenances[0];
+        $this->createClientWithUser($this->owner)->request('GET', sprintf('/maintenances/%d', $otherMaintenance->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testUserCanGetMaintenanceFilterByBike(): void
     {
-        $maintenance = $this->maintenances[0];
-        $this->createClientWithUser($maintenance->bike->owner)->request('GET', '/maintenances?bike='.$maintenance->bike->id);
+        $response = $this->createClientWithUser($this->owner)->request('GET', sprintf('/maintenances?bike=%d', $this->userMaintenance->bike->id))->toArray();
         $this->assertResponseIsSuccessful();
+
+        foreach ($response['hydra:member'] as $maintenanceResponse) {
+            $maintenanceCheck = $this->maintenanceRepository->find($maintenanceResponse['id']);
+            self::assertSame($maintenanceCheck->bike->owner->id, $this->userMaintenance->bike->owner->id);
+        }
     }
 
     public function testBossCanGetMaintenanceCollection(): void
@@ -91,8 +111,7 @@ class GetTest extends AbstractTestCase
 
     public function testBossCanGetMaintenanceOfAnUser(): void
     {
-        $maintenance = $this->maintenances[0];
-        $this->createClientWithUser($this->appointment->repairer->owner)->request('GET', '/maintenances?bike='.$maintenance->bike->id);
+        $this->createClientWithUser($this->appointment->repairer->owner)->request('GET', sprintf('/maintenances?bike=%d', $this->userMaintenance->bike->id));
         $this->assertResponseIsSuccessful();
     }
 }

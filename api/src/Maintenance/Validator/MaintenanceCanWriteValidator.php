@@ -31,11 +31,11 @@ class MaintenanceCanWriteValidator extends ConstraintValidator
         $currentUser = $this->security->getUser();
         $bikeOwner = $value->bike->owner;
 
-        if ($this->security->isGranted('ROLE_ADMIN') || $currentUser === $bikeOwner) {
+        if ($this->security->isGranted('ROLE_ADMIN') || $currentUser->id === $bikeOwner->id) {
             return;
         }
 
-        if ($this->security->isGranted('ROLE_EMPLOYEE')) {
+        if ($this->security->isGranted('ROLE_EMPLOYEE') && $currentUser->repairerEmployee) {
             $currentRepairer = $currentUser->repairerEmployee->repairer;
 
             if (!$currentRepairer) {
