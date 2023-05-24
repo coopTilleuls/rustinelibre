@@ -18,7 +18,7 @@ const Employees = () => {
       </Head>
       <DashboardLayout>
         <Box component="main">
-          <Link href={'/dashboard/employes/ajouter'}>
+          <Link href={'/sradmin/employes/ajouter'}>
             <Button variant="contained" sx={{marginBottom: 2}}>
               <AddIcon />
               Ajouter un réparateur

@@ -49,7 +49,7 @@ export const EmployeesListActions = ({
         <CircularProgress />
       ) : (
         <>
-          <Link href={`/dashboard/employes/edit/${employee.id}`}>
+          <Link href={`/sradmin/employes/edit/${employee.id}`}>
             <EditIcon color="primary" />
           </Link>
           <DeleteForeverIcon

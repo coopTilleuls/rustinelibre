@@ -98,7 +98,7 @@ export const EmployeeForm = ({
 
     if (newRepairerEmployee) {
       setUpdateSuccess(true);
-      await router.push('/dashboard/employes');
+      await router.push('/sradmin/employes');
     }
 
     setPendingRegistration(false);
