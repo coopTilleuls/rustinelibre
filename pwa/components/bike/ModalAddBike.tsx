@@ -16,7 +16,6 @@ import {bikeResource} from '@resources/bikeResource';
 import {RequestBody} from '@interfaces/Resource';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {checkFileSize} from "@helpers/checkFileSize";
-import {textAlign} from "@mui/system";
 
 type ModalAddBikeProps = {
   bikeTypes: BikeType[];
@@ -139,7 +138,7 @@ const ModalAddBike = ({
             height="auto"
             src={apiImageUrl(photo.contentUrl)}
             alt="Photo du vélo"
-            style={{marginLeft: isMobile ? '10%' : '20%'}}
+            style={{marginLeft: isMobile ? '10%' : '300'}}
           />
         )}
         <Box
