@@ -176,7 +176,7 @@ const ModalAddBike = ({
 
           <Button variant="outlined" component="label" sx={{mt: 2, mb: 2}}>
             {loadingPhoto ? (
-              <CircularProgress sx={{color: 'white'}} />
+              <CircularProgress color={"primary"} />
             ) : photo ? (
               'Changer de photo'
             ) : (
@@ -185,7 +185,7 @@ const ModalAddBike = ({
             <input type="file" hidden onChange={(e) => handleFileChange(e)} />
           </Button>
           <Button type="submit" variant="contained">
-            {!pendingAdd ? 'Ajouter ce vélo' : <CircularProgress size={20} />}
+            {!pendingAdd ? 'Ajouter ce vélo' : <CircularProgress size={20} sx={{color: 'white'}} />}
           </Button>
           {errorMessage && (
             <Typography variant="body1" color="error">
