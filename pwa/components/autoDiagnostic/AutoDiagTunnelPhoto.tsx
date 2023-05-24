@@ -8,10 +8,12 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {uploadFile} from '@helpers/uploadFile';
 import {MediaObject} from '@interfaces/MediaObject';
+import {checkFileSize} from "@helpers/checkFileSize";
 
 export const AutoDiagTunnelPhoto = (): JSX.Element => {
   const router = useRouter();
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
+  const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
   const {
     appointment,
@@ -48,12 +50,20 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       return;
     }
     if (event.target.files) {
+
+      setImageTooHeavy(false);
+      const file = event.target.files[0];
+      if (!checkFileSize(file)) {
+        setImageTooHeavy(true);
+        return;
+      }
+
       setLoadingPhoto(true);
       if (photo) {
         await mediaObjectResource.delete(photo['@id']);
       }
       // Upload new picture
-      const response = await uploadFile(event.target.files[0]);
+      const response = await uploadFile(file);
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
         // Display new photo
@@ -76,6 +86,9 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
         Ajouter une photo
       </Typography>
+      {imageTooHeavy && <Typography sx={{textAlign: 'center', color: 'red'}}>
+        Votre photo dépasse la taille maximum autorisée (5mo)
+      </Typography>}
       <Box border="1px solid grey" p={2} borderRadius={5}>
         {loadingPhoto && <CircularProgress />}
         {!loadingPhoto && (
