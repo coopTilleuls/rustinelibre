@@ -20,6 +20,7 @@ import {Collection} from '@interfaces/Resource';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModalDeleteBike from '@components/bike/ModalDeleteBike';
 import {useAccount} from '@contexts/AuthContext';
+import useMediaQuery from "@hooks/useMediaQuery";
 
 type EditBikeProps = {
   bikeTypesFetched: BikeType[];
@@ -37,6 +38,7 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const isMobile = useMediaQuery('(max-width: 1024px)');
 
   async function fetchBikeTypes() {
     const responseBikeTypes = await bikeTypeResource.getAll(false);
@@ -108,10 +110,11 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
               </Typography>
               {bike.picture && (
                 <img
-                  width="500"
+                  width="300"
                   height="auto"
                   src={apiImageUrl(bike.picture.contentUrl)}
                   alt="Photo du vélo"
+                  style={{marginLeft: isMobile ? '5%' : '20%'}}
                 />
               )}
               <BikeTabs bike={bike} bikeTypes={bikeTypes} />
