@@ -20,7 +20,6 @@ final class BuildRepairerSlotsAvailableAction extends AbstractController
     }
 
     #[ParamConverter('repairer', class: Repairer::class)]
-
     public function __invoke(Request $request, Repairer $repairer): JsonResponse
     {
         $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($repairer);

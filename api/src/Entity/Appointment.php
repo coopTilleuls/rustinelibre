@@ -15,8 +15,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model;
 use App\Appointments\Validator\AppointmentState;
-use App\Controller\RepairerAcceptAppointmentAction;
+use App\Controller\AppointmentStatusAction;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -34,10 +35,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(
-    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS') or is_granted('ROLE_EMPLOYEE')",
-    uriTemplate: "/appointment_repairer_accept/{id}",
+    security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user",
+    uriTemplate: '/appointment_status/{id}',
     requirements: ['id' => '\d+'],
-    controller: RepairerAcceptAppointmentAction::class
+    controller: AppointmentStatusAction::class,
+    openapi: new Model\Operation(
+        summary: 'Update appointment status',
+        description: 'Request body should contains a transition propery which is one of the following transition : validated_by_repairer, validated_by_cyclist, refused, propose_another_slot, cancellation'),
 )]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
@@ -82,7 +86,7 @@ class Appointment
     public ?\DateTimeImmutable $slotTime = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    #[Groups([self::APPOINTMENT_READ])]
     public ?string $status = self::PENDING_REPAIRER;
 
     #[ORM\ManyToOne]

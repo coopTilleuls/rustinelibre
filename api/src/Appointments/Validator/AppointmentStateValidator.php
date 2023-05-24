@@ -18,7 +18,6 @@ final class AppointmentStateValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, AppointmentState::class);
         }
 
-
         if (!in_array($value->status, AppointmentState::VALID_STATUS)) {
             $this->context->buildViolation((string) $constraint->message)
                 ->addViolation();

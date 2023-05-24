@@ -69,7 +69,7 @@ class AppointmentRepository extends ServiceEntityRepository
                 Appointment::PENDING_CYCLIST,
                 Appointment::PENDING_REPAIRER,
                 Appointment::VALIDATED,
-            ]
+            ],
         ]);
 
         return array_column($query->getArrayResult(), 'appointment_time');

@@ -17,18 +17,18 @@ framework:
                 - refused
                 - cancel
             transitions:
-                accepted_by_repairer:
+                validated_by_repairer:
                     from: pending_repairer
+                    to:   validated
+                validated_by_cyclist:
+                    from: pending_cyclist
                     to:   validated
                 refused:
                     from: [pending_repairer, pending_cyclist]
                     to:   refused
-                repairer_propose_another_slot:
+                propose_another_slot:
                     from: [pending_repairer, pending_cyclist, validated]
                     to:   pending_cyclist
-                accepted_by_cyclist:
-                    from: pending_cyclist
-                    to:   validated
                 cancellation:
                     from: [pending_repairer, pending_cyclist, validated]
                     to:   cancel
