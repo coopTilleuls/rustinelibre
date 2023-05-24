@@ -10,8 +10,7 @@ export const menuNotLogged = [
   },
   {
     name: 'FAQ',
-    link: '/',
-    disabled: true,
+    link: '/faq',
   },
   {
     name: 'Devenir réparateur',
@@ -31,7 +30,6 @@ export const menuLogged = [
   },
   {
     name: 'FAQ',
-    link: '/',
-    disabled: true,
+    link: '/faq',
   },
 ];
