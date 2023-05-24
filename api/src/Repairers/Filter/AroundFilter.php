@@ -54,7 +54,7 @@ final class AroundFilter extends AbstractFilter
             $description['around'] = [
                 'type' => Type::BUILTIN_TYPE_STRING,
                 'required' => false,
-                'description' => 'Filter to get points around given GPS coordinates',
+                'description' => 'Filter to get points around given GPS coordinates. This filter should be placed in entity only at first to avoid overide of other filters',
                 'openapi' => [
                     'example' => '/repairers?around[distance]=latitude,longitude',
                     'allowReserved' => false,
