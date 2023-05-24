@@ -105,7 +105,7 @@ export const CustomerBikesList =  ({customer}: CustomerBikesListProps): JSX.Elem
                                     align="left"
                                     sx={{cursor: 'pointer'}}
                                 >
-                                    <Link href={`/dashboard/clients/velos/${bike.id}`}>
+                                    <Link href={`/sradmin/clients/velos/${bike.id}`}>
                                         <Button variant="outlined" startIcon={<FormatListBulletedIcon />}>
                                             Carnet d&apos;entretien
                                         </Button>

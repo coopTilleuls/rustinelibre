@@ -115,7 +115,7 @@ export const CustomersList = (): JSX.Element => {
                                     align="left"
                                     sx={{cursor: 'pointer'}}
                                 >
-                                    <Link href={`/dashboard/clients/${customer.id}`}>
+                                    <Link href={`/sradmin/clients/${customer.id}`}>
                                         <RemoveRedEyeIcon color="info" />
                                     </Link>
                                 </TableCell>
