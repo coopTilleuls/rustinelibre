@@ -161,6 +161,8 @@ const RepairerSlots: NextPageWithLayout = () => {
                       )}
                       {user && tunnelStep == 'confirm' && (
                         <RecapStep
+                          repairer={repairer}
+                          slotSelected={slotSelected!}
                           handleConfirmAppointment={handleConfirmAppointment}
                         />
                       )}
