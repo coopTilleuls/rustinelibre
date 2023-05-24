@@ -73,7 +73,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
 
         $originalEntityData = $this->entityManager->getUnitOfWork()->getOriginalEntityData($object);
 
-        if ((true !== $originalEntityData['accepted'] && $object->accepted) || $originalEntityData['slotTime'] !== $object->slotTime) {
+        if ($originalEntityData['status'] && $object->status || $originalEntityData['slotTime'] !== $object->slotTime) {
             $this->entityManager->persist($object);
             $this->entityManager->flush();
             $this->firstSlotAvailableCalculator->setFirstSlotAvailable($object->repairer);
