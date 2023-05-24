@@ -134,9 +134,11 @@ const ModalAddBike = ({
         </Typography>
         {photo && (
           <img
-            width={isMobile ? '80%' : '200'}
+            width={isMobile ? '80%' : '300'}
+            height="auto"
             src={apiImageUrl(photo.contentUrl)}
             alt="Photo du vélo"
+            style={{marginLeft: isMobile ? '10%' : '300'}}
           />
         )}
         <Box
