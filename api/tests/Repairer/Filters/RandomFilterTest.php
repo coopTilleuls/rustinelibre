@@ -80,10 +80,10 @@ class RandomFilterTest extends AbstractTestCase
 
         // Check repairer type
         $firstRepairer = static::createClient()->request('GET', $idsFromFirstResponse[0])->toArray();
-        $this->assertEquals('Réparateur à vélo', $firstRepairer['repairerType']['name']);
+        $this->assertEquals('Réparateur itinérant', $firstRepairer['repairerType']['name']);
 
-        $SecondRepairer = static::createClient()->request('GET', $idsFromSecondResponse[0])->toArray();
-        $this->assertEquals('Réparateur à vélo', $firstRepairer['repairerType']['name']);
+        $secondRepairer = static::createClient()->request('GET', $idsFromSecondResponse[0])->toArray();
+        $this->assertEquals('Réparateur itinérant', $secondRepairer['repairerType']['name']);
     }
 
     public function testRandomFilterWorkWithAroundFilter(): void
