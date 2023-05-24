@@ -6,7 +6,7 @@ export const menuNotLogged = [
   },
   {
     name: 'Liste des réparateurs',
-    link: '/reparateur/chercher-un-reparateur',
+    link: '/liste-des-reparateurs',
   },
   {
     name: 'FAQ',
@@ -27,7 +27,7 @@ export const menuLogged = [
   },
   {
     name: 'Liste des réparateurs',
-    link: '/reparateur/chercher-un-reparateur',
+    link: '/liste-des-reparateurs',
   },
   {
     name: 'FAQ',
