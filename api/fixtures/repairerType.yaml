@@ -4,4 +4,4 @@ App\Entity\RepairerType:
   auto_reparation:
     name: 'Auto réparation'
   reparateur_velo:
-    name: 'Réparateur à vélo'
+    name: 'Réparateur itinérant'
