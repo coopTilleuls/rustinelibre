@@ -1,13 +1,23 @@
 import React from 'react';
-import useMediaQuery from '@hooks/useMediaQuery';
-import {Box, Typography, Button, Stack, Collapse, Divider} from '@mui/material';
+import {Box, Typography, Button, Stack} from '@mui/material';
+import {Repairer} from '@interfaces/Repairer';
 
 interface RecapStepProps {
+  repairer: Repairer;
+  slotSelected: string;
   handleConfirmAppointment: () => void;
 }
 
-const RecapStep = ({handleConfirmAppointment}: RecapStepProps) => {
-  const isMobile = useMediaQuery('(max-width: 640px)');
+const RecapStep = ({
+  repairer,
+  slotSelected,
+  handleConfirmAppointment,
+}: RecapStepProps) => {
+  const date: string = new Date(slotSelected).toLocaleString('fr-FR', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
     <Stack
@@ -18,8 +28,8 @@ const RecapStep = ({handleConfirmAppointment}: RecapStepProps) => {
       <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
         Récapitulatif
       </Typography>
-      <Typography align="justify" sx={{mt: 2}}>
-        Votre RDV: 17 février chez VéloBobos
+      <Typography align="justify" sx={{mt: 2, textTransform: 'capitalize'}}>
+        {`Votre RDV: ${date} chez ${repairer.name}`}
       </Typography>
 
       <Box>
