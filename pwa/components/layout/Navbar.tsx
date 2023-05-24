@@ -37,9 +37,9 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
     setAnchorElNav(null);
   };
 
-  const clickLogOut = () => {
-    logout();
-    router.push('/');
+  const clickLogOut = async () => {
+    await logout();
+    await router.push('/');
   };
 
   return (
