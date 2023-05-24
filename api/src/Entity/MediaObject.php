@@ -48,7 +48,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                     ])
                 )
             ),
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             validationContext: ['groups' => ['Default', self::MEDIA_OBJECT_CREATE]],
             deserialize: false
         ),
