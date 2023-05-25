@@ -10,9 +10,9 @@ export interface Appointment {
     id: string;
     customer: User;
     repairer: Repairer;
-    accepted?: boolean;
     autoDiagnostic?: AutoDiagnostic;
     slotTime: string;
+    status: string;
     bike?: Bike;
     bikeType?: BikeType;
 }
