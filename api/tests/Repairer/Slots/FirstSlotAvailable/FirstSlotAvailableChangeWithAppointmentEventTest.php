@@ -75,16 +75,22 @@ class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
         $repairer = $this->getRepairerWithSlotsAvailable(0);
         $client = $this->createClientAuthAsAdmin();
 
-        // get appointment to refuse
-        $appointment = $client->request('GET', sprintf('/appointments?customer=/users/%d', $repairer->owner->id))->toArray()['hydra:member'][0];
+        // get all appointments to find one of our repairer to refuse
+        $appointments = $client->request('GET', '/appointments')->toArray()['hydra:member'];
 
         $firstResponse = $client->request('GET', sprintf('/repairers/%d', $repairer->id))->toArray();
 
-        $response = $client->request('PUT', sprintf('/appointments/%d', $appointment['id']), [
-            'json' => [
-                'accepted' => false,
-            ],
-        ]);
+        foreach ($appointments as $appointment) {
+            $parts = explode('/', $appointment['repairer']['@id']);
+            if (end($parts) === (string) $repairer->id) {
+                $client->request('PUT', sprintf('/appointment_status/%d', $appointment['id']), [
+                    'json' => [
+                        'transition' => 'refused',
+                    ],
+                ]);
+                break;
+            }
+        }
 
         $secondResponse = $client->request('GET', sprintf('/repairers/%d', $repairer->id))->toArray();
         self::assertNotSame($firstResponse['firstSlotAvailable'], $secondResponse['firstSlotAvailable']);

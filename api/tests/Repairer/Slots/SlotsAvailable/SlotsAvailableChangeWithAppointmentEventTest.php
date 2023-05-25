@@ -76,9 +76,9 @@ class SlotsAvailableChangeWithAppointmentEventTest extends SlotsTestCase
 
         $secondResponse = $client->request('GET', sprintf('/repairer_get_slots_available/%d', $repairer->id))->toArray();
 
-        $client->request('PUT', sprintf('/appointments/%d', $appointmentResponse['id']), [
+        $client->request('PUT', sprintf('/appointment_status/%d', $appointmentResponse['id']), [
             'json' => [
-                'accepted' => false,
+                'transition' => 'refused',
             ],
         ]);
 
