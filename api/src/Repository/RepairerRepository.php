@@ -77,7 +77,7 @@ class RepairerRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->where('r.firstSlotAvailable < :date')
-            ->setParameter('date', new \DateTime('now'))
+            ->setParameter('date', new \DateTime('+30 minutes'))
             ->getQuery()
             ->getResult();
     }

@@ -129,7 +129,7 @@ final class ComputeAvailableSlotsByRepairer
 
                 // Add slots until the time range stop
                 while ($slot < $endTimeRange) {
-                    if ($slot > new \DateTime()) {
+                    if (new \DateTime() < $slot) {
                         $data[$day][] = $slot->format('H:i');
                     }
                     $slot->modify(sprintf('+%s minutes', $repairer->durationSlot ?? '60'));

@@ -34,4 +34,3 @@ App\Entity\RepairerOpeningHours:
         day: sunday
         startTime: <numberBetween(10, 18)>:00
         endTime: <numberBetween(10, 18)>:00
-        

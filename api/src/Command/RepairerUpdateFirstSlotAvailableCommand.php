@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Repairers\Service\UpdateOldFirstSlotAvailableService;
@@ -11,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:repairer:update-first-slot-available',
-    description: 'Add a short description for your command',
+    description: 'update first slot available for all repairers',
 )]
 class RepairerUpdateFirstSlotAvailableCommand extends Command
 {
@@ -28,7 +30,7 @@ class RepairerUpdateFirstSlotAvailableCommand extends Command
 
         $this->updateOldFirstSlotAvailableService->updateOldFirstSlotAvailable();
 
-        $io->success('All repairer have been updated');
+        $io->success('All repairers have been updated');
 
         return Command::SUCCESS;
     }
