@@ -23,7 +23,8 @@ const RepairersList: NextPageWithLayout = () => {
         setIsLoading(true);
         let params = {
             paginatinon: 'false',
-            sort: 'random'
+            sort: 'random',
+            enabled: 'true'
         };
         const response = await repairerResource.getAll(false, params);
         setRepairers(response['hydra:member']);
