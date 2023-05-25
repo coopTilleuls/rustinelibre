@@ -2,11 +2,12 @@ import React, {useContext, useEffect, useState} from 'react';
 import {ENTRYPOINT} from '@config/entrypoint';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {repairerResource} from '@resources/repairerResource';
-import {InputLabel, Box, Grid, Button} from '@mui/material';
+import {InputLabel, Box, Grid, Button, Typography} from '@mui/material';
 import {getToken} from '@helpers/localHelper';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {MediaObject} from '@interfaces/MediaObject';
 import {Repairer} from '@interfaces/Repairer';
+import {checkFileSize} from "@helpers/checkFileSize";
 
 interface DashboardInfosPhotosProps {
   repairer: Repairer | null;
@@ -20,6 +21,7 @@ export const DashboardInfosPhotos = ({
   const {thumbnail, setThumbnail, descriptionPicture, setDescriptionPicture} =
     useContext(RepairerFormContext);
   const [loading, setLoading] = useState<boolean>(false);
+  const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
   useEffect(() => {
     if (repairer) {
@@ -35,9 +37,16 @@ export const DashboardInfosPhotos = ({
     pictureType: string
   ) => {
     if (event.target.files && repairer) {
+      setImageTooHeavy(false);
+      const file = event.target.files[0];
+      if (!checkFileSize(file)) {
+        setImageTooHeavy(true);
+        return;
+      }
+
       setLoading(true);
 
-      const response = await uploadFile(event.target.files[0]);
+      const response = await uploadFile(file);
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
         if (pictureType === 'thumbnail') {
@@ -104,6 +113,9 @@ export const DashboardInfosPhotos = ({
           onChange={(e) => handleFileChange(e, 'thumbnail')}
         />
       </Button>
+      {imageTooHeavy && <Typography sx={{textAlign: 'center', color: 'red'}}>
+        Votre photo dépasse la taille maximum autorisée (5mo)
+      </Typography>}
       <InputLabel sx={{mt: 4}}>Photo de description</InputLabel>
       <Grid container spacing={2} sx={{marginTop: '10'}}>
         <Grid item>
@@ -125,6 +137,9 @@ export const DashboardInfosPhotos = ({
           onChange={(e) => handleFileChange(e, 'description')}
         />
       </Button>
+      {imageTooHeavy && <Typography sx={{textAlign: 'center', color: 'red'}}>
+        Votre photo dépasse la taille maximum autorisée (5mo)
+      </Typography>}
     </Box>
   );
 };

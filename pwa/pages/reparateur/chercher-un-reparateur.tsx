@@ -111,6 +111,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       itemsPerPage: 20,
       'bikeTypesSupported.id': selectedBike.id,
       page: `${currentPage ?? 1}`,
+      enabled: 'true'
     };
 
     params = city

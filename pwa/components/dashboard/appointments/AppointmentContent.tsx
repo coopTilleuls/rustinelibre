@@ -97,7 +97,7 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     {appointment.bike ?
-                        <Link href={`/dashboard/clients/velos/${appointment.bike.id}`}>
+                        <Link href={`/sradmin/clients/velos/${appointment.bike.id}`}>
                             <Button variant="outlined">
                                 Voir le carnet du vélo
                             </Button>

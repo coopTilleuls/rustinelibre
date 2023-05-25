@@ -6,6 +6,7 @@ namespace App\Appointments\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Appointment;
+use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,10 +31,12 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$object instanceof Appointment || Request::METHOD_POST !== $method) {
+        if (!$object instanceof Appointment || Request::METHOD_POST !== $method || $this->security->isGranted('ROLE_ADMIN')) {
             return;
         }
 
-        $object->customer = $this->security->getUser();
+        /** @var User $currentUser */
+        $currentUser = $this->security->getUser();
+        $object->customer = $currentUser;
     }
 }

@@ -15,6 +15,7 @@ import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {bikeResource} from '@resources/bikeResource';
 import {RequestBody} from '@interfaces/Resource';
 import useMediaQuery from '@hooks/useMediaQuery';
+import {checkFileSize} from "@helpers/checkFileSize";
 
 type ModalAddBikeProps = {
   bikeTypes: BikeType[];
@@ -36,6 +37,7 @@ const ModalAddBike = ({
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
   const [photo, setPhoto] = useState<MediaObject | null>(null);
   const isMobile = useMediaQuery('(max-width: 640px)');
+  const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
   const handleBikeChange = (event: SelectChangeEvent): void => {
     const selectedBikeType = bikeTypes.find(
@@ -92,9 +94,15 @@ const ModalAddBike = ({
     }
 
     if (event.target.files) {
-      setLoadingPhoto(true);
+      setImageTooHeavy(false);
+      const file = event.target.files[0];
+      if (!checkFileSize(file)) {
+        setImageTooHeavy(true);
+        return;
+      }
 
-      const response = await uploadFile(event.target.files[0]);
+      setLoadingPhoto(true);
+      const response = await uploadFile(file);
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
         setPhoto(mediaObjectResponse);
@@ -126,9 +134,11 @@ const ModalAddBike = ({
         </Typography>
         {photo && (
           <img
-            width={isMobile ? '80%' : '200'}
+            width={isMobile ? '80%' : '300'}
+            height="auto"
             src={apiImageUrl(photo.contentUrl)}
             alt="Photo du vélo"
+            style={{marginLeft: isMobile ? '10%' : '300'}}
           />
         )}
         <Box
@@ -184,6 +194,9 @@ const ModalAddBike = ({
             )}
             <input type="file" hidden onChange={(e) => handleFileChange(e)} />
           </Button>
+          {imageTooHeavy && <Typography sx={{textAlign: 'center', color: 'red'}}>
+            Votre photo dépasse la taille maximum autorisée (5mo)
+          </Typography>}
           <Button type="submit" variant="contained">
             {!pendingAdd ? 'Ajouter ce vélo' : <CircularProgress size={20} sx={{color: 'white'}} />}
           </Button>

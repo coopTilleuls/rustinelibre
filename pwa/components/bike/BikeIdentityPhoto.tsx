@@ -13,6 +13,7 @@ import {uploadFile} from "@helpers/uploadFile";
 import {bikeResource} from "@resources/bikeResource";
 import {mediaObjectResource} from "@resources/mediaObjectResource";
 import {useAccount} from "@contexts/AuthContext";
+import {checkFileSize} from "@helpers/checkFileSize";
 
 type BikeIdentityPhotoProps = {
     bike: Bike;
@@ -25,15 +26,24 @@ const BikeIdentityPhoto = ({bike, photo, propertyName, title}: BikeIdentityPhoto
 
 
     const [photoDisplay, setPhotoDisplay] = useState<MediaObject|null>(photo);
+    const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const {user} = useAccount({redirectIfNotFound: '/velos/mes-velos'});
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         if (event.target.files) {
+            setImageTooHeavy(false);
+            const file = event.target.files[0];
+
+            if (!checkFileSize(file)) {
+                setImageTooHeavy(true);
+                return;
+            }
+
             setLoading(true);
 
             // Upload new picture
-            const response = await uploadFile(event.target.files[0]);
+            const response = await uploadFile(file);
             const mediaObjectResponse = await response?.json() as MediaObject;
             if (mediaObjectResponse) {
                 // Display new photo
@@ -83,7 +93,7 @@ const BikeIdentityPhoto = ({bike, photo, propertyName, title}: BikeIdentityPhoto
                         <Typography variant="h5" sx={{textAlign: 'center'}}>
                             {title}
                         </Typography>
-                        <img src={photoDisplay.contentUrl} alt="Photo du vélo" style={{marginLeft: '30%'}} />
+                        <img width="80%" height="auto" src={photoDisplay.contentUrl} alt="Photo du vélo" style={{marginLeft: '10%'}} />
                     </Box>}
                     {!photoDisplay && !loading &&
                         <Box>
@@ -94,8 +104,12 @@ const BikeIdentityPhoto = ({bike, photo, propertyName, title}: BikeIdentityPhoto
                                 <Typography sx={{textAlign: 'center'}}>
                                     <AddAPhotoIcon sx={{fontSize: "3em", cursor: 'pointer', marginBottom: '20px'}} />
                                     <br />
-                                    Ajouter une photo (taille maximum 10mo)
+                                    Ajouter une photo (taille maximum 5mo)
                                 </Typography>
+
+                                {imageTooHeavy && <Typography sx={{textAlign: 'center', color: 'red'}}>
+                                    Votre photo dépasse la taille maximum autorisée (5mo)
+                                </Typography>}
                             </label>
                             <input
                                 id="fileUpload"
