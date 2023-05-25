@@ -1,20 +1,8 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import {Appointment} from "@interfaces/Appointment";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import List from "@mui/material/List";
-import {formatDate} from "@helpers/dateHelper";
-import {apiImageUrl} from "@helpers/apiImagesHelper";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import BuildIcon from '@mui/icons-material/Build';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Customer} from "@interfaces/Customer";
-import {Button} from "@mui/material";
 import AppointmentContent from "@components/dashboard/appointments/AppointmentContent";
 
 type ModalAddBikeProps = {
@@ -42,7 +30,7 @@ const CustomerAppointmentModal = ({
                 position={'absolute'}
                 top={'50%'}
                 left={'50%'}
-                width={{xs: '85%', md: '40%'}}
+                width={{xs: '85%', md: '70%'}}
                 maxWidth={700}
                 p={4}
                 boxShadow={24}

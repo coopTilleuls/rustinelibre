@@ -90,7 +90,7 @@ class Repairer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
     public ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
