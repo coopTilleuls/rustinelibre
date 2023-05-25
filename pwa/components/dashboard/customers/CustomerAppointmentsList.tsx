@@ -17,10 +17,8 @@ import {Customer} from "@interfaces/Customer";
 import {Appointment} from "@interfaces/Appointment";
 import {appointmentResource} from "@resources/appointmentResource";
 import {formatDate} from 'helpers/dateHelper';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import CustomerAppointmentModal from "@components/dashboard/customers/CustomerAppointmentModal";
+import {getAppointmentStatus} from "@helpers/appointmentStatus";
 
 interface CustomerAppointmentsListProps {
     customer: Customer
@@ -106,12 +104,7 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
                                     {appointment.autoDiagnostic?.prestation}
                                 </TableCell>
                                 <TableCell align="left">
-                                    {appointment.accepted === undefined
-                                        ? <HourglassBottomIcon color="disabled" />
-                                        : appointment.accepted
-                                            ? <CheckCircleOutlineIcon color="success" />
-                                            : <DoNotDisturbIcon color="error" />
-                                    }
+                                    {getAppointmentStatus(appointment.status)}
                                 </TableCell>
                                 <TableCell
                                     align="left"
