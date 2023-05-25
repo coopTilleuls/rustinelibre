@@ -122,9 +122,9 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
                 <Typography
                   paragraph
                   fontSize={{xs: 16, md: 18}}
-                  color="text.secondary">
-                  {repairer.openingHours}
-                </Typography>
+                  color="text.secondary"
+                  dangerouslySetInnerHTML={{__html: repairer.openingHours}}
+                />
               </>
             )}
           </Box>
