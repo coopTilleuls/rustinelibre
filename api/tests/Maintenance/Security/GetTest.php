@@ -40,7 +40,7 @@ class GetTest extends AbstractTestCase
         $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy([]);
         $this->maintenanceRepository = static::getContainer()->get(MaintenanceRepository::class);
         // According to the fixtures, maintenance of user with ROLE USER given
-        $this->userMaintenance = $this->maintenanceRepository->findOneBy(['bike' => 21]);
+        $this->userMaintenance = $this->maintenanceRepository->findOneBy(['name' => 'User bike maintenance']);
         $this->owner = $this->userMaintenance->bike->owner;
     }
 

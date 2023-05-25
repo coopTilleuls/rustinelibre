@@ -14,6 +14,7 @@ use App\Repository\AppointmentRepository;
 use App\Repository\BikeRepository;
 use App\Repository\MaintenanceRepository;
 use App\Repository\RepairerEmployeeRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,6 +26,7 @@ class CreateTest extends AbstractTestCase
 
     protected Bike $bike;
 
+    protected User $user;
     protected Repairer $repairerWithAppointment;
 
     protected User $customer;
@@ -37,8 +39,9 @@ class CreateTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->find(1);
-        $this->appointment = static::getContainer()->get(AppointmentRepository::class)->find(1);
+        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy(['name' => 'name 1']);
+        $this->user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
+        $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['customer' => $this->user]);
         $this->repairerWithAppointment = $this->appointment->repairer;
         $this->boss = $this->repairerWithAppointment->owner;
         $this->customer = $this->appointment->customer;

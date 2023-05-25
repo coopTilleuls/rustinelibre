@@ -6,6 +6,6 @@ App\Entity\Maintenance:
     repairDate: <dateTimeImmutableFromInterval('-3 years')>
   maintenance_21:
     bike: '@bike_21'
-    name: 'name 21'
+    name: 'User bike maintenance'
     description: 'description 21'
     repairDate: <dateTimeImmutableFromInterval('-3 years')>
