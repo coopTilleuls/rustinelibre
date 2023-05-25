@@ -21,14 +21,15 @@ final class BikeOwnerValidator extends ConstraintValidator
         if (!$constraint instanceof BikeOwner) {
             throw new UnexpectedTypeException($constraint, BikeOwner::class);
         }
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+
+        if ($this->security->isGranted('ROLE_ADMIN') || !$value) {
             return;
         }
 
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
 
-        if (!$currentUser || (!$currentUser->isAdmin() && $value->owner->id !== $this->security->getUser()->id)) {
+        if (!$currentUser || $value->owner->id !== $currentUser->id) {
             $this->context->buildViolation((string) $constraint->message)
                 ->addViolation();
         }

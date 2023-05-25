@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
 use App\Appointments\Validator\AppointmentState;
+use App\Bike\Validator\BikeOwner;
 use App\Controller\AppointmentStatusAction;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -92,6 +93,7 @@ class Appointment
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    #[BikeOwner]
     public ?Bike $bike = null;
 
     #[ORM\ManyToOne]
