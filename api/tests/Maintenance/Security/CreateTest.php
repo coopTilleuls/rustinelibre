@@ -51,14 +51,12 @@ class CreateTest extends AbstractTestCase
 
     public function testUserCanCreateMaintenanceForOwnBike(): void
     {
-        $maintenance = $this->maintenance;
-
-        $this->createClientWithUser($maintenance->bike->owner)->request('POST', '/maintenances', [
+        $this->createClientWithUser($this->maintenance->bike->owner)->request('POST', '/maintenances', [
         'headers' => ['Content-Type' => 'application/json'],
         'json' => [
             'name' => 'Test',
             'description' => 'test description',
-            'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+            'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
             'repairDate' => '2023-04-28 14:30:00',
             ],
             ]);
@@ -68,13 +66,12 @@ class CreateTest extends AbstractTestCase
 
     public function testUserCannotCreateMaintenanceForOtherBike(): void
     {
-        $maintenance = $this->maintenance;
         $this->createClientAuthAsUser()->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+                'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
                 'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);
@@ -91,7 +88,6 @@ class CreateTest extends AbstractTestCase
     public function testBossCanCreateMaintenanceForCustomer(): void
     {
         // boss add maintenance on bike's customer
-
         $this->createClientWithUser($this->boss)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
@@ -107,13 +103,12 @@ class CreateTest extends AbstractTestCase
     public function testBossCannotCreateMaintenanceForOtherUser(): void
     {
         // boss add maintenance on other bike according to the fixtures
-        $maintenance = $this->maintenance;
         $this->createClientWithUser($this->boss)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+                'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
                 'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);
@@ -145,13 +140,12 @@ class CreateTest extends AbstractTestCase
     public function testEmployeeCannotCreateMaintenanceForOtherUser(): void
     {
         // Employee add maintenance on other bike
-        $maintenance = $this->maintenance;
         $this->createClientWithUser($this->repairerEmployee->employee)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+                'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
                 'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);

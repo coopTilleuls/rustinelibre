@@ -7,7 +7,6 @@ namespace App\Tests\Maintenance\Security;
 use App\Entity\Appointment;
 use App\Entity\Bike;
 use App\Entity\Maintenance;
-use App\Entity\Repairer;
 use App\Entity\User;
 use App\Repository\AppointmentRepository;
 use App\Repository\MaintenanceRepository;
@@ -16,11 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GetTest extends AbstractTestCase
 {
-    /** @var [] */
-    protected $maintenances = [];
-
-    /** @var Repairer[] */
-    protected array $repairers = [];
+    /** @var Maintenance[] */
+    protected array $maintenances = [];
 
     protected Appointment $appointment;
 
@@ -47,6 +43,7 @@ class GetTest extends AbstractTestCase
     public function testUserCanGetMaintenancesForOwnBikes(): void
     {
         $response = $this->createClientWithUser($this->owner)->request('GET', '/maintenances')->toArray();
+
         $this->assertResponseIsSuccessful();
         foreach ($response['hydra:member'] as $maintenanceResponse) {
             $maintenanceCheck = $this->maintenanceRepository->find($maintenanceResponse['id']);
@@ -61,9 +58,7 @@ class GetTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         // check that admin get all collection
         $this->assertSameSize($response['hydra:member'], $this->maintenances);
-
         // Check order filter by id
-
         $this->assertGreaterThan($response['hydra:member'][0]['id'], $response['hydra:member'][1]['id']);
     }
 
@@ -109,9 +104,14 @@ class GetTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testBossCanGetMaintenanceOfAnUser(): void
+    public function testBossCanGetMaintenancesOfABike(): void
     {
-        $this->createClientWithUser($this->appointment->repairer->owner)->request('GET', sprintf('/maintenances?bike=%d', $this->userMaintenance->bike->id));
+        $response = $this->createClientWithUser($this->appointment->repairer->owner)->request('GET', sprintf('/maintenances?bike=%d', $this->userMaintenance->bike->id))->toArray();
+
         $this->assertResponseIsSuccessful();
+        foreach ($response['hydra:member'] as $maintenanceResponse) {
+            $maintenanceCheck = $this->maintenanceRepository->find($maintenanceResponse['id']);
+            self::assertSame($maintenanceCheck->bike->owner->id, $this->userMaintenance->bike->owner->id);
+        }
     }
 }
