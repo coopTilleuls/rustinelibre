@@ -27,6 +27,7 @@ class CreateTest extends AbstractTestCase
     protected Bike $bike;
 
     protected User $user;
+
     protected Repairer $repairerWithAppointment;
 
     protected User $customer;
@@ -59,7 +60,7 @@ class CreateTest extends AbstractTestCase
             'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
             'repairDate' => '2023-04-28 14:30:00',
             ],
-            ]);
+        ]);
 
         $this->assertResponseIsSuccessful();
     }
