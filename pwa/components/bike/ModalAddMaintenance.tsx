@@ -52,8 +52,6 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = n
     const [selectedDate, setSelectedDate] = useState<string|null>(null);
     const {user} = useAccount({});
 
-    console.log(maintenance);
-
     useEffect(() => {
         if (maintenance) {
             setName(maintenance.name)
