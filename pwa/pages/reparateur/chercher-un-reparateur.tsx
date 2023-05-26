@@ -48,8 +48,8 @@ import {BikeType} from '@interfaces/BikeType';
 import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {searchCity} from '@utils/apiCity';
-import {RepairerType} from "@interfaces/RepairerType";
-import {repairerTypeResource} from "@resources/repairerTypeResource";
+import {RepairerType} from '@interfaces/RepairerType';
+import {repairerTypeResource} from '@resources/repairerTypeResource';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -60,7 +60,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
-  const [timeoutId, setTimeoutId] = useState<number | null>(null);
   const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
   const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
@@ -76,7 +75,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     };
     fetchRepairerTypes();
   }, []);
-
 
   const {
     cityInput,
@@ -130,9 +128,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
     if (city) {
       const aroundFilterKey: string = `around[${city.name}]`;
-      params[aroundFilterKey] = `${city.lat},${city.lon}`
+      params[aroundFilterKey] = `${city.lat},${city.lon}`;
     }
-    
+
     if (orderBy && filterBy) {
       const {key: sortKey, value: sortValue} = orderBy;
       const {key: filterKey, value: filterValue} = filterBy;
@@ -147,20 +145,16 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       params = {...{availability: 'ASC'}, ...params};
     }
 
-
     if (repairerTypeSelected.length > 0) {
       const ids = repairerTypeSelected.map((name) => {
         const repairerType = repairerTypes.find((type) => type.name === name);
         return repairerType ? repairerType.id : null;
       });
 
-      const queryString = ids
-          .map((id) => `repairerType.id[]=${id}`)
-          .join('&');
+      const queryString = ids.map((id) => `repairerType.id[]=${id}`).join('&');
 
-      params = {...{'repairerType': `${queryString}`}, ...params}
+      params = {...{repairerType: `${queryString}`}, ...params};
     }
-
 
     const response = await repairerResource.getAll(false, params);
     setRepairers(response['hydra:member']);
@@ -178,7 +172,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setRepairers,
     setTotalItems,
     repairerTypeSelected,
-    repairerTypes
+    repairerTypes,
   ]);
 
   useEffect(() => {
@@ -248,27 +242,22 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
   const handleChangeRepairerType = (event: SelectChangeEvent) => {
     const {
-      target: { value },
+      target: {value},
     } = event;
 
     setRepairerTypeSelected(
-        typeof value === 'string' ? value.split(',') : value,
+      typeof value === 'string' ? value.split(',') : value
     );
   };
-
-  const getRepairerTypeId = (repairerTypeName: string): number | null => {
-    const repairerType = repairerTypes.find((type) => type.name === repairerTypeName);
-    return repairerType ? repairerType.id : null;
-  }
 
   useEffect(() => {
     if (orderBy) {
       fetchRepairers();
     }
-    if (filterBy) {
+    if (repairerTypeSelected.length) {
       fetchRepairers();
     }
-  }, [orderBy, filterBy, fetchRepairers]);
+  }, [orderBy, repairerTypeSelected, fetchRepairers]);
 
   const scrollToTop = (): void => {
     if (listContainerRef.current) {

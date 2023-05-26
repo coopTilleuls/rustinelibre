@@ -9,14 +9,13 @@ import {
   Select,
   SelectChangeEvent,
   Checkbox,
+  OutlinedInput,
+  ListItemText,
+  colors,
 } from '@mui/material';
-import {RepairerType} from '@interfaces/RepairerType';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
-
-import OutlinedInput from '@mui/material/OutlinedInput';
-import ListItemText from '@mui/material/ListItemText';
-
+import {RepairerType} from '@interfaces/RepairerType';
 
 const sortOptions: Record<string, string> = {
   availability: 'Disponibilité',
@@ -26,8 +25,8 @@ const sortOptions: Record<string, string> = {
 interface RepairerSortOptionsProps {
   isMobile: boolean;
   handleSelectSortOption: (event: SelectChangeEvent) => Promise<void>;
-  handleChangeRepairerType: (e: any) => void,
-  repairerTypes: RepairerType[],
+  handleChangeRepairerType: (e: any) => void;
+  repairerTypes: RepairerType[];
 }
 
 const RepairerSortOptions = ({
@@ -35,14 +34,8 @@ const RepairerSortOptions = ({
   handleChangeRepairerType,
   repairerTypes,
 }: RepairerSortOptionsProps): JSX.Element => {
-
-  const {
-    repairers,
-    sortChosen,
-    showMap,
-    setShowMap,
-      repairerTypeSelected
-  } = useContext(SearchRepairerContext);
+  const {repairers, sortChosen, showMap, setShowMap, repairerTypeSelected} =
+    useContext(SearchRepairerContext);
 
   return (
     <Box
@@ -54,9 +47,6 @@ const RepairerSortOptions = ({
       <FormControl sx={{width: {xs: '30%', md: '20%'}}} size="small">
         <InputLabel id="sort-results-label">Trier</InputLabel>
         <Select
-          sx={{
-            '& .MuiSelect-select': {fontSize: {xs: 12, md: 16}},
-          }}
           label="trier"
           labelId="sort-results-label"
           id="sort-results"
@@ -72,29 +62,41 @@ const RepairerSortOptions = ({
           ))}
         </Select>
       </FormControl>
-
       <FormControl
-          sx={{width: {xs: '30%', md: '30%'}, ml: {md: 2}}}
-          size="small">
-          <InputLabel id="filter-results-label">Type de réparateur</InputLabel>
-          <Select
-              labelId="Select multiple repairer type"
-              id="multiple_select_repairer_type"
-              multiple
-              value={repairerTypeSelected}
-              onChange={handleChangeRepairerType}
-              input={<OutlinedInput label="Type de réparateur" />}
-              renderValue={(selected) => selected.join(', ')}
-          >
-            {repairerTypes.map((repairerType) => (
-                <MenuItem key={repairerType.id} value={repairerType.name}>
-                  <Checkbox checked={repairerTypeSelected.indexOf(repairerType.name) > -1} />
-                  <ListItemText primary={repairerType.name} />
-                </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
+        sx={{width: {xs: '30%', md: '30%'}, ml: {md: 2}}}
+        size="small">
+        <InputLabel id="filter-results-label" sx={{color: 'black'}}>
+          Type de réparateur
+        </InputLabel>
+        <Select
+          labelId="filter-results-label"
+          id="filter-results"
+          multiple
+          value={repairerTypeSelected}
+          onChange={handleChangeRepairerType}
+          input={<OutlinedInput label="Type de réparateur" />}
+          renderValue={(selected) =>
+            selected.length > 0
+              ? `${selected.length} ${
+                  selected.length > 1
+                    ? 'filtres sélectionnés'
+                    : 'filtre sélectionné'
+                }`
+              : '0 filtre sélectionné'
+          }>
+          <MenuItem disabled value="">
+            <em>Type de réparateur</em>
+          </MenuItem>
+          {repairerTypes.map((repairerType) => (
+            <MenuItem key={repairerType.id} value={repairerType.name}>
+              <Checkbox
+                checked={repairerTypeSelected.indexOf(repairerType.name) > -1}
+              />
+              <ListItemText primary={repairerType.name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       {repairers.length ? (
         <Button
           sx={{
