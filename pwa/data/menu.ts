@@ -1,8 +1,7 @@
 export const menuNotLogged = [
   {
     name: 'Notre collectif',
-    link: '/',
-    disabled: true,
+    link: '/notre-collectif',
   },
   {
     name: 'Liste des réparateurs',
@@ -21,8 +20,7 @@ export const menuNotLogged = [
 export const menuLogged = [
   {
     name: 'Notre collectif',
-    link: '/',
-    disabled: true,
+    link: '/notre-collectif',
   },
   {
     name: 'Liste des réparateurs',
