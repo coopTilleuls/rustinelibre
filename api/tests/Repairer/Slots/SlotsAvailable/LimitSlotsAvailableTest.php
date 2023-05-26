@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Repairer\Slots\SlotsAvailable;
 
 use App\Tests\Repairer\Slots\SlotsTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class LimitSlotsAvailableTest extends SlotsTestCase
 {
@@ -41,6 +42,6 @@ class LimitSlotsAvailableTest extends SlotsTestCase
             'repairer' => sprintf('/repairers/%d', $repairer->id),
             'slotTime' => $repairer->firstSlotAvailable->format('Y-m-d H:i:s'),
         ]]);
-        self::assertResponseStatusCodeSame(400);
+        self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 }

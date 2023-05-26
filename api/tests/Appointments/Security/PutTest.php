@@ -9,6 +9,7 @@ use App\Repairers\Service\UpdateOldFirstSlotAvailableService;
 use App\Repository\AppointmentRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\AppointmentTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class PutTest extends AbstractTestCase
 {
@@ -38,7 +39,7 @@ class PutTest extends AbstractTestCase
                 'slotTime' => $this->appointment->repairer->firstSlotAvailable->format('Y-m-d H:i:s'),
             ],
         ]);
-        self::assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     public function testPutAppointmentWithUnavailableSlot(): void
@@ -49,6 +50,6 @@ class PutTest extends AbstractTestCase
                 'slotTime' => (new \DateTime())->setDate(2025, 12, 12)->setTime(01, 01)->format('Y-m-d H:i:s'),
             ],
         ]);
-        self::assertResponseStatusCodeSame(400);
+        self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 }
