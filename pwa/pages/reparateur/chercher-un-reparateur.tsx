@@ -248,16 +248,15 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setRepairerTypeSelected(
       typeof value === 'string' ? value.split(',') : value
     );
+
+    fetchRepairers();
   };
 
   useEffect(() => {
     if (orderBy) {
       fetchRepairers();
     }
-    if (repairerTypeSelected.length) {
-      fetchRepairers();
-    }
-  }, [orderBy, repairerTypeSelected, fetchRepairers]);
+  }, [orderBy, fetchRepairers]);
 
   const scrollToTop = (): void => {
     if (listContainerRef.current) {
