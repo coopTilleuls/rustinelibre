@@ -42,6 +42,7 @@ class MaintenanceCanWriteValidator extends ConstraintValidator
             !($this->security->isGranted('ROLE_BOSS') && $repairerFromBoss)
         ) {
             $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
+
             return;
         }
 
