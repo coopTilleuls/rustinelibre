@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {repairerTypeResource} from '@resources/repairerTypeResource';
+import React, {useContext} from 'react';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {
   Box,
@@ -9,10 +8,14 @@ import {
   InputLabel,
   Select,
   SelectChangeEvent,
+  Checkbox,
+  OutlinedInput,
+  ListItemText,
+  colors,
 } from '@mui/material';
-import {RepairerType} from '@interfaces/RepairerType';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
+import {RepairerType} from '@interfaces/RepairerType';
 
 const sortOptions: Record<string, string> = {
   availability: 'Disponibilité',
@@ -22,34 +25,17 @@ const sortOptions: Record<string, string> = {
 interface RepairerSortOptionsProps {
   isMobile: boolean;
   handleSelectSortOption: (event: SelectChangeEvent) => Promise<void>;
-  handleSelectFilterOption: (event: SelectChangeEvent) => Promise<void>;
+  handleChangeRepairerType: (e: any) => void;
+  repairerTypes: RepairerType[];
 }
 
 const RepairerSortOptions = ({
   handleSelectSortOption,
-  handleSelectFilterOption,
+  handleChangeRepairerType,
+  repairerTypes,
 }: RepairerSortOptionsProps): JSX.Element => {
-  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
-  const {
-    repairers,
-    repairerTypeSelected,
-    setRepairerTypeSelected,
-    sortChosen,
-    showMap,
-    setShowMap,
-  } = useContext(SearchRepairerContext);
-
-  useEffect(() => {
-    const fetchRepairerTypes = async () => {
-      const response = await repairerTypeResource.getAll(false);
-      setRepairerTypes(response['hydra:member']);
-      if (response['hydra:totalItems'] > 0) {
-        setRepairerTypeSelected(response['hydra:member'][0].id.toString());
-      }
-    };
-
-    fetchRepairerTypes();
-  }, [setRepairerTypeSelected]);
+  const {repairers, sortChosen, showMap, setShowMap, repairerTypeSelected} =
+    useContext(SearchRepairerContext);
 
   return (
     <Box
@@ -61,9 +47,6 @@ const RepairerSortOptions = ({
       <FormControl sx={{width: {xs: '30%', md: '20%'}}} size="small">
         <InputLabel id="sort-results-label">Trier</InputLabel>
         <Select
-          sx={{
-            '& .MuiSelect-select': {fontSize: {xs: 12, md: 16}},
-          }}
           label="trier"
           labelId="sort-results-label"
           id="sort-results"
@@ -80,24 +63,36 @@ const RepairerSortOptions = ({
         </Select>
       </FormControl>
       <FormControl
-        sx={{width: {xs: '30%', md: '20%'}, ml: {md: 2}}}
+        sx={{width: {xs: '30%', md: '30%'}, ml: {md: 2}}}
         size="small">
-        <InputLabel id="filter-results-label">Filtrer</InputLabel>
+        <InputLabel id="filter-results-label" sx={{color: 'black'}}>
+          Type de réparateur
+        </InputLabel>
         <Select
-          sx={{
-            '& .MuiSelect-select': {fontSize: {xs: 12, md: 16}},
-          }}
-          label="Filtrer"
           labelId="filter-results-label"
           id="filter-results"
-          onChange={handleSelectFilterOption}
-          value={repairerTypeSelected}>
+          multiple
+          value={repairerTypeSelected}
+          onChange={handleChangeRepairerType}
+          input={<OutlinedInput label="Type de réparateur" />}
+          renderValue={(selected) =>
+            selected.length > 0
+              ? `${selected.length} ${
+                  selected.length > 1
+                    ? 'filtres sélectionnés'
+                    : 'filtre sélectionné'
+                }`
+              : '0 filtre sélectionné'
+          }>
           <MenuItem disabled value="">
-            <em>Filtrer</em>
+            <em>Type de réparateur</em>
           </MenuItem>
           {repairerTypes.map((repairerType) => (
-            <MenuItem key={repairerType.id} value={repairerType.id}>
-              {repairerType.name}
+            <MenuItem key={repairerType.id} value={repairerType.name}>
+              <Checkbox
+                checked={repairerTypeSelected.indexOf(repairerType.name) > -1}
+              />
+              <ListItemText primary={repairerType.name} />
             </MenuItem>
           ))}
         </Select>

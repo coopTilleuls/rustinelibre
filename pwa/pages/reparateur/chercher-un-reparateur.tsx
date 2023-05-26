@@ -48,6 +48,8 @@ import {BikeType} from '@interfaces/BikeType';
 import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {searchCity} from '@utils/apiCity';
+import {RepairerType} from '@interfaces/RepairerType';
+import {repairerTypeResource} from '@resources/repairerTypeResource';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -58,13 +60,21 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
-  const [timeoutId, setTimeoutId] = useState<number | null>(null);
   const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
   const [alreadyFetchApi, setAlreadyFetchApi] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const listContainerRef = useRef<HTMLDivElement>(null);
+  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
+
+  useEffect(() => {
+    const fetchRepairerTypes = async () => {
+      const response = await repairerTypeResource.getAll(false);
+      setRepairerTypes(response['hydra:member']);
+    };
+    fetchRepairerTypes();
+  }, []);
 
   const {
     cityInput,
@@ -82,7 +92,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     orderBy,
     filterBy,
     setOrderBy,
-    setFilterBy,
     setSortChosen,
     totalItems,
     setTotalItems,
@@ -119,9 +128,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
     if (city) {
       const aroundFilterKey: string = `around[${city.name}]`;
-      params[aroundFilterKey] = `${city.lat},${city.lon}`
+      params[aroundFilterKey] = `${city.lat},${city.lon}`;
     }
-    
+
     if (orderBy && filterBy) {
       const {key: sortKey, value: sortValue} = orderBy;
       const {key: filterKey, value: filterValue} = filterBy;
@@ -134,6 +143,17 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       params = {...params, [key]: value};
     } else {
       params = {...{availability: 'ASC'}, ...params};
+    }
+
+    if (repairerTypeSelected.length > 0) {
+      const ids = repairerTypeSelected.map((name) => {
+        const repairerType = repairerTypes.find((type) => type.name === name);
+        return repairerType ? repairerType.id : null;
+      });
+
+      const queryString = ids.map((id) => `repairerType.id[]=${id}`).join('&');
+
+      params = {...{repairerType: `${queryString}`}, ...params};
     }
 
     const response = await repairerResource.getAll(false, params);
@@ -151,6 +171,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     selectedBike,
     setRepairers,
     setTotalItems,
+    repairerTypeSelected,
+    repairerTypes,
   ]);
 
   useEffect(() => {
@@ -218,25 +240,24 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     });
   };
 
-  const handleSelectFilterOption = async (
-    event: SelectChangeEvent
-  ): Promise<void> => {
-    setRepairerTypeSelected(event.target.value);
+  const handleChangeRepairerType = (event: SelectChangeEvent) => {
+    const {
+      target: {value},
+    } = event;
 
-    setFilterBy({
-      key: 'repairerType.id',
-      value: repairerTypeSelected,
-    });
+    setRepairerTypeSelected(
+      typeof value === 'string' ? value.split(',') : value
+    );
   };
 
   useEffect(() => {
     if (orderBy) {
       fetchRepairers();
     }
-    if (filterBy) {
+    if (repairerTypeSelected.length) {
       fetchRepairers();
     }
-  }, [orderBy, filterBy, fetchRepairers]);
+  }, [orderBy, repairerTypeSelected, fetchRepairers]);
 
   const scrollToTop = (): void => {
     if (listContainerRef.current) {
@@ -354,8 +375,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                   {repairers.length ? (
                     <RepairerSortOptions
                       isMobile={isMobile}
+                      handleChangeRepairerType={handleChangeRepairerType}
                       handleSelectSortOption={handleSelectSortOption}
-                      handleSelectFilterOption={handleSelectFilterOption}
+                      repairerTypes={repairerTypes}
                     />
                   ) : null}
                 </Box>
