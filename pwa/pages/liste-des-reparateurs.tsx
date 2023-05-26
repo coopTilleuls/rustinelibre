@@ -8,7 +8,7 @@ import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {
     CircularProgress,
     Container,
-    Box,
+    Box, Typography,
 } from '@mui/material';
 import {repairerResource} from '@resources/repairerResource';
 import {Repairer} from "@interfaces/Repairer";
@@ -47,6 +47,15 @@ const RepairersList: NextPageWithLayout = () => {
                     flexDirection="column"
                     overflow="auto">
                     <Container sx={{mt: 10}}>
+
+                        <Typography variant="h3" sx={{mb: 5, textAlign: 'center'}}>
+                            Liste des réparateurs
+                        </Typography>
+
+                        <Typography variant="body1" sx={{mb: 5}}>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec est magna, finibus in suscipit sit amet, tempor non leo. Aliquam placerat lacinia maximus.
+                        </Typography>
+
 
                         {isLoading && <CircularProgress />}
                         {!isLoading && <Grid2 container spacing={4}>
