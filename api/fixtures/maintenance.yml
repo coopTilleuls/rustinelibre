@@ -1,6 +1,11 @@
 App\Entity\Maintenance:
   maintenance_{1..20}:
-    bike: '@bike_*'
+    bike: '@bike_<numberBetween(1, 20)>'
     name: 'name <current()>'
     description: 'description <current()>'
+    repairDate: <dateTimeImmutableFromInterval('-3 years')>
+  maintenance_21:
+    bike: '@bike_21'
+    name: 'User bike maintenance'
+    description: 'description 21'
     repairDate: <dateTimeImmutableFromInterval('-3 years')>
