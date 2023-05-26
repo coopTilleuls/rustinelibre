@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {Button, Typography, Box} from '@mui/material';
 import {Page} from '@interfaces/Page';
 import {User} from '@interfaces/User';
+import {useRouter} from "next/router";
 
 interface NavbarDesktopProps {
   pages: Page[];
@@ -16,6 +17,10 @@ const NavbarDesktop = ({
   user,
   logOut,
 }: NavbarDesktopProps): JSX.Element => {
+
+    const router = useRouter();
+    const { asPath } = router;
+
   return (
     <Box
       width="100%"
@@ -49,6 +54,7 @@ const NavbarDesktop = ({
               <Button
                 disabled={disabled}
                 sx={{
+                  textDecoration: link === asPath ? 'underline' : 'none',
                   display: 'flex',
                   paddingX: 2,
                   marginX: 0.5,
