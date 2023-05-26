@@ -11,7 +11,7 @@ class LimitSlotsAvailableTest extends SlotsTestCase
     public function testUserCanTakeAllSlotsAvailable(): void
     {
         $repairer = $this->getRepairerWithSlotsAvailable(4);
-        $client = $this->createClientWithUser($repairer->owner);
+        $client = $this->createClientAuthAsUser();
 
         for ($i = 0; $i < 4; ++$i) {
             $client->request('POST', '/appointments', ['json' => [
@@ -25,7 +25,7 @@ class LimitSlotsAvailableTest extends SlotsTestCase
     public function testUserCannotTakeMoreThanSlotsAvailable(): void
     {
         $repairer = $this->getRepairerWithSlotsAvailable(4);
-        $client = $this->createClientWithUser($repairer->owner);
+        $client = $this->createClientAuthAsUser();
 
         // take all slots available
         for ($i = 0; $i < 4; ++$i) {
@@ -41,6 +41,6 @@ class LimitSlotsAvailableTest extends SlotsTestCase
             'repairer' => sprintf('/repairers/%d', $repairer->id),
             'slotTime' => $repairer->firstSlotAvailable->format('Y-m-d H:i:s'),
         ]]);
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(400);
     }
 }

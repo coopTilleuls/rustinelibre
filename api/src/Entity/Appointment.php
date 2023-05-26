@@ -43,7 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         description: 'Request body should contains a transition propery which is one of the following transition : validated_by_repairer, validated_by_cyclist, refused, propose_another_slot, cancellation'),
     security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user",
 )]
-#[Post(securityPostValidation: "is_granted('AVAILABLE_SLOT', object)")]
+#[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[ApiFilter(DateFilter::class, properties: ['slotTime'])]
