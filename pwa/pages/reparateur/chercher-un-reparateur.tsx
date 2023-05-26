@@ -111,7 +111,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       itemsPerPage: 20,
       'bikeTypesSupported.id': selectedBike.id,
       page: `${currentPage ?? 1}`,
-      enabled: 'true'
+      enabled: 'true',
     };
 
     params = city
@@ -311,7 +311,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                       value={city}
                       options={citiesList}
                       getOptionLabel={(city) =>
-                        typeof city === 'string' ? city : city.name
+                        typeof city === 'string'
+                          ? city
+                          : `${city.name}  (${city.postcode})`
                       }
                       onChange={(event, value) => setCity(value as City)}
                       onInputChange={(event, value) => setCityInput(value)}
