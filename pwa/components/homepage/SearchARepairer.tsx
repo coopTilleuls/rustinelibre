@@ -138,7 +138,9 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                   value={city}
                   options={citiesList}
                   getOptionLabel={(city) =>
-                    typeof city === 'string' ? city : city.name
+                    typeof city === 'string'
+                      ? city
+                      : `${city.name}  (${city.postcode})`
                   }
                   onChange={(event, value) => setCity(value as City)}
                   onInputChange={(event, value) => setCityInput(value)}
