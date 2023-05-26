@@ -256,7 +256,10 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     if (orderBy) {
       fetchRepairers();
     }
-  }, [orderBy, fetchRepairers]);
+    if (repairerTypeSelected.length) {
+      fetchRepairers();
+    }
+  }, [orderBy, repairerTypeSelected, fetchRepairers]);
 
   const scrollToTop = (): void => {
     if (listContainerRef.current) {

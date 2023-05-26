@@ -64,6 +64,12 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
                 sx={{wordBreak: 'break-word'}}>
                 {repairer.name}
               </Typography>
+              <Typography
+                fontSize={{xs: 16, md: 24}}
+                fontWeight={600}
+                sx={{wordBreak: 'break-word'}}>
+                {repairer.repairerType.name}
+              </Typography>
               {repairer.distance && (
                 <Typography
                   fontSize={{xs: 12, md: 14}}
