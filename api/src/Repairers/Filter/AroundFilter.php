@@ -26,21 +26,22 @@ final class AroundFilter extends AbstractFilter
         }
 
         if (!is_array($value) || empty($value)) {
-            throw new BadRequestHttpException('Wrong format provided for the filter, should be : ?around[distance]=latitude,longitude');
+            throw new BadRequestHttpException('Wrong format provided for the filter, should be : ?around[cityName]=latitude,longitude');
         }
 
-        $distance = key($value);
-        $coordinates = explode(',', $value[$distance]);
+        $city = key($value);
+        $coordinates = explode(',', $value[$city]);
 
-        $queryBuilder->orWhere($queryBuilder->expr()->eq(
-            'ST_DWithin(
+        $queryBuilder->andWhere($queryBuilder->expr()->eq(
+            'LOWER(o.city) = LOWER(:searchCity) OR ST_DWithin(
                     o.gpsPoint,
                     ST_SetSRID(ST_MakePoint(:around_latitude, :around_longitude), 4326),
                     :around_distance
                 )', 'true'));
         $queryBuilder->setParameter('around_latitude', $coordinates[0]);
         $queryBuilder->setParameter('around_longitude', $coordinates[1]);
-        $queryBuilder->setParameter('around_distance', $distance);
+        $queryBuilder->setParameter('around_distance', '5000');
+        $queryBuilder->setParameter('searchCity', $city);
     }
 
     public function getDescription(string $resourceClass): array
@@ -54,9 +55,9 @@ final class AroundFilter extends AbstractFilter
             $description['around'] = [
                 'type' => Type::BUILTIN_TYPE_STRING,
                 'required' => false,
-                'description' => 'Filter to get points around given GPS coordinates. This filter should be placed in entity only at first to avoid overide of other filters',
+                'description' => 'Filter to get points around given GPS coordinates.',
                 'openapi' => [
-                    'example' => '/repairers?around[distance]=latitude,longitude',
+                    'example' => '/repairers?around[city]=latitude,longitude',
                     'allowReserved' => false,
                     'allowEmptyValue' => true,
                     'explode' => false,
