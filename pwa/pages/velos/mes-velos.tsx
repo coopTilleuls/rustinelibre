@@ -92,7 +92,7 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
             mt: 4,
             mb: 10,
           }}>
-          <Typography fontSize={{xs: 24, md: 40}} fontWeight={600}>
+          <Typography fontSize={{xs: 24, md: 40}} fontWeight={600} pb={8}>
             Mes vélos
           </Typography>
 
@@ -119,7 +119,7 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
               {bikes.length === 0 && !loading && !isLoadingFetchUser && (
                 <Box>
                   <Typography>
-                    Vous n&apos;avez pas encore de vélos enregistrés
+                    Vous n&apos;avez pas encore de vélos enregistrés.
                   </Typography>
                   <List
                     sx={{
@@ -145,7 +145,7 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
                       <ListItemIcon>
                         <BuildIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Créeez un historique des réparations" />
+                      <ListItemText primary="Créez un historique des réparations" />
                     </ListItemButton>
                   </List>
                 </Box>
