@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {repairerTypeResource} from '@resources/repairerTypeResource';
+import React, {useContext} from 'react';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {
   Box,
@@ -9,13 +8,15 @@ import {
   InputLabel,
   Select,
   SelectChangeEvent,
-  FormGroup,
-  FormControlLabel,
   Checkbox,
 } from '@mui/material';
 import {RepairerType} from '@interfaces/RepairerType';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
+
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+
 
 const sortOptions: Record<string, string> = {
   availability: 'Disponibilité',
@@ -25,30 +26,23 @@ const sortOptions: Record<string, string> = {
 interface RepairerSortOptionsProps {
   isMobile: boolean;
   handleSelectSortOption: (event: SelectChangeEvent) => Promise<void>;
-  handleSelectFilters: (event: any, filterId: any) => void;
+  handleChangeRepairerType: (e: any) => void,
+  repairerTypes: RepairerType[],
 }
 
 const RepairerSortOptions = ({
   handleSelectSortOption,
-  handleSelectFilters,
+  handleChangeRepairerType,
+  repairerTypes,
 }: RepairerSortOptionsProps): JSX.Element => {
-  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
+
   const {
     repairers,
-    repairerTypeSelected,
-    setRepairerTypeSelected,
     sortChosen,
     showMap,
     setShowMap,
+      repairerTypeSelected
   } = useContext(SearchRepairerContext);
-
-  useEffect(() => {
-    const fetchRepairerTypes = async () => {
-      const response = await repairerTypeResource.getAll(false);
-      setRepairerTypes(response['hydra:member']);
-    };
-    fetchRepairerTypes();
-  }, [setRepairerTypeSelected]);
 
   return (
     <Box
@@ -80,32 +74,26 @@ const RepairerSortOptions = ({
       </FormControl>
 
       <FormControl
-        sx={{width: {xs: '30%', md: '30%'}, ml: {md: 2}}}
-        size="small">
-        <InputLabel id="filter-results-label">Filtrer</InputLabel>
-        <FormGroup>
-          <Select sx={{pl: 4}}>
+          sx={{width: {xs: '30%', md: '30%'}, ml: {md: 2}}}
+          size="small">
+          <InputLabel id="filter-results-label">Type de réparateur</InputLabel>
+          <Select
+              labelId="Select multiple repairer type"
+              id="multiple_select_repairer_type"
+              multiple
+              value={repairerTypeSelected}
+              onChange={handleChangeRepairerType}
+              input={<OutlinedInput label="Type de réparateur" />}
+              renderValue={(selected) => selected.join(', ')}
+          >
             {repairerTypes.map((repairerType) => (
-              <FormControlLabel
-                sx={{display: 'flex', pl: 2}}
-                key={repairerType.id}
-                value={`(${repairerTypeSelected.length})`}
-                control={
-                  <Checkbox
-                    checked={repairerTypeSelected.includes(repairerType.id)}
-                    onChange={(event) =>
-                      handleSelectFilters(event, repairerType.id)
-                    }
-                    value={repairerType.id}
-                    name={`filter-${repairerType.id}`}
-                  />
-                }
-                label={repairerType.name}
-              />
+                <MenuItem key={repairerType.id} value={repairerType.name}>
+                  <Checkbox checked={repairerTypeSelected.indexOf(repairerType.name) > -1} />
+                  <ListItemText primary={repairerType.name} />
+                </MenuItem>
             ))}
           </Select>
-        </FormGroup>
-      </FormControl>
+        </FormControl>
 
       {repairers.length ? (
         <Button

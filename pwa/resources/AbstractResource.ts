@@ -235,14 +235,25 @@ export abstract class AbstractResource<T> {
 
   public getUrl(id?: string, params?: RequestParams): string {
     const url = new URL(ENTRYPOINT + (undefined !== id ? id : this.endpoint));
+    let queryMultipleMatch: string|null = null;
 
     if (undefined !== params) {
       Object.keys(params).forEach((key) => {
-        url.searchParams.append(key, params[key] as string);
+        const queryValue = params[key].toString();
+        if (queryValue.includes("[]=")) {
+          queryMultipleMatch = queryValue;
+        } else {
+          url.searchParams.append(key, queryValue);
+        }
       });
     }
 
-    return url.toString();
+    let stringUrl: string = url.toString();
+    if (queryMultipleMatch !== null) {
+      stringUrl = `${stringUrl}&${queryMultipleMatch}`
+    }
+
+    return stringUrl;
   }
 
   protected async getResult(
