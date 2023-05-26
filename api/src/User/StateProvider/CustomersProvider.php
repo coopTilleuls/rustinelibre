@@ -33,12 +33,14 @@ final class CustomersProvider implements ProviderInterface
     {
         /** @var User $user */
         $user = $this->security->getUser();
-        if (!$user->repairer) {
+        $repairerFromEmployee = $user?->repairerEmployee?->repairer;
+        $repairerFromBoss = $user?->repairer;
+        if (!$repairerFromEmployee && !$repairerFromBoss) {
             throw new NotFoundHttpException('No customers for you ');
         }
 
         $customersIdsQueryBuilder = $this->appointmentRepository->getAppointmentCustomersIdsQueryBuilder();
-        $customersQueryBuilder = $this->userRepository->getUsersInQbIdsByRepairer($customersIdsQueryBuilder, $user->repairer);
+        $customersQueryBuilder = $this->userRepository->getUsersInQbIdsByRepairer($customersIdsQueryBuilder, $repairerFromEmployee ?? $repairerFromBoss);
         $queryNameGenerator = new QueryNameGenerator();
 
         /** @var QueryCollectionExtensionInterface $extension */
