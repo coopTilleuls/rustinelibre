@@ -19,7 +19,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Moment } from 'moment';
 import {Maintenance} from "@interfaces/Maintenance";
-import {formatDate} from "@helpers/dateHelper";
+import {useAccount} from "@contexts/AuthContext";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -50,13 +50,12 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = n
     const [photo, setPhoto] = useState<MediaObject|null>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
     const [selectedDate, setSelectedDate] = useState<string|null>(null);
+    const {user} = useAccount({});
 
+    console.log(maintenance);
 
     useEffect(() => {
         if (maintenance) {
-
-            console.log(maintenance);
-
             setName(maintenance.name)
             if (maintenance.description) {
                 setDescription(maintenance.description)
@@ -201,13 +200,15 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = n
                         >
                             Fermer
                         </Button>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            {!pendingAdd ? maintenance ? 'Modifier cette réparation' : 'Ajouter cette réparation' : <CircularProgress sx={{color: 'white'}} size={20} />}
-                        </Button>
+                        {
+                            maintenance && user && maintenance.bike.owner.id === user.id && <Button
+                                type="submit"
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                {!pendingAdd ? maintenance ? 'Modifier cette réparation' : 'Ajouter cette réparation' : <CircularProgress sx={{color: 'white'}} size={20} />}
+                            </Button>
+                        }
                     </Box>
 
                     {errorMessage && (

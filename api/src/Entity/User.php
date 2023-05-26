@@ -72,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
-    #[Groups([self::USER_READ, self::CUSTOMER_READ])]
+    #[Groups([self::USER_READ, self::CUSTOMER_READ, Maintenance::READ])]
     public int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]
