@@ -34,7 +34,12 @@ const CustomerBikes: NextPageWithLayout = () => {
         setMaintenanceSelected(maintenance);
         setOpenModal(true)
     };
-    const handleCloseModal = (): void => setOpenModal(false);
+    const handleCloseModal = async (refresh: boolean = false): Promise<void> => {
+        setOpenModal(false)
+        if (refresh && bike) {
+            await fetchMaintenances(bike.id);
+        }
+    };
 
     const handleCloseModalAddMaintenance = async (): Promise<void> => {
         setOpenModalAddMaintenance(false);
@@ -127,6 +132,7 @@ const CustomerBikes: NextPageWithLayout = () => {
                     bike={bike}
                     openModal={openModalAddMaintenance}
                     handleCloseModal={handleCloseModalAddMaintenance}
+                    maintenance={null}
                 />
             }
         </>

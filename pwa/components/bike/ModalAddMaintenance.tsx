@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -18,6 +18,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Moment } from 'moment';
+import {Maintenance} from "@interfaces/Maintenance";
+import {formatDate} from "@helpers/dateHelper";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -34,10 +36,11 @@ const style = {
 type ModalAddMaintenanceProps = {
     bike: Bike;
     openModal: boolean;
-    handleCloseModal: () => void;
+    handleCloseModal: (refresh : boolean) => void;
+    maintenance: Maintenance|null;
 };
 
-const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMaintenanceProps): JSX.Element => {
+const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = null}: ModalAddMaintenanceProps): JSX.Element => {
 
     const [pendingAdd, setPendingAdd] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -47,6 +50,20 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
     const [photo, setPhoto] = useState<MediaObject|null>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
     const [selectedDate, setSelectedDate] = useState<string|null>(null);
+
+
+    useEffect(() => {
+        if (maintenance) {
+
+            console.log(maintenance);
+
+            setName(maintenance.name)
+            if (maintenance.description) {
+                setDescription(maintenance.description)
+            }
+            setPhoto(maintenance.photo ? maintenance.photo : null);
+        }
+    }, [maintenance]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 
@@ -58,7 +75,6 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
         setErrorMessage(null);
         setPendingAdd(true);
 
-        let newMaintenance;
         try {
             let bodyRequest: RequestBody = {
                 'name': name,
@@ -73,17 +89,19 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
             if (photo) {
                 bodyRequest['photo'] = photo['@id'];
             }
-            newMaintenance = await maintenanceResource.post(bodyRequest)
+            if (maintenance) {
+                maintenance = await maintenanceResource.put(maintenance['@id'], bodyRequest);
+            } else {
+                maintenance = await maintenanceResource.post(bodyRequest);
+                setName('');
+                setDescription('');
+                setPhoto(null);
+                setSelectedDate(null)
+            }
+
+            handleCloseModal(true);
         } catch (e) {
             setErrorMessage('Ajout de cette réparation impossible');
-        }
-
-        if (newMaintenance) {
-            setName('');
-            setDescription('');
-            setPhoto(null);
-            setSelectedDate(null)
-            handleCloseModal();
         }
 
         setPendingAdd(false);
@@ -118,7 +136,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
     return (
         <Modal
             open={openModal}
-            onClose={handleCloseModal}
+            onClose={() => handleCloseModal(false)}
             aria-labelledby="Ajouter un vélo"
             aria-describedby="popup_add_bike"
         >
@@ -140,15 +158,19 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
                         value={name}
                         onChange={handleChangeName}
                     />
-                    <InputLabel id="demo-simple-select-label">Date de la réparation</InputLabel>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            format="DD-MM-YYYY"
-                            label="Date"
-                            value={selectedDate}
-                            onChange={(newValue: string|Moment|null) => setSelectedDate(newValue && typeof newValue !== 'string' ? newValue.format('YYYY-MM-DD') : null)}
-                        />
-                    </LocalizationProvider>
+                    {
+                        !maintenance && <Box>
+                            <InputLabel id="demo-simple-select-label">Date de la réparation</InputLabel>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    format="DD-MM-YYYY"
+                                    label="Date"
+                                    value={selectedDate}
+                                    onChange={(newValue: string|Moment|null) => setSelectedDate(newValue && typeof newValue !== 'string' ? newValue.format('YYYY-MM-DD') : null)}
+                                />
+                            </LocalizationProvider>
+                        </Box>
+                    }
                     <TextField
                         margin="normal"
                         placeholder="Description de votre réparation"
@@ -156,6 +178,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
                         fullWidth
                         rows={3}
                         maxRows={6}
+                        value={description}
                         onChange={handleChangeDescription}
                     />
                     <Button
@@ -170,14 +193,23 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal}: ModalAddMainte
                             onChange={(e) => handleFileChange(e)}
                         />
                     </Button>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="outlined"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        {!pendingAdd ? 'Ajouter cette réparation' : <CircularProgress size={20} />}
-                    </Button>
+                    <Box sx={{float:'right', mt: 5}}>
+                        <Button
+                            onClick={() => handleCloseModal(false)}
+                            variant="outlined"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Fermer
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            {!pendingAdd ? maintenance ? 'Modifier cette réparation' : 'Ajouter cette réparation' : <CircularProgress sx={{color: 'white'}} size={20} />}
+                        </Button>
+                    </Box>
+
                     {errorMessage && (
                         <Typography variant="body1" color="error">
                             {errorMessage}

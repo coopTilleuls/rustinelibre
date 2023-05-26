@@ -38,14 +38,16 @@ const BikeMaintenance = ({
   const [maintenanceSelected, setMaintenanceSelected] = useState<Maintenance | null>(null);
 
   const handleOpenModal = (): void => setOpenModal(true);
-  const handleOpenModalDetail = (): void => setOpenModal(true);
-  const handleCloseModal = (): void => {
+  const handleCloseModal = async (): Promise<void> => {
     setOpenModal(false);
-    fetchMaintenance();
+    await fetchMaintenance();
   };
 
-  const handleCloseModalDetail = (): void => {
+  const handleCloseModalDetail = async(refresh: boolean): Promise<void> => {
     setOpenModalDetail(false);
+    if (refresh) {
+      await fetchMaintenance();
+    }
   };
 
   const clickMaintenanceDetail = (maintenance: Maintenance) => {
@@ -110,6 +112,7 @@ const BikeMaintenance = ({
         bike={bike}
         openModal={openModal}
         handleCloseModal={handleCloseModal}
+        maintenance={null}
       />
 
       <ModalDetailMaintenance
