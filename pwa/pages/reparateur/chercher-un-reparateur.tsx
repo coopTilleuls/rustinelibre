@@ -121,7 +121,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       const aroundFilterKey: string = `around[${city.name}]`;
       params[aroundFilterKey] = `${city.lat},${city.lon}`
     }
-    g
+    
     if (orderBy && filterBy) {
       const {key: sortKey, value: sortValue} = orderBy;
       const {key: filterKey, value: filterValue} = filterBy;
