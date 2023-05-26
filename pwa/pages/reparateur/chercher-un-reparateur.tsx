@@ -248,8 +248,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setRepairerTypeSelected(
       typeof value === 'string' ? value.split(',') : value
     );
-
-    fetchRepairers();
   };
 
   useEffect(() => {
