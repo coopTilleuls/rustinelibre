@@ -14,7 +14,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Bike\Validator\BikeOwner;
 use App\Maintenance\Validator\MaintenanceCanWrite;
 use App\Repository\MaintenanceRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -48,7 +47,6 @@ class Maintenance
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[BikeOwner]
     #[Groups([self::READ, self::WRITE])]
     public ?Bike $bike = null;
 

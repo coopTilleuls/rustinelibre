@@ -1,7 +1,13 @@
 App\Entity\Bike:
   bike_{1..20}:
-    owner: '@user_*'
+    owner: '@user_<numberBetween(7, 20)>'
     brand: 'brand <current()>'
     bikeType: '@biketype_*'
     name: 'name <current()>'
     description: 'description <current()>'
+  bike_21:
+    owner: '@user_1'
+    brand: 'brand 21'
+    bikeType: '@biketype_*'
+    name: 'name 21>'
+    description: 'description 21>'

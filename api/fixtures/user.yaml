@@ -34,7 +34,14 @@ App\Entity\User:
     lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
-  user_{10..20}:
+  user_{3..6}:
+    roles: [ "ROLE_USER", "ROLE_EMPLOYEE" ]
+    email: <email()>
+    firstName: <firstName()>
+    lastName: <lastName()>
+    plainPassword: "Test1passwordOk!"
+    emailConfirmed: true
+  user_{7..20}:
     roles: ["ROLE_USER"]
     email: <email()>
     firstName: <firstName()>

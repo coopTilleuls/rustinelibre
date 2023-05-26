@@ -30,27 +30,31 @@ class MaintenanceCanWriteValidator extends ConstraintValidator
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
         $bikeOwner = $value->bike->owner;
+        $repairerFromEmployee = $currentUser?->repairerEmployee?->repairer;
+        $repairerFromBoss = $currentUser?->repairer;
 
-        // The current user is the bike owner or an admin
-        if ($bikeOwner === $currentUser || $this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('ROLE_ADMIN') || $currentUser->id === $bikeOwner->id) {
             return;
         }
 
-        if ($this->security->isGranted('ROLE_BOSS')) {
-            $currentRepairer = $currentUser->repairer;
+        if (
+            !($this->security->isGranted('ROLE_EMPLOYEE') && $currentUser->repairerEmployee && $repairerFromEmployee) &&
+            !($this->security->isGranted('ROLE_BOSS') && $repairerFromBoss)
+        ) {
+            $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
 
-            if (!$currentRepairer) {
-                $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
-            }
-
-            $appointment = $this->appointmentRepository->findOneBy([
-                'customer' => $bikeOwner,
-                'repairer' => $currentRepairer,
-            ]);
-
-            if (!$appointment) {
-                $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
-            }
+            return;
         }
+
+        $appointment = $this->appointmentRepository->findOneBy([
+            'customer' => $bikeOwner,
+            'repairer' => $repairerFromEmployee ?? $repairerFromBoss,
+        ]);
+
+        if ($appointment) {
+            return;
+        }
+
+        $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
     }
 }
