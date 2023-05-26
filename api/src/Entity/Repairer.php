@@ -64,7 +64,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
-#[ApiFilter(AroundFilter::class)] // Should always be first filter of the list
+#[ApiFilter(AroundFilter::class)]
 #[ApiFilter(FirstAvailableSlotFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'city' => 'iexact',
