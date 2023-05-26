@@ -106,18 +106,22 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setPendingSearchCity(true);
     setIsLoading(true);
 
-    let params = {
-      city: city ? city.name : cityInput,
+    interface ParamsType {
+      [key: string]: number | string;
+    }
+
+    let params: ParamsType = {
       itemsPerPage: 20,
       'bikeTypesSupported.id': selectedBike.id,
       page: `${currentPage ?? 1}`,
       enabled: 'true',
     };
 
-    params = city
-      ? {...{'around[5000]': `${city.lat},${city.lon}`}, ...params}
-      : params;
-
+    if (city) {
+      const aroundFilterKey: string = `around[${city.name}]`;
+      params[aroundFilterKey] = `${city.lat},${city.lon}`
+    }
+    
     if (orderBy && filterBy) {
       const {key: sortKey, value: sortValue} = orderBy;
       const {key: filterKey, value: filterValue} = filterBy;

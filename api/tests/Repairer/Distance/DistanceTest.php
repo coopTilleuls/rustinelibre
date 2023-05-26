@@ -10,7 +10,7 @@ class DistanceTest extends AbstractTestCase
 {
     public function testCollectionWithDistance(): void
     {
-        $response = self::createClient()->request('GET', '/repairers?around[5000]=50.621917,3.063398');
+        $response = self::createClient()->request('GET', '/repairers?around[lille]=50.621917,3.063398');
         $this->assertResponseIsSuccessful();
         $responseCollection = $response->toArray()['hydra:member'];
 

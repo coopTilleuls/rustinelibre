@@ -90,7 +90,7 @@ class RandomFilterTest extends AbstractTestCase
     {
         $responses = [];
         for ($i = 0; $i < 10; ++$i) {
-            $response = static::createClient()->request('GET', '/repairers?sort=random&around[10]=50.67394149851168,3.0665240417922486')->toArray()['hydra:member'];
+            $response = static::createClient()->request('GET', '/repairers?sort=random&around[Lille]=50.67394149851168,3.0665240417922486')->toArray()['hydra:member'];
             if (count($response) < 2) {
                 $this->markTestSkipped('He should have at least 2 repairers with same latitude and longitude to test the random filter with the around filter.');
             }
