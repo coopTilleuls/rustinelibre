@@ -99,7 +99,7 @@ export const CustomersList = (): JSX.Element => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {loadingList && <CircularProgress />}
+                        {loadingList && <CircularProgress sx={{ml: 5, mt: 5}} />}
                         {customers.map((customer) => (
                             <TableRow
                                 key={customer.id}

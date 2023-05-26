@@ -18,7 +18,9 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '50%',
+    width: '70%',
+    maxHeight: '100%',
+    overflow: 'scroll',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -61,14 +63,14 @@ const ModalShowBike = ({bike, openModal, handleCloseModal}: ModalShowBikeProps):
                                         primary={`${bike.owner.firstName} ${bike.owner.lastName}`}
                                     />
                                 </ListItem>
-                                <ListItem>
+                                {bike.brand && <ListItem>
                                     <ListItemIcon>
                                         <CopyrightIcon />
                                     </ListItemIcon>
                                     <ListItemText
                                         primary={bike.brand}
                                     />
-                                </ListItem>
+                                </ListItem>}
                                 {bike.bikeType &&
                                     <ListItem>
                                         <ListItemIcon>
@@ -90,9 +92,9 @@ const ModalShowBike = ({bike, openModal, handleCloseModal}: ModalShowBikeProps):
                                     </ListItem>
                                 }
 
-                                {bike.picture && <img width="400" height="auto" alt="photo du véo" src={apiImageUrl(bike.picture.contentUrl)}/>}
-                                {bike.wheelPicture && <img width="400" height="auto" alt="photo de la roue" src={apiImageUrl(bike.wheelPicture.contentUrl)}/>}
-                                {bike.transmissionPicture && <img width="400" height="auto" alt="photo de la transmission" src={apiImageUrl(bike.transmissionPicture.contentUrl)}/>}
+                                {bike.picture && <img width="300" height="auto" alt="photo du véo" src={apiImageUrl(bike.picture.contentUrl)}/>}
+                                {bike.wheelPicture && <img width="300" height="auto" alt="photo de la roue" src={apiImageUrl(bike.wheelPicture.contentUrl)}/>}
+                                {bike.transmissionPicture && <img width="300" height="auto" alt="photo de la transmission" src={apiImageUrl(bike.transmissionPicture.contentUrl)}/>}
                             </List>
 
                             <Button variant="outlined" onClick={handleCloseModal} sx={{float: 'right'}}>
