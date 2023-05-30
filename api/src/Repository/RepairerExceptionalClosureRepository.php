@@ -42,9 +42,9 @@ class RepairerExceptionalClosureRepository extends ServiceEntityRepository
         }
 
         return $this->createQueryBuilder('re')
-            ->andWhere('re.repairer = :repairer')
             ->andWhere('re.startDate >= :from AND re.startDate <= :to')
             ->orWhere('re.endDate >= :from')
+            ->andWhere('re.repairer = :repairer')
             ->setParameter('repairer', $repairer->id)
             ->setParameter('from', $from)
             ->setParameter('to', $to)
