@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class MaintenanceAuthorSubscriber implements EventSubscriberInterface
+class MaintenanceAuthorEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private Security $security)
     {

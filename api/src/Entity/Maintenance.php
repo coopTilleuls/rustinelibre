@@ -68,8 +68,8 @@ class Maintenance
     #[Groups([self::READ, self::WRITE])]
     public ?\DateTimeImmutable $repairDate = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'maintenances')]
-    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Groups([self::READ])]
     public ?User $author = null;
 }
