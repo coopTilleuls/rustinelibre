@@ -128,9 +128,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ])]
     public Collection $bikes;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Maintenance::class, cascade: ['persist', 'remove'])]
+    private Collection $maintenances;
+
     public function __construct()
     {
         $this->bikes = new ArrayCollection();
+        $this->maintenances = new ArrayCollection();
     }
 
     /**
@@ -190,5 +194,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    /**
+     * @return Collection<int, Maintenance>
+     */
+    public function getMaintenances(): Collection
+    {
+        return $this->maintenances;
+    }
+
+    public function addMaintenance(Maintenance $maintenance): self
+    {
+        if (!$this->maintenances->contains($maintenance)) {
+            $this->maintenances->add($maintenance);
+            $maintenance->author = $this;
+        }
+
+        return $this;
+    }
+
+    public function removeMaintenance(Maintenance $maintenance): self
+    {
+        if ($this->maintenances->removeElement($maintenance)) {
+            // set the owning side to null (unless already changed)
+            if ($maintenance->author === $this) {
+                $maintenance->author = null;
+            }
+        }
+
+        return $this;
     }
 }

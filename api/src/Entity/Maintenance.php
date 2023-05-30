@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Get(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user or is_granted('MAINTENANCE_REPAIRER_READ', object)")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Put(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user or object.author == user")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
 #[ApiFilter(SearchFilter::class, properties: ['bike' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'repairDate'], arguments: ['orderParameterName' => 'order'])]
@@ -67,4 +67,9 @@ class Maintenance
     #[ORM\Column(nullable: true)]
     #[Groups([self::READ, self::WRITE])]
     public ?\DateTimeImmutable $repairDate = null;
+
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'maintenances')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Groups([self::READ])]
+    public ?User $author = null;
 }
