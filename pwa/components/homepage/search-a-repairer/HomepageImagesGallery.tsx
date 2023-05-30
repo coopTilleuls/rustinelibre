@@ -7,8 +7,8 @@ import bikeWoman from '@public/img/bike-woman.jpg';
 
 const HomepageImagesGallery = () => {
   return (
-    <Box display={{xs: 'none', md: 'flex'}} width="40%">
-      <Box width="50%" height="100%">
+    <Box display={{xs: 'none', md: 'flex'}} width="90%">
+      <Box width="65%" height="100%">
         <Box width="100%" height="45%" pb={0.5}>
           <Image
             style={{
@@ -34,7 +34,7 @@ const HomepageImagesGallery = () => {
           />
         </Box>
       </Box>
-      <Box width="50%" height="100%" pl={0.5} display="flex" alignItems="end">
+      <Box width="60%" height="100%" pl={0.5} display="flex" alignItems="end">
         <Box width="100%" height="90%">
           <Image
             style={{
