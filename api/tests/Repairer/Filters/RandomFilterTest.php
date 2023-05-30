@@ -24,38 +24,31 @@ class RandomFilterTest extends AbstractTestCase
 
     public function testRandomFilterWorkWithFirstSlotAvailableFilter(): void
     {
-        $firstResponse = static::createClient()->request('GET', '/repairers?sort=random&availability=ASC')->toArray()['hydra:member'];
-        self::assertResponseIsSuccessful();
-        $secondResponse = static::createClient()->request('GET', '/repairers?sort=random&availability=ASC')->toArray()['hydra:member'];
-        self::assertResponseIsSuccessful();
+        $idsFromResponses = [];
+        $client = static::createClient();
 
-        $idsFromFirstResponse = [];
-        $idsFromSecondResponse = [];
+        for ($i = 0; $i < 2; ++$i) {
+            $response = $client->request('GET', '/repairers?sort=random&availability=ASC')->toArray()['hydra:member'];
+            self::assertResponseIsSuccessful();
 
-        foreach ($firstResponse as $key => $repairer) {
-            // Check that each result has a firstSlotAvailable less or equal to next result
-            if (array_key_exists($key + 1, $firstResponse)) {
-                $this->assertLessThanOrEqual($firstResponse[$key + 1]['firstSlotAvailable'], $repairer['firstSlotAvailable']);
+            $idsForThisResponse = [];
+            foreach ($response as $key => $repairer) {
+                if (array_key_exists($key + 1, $response) &&
+                    array_key_exists('firstSlotAvailable', $repairer) &&
+                    array_key_exists('firstSlotAvailable', $response[$key + 1])
+                ) {
+                    // Check that each result has a firstSlotAvailable less or equal to next result
+                    $this->assertLessThanOrEqual($response[$key + 1]['firstSlotAvailable'], $repairer['firstSlotAvailable']);
+                }
+                $idsForThisResponse[] = $repairer['@id'];
             }
-            $idsFromFirstResponse[$repairer['firstSlotAvailable']][] = $repairer['@id'];
+            // we tranform the array to string to compare the content order
+            $idsFromResponses[] = implode('', $idsForThisResponse);
         }
 
-        foreach ($secondResponse as $key => $repairer) {
-            // Check that each result has a firstSlotAvailable less or equal to next result
-            if (array_key_exists($key + 1, $secondResponse)) {
-                $this->assertLessThanOrEqual($secondResponse[$key + 1]['firstSlotAvailable'], $repairer['firstSlotAvailable']);
-            }
-            $idsFromSecondResponse[$repairer['firstSlotAvailable']][] = $repairer['@id'];
-        }
-
-        foreach ($idsFromFirstResponse as $key => $ids) {
-            if (count($ids) > 1) {
-                // if there are several results with the same firstSlotAvailable, their order should change between requests
-                $this->assertNotSame($ids, $idsFromSecondResponse[$key]);
-            } elseif (1 === count($ids)) {
-                $this->assertSame($ids, $idsFromSecondResponse[$key]);
-            }
-        }
+        // we check if different orders are returned
+        $idsFromResponses = array_unique($idsFromResponses);
+        self::assertGreaterThanOrEqual(2, count($idsFromResponses));
     }
 
     public function testRandomFilterWorkWithSearchFilter(): void

@@ -19,7 +19,7 @@ use ApiPlatform\OpenApi\Model;
 use App\Controller\BuildRepairerSlotsAvailableAction;
 use App\Repairers\Dto\CreateUserRepairerDto;
 use App\Repairers\Filter\AroundFilter;
-use App\Repairers\Filter\FirstAvailableSlotFilter;
+use App\Repairers\Filter\FirstSlotAvailableFilter;
 use App\Repairers\Filter\ProximityFilter;
 use App\Repairers\Filter\RandomFilter;
 use App\Repairers\State\CreateUserRepairerProcessor;
@@ -65,7 +65,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[ApiFilter(AroundFilter::class)]
-#[ApiFilter(FirstAvailableSlotFilter::class)]
+#[ApiFilter(FirstSlotAvailableFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'city' => 'iexact',
     'description' => 'ipartial',
