@@ -105,18 +105,25 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($object->repairer);
-
-        if (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true)) {
-            throw new BadRequestHttpException('This slot is not available.');
-        }
-
+        // Get the original RDV to check change
         $originalEntityData = $this->entityManager->getUnitOfWork()->getOriginalEntityData($object);
 
+        // If neither status nor the slot change. Do nothing.
         if ($originalEntityData['status'] !== $object->status || $originalEntityData['slotTime'] !== $object->slotTime) {
+
+            // Get all available slots
+            $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($object->repairer);
+
+            // The slot change, and the new slot is not available
+            if ($originalEntityData['slotTime'] !== $object->slotTime && (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true))) {
+                throw new BadRequestHttpException('This slot is not available.');
+            }
+
+            // Flush the RDV now to get infos in database if necessary
             $this->entityManager->persist($object);
             $this->entityManager->flush();
 
+            // Get RDV and count if the maximum slots has been reached
             $appointmentsWithRepairerAndSlotTime = $this->appointmentRepository->findBy(['repairer' => $object->repairer, 'slotTime' => $object->slotTime]);
 
             if (count($appointmentsWithRepairerAndSlotTime) >= $object->repairer->numberOfSlots) {
