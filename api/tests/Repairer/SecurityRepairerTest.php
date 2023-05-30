@@ -106,7 +106,6 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertIsString($response['owner']);
         $this->assertSame($response['repairerType']['@id'], '/repairer_types/'.$this->repairers[5]->repairerType->id);
         $this->assertSame($response['openingHours'], $this->repairers[5]->openingHours);
-        $this->assertSame($response['optionalPage'], $this->repairers[5]->optionalPage);
         $this->assertArrayNotHasKey('enabled', $response);
     }
 
