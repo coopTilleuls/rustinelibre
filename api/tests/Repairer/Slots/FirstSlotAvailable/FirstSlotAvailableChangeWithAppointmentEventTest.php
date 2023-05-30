@@ -73,7 +73,7 @@ class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
     public function testFirstSlotAvailableChangeAfterAppointmentRefusalAndSlotBecomesAvailable(): void
     {
         $repairer = $this->getRepairerWithSlotsAvailable(0);
-        $client = $this->createClientAuthAsAdmin();
+        $client = $this->createClientWithUser($repairer->owner);
 
         // get all appointments to find one of our repairer to refuse
         $appointments = $client->request('GET', '/appointments')->toArray()['hydra:member'];
@@ -81,8 +81,7 @@ class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
         $firstResponse = $client->request('GET', sprintf('/repairers/%d', $repairer->id))->toArray();
 
         foreach ($appointments as $appointment) {
-            $parts = explode('/', $appointment['repairer']['@id']);
-            if (end($parts) === (string) $repairer->id) {
+            if ($appointment['repairer']['id'] === $repairer->id) {
                 $client->request('PUT', sprintf('/appointment_status/%d', $appointment['id']), [
                     'json' => [
                         'transition' => 'refused',

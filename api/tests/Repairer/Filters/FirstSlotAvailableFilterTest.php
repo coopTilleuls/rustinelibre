@@ -39,7 +39,7 @@ class FirstSlotAvailableFilterTest extends SlotsTestCase
         // Check that previous first result is no more before others
         $response2 = static::createClient()->request('GET', '/repairers?availability=ASC')->toArray();
         self::assertResponseIsSuccessful();
-        self::assertNotEquals($response['hydra:member'][0]['id'], $response2['hydra:member'][0]['id']);
+        self::assertNotEquals($response['hydra:member'][0], $response2['hydra:member'][0]);
         self::assertLessThanOrEqual($response2['hydra:member'][1]['firstSlotAvailable'], $response2['hydra:member'][0]['firstSlotAvailable']);
         self::assertLessThanOrEqual($response2['hydra:member'][2]['firstSlotAvailable'], $response2['hydra:member'][1]['firstSlotAvailable']);
     }
