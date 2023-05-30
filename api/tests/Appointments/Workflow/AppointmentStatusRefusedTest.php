@@ -29,7 +29,7 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
         self::assertSame('refused', $this->appointmentRepository->find($appointment->id)->status);
     }
 
-    public function testCyclistCanRefuseFromPendingCyclist(): void
+    public function testCyclistCannotRefuseFromPendingCyclist(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
         $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
@@ -37,8 +37,8 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
                 'transition' => 'refused',
             ],
         ]);
-        self::assertResponseIsSuccessful();
-        self::assertSame('refused', $this->appointmentRepository->find($appointment->id)->status);
+        self::assertResponseStatusCodeSame(403);
+        self::assertSame('pending_cyclist', $this->appointmentRepository->find($appointment->id)->status);
     }
 
     public function testRepairerCanRefuseFromPendingCyclist(): void
@@ -53,7 +53,7 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
         self::assertSame('refused', $this->appointmentRepository->find($appointment->id)->status);
     }
 
-    public function testCyclistCanRefuseFromPendingRepairer(): void
+    public function testCyclistCannotRefuseFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
         $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
@@ -61,8 +61,8 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
                 'transition' => 'refused',
             ],
         ]);
-        self::assertResponseIsSuccessful();
-        self::assertSame('refused', $this->appointmentRepository->find($appointment->id)->status);
+        self::assertResponseStatusCodeSame(403);
+        self::assertSame('pending_repairer', $this->appointmentRepository->find($appointment->id)->status);
     }
 
     public function testRepairerCannotRefuseFromCancel(): void

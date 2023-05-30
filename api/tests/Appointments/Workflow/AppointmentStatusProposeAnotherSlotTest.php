@@ -56,7 +56,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
         self::assertSame('pending_cyclist', $this->appointmentRepository->find($appointment->id)->status);
     }
 
-    public function testCyclistCanProposeAnotherSlotFromPendingRepairer(): void
+    public function testCyclistCannotProposeAnotherSlotFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
         $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
@@ -65,11 +65,11 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
             ],
         ]);
-        self::assertResponseIsSuccessful();
-        self::assertSame('pending_cyclist', $this->appointmentRepository->find($appointment->id)->status);
+        self::assertResponseStatusCodeSame(403);
+        self::assertNotSame('pending_cyclist', $this->appointmentRepository->find($appointment->id)->status);
     }
 
-    public function testCyclistCanProposeAnotherSlotFromPendingCyclist(): void
+    public function testCyclistCannotProposeAnotherSlotFromPendingCyclist(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
         $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
@@ -78,11 +78,11 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
             ],
         ]);
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(403);
         self::assertSame('pending_cyclist', $this->appointmentRepository->find($appointment->id)->status);
     }
 
-    public function testCyclistCanProposeAnotherSlotFromValidated(): void
+    public function testCyclistCannotProposeAnotherSlotFromValidated(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'validated']);
         $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
@@ -91,8 +91,8 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
             ],
         ]);
-        self::assertResponseIsSuccessful();
-        self::assertSame('pending_cyclist', $this->appointmentRepository->find($appointment->id)->status);
+        self::assertResponseStatusCodeSame(403);
+        self::assertSame('validated', $this->appointmentRepository->find($appointment->id)->status);
     }
 
     public function testRepairerCannotProposeAnotherSlotFromRefused(): void
