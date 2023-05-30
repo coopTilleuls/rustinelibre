@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {Container, Box, Typography, Paper, Stack, Button} from '@mui/material';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
@@ -81,7 +80,7 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
                 style={{textDecoration: 'none'}}>
                 <Button variant="contained">Je réserve</Button>
               </Link>
-              <Image
+              <img
                 src={apiImageUrl(repairer.thumbnail.contentUrl)}
                 alt={'Photo de profil du réparateur'}
               />

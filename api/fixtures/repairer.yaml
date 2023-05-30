@@ -383,6 +383,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@atelier'
     optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
+    enabled: false
   repairer_24:
     name: 'Pignons sur rue'
     owner: '@user_49'
@@ -398,6 +399,7 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
     optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
+    enabled: false
   repairer_25:
     name: 'A vos vélos'
     owner: '@user_50'
@@ -413,3 +415,4 @@ App\Entity\Repairer:
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
     optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
+    enabled: false
