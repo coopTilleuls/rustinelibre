@@ -110,7 +110,6 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
 
         // If neither status nor the slot change. Do nothing.
         if ($originalEntityData['status'] !== $object->status || $originalEntityData['slotTime'] !== $object->slotTime) {
-
             // Get all available slots
             $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($object->repairer);
 
