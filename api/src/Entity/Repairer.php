@@ -185,7 +185,7 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     #[ApiFilter(BooleanFilter::class)]
-    public ?bool $enabled = false;
+    public ?bool $enabled = true;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
