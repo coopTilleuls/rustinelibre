@@ -80,10 +80,10 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
                 style={{textDecoration: 'none'}}>
                 <Button variant="contained">Je réserve</Button>
               </Link>
-              <img
-                src={apiImageUrl(repairer.thumbnail.contentUrl)}
-                alt={'Photo de profil du réparateur'}
-              />
+              {repairer.descriptionPicture && <img
+                  src={apiImageUrl(repairer.descriptionPicture.contentUrl)}
+                  alt={'Photo de description du réparateur'}
+              />}
             </>
           )}
           <Box width={{md: '70%'}}>
