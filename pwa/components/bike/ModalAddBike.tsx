@@ -159,6 +159,7 @@ const ModalAddBike = ({
             autoComplete="name"
             autoFocus
             value={name}
+            inputProps={{ maxLength: 255 }}
             onChange={handleChangeName}
           />
           {!bikeTypeSelectedProps &&

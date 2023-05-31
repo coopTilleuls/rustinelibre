@@ -103,7 +103,7 @@ export const DashboardWaitingAppointments = ({repairer, appointmentsWaiting, fet
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {appointmentsWaiting.map((appointment) => (
+                        {appointmentsWaiting.slice(0, 6).map((appointment) => (
                             <TableRow
                                 key={appointment.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}>

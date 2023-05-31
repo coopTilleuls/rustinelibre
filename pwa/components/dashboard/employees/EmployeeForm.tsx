@@ -156,6 +156,7 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
             name="firstName"
             autoComplete="firstName"
             value={firstName}
+            inputProps={{ maxLength: 50 }}
             onChange={handleChangeFirstName}
           />
           <TextField
@@ -167,6 +168,7 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
             name="lastName"
             autoComplete="lastName"
             value={lastName}
+            inputProps={{ maxLength: 50 }}
             onChange={handleChangeLastName}
           />
           <TextField
@@ -180,6 +182,7 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
             name="email"
             autoComplete="email"
             value={email}
+            inputProps={{ maxLength: 180 }}
             onChange={handleChangeEmail}
           />
           <TextField

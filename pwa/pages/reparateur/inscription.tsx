@@ -319,6 +319,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     autoComplete="firstName"
                     autoFocus
                     value={firstName}
+                    inputProps={{ maxLength: 50 }}
                     onChange={handleChangeFirstName}
                   />
                   <TextField
@@ -330,6 +331,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     name="lastName"
                     autoComplete="lastName"
                     value={lastName}
+                    inputProps={{ maxLength: 50 }}
                     onChange={handleChangeLastName}
                   />
                   <TextField
@@ -343,6 +345,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     name="email"
                     autoComplete="email"
                     value={email}
+                    inputProps={{ maxLength: 180 }}
                     onChange={handleChangeEmail}
                   />
                   <TextField
@@ -368,6 +371,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     name="name"
                     autoComplete="name"
                     value={name}
+                    inputProps={{ maxLength: 80 }}
                     onChange={handleChangeName}
                   />
                   <TextField
@@ -379,6 +383,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     name="street"
                     autoComplete="street"
                     value={street}
+                    inputProps={{ maxLength: 800 }}
                     onChange={handleChangeStreet}
                   />
                   <Autocomplete
@@ -395,6 +400,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                         required
                         {...params}
                         value={cityInput}
+                        inputProps={{ maxLength: 60 }}
                         onChange={(e) => handleCityChange(e)}
                       />
                     )}
@@ -452,6 +458,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     name="comment"
                     autoComplete="comment"
                     value={comment}
+                    inputProps={{ maxLength: 2000 }}
                     onChange={handleChangeComments}
                   />
                   <Box
