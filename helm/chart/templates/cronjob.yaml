@@ -1,4 +1,4 @@
-{{- if .Values.dailyCronjobDbReset.enabled }}
+{{- if .Values.repairerUpdateFirstSlotAvailable.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "bikelib.labels" . | nindent 4 }}
 spec:
-  schedule: '0 0 * * *'
+  schedule: '*/30 * * * *'
   jobTemplate:
     metadata:
       annotations:
@@ -31,80 +31,84 @@ spec:
               command: ['/bin/sh', '-c']
               args: ['
                 set -ex;
-                bin/console doctrine:schema:drop --full-database --force;
-                bin/console doctrine:migrations:migrate --no-interaction;
+                php bin/console app:repairer:update-first-slot-available;
               ']
-              env:
-                - name: API_ENTRYPOINT_HOST
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-host
-                - name: JWT_PASSPHRASE
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-jwt-passphrase
-                - name: JWT_PUBLIC_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-jwt-public-key
-                - name: JWT_SECRET_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-jwt-secret-key
-                - name: TRUSTED_HOSTS
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-trusted-hosts
-                - name: TRUSTED_PROXIES
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-trusted-proxies
-                - name: APP_ENV
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-app-env
-                - name: APP_DEBUG
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-app-debug
-                - name: APP_SECRET
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-app-secret
-                - name: CORS_ALLOW_ORIGIN
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: php-cors-allow-origin
-                - name: DATABASE_URL
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: database-url
-                - name: MERCURE_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: mercure-url
-                - name: MERCURE_PUBLIC_URL
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: mercure-public-url
-                - name: MERCURE_JWT_SECRET
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
-                      key: mercure-jwt-secret
+          env:
+            - name: API_ENTRYPOINT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-host
+            - name: JWT_PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-jwt-passphrase
+            - name: JWT_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-jwt-public-key
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-jwt-secret-key
+            - name: TRUSTED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-trusted-hosts
+            - name: TRUSTED_PROXIES
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-trusted-proxies
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-app-env
+            - name: APP_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-app-debug
+            - name: APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-app-secret
+            - name: CORS_ALLOW_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: php-cors-allow-origin
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: database-url
+            - name: MAILER_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: mailer-dsn
+            - name: MERCURE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: mercure-url
+            - name: MERCURE_PUBLIC_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: mercure-public-url
+            - name: MERCURE_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: mercure-jwt-secret
               lifecycle:
                 preStop:
                   exec:
