@@ -152,7 +152,6 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                       label="Ville"
                       {...params}
                       variant="standard"
-                      inputProps={{ maxLength: 60 }}
                       InputLabelProps={{
                         shrink: true,
                       }}

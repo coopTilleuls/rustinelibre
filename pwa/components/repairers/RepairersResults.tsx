@@ -86,7 +86,7 @@ export const RepairersResults = (): JSX.Element => {
                   handleClipMapPin(event, repairer);
                 },
               }}>
-              <Popup>{repairer.name}</Popup>
+              <Popup><RepairerCard repairer={repairer}/></Popup>
             </Marker>
           ))}
         </MapContainer>
