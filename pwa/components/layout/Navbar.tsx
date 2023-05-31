@@ -22,6 +22,7 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
   const {logout} = useAuth();
 
   useEffect(() => {
+
     if (user) {
       const roles = getRoles();
       roles?.includes('ROLE_ADMIN') ? setAdmin(true) : setAdmin(false);

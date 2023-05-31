@@ -89,7 +89,7 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {appointmentsNext.map((appointment) => (
+                        {appointmentsNext.slice(0, 6).map((appointment) => (
                             <TableRow
                                 key={appointment.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}>
