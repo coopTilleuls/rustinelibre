@@ -85,6 +85,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
         autoComplete="firstName"
         autoFocus
         value={firstName}
+        inputProps={{ maxLength: 50 }}
         onChange={handleChangeFirstName}
       />
       <TextField
@@ -97,6 +98,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
         autoComplete="lastName"
         autoFocus
         value={lastName}
+        inputProps={{ maxLength: 50 }}
         onChange={handleChangeLastName}
       />
       {!user && (
@@ -112,6 +114,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
           autoComplete="email"
           autoFocus
           value={email}
+          inputProps={{ maxLength: 180 }}
           onChange={handleChangeEmail}
         />
       )}

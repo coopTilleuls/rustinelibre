@@ -73,6 +73,7 @@ export const CustomersList = (): JSX.Element => {
                 value={searchTerm}
                 onChange={handleSearchTermChange}
                 onKeyPress={handleKeyPress}
+                inputProps={{ maxLength: 180 }}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">

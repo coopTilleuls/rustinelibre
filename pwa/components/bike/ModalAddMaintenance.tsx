@@ -153,6 +153,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = n
                         autoComplete="name"
                         autoFocus
                         value={name}
+                        inputProps={{ maxLength: 255 }}
                         onChange={handleChangeName}
                     />
                     {
@@ -176,6 +177,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = n
                         rows={3}
                         maxRows={6}
                         value={description}
+                        inputProps={{ maxLength: 3000 }}
                         onChange={handleChangeDescription}
                     />
                     <Button
