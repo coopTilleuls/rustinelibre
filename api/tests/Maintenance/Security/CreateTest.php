@@ -40,7 +40,7 @@ class CreateTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy(['name' => 'name 1']);
+        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy(['name' => 'name 4']);
         $this->user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
         $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['customer' => $this->user]);
         $this->repairerWithAppointment = $this->appointment->repairer;
