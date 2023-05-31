@@ -68,6 +68,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(FirstSlotAvailableFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'city' => 'iexact',
+    'name' => 'ipartial',
     'description' => 'ipartial',
     'postcode' => 'iexact',
     'country' => 'ipartial',
@@ -95,7 +96,7 @@ class Repairer
 
     #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?User $owner = null;
 
     #[ORM\ManyToOne]

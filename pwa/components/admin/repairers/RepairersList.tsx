@@ -7,26 +7,27 @@ import {
     TableCell,
     TableBody,
     TableContainer,
-    CircularProgress, TextField,
+    CircularProgress, TextField, Typography,
 } from '@mui/material';
-import {customerResource} from "@resources/customerResource";
-import Link from "next/link";
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import {Customer} from "@interfaces/Customer";
 import SearchIcon from '@mui/icons-material/Search';
 import { InputAdornment } from '@mui/material';
+import DeleteIcon from "@mui/icons-material/Delete";
+import {Repairer} from "@interfaces/Repairer";
+import {repairerResource} from "@resources/repairerResource";
+import EditIcon from "@mui/icons-material/Edit";
+import Link from "next/link";
 
-export const CustomersList = (): JSX.Element => {
+export const RepairersList = (): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
-    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [repairers, setRepairers] = useState<Repairer[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
 
-    const fetchCustomers = async () => {
+    const fetchRepairers = async () => {
         setLoadingList(true);
         let params = {
             page: `${currentPage ?? 1}`,
@@ -35,26 +36,34 @@ export const CustomersList = (): JSX.Element => {
         };
 
         if ('' !== searchTerm) {
-            params = {...{userSearch: searchTerm}, ...params};
+            params = {...{name: searchTerm}, ...params};
             params.page = '1';
         }
 
-        const response = await customerResource.getAll(true, params);
-        setCustomers(response['hydra:member']);
+        const response = await repairerResource.getAll(true, params);
+        setRepairers(response['hydra:member']);
         setTotalPages(Math.ceil(response['hydra:totalItems'] / 30))
         setLoadingList(false);
     };
 
     useEffect(() => {
-        fetchCustomers();
+        fetchRepairers();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect((): void => {
-        fetchCustomers();
+        fetchRepairers();
     }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
         setCurrentPage(page);
+    };
+
+    const getStatus = (enabled: boolean): string => {
+        if (enabled) {
+            return 'Activé';
+        }
+
+        return 'En attente';
     };
 
     const handleSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +72,7 @@ export const CustomersList = (): JSX.Element => {
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === 'Enter') {
-            fetchCustomers();
+            fetchRepairers();
         }
     };
 
@@ -95,31 +104,41 @@ export const CustomersList = (): JSX.Element => {
                         }}>
                         <TableRow>
                             <TableCell align="left">Nom</TableCell>
-                            <TableCell align="left">Prénom</TableCell>
-                            <TableCell align="left">Email</TableCell>
-                            <TableCell align="left"></TableCell>
+                            <TableCell align="center">Statut</TableCell>
+                            <TableCell align="center">Adresse</TableCell>
+                            <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {loadingList && <CircularProgress sx={{ml: 5, mt: 5}} />}
-                        {customers.map((customer) => (
+                        {repairers.map((repairer) => (
                             <TableRow
-                                key={customer.id}
+                                key={repairer.id}
                                 sx={{
                                     '&:last-child td, &:last-child th': {border: 0},
                                 }}>
                                 <TableCell align="left" component="th" scope="row">
-                                    {customer.lastName}
+                                    {repairer.name}
+                                    <br />
+                                    {repairer.owner && <Typography sx={{color: 'grey'}}>
+                                        {repairer.owner.email}
+                                    </Typography>}
+
                                 </TableCell>
-                                <TableCell align="left">{customer.firstName}</TableCell>
-                                <TableCell align="left">{customer.email}</TableCell>
+                                <TableCell align="center">
+                                    {getStatus(repairer.enabled)}
+                                </TableCell>
                                 <TableCell
-                                    align="left"
+                                    align="center"
                                     sx={{cursor: 'pointer'}}
                                 >
-                                    <Link href={`/sradmin/clients/${customer.id}`}>
-                                        <RemoveRedEyeIcon color="info" />
+                                    {`${repairer.street}, ${repairer.postcode} ${repairer.city}`}
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Link href={`/admin/reparateurs/edit/${repairer.id}`}>
+                                        <EditIcon sx={{color: '#8c83ba', fontSize: '2em', cursor: 'pointer'}} />
                                     </Link>
+                                    <DeleteIcon sx={{color: '#8c83ba', fontSize: '2em', cursor: 'pointer'}} />
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -144,4 +163,4 @@ export const CustomersList = (): JSX.Element => {
     );
 };
 
-export default CustomersList;
+export default RepairersList;

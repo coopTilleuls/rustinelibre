@@ -36,8 +36,9 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
     if (user) {
       setFirstName(user.firstName);
       setLastName(user.lastName);
+      setEmail(user.email);
     }
-  }, [user, setFirstName, setLastName]);
+  }, [user, setFirstName, setLastName, setEmail]);
 
   const handleChangeFirstName = (
     event: ChangeEvent<HTMLInputElement>
@@ -101,23 +102,21 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
         inputProps={{ maxLength: 50 }}
         onChange={handleChangeLastName}
       />
-      {!user && (
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          error={emailError}
-          helperText={emailHelperText}
-          id="email"
-          label="Email"
-          name="email"
-          autoComplete="email"
-          autoFocus
-          value={email}
-          inputProps={{ maxLength: 180 }}
-          onChange={handleChangeEmail}
-        />
-      )}
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        error={emailError}
+        helperText={emailHelperText}
+        id="email"
+        label="Email"
+        name="email"
+        autoComplete="email"
+        autoFocus
+        value={email}
+        inputProps={{ maxLength: 180 }}
+        onChange={handleChangeEmail}
+      />
       <TextField
         margin="normal"
         required
