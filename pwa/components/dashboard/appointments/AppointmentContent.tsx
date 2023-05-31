@@ -14,9 +14,7 @@ import {apiImageUrl} from "@helpers/apiImagesHelper";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import BuildIcon from "@mui/icons-material/Build";
 import {getAppointmentStatus} from "@helpers/appointmentStatus";
 import {openingHoursResource} from "@resources/openingHours";
 import useMediaQuery from "@hooks/useMediaQuery";
@@ -24,9 +22,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {bikeResource} from "@resources/bikeResource";
 import {maintenanceResource} from "@resources/MaintenanceResource";
 import {Bike} from "@interfaces/Bike";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 
 type AppointmentContentProps = {
     appointment: Appointment;
@@ -129,9 +128,18 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
     return (
         <Box>
             <Typography id="appointment_title" fontSize={20} fontWeight={600}>
-                Rendez-vous : {`${appointment.customer.firstName} ${appointment.customer.lastName}`}
+                {appointment.autoDiagnostic && appointment.autoDiagnostic.prestation}
+                {!appointment.autoDiagnostic && `Rendez-vous : ${appointment.customer.firstName} ${appointment.customer.lastName}`}
             </Typography>
             <List>
+                <ListItem>
+                    <ListItemIcon>
+                        <AccountCircleIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={`${appointment.customer.firstName} ${appointment.customer.lastName}`}
+                    />
+                </ListItem>
                 <ListItem>
                     <ListItemIcon>
                         <CalendarMonthIcon />
@@ -142,27 +150,29 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
                 </ListItem>
                 <ListItem>
                     <ListItemIcon>
-                        <AlternateEmailIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={appointment.customer.email}
-                    />
-                </ListItem>
-                <ListItem>
-                    <ListItemIcon>
                         <CheckCircleOutlineIcon />
                     </ListItemIcon>
                     <ListItemText
                         primary={getAppointmentStatus(appointment.status)}
                     />
                 </ListItem>
-                {appointment.autoDiagnostic &&
+                {appointment.bike &&
                     <ListItem>
                         <ListItemIcon>
-                            <BuildIcon />
+                            <DirectionsBikeIcon />
                         </ListItemIcon>
                         <ListItemText
-                            primary={appointment.autoDiagnostic.prestation}
+                            primary={appointment.bike.name}
+                        />
+                    </ListItem>
+                }
+                {appointment.bikeType &&
+                    <ListItem>
+                        <ListItemIcon>
+                            <DirectionsBikeIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={appointment.bikeType.name}
                         />
                     </ListItem>
                 }
