@@ -117,6 +117,7 @@ const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
             autoComplete="name"
             autoFocus
             value={name}
+            inputProps={{ maxLength: 255 }}
             onChange={handleChangeName}
           />
           <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
@@ -149,6 +150,7 @@ const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
             autoComplete="brand"
             autoFocus
             value={brand}
+            inputProps={{ maxLength: 255 }}
             onChange={handleChangeBrand}
           />
           {addDescription && (
@@ -160,6 +162,7 @@ const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
               value={description}
               rows={3}
               maxRows={6}
+              inputProps={{ maxLength: 2000 }}
               onChange={handleChangeDescription}
             />
           )}

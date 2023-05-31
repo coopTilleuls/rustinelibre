@@ -93,6 +93,7 @@ export const ContactDetails = ({
         autoComplete="name"
         autoFocus
         value={name}
+        inputProps={{ maxLength: 80 }}
         onChange={handleChangeName}
       />
       <TextField
@@ -104,6 +105,7 @@ export const ContactDetails = ({
         autoComplete="mobilePhone"
         autoFocus
         value={mobilePhone}
+        inputProps={{ maxLength: 30 }}
         onChange={handleChangeMobilePhone}
       />
       <TextField
@@ -116,6 +118,7 @@ export const ContactDetails = ({
         autoComplete="street"
         autoFocus
         value={street}
+        inputProps={{ maxLength: 800 }}
         onChange={handleChangeStreet}
       />
       <Autocomplete
@@ -130,6 +133,7 @@ export const ContactDetails = ({
             label="Ville"
             {...params}
             value={cityInput}
+            inputProps={{ maxLength: 60 }}
             onChange={(e) => handleCityChange(e)}
           />
         )}
