@@ -349,7 +349,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                           label="Ville"
                           {...params}
                           size="small"
-                          inputProps={{ maxLength: 60 }}
                         />
                       )}
                     />
