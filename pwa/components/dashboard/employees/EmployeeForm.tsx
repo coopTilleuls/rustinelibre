@@ -14,14 +14,11 @@ import {RequestBody} from '@interfaces/Resource';
 import {UserFormContext} from '@contexts/UserFormContext';
 
 interface EmployeeFormProps {
-  repairerEmployee?: RepairerEmployee | null;
-  edit?: boolean;
+  repairerEmployee: RepairerEmployee | null;
 }
 
-export const EmployeeForm = ({
-  repairerEmployee,
-  edit,
-}: EmployeeFormProps): JSX.Element => {
+export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element => {
+
   const [enabled, setEnabled] = useState<boolean>(
     repairerEmployee ? repairerEmployee.enabled : true
   );
@@ -54,7 +51,8 @@ export const EmployeeForm = ({
     setEmail(repairerEmployee ? repairerEmployee.employee.email : '');
     setFirstName(repairerEmployee ? repairerEmployee.employee.firstName : '');
     setLastName(repairerEmployee ? repairerEmployee.employee.lastName : '');
-  }, [repairerEmployee, setEmail, setFirstName, setLastName]);
+    setPassword('');
+  }, [repairerEmployee, setEmail, setFirstName, setLastName, setPassword]);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -72,33 +70,25 @@ export const EmployeeForm = ({
       email: email,
     };
 
-    if (password && password !== '') {
-      bodyRequest['plainPassword'] = password;
+    if (password !== '') {
+       bodyRequest['plainPassword'] = password;
     }
 
-    let newRepairerEmployee;
     try {
-      if (edit && repairerEmployee) {
+      if (repairerEmployee) {
         bodyRequest['enabled'] = enabled;
-        newRepairerEmployee =
-          await repairerEmployeesResource.updateEmployeeAndUser(
+        await repairerEmployeesResource.updateEmployeeAndUser(
             repairerEmployee['id'],
             bodyRequest
           );
       } else {
-        newRepairerEmployee = await repairerEmployeesResource.post({
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-        });
+        await repairerEmployeesResource.post(bodyRequest);
       }
-    } catch (e) {
-      setErrorMessage(edit ? 'Édition impossible' : 'Inscription impossible');
-    }
 
-    if (newRepairerEmployee) {
       setUpdateSuccess(true);
       await router.push('/sradmin/employes');
+    } catch (e) {
+      setErrorMessage(repairerEmployee ? 'Édition impossible' : 'Inscription impossible');
     }
 
     setPendingRegistration(false);
@@ -142,6 +132,7 @@ export const EmployeeForm = ({
     setEnabled(event.target.checked);
   };
 
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -152,7 +143,7 @@ export const EmployeeForm = ({
           alignItems: 'center',
         }}>
         <Typography component="h1" variant="h5">
-          {edit ? 'Modifier ce réparateur' : "J'ajoute un réparateur"}
+          {repairerEmployee ? 'Modifier ce réparateur' : "J'ajoute un réparateur"}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
           <TextField
@@ -206,11 +197,11 @@ export const EmployeeForm = ({
             onChange={handleChangePassword}
           />
           <Typography variant="body1">
-            {edit
+            {repairerEmployee
               ? 'Laissez ce champ vide pour conserver le mot de passe actuel'
               : "Si vous ne renseignez pas de mot de passe, l'application en générera un aléatoirement"}
           </Typography>
-          {edit && (
+          {repairerEmployee && (
             <FormControlLabel
               control={
                 <Switch checked={enabled} onChange={handleChangeEnabled} />
@@ -224,7 +215,7 @@ export const EmployeeForm = ({
             variant="outlined"
             sx={{mt: 3, mb: 2}}>
             {!pendingRegistration ? (
-              edit ? (
+              repairerEmployee ? (
                 'Editer ce réparateur'
               ) : (
                 'Ajouter un réparateur'

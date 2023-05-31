@@ -30,12 +30,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
     paginationClientEnabled: true,
 )]
-#[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact', 'status' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(
-    uriTemplate: '/appointment_status/{id}',
+    uriTemplate: '/appointment_transition/{id}',
     requirements: ['id' => '\d+'],
     controller: AppointmentStatusAction::class,
     openapi: new Model\Operation(

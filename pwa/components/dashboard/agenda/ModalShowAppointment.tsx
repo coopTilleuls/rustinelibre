@@ -1,21 +1,9 @@
 import React, {useEffect, useState} from "react";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import Button from "@mui/material/Button";
 import {CircularProgress} from "@mui/material";
 import {appointmentResource} from "@resources/appointmentResource";
 import {Appointment} from "@interfaces/Appointment";
-import {formatDate} from "@helpers/dateHelper";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Grid from '@mui/material/Grid';
-import {apiImageUrl} from "@helpers/apiImagesHelper";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import HandymanIcon from '@mui/icons-material/Handyman';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import Link from "next/link";
 import AppointmentContent from "@components/dashboard/appointments/AppointmentContent";
 
 const style = {
@@ -31,27 +19,14 @@ const style = {
 };
 
 type ModalShowAppointmentProps = {
-    id: string;
+    appointment: Appointment;
     openModal: boolean;
     handleCloseModal: (refresh: boolean|undefined) => void;
 };
 
-const ModalShowAppointment = ({id, openModal, handleCloseModal}: ModalShowAppointmentProps): JSX.Element => {
+const ModalShowAppointment = ({appointment, openModal, handleCloseModal}: ModalShowAppointmentProps): JSX.Element => {
 
     const [loading, setLoading] = useState<boolean>(false);
-    const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
-    const [appointment, setAppointment] = useState<Appointment|null>(null);
-
-    useEffect(() => {
-        fetchAppointment();
-    }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const fetchAppointment = async () => {
-        setLoading(true);
-        const appointmentsFetch = await appointmentResource.get(id, true);
-        setAppointment(appointmentsFetch);
-        setLoading(false)
-    }
 
     return (
         <Modal
