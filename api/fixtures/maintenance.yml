@@ -4,8 +4,10 @@ App\Entity\Maintenance:
     name: 'name <current()>'
     description: 'description <current()>'
     repairDate: <dateTimeImmutableFromInterval('-3 years')>
+    author: '@bike_<numberBetween(1, 20)>->owner'
   maintenance_21:
     bike: '@bike_21'
     name: 'User bike maintenance'
     description: 'description 21'
     repairDate: <dateTimeImmutableFromInterval('-3 years')>
+    author: '@bike_21->owner'
