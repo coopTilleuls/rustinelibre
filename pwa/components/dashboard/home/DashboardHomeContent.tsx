@@ -23,9 +23,6 @@ export const DashboardHomeContent = ({repairer, currentBoss}: DashboardHomeConte
     const [appointmentsWaiting, setAppointmentsWaiting] = useState<Appointment[]>([]);
 
     const fetchNextAppointments = async () => {
-
-        console.log('next fetch');
-
         setLoadingListNext(true);
         const nextAppointments = await fetchAppointments({
             itemsPerPage: '6',
