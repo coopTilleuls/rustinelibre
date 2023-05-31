@@ -401,17 +401,17 @@ App\Entity\Repairer:
     optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
     enabled: false
   repairer_25:
-    name: 'A vos vélos'
+    name: 'A tes vélos'
     owner: '@user_50'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '60 rue Pierre Legrand'
+    street: '70 rue Pierre Legrand'
     city: 'Lille'
     postcode: '59000'
     country: 'France'
     bikeTypesSupported: [ '@biketype_elec', '@biketype_classic' ]
     latitude: '50.67394149851168'
-    longitude: '3.0665240417922486'
+    longitude: '3.0665240417922489'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
     repairerType: '@auto_reparation'
     optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
