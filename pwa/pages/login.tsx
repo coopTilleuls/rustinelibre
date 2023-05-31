@@ -93,6 +93,7 @@ const Login: NextPageWithLayout = ({}) => {
                   autoComplete="email"
                   autoFocus
                   value={email}
+                  inputProps={{ maxLength: 180 }}
                   onChange={handleChangeEmail}
                 />
                 <TextField
