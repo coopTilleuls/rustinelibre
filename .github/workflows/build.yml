@@ -9,7 +9,7 @@ jobs:
  
     steps:
     - name: Build/Push
-      uses: coopTilleuls/action-docker-build-push@v4
+      uses: coopTilleuls/action-docker-build-push@v6 
       with:
         IMAGE_NAME: bikelib-php
         BUILD_CONTEXT: api
@@ -24,7 +24,7 @@ jobs:
 
     steps:
     - name: Build/Push
-      uses: coopTilleuls/action-docker-build-push@v4
+      uses: coopTilleuls/action-docker-build-push@v6
       with:
         IMAGE_NAME: bikelib-caddy
         BUILD_CONTEXT: api
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Build/Push
-      uses: coopTilleuls/action-docker-build-push@v4
+      uses: coopTilleuls/action-docker-build-push@v6
       with:
         IMAGE_NAME: bikelib-pwa
         BUILD_CONTEXT: pwa
