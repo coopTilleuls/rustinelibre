@@ -17,8 +17,8 @@ import {Customer} from "@interfaces/Customer";
 import {Appointment} from "@interfaces/Appointment";
 import {appointmentResource} from "@resources/appointmentResource";
 import {formatDate} from 'helpers/dateHelper';
-import CustomerAppointmentModal from "@components/dashboard/customers/CustomerAppointmentModal";
 import {getAppointmentStatus} from "@helpers/appointmentStatus";
+import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
 
 interface CustomerAppointmentsListProps {
     customer: Customer
@@ -131,7 +131,7 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
                 </Stack>
             }
 
-            <CustomerAppointmentModal customer={customer} appointment={appointmentSelected} openModal={openModal} handleCloseModal={handleClose} />
+            {appointmentSelected && <ModalShowAppointment appointment={appointmentSelected} openModal={openModal} handleCloseModal={handleClose} />}
         </Box>
     );
 };

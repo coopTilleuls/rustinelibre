@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 
 const Employees = () => {
-  const {user} = useAccount({});
+  const {user} = useAccount({redirectIfNotFound: '/'});
 
   return (
     <>
@@ -24,7 +24,7 @@ const Employees = () => {
               Ajouter un réparateur
             </Button>
           </Link>
-          <EmployeesList currentBoss={user} />
+            {(user && user.repairer) && <EmployeesList currentBoss={user} />}
         </Box>
       </DashboardLayout>
     </>

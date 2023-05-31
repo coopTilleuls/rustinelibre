@@ -82,7 +82,7 @@ class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
 
         foreach ($appointments as $appointment) {
             if ($appointment['repairer']['id'] === $repairer->id) {
-                $client->request('PUT', sprintf('/appointment_status/%d', $appointment['id']), [
+                $client->request('PUT', sprintf('/appointment_transition/%d', $appointment['id']), [
                     'json' => [
                         'transition' => 'refused',
                     ],

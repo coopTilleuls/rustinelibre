@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -38,6 +40,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
 #[Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer == user.repairer)")]
+#[ApiFilter(SearchFilter::class, properties: ['repairer' => 'exact'])]
 class RepairerEmployee
 {
     public const EMPLOYEE_READ = 'employee_read';
