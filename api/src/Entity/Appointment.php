@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use gcgApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -29,6 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
     paginationClientEnabled: true,
+    paginationClientItemsPerPage: true,
 )]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact', 'status' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
