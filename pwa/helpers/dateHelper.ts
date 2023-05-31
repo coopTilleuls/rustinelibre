@@ -33,3 +33,40 @@ export const isPast = (targetDate: string): boolean => {
 
   return parsedTargetDate < currentDate;
 }
+
+export const dateObjectAsString = (date: Date, withHours: boolean = true): string => {
+  const year = date.getFullYear();
+  const month = padNumber(date.getMonth() + 1);
+  const day = padNumber(date.getDate());
+  const hours = padNumber(date.getHours());
+  const minutes = padNumber(date.getMinutes());
+
+  if (withHours) {
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  }
+
+  return `${year}-${month}-${day}`;
+}
+
+export const getDateFromDateAsString = (slotTime: string): string => {
+  const dateObj = new Date(slotTime);
+  const year = dateObj.getFullYear();
+  const month = padNumber(dateObj.getMonth() + 1);
+  const day = padNumber(dateObj.getDate());
+
+  return `${day}/${month}/${year}`;
+}
+
+export const getTimeFromDateAsString = (slotTime: string): string => {
+  const dateObj = new Date(slotTime);
+  const hours = padNumber(dateObj.getHours());
+  const minutes = padNumber(dateObj.getMinutes());
+
+  return `${hours}:${minutes}`;
+}
+
+
+const padNumber = (number: number): string => {
+  return number.toString().padStart(2, '0');
+}
+

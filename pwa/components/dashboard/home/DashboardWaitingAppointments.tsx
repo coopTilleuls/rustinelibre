@@ -7,35 +7,43 @@ import {
     TableCell,
     TableBody,
     TableContainer,
-    CircularProgress, Box, Typography, Button,
+    CircularProgress, Box, Typography,
 } from '@mui/material';
 import {Appointment} from "@interfaces/Appointment";
+import {appointmentResource} from "@resources/appointmentResource";
 import {getDateFromDateAsString, getTimeFromDateAsString} from "@helpers/dateHelper";
 import SearchIcon from '@mui/icons-material/Search';
 import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
-import AddIcon from "@mui/icons-material/Add";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-interface DashboardNextAppointmentsProps {
+interface DashboardWaitingAppointmentsProps {
     repairer: string;
-    appointmentsNext: Appointment[];
-    fetchNextAppointments: () => void
-    loadingListNext: boolean
+    appointmentsWaiting: Appointment[];
+    fetchWaitingAppointments: () => Promise<void>;
+    fetchNextAppointments: () => Promise<void>;
+    loadingListWait: boolean;
 }
 
-export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNextAppointments, loadingListNext}: DashboardNextAppointmentsProps): JSX.Element => {
+export const DashboardWaitingAppointments = ({repairer, appointmentsWaiting, fetchWaitingAppointments, fetchNextAppointments, loadingListWait}: DashboardWaitingAppointmentsProps): JSX.Element => {
 
     const [appointmentSelected, setAppointmentSelected] = useState<Appointment|null>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);
+    const [updateAppointmentId, setUpdateAppointmentId] = useState<string|null>(null);
 
-    const handleCloseModal = async (refresh = true): Promise<void> => {
+    const handleCloseModal = (refresh = true): void => {
         setOpenModal(false);
         if (refresh) {
-            await fetchNextAppointments();
+            refreshLists();
         }
     };
 
+    const refreshLists = async(): Promise<void> => {
+        await fetchNextAppointments();
+        await fetchWaitingAppointments();
+    }
+
     useEffect(() => {
-        fetchNextAppointments();
+        fetchWaitingAppointments();
     }, [repairer]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const getAppointmentName = (appointment: Appointment): string => {
@@ -63,17 +71,23 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
         setAppointmentSelected(appointment);
     }
 
+    const handleValidAppointment = async(appointment: Appointment) => {
+        setUpdateAppointmentId(appointment.id);
+        await appointmentResource.updateAppointmentStatus(appointment.id, {
+            transition: 'validated_by_repairer'
+        })
+
+        await refreshLists();
+        setUpdateAppointmentId(null);
+    }
+
     return (
         <Box>
             <Typography variant="h5">
-                Prochains rendez-vous
-                <Button variant="contained" sx={{float: 'right'}} size="small">
-                    <AddIcon />
-                    Créer un rendez-vous
-                </Button>
+                Rendez-vous en attente
             </Typography>
-            {loadingListNext && <CircularProgress sx={{ml: 10, mt: 10}} />}
-            {!loadingListNext && <TableContainer elevation={4} component={Paper} sx={{mt: 3}}>
+            {loadingListWait && <CircularProgress sx={{ml: 10, mt: 10}} />}
+            {!loadingListWait && <TableContainer elevation={4} component={Paper} sx={{mt: 3}}>
                 <Table aria-label="rdv">
                     <TableHead
                         sx={{
@@ -85,11 +99,11 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
                         <TableRow>
                             <TableCell align="left">Type</TableCell>
                             <TableCell align="right">Date</TableCell>
-                            <TableCell align="center">Action</TableCell>
+                            <TableCell align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {appointmentsNext.map((appointment) => (
+                        {appointmentsWaiting.map((appointment) => (
                             <TableRow
                                 key={appointment.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}>
@@ -108,7 +122,9 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="center">
-                                    <SearchIcon onClick={() => handleShowAppointment(appointment)} sx={{backgroundColor: '#8c83ba', borderRadius: '20px', color: 'white', padding: '5px', fontSize: '2.5em', cursor: 'pointer'}} />
+                                    {updateAppointmentId === appointment.id && <CircularProgress />}
+                                    {!updateAppointmentId && <CheckCircleOutlineIcon onClick={() => handleValidAppointment(appointment)} sx={{color: '#8c83ba', fontSize: '2.8em', cursor: 'pointer'}} />}
+                                    {!updateAppointmentId && <SearchIcon onClick={() => handleShowAppointment(appointment)} sx={{backgroundColor: '#8c83ba', borderRadius: '20px', color: 'white', padding: '5px', fontSize: '2.5em', cursor: 'pointer'}} />}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -121,4 +137,4 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
     );
 };
 
-export default DashboardNextAppointments;
+export default DashboardWaitingAppointments;

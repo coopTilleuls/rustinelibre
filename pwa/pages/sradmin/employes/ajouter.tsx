@@ -15,7 +15,7 @@ const AddEmployee: NextPageWithLayout = () => {
       <Box
         component="main"
         sx={{marginLeft: '20%', marginRight: '5%', marginTop: '100px'}}>
-        <EmployeeForm />
+        <EmployeeForm repairerEmployee={null} />
       </Box>
     </>
   );

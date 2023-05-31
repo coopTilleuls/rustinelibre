@@ -7,7 +7,7 @@ import DashboardHomeContent from "@components/dashboard/home/DashboardHomeConten
 
 const Dashboard = () => {
 
-    const {user} = useAccount({redirectIfNotFound: '/'});
+    const {user} = useAccount({});
 
     return (
         <>
@@ -16,7 +16,7 @@ const Dashboard = () => {
             </Head>
             <DashboardLayout>
                 <Box component="main">
-                    {user && user.repairer && <DashboardHomeContent repairer={user.repairer} />}
+                    {user && user.repairer && <DashboardHomeContent repairer={user.repairer} currentBoss={user} />}
                 </Box>
             </DashboardLayout>
         </>

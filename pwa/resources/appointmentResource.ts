@@ -6,7 +6,7 @@ class AppointmentResource extends AbstractResource<Appointment> {
     protected endpoint = '/appointments';
 
     async updateAppointmentStatus(id: string, body: RequestBody = {}, headers?: RequestHeaders): Promise<any> {
-        const url = this.getUrl(`/appointment_status/${id}`);
+        const url = this.getUrl(`/appointment_transition/${id}`);
 
         const doFetch = async () => {
             return await fetch(url, {

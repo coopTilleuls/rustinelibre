@@ -17,25 +17,28 @@ import {RepairerEmployee} from '@interfaces/RepairerEmployee';
 import {User} from '@interfaces/User';
 
 interface EmployeesListProps {
-  currentBoss: User | null;
+  currentBoss: User;
 }
 
-export const EmployeesList = ({
-  currentBoss,
-}: EmployeesListProps): JSX.Element => {
+export const EmployeesList = ({currentBoss}: EmployeesListProps): JSX.Element => {
+
   const [loadingList, setLoadingList] = useState<boolean>(false);
   const [employees, setEmployees] = useState<RepairerEmployee[]>([]);
 
   const fetchEmployees = async () => {
-    const response = await repairerEmployeesResource.getAll();
-    setEmployees(response['hydra:member']);
-    setLoadingList(false);
+    if (currentBoss && currentBoss.repairer) {
+        setLoadingList(true);
+        const response = await repairerEmployeesResource.getAll(true, {
+          'repairer': currentBoss.repairer
+        });
+        setEmployees(response['hydra:member']);
+        setLoadingList(false);
+    }
   };
 
   useEffect(() => {
-    setLoadingList(true);
-    fetchEmployees();
-  }, []);
+      fetchEmployees();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <TableContainer elevation={4} component={Paper}>

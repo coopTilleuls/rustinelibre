@@ -36,7 +36,7 @@ interface AgendaCalendarProps {
 
 export const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
 
-    const [selectedId, setSelectedId] = useState<string|null>(null);
+    const [appointment, setAppointment] = useState<Appointment|null>(null);
     const [calendarEvents, setCalendarEvents] = useState<{ title: string; id: string }[]>([]);
     const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -77,9 +77,10 @@ export const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => 
         setCalendarEvents(appointmentsEvents);
     }
 
-    const clickAppointment = (event: EventImpl) => {
+    const clickAppointment = async (event: EventImpl) => {
         setOpenModal(true);
-        setSelectedId(event.id);
+        const appointmentFetch = await appointmentResource.getById(event.id, true);
+        setAppointment(appointmentFetch);
     }
 
     return (
@@ -101,8 +102,8 @@ export const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => 
             />
 
             {
-                selectedId && <ModalShowAppointment
-                    id={selectedId}
+                appointment && <ModalShowAppointment
+                    appointment={appointment}
                     openModal={openModal}
                     handleCloseModal={handleCloseModal}
                 />

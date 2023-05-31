@@ -50,12 +50,12 @@ export const EmployeesListActions = ({
       ) : (
         <>
           <Link href={`/sradmin/employes/edit/${employee.id}`}>
-            <EditIcon color="primary" />
+            <EditIcon color="primary" sx={{color: '#8c83ba'}} />
           </Link>
           <DeleteForeverIcon
             color="error"
             onClick={() => handleDeleteClick()}
-            sx={{cursor: 'pointer', ml: 1}}
+            sx={{cursor: 'pointer', ml: 1, color: '#8c83ba'}}
           />
         </>
       )}

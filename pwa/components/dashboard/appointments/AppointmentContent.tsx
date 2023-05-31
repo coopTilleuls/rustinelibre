@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Box from '@mui/material/Box';
 import Button from "@mui/material/Button";
 import {CircularProgress} from "@mui/material";
@@ -24,6 +24,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {bikeResource} from "@resources/bikeResource";
+import {maintenanceResource} from "@resources/MaintenanceResource";
+import {Bike} from "@interfaces/Bike";
 
 type AppointmentContentProps = {
     appointment: Appointment;
@@ -32,6 +35,8 @@ type AppointmentContentProps = {
 
 const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentProps): JSX.Element => {
 
+    const [pendingValid, setPendingValid] = useState<boolean>(false);
+    const [pendingRefuse, setPendingRefuse] = useState<boolean>(false);
     const [loadingNewSlot, setLoadingNewSlot] = useState<boolean>(false);
     const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
     const [proposeOtherSlot, setProposeOtherSlot] = useState<boolean>(false);
@@ -41,7 +46,21 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
     const [times, setTimes] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<string|undefined>(undefined);
     const [selectedTime, setSelectedTime] = useState<string|undefined>('');
+    const [bikes, setBikes] = useState<number>(0);
 
+    useEffect(() => {
+        if (appointment.bike) {
+            fetchMaintenances(appointment.bike);
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const fetchMaintenances = async(bike: Bike) => {
+        const maintenancesFetch = await maintenanceResource.getAll(true,{
+            'bike': bike['@id'],
+        });
+
+        setBikes(maintenancesFetch['hydra:totalItems']);
+    }
 
     const cancelAppointment = async () => {
         if (!appointment) {
@@ -73,6 +92,24 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
 
     const handleTimeChange = (event: SelectChangeEvent) => {
         setSelectedTime(event.target.value as string);
+    };
+
+    const handleClickAcceptAppointment = async (appointmentId: string) => {
+        setPendingValid(true);
+        await appointmentResource.updateAppointmentStatus(appointmentId, {
+            transition: 'validated_by_repairer',
+        });
+        handleCloseModal(true);
+        setPendingValid(false);
+    };
+
+    const handleClickRefuseAppointment = async (appointmentId: string) => {
+        setPendingRefuse(true);
+        await appointmentResource.updateAppointmentStatus(appointmentId, {
+            transition: 'refused',
+        });
+        handleCloseModal(true);
+        setPendingRefuse(false);
     };
 
     const sendNewSlot = async() => {
@@ -135,8 +172,22 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
             </List>
 
             <Grid container spacing={2}>
+
+                {appointment.status === 'pending_repairer' && <Grid item xs={6}>
+                    <Button variant="outlined" sx={{backgroundColor: '#7c9f4f', color: 'white','&:hover': {color:'black'}}} onClick={() => handleClickAcceptAppointment(appointment.id)}>
+                        {pendingValid ? <CircularProgress sx={{color:'white'}} /> : 'Accepter le RDV'}
+                    </Button>
+                </Grid>}
+
+                {appointment.status === 'pending_repairer' && <Grid item xs={6}>
+                    <Button variant="outlined" sx={{backgroundColor: 'red', color: 'white','&:hover': {color:'black'}}} onClick={() => handleClickRefuseAppointment(appointment.id)}>
+                        {pendingRefuse ? <CircularProgress sx={{color:'white'}} /> : 'Refuser le RDV'}
+                    </Button>
+                </Grid>}
+
+
                 <Grid item xs={6}>
-                    {appointment.bike ?
+                    {(appointment.bike && bikes > 0) ?
                         <Link href={`/sradmin/clients/velos/${appointment.bike.id}`}>
                             <Button variant="outlined">
                                 Voir le carnet du vélo
@@ -151,26 +202,33 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
                     </Button>
                 </Grid>
 
-                <Grid item xs={6}>
-                    {(isPast(appointment.slotTime) || appointment.status === 'cancel' || appointment.status === 'refused') ?
-                        <Button disabled variant="outlined">
-                            Modifier le rendez-vous
-                        </Button> :
-                        <Button variant="outlined" sx={{color: 'green'}} onClick={handleClickProposeOtherSlot}>
-                            Modifier le rendez-vous
-                        </Button>
-                    }
-                </Grid>
-                <Grid item xs={6}>
-                    {(isPast(appointment.slotTime) || appointment.status === 'cancel' || appointment.status === 'refused') ?
-                        <Button variant="outlined" disabled>
-                            Annuler le rendez-vous
-                        </Button>:
-                        <Button variant="outlined" sx={{color: 'red'}} onClick={cancelAppointment}>
-                            {!loadingDelete ? 'Annuler le rendez-vous' : <CircularProgress />}
-                        </Button>
-                    }
-                </Grid>
+                {
+                    appointment.status === 'validated' &&
+                        <Grid item xs={6}>
+                            {(isPast(appointment.slotTime)) ?
+                                <Button disabled variant="outlined">
+                                    Modifier le rendez-vous
+                                </Button> :
+                                <Button variant="outlined" sx={{color: 'green'}} onClick={handleClickProposeOtherSlot}>
+                                    Modifier le rendez-vous
+                                </Button>
+                            }
+                        </Grid>
+                }
+
+                {
+                    appointment.status === 'validated' &&
+                        <Grid item xs={6}>
+                            {(isPast(appointment.slotTime)) ?
+                                <Button variant="outlined" disabled>
+                                    Annuler le rendez-vous
+                                </Button>:
+                                <Button variant="outlined" sx={{color: 'red'}} onClick={cancelAppointment}>
+                                    {!loadingDelete ? 'Annuler le rendez-vous' : <CircularProgress />}
+                                </Button>
+                            }
+                        </Grid>
+                }
 
                 {
                     proposeOtherSlot &&
