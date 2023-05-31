@@ -95,4 +95,12 @@ class RepairerSerializationTest extends AbstractTestCase
         self::createClientAuthAsUser()->request('GET', sprintf('/repairers/999999'));
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
+
+    public function testGetRepairerCollectionWithPagination(): void
+    {
+        // classic user given
+        $response = self::createClientAuthAsUser()->request('GET', '/repairers?itemsPerPage=6')->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(6, $response['hydra:member']);
+    }
 }

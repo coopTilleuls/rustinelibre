@@ -114,4 +114,11 @@ class GetTest extends AbstractTestCase
             self::assertSame($maintenanceCheck->bike->owner->id, $this->userMaintenance->bike->owner->id);
         }
     }
+
+    public function testGetMaintenanceCollectionWithPagination(): void
+    {
+        $response = $this->createClientWithUser($this->appointment->repairer->owner)->request('GET', '/maintenances?itemsPerPage=6')->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(6, $response['hydra:member']);
+    }
 }
