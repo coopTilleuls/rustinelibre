@@ -2,12 +2,12 @@ App\Entity\Appointment:
   appointment_1:
     customer: '@user_1'
     repairer: '@repairer_1'
-    slotTime: <(new DateTimeImmutable("2023-03-22T10:00:00"))>
+    slotTime: <(new DateTimeImmutable("now"))>
   appointment_{2..20}:
     customer: '@user_<numberBetween(10, 20)>'
     repairer: '@repairer_<numberBetween(2, 20)>'
-    slotTime: <dateTimeImmutableFromInterval('-1 month')>
+    slotTime: <dateTimeImmutableFromInterval('+1 month')>
   appointment_{21..23}:
     customer: '@user_<numberBetween(10, 20)>'
     repairer: '@repairer_13'
-    slotTime: <dateTimeImmutableFromInterval('-1 month')>
+    slotTime: <dateTimeImmutableFromInterval('+1 month')>

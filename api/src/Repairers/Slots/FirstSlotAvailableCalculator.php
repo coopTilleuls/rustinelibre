@@ -14,10 +14,14 @@ final class FirstSlotAvailableCalculator
     {
     }
 
-    public function setFirstSlotAvailable(Repairer $repairer, ?bool $flush = false): void
+    /**
+     * @param ?array<string, array<int, string>> $slotsAvailable
+     */
+    public function setFirstSlotAvailable(Repairer $repairer, ?bool $flush = false, ?array $slotsAvailable = null): void
     {
-        /** @var array<string, array<int, string>> $slotsAvailable */
-        $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($repairer);
+        if (null === $slotsAvailable) {
+            $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($repairer);
+        }
 
         if (!empty($slotsAvailable)) {
             $day = key($slotsAvailable);
