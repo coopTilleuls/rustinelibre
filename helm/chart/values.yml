@@ -43,9 +43,8 @@ mailer:
   # is set automaticaly if maildev is enabled
   dsn: change_me
 
-dailyCronjobDbReset:
-  # We don't reset the db everyday for now
-  enabled: false
+repairerUpdateFirstSlotAvailable:
+  enabled: true
 
 consumer:
   # We don't use async for now so consumer isn't needed

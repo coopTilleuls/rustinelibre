@@ -41,9 +41,9 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 			echo "The database is now ready and reachable"
 		fi
 
-		if [ "$( find ./migrations -iname '*.php' -print -quit )" ]; then
-			php bin/console doctrine:migrations:migrate --no-interaction
-		fi
+		# if [ "$( find ./migrations -iname '*.php' -print -quit )" ]; then
+		# 	php bin/console doctrine:migrations:migrate --no-interaction
+		# fi
 	fi
 fi
 

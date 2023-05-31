@@ -1,4 +1,4 @@
-{{- if .Values.dailyCronjobDbReset.enabled }}
+{{- if .Values.repairerUpdateFirstSlotAvailable.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "bikelib.labels" . | nindent 4 }}
 spec:
-  schedule: '0 0 * * *'
+  schedule: '*/30 * * * *'
   jobTemplate:
     metadata:
       annotations:
@@ -31,8 +31,7 @@ spec:
               command: ['/bin/sh', '-c']
               args: ['
                 set -ex;
-                bin/console doctrine:schema:drop --full-database --force;
-                bin/console doctrine:migrations:migrate --no-interaction;
+                php bin/console app:repairer:update-first-slot-available;
               ']
               env:
                 - name: API_ENTRYPOINT_HOST
@@ -90,6 +89,11 @@ spec:
                     secretKeyRef:
                       name: {{ include "bikelib.fullname" . }}
                       key: database-url
+                - name: MAILER_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "bikelib.fullname" . }}
+                      key: mailer-dsn
                 - name: MERCURE_URL
                   valueFrom:
                     configMapKeyRef:
