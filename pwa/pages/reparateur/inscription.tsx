@@ -400,7 +400,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                         required
                         {...params}
                         value={cityInput}
-                        inputProps={{ maxLength: 60 }}
                         onChange={(e) => handleCityChange(e)}
                       />
                     )}
