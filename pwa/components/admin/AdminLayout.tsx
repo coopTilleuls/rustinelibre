@@ -13,6 +13,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DashboardSidebarListItem from "@components/dashboard/DashboardSidebarListItem";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import Link from "next/link";
 
 const drawerWidth = 240;
 
@@ -114,7 +115,18 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
       </AppBar>
       <Box sx={{display: 'flex'}}>
         <Drawer variant={'permanent'} open={!isMobile} anchor="left">
-          <DrawerHeader></DrawerHeader>
+          <DrawerHeader>
+            <Link href="/" style={{textDecoration: 'none'}}>
+              <Typography
+                  color="primary"
+                  sx={{
+                    fontSize: 17,
+                    fontWeight: 600,
+                  }}>
+                La Rustine Libre - ADMIN
+              </Typography>
+            </Link>
+          </DrawerHeader>
           <Divider />
           <List>
             <DashboardSidebarListItem

@@ -15,6 +15,7 @@ class CreateInterventionTest extends AbstractTestCase
         $client->request('POST', '/interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention admin !',
+                'isAdmin' => true
             ],
         ]);
 
@@ -24,11 +25,23 @@ class CreateInterventionTest extends AbstractTestCase
             'isAdmin' => true,
         ]);
     }
+    
+    public function testBossCannotPost(): void
+    {
+        $client = $this->createClientAuthAsBoss();
+        $response = $client->request('POST', '/interventions', [
+            'json' => [
+                'description' => 'Une nouvelle intervention de boss !',
+            ],
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
 
     public function testAdminSetPrice(): void
     {
         $client = $this->createClientAuthAsAdmin();
-        $client->request('POST', '/interventions', [
+        $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention admin !',
                 'price' => 1000,
@@ -41,7 +54,7 @@ class CreateInterventionTest extends AbstractTestCase
     public function testBossCanPost(): void
     {
         $client = $this->createClientAuthAsBoss();
-        $client->request('POST', '/interventions', [
+        $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention boss !',
                 'price' => 1000,
@@ -58,7 +71,7 @@ class CreateInterventionTest extends AbstractTestCase
     public function testBossForgetsPrice(): void
     {
         $client = $this->createClientAuthAsBoss();
-        $client->request('POST', '/interventions', [
+        $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention boss !',
             ],
@@ -70,7 +83,7 @@ class CreateInterventionTest extends AbstractTestCase
     public function testBossSetNegativePrice(): void
     {
         $client = $this->createClientAuthAsBoss();
-        $client->request('POST', '/interventions', [
+        $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention boss !',
                 'price' => -1000,
@@ -83,7 +96,7 @@ class CreateInterventionTest extends AbstractTestCase
     public function testWithoutDescription(): void
     {
         $client = $this->createClientAuthAsBoss();
-        $client->request('POST', '/interventions', [
+        $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'price' => 1000,
             ],
@@ -95,7 +108,7 @@ class CreateInterventionTest extends AbstractTestCase
     public function testUserCannotPost(): void
     {
         $client = $this->createClientAuthAsUser();
-        $client->request('POST', '/interventions', [
+        $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention !',
             ],
@@ -107,7 +120,7 @@ class CreateInterventionTest extends AbstractTestCase
     public function testUnauthenticatedCannotPost(): void
     {
         $client = self::createClient();
-        $client->request('POST', '/interventions', [
+        $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention !',
             ],
