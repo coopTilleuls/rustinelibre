@@ -1,15 +1,10 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
 import {useRouter} from 'next/router';
-import {Alert, Button, CircularProgress, Typography} from '@mui/material';
-import UserForm from "@components/profile/UserForm";
-import {User} from "@interfaces/User";
-import {userResource} from "@resources/userResource";
+import {CircularProgress} from '@mui/material';
 import AdminLayout from "@components/admin/AdminLayout";
-import {RequestBody} from "@interfaces/Resource";
-import {UserFormContext} from "@contexts/UserFormContext";
 import {BikeType} from "@interfaces/BikeType";
 import {RepairerType} from "@interfaces/RepairerType";
 import {repairerTypeResource} from "@resources/repairerTypeResource";
@@ -56,8 +51,7 @@ const EditRepairer: NextPageWithLayout = () => {
 
     useEffect(() => {
         fetchRepairer();
-    }, [id]);
-
+    }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
