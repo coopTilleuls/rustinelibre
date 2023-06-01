@@ -9,13 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
-class LastConnectEventSubscriber implements EventSubscriberInterface
+final class LastConnectEventSubscriber implements EventSubscriberInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function onLoginSuccess(InteractiveLoginEvent $event): void
@@ -26,7 +23,7 @@ class LastConnectEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $user->lastConnect = new \DateTime('', new \DateTimeZone('Europe/Paris'));
+        $user->lastConnect = new \DateTimeImmutable('', new \DateTimeZone('Europe/Paris'));
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
