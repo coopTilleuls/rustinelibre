@@ -15,6 +15,8 @@ interface MobileNavbarProps {
   pages: Page[];
   boss: boolean;
   user?: User;
+  employee: boolean;
+  admin: boolean;
   handleClose?: () => void;
   handleOpen?: (value: any) => void;
   logOut?: () => void;
@@ -25,6 +27,8 @@ const MobileNavbar = ({
   pages,
   boss,
   user,
+  employee,
+  admin,
   handleClose,
   handleOpen,
   anchorElNav,

@@ -21,7 +21,7 @@ const Employees = () => {
           <Link href={'/sradmin/employes/ajouter'}>
             <Button variant="contained" sx={{marginBottom: 2}}>
               <AddIcon />
-              Ajouter un réparateur
+              Ajouter un employé
             </Button>
           </Link>
             {(user && user.repairer) && <EmployeesList currentBoss={user} />}

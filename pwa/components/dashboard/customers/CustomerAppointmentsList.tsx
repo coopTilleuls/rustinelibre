@@ -19,6 +19,7 @@ import {appointmentResource} from "@resources/appointmentResource";
 import {formatDate} from 'helpers/dateHelper';
 import {getAppointmentStatus} from "@helpers/appointmentStatus";
 import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
+import {useAccount} from "@contexts/AuthContext";
 
 interface CustomerAppointmentsListProps {
     customer: Customer
@@ -31,6 +32,7 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
     const [totalPages, setTotalPages] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [openModal, setOpenModal] = React.useState(false);
+    const {user} = useAccount({});
 
     const handleOpen = () => setOpenModal(true);
     const handleClose = (refresh: boolean|undefined) => {
@@ -46,12 +48,17 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
     }
 
     const fetchAppointments = async () => {
+        if (!user || !user.repairer) {
+            return;
+        }
+
         setLoadingList(true);
         let params = {
             page: `${currentPage ?? 1}`,
             itemsPerPage: 20,
             'order[id]': 'DESC',
-            customer: customer.id
+            customer: customer.id,
+            repairer: user.repairer
         };
         const response = await appointmentResource.getAll(true, params);
         setAppointments(response['hydra:member']);

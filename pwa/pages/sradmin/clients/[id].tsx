@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import {useRouter} from 'next/router';
 import {CircularProgress} from '@mui/material';
 import CustomerDetail from "@components/dashboard/customers/CustomerDetail";
-import {customerResource} from "@resources/customerResource";
 import {Customer} from "@interfaces/Customer";
 import {userResource} from "@resources/userResource";
 

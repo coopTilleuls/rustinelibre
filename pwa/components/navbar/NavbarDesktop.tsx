@@ -8,15 +8,12 @@ interface NavbarDesktopProps {
   pages: Page[];
   boss: boolean;
   user?: User;
+  employee: boolean;
+  admin: boolean;
   logOut?: () => void;
 }
 
-const NavbarDesktop = ({
-  pages,
-  boss,
-  user,
-  logOut,
-}: NavbarDesktopProps): JSX.Element => {
+const NavbarDesktop = ({pages, boss, user, employee, admin, logOut}: NavbarDesktopProps): JSX.Element => {
 
     const router = useRouter();
     const { asPath } = router;
@@ -71,7 +68,7 @@ const NavbarDesktop = ({
             </Link>
           );
         })}
-        {boss && user && (
+        {(boss || employee) && user && (
           <Link href="/sradmin" style={{textDecoration: 'none'}}>
             <Button
               key="dashboard"
@@ -89,6 +86,27 @@ const NavbarDesktop = ({
                 },
               }}>
               Accès réparateur
+            </Button>
+          </Link>
+        )}
+        {(admin) && user && (
+          <Link href="/admin/reparateurs" style={{textDecoration: 'none'}}>
+            <Button
+              key="admin"
+              sx={{
+                display: 'flex',
+                paddingX: 2,
+                marginX: 1,
+                textTransform: 'capitalize',
+                fontSize: 16,
+                fontWeight: 600,
+                borderRadius: 20,
+                '&:hover': {
+                  color: 'primary.main',
+                  backgroundColor: 'white',
+                },
+              }}>
+              ADMIN
             </Button>
           </Link>
         )}

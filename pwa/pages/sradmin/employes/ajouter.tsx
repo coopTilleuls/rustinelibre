@@ -9,7 +9,7 @@ const AddEmployee: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Ajouter un réparateur</title>
+        <title>Ajouter un employé</title>
       </Head>
       <DashboardLayout />
       <Box
