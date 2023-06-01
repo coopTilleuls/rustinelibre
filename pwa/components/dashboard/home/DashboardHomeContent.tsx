@@ -42,7 +42,8 @@ export const DashboardHomeContent = ({repairer, currentBoss}: DashboardHomeConte
             itemsPerPage: '6',
             repairer: repairer,
             'order[slotTime]': 'ASC',
-            status: 'pending_repairer'
+            status: 'pending_repairer',
+            'slotTime[after]': dateObjectAsString(new Date()),
         })
 
         setAppointmentsWaiting(waitAppointments);
