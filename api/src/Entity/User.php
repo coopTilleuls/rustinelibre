@@ -21,6 +21,7 @@ use App\User\StateProvider\CurrentUserProvider;
 use App\User\StateProvider\CustomersProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -127,6 +128,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Bike::class, cascade: ['persist', 'remove'])]
     #[Groups([self::USER_READ])]
     public Collection $bikes;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups([self::USER_READ])]
+    public ?\DateTimeImmutable $lastConnect = null;
 
     public function __construct()
     {
