@@ -390,17 +390,19 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     sx={{mt: 2, mb: 1}}
                     freeSolo
                     value={cityInput}
-                    options={citiesList.map((optionCity) => optionCity.name)}
-                    onChange={(event, values) =>
-                      handleCitySelect(event, values)
+                    options={citiesList}
+                    getOptionLabel={(city) =>
+                        typeof city === 'string'
+                            ? city
+                            : `${city.name}  (${city.postcode})`
                     }
+                    onChange={(event, value) => setCity(value as City)}
                     renderInput={(params) => (
                       <TextField
                         label="Ville"
                         required
                         {...params}
                         value={cityInput}
-                        inputProps={{ maxLength: 60 }}
                         onChange={(e) => handleCityChange(e)}
                       />
                     )}

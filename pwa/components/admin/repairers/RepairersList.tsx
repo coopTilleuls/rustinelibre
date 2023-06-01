@@ -7,7 +7,15 @@ import {
     TableCell,
     TableBody,
     TableContainer,
-    CircularProgress, TextField, Typography,
+    CircularProgress,
+    TextField,
+    Typography,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button,
+    Dialog,
 } from '@mui/material';
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
@@ -19,6 +27,7 @@ import {Repairer} from "@interfaces/Repairer";
 import {repairerResource} from "@resources/repairerResource";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
+import CircleIcon from '@mui/icons-material/Circle';
 
 export const RepairersList = (): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -26,6 +35,9 @@ export const RepairersList = (): JSX.Element => {
     const [totalPages, setTotalPages] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+    const [removePending, setRemovePending] = useState<boolean>(false);
+    const [selectedRepairerToDelete, setSelectedRepairerToDelete] = useState<Repairer|null>(null);
 
     const fetchRepairers = async () => {
         setLoadingList(true);
@@ -54,16 +66,30 @@ export const RepairersList = (): JSX.Element => {
         fetchRepairers();
     }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
-        setCurrentPage(page);
+    const handleDeleteClick = (repairer: Repairer) => {
+        setDeleteDialogOpen(true);
+        setSelectedRepairerToDelete(repairer)
     };
 
-    const getStatus = (enabled: boolean): string => {
-        if (enabled) {
-            return 'Activé';
+    const handleDeleteConfirm = async () => {
+        if (!selectedRepairerToDelete) {
+            return;
         }
 
-        return 'En attente';
+        setRemovePending(true);
+        setDeleteDialogOpen(false);
+        try {
+            await repairerResource.delete(selectedRepairerToDelete['@id']);
+        } finally {
+            setRemovePending(false);
+            setSelectedRepairerToDelete(null);
+        }
+
+        await fetchRepairers();
+    };
+
+    const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
+        setCurrentPage(page);
     };
 
     const handleSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,10 +149,15 @@ export const RepairersList = (): JSX.Element => {
                                     {repairer.owner && <Typography sx={{color: 'grey'}}>
                                         {repairer.owner.email}
                                     </Typography>}
-
                                 </TableCell>
                                 <TableCell align="center">
-                                    {getStatus(repairer.enabled)}
+                                    {repairer.enabled && <span style={{color: '#027f00', backgroundColor: '#cdffcd', padding: '10px', borderRadius: '10px'}}>
+                                        <CircleIcon sx={{fontSize: '0.8em'}} /> Actif
+                                    </span>}
+
+                                    {!repairer.enabled && <span style={{color: '#a36f1a', backgroundColor: '#ffeccb', padding: '10px', borderRadius: '10px'}}>
+                                        <CircleIcon sx={{fontSize: '0.8em'}} /> En attente
+                                    </span>}
                                 </TableCell>
                                 <TableCell
                                     align="center"
@@ -138,7 +169,7 @@ export const RepairersList = (): JSX.Element => {
                                     <Link href={`/admin/reparateurs/edit/${repairer.id}`}>
                                         <EditIcon sx={{color: '#8c83ba', fontSize: '2em', cursor: 'pointer'}} />
                                     </Link>
-                                    <DeleteIcon sx={{color: '#8c83ba', fontSize: '2em', cursor: 'pointer'}} />
+                                    <DeleteIcon onClick={() => handleDeleteClick(repairer)} sx={{color: '#8c83ba', fontSize: '2em', cursor: 'pointer'}} />
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -158,6 +189,25 @@ export const RepairersList = (): JSX.Element => {
                         size="large"
                     />
                 </Stack>
+            }
+
+            {
+                selectedRepairerToDelete && <Dialog
+                    open={deleteDialogOpen}
+                    onClose={() => setDeleteDialogOpen(false)}>
+                    <DialogTitle>Confirmation</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            {`Êtes-vous sûr de vouloir supprimer ${selectedRepairerToDelete.name}`}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
+                        <Button onClick={handleDeleteConfirm} color="secondary">
+                            Supprimer
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             }
         </Box>
     );

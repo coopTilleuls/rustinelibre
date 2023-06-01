@@ -8,11 +8,11 @@ const Repairers = () => {
     return (
         <>
             <Head>
-                <title>Solution de réparation</title>
+                <title>Messagerie</title>
             </Head>
             <AdminLayout>
                 <Box component="main">
-                    <RepairersList />
+                    Test
                 </Box>
             </AdminLayout>
         </>
