@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\User;
 
 use App\Tests\AbstractTestCase;
+use DateTime;
 use Symfony\Component\HttpFoundation\Response;
 
 class GetCurrentUserTest extends AbstractTestCase
@@ -27,5 +28,15 @@ class GetCurrentUserTest extends AbstractTestCase
     {
         static::createClient()->request('GET', sprintf('/me'));
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
+
+    public function testGetLastConnection(): void
+    {
+        $response = $this->createClientAuthAsUser()->request('GET', '/me')->toArray();
+        $this->assertResponseIsSuccessful();
+
+        $dateTime = \DateTime::createFromFormat(\DateTimeInterface::ATOM, $response['lastConnect']);
+        // Will be false if $response['lastConnect'] is not a dateTime
+        $this->assertNotFalse($dateTime);
     }
 }
