@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -66,8 +67,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Patch(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(FirstSlotAvailableFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: [
     'city' => 'iexact',
+    'name' => 'ipartial',
     'description' => 'ipartial',
     'postcode' => 'iexact',
     'country' => 'ipartial',
@@ -95,7 +98,7 @@ class Repairer
 
     #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?User $owner = null;
 
     #[ORM\ManyToOne]
@@ -182,7 +185,7 @@ class Repairer
     public ?string $optionalPage = null;
 
     #[ORM\Column]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     #[ApiFilter(BooleanFilter::class)]
     public ?bool $enabled = true;

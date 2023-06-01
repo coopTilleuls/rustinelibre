@@ -19,165 +19,165 @@ import HandymanIcon from '@mui/icons-material/Handyman';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: 'hidden',
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up('sm')]: {
+        width: `calc(${theme.spacing(8)} + 1px)`,
+    },
 });
 
 const DrawerHeader = styled('div')(({theme}) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
 }));
 
 interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
+    open?: boolean;
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+    shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({theme, open}) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
     }),
-  }),
+    ...(open && {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    }),
 }));
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open',
+    shouldForwardProp: (prop) => prop !== 'open',
 })(({theme, open}) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
-  }),
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': closedMixin(theme),
+    }),
 }));
 
 interface DashboardLayoutProps {
-  children?: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 const DashboardLayout = ({children}: DashboardLayoutProps) => {
-  const theme = useTheme();
-  const {user} = useAccount({redirectIfNotFound: '/login'});
-  const router = useRouter();
-  const isMobile = useMediaQuery('(max-width: 640px)');
+    const theme = useTheme();
+    const {user} = useAccount({redirectIfNotFound: '/login'});
+    const router = useRouter();
+    const isMobile = useMediaQuery('(max-width: 640px)');
 
-  if (user && !user.roles.includes('ROLE_BOSS')) {
-    router.push('/');
-  }
+    if (user && !user.roles.includes('ROLE_BOSS')) {
+        router.push('/');
+    }
 
-  return (
-    <>
-      <AppBar position="sticky" open={!isMobile}>
-        <Toolbar>
-          <List>
-            <ListItem key="1" disablePadding>
-              <Typography fontWeight={600}>
-                Bonjour {user?.firstName} !
-              </Typography>
-            </ListItem>
-          </List>
-        </Toolbar>
-      </AppBar>
-      <Box sx={{display: 'flex'}}>
-        <Drawer variant={'permanent'} open={!isMobile} anchor="left">
-          <DrawerHeader></DrawerHeader>
-          <Divider />
-          <List>
-            <DashboardSidebarListItem
-              text="Tableau de bord"
-              open={true}
-              icon={<HomeIcon />}
-              path="/sradmin"
-            />
-            <DashboardSidebarListItem
-              text="Agenda"
-              open={true}
-              icon={<CalendarMonthIcon />}
-              path="/sradmin/agenda"
-            />
-            <DashboardSidebarListItem
-              text="Messages"
-              open={true}
-              icon={<ForumIcon />}
-              path="/sradmin/messagerie"
-            />
-            <DashboardSidebarListItem
-              text="Clients"
-              open={true}
-              icon={<FolderSharedIcon />}
-              path="/sradmin/clients"
-            />
-            <DashboardSidebarListItem
-              text="Paramètres Agenda"
-              open={true}
-              icon={<HandymanIcon />}
-              path="/sradmin/agenda/parametres"
-            />
-            <DashboardSidebarListItem
-              text="Employés"
-              open={true}
-              icon={<EngineeringIcon />}
-              path="/sradmin/employes"
-            />
-          </List>
-          <Divider />
-          <List>
-            <DashboardSidebarListItem
-              text="Informations"
-              open={true}
-              icon={<InfoIcon />}
-              path="/sradmin/informations"
-            />
-            <DashboardSidebarListItem
-              text="Retourner sur le site"
-              open={true}
-              icon={<ArrowBackIcon />}
-              path="/"
-            />
-          </List>
-        </Drawer>
-        <Box sx={{flexGrow: 1}} p={3}>
-          {children}
-        </Box>
-      </Box>
-    </>
-  );
+    return (
+        <>
+            <AppBar position="sticky" open={!isMobile}>
+                <Toolbar>
+                    <List>
+                        <ListItem key="1" disablePadding>
+                            <Typography fontWeight={600}>
+                                Bonjour {user?.firstName} !
+                            </Typography>
+                        </ListItem>
+                    </List>
+                </Toolbar>
+            </AppBar>
+            <Box sx={{display: 'flex'}}>
+                <Drawer variant={'permanent'} open={!isMobile} anchor="left">
+                    <DrawerHeader></DrawerHeader>
+                    <Divider />
+                    <List>
+                        <DashboardSidebarListItem
+                            text="Tableau de bord"
+                            open={true}
+                            icon={<HomeIcon />}
+                            path="/sradmin"
+                        />
+                        <DashboardSidebarListItem
+                            text="Agenda"
+                            open={true}
+                            icon={<CalendarMonthIcon />}
+                            path="/sradmin/agenda"
+                        />
+                        <DashboardSidebarListItem
+                            text="Messages"
+                            open={true}
+                            icon={<ForumIcon />}
+                            path="/sradmin/messagerie"
+                        />
+                        <DashboardSidebarListItem
+                            text="Clients"
+                            open={true}
+                            icon={<FolderSharedIcon />}
+                            path="/sradmin/clients"
+                        />
+                        <DashboardSidebarListItem
+                            text="Paramètres Agenda"
+                            open={true}
+                            icon={<HandymanIcon />}
+                            path="/sradmin/agenda/parametres"
+                        />
+                        <DashboardSidebarListItem
+                            text="Employés"
+                            open={true}
+                            icon={<EngineeringIcon />}
+                            path="/sradmin/employes"
+                        />
+                    </List>
+                    <Divider />
+                    <List>
+                        <DashboardSidebarListItem
+                            text="Informations"
+                            open={true}
+                            icon={<InfoIcon />}
+                            path="/sradmin/informations"
+                        />
+                        <DashboardSidebarListItem
+                            text="Retourner sur le site"
+                            open={true}
+                            icon={<ArrowBackIcon />}
+                            path="/"
+                        />
+                    </List>
+                </Drawer>
+                <Box sx={{flexGrow: 1}} p={3}>
+                    {children}
+                </Box>
+            </Box>
+        </>
+    );
 };
 
 export default DashboardLayout;

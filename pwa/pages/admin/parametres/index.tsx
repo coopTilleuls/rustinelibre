@@ -1,25 +1,23 @@
 import React from 'react';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
-import {useAccount} from "@contexts/AuthContext";
 import AdminLayout from "@components/admin/AdminLayout";
+import ParametersContent from "@components/admin/parameters/ParametersContent";
 
-const Dashboard = () => {
-
-    const {user} = useAccount({});
+const AdminParameters = () => {
 
     return (
         <>
             <Head>
-                <title>Admin</title>
+                <title>Paramètres</title>
             </Head>
             <AdminLayout>
                 <Box component="main">
-
+                    <ParametersContent />
                 </Box>
             </AdminLayout>
         </>
     );
 };
 
-export default Dashboard;
+export default AdminParameters;

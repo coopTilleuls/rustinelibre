@@ -8,5 +8,6 @@ export interface User {
     roles: string[];
     repairer: string,
     plainPassword: string;
-    emailConfirmed: number;
+    lastConnect?: string;
+    emailConfirmed: boolean;
 }
