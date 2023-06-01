@@ -20,10 +20,8 @@ interface EmployeesListActionsProps {
   fetchEmployees: () => Promise<void>;
 }
 
-export const EmployeesListActions = ({
-  employee,
-  fetchEmployees,
-}: EmployeesListActionsProps): JSX.Element => {
+export const EmployeesListActions = ({employee, fetchEmployees}: EmployeesListActionsProps): JSX.Element => {
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
 
