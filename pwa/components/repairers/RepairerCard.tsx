@@ -14,6 +14,7 @@ import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
+import useMediaQuery from "@hooks/useMediaQuery";
 
 interface RepairerProps extends PropsWithRef<any> {
   repairer: Repairer;
@@ -21,13 +22,14 @@ interface RepairerProps extends PropsWithRef<any> {
 
 export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
   const {sortChosen, selectedRepairer} = useContext(SearchRepairerContext);
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   return (
     <Link href={`/reparateur/${repairer.id}`} style={{textDecoration: 'none'}}>
       <Card
         sx={{
           boxShadow: 0,
-          border: (theme) => `4px solid ${theme.palette.grey[300]}`,
+          border: (theme) => !isMobile ? `4px solid ${theme.palette.grey[300]}` : '',
           display: 'flex',
           backgroundColor:
             repairer.id === selectedRepairer ? 'lightblue' : 'white',
