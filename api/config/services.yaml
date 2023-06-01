@@ -47,6 +47,9 @@ services:
 
     App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
 
-    App\Tests\EventListener\KernelTerminateListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.terminate }
+when@test:
+    services:
+        App\Tests\EventListener\KernelTerminateListener:
+            tags:
+                - { name: kernel.event_listener, event: kernel.terminate }
+            arguments: [ '@database_connection', '@kernel' ]

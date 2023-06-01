@@ -20,7 +20,7 @@ class AppointmentStatusValidateByCyclistTest extends AbstractTestCase
     public function testCyclistCanValidateFromPendingCyclist(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'validated_by_cyclist',
             ],
@@ -32,7 +32,7 @@ class AppointmentStatusValidateByCyclistTest extends AbstractTestCase
     public function testCyclistCannotValidateFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'validated_by_cyclist',
             ],
@@ -44,7 +44,7 @@ class AppointmentStatusValidateByCyclistTest extends AbstractTestCase
     public function testCyclistCannotValidateFromRefuse(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'refused']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'validated_by_cyclist',
             ],
@@ -56,7 +56,7 @@ class AppointmentStatusValidateByCyclistTest extends AbstractTestCase
     public function testCyclistCannotValidateFromCancel(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'cancel']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'validated_by_cyclist',
             ],

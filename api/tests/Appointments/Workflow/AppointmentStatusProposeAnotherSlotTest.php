@@ -20,7 +20,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testRepairerCanProposeAnotherSlotFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -33,7 +33,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testRepairerCanProposeAnotherSlotFromPendingCyclist(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -46,7 +46,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testRepairerCanProposeAnotherSlotFromValidated(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'validated']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -59,7 +59,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testCyclistCannotProposeAnotherSlotFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -72,7 +72,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testCyclistCannotProposeAnotherSlotFromPendingCyclist(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -85,7 +85,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testCyclistCannotProposeAnotherSlotFromValidated(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'validated']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -98,7 +98,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testRepairerCannotProposeAnotherSlotFromRefused(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'refused']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -111,7 +111,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testCyclistCannotProposeAnotherSlotFromRefused(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'refused']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -124,7 +124,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testRepairerCannotProposeAnotherSlotFromCancel(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'cancel']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
@@ -137,7 +137,7 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testCyclistCannotProposeAnotherSlotFromCancel(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'cancel']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),

@@ -20,7 +20,7 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
     public function testRepairerCanRefuseFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'refused',
             ],
@@ -32,7 +32,7 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
     public function testCyclistCannotRefuseFromPendingCyclist(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'refused',
             ],
@@ -44,7 +44,7 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
     public function testRepairerCanRefuseFromPendingCyclist(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'refused',
             ],
@@ -56,7 +56,7 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
     public function testCyclistCannotRefuseFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'refused',
             ],
@@ -68,7 +68,7 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
     public function testRepairerCannotRefuseFromCancel(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'cancel']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'refused',
             ],
@@ -80,7 +80,7 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
     public function testCyclistCannotRefuseFromCancel(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'cancel']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'refused',
             ],

@@ -79,7 +79,7 @@ class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
 
         $firstResponse = $client->request('GET', sprintf('/repairers/%d', $repairer->id))->toArray();
 
-        $client->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $client->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'refused',
             ],

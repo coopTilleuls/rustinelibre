@@ -20,7 +20,7 @@ class AppointmentStatusValidateByRepairerTest extends AbstractTestCase
     public function testRepairerCanValidateFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'validated_by_repairer',
             ],
@@ -32,7 +32,7 @@ class AppointmentStatusValidateByRepairerTest extends AbstractTestCase
     public function testRepairerCannotValidateFromPendingCyclist(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'validated_by_repairer',
             ],
@@ -44,7 +44,7 @@ class AppointmentStatusValidateByRepairerTest extends AbstractTestCase
     public function testRepairerCannotValidateFromRefuse(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'refused']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'validated_by_repairer',
             ],
@@ -56,7 +56,7 @@ class AppointmentStatusValidateByRepairerTest extends AbstractTestCase
     public function testRepairerCannotValidateFromCancel(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'cancel']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_status/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'validated_by_repairer',
             ],
