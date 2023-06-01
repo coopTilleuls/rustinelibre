@@ -46,3 +46,7 @@ services:
     App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
 
     App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
+
+    App\Tests\EventListener\KernelTerminateListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate }
