@@ -1,25 +1,22 @@
-import React from 'react';
 import Head from 'next/head';
+import React from 'react';
 import Box from '@mui/material/Box';
-import {useAccount} from "@contexts/AuthContext";
 import AdminLayout from "@components/admin/AdminLayout";
+import RepairersList from "@components/admin/repairers/RepairersList";
 
-const Dashboard = () => {
-
-    const {user} = useAccount({});
-
+const Repairers = () => {
     return (
         <>
             <Head>
-                <title>Admin</title>
+                <title>Messagerie</title>
             </Head>
             <AdminLayout>
                 <Box component="main">
-
+                    Test
                 </Box>
             </AdminLayout>
         </>
     );
 };
 
-export default Dashboard;
+export default Repairers;

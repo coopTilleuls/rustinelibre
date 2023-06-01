@@ -36,7 +36,6 @@ const MyProfile: NextPageWithLayout = () => {
     setErrorMessage(null);
     setPendingUpdate(true);
 
-    let newUser;
     try {
       const bodyRequest: RequestBody = {
         firstName: firstName,
@@ -45,16 +44,13 @@ const MyProfile: NextPageWithLayout = () => {
       if (password && password !== '') {
         bodyRequest['plainPassword'] = password;
       }
-      newUser = await userResource.putById(user.id, bodyRequest);
-    } catch (e) {
-      setErrorMessage('Mise à jour impossible');
-    }
-
-    if (newUser) {
+      await userResource.putById(user.id, bodyRequest);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
+    } catch (e) {
+      setErrorMessage('Mise à jour impossible');
     }
 
     setPendingUpdate(false);
@@ -119,7 +115,7 @@ const MyProfile: NextPageWithLayout = () => {
                     </Typography>
                   )}
                   {success && (
-                    <Alert sx={{width: '50%'}} severity="success">
+                    <Alert sx={{width: '100%'}} severity="success">
                       Profil mis à jour
                     </Alert>
                   )}
