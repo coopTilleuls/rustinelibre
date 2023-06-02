@@ -4,7 +4,7 @@ import {RepairerOpeningHours} from "@interfaces/RepairerOpeningHours";
 import {openingHoursResource} from "@resources/openingHours";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import {Button, Chip, CircularProgress, Divider, Tooltip} from "@mui/material";
+import {Button, Chip, CircularProgress, Divider} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import ModalAddOpeningHours from "@components/dashboard/agenda/ModalAddOpeningHours";
 import DeleteIcon from "@mui/icons-material/Delete";
