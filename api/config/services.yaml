@@ -43,13 +43,13 @@ services:
         arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]
         autoconfigure: false
 
-    App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
-
-    App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
 
 when@test:
     services:
-        App\Tests\EventListener\KernelTerminateListener:
-            tags:
-                - { name: kernel.event_listener, event: kernel.terminate }
-            arguments: [ '@database_connection', '@kernel' ]
+        _defaults:
+            autowire: true      # Automatically injects dependencies in your services.
+            autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+        App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
+
+        App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
