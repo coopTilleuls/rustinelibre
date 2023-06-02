@@ -9,6 +9,7 @@ use App\Repairers\Service\UpdateOldFirstSlotAvailableService;
 use App\Repository\AppointmentRepository;
 use App\Repository\BikeTypeRepository;
 use App\Repository\RepairerRepository;
+use App\Repository\RepairerTypeRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\BikeTypeTrait;
@@ -20,6 +21,7 @@ class SlotsTestCase extends AbstractTestCase
     public const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
     public UserRepository $userRepository;
+    public RepairerTypeRepository $repairerTypeRepository;
     public RepairerRepository $repairerRepository;
     public AppointmentRepository $appointmentRepository;
     public UpdateOldFirstSlotAvailableService $updateOldFirstSlotAvailableService;
@@ -28,6 +30,7 @@ class SlotsTestCase extends AbstractTestCase
     {
         parent::setUp();
         $this->userRepository = static::getContainer()->get(UserRepository::class);
+        $this->repairerTypeRepository = static::getContainer()->get(RepairerTypeRepository::class);
         $this->repairerRepository = static::getContainer()->get(RepairerRepository::class);
         $this->appointmentRepository = static::getContainer()->get(AppointmentRepository::class);
         $this->bikeTypeRepository = static::getContainer()->get(BikeTypeRepository::class);
@@ -40,13 +43,30 @@ class SlotsTestCase extends AbstractTestCase
         if ($numberSlotsAvailable > 4) {
             self::fail('Number of slots available must be less than 4');
         }
-        $user = $this->userRepository->getUserWithoutRepairer();
+        $repairerType = $this->repairerTypeRepository->findOneBy([]);
         $bikeType = $this->getBikeType();
-        $client = $this->createClientWithUser($user);
+        $client = $this->createClientAuthAsAdmin();
         $adminClient = $this->createClientAuthAsAdmin();
+        $randomString = (string) random_int(0, 1000000);
+
+        $repairerId = $client->request('POST', '/create_user_and_repairer', [
+            'json' => [
+                'email' => sprintf('%s@example.com', $randomString),
+                'plainPassword' => 'Test1passwordOk!',
+                'firstName' => $randomString,
+                'lastName' => $randomString,
+                'name' => $randomString,
+                'street' => $randomString,
+                'city' => 'Lille',
+                'postcode' => '59000',
+                'repairerType' => sprintf('/repairer_types/%d', $repairerType->id),
+                'comment' => $randomString,
+                'bikeTypesSupported' => [sprintf('/bike_types/%d', $bikeType->id)],
+            ],
+        ])->toArray()['id'];
 
         // create new repairer
-        $repairer = $client->request('POST', '/repairers', [
+        $repairer = $client->request('PUT', sprintf('/repairers/%s', $repairerId), [
             'json' => [
                 'name' => 'Chez Jeje',
                 'description' => 'On aime réparer des trucs',
