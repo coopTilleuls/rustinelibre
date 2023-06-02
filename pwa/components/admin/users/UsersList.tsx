@@ -19,6 +19,7 @@ import {User} from "@interfaces/User";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
+import {formatDate} from "@helpers/dateHelper";
 
 export const UsersList = (): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -131,7 +132,7 @@ export const UsersList = (): JSX.Element => {
                                     align="center"
                                     sx={{cursor: 'pointer'}}
                                 >
-                                    {user.lastConnect}
+                                    {user.lastConnect && formatDate(user.lastConnect)}
                                 </TableCell>
                                 <TableCell align="right">
                                     <Link href={`/admin/utilisateurs/edit/${user.id}`}>
