@@ -31,7 +31,6 @@ import CircleIcon from '@mui/icons-material/Circle';
 import {formatDate} from "@helpers/dateHelper";
 import Switch from '@mui/material/Switch';
 
-
 export const RepairersList = (): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
     const [repairers, setRepairers] = useState<Repairer[]>([]);
