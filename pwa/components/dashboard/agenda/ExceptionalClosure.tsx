@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import OpeningHoursDetail from "@components/dashboard/agenda/OpeningHoursDetail";
-import {Button, CircularProgress, Typography} from "@mui/material";
+import {Button, Chip, CircularProgress, Divider, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import {RepairerOpeningHours} from "@interfaces/RepairerOpeningHours";
 import {RepairerExceptionalClosure} from "@interfaces/RepairerExceptionalClosure";
@@ -11,6 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {formatDate} from "@helpers/dateHelper";
 import ModalAddOpeningHours from "@components/dashboard/agenda/ModalAddOpeningHours";
 import ModalAddExceptionalClosure from "@components/dashboard/agenda/ModalAddExceptionalClosure";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 
 interface ExceptionalClosureProps {
@@ -58,18 +59,19 @@ export const ExceptionalClosure = ({repairer}: ExceptionalClosureProps): JSX.Ele
             <Box  sx={{marginTop: '40px'}}>
                 {loading && <CircularProgress />}
                 {!loading && exceptionalClosures.map(exceptionalClosure => {
-                    return <Box sx={{marginBottom: '40px'}} key={exceptionalClosure.id}>
-                            <Grid container spacing={2}>
+                    return <Box sx={{marginBottom: '20px'}} key={exceptionalClosure.id}>
+                            <Grid container spacing={2} sx={{marginBottom: '20px'}}>
                                 <Grid item xs={8}>
                                     {loading && <CircularProgress />}
 
-                                    {formatDate(exceptionalClosure.startDate, false)} - {formatDate(exceptionalClosure.endDate, false)}
-                                    <Button sx={{float:'right'}} variant="outlined" onClick={() => removeExceptionalClosure(exceptionalClosure['@id'])}>
-                                        Supprimer
-                                    </Button>
+                                    <Chip
+                                        label={`${formatDate(exceptionalClosure.startDate, false)} - ${formatDate(exceptionalClosure.endDate, false)}`}
+                                        deleteIcon={<DeleteIcon />}
+                                        onDelete={() => removeExceptionalClosure(exceptionalClosure['@id'])}
+                                    />
                                 </Grid>
                             </Grid>
-                            <hr/>
+                            <Divider />
                         </Box>
                 })}
 
