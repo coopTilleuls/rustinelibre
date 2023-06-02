@@ -2,7 +2,6 @@ import React from 'react';
 import {NextLinkComposed} from '@components/common/link/Link';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
@@ -12,9 +11,6 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {User} from '@interfaces/User';
 import {useRouter} from 'next/router';
-import {Button, Link} from '@mui/material';
-import pages from 'pages';
-import {legalNoticesFooter} from '@data/legal-notices-footer';
 
 interface FooterProps {
   user?: User;
@@ -50,13 +46,9 @@ const Footer = ({user}: FooterProps): JSX.Element => {
           />
           <BottomNavigationAction
             component={NextLinkComposed}
-            to={{pathname: '/'}}
+            to={{pathname: '/rendez-vous/mes-rendez-vous'}}
             label={!isMobile && 'Rendez-vous'}
             icon={<CalendarMonthIcon />}
-            disabled
-            sx={{
-              opacity: 0.5,
-            }}
           />
           <BottomNavigationAction
             component={NextLinkComposed}
