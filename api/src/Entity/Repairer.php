@@ -128,13 +128,13 @@ class Repairer
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 800, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
     public ?string $street = null;
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
     public ?string $city = null;
 
     #[Assert\Type('string')]
@@ -193,7 +193,7 @@ class Repairer
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
     public ?MediaObject $thumbnail = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
