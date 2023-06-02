@@ -43,13 +43,6 @@ services:
         arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]
         autoconfigure: false
 
+    App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
 
-when@test:
-    services:
-        _defaults:
-            autowire: true      # Automatically injects dependencies in your services.
-            autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
-        App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
-
-        App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
+    App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
