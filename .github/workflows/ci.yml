@@ -103,6 +103,6 @@ jobs:
       - name: Fixtures
         run: docker compose exec -T php bin/console hautelook:fixtures:load --env=test --no-interaction --purge-with-truncate
       - name: PHPUnit
-        run: docker compose exec -T php php -d memory_limit=256M bin/phpunit
+        run: docker compose exec -T php php -d memory_limit=512M bin/phpunit
       - name: EsLint
         run: docker compose exec -T pwa npm run lint

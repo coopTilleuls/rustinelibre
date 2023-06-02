@@ -68,7 +68,7 @@ const NavbarDesktop = ({pages, boss, user, employee, admin, logOut}: NavbarDeskt
             </Link>
           );
         })}
-        {(boss || employee) && user && (
+        {user && (boss || employee) && (
           <Link href="/sradmin" style={{textDecoration: 'none'}}>
             <Button
               key="dashboard"
@@ -89,7 +89,7 @@ const NavbarDesktop = ({pages, boss, user, employee, admin, logOut}: NavbarDeskt
             </Button>
           </Link>
         )}
-        {(admin) && user && (
+        {user && admin && (
           <Link href="/admin/reparateurs" style={{textDecoration: 'none'}}>
             <Button
               key="admin"
