@@ -29,6 +29,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
 import CircleIcon from '@mui/icons-material/Circle';
 import {formatDate} from "@helpers/dateHelper";
+import Switch from '@mui/material/Switch';
+
 
 export const RepairersList = (): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -103,6 +105,23 @@ export const RepairersList = (): JSX.Element => {
         }
     };
 
+    const handleSwitchChange = async (event: ChangeEvent, repairer: Repairer) => {
+
+        const isChecked = (event.target as HTMLInputElement).checked;
+        await repairerResource.put(repairer['@id'], {
+            enabled: isChecked
+        })
+
+        const updatedRepairerList = repairers.map((r: Repairer) => {
+            if (r.id === repairer.id) {
+                return { ...r, enabled: isChecked };
+            }
+            return r;
+        });
+
+        setRepairers(updatedRepairerList);
+    };
+
     return (
         <Box>
             <TextField
@@ -132,7 +151,7 @@ export const RepairersList = (): JSX.Element => {
                         <TableRow>
                             <TableCell align="left">Nom</TableCell>
                             <TableCell align="center">Statut</TableCell>
-                            <TableCell align="center">Adresse</TableCell>
+                            <TableCell align="center">Activé</TableCell>
                             <TableCell align="center">Dernière connexion</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
@@ -162,7 +181,11 @@ export const RepairersList = (): JSX.Element => {
                                     </span>}
                                 </TableCell>
                                 <TableCell align="center">
-                                    {`${repairer.street}, ${repairer.postcode} ${repairer.city}`}
+                                    <Switch
+                                        checked={repairer.enabled}
+                                        onChange={(event) => handleSwitchChange(event, repairer)}
+                                        inputProps={{ 'aria-label': 'controlled' }}
+                                    />
                                 </TableCell>
                                 <TableCell align="center">
                                     {repairer.owner.lastConnect && formatDate(repairer.owner.lastConnect)}
