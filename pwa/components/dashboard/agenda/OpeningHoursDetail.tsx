@@ -4,9 +4,10 @@ import {RepairerOpeningHours} from "@interfaces/RepairerOpeningHours";
 import {openingHoursResource} from "@resources/openingHours";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import {Button, CircularProgress} from "@mui/material";
+import {Button, Chip, CircularProgress, Divider, Tooltip} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import ModalAddOpeningHours from "@components/dashboard/agenda/ModalAddOpeningHours";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface OpeningHoursDetailProps {
     repairer: Repairer;
@@ -49,7 +50,7 @@ export const OpeningHoursDetail = ({repairer, dayOfWeek}: OpeningHoursDetailProp
 
     return (
         <>
-            <Box sx={{marginBottom: '40px'}}>
+            <Box sx={{marginBottom: '20px'}}>
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
                         {dayOfWeek.fr}
@@ -59,25 +60,28 @@ export const OpeningHoursDetail = ({repairer, dayOfWeek}: OpeningHoursDetailProp
                         {!loading && openingHours.length > 0 && <Box>
                             {openingHours.map(openingTimes => {
                                     return <Box key={openingTimes.id} sx={{marginBottom: '20px'}}>
-                                        {openingTimes.startTime} - {openingTimes.endTime}
-                                        <Button sx={{float:'right'}} variant="outlined" onClick={() => removeOpeningHour(openingTimes['@id'])}>
-                                            Supprimer
-                                        </Button>
+                                        <Chip
+                                            label={`${openingTimes.startTime} - ${openingTimes.endTime}`}
+                                            deleteIcon={<DeleteIcon />}
+                                            onDelete={() => removeOpeningHour(openingTimes['@id'])}
+                                        />
                                     </Box>
                                 })}
-                            {openingHours.length < 2 && <Box onClick={handleOpenModal} sx={{color: '#1876d2', cursor: 'pointer'}}><AddIcon sx={{marginTop: '25px'}} /> Ajouter une plage horaire</Box>}
+                            {openingHours.length < 2 && <Button sx={{float:'left'}} variant="outlined" onClick={handleOpenModal}>Ajouter une plage horaire</Button>}
                         </Box>
                         }
 
-                        {!loading && openingHours.length === 0 &&
+                        {!loading && openingHours.length === 0 && <Box>
                             <Box sx={{marginBottom: '30px'}}>
-                                {`Aucun horaire d'ouverture ce jour`} <Button sx={{float:'right'}} variant="outlined" onClick={handleOpenModal}>Ajouter une plage horaire</Button>
+                                {`Aucun horaire d'ouverture ce jour`}
                             </Box>
+                            <Button sx={{float:'left'}} variant="outlined" onClick={handleOpenModal}>Ajouter une plage horaire</Button>
+                        </Box>
                         }
                     </Grid>
                 </Grid>
             </Box>
-            <hr/>
+            <Divider sx={{marginBottom: '20px'}}/>
 
             <ModalAddOpeningHours
                 day={dayOfWeek.en}
