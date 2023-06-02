@@ -75,8 +75,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $user = $this->security->getUser();
 
         if (
-            !$user instanceof User ||
-            !(in_array('ROLE_ADMIN', $user->getRoles(), true) || in_array('ROLE_BOSS', $user->getRoles(), true) || in_array('ROLE_EMPLOYEE', $user->getRoles(), true))
+            null === $user ||
+            !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
             throw new AccessDeniedHttpException();
         }
@@ -103,8 +103,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $user = $this->security->getUser();
 
         if (
-            !$user instanceof User ||
-            !(in_array('ROLE_ADMIN', $user->getRoles(), true) || in_array('ROLE_BOSS', $user->getRoles(), true) || in_array('ROLE_EMPLOYEE', $user->getRoles(), true))
+            null === $user ||
+            !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
             throw new AccessDeniedHttpException();
         }
