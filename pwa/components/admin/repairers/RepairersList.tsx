@@ -28,6 +28,7 @@ import {repairerResource} from "@resources/repairerResource";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
 import CircleIcon from '@mui/icons-material/Circle';
+import {formatDate} from "@helpers/dateHelper";
 
 export const RepairersList = (): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -132,6 +133,7 @@ export const RepairersList = (): JSX.Element => {
                             <TableCell align="left">Nom</TableCell>
                             <TableCell align="center">Statut</TableCell>
                             <TableCell align="center">Adresse</TableCell>
+                            <TableCell align="center">Dernière connexion</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -159,11 +161,11 @@ export const RepairersList = (): JSX.Element => {
                                         <CircleIcon sx={{fontSize: '0.8em'}} /> En attente
                                     </span>}
                                 </TableCell>
-                                <TableCell
-                                    align="center"
-                                    sx={{cursor: 'pointer'}}
-                                >
+                                <TableCell align="center">
                                     {`${repairer.street}, ${repairer.postcode} ${repairer.city}`}
+                                </TableCell>
+                                <TableCell align="center">
+                                    {repairer.owner.lastConnect && formatDate(repairer.owner.lastConnect)}
                                 </TableCell>
                                 <TableCell align="right">
                                     <Link href={`/admin/reparateurs/edit/${repairer.id}`}>
