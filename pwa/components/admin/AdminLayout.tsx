@@ -96,7 +96,7 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
   const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 640px)');
 
-  if (user && !user.roles.includes('ROLE_BOSS')) {
+  if (user && !user.roles.includes('ROLE_ADMIN')) {
     router.push('/');
   }
 
