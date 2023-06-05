@@ -191,7 +191,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
 
   useEffect(() => {
     if (isMobile && city && selectedBike) {
-      console.log('mobile city change');
       fetchRepairers();
     }
   }, [city, isMobile, selectedBike]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -273,7 +272,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   }, [orderBy, fetchRepairers]);
 
   useEffect(() => {
-    console.log('repairer type selected');
     fetchRepairers();
   }, [repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
