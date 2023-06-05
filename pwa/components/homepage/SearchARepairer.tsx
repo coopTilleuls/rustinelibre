@@ -83,7 +83,10 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   useEffect(() => {
     if (cityInput === '' || cityInput.length < 3) {
       setCitiesList([]);
-    } else fetchCitiesResult(cityInput);
+      setCity(null);
+    } else {
+      fetchCitiesResult(cityInput);
+    }
   }, [setCitiesList, fetchCitiesResult, cityInput]);
 
   const handleBikeChange = (event: SelectChangeEvent): void => {

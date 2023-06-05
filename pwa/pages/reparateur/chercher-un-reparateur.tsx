@@ -109,9 +109,11 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairers = useCallback(async (): Promise<void> => {
-    if (!selectedBike || !cityInput) {
+
+    if (!selectedBike || !city) {
       return;
     }
+
     setPendingSearchCity(true);
     setIsLoading(true);
 
@@ -342,7 +344,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                           : `${city.name}  (${city.postcode})`
                       }
                       onChange={(event, value) => setCity(value as City)}
-                      onInputChange={(event, value) => setCityInput(value)}
+                      onInputChange={(event, value) => {setCity(null);setCityInput(value)}}
                       renderInput={(params) => (
                         <TextField
                           required
@@ -353,12 +355,12 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                       )}
                     />
                   </Box>
-                  {!isMobile && (
-                    <Box
+                  <Box
                       display={{xs: 'none', md: 'flex'}}
                       alignItems="center"
-                      sx={{mt: {xs: 2, md: 0}}}>
-                      <Button
+                      sx={{mt: 0}}
+                  >
+                    <Button
                         type="submit"
                         variant="contained"
                         sx={{
@@ -367,10 +369,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                           borderRadius: '5px',
                           ml: {xs: 0, md: 2},
                         }}>
-                        <SearchIcon sx={{color: 'white'}} />
-                      </Button>
-                    </Box>
-                  )}
+                      <SearchIcon sx={{color: 'white'}} />
+                    </Button>
+                  </Box>
                 </Box>
                 <Box width="100%">
                   {repairers.length ? (

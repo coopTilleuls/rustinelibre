@@ -65,12 +65,11 @@ export const RepairersResults = (): JSX.Element => {
           </Grid2>
         </Box>
       )}
-      <Box
+      {showMap && <Box
         sx={{
-          display: {xs: showMap ? 'block' : 'none', md: 'block'},
+          display: {xs: 'block', md: 'block'},
           width: {xs: '100%', md: '50%'},
-          // height: 'calc(100vh - 335px)',
-          height: '400px',
+          height: 'calc(100vh - 335px)',
           position: 'sticky',
           top: '198px',
         }}>
@@ -103,7 +102,7 @@ export const RepairersResults = (): JSX.Element => {
             </Marker>
           ))}
         </MapContainer>
-      </Box>
+      </Box>}
     </Box>
   );
 };
