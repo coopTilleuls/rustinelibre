@@ -53,9 +53,10 @@ import {repairerTypeResource} from '@resources/repairerTypeResource';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
+  repairerTypesFetched: RepairerType[];
 };
 
-const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetched = []}) => {
+const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetched = [], repairerTypesFetched = []}) => {
 
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
@@ -65,15 +66,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const listContainerRef = useRef<HTMLDivElement>(null);
-  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
-
-  useEffect(() => {
-    const fetchRepairerTypes = async () => {
-      const response = await repairerTypeResource.getAll(false);
-      setRepairerTypes(response['hydra:member']);
-    };
-    fetchRepairerTypes();
-  }, []);
+  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
 
   const {
     cityInput,
@@ -101,9 +94,20 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
     setBikeTypes(responseBikeTypes['hydra:member']);
   };
 
+  const fetchRepairerTypes = async () => {
+    const response = await repairerTypeResource.getAll(false);
+    setRepairerTypes(response['hydra:member']);
+  };
+
   useEffect(() => {
     if (bikeTypes.length === 0) {
       fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (repairerTypes.length === 0) {
+      fetchRepairerTypes();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -146,13 +150,12 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
     }
 
 
-    console.log(repairerTypeSelected);
-
     if (repairerTypeSelected.length > 0) {
+      if (repairerTypes.length === 0) {
+        await fetchRepairerTypes();
+      }
+
       const ids = repairerTypeSelected.map((name) => {
-
-        console.log(repairerTypes);
-
         const repairerType = repairerTypes.find((type) => type.name === name);
         return repairerType ? repairerType.id : null;
       });
@@ -170,7 +173,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
     setIsLoading(false);
   }, [
     city,
-    cityInput,
     currentPage,
     orderBy,
     filterBy,
@@ -179,7 +181,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
     setTotalItems,
     repairerTypeSelected,
     repairerTypes,
-  ]);
+  ]); 
 
   useEffect(() => {
     if (isMobile && city && selectedBike) {
@@ -263,10 +265,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   }, [orderBy, fetchRepairers]);
 
   useEffect(() => {
-
     fetchRepairers();
-
-  }, [repairerTypeSelected]);
+  }, [repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const scrollToTop = (): void => {
     if (listContainerRef.current) {
@@ -429,9 +429,13 @@ export const getStaticProps: GetStaticProps = async () => {
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
   const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
+  const repairerTypesCollection = await repairerTypeResource.getAll(false);
+  const repairerTypesFetched = repairerTypesCollection['hydra:member'];
+
   return {
     props: {
       bikeTypesFetched,
+      repairerTypesFetched
     },
     revalidate: 10,
   };

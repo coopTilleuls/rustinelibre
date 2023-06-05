@@ -32,13 +32,13 @@ const MapPosition = dynamic(
 type InformationsContainerProps = {
     bikeTypes: BikeType[];
     repairerTypes: RepairerType[];
-    repairerFetch: Repairer|null;
+    repairerFetch: Repairer;
     fetchRepairer: () => Promise<void>
 };
 
 const InformationsContainer = ({bikeTypes , repairerTypes, repairerFetch, fetchRepairer}: InformationsContainerProps) => {
 
-    const [repairer, setRepairer] = useState<Repairer | null>(null);
+    const [repairer, setRepairer] = useState<Repairer>(repairerFetch);
     const [loading, setLoading] = useState<boolean>(true);
     const [success, setSuccess] = useState<boolean>(false);
     const [tabValue, setTabValue] = React.useState<number>(0);
@@ -74,9 +74,6 @@ const InformationsContainer = ({bikeTypes , repairerTypes, repairerFetch, fetchR
         setMobilePhone,
     } = useContext(RepairerFormContext);
 
-    useEffect(() => {
-        setRepairer(repairerFetch);
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (repairer) {
