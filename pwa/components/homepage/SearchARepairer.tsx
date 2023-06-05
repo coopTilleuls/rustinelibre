@@ -83,8 +83,11 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   useEffect(() => {
     if (cityInput === '' || cityInput.length < 3) {
       setCitiesList([]);
-    } else fetchCitiesResult(cityInput);
-  }, [setCitiesList, fetchCitiesResult, cityInput]);
+      setCity(null);
+    } else {
+      fetchCitiesResult(cityInput);
+    }
+  }, [setCitiesList, fetchCitiesResult, cityInput]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBikeChange = (event: SelectChangeEvent): void => {
     const selectedBikeType = bikeTypes.find(

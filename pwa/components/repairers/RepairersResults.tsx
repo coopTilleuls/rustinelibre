@@ -9,11 +9,12 @@ import Box from '@mui/material/Box';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
+import useMediaQuery from "@hooks/useMediaQuery";
 
 export const RepairersResults = (): JSX.Element => {
-  const {showMap, setSelectedRepairer, repairers} = useContext(
-    SearchRepairerContext
-  );
+
+    const isMobile = useMediaQuery('(max-width: 640px)');
+    const {showMap, setSelectedRepairer, repairers} = useContext(SearchRepairerContext);
 
   const [mapCenter, setMapCenter] = useState<[number, number]>([
     Number(repairers[0].latitude),
@@ -29,7 +30,15 @@ export const RepairersResults = (): JSX.Element => {
     if (showMap) {
       event.target.openPopup();
     } else {
-      handleSelectRepairer(repairer.id);
+      if (!isMobile) {
+        handleSelectRepairer(repairer.id);
+      }
+    }
+  };
+
+  const handleHoverPin = (event: LeafletMouseEvent, repairer: Repairer) => {
+    if (showMap) {
+      event.target.openPopup();
     }
   };
 
@@ -58,9 +67,9 @@ export const RepairersResults = (): JSX.Element => {
           </Grid2>
         </Box>
       )}
-      <Box
+      {(showMap || !isMobile) && <Box
         sx={{
-          display: {xs: showMap ? 'block' : 'none', md: 'block'},
+          display: {xs: 'block', md: 'block'},
           width: {xs: '100%', md: '50%'},
           height: 'calc(100vh - 335px)',
           position: 'sticky',
@@ -81,16 +90,21 @@ export const RepairersResults = (): JSX.Element => {
               key={repairer.id}
               position={[Number(repairer.latitude), Number(repairer.longitude)]}
               eventHandlers={{
-                mouseover: (event) => event.target.openPopup(),
+                // mouseover: (event) => {
+                //     handleHoverPin(event, repairer);
+                // },
                 click: (event) => {
                   handleClipMapPin(event, repairer);
                 },
               }}>
-              <Popup><RepairerCard repairer={repairer}/></Popup>
+              <Popup>
+                  {isMobile && <RepairerCard repairer={repairer} />}
+                  {!isMobile && repairer.name}
+              </Popup>
             </Marker>
           ))}
         </MapContainer>
-      </Box>
+      </Box>}
     </Box>
   );
 };
