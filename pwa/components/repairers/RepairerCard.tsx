@@ -32,7 +32,7 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
           border: (theme) => !isMobile ? `4px solid ${theme.palette.grey[300]}` : '',
           display: 'flex',
           backgroundColor:
-            repairer.id === selectedRepairer ? 'lightblue' : 'white',
+            repairer.id === (selectedRepairer) ? 'lightblue' : 'white',
         }}>
         <CardMedia
           component="img"

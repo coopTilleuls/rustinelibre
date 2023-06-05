@@ -62,11 +62,9 @@ const EditRepairer: NextPageWithLayout = () => {
             <Box
                 component="main"
                 sx={{marginLeft: '20%', marginRight: '5%'}}>
-                {loading ? (
-                    <CircularProgress />
-                ) : (
-                    <InformationsContainer repairerTypes={repairerTypes} bikeTypes={bikeTypes} repairerFetch={repairer} fetchRepairer={fetchRepairer} />
-                )}
+
+                {loading && <CircularProgress />}
+                {!loading && repairer && <InformationsContainer repairerTypes={repairerTypes} bikeTypes={bikeTypes} repairerFetch={repairer} fetchRepairer={fetchRepairer} />}
             </Box>
         </>
     );

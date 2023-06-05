@@ -12,6 +12,7 @@ import InformationsContainer from "@components/dashboard/informations/Informatio
 import {Repairer} from "@interfaces/Repairer";
 import {repairerResource} from "@resources/repairerResource";
 import {useAccount} from "@contexts/AuthContext";
+import {CircularProgress} from "@mui/material";
 
 type RepairerInformationsProps = {
   bikeTypesFetched: BikeType[];
@@ -51,10 +52,12 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bi
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairer = async () => {
+
     if (user && user.repairer) {
       setLoading(true);
       const repairerFetch: Repairer = await repairerResource.get(user.repairer);
       setRepairer(repairerFetch);
+      setLoading(false);
     }
   };
 
@@ -68,7 +71,8 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bi
         <title>Informations</title>
       </Head>
       <DashboardLayout>
-        <InformationsContainer bikeTypes={bikeTypes} repairerTypes={repairerTypes} repairerFetch={repairer} fetchRepairer={fetchRepairer} />
+        {loading && <CircularProgress />}
+        {!loading && repairer && <InformationsContainer bikeTypes={bikeTypes} repairerTypes={repairerTypes} repairerFetch={repairer} fetchRepairer={fetchRepairer} />}
       </DashboardLayout>
     </>
   );
