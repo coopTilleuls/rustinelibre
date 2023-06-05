@@ -20,7 +20,7 @@ export const DashboardHomeEmployees = ({currentBoss}: DashboardHomeEmployeesProp
                 <Link href={'/sradmin/employes/ajouter'}>
                     <Button variant="contained" sx={{float: 'right'}} size="small">
                         <AddIcon />
-                        Ajouter un réparateur
+                        Ajouter un employé
                     </Button>
                 </Link>
             </Typography>

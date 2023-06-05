@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Repairer\Slots\FirstSlotAvailable;
 
+use App\Repository\AppointmentRepository;
 use App\Tests\Repairer\Slots\SlotsTestCase;
 
 class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
@@ -54,14 +55,12 @@ class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
         $repairer = $this->getRepairerWithSlotsAvailable(0);
         $client = $this->createClientAuthAsAdmin();
 
-        // get appointments to delete
-        $appointments = $client->request('GET', sprintf('/appointments?customer=/users/%d', $repairer->owner->id))->toArray()['hydra:member'];
+        $this->appointmentRepository = self::getContainer()->get(AppointmentRepository::class);
+        $appointment = $this->appointmentRepository->findOneBy(['repairer' => $repairer]);
 
         $firstResponse = $client->request('GET', sprintf('/repairers/%d', $repairer->id))->toArray();
 
-        foreach ($appointments as $appointment) {
-            $client->request('DELETE', sprintf('/appointments/%d', $appointment['id']));
-        }
+        $client->request('DELETE', sprintf('/appointments/%d', $appointment->id));
 
         $secondResponse = $client->request('GET', sprintf('/repairers/%d', $repairer->id))->toArray();
         self::assertNotSame($firstResponse['firstSlotAvailable'], $secondResponse['firstSlotAvailable']);
@@ -75,21 +74,16 @@ class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
         $repairer = $this->getRepairerWithSlotsAvailable(0);
         $client = $this->createClientWithUser($repairer->owner);
 
-        // get all appointments to find one of our repairer to refuse
-        $appointments = $client->request('GET', '/appointments')->toArray()['hydra:member'];
+        $this->appointmentRepository = self::getContainer()->get(AppointmentRepository::class);
+        $appointment = $this->appointmentRepository->findOneBy(['repairer' => $repairer]);
 
         $firstResponse = $client->request('GET', sprintf('/repairers/%d', $repairer->id))->toArray();
 
-        foreach ($appointments as $appointment) {
-            if ($appointment['repairer']['id'] === $repairer->id) {
-                $client->request('PUT', sprintf('/appointment_transition/%d', $appointment['id']), [
-                    'json' => [
-                        'transition' => 'refused',
-                    ],
-                ]);
-                break;
-            }
-        }
+        $client->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
+            'json' => [
+                'transition' => 'refused',
+            ],
+        ]);
 
         $secondResponse = $client->request('GET', sprintf('/repairers/%d', $repairer->id))->toArray();
         self::assertNotSame($firstResponse['firstSlotAvailable'], $secondResponse['firstSlotAvailable']);

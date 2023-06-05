@@ -53,11 +53,11 @@ import {repairerTypeResource} from '@resources/repairerTypeResource';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
+  repairerTypesFetched: RepairerType[];
 };
 
-const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
-  bikeTypesFetched = [],
-}) => {
+const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetched = [], repairerTypesFetched = []}) => {
+
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
@@ -67,14 +67,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   const isMobile = useMediaQuery('(max-width: 640px)');
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
-
-  useEffect(() => {
-    const fetchRepairerTypes = async () => {
-      const response = await repairerTypeResource.getAll(false);
-      setRepairerTypes(response['hydra:member']);
-    };
-    fetchRepairerTypes();
-  }, []);
 
   const {
     cityInput,
@@ -102,16 +94,29 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setBikeTypes(responseBikeTypes['hydra:member']);
   };
 
+  const fetchRepairerTypes = async () => {
+    const response = await repairerTypeResource.getAll(false);
+    setRepairerTypes(response['hydra:member']);
+  };
+
   useEffect(() => {
     if (bikeTypes.length === 0) {
       fetchBikeTypes();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (repairerTypes.length === 0) {
+      fetchRepairerTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const fetchRepairers = useCallback(async (): Promise<void> => {
-    if (!selectedBike || !cityInput) {
+
+    if (!selectedBike || !city) {
       return;
     }
+
     setPendingSearchCity(true);
     setIsLoading(true);
 
@@ -145,9 +150,19 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       params = {...{availability: 'ASC'}, ...params};
     }
 
+
     if (repairerTypeSelected.length > 0) {
+      let repairerTypesIterate: RepairerType[] = [];
+
+      if (repairerTypes.length === 0) {
+        const repairerTypesFetched = await repairerTypeResource.getAll(false);
+        repairerTypesIterate = repairerTypesFetched['hydra:member'];
+      } else {
+        repairerTypesIterate = repairerTypes;
+      }
+
       const ids = repairerTypeSelected.map((name) => {
-        const repairerType = repairerTypes.find((type) => type.name === name);
+        const repairerType = repairerTypesIterate.find((type) => type.name === name);
         return repairerType ? repairerType.id : null;
       });
 
@@ -164,7 +179,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setIsLoading(false);
   }, [
     city,
-    cityInput,
     currentPage,
     orderBy,
     filterBy,
@@ -184,7 +198,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   useEffect((): void => {
     fetchRepairers();
     scrollToTop();
-  }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  }, [currentPage, setCurrentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchCitiesResult = useCallback(
     async (cityStr: string) => {
@@ -258,7 +273,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
   useEffect(() => {
     fetchRepairers();
-  }, [repairerTypeSelected, fetchRepairers]);
+  }, [repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const scrollToTop = (): void => {
     if (listContainerRef.current) {
@@ -342,7 +357,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                           : `${city.name}  (${city.postcode})`
                       }
                       onChange={(event, value) => setCity(value as City)}
-                      onInputChange={(event, value) => setCityInput(value)}
+                      onInputChange={(event, value) => {setCityInput(value)}}
                       renderInput={(params) => (
                         <TextField
                           required
@@ -353,12 +368,12 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                       )}
                     />
                   </Box>
-                  {!isMobile && (
-                    <Box
+                  <Box
                       display={{xs: 'none', md: 'flex'}}
                       alignItems="center"
-                      sx={{mt: {xs: 2, md: 0}}}>
-                      <Button
+                      sx={{mt: 0}}
+                  >
+                    <Button
                         type="submit"
                         variant="contained"
                         sx={{
@@ -367,10 +382,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                           borderRadius: '5px',
                           ml: {xs: 0, md: 2},
                         }}>
-                        <SearchIcon sx={{color: 'white'}} />
-                      </Button>
-                    </Box>
-                  )}
+                      <SearchIcon sx={{color: 'white'}} />
+                    </Button>
+                  </Box>
                 </Box>
                 <Box width="100%">
                   {repairers.length ? (
@@ -422,9 +436,13 @@ export const getStaticProps: GetStaticProps = async () => {
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
   const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
+  const repairerTypesCollection = await repairerTypeResource.getAll(false);
+  const repairerTypesFetched = repairerTypesCollection['hydra:member'];
+
   return {
     props: {
       bikeTypesFetched,
+      repairerTypesFetched
     },
     revalidate: 10,
   };

@@ -90,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Type('boolean')]
     #[ORM\Column(type: 'boolean', nullable: false)]
     #[Groups([self::USER_READ])]
-    public bool $emailConfirmed = false;
+    public bool $emailConfirmed = true;
 
     #[ORM\Column(type: 'string')]
     public ?string $password = null;
@@ -130,7 +130,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public Collection $bikes;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    #[Groups([self::USER_READ])]
+    #[Groups([self::USER_READ, Repairer::REPAIRER_COLLECTION_READ])]
     public ?\DateTimeImmutable $lastConnect = null;
 
     public function __construct()

@@ -15,6 +15,7 @@ import EngineeringIcon from '@mui/icons-material/Engineering';
 import {useAccount} from '@contexts/AuthContext';
 import useMediaQuery from '@hooks/useMediaQuery';
 import HandymanIcon from '@mui/icons-material/Handyman';
+import Link from "next/link";
 
 const drawerWidth = 240;
 
@@ -42,7 +43,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 const DrawerHeader = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
@@ -116,7 +117,18 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
             </AppBar>
             <Box sx={{display: 'flex'}}>
                 <Drawer variant={'permanent'} open={!isMobile} anchor="left">
-                    <DrawerHeader></DrawerHeader>
+                    <DrawerHeader>
+                        <Link href="/" style={{textDecoration: 'none'}}>
+                            <Typography
+                                color="primary"
+                                sx={{
+                                    fontSize: 17,
+                                    fontWeight: 600,
+                                }}>
+                                La Rustine Libre
+                            </Typography>
+                        </Link>
+                    </DrawerHeader>
                     <Divider />
                     <List>
                         <DashboardSidebarListItem

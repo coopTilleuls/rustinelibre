@@ -62,7 +62,7 @@ jobs:
           push: false
           load: true
       - name: Start services
-        run: docker compose up -d
+        run: docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.test.yml up -d
       - name: Wait for services
         run: |
           while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do
@@ -103,6 +103,6 @@ jobs:
       - name: Fixtures
         run: docker compose exec -T php bin/console hautelook:fixtures:load --env=test --no-interaction --purge-with-truncate
       - name: PHPUnit
-        run: docker compose exec -T php php -d memory_limit=256M bin/phpunit
+        run: docker compose exec -T php php -d memory_limit=512M bin/phpunit
       - name: EsLint
         run: docker compose exec -T pwa npm run lint

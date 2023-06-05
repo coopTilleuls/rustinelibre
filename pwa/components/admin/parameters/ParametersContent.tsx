@@ -3,6 +3,7 @@ import {Box} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import ParametersBikeTypes from "@components/admin/parameters/ParametersBikeTypes";
 import ParametersRepairerTypes from "@components/admin/parameters/ParametersRepairerTypes";
+import InterventionsList from "@components/admin/parameters/interventions/InterventionsList";
 
 export const ParametersContent = (): JSX.Element => {
 
@@ -16,7 +17,7 @@ export const ParametersContent = (): JSX.Element => {
                     <ParametersRepairerTypes />
                 </Grid>
                 <Grid item xs={12}>
-                    {/*@todo add  interventions list*/}
+                    <InterventionsList />
                 </Grid>
             </Grid>
         </Box>

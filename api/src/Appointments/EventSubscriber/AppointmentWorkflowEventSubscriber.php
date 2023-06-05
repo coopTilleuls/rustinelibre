@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Appointments\EventSubscriber;
 
 use App\Entity\Appointment;
+use App\Entity\User;
 use App\Repairers\Slots\FirstSlotAvailableCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -70,10 +71,20 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
 
     public function onProposeNewSlot(Event $event): void
     {
+        /** @var ?User $user */
+        $user = $this->security->getUser();
+
+        if (
+            null === $user ||
+            !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
+        ) {
+            throw new AccessDeniedHttpException();
+        }
+
         /** @var Appointment $appointment */
         $appointment = $event->getSubject();
 
-        $contentRequest = json_decode($this->requestStack->getCurrentRequest()->getContent(), true);
+        $contentRequest = json_decode($this->requestStack->getCurrentRequest()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         if (!array_key_exists('slotTime', $contentRequest)) {
             throw new BadRequestHttpException(sprintf('You should provide a new slotTime in your body request for the transition : %s', $event->getTransition()->getName()));
@@ -88,6 +99,16 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
 
     public function onRefused(Event $event): void
     {
+        /** @var ?User $user */
+        $user = $this->security->getUser();
+
+        if (
+            null === $user ||
+            !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
+        ) {
+            throw new AccessDeniedHttpException();
+        }
+
         /** @var Appointment $appointment */
         $appointment = $event->getSubject();
 

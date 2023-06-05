@@ -28,6 +28,8 @@ import {repairerResource} from "@resources/repairerResource";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
 import CircleIcon from '@mui/icons-material/Circle';
+import {formatDate} from "@helpers/dateHelper";
+import Switch from '@mui/material/Switch';
 
 export const RepairersList = (): JSX.Element => {
     const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -102,6 +104,23 @@ export const RepairersList = (): JSX.Element => {
         }
     };
 
+    const handleSwitchChange = async (event: ChangeEvent, repairer: Repairer) => {
+
+        const isChecked = (event.target as HTMLInputElement).checked;
+        await repairerResource.put(repairer['@id'], {
+            enabled: isChecked
+        })
+
+        const updatedRepairerList = repairers.map((r: Repairer) => {
+            if (r.id === repairer.id) {
+                return { ...r, enabled: isChecked };
+            }
+            return r;
+        });
+
+        setRepairers(updatedRepairerList);
+    };
+
     return (
         <Box>
             <TextField
@@ -131,7 +150,8 @@ export const RepairersList = (): JSX.Element => {
                         <TableRow>
                             <TableCell align="left">Nom</TableCell>
                             <TableCell align="center">Statut</TableCell>
-                            <TableCell align="center">Adresse</TableCell>
+                            <TableCell align="center">Activé</TableCell>
+                            <TableCell align="center">Dernière connexion</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -159,11 +179,15 @@ export const RepairersList = (): JSX.Element => {
                                         <CircleIcon sx={{fontSize: '0.8em'}} /> En attente
                                     </span>}
                                 </TableCell>
-                                <TableCell
-                                    align="center"
-                                    sx={{cursor: 'pointer'}}
-                                >
-                                    {`${repairer.street}, ${repairer.postcode} ${repairer.city}`}
+                                <TableCell align="center">
+                                    <Switch
+                                        checked={repairer.enabled}
+                                        onChange={(event) => handleSwitchChange(event, repairer)}
+                                        inputProps={{ 'aria-label': 'controlled' }}
+                                    />
+                                </TableCell>
+                                <TableCell align="center">
+                                    {repairer.owner.lastConnect && formatDate(repairer.owner.lastConnect)}
                                 </TableCell>
                                 <TableCell align="right">
                                     <Link href={`/admin/reparateurs/edit/${repairer.id}`}>

@@ -78,9 +78,7 @@ export const SearchRepairerProvider = ({
   const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
   const [showMap, setShowMap] = useState<boolean>(false);
   const [repairers, setRepairers] = useState<Repairer[]>([]);
-  const [repairerTypeSelected, setRepairerTypeSelected] = useState<string[]>(
-    []
-  );
+  const [repairerTypeSelected, setRepairerTypeSelected] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [orderBy, setOrderBy] = useState<OrderByOption | null>(null);
   const [filterBy, setFilterBy] = useState<OrderByOption | null>(null);

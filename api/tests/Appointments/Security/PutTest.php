@@ -29,8 +29,6 @@ class PutTest extends AbstractTestCase
         $this->appointment = $appointment;
     }
 
-    // @todo test update appointment (not the status property)
-
     public function testPutAppointmentWithAvailableSlot(): void
     {
         $client = $this->createClientAuthAsAdmin();

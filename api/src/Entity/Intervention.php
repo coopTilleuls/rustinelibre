@@ -28,7 +28,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Get]
 #[GetCollection]
+#[Post(security: "is_granted('ROLE_ADMIN')")]
 #[Post(
+    uriTemplate: '/create_repairer_interventions',
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
     input: CreateInterventionRepairerDto::class,
     processor: CreateInterventionWithCurrentRepairerProcessor::class,
@@ -53,7 +55,7 @@ class Intervention
     public ?string $description = null;
 
     #[ORM\Column]
-    #[Groups([self::READ])]
+    #[Groups([self::READ, self::WRITE])]
     public ?bool $isAdmin = null;
 
     #[ORM\OneToMany(mappedBy: 'intervention', targetEntity: RepairerIntervention::class, cascade: ['persist', 'remove'])]
