@@ -58,10 +58,15 @@ jobs:
               fi
               URL=${RELEASE_NAME}.nonprod.${{ secrets.domain }}
           fi
-          export JWT_PASSPHRASE=$(openssl rand -base64 32)
-          export JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
-          export JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$JWT_SECRET_KEY") -passin file:<(echo "$JWT_PASSPHRASE") -pubout)
+          export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
+          export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+          export APP_JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$APP_JWT_SECRET_KEY") -passin file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -pubout)
           export TRUSTED_HOSTS="^127.0.0.1|localhost|${URL}|${RELEASE_NAME}-bikelib$"
+          export MERCURE_JWT_PUBLIC_KEY=$(openssl genpkey -pass file:<(echo "$APP_JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+          export MERCURE_EXTRA_DIRECTIVES=$(cat <<EOF
+          cors_origins http://localhost:8080 http://localhost:8081 https://localhost http://localhost https://${URL}
+          EOF
+          )
           helm upgrade --install $RELEASE_NAME ./helm/chart \
             --atomic \
             --debug \
@@ -76,10 +81,13 @@ jobs:
             --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
             --set=php.corsAllowOrigin="https?://${URL}$" \
             --set=php.trustedHosts="${TRUSTED_HOSTS//./\\\\.}" \
-            --set=php.jwt.secretKey="${JWT_SECRET_KEY}" \
-            --set=php.jwt.publicKey="${JWT_PUBLIC_KEY}" \
-            --set=php.jwt.passphrase=${JWT_PASSPHRASE} \
+            --set=php.jwt.secretKey="${APP_JWT_SECRET_KEY}" \
+            --set=php.jwt.publicKey="${APP_JWT_PUBLIC_KEY}" \
+            --set=php.jwt.passphrase=${APP_APP_JWT_PUBLIC_KEY} \
             --set=php.host=${URL} \
+            --set=mercure.publicUrl=https://${URL}/.well-known/mercure \
+            --set=mercure.jwtSecret="${MERCURE_JWT_PUBLIC_KEY}" \
+            --set=mercure.extraDirectives="${MERCURE_EXTRA_DIRECTIVES}" \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-prod.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
