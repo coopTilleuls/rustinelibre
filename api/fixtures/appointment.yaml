@@ -11,3 +11,7 @@ App\Entity\Appointment:
     customer: '@user_<numberBetween(10, 20)>'
     repairer: '@repairer_13'
     slotTime: <dateTimeImmutableFromInterval('+1 month')>
+  appointment_{24..40}:
+    customer: '@user_1'
+    repairer: '@repairer_1'
+    slotTime: <dateTimeImmutableFromInterval('+1 month')>
