@@ -8,6 +8,9 @@ ENV APP_ENV=prod
 
 WORKDIR /srv/app
 
+# needed for security update until base image is updated
+RUN apk upgrade libcurl curl
+
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
