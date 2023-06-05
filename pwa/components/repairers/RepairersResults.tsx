@@ -30,7 +30,9 @@ export const RepairersResults = (): JSX.Element => {
     if (showMap) {
       event.target.openPopup();
     } else {
-      handleSelectRepairer(repairer.id);
+      if (!isMobile) {
+        handleSelectRepairer(repairer.id);
+      }
     }
   };
 
@@ -65,7 +67,7 @@ export const RepairersResults = (): JSX.Element => {
           </Grid2>
         </Box>
       )}
-      {showMap && <Box
+      {(showMap || !isMobile) && <Box
         sx={{
           display: {xs: 'block', md: 'block'},
           width: {xs: '100%', md: '50%'},

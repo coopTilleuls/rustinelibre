@@ -55,9 +55,8 @@ type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
 };
 
-const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
-  bikeTypesFetched = [],
-}) => {
+const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetched = []}) => {
+
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
@@ -109,7 +108,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairers = useCallback(async (): Promise<void> => {
-
     if (!selectedBike || !city) {
       return;
     }
@@ -147,8 +145,14 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       params = {...{availability: 'ASC'}, ...params};
     }
 
+
+    console.log(repairerTypeSelected);
+
     if (repairerTypeSelected.length > 0) {
       const ids = repairerTypeSelected.map((name) => {
+
+        console.log(repairerTypes);
+
         const repairerType = repairerTypes.find((type) => type.name === name);
         return repairerType ? repairerType.id : null;
       });
@@ -259,8 +263,10 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   }, [orderBy, fetchRepairers]);
 
   useEffect(() => {
+
     fetchRepairers();
-  }, [repairerTypeSelected, fetchRepairers]);
+
+  }, [repairerTypeSelected]);
 
   const scrollToTop = (): void => {
     if (listContainerRef.current) {
