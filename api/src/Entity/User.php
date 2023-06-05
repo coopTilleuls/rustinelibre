@@ -90,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Type('boolean')]
     #[ORM\Column(type: 'boolean', nullable: false)]
     #[Groups([self::USER_READ])]
-    public bool $emailConfirmed = false;
+    public bool $emailConfirmed = true;
 
     #[ORM\Column(type: 'string')]
     public ?string $password = null;
