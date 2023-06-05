@@ -66,7 +66,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const listContainerRef = useRef<HTMLDivElement>(null);
-  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
+  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
 
   const {
     cityInput,
@@ -112,6 +112,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairers = useCallback(async (): Promise<void> => {
+
     if (!selectedBike || !city) {
       return;
     }
@@ -151,12 +152,17 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
 
 
     if (repairerTypeSelected.length > 0) {
+      let repairerTypesIterate: RepairerType[] = [];
+
       if (repairerTypes.length === 0) {
-        await fetchRepairerTypes();
+        const repairerTypesFetched = await repairerTypeResource.getAll(false);
+        repairerTypesIterate = repairerTypesFetched['hydra:member'];
+      } else {
+        repairerTypesIterate = repairerTypes;
       }
 
       const ids = repairerTypeSelected.map((name) => {
-        const repairerType = repairerTypes.find((type) => type.name === name);
+        const repairerType = repairerTypesIterate.find((type) => type.name === name);
         return repairerType ? repairerType.id : null;
       });
 
@@ -181,10 +187,11 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
     setTotalItems,
     repairerTypeSelected,
     repairerTypes,
-  ]); 
+  ]);
 
   useEffect(() => {
     if (isMobile && city && selectedBike) {
+      console.log('mobile city change');
       fetchRepairers();
     }
   }, [city, isMobile, selectedBike]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -192,7 +199,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   useEffect((): void => {
     fetchRepairers();
     scrollToTop();
-  }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  }, [currentPage, setCurrentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchCitiesResult = useCallback(
     async (cityStr: string) => {
@@ -265,6 +273,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   }, [orderBy, fetchRepairers]);
 
   useEffect(() => {
+    console.log('repairer type selected');
     fetchRepairers();
   }, [repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -350,7 +359,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
                           : `${city.name}  (${city.postcode})`
                       }
                       onChange={(event, value) => setCity(value as City)}
-                      onInputChange={(event, value) => {setCity(null);setCityInput(value)}}
+                      onInputChange={(event, value) => {setCityInput(value)}}
                       renderInput={(params) => (
                         <TextField
                           required
