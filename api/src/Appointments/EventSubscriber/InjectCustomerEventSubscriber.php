@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use function PHPUnit\Framework\throwException;
 
 readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
 {
@@ -40,12 +39,12 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
 
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
-        if($this->security->isGranted('ROLE_BOSS') || $this->security->isGranted('ROLE_EMPLOYEE')){
-        $checkAppointment = $this->appointmentRepository->findOneBy([
-            'customer' => $object->customer->id,
-            'repairer' => $currentUser->repairerEmployee->repairer ?? $currentUser->repairer,
-        ]);
-            if(!$checkAppointment) {
+        if ($this->security->isGranted('ROLE_BOSS') || $this->security->isGranted('ROLE_EMPLOYEE')) {
+            $checkAppointment = $this->appointmentRepository->findOneBy([
+                'customer' => $object->customer->id,
+                'repairer' => $currentUser->repairerEmployee->repairer ?? $currentUser->repairer,
+            ]);
+            if (!$checkAppointment) {
                 throw new AccessDeniedHttpException('Cet utilisateur n\'est pas un de vos client');
             }
         }
