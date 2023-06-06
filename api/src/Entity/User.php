@@ -99,6 +99,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ, self::USER_WRITE])]
     public ?string $plainPassword = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([self::USER_READ, self::USER_WRITE])]
+    public ?string $street = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    #[Groups([self::USER_READ, self::USER_WRITE])]
+    public ?string $city = null;
+
     #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
     #[Groups([self::USER_READ])]
     public ?Repairer $repairer = null;

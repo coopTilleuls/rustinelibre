@@ -20,7 +20,7 @@ const EditUser: NextPageWithLayout = () => {
     const [success, setSuccess] = useState<boolean>(false);
     const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const {firstName, lastName, email, password, passwordError} = useContext(UserFormContext);
+    const {firstName, lastName, passwordError, city, street} = useContext(UserFormContext);
 
     useEffect(() => {
         async function fetchUser() {
@@ -37,7 +37,7 @@ const EditUser: NextPageWithLayout = () => {
     }, [id]);
 
     const updateUser = async (): Promise<void> => {
-        if (passwordError || !firstName || !lastName || !user || !email) {
+        if (!firstName || !lastName || !user) {
             return;
         }
 
@@ -48,11 +48,9 @@ const EditUser: NextPageWithLayout = () => {
             const bodyRequest: RequestBody = {
                 firstName: firstName,
                 lastName: lastName,
-                email: email
+                city: city,
+                street: street,
             };
-            if (password && password !== '' && password !== '***********') {
-                bodyRequest['plainPassword'] = password;
-            }
             await userResource.putById(user.id, bodyRequest);
             setSuccess(true);
             setTimeout(() => {setSuccess(false)}, 3000);
