@@ -4,34 +4,34 @@ declare(strict_types=1);
 
 namespace App\Messages\EventSubscriber;
 
+use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Appointment;
 use App\Entity\Discussion;
 use App\Repository\DiscussionRepository;
-use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Events;
-use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-readonly class CreateDiscussionEventSubscriber implements EventSubscriber
+readonly class CreateDiscussionEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private DiscussionRepository $discussionRepository, private RequestStack $requestStack)
+    public function __construct(private DiscussionRepository $discussionRepository)
     {
     }
 
-    public function getSubscribedEvents(): array
+    public static function getSubscribedEvents(): array
     {
         return [
-            Events::postPersist,
+            KernelEvents::VIEW => ['createDiscussion', EventPriorities::POST_WRITE],
         ];
     }
 
-    public function postPersist(BaseLifecycleEventArgs $args): void
+    public function createDiscussion(ViewEvent $event): void
     {
-        $object = $args->getObject();
-        $method = $this->requestStack->getCurrentRequest()?->getMethod();
+        $object = $event->getControllerResult();
+        $method = $event->getRequest()->getMethod();
 
-        if (!$object instanceof Appointment || ($method && Request::METHOD_POST !== $method)) {
+        if (!$object instanceof Appointment || Request::METHOD_POST !== $method) {
             return;
         }
 

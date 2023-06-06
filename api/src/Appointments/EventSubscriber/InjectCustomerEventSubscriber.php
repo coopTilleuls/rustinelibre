@@ -31,7 +31,7 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$object instanceof Appointment || Request::METHOD_POST !== $method || $this->security->isGranted('ROLE_ADMIN')) {
+        if (!$object instanceof Appointment || Request::METHOD_POST !== $method) {
             return;
         }
 
