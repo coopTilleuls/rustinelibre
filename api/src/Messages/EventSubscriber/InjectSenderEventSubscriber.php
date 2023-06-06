@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Appointments\EventSubscriber;
+namespace App\Messages\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
-use App\Entity\Appointment;
+use App\Entity\DiscussionMessage;
 use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
+readonly class InjectSenderEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private Security $security)
     {
@@ -22,21 +22,21 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::VIEW => ['injectCustomer', EventPriorities::PRE_WRITE],
+            KernelEvents::VIEW => ['injectSender', EventPriorities::PRE_WRITE],
         ];
     }
 
-    public function injectCustomer(ViewEvent $event): void
+    public function injectSender(ViewEvent $event): void
     {
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$object instanceof Appointment || Request::METHOD_POST !== $method) {
+        if (!$object instanceof DiscussionMessage || Request::METHOD_POST !== $method) {
             return;
         }
 
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
-        $object->customer = $currentUser;
+        $object->sender = $currentUser;
     }
 }
