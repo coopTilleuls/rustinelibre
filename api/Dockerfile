@@ -106,6 +106,9 @@ RUN xcaddy build v2.6.4 \
 # Caddy image
 FROM caddy:2-alpine AS app_caddy
 
+# needed for security update until base image is updated
+RUN apk upgrade libcurl curl openssl openssl-dev libressl
+
 WORKDIR /srv/app
 
 COPY --from=app_caddy_builder --link /usr/bin/caddy /usr/bin/caddy

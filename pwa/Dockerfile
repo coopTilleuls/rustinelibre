@@ -7,8 +7,6 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
-RUN apk upgrade libcurl curl openssl openssl-dev libressl
-
 RUN corepack enable && \
 	corepack prepare --activate pnpm@latest && \
 	pnpm config -g set store-dir /.pnpm-store
@@ -19,7 +17,6 @@ RUN corepack enable && \
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 
-# Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
 FROM builder_base AS deps
 
 COPY --link pnpm-lock.yaml package.json ./
@@ -49,6 +46,9 @@ RUN pnpm run build
 # Production image, copy all the files and run next
 FROM node:18-alpine AS prod
 WORKDIR /srv/app
+
+# Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
+RUN apk upgrade libcurl curl openssl openssl-dev libressl
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
