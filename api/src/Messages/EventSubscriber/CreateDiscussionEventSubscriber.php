@@ -29,9 +29,9 @@ readonly class CreateDiscussionEventSubscriber implements EventSubscriber
     public function postPersist(BaseLifecycleEventArgs $args): void
     {
         $object = $args->getObject();
-        $method = $this->requestStack->getCurrentRequest()->getMethod();
+        $method = $this->requestStack->getCurrentRequest()?->getMethod();
 
-        if (!$object instanceof Appointment || Request::METHOD_POST !== $method) {
+        if (!$object instanceof Appointment || ($method && Request::METHOD_POST !== $method)) {
             return;
         }
 

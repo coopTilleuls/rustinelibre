@@ -38,6 +38,10 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
+    App\Messages\EventSubscriber\CreateDiscussionEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
+
     App\OpenApi\OpenApiFactory:
         decorates: 'lexik_jwt_authentication.api_platform.openapi.factory'
         arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]
