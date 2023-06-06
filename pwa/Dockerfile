@@ -48,7 +48,7 @@ FROM node:18-alpine AS prod
 WORKDIR /srv/app
 
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
-RUN apk upgrade libcurl curl openssl openssl-dev libressl
+RUN apk upgrade libcurl curl openssl openssl-dev libressl libcrypto3 libssl3
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
