@@ -50,12 +50,12 @@ const EditUser: NextPageWithLayout = () => {
                 lastName: lastName,
                 email: email
             };
-            if (password && password !== '') {
+            if (password && password !== '' && password !== '***********') {
                 bodyRequest['plainPassword'] = password;
             }
             await userResource.putById(user.id, bodyRequest);
             setSuccess(true);
-            setTimeout(() => {setSuccess(false);}, 3000);
+            setTimeout(() => {setSuccess(false)}, 3000);
         } catch (e) {
             setErrorMessage('Mise à jour impossible');
         }
