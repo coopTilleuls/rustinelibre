@@ -22,14 +22,13 @@ const MyProfile: NextPageWithLayout = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const {firstName, lastName, email, password, passwordError} =
-    useContext(UserFormContext);
+  const {firstName, lastName, passwordError, city, street} = useContext(UserFormContext);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (passwordError || !firstName || !lastName || !user) {
+    if (!firstName || !lastName || !user) {
       return;
     }
 
@@ -40,11 +39,9 @@ const MyProfile: NextPageWithLayout = () => {
       const bodyRequest: RequestBody = {
         firstName: firstName,
         lastName: lastName,
-        email: email
+        city: city,
+        street: street
       };
-      if (password && password !== '' && password !== '***********') {
-        bodyRequest['plainPassword'] = password;
-      }
       await userResource.putById(user.id, bodyRequest);
       setSuccess(true);
       setTimeout(() => {
