@@ -36,12 +36,21 @@ docker-compose exec php sh  # "Entrer" dans le container PHP
 ``` shell
 bin/console d:d:c           # Créer la BDD
 bin/console d:m:m           # Lance les migrations
-bin/console h:f:l           # Injecte les fixtures
+bin/console h:f:l -e dev    # Injecte les fixtures
 ```
 
-## Pour exécuter les tests
+## Pour exécuter l'intégralité des tests de l'API
 ``` shell
-bin/phpunit             # Lance les tests API
+bin/console d:d:d --env=test --force
+bin/console d:d:c --env=test
+bin/console d:m:m --env=test
+bin/console h:f:l --env=test
+php -d memory_limit=512M vendor/bin/phpunit   
+```
+
+## Pour lancer un test seul
+``` shell
+vendor/bin/phpunit  <chemin/vers/votre/test>  
 ```
 
 
@@ -54,7 +63,7 @@ Faites une request POST sur cette URL : https://localhost/auth avec ce contenu
 }
 ```
 
-Pour obtenir le token suivant
+Permet d'obtenir le token suivant
 ```
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Nzk2NTQxOTgsImV4cCI6MTY3OTY1Nzc5OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImNsZW1lbnRAbGVzLXRpbGxldWxzLmNvb3AifQ.OmmLYlmeriqt-SSIgseyTDDYcAOFs_ws4p7FmbBbExpPn3JQOyrIQk3zs-NKOIupxT8grB42KPnCa_cm08i6Mu1p4Bm-lBWe2N95rNCTRAhazFirwVCx5Jgkp1QD2ICUElOyw6pid8oroTQ903XhtHJnK8tRADArDZqz64U3p4eHcMbappjyJCQhVeV50oYsqcmR3gPWkO5uNt-9lMz4prOasz4rRPXY3MIVrGX6NJTCGkQjQPD0ibcqofJxoXpWmYvzIMNfRw7Wb0yd7guQxm7rWRVAwjBWFiW1eLou4upuq_KREojGLJwcTHVODeCrJcsQyRPtW1SRvrtP-PJ3tA"

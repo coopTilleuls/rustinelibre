@@ -40,8 +40,9 @@ const MyProfile: NextPageWithLayout = () => {
       const bodyRequest: RequestBody = {
         firstName: firstName,
         lastName: lastName,
+        email: email
       };
-      if (password && password !== '') {
+      if (password && password !== '' && password !== '***********') {
         bodyRequest['plainPassword'] = password;
       }
       await userResource.putById(user.id, bodyRequest);

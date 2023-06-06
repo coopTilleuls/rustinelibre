@@ -171,6 +171,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
       params = {...{repairerType: `${queryString}`}, ...params};
     }
 
+    params = {...{sort: 'random'}, ...params};
+
     const response = await repairerResource.getAll(false, params);
     setRepairers(response['hydra:member']);
     setTotalItems(response['hydra:totalItems']);
