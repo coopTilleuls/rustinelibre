@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
-RUN apk upgrade libcurl curl openssl openssl-dev libcrypto
+RUN apk upgrade libcurl curl openssl openssl-dev libressl
 
 RUN corepack enable && \
 	corepack prepare --activate pnpm@latest && \
