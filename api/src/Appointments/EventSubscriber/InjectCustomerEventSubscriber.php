@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private Security $security, private readonly AppointmentRepository $appointmentRepository)
+    public function __construct(private Security $security, private AppointmentRepository $appointmentRepository)
     {
     }
 
@@ -32,13 +32,13 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
     {
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
+        /** @var User $currentUser */
+        $currentUser = $this->security->getUser();
 
-        if (!$object instanceof Appointment || Request::METHOD_POST !== $method || $this->security->isGranted('ROLE_ADMIN')) {
+        if (!$object instanceof Appointment || Request::METHOD_POST !== $method || $this->security->isGranted('ROLE_ADMIN') || $currentUser === $object->customer) {
             return;
         }
 
-        /** @var User $currentUser */
-        $currentUser = $this->security->getUser();
         if ($this->security->isGranted('ROLE_BOSS') || $this->security->isGranted('ROLE_EMPLOYEE')) {
             $checkAppointment = $this->appointmentRepository->findOneBy([
                 'customer' => $object->customer->id,
