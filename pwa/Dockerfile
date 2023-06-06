@@ -7,6 +7,8 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
+RUN apk upgrade libcurl curl openssl openssl-dev libcrypto
+
 RUN corepack enable && \
 	corepack prepare --activate pnpm@latest && \
 	pnpm config -g set store-dir /.pnpm-store
