@@ -37,6 +37,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
       setFirstName(user.firstName);
       setLastName(user.lastName);
       setEmail(user.email);
+      setPassword('***********')
     }
   }, [user, setFirstName, setLastName, setEmail]);
 

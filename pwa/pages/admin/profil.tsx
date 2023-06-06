@@ -13,7 +13,6 @@ import {
 import {useAccount} from '@contexts/AuthContext';
 import {UserFormContext} from '@contexts/UserFormContext';
 import {userResource} from '@resources/userResource';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
 import UserForm from '@components/profile/UserForm';
 import {RequestBody} from '@interfaces/Resource';
 import AdminLayout from "@components/admin/AdminLayout";
@@ -41,8 +40,9 @@ const AdminProfile: NextPageWithLayout = () => {
             const bodyRequest: RequestBody = {
                 firstName: firstName,
                 lastName: lastName,
+                email: email
             };
-            if (password && password !== '') {
+            if (password && password !== '' && password !== '***********') {
                 bodyRequest['plainPassword'] = password;
             }
             await userResource.putById(user.id, bodyRequest);
