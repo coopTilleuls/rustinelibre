@@ -10,12 +10,14 @@ use App\Tests\Repairer\Slots\SlotsTestCase;
 class SlotsAvailableChangeWithAppointmentEventTest extends SlotsTestCase
 {
     private User $user;
+
     public function setUp(): void
     {
         parent::setUp();
-        //Get user with ROLE_USER
+        // Get user with ROLE_USER
         $this->user = $this->userRepository->findOneBy(['email' => 'user1@test.com']);
     }
+
     /*
          * test if slots available are updated after appointment creation
          */

@@ -36,7 +36,7 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
-        if (!$object instanceof Appointment || Request::METHOD_POST !== $method || ($this->security->isGranted('ROLE_ADMIN') &&  $object->customer  && $currentUser->id !== $object->customer->id) || $object->customer && $currentUser->id === $object->customer->id) {
+        if (!$object instanceof Appointment || Request::METHOD_POST !== $method || ($this->security->isGranted('ROLE_ADMIN') && $object->customer && $currentUser->id !== $object->customer->id) || $object->customer && $currentUser->id === $object->customer->id) {
             return;
         }
 
