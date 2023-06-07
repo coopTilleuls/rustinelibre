@@ -6,6 +6,8 @@ App\Entity\User:
     lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>
   boss_1:
     roles: ["ROLE_BOSS"]
     email: "boss@test.com"
@@ -13,6 +15,8 @@ App\Entity\User:
     lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>
   boss_2:
     roles: [ "ROLE_BOSS" ]
     email: "boss2@test.com"
@@ -20,6 +24,8 @@ App\Entity\User:
     lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>
   user_1:
     roles: ["ROLE_USER"]
     email: "user1@test.com"
@@ -27,6 +33,8 @@ App\Entity\User:
     lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>
   user_2:
     roles: ["ROLE_BOSS"]
     email: "repairer2@test.com"
@@ -34,6 +42,8 @@ App\Entity\User:
     lastName: 'Tilleuls'
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>
   user_{3..6}:
     roles: [ "ROLE_USER", "ROLE_EMPLOYEE" ]
     email: <email()>
@@ -41,6 +51,8 @@ App\Entity\User:
     lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>
   user_{7..20}:
     roles: ["ROLE_USER"]
     email: <email()>
@@ -48,6 +60,8 @@ App\Entity\User:
     lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>
   user_not_confirm{21..25}:
     roles: ["ROLE_USER"]
     email: <email()>
@@ -55,6 +69,8 @@ App\Entity\User:
     lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: false
+    street: <address()>
+    city: <city()>
   user_{26..100}:
     roles: [ "ROLE_BOSS" ]
     email: <email()>
@@ -62,6 +78,8 @@ App\Entity\User:
     lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>
   user_{101..200}:
     roles: [ "ROLE_USER" ]
     email: <email()>
@@ -69,3 +87,5 @@ App\Entity\User:
     lastName: <lastName()>
     plainPassword: "Test1passwordOk!"
     emailConfirmed: true
+    street: <address()>
+    city: <city()>

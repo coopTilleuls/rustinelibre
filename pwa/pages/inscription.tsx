@@ -1,7 +1,6 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useContext} from 'react';
 import Head from 'next/head';
-import {useRouter} from 'next/router';
 import {userResource} from '@resources/userResource';
 import {useAccount} from '@contexts/AuthContext';
 import {UserFormContext} from '@contexts/UserFormContext';
@@ -20,14 +19,13 @@ import UserForm from '@components/profile/UserForm';
 import Link from 'next/link';
 
 const Registration: NextPageWithLayout = ({}) => {
-  const [pendingRegistration, setPendingRegistration] =
-    useState<boolean>(false);
+
+  const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {user} = useAccount({redirectIfFound: '/'});
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
-  const router = useRouter();
 
-  const {firstName, lastName, email, password, passwordError} =
+  const {firstName, lastName, email, password, passwordError, city, street} =
     useContext(UserFormContext);
 
   const handleSubmit = async (
@@ -47,6 +45,8 @@ const Registration: NextPageWithLayout = ({}) => {
         lastName: lastName,
         email: email,
         plainPassword: password,
+        city: city,
+        street: street
       });
     } catch (e) {
       setErrorMessage('Inscription impossible');
