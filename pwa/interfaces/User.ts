@@ -4,6 +4,8 @@ export interface User {
     id: string;
     firstName: string;
     lastName: string;
+    city?: string;
+    street?: string;
     email: string;
     roles: string[];
     repairer: string,

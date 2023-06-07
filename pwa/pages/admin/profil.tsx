@@ -18,12 +18,12 @@ import {RequestBody} from '@interfaces/Resource';
 import AdminLayout from "@components/admin/AdminLayout";
 
 const AdminProfile: NextPageWithLayout = () => {
+
     const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
     const [success, setSuccess] = useState<boolean>(false);
     const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const {firstName, lastName, email, password, passwordError} =
-        useContext(UserFormContext);
+    const {firstName, lastName, city, street, passwordError} = useContext(UserFormContext);
 
     const handleSubmit = async (
         event: React.FormEvent<HTMLFormElement>
@@ -40,11 +40,9 @@ const AdminProfile: NextPageWithLayout = () => {
             const bodyRequest: RequestBody = {
                 firstName: firstName,
                 lastName: lastName,
-                email: email
+                city: city,
+                street: street,
             };
-            if (password && password !== '' && password !== '***********') {
-                bodyRequest['plainPassword'] = password;
-            }
             await userResource.putById(user.id, bodyRequest);
             setSuccess(true);
             setTimeout(() => {
