@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Repairer\Slots\SlotsAvailable;
 
+use App\Entity\User;
 use App\Tests\Repairer\Slots\SlotsTestCase;
 
 class SlotsAvailableChangeWithAppointmentEventTest extends SlotsTestCase
 {
+    private User $user;
+    public function setUp(): void
+    {
+        parent::setUp();
+        //Get user with ROLE_USER
+        $this->user = $this->userRepository->findOneBy(['email' => 'user1@test.com']);
+    }
     /*
          * test if slots available are updated after appointment creation
          */
@@ -43,6 +51,7 @@ class SlotsAvailableChangeWithAppointmentEventTest extends SlotsTestCase
 
         $appointmentResponse = $client->request('POST', '/appointments', [
             'json' => [
+                'customer' => sprintf('/users/%d', $this->user->id),
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
                 'slotTime' => \DateTimeImmutable::createFromFormat('Y-m-d H:i', $slotTime)->format('Y-m-d H:i:s '),
             ],
@@ -69,6 +78,7 @@ class SlotsAvailableChangeWithAppointmentEventTest extends SlotsTestCase
 
         $appointmentResponse = $client->request('POST', '/appointments', [
             'json' => [
+                'customer' => sprintf('/users/%d', $this->user->id),
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
                 'slotTime' => \DateTimeImmutable::createFromFormat('Y-m-d H:i', $slotTime)->format('Y-m-d H:i:s '),
             ],
