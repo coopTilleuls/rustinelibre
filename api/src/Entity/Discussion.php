@@ -16,9 +16,13 @@ use ApiPlatform\Metadata\Post;
 use App\Repository\DiscussionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DiscussionRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => [self::DISCUSSION_READ]],
+    denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]]
+)]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or (user.repairer and user.repairer == object.repairer) 
 or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
@@ -29,24 +33,34 @@ or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)
 #[ApiFilter(OrderFilter::class)]
 class Discussion
 {
+    public const DISCUSSION_READ = 'discussion_read';
+    public const DISCUSSION_WRITE = 'discussion_write';
+
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([self::DISCUSSION_READ])]
     public ?int $id = null;
 
     #[Assert\NotNull]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[Groups([self::DISCUSSION_READ, self::DISCUSSION_WRITE])]
     public ?Repairer $repairer = null;
 
     #[Assert\NotNull]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[Groups([self::DISCUSSION_READ, self::DISCUSSION_WRITE])]
     public ?User $customer = null;
 
     #[ORM\Column(nullable: true)]
     public ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups([self::DISCUSSION_WRITE])]
+    public ?\DateTimeImmutable $lastMessage = null;
 
     public function __construct()
     {

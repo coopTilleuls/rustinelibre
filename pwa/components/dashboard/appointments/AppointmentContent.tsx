@@ -235,9 +235,19 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
                         </Button>}
                 </Grid>
                 <Grid item xs={6}>
-                    <Button disabled={!discussion} variant="outlined">
-                        Envoyer un message
-                    </Button>
+                    {
+                        discussion && <Link href={`/sradmin/messagerie/${discussion.id}`}>
+                            <Button variant="outlined">
+                                Envoyer un message
+                            </Button>
+                        </Link>
+                    }
+                    {
+                        !discussion && <Button disabled variant="outlined">
+                                Envoyer un message
+                            </Button>
+                    }
+
                 </Grid>
 
                 {

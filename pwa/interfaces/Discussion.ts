@@ -8,4 +8,5 @@ export interface Discussion {
     customer: User;
     repairer: Repairer;
     createdAt: string;
+    lastMessage: string;
 }
