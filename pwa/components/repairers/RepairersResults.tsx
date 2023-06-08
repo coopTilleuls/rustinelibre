@@ -36,12 +36,6 @@ export const RepairersResults = (): JSX.Element => {
     }
   };
 
-  const handleHoverPin = (event: LeafletMouseEvent, repairer: Repairer) => {
-    if (showMap) {
-      event.target.openPopup();
-    }
-  };
-
   return (
     <Box display="flex">
       {!showMap && (
@@ -85,24 +79,30 @@ export const RepairersResults = (): JSX.Element => {
             borderRadius: 5,
           }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {repairers.map((repairer) => (
-            <Marker
-              key={repairer.id}
-              position={[Number(repairer.latitude), Number(repairer.longitude)]}
-              eventHandlers={{
-                // mouseover: (event) => {
-                //     handleHoverPin(event, repairer);
-                // },
-                click: (event) => {
-                  handleClipMapPin(event, repairer);
-                },
-              }}>
+          {repairers.map((repairer) => {
+
+            if (!repairer.latitude || !repairer.longitude) {
+              return;
+            }
+
+            return <Marker
+                key={repairer.id}
+                position={[Number(repairer.latitude), Number(repairer.longitude)]}
+                eventHandlers={{
+                  // mouseover: (event) => {
+                  //     handleHoverPin(event, repairer);
+                  // },
+                  click: (event) => {
+                    handleClipMapPin(event, repairer);
+                  },
+                }}>
               <Popup>
-                  {isMobile && <RepairerCard repairer={repairer} />}
-                  {!isMobile && repairer.name}
+                {isMobile && <RepairerCard repairer={repairer} />}
+                {!isMobile && repairer.name}
               </Popup>
             </Marker>
-          ))}
+            }
+          )}
         </MapContainer>
       </Box>}
     </Box>

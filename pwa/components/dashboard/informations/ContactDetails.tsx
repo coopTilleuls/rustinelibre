@@ -91,7 +91,6 @@ export const ContactDetails = ({
         label="Nom de votre enseigne"
         name="name"
         autoComplete="name"
-        autoFocus
         value={name}
         inputProps={{ maxLength: 80 }}
         onChange={handleChangeName}
@@ -103,7 +102,6 @@ export const ContactDetails = ({
         label="Numéro de téléphone"
         name="name"
         autoComplete="mobilePhone"
-        autoFocus
         value={mobilePhone}
         inputProps={{ maxLength: 30 }}
         onChange={handleChangeMobilePhone}
@@ -116,7 +114,6 @@ export const ContactDetails = ({
         label="Numéro et rue"
         name="street"
         autoComplete="street"
-        autoFocus
         value={street}
         inputProps={{ maxLength: 800 }}
         onChange={handleChangeStreet}
