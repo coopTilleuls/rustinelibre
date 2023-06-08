@@ -14,7 +14,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 readonly class UpdateDiscussionLastMessageEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private DiscussionRepository $discussionRepository) {}
+    public function __construct(private DiscussionRepository $discussionRepository)
+    {
+    }
 
     public static function getSubscribedEvents(): array
     {

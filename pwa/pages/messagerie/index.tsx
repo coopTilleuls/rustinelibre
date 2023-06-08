@@ -1,7 +1,6 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect} from 'react';
 import Head from 'next/head';
-import DashboardLayout from '@components/dashboard/DashboardLayout';
 import Box from '@mui/material/Box';
 import {CircularProgress, Container} from '@mui/material';
 import {discussionResource} from "@resources/discussionResource";
@@ -15,6 +14,7 @@ import ListItemText from '@mui/material/ListItemText';
 import {formatDate} from "@helpers/dateHelper";
 import WebsiteLayout from "@components/layout/WebsiteLayout";
 import {useAccount} from "@contexts/AuthContext";
+import {ENTRYPOINT} from "@config/entrypoint";
 
 const Messagerie: NextPageWithLayout = () => {
 
@@ -22,6 +22,19 @@ const Messagerie: NextPageWithLayout = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [discussionSelected, setDiscussionSelected] = useState<Discussion | null>(null);
     const {user} = useAccount({});
+
+    const subscribeMercureDiscussions = async(): Promise<void> => {
+        const hubUrl = `${ENTRYPOINT}/.well-known/mercure`
+        const hub = new URL(hubUrl);
+        discussions.map(discussion => {
+            hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+        })
+
+        const eventSource = new EventSource(hub);
+        eventSource.onmessage = event => {
+            fetchDiscussions()
+        };
+    }
 
     const fetchDiscussions = async() => {
         if (!user) {
@@ -34,12 +47,21 @@ const Messagerie: NextPageWithLayout = () => {
             customer: user['@id']
         });
         setDiscussions(response['hydra:member']);
+        if (response['hydra:member'].length > 0) {
+            setDiscussionSelected(response['hydra:member'][0])
+        }
         setLoading(false);
     }
 
     useEffect(() => {
         fetchDiscussions();
     }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (discussions.length > 0) {
+            subscribeMercureDiscussions();
+        }
+    }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

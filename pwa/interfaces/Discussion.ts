@@ -4,7 +4,7 @@ import {Repairer} from '@interfaces/Repairer';
 export interface Discussion {
     '@id': string;
     '@type': string;
-    id: string;
+    id: number;
     customer: User;
     repairer: Repairer;
     createdAt: string;

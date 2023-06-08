@@ -15,13 +15,14 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\DiscussionRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DiscussionRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
-    denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]]
+    denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
+    mercure: true,
 )]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or (user.repairer and user.repairer == object.repairer) 
@@ -56,10 +57,11 @@ class Discussion
     public ?User $customer = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups([self::DISCUSSION_READ, self::DISCUSSION_WRITE])]
     public ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups([self::DISCUSSION_WRITE])]
+    #[Groups([self::DISCUSSION_READ])]
     public ?\DateTimeImmutable $lastMessage = null;
 
     public function __construct()

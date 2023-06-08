@@ -1,13 +1,11 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import Box from '@mui/material/Box';
-import {Maintenance} from "@interfaces/Maintenance";
-import {maintenanceResource} from "@resources/MaintenanceResource";
-import {Bike} from "@interfaces/Bike";
 import {Discussion} from "@interfaces/Discussion";
 import {DiscussionMessage} from "@interfaces/DiscussionMessage";
 import {discussionMessageResource} from "@resources/discussionMessageResource";
 import {Container, Paper, TextField, Button, CircularProgress} from '@mui/material';
 import {useAccount} from "@contexts/AuthContext";
+import {ENTRYPOINT} from '@config/entrypoint';
 
 type MessagesContentProps = {
     discussion: Discussion;
@@ -16,7 +14,7 @@ type MessagesContentProps = {
 
 const MessagesContent = ({discussion, bottomPosition = 5}: MessagesContentProps): JSX.Element => {
 
-    const messagesEndRef = useRef(null);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
     const {user} = useAccount({});
     const [loading, setLoading] = useState<boolean>(false);
     const [messages, setMessages] = useState<DiscussionMessage[]>([]);
@@ -26,6 +24,16 @@ const MessagesContent = ({discussion, bottomPosition = 5}: MessagesContentProps)
     const handleMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
         setMessageToSend(event.target.value);
     };
+
+    const subscribeMercureDiscussion = async(): Promise<void> => {
+        const hubUrl = `${ENTRYPOINT}/.well-known/mercure`
+        const hub = new URL(hubUrl);
+        hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+        const eventSource = new EventSource(hub);
+        eventSource.onmessage = event => {
+            fetchMessages()
+        };
+    }
 
     const handleSendMessage = async(): Promise<void> => {
         if (!messageToSend) {
@@ -37,11 +45,10 @@ const MessagesContent = ({discussion, bottomPosition = 5}: MessagesContentProps)
             content: messageToSend,
             discussion: discussion['@id'],
         })
-        await fetchMessages();
         setMessageToSend('');
     };
 
-    const handleKeyDown = (event: any) => {
+    const handleKeyDown = (event: any): void => {
         if (event.keyCode === 13 && !event.shiftKey) {
             event.preventDefault();
             handleSendMessage();
@@ -66,8 +73,16 @@ const MessagesContent = ({discussion, bottomPosition = 5}: MessagesContentProps)
     }
 
     useEffect(() => {
+        if (messagesContainerRef.current) {
+            const messagesContainer = messagesContainerRef.current;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
         setLoading(true);
         fetchMessages();
+        subscribeMercureDiscussion();
         setLoading(false);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -84,11 +99,15 @@ const MessagesContent = ({discussion, bottomPosition = 5}: MessagesContentProps)
                 position: 'fixed',
                 right: 50,
                 top: 100,
+                paddingBottom: 5,
                 height: 'calc(100vh - 350px)',
                 // height: '200px',
-                overflowY: 'scroll'
-            }}>
-                {messages.map((msg, index) => (
+                overflowY: 'scroll',
+                width: '75%'
+            }}
+            ref={messagesContainerRef}
+            >
+                {messages.sort((a, b) => a.id - b.id).map((msg, index) => (
                     <Box
                         key={index}
                         sx={{
@@ -100,14 +119,11 @@ const MessagesContent = ({discussion, bottomPosition = 5}: MessagesContentProps)
                             padding: '10px',
                             minWidth: '60%',
                             borderRadius: '10px',
-                            // position: 'relative',
-                            // bottom: '10px'
                         }}
                     >
                         {msg.content}
                     </Box>
                 ))}
-                <div ref={messagesEndRef} />
             </Box>}
 
             <Box>
