@@ -15,7 +15,7 @@ class CreateInterventionTest extends AbstractTestCase
         $client->request('POST', '/interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention admin !',
-                'isAdmin' => true
+                'isAdmin' => true,
             ],
         ]);
 
@@ -25,7 +25,7 @@ class CreateInterventionTest extends AbstractTestCase
             'isAdmin' => true,
         ]);
     }
-    
+
     public function testBossCannotPost(): void
     {
         $client = $this->createClientAuthAsBoss();

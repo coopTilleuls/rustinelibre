@@ -64,6 +64,7 @@ services:
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgis/postgis:14-3.3-alpine
+    command: postgres -c 'max_connections=1000'
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-app}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-!ChangeMe!}
