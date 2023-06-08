@@ -177,9 +177,8 @@ const InformationsContainer = ({bikeTypes , repairerTypes, repairerFetch, fetchR
             setTimeout(() => {
                 setSuccess(false);
             }, 3000);
-            const repairerFetch: Repairer = await repairerResource.get(
-                user!.repairer
-            );
+
+            const repairerFetch: Repairer = await repairerResource.get(repairer['@id']);
             setRepairer(repairerFetch);
         } catch (e) {
             setErrorMessage('Mise à jour impossible');

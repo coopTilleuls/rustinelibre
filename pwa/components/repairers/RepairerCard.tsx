@@ -66,7 +66,7 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
                 sx={{wordBreak: 'break-word'}}>
                 {repairer.name}
               </Typography>
-              {repairer.distance && (
+              {repairer.latitude && repairer.longitude && repairer.distance && (
                 <Typography
                   fontSize={{xs: 12, md: 14}}
                   color="primary"
