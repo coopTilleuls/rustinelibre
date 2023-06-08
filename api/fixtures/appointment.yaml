@@ -36,3 +36,7 @@ App\Entity\Appointment:
     repairer: '@repairer_<numberBetween(2, 20)>'
     slotTime: <dateTimeImmutableFromInterval('+1 day')>
     status: 'cancel'
+  appointment_{24..40}:
+    customer: '@user_1'
+    repairer: '@repairer_1'
+    slotTime: <dateTimeImmutableFromInterval('+1 month')>
