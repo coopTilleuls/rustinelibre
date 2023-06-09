@@ -47,7 +47,6 @@ const UpdatePassword = (): JSX.Element => {
         setPendingLogin(false);
     };
 
-
     useEffect(() => {
         if (user) {
             setEmail(user.email);
