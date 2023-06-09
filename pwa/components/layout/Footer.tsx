@@ -58,12 +58,12 @@ const Footer = ({user}: FooterProps): JSX.Element => {
           />
           <BottomNavigationAction
             component={NextLinkComposed}
-            to={{pathname: '/'}}
+            to={{pathname: user ? '/messagerie' : '/'}}
             label={!isMobile && 'Messages'}
             icon={<ChatBubbleIcon />}
-            disabled
+            disabled={!user}
             sx={{
-              opacity: 0.5,
+              opacity: user ? 1 : 0.5,
             }}
           />
           {user ? (

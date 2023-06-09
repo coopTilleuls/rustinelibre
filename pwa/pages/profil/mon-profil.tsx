@@ -24,9 +24,7 @@ const MyProfile: NextPageWithLayout = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {firstName, lastName, passwordError, city, street} = useContext(UserFormContext);
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     if (!firstName || !lastName || !user) {
       return;

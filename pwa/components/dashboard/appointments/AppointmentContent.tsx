@@ -26,6 +26,8 @@ import {maintenanceResource} from "@resources/MaintenanceResource";
 import {Bike} from "@interfaces/Bike";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import {Discussion} from "@interfaces/Discussion";
+import {discussionResource} from "@resources/discussionResource";
 
 type AppointmentContentProps = {
     appointment: Appointment;
@@ -46,11 +48,16 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
     const [selectedDate, setSelectedDate] = useState<string|undefined>(undefined);
     const [selectedTime, setSelectedTime] = useState<string|undefined>('');
     const [bikes, setBikes] = useState<number>(0);
+    const [discussion, setDiscussion] = useState<Discussion|null>(null);
 
     useEffect(() => {
         if (appointment.bike) {
             fetchMaintenances(appointment.bike);
         }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        getOrCreateDiscussion();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchMaintenances = async(bike: Bike) => {
@@ -59,6 +66,27 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
         });
 
         setBikes(maintenancesFetch['hydra:totalItems']);
+    }
+
+    const getOrCreateDiscussion = async () => {
+        const response = await discussionResource.getAll(true, {
+            repairer: appointment.repairer['@id'],
+            customer: appointment.customer['@id'],
+        })
+
+        if (response['hydra:member'].length === 0) {
+            const discussionCreate = await createDiscussion(appointment.repairer['@id'], appointment.customer['@id']);
+            setDiscussion(discussionCreate)
+        }
+
+        setDiscussion(response['hydra:member'][0]);
+    }
+
+    const createDiscussion = async (repairer: string, customer: string): Promise<Discussion> => {
+        return await discussionResource.post( {
+            repairer: appointment.repairer['@id'],
+            customer: appointment.customer['@id'],
+        })
     }
 
     const cancelAppointment = async () => {
@@ -200,16 +228,26 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
                     {(appointment.bike && bikes > 0) ?
                         <Link href={`/sradmin/clients/velos/${appointment.bike.id}`}>
                             <Button variant="outlined">
-                                Voir le carnet du vélo
+                                 Voir le carnet du vélo
                             </Button>
                         </Link> : <Button disabled variant="outlined">
                             Voir le carnet du vélo
                         </Button>}
                 </Grid>
                 <Grid item xs={6}>
-                    <Button variant="outlined">
-                        Envoyer un message
-                    </Button>
+                    {
+                        discussion && <Link href={`/sradmin/messagerie/${discussion.id}`}>
+                            <Button variant="outlined">
+                                Envoyer un message
+                            </Button>
+                        </Link>
+                    }
+                    {
+                        !discussion && <Button disabled variant="outlined">
+                                Envoyer un message
+                            </Button>
+                    }
+
                 </Grid>
 
                 {
