@@ -10,14 +10,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Appointment>
- *
- * @method Appointment|null find($id, $lockMode = null, $lockVersion = null)
- * @method Appointment|null findOneBy(array $criteria, array $orderBy = null)
- * @method Appointment[]    findAll()
- * @method Appointment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class AppointmentRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -92,6 +84,23 @@ class AppointmentRepository extends ServiceEntityRepository
             ->select('ac.id')
             ->andWhere('a.repairer = :repairer')
             ->addGroupBy('ac.id')
+        ;
+    }
+
+    public function getOldOrDelayedAppointments(): array
+    {
+        $now = new \DateTimeImmutable();
+        $back72Hours = $now->sub(new \DateInterval('PT72H'));
+
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.slotTime <= :now')
+            ->orWhere('(a.createdAt IS NOT NULL AND a.createdAt <= :back72Hours) AND (a.status = :pendingRepairer OR a.status = :pendingCyclist)')
+            ->setParameter('now', $now)
+            ->setParameter('back72Hours', $back72Hours)
+            ->setParameter('pendingRepairer', Appointment::PENDING_REPAIRER)
+            ->setParameter('pendingCyclist', Appointment::PENDING_CYCLIST)
+            ->getQuery()
+            ->getResult()
         ;
     }
 }

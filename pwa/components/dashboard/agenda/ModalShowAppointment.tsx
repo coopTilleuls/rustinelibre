@@ -39,7 +39,7 @@ const ModalShowAppointment = ({appointment, openModal, handleCloseModal}: ModalS
                 <Box sx={{ mt: 1 }}>
                     {loading && <CircularProgress />}
                     {!loading && appointment &&
-                        <AppointmentContent appointment={appointment} handleCloseModal={handleCloseModal} />
+                        <AppointmentContent appointmentProps={appointment} handleCloseModal={handleCloseModal} />
                     }
                 </Box>
             </Box>

@@ -102,6 +102,15 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?BikeType $bikeType = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups([self::APPOINTMENT_READ])]
+    public ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+    }
+
     public function getStatus(): ?string
     {
         return $this->status;
