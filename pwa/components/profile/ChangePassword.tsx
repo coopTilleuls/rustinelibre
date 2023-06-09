@@ -166,6 +166,7 @@ const Login= (): JSX.Element => {
                                         label="Nouveau mot de passe"
                                         type="password"
                                         id="newPassword"
+                                        autoFocus
                                         value={newPassword}
                                         onChange={handleChangeNewPassword}
                                     />
