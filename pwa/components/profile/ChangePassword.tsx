@@ -12,17 +12,11 @@ import {
     Paper, Alert,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {RequestBody} from "@interfaces/Resource";
 import {userResource} from "@resources/userResource";
 import {UserFormContext} from "@contexts/UserFormContext";
 
-type ChangePasswordProps ={
-
-};
-const Login= ({
-
-              }: ChangePasswordProps): JSX.Element => {
+const Login= (): JSX.Element => {
     const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
     const [successOldPassword, setSuccessOldPassword] = useState<boolean>(false);
     const [successNewPassword, setSuccessNewPassword] = useState<boolean>(false);
@@ -105,11 +99,7 @@ const Login= ({
 
     }
     return (
-        <>
-            <Head>
-                <title>Modifier mot de passe</title>
-            </Head>
-            <WebsiteLayout>
+
                 <Container sx={{width: {xs: '100%', md: '50%'}}}>
                     <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
                         <Box
@@ -215,8 +205,6 @@ const Login= ({
                         </Box>
                     </Paper>
                 </Container>
-            </WebsiteLayout>
-        </>
     );
 };
 
