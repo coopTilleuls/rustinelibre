@@ -65,10 +65,10 @@ export const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => 
 
         const appointmentsEvents = appointments.map((appointment) => {
             const { customer, autoDiagnostic, slotTime } = appointment;
-            const title: string = `${customer.firstName} ${customer.lastName}`;
+            const title: string = customer ? `${customer.firstName} ${customer.lastName}` : 'Nom inconnu';
             const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
 
-            let color = 'blue';
+            let color = 'grey';
             switch (appointment.status) {
                 case 'validated':
                     color = 'green';
@@ -78,6 +78,12 @@ export const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => 
                     break;
                 case 'pending_cyclist':
                     color = 'orange';
+                    break;
+                case 'cancel':
+                    color = 'red';
+                    break;
+                case 'refused':
+                    color = 'red';
                     break;
             }
 
