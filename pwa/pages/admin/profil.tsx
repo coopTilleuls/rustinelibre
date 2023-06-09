@@ -16,6 +16,7 @@ import {userResource} from '@resources/userResource';
 import UserForm from '@components/profile/UserForm';
 import {RequestBody} from '@interfaces/Resource';
 import AdminLayout from "@components/admin/AdminLayout";
+import Link from "next/link";
 
 const AdminProfile: NextPageWithLayout = () => {
 
@@ -107,6 +108,17 @@ const AdminProfile: NextPageWithLayout = () => {
                                                 <CircularProgress size={20} sx={{color: 'white'}} />
                                             )}
                                         </Button>
+                                        <Link href={"/admin/modifier-mot-de-passe"}
+                                        >
+                                            <Button
+                                                variant="contained">
+                                                {!pendingUpdate ? (
+                                                    'Changer mon mot de passe'
+                                                ) : (
+                                                    <CircularProgress size={20} sx={{color: 'white'}} />
+                                                )}
+                                            </Button>
+                                        </Link>
                                     </Box>
                                     {errorMessage && (
                                         <Typography variant="body1" color="error">

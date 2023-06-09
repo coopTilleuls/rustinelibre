@@ -1,7 +1,7 @@
-import {NextPageWithLayout} from 'pages/_app';
+import {NextPageWithLayout} from '../_app';
 import React, {useState, ChangeEvent, useContext, useEffect} from 'react';
 import Head from 'next/head';
-import {useAccount, useAuth} from 'contexts/AuthContext';
+import {useAccount, useAuth} from '@contexts/AuthContext';
 import {
     Container,
     Box,
@@ -47,7 +47,6 @@ const Login: NextPageWithLayout = ({}) => {
 
         if (connectionSuccess) {
             setSuccessOldPassword(true);
-            /**/
         } else {
             setErrorMessage('Ces identifiants de connexion ne sont pas valides');
         }
