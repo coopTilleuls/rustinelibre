@@ -122,7 +122,7 @@ export const ContactDetails = ({
         name="streetNumber"
         autoComplete="streetNumber"
         value={streetNumber}
-        inputProps={{ maxLength: 10 }}
+        inputProps={{ maxLength: 30 }}
         onChange={handleChangeStreetNumber}
       />
       <TextField

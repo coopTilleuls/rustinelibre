@@ -434,7 +434,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                           name="streetNumber"
                           autoComplete="streetNumber"
                           value={streetNumber}
-                          inputProps={{ maxLength: 8 }}
+                          inputProps={{ maxLength: 30 }}
                           onChange={handleChangeStreetNumber}
                       />
                   }

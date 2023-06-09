@@ -16,7 +16,7 @@ final class Version20230609125415 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE repairer ADD street_number VARCHAR(5) DEFAULT NULL');
+        $this->addSql('ALTER TABLE repairer ADD street_number VARCHAR(30) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void

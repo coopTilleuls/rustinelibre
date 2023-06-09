@@ -133,7 +133,7 @@ class Repairer
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
-    #[ORM\Column(length: 5, nullable: true)]
+    #[ORM\Column(length: 30, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
     public ?string $streetNumber = null;
 
