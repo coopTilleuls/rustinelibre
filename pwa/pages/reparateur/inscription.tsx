@@ -280,8 +280,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setSelectedBikeTypes(typeof value === 'string' ? value.split(',') : value);
   };
 
-  console.log(streetSelected);
-
   return (
     <>
       <Head>
