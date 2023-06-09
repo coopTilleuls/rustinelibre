@@ -30,12 +30,13 @@ import {Discussion} from "@interfaces/Discussion";
 import {discussionResource} from "@resources/discussionResource";
 
 type AppointmentContentProps = {
-    appointment: Appointment;
+    appointmentProps: Appointment;
     handleCloseModal: (refresh: boolean|undefined) => void
 };
 
-const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentProps): JSX.Element => {
+const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentContentProps): JSX.Element => {
 
+    const [appointment, setAppointment] = useState<Appointment>(appointmentProps);
     const [pendingValid, setPendingValid] = useState<boolean>(false);
     const [pendingRefuse, setPendingRefuse] = useState<boolean>(false);
     const [loadingNewSlot, setLoadingNewSlot] = useState<boolean>(false);
@@ -60,6 +61,10 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
         getOrCreateDiscussion();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        checkSlotTimePast();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
     const fetchMaintenances = async(bike: Bike) => {
         const maintenancesFetch = await maintenanceResource.getAll(true,{
             'bike': bike['@id'],
@@ -69,6 +74,10 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
     }
 
     const getOrCreateDiscussion = async () => {
+        if (!appointment.customer) {
+            return;
+        }
+
         const response = await discussionResource.getAll(true, {
             repairer: appointment.repairer['@id'],
             customer: appointment.customer['@id'],
@@ -80,6 +89,19 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
         }
 
         setDiscussion(response['hydra:member'][0]);
+    }
+
+    const checkSlotTimePast = async () => {
+
+        const date = new Date(appointment.slotTime);
+        const currentDate = new Date();
+        if (date < currentDate && (appointment.status === 'pending_repairer' || appointment.status === 'pending_cyclist')) {
+           const appointmentUpdate = await appointmentResource.updateAppointmentStatus(appointment.id, {
+               transition: 'cancellation'
+           })
+
+            setAppointment(appointmentUpdate);
+        }
     }
 
     const createDiscussion = async (repairer: string, customer: string): Promise<Discussion> => {
@@ -157,17 +179,19 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
         <Box>
             <Typography id="appointment_title" fontSize={20} fontWeight={600}>
                 {appointment.autoDiagnostic && appointment.autoDiagnostic.prestation}
-                {!appointment.autoDiagnostic && `Rendez-vous : ${appointment.customer.firstName} ${appointment.customer.lastName}`}
+                {!appointment.autoDiagnostic && appointment.customer && `Rendez-vous : ${appointment.customer.firstName} ${appointment.customer.lastName}`}
             </Typography>
             <List>
-                <ListItem>
-                    <ListItemIcon>
-                        <AccountCircleIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={`${appointment.customer.firstName} ${appointment.customer.lastName}`}
-                    />
-                </ListItem>
+                {
+                    appointment.customer && <ListItem>
+                        <ListItemIcon>
+                            <AccountCircleIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={`${appointment.customer.firstName} ${appointment.customer.lastName}`}
+                        />
+                    </ListItem>
+                }
                 <ListItem>
                     <ListItemIcon>
                         <CalendarMonthIcon />
@@ -210,7 +234,6 @@ const AppointmentContent = ({appointment, handleCloseModal}: AppointmentContentP
             </List>
 
             <Grid container spacing={2}>
-
                 {appointment.status === 'pending_repairer' && <Grid item xs={6}>
                     <Button variant="outlined" sx={{backgroundColor: '#7c9f4f', color: 'white','&:hover': {color:'black'}}} onClick={() => handleClickAcceptAppointment(appointment.id)}>
                         {pendingValid ? <CircularProgress sx={{color:'white'}} /> : 'Accepter le RDV'}
