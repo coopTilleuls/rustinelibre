@@ -44,7 +44,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
       setStreet(user.street ? user.street : '');
       setCity(user.city ? user.city : '');
     }
-  }, [user, setFirstName, setLastName, setEmail, setStreet, setCity]);
+  }, [user, setFirstName, setLastName, setEmail, setStreet, setCity, setPassword]);
 
   const handleChangeFirstName = (
     event: ChangeEvent<HTMLInputElement>

@@ -9,5 +9,5 @@ App\Entity\Bike:
     owner: '@user_1'
     brand: 'brand 21'
     bikeType: '@biketype_*'
-    name: 'name 21>'
+    name: 'name 21'
     description: 'description 21>'
