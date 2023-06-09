@@ -61,7 +61,7 @@ const RepairerSlots: NextPageWithLayout = () => {
 
     const newAppointment = await appointmentResource.post({
       repairer: repairer['@id'],
-      slotTime: slotSelected,
+      slotTime: slotSelected
     });
 
     if (newAppointment) {
