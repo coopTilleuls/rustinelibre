@@ -18,6 +18,8 @@ export const ContactDetails = ({
   const {
     name,
     setName,
+    streetNumber,
+    setStreetNumber,
     mobilePhone,
     setMobilePhone,
     street,
@@ -34,6 +36,7 @@ export const ContactDetails = ({
     if (repairer) {
       setName(repairer.name ? repairer.name : '');
       setStreet(repairer.street ? repairer.street : '');
+      setStreetNumber(repairer.streetNumber ? repairer.streetNumber : '');
       setCityInput(repairer.city ? repairer.city : '');
     }
   }, [repairer, setName, setStreet, setCityInput]);
@@ -64,6 +67,10 @@ export const ContactDetails = ({
 
   const handleChangeStreet = (event: ChangeEvent<HTMLInputElement>): void => {
     setStreet(event.target.value);
+  };
+
+  const handleChangeStreetNumber = (event: ChangeEvent<HTMLInputElement>): void => {
+    setStreetNumber(event.target.value);
   };
 
   const handleCityChange = async (
@@ -110,8 +117,20 @@ export const ContactDetails = ({
         margin="normal"
         required
         fullWidth
+        id="streetNumber"
+        label="Numéro dans la rue"
+        name="streetNumber"
+        autoComplete="streetNumber"
+        value={streetNumber}
+        inputProps={{ maxLength: 30 }}
+        onChange={handleChangeStreetNumber}
+      />
+      <TextField
+        margin="normal"
+        required
+        fullWidth
         id="street"
-        label="Numéro et rue"
+        label="Rue"
         name="street"
         autoComplete="street"
         value={street}

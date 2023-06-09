@@ -54,7 +54,7 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
               fontSize={{xs: 14, md: 18}}
               color="text.secondary"
               sx={{display: 'flex', alignItems: 'center'}}>
-              <FmdGoodIcon color="primary" sx={{mr: 1}} /> {repairer.street}
+              <FmdGoodIcon color="primary" sx={{mr: 1}} /> {repairer.streetNumber} {repairer.street}
             </Typography>
             <Typography
               paragraph

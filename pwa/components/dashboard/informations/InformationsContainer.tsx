@@ -54,6 +54,8 @@ const InformationsContainer = ({bikeTypes , repairerTypes, repairerFetch, fetchR
         setDescription,
         street,
         setStreet,
+        streetNumber,
+        setStreetNumber,
         cityInput,
         setCityInput,
         city,
@@ -82,6 +84,7 @@ const InformationsContainer = ({bikeTypes , repairerTypes, repairerFetch, fetchR
             setMobilePhone(repairer.mobilePhone ? repairer.mobilePhone : '');
             setDescription(repairer.description ? repairer.description : '');
             setStreet(repairer.street ? repairer.street : '');
+            setStreetNumber(repairer.streetNumber ? repairer.streetNumber : '');
             setCityInput(repairer.city ? repairer.city : '');
             setOptionalPage(repairer.optionalPage ? repairer.optionalPage : '');
             setOpeningHours(repairer.openingHours ? repairer.openingHours : '');
@@ -129,6 +132,10 @@ const InformationsContainer = ({bikeTypes , repairerTypes, repairerFetch, fetchR
             bodyRequest['name'] = name;
         }
 
+        if (streetNumber && streetNumber !== '') {
+            bodyRequest['streetNumber'] = streetNumber;
+        }
+
         if (street && street !== '') {
             bodyRequest['street'] = street;
         }
@@ -148,8 +155,6 @@ const InformationsContainer = ({bikeTypes , repairerTypes, repairerFetch, fetchR
         if (city) {
             bodyRequest['city'] = city.name;
             bodyRequest['postcode'] = city.postcode;
-            bodyRequest['latitude'] = city.lat.toString();
-            bodyRequest['longitude'] = city.lon.toString();
         }
 
         if (optionalPage && optionalPage !== '') {

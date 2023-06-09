@@ -9,8 +9,8 @@ use App\Tests\Repairer\Slots\SlotsTestCase;
 class SlotsAvailableNotInPastTest extends SlotsTestCase
 {
     /*
-         * test if slots available for today are not in the past
-         */
+     * test if slots available for today are not in the past
+     */
     public function testGetOnlySlotsAvailableNotStarted(): void
     {
         $repairer = $this->getRepairerWithSlotsAvailable();

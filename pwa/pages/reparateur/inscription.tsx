@@ -4,7 +4,6 @@ import React, {
   useState,
   ChangeEvent,
   useEffect,
-  SyntheticEvent,
   useContext,
   useCallback,
 } from 'react';
@@ -46,9 +45,10 @@ import {City as GouvCity} from '@interfaces/Gouv';
 import {RepairerType} from '@interfaces/RepairerType';
 import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
-import {searchCity} from '@utils/apiCity';
+import {searchCity, searchStreet} from '@utils/apiCity';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
+import {Street} from "@interfaces/Street";
 
 type RepairerRegistrationProps = {
   bikeTypesFetched: BikeType[];
@@ -59,17 +59,18 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   bikeTypesFetched = [],
   repairerTypesFetched = [],
 }) => {
+
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [comment, setComment] = useState<string>('');
+  const [streetList, setStreetList] = useState<Street[]>([]);
+  const [streetSelected, setStreetSelected] = useState<Street|null>(null);
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
-  const [repairerTypes, setRepairerTypes] =
-    useState<RepairerType[]>(repairerTypesFetched);
+  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
   const [repairerTypeSelected, setRepairerTypeSelected] =
     useState<RepairerType | null>(
       repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null
     );
-  const router = useRouter();
 
   const {
     firstName,
@@ -95,6 +96,8 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setName,
     street,
     setStreet,
+    streetNumber,
+    setStreetNumber,
     cityInput,
     setCityInput,
     city,
@@ -157,15 +160,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setCityInput(event.target.value);
   };
 
-  const handleCitySelect = (
-    event: SyntheticEvent<Element, Event>,
-    value: string | null
-  ) => {
-    const selectedCity = citiesList.find((city) => city.name === value);
-    setCity(selectedCity ?? null);
-    setCityInput(value ?? '');
-  };
-
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -177,7 +171,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       !email ||
       !password ||
       !repairerTypeSelected ||
-      !street ||
+      !streetSelected ||
       !city ||
       Object.keys(selectedBikeTypes).length === 0
     ) {
@@ -198,12 +192,15 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         email: email,
         plainPassword: password,
         name: name,
-        street: street,
+        street: streetSelected.name,
+        streetNumber: streetNumber,
         city: city.name,
         postcode: city?.postcode,
         bikeTypesSupported: selectedBikeTypeIRIs,
         repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
         comment: comment,
+        latitude: streetSelected.lat,
+        longitude: streetSelected.lon
       });
       setPendingRegistration(false);
       setInscriptionSuccess(true);
@@ -226,8 +223,17 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setName(event.target.value);
   };
 
-  const handleChangeStreet = (event: ChangeEvent<HTMLInputElement>): void => {
-    setStreet(event.target.value);
+  const handleChangeStreetNumber = (event: ChangeEvent<HTMLInputElement>): void => {
+    setStreetNumber(event.target.value);
+  };
+
+  const handleChangeStreet = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
+
+    const adresseSearch = event.target.value;
+    if (adresseSearch.length >= 3) {
+      const streetApiResponse = await searchStreet(adresseSearch, city);
+      setStreetList(streetApiResponse)
+    }
   };
 
   const handleChangeComments = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -374,18 +380,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     inputProps={{ maxLength: 80 }}
                     onChange={handleChangeName}
                   />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="street"
-                    label="Numéro et rue"
-                    name="street"
-                    autoComplete="street"
-                    value={street}
-                    inputProps={{ maxLength: 800 }}
-                    onChange={handleChangeStreet}
-                  />
                   <Autocomplete
                     sx={{mt: 2, mb: 1}}
                     freeSolo
@@ -394,7 +388,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     getOptionLabel={(city) =>
                         typeof city === 'string'
                             ? city
-                            : `${city.name}  (${city.postcode})`
+                            : `${city.name} (${city.postcode})`
                     }
                     onChange={(event, value) => setCity(value as City)}
                     renderInput={(params) => (
@@ -407,6 +401,43 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       />
                     )}
                   />
+                  {
+                    city &&  <Autocomplete
+                          sx={{mt: 2, mb: 1}}
+                          freeSolo
+                          value={street}
+                          options={streetList}
+                          getOptionLabel={(streetObject) =>
+                              typeof streetObject === 'string'
+                                  ? streetObject
+                                  :`${streetObject.name} (${streetObject.city})`
+                          }
+                          onChange={(event, value) => setStreetSelected(value as Street)}
+                          renderInput={(params) => (
+                              <TextField
+                                  label="Rue"
+                                  required
+                                  {...params}
+                                  value={street}
+                                  onChange={(e) => handleChangeStreet(e)}
+                              />
+                          )}
+                      />
+                  }
+                  {
+                    streetSelected &&  <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="streetNumber"
+                          label="Numéro de la rue"
+                          name="streetNumber"
+                          autoComplete="streetNumber"
+                          value={streetNumber}
+                          inputProps={{ maxLength: 30 }}
+                          onChange={handleChangeStreetNumber}
+                      />
+                  }
                   <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
                     <InputLabel id="repairer-type-label">
                       Type de réparateur
