@@ -11,6 +11,7 @@ interface RepairerFormContext {
     name: string,
     description: string,
     street: string,
+    streetNumber: string,
     mobilePhone: string,
     cityInput: string,
     latitude: string,
@@ -29,6 +30,7 @@ interface RepairerFormContext {
     setName: (value: string) => void,
     setDescription: (value: string) => void,
     setStreet: (value: string) => void,
+    setStreetNumber: (value: string) => void,
     setMobilePhone: (value: string) => void,
     setCityInput: (value: string) => void,
     setLatitude: (value: string) => void,
@@ -51,6 +53,7 @@ const initialValue = {
     mobilePhone: '',
     description: '',
     street: '',
+    streetNumber: '',
     cityInput: '',
     latitude: '',
     longitude: '',
@@ -69,6 +72,7 @@ const initialValue = {
     setMobilePhone: () => null,
     setDescription: () => null,
     setStreet: () => null,
+    setStreetNumber: () => null,
     setCityInput: () => null,
     setLatitude: () => null,
     setLongitude: () => null,
@@ -91,6 +95,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
     const [name, setName] = useState<string>('');
     const [mobilePhone, setMobilePhone] = useState<string>('');
     const [description, setDescription] = useState<string>('');
+    const [streetNumber, setStreetNumber] = useState<string>('');
     const [street, setStreet] = useState<string>('');
     const [cityInput, setCityInput] = useState<string>('');
     const [latitude, setLatitude] = useState<string>('');
@@ -114,6 +119,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 mobilePhone,
                 description,
                 street,
+                streetNumber,
                 cityInput,
                 latitude,
                 longitude,
@@ -129,6 +135,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 thumbnail,
                 descriptionPicture,
                 setName,
+                setStreetNumber,
                 setMobilePhone,
                 setDescription,
                 setStreet,

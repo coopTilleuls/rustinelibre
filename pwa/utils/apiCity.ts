@@ -1,3 +1,7 @@
+import {Street} from "@interfaces/Street";
+import {City as Gouv} from "@interfaces/Gouv";
+import {City} from "@interfaces/City";
+
 export const searchCity = async (
   search: string,
   useNominatim: boolean = false
@@ -22,4 +26,30 @@ const gouvCities = async (search: string) => {
   return await response.json().then((data) => {
     return data['features'];
   });
+};
+
+export const searchStreet = async (
+    search: string,
+    city: City|null
+) => {
+  search = encodeURIComponent(search);
+  const response = await fetch(
+      `https://api-adresse.data.gouv.fr/search/?q=${search}&type=street&limit=15${city && '&lat='+city.lat+'&lon='+city.lon}`
+  );
+
+  const apiFeatures =  await response.json().then((data) => {
+    return data['features'];
+  });
+
+  const data: Street[] = [];
+  apiFeatures.map((feature: Gouv) => {
+    return data.push({
+      name: feature.properties.name,
+      city: feature.properties.city+' '+feature.properties.postcode,
+      lat: feature.geometry.coordinates[1],
+      lon: feature.geometry.coordinates[0],
+    });
+  })
+
+  return data;
 };
