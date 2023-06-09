@@ -417,12 +417,12 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
             <Box textAlign="center" pt={2}>
               {pendingSearchCity && <CircularProgress />}
             </Box>
+
+            {!pendingSearchCity && totalItems > 20 && (
+                <PaginationBlock onPageChange={handlePageChange} />
+            )}
           </Container>
         </Box>
-
-        {!pendingSearchCity && totalItems > 20 && (
-          <PaginationBlock onPageChange={handlePageChange} />
-        )}
       </WebsiteLayout>
     </>
   );
