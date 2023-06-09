@@ -40,11 +40,7 @@ final class HashPasswordSubscriber implements EventSubscriber
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof User) {
-            return;
-        }
-
-        if ('auth' == $this->requestStack->getCurrentRequest()->attributes->get('_route')) {
+        if (!$entity instanceof User || 'auth' == $this->requestStack->getCurrentRequest()?->attributes->get('_route')) {
             return;
         }
 

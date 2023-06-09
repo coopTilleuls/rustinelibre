@@ -1,5 +1,4 @@
-import React, {useState, ChangeEvent, useContext, useEffect} from 'react';
-import Head from 'next/head';
+import React, {useState, ChangeEvent, useEffect} from 'react';
 import {useAccount, useAuth} from '@contexts/AuthContext';
 import {
     Container,
@@ -12,9 +11,7 @@ import {
     Paper, Alert,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {RequestBody} from "@interfaces/Resource";
 import {userResource} from "@resources/userResource";
-import {UserFormContext} from "@contexts/UserFormContext";
 
 const UpdatePassword = (): JSX.Element => {
     const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
@@ -26,9 +23,7 @@ const UpdatePassword = (): JSX.Element => {
     const [checkPassword, setCheckPassword] = useState<string>('');
     const [pendingLogin, setPendingLogin] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const {password} = useContext(UserFormContext);
     const {login} = useAuth();
-
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -76,9 +71,8 @@ const UpdatePassword = (): JSX.Element => {
         }
         setErrorMessage(null);
         setPendingLogin(true);
-        if(checkPassword == newPassword){
+        if(checkPassword == newPassword) {
             try {
-
                 await userResource.putById(user.id, {
                     email: user.email,
                     plainPassword: newPassword
@@ -97,117 +91,115 @@ const UpdatePassword = (): JSX.Element => {
         }
 
         setPendingLogin(false);
-
     }
     return (
+        <Container sx={{width: {xs: '100%', md: '50%'}}}>
+            <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
+                <Box
+                    sx={{
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}>
+                    <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+                        Modifier mot de passe
+                    </Typography>
+                    <Box
+                        component="form"
+                        onSubmit={handleSubmit}
+                        noValidate
+                        sx={{mt: 1}}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Mot de passe actuel"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            value={oldPassword}
+                            onChange={handleChangeOldPassword}
+                        />
 
-                <Container sx={{width: {xs: '100%', md: '50%'}}}>
-                    <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
-                        <Box
-                            sx={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                            }}>
-                            <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
-                                <LockOutlinedIcon />
-                            </Avatar>
-                            <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
-                                Modifier mot de passe
-                            </Typography>
-                            <Box
-                                component="form"
-                                onSubmit={handleSubmit}
-                                noValidate
-                                sx={{mt: 1}}>
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Mot de passe actuel"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    value={oldPassword}
-                                    onChange={handleChangeOldPassword}
-                                />
-
-                                {!successOldPassword &&
-                                    <Box display="flex" flexDirection="column" alignItems="center">
-                                        <Button type="submit" variant="contained" sx={{my: 2}}>
-                                            {!pendingLogin ? (
-                                                'Confirmer le mot de passe actuel'
-                                            ) : (
-                                                <CircularProgress size={20} sx={{color: 'white'}} />
-                                            )}
-                                        </Button>
-                                        {errorMessage && (
-                                            <Typography variant="body1" color="error">
-                                                {errorMessage}
-                                            </Typography>
-                                        )}
-                                    </Box>
-                                }
+                        {!successOldPassword &&
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                                <Button type="submit" variant="contained" sx={{my: 2}}>
+                                    {!pendingLogin ? (
+                                        'Confirmer le mot de passe actuel'
+                                    ) : (
+                                        <CircularProgress size={20} sx={{color: 'white'}} />
+                                    )}
+                                </Button>
+                                {errorMessage && (
+                                    <Typography variant="body1" color="error">
+                                        {errorMessage}
+                                    </Typography>
+                                )}
                             </Box>
+                        }
+                    </Box>
 
-                            {successOldPassword &&
-                                <Box
-                                    component="form"
-                                    onSubmit={handleUpdatePassword}
-                                    noValidate
-                                    sx={{mt: 1}}>
+                    {successOldPassword &&
+                        <Box
+                            component="form"
+                            onSubmit={handleUpdatePassword}
+                            noValidate
+                            sx={{mt: 1}}>
 
-                                    <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        name="newPassword"
-                                        label="Nouveau mot de passe"
-                                        type="password"
-                                        id="newPassword"
-                                        autoFocus
-                                        value={newPassword}
-                                        onChange={handleChangeNewPassword}
-                                    />
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="newPassword"
+                                label="Nouveau mot de passe"
+                                type="password"
+                                id="newPassword"
+                                autoFocus
+                                value={newPassword}
+                                onChange={handleChangeNewPassword}
+                            />
 
-                                    <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        name="checkPassword"
-                                        label="Confirmer le mot de passe"
-                                        type="password"
-                                        id="checkPassword"
-                                        value={checkPassword}
-                                        onChange={handleChangeCheckPassword}
-                                    />
-                                    <Box display="flex" flexDirection="column" alignItems="center">
-                                        <Button type="submit" variant="contained" sx={{my: 2}}>
-                                            {!pendingLogin ? (
-                                                'Mettre à jour mon mot de passe'
-                                            ) : (
-                                                <CircularProgress size={20} sx={{color: 'white'}} />
-                                            )}
-                                        </Button>
-                                        {errorMessage && (
-                                            <Typography variant="body1" color="error">
-                                                {errorMessage}
-                                            </Typography>
-                                        )}
-                                    </Box>
-                                </Box>
-                            }
-                            {successNewPassword && (
-                                <Alert sx={{width: '100%'}} severity="success">
-                                    Mot de passe mis à jour
-                                </Alert>
-                            )}
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="checkPassword"
+                                label="Confirmer le mot de passe"
+                                type="password"
+                                id="checkPassword"
+                                value={checkPassword}
+                                onChange={handleChangeCheckPassword}
+                            />
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                                <Button type="submit" variant="contained" sx={{my: 2}}>
+                                    {!pendingLogin ? (
+                                        'Mettre à jour mon mot de passe'
+                                    ) : (
+                                        <CircularProgress size={20} sx={{color: 'white'}} />
+                                    )}
+                                </Button>
+                                {errorMessage && (
+                                    <Typography variant="body1" color="error">
+                                        {errorMessage}
+                                    </Typography>
+                                )}
+                            </Box>
                         </Box>
-                    </Paper>
-                </Container>
-    );
+                    }
+                    {successNewPassword && (
+                        <Alert sx={{width: '100%'}} severity="success">
+                            Mot de passe mis à jour
+                        </Alert>
+                    )}
+                </Box>
+            </Paper>
+        </Container>
+    )
 };
 
 export default UpdatePassword;
