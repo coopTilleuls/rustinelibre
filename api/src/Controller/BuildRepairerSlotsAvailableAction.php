@@ -7,13 +7,12 @@ namespace App\Controller;
 use App\Entity\Repairer;
 use App\Repairers\Slots\ComputeAvailableSlotsByRepairer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
-final class BuildRepairerSlotsAvailableAction extends AbstractController
+final class BuildRepairerSlotsAvailableAction
 {
     public function __construct(private ComputeAvailableSlotsByRepairer $computeAvailableSlotsByRepairer)
     {

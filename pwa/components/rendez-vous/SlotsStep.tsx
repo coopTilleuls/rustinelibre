@@ -25,8 +25,34 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
   const fetchOpeningHours = async () => {
     setLoading(true);
     const openingHoursFetch = await openingHoursResource.getRepairerSlotsAvailable(repairer.id);
-    setOpeningHours(openingHoursFetch);
+    setOpeningHours(filterDates(openingHoursFetch));
     setLoading(false);
+  }
+
+  const filterDates = (data: Record<string, string[]>): Record<string, string[]> => {
+
+    // Get current date as a string
+    const currentDate = new Date();
+    const currentDateStr = currentDate.toISOString().split('T')[0];
+
+    // If current date is in our data
+    if (currentDateStr in data) {
+      const [year, month, day] = currentDateStr.split("-");
+      const currentHours = data[currentDateStr];
+      const filteredHours = currentHours.filter(hour => {
+        const [hours, minutes] = hour.split(":");
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hours), parseInt(minutes));
+        return date >= currentDate;
+      });
+
+      if (filteredHours.length === 0) {
+        delete data[currentDateStr];
+      } else {
+        data[currentDateStr] = filteredHours;
+      }
+    }
+
+    return data;
   }
 
 

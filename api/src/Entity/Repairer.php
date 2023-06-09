@@ -93,7 +93,7 @@ class Repairer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ])]
     public ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
@@ -112,7 +112,7 @@ class Repairer
         max : 80,
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ])]
     public ?string $name = null;
 
     #[Assert\Type('string')]
@@ -231,9 +231,9 @@ class Repairer
     #[ORM\Column(nullable: true)]
     #[Assert\Type('integer')]
     #[Assert\Range(
+        notInRangeMessage: 'You must have a number of slots between {{ min }} and {{ max }}',
         min: 1,
         max: 10,
-        notInRangeMessage: 'You must have a number of slots between {{ min }} and {{ max }}',
     )]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?int $numberOfSlots = 1;

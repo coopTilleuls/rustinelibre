@@ -69,8 +69,8 @@ class Appointment
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups([self::APPOINTMENT_READ])]
-    public User $customer;
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    public ?User $customer = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -101,6 +101,15 @@ class Appointment
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?BikeType $bikeType = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups([self::APPOINTMENT_READ])]
+    public ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+    }
 
     public function getStatus(): ?string
     {

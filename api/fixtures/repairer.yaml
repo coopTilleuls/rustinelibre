@@ -15,9 +15,10 @@ App\Entity\Repairer:
     repairerType: '@atelier'
     enabled: true
     openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
+    numberOfSlots: 4
   repairer_2:
     name: 'Chez Francis'
-    owner: '@user_27'
+    owner: '@boss_2'
     description: "Lorem ipsum 2"
     mobilePhone: "0720397700"
     street: "1917 rue Francis Cabrel"
@@ -32,6 +33,7 @@ App\Entity\Repairer:
     enabled: true
     openingHours: 'Du lundi au vendredi : 9h-12h / 14h-19h'
     optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
+    numberOfSlots: 4
   repairer_3:
     name: 'Chez Benoit Broutchoux'
     owner: '@user_28'
