@@ -10,6 +10,7 @@ import {
   Container,
   Paper,
 } from '@mui/material';
+import Link from "next/link";
 import {useAccount} from '@contexts/AuthContext';
 import {UserFormContext} from '@contexts/UserFormContext';
 import {userResource} from '@resources/userResource';
@@ -104,6 +105,17 @@ const MyProfile: NextPageWithLayout = () => {
                         <CircularProgress size={20} sx={{color: 'white'}} />
                       )}
                     </Button>
+                    <Link href={"/profil/modifier-mot-de-passe"}
+                          >
+                      <Button
+                          variant="contained">
+                        {!pendingUpdate ? (
+                            'Changer mon mot de passe'
+                        ) : (
+                            <CircularProgress size={20} sx={{color: 'white'}} />
+                        )}
+                      </Button>
+                    </Link>
                   </Box>
                   {errorMessage && (
                     <Typography variant="body1" color="error">
