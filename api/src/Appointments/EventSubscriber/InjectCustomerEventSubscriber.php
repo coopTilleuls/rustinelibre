@@ -36,19 +36,34 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
-        if (!$object instanceof Appointment || Request::METHOD_POST !== $method || ($this->security->isGranted('ROLE_ADMIN') && $object->customer && $currentUser->id !== $object->customer->id) || $object->customer && $currentUser->id === $object->customer->id) {
+        if (!$object instanceof Appointment || Request::METHOD_POST !== $method) {
             return;
         }
 
-        if ($this->security->isGranted('ROLE_BOSS') || $this->security->isGranted('ROLE_EMPLOYEE')) {
+        // If no customer provided, inject it
+        if (!$object->customer) {
+            $object->customer = $currentUser;
+
+            return;
+        }
+
+        // If admin or current user = customer, do nothing
+        if ($this->security->isGranted('ROLE_ADMIN') || $object->customer === $currentUser) {
+            return;
+        }
+
+        // If boss/employee, check customer relationship
+        if (($this->security->isGranted('ROLE_BOSS') || $this->security->isGranted('ROLE_EMPLOYEE')) && $object->customer !== $currentUser) {
             $checkAppointment = $this->appointmentRepository->findOneBy([
-                'customer' => $object->customer->id,
+                'customer' => $object->customer,
                 'repairer' => $currentUser->repairerEmployee->repairer ?? $currentUser->repairer,
             ]);
-            if (!$checkAppointment) {
-                throw new AccessDeniedHttpException('Cet utilisateur n\'est pas un de vos client');
+
+            if ($checkAppointment) {
+                return;
             }
         }
-        $object->customer = $currentUser;
+
+        throw new AccessDeniedHttpException('Cet utilisateur n\'est pas un de vos client');
     }
 }
