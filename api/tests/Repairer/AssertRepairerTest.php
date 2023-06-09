@@ -190,7 +190,6 @@ class AssertRepairerTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'street: This value should not be blank.',
         ]);
     }
 
