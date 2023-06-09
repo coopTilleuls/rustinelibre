@@ -18,6 +18,7 @@ export interface Repairer {
   thumbnail?: MediaObject;
   descriptionPicture?: MediaObject;
   street?: string;
+  streetNumber?: string;
   rrule: string;
   latitude?: string;
   longitude?: string;

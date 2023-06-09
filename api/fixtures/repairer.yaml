@@ -4,7 +4,8 @@ App\Entity\Repairer:
     owner: '@boss_1'
     description: "Lorem ipsum"
     mobilePhone: "0720397700"
-    street: "1936 rue Johnny Hallyday"
+    street: "rue Johnny Hallyday"
+    streetNumber: "1936"
     city: "Lomme"
     postcode: "59160"
     country: "France"
@@ -21,7 +22,8 @@ App\Entity\Repairer:
     owner: '@boss_2'
     description: "Lorem ipsum 2"
     mobilePhone: "0720397700"
-    street: "1917 rue Francis Cabrel"
+    street: "rue Francis Cabrel"
+    streetNumber: "1917"
     city: "Lille"
     postcode: "59000"
     country: "France"
@@ -39,7 +41,8 @@ App\Entity\Repairer:
     owner: '@user_28'
     description: "Lorem ipsum 3"
     mobilePhone: "0720397700"
-    street: "1917 rue Benoît Broutchouille"
+    street: "rue Benoît Broutchouille"
+    streetNumber: "1917"
     city: "Lille"
     postcode: "59000"
     country: "France"
@@ -56,7 +59,8 @@ App\Entity\Repairer:
     owner: '@user_29'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '12 rue de la Monnaie'
+    street: 'rue de la Monnaie'
+    streetNumber: "12"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -73,7 +77,8 @@ App\Entity\Repairer:
     owner: '@user_30'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '60 rue Pierre Legrand'
+    street: 'rue Pierre Legrand'
+    streetNumber: "60"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -90,7 +95,8 @@ App\Entity\Repairer:
     owner: '@user_31'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '10 rue Chanzy'
+    street: 'rue Chanzy'
+    streetNumber: "10"
     city: 'Hellemmes'
     postcode: '59000'
     country: 'France'
@@ -107,7 +113,8 @@ App\Entity\Repairer:
     owner: '@user_32'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '112 rue Gambetta'
+    street: 'rue Gambetta'
+    streetNumber: "112"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -124,7 +131,8 @@ App\Entity\Repairer:
     owner: '@user_33'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '40 rue Roger Salengro '
+    street: 'rue Roger Salengro'
+    streetNumber: "40"
     city: 'Ronchin'
     postcode: '59000'
     country: 'France'
@@ -141,7 +149,8 @@ App\Entity\Repairer:
     owner: '@user_34'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '16 rue de Suède'
+    street: 'rue de Suède'
+    streetNumber: "16"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -158,7 +167,8 @@ App\Entity\Repairer:
     owner: '@user_35'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '14 rue Carnot'
+    street: 'rue Carnot'
+    streetNumber: "14"
     city: 'La Madeleine'
     postcode: '59000'
     country: 'France'
@@ -175,7 +185,8 @@ App\Entity\Repairer:
     owner: '@user_36'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '10 avenue du Maréchal Foch'
+    street: 'avenue du Maréchal Foch'
+    streetNumber: "10"
     city: 'Marcq en Baroeul'
     postcode: '59000'
     country: 'France'
@@ -192,7 +203,8 @@ App\Entity\Repairer:
     owner: '@user_37'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '12 rue de Cambrai'
+    street: 'rue de Cambrai'
+    streetNumber: "12"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -209,7 +221,8 @@ App\Entity\Repairer:
     owner: '@user_38'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '30 rue Pasteur'
+    street: 'rue Pasteur'
+    streetNumber: "30"
     city: 'La Madeleine'
     postcode: '59000'
     country: 'France'
@@ -226,7 +239,8 @@ App\Entity\Repairer:
     owner: '@user_39'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '12 rue Boileau'
+    street: 'rue Boileau'
+    streetNumber: "12"
     city: 'Lambersart'
     postcode: '59000'
     country: 'France'
@@ -243,7 +257,8 @@ App\Entity\Repairer:
     owner: '@user_40'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '37 rue Négrier'
+    street: 'rue Négrier'
+    streetNumber: "37"
     city: 'LIlle'
     postcode: '59000'
     country: 'France'
@@ -260,7 +275,8 @@ App\Entity\Repairer:
     owner: '@user_41'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '10 rue de Dieppe'
+    street: 'rue de Dieppe'
+    streetNumber: "10"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -277,7 +293,8 @@ App\Entity\Repairer:
     owner: '@user_42'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '76 boulevard Jean-Baptiste Lebas'
+    street: 'boulevard Jean-Baptiste Lebas'
+    streetNumber: "76"
     city: 'LIlle'
     postcode: '59000'
     country: 'France'
@@ -294,7 +311,8 @@ App\Entity\Repairer:
     owner: '@user_43'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '2 rue Bourignon'
+    street: 'rue Bourignon'
+    streetNumber: "2"
     city: 'LIlle'
     postcode: '59000'
     country: 'France'
@@ -311,7 +329,8 @@ App\Entity\Repairer:
     owner: '@user_44'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '6 rue Abélard'
+    street: 'rue Abélard'
+    streetNumber: "6"
     city: 'LIlle'
     postcode: '59000'
     country: 'France'
@@ -327,7 +346,8 @@ App\Entity\Repairer:
     owner: '@user_45'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '5 rue Lydéric'
+    street: 'rue Lydéric'
+    streetNumber: "5"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -343,7 +363,8 @@ App\Entity\Repairer:
     owner: '@user_46'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '132 boulevard de Turin'
+    street: 'boulevard de Turin'
+    streetNumber: "132"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -359,7 +380,8 @@ App\Entity\Repairer:
     owner: '@user_47'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '10 rue Carnot'
+    street: 'rue Carnot'
+    streetNumber: "10"
     city: 'Faches Thumesnil'
     postcode: '59000'
     country: 'France'
@@ -375,7 +397,8 @@ App\Entity\Repairer:
     owner: '@user_48'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '12 rue de Gand'
+    street: 'rue de Gand'
+    streetNumber: "12"
     city: 'Lille'
     postcode: '59000'
     country: 'France'
@@ -391,7 +414,8 @@ App\Entity\Repairer:
     owner: '@user_49'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '10 rue de lille'
+    street: 'rue de lille'
+    streetNumber: "10"
     city: 'Marquette-lez-lille'
     postcode: '59000'
     country: 'France'
@@ -407,7 +431,8 @@ App\Entity\Repairer:
     owner: '@user_50'
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis magna ut libero cursus, quis dignissim leo facilisis. Morbi interdum, tortor at laoreet porta, tortor metus aliquet tellus, nec gravida.'
     mobilePhone: '0794298216'
-    street: '70 rue Pierre Legrand'
+    street: 'rue Pierre Legrand'
+    streetNumber: "70"
     city: 'Lille'
     postcode: '59000'
     country: 'France'

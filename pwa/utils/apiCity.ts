@@ -1,5 +1,6 @@
-import {City} from "@interfaces/City";
 import {Street} from "@interfaces/Street";
+import {City as Gouv} from "@interfaces/Gouv";
+import {City} from "@interfaces/City";
 
 export const searchCity = async (
   search: string,
@@ -40,14 +41,13 @@ export const searchStreet = async (
     return data['features'];
   });
 
-
   const data: Street[] = [];
-  apiFeatures.map((feature: City) => {
+  apiFeatures.map((feature: Gouv) => {
     return data.push({
       name: feature.properties.name,
-      city: feature.properties.city+' ('+feature.properties.postcode+')',
-      lat: feature.geometry.coordinates[0],
-      lon: feature.geometry.coordinates[1],
+      city: feature.properties.city+' '+feature.properties.postcode,
+      lat: feature.geometry.coordinates[1],
+      lon: feature.geometry.coordinates[0],
     });
   })
 

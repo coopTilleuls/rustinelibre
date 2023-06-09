@@ -84,7 +84,7 @@ export const RepairerCard = ({repairer}: RepairerProps): JSX.Element => {
                 Adresse :
               </Typography>
               <Typography color="text.secondary" fontSize={{xs: 14, md: 16}}>
-                {repairer.street}
+                {repairer.streetNumber} {repairer.street}
               </Typography>
               <Typography
                 color="text.secondary"

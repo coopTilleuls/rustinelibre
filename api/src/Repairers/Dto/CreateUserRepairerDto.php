@@ -35,6 +35,10 @@ final class CreateUserRepairerDto
 
     #[Assert\NotBlank]
     #[Groups([Repairer::REPAIRER_WRITE])]
+    public ?string $streetNumber = null;
+
+    #[Assert\NotBlank]
+    #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $street = null;
 
     #[Assert\NotBlank]
@@ -51,6 +55,12 @@ final class CreateUserRepairerDto
 
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $comment = null;
+
+    #[Groups([Repairer::REPAIRER_WRITE])]
+    public ?float $latitude = null;
+
+    #[Groups([Repairer::REPAIRER_WRITE])]
+    public ?float $longitude = null;
 
     #[Groups([Repairer::REPAIRER_WRITE])]
     /** @var BikeType[] */

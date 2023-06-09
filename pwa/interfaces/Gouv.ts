@@ -7,6 +7,8 @@ export interface Properties {
     id: string;
     city: string;
     postcode: string;
+    label: string;
+    name: string;
 }
 
 export interface Geometry {
