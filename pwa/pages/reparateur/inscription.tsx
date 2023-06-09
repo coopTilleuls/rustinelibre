@@ -4,7 +4,6 @@ import React, {
   useState,
   ChangeEvent,
   useEffect,
-  SyntheticEvent,
   useContext,
   useCallback,
 } from 'react';
@@ -46,7 +45,7 @@ import {City as GouvCity} from '@interfaces/Gouv';
 import {RepairerType} from '@interfaces/RepairerType';
 import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
-import {searchCity} from '@utils/apiCity';
+import {searchCity, searchStreet} from '@utils/apiCity';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
@@ -61,6 +60,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
 }) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [comment, setComment] = useState<string>('');
+  const [streetList, setStreetList] = useState<object[]>([]);
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [repairerTypes, setRepairerTypes] =
@@ -157,15 +157,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setCityInput(event.target.value);
   };
 
-  const handleCitySelect = (
-    event: SyntheticEvent<Element, Event>,
-    value: string | null
-  ) => {
-    const selectedCity = citiesList.find((city) => city.name === value);
-    setCity(selectedCity ?? null);
-    setCityInput(value ?? '');
-  };
-
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -226,8 +217,21 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setName(event.target.value);
   };
 
-  const handleChangeStreet = (event: ChangeEvent<HTMLInputElement>): void => {
-    setStreet(event.target.value);
+  const handleChangeStreet = async (event: ChangeEvent<HTMLInputElement>): void => {
+
+    const adresseSearch = event.target.value;
+    // setStreet(adresseSearch);
+
+    if (adresseSearch.length >= 3) {
+
+      const streetApiResponse = await searchStreet(adresseSearch, city);
+
+      setStreetList(streetApiResponse)
+      console.log(streetApiResponse);
+    }
+
+
+
   };
 
   const handleChangeComments = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -374,18 +378,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     inputProps={{ maxLength: 80 }}
                     onChange={handleChangeName}
                   />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="street"
-                    label="Numéro et rue"
-                    name="street"
-                    autoComplete="street"
-                    value={street}
-                    inputProps={{ maxLength: 800 }}
-                    onChange={handleChangeStreet}
-                  />
                   <Autocomplete
                     sx={{mt: 2, mb: 1}}
                     freeSolo
@@ -407,6 +399,37 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       />
                     )}
                   />
+                  <Autocomplete
+                    sx={{mt: 2, mb: 1}}
+                    freeSolo
+                    value={street}
+                    options={streetList}
+                    getOptionLabel={(streetObject) =>
+                        `${streetObject.name}  (${streetObject.city})`
+                    }
+                    onChange={(event, value) => setStreet(value)}
+                    renderInput={(params) => (
+                      <TextField
+                        label="Numéro et rue"
+                        required
+                        {...params}
+                        value={street}
+                        onChange={(e) => handleChangeStreet(e)}
+                      />
+                    )}
+                  />
+                  {/*<TextField*/}
+                  {/*    margin="normal"*/}
+                  {/*    required*/}
+                  {/*    fullWidth*/}
+                  {/*    id="street"*/}
+                  {/*    label="Numéro et rue"*/}
+                  {/*    name="street"*/}
+                  {/*    autoComplete="street"*/}
+                  {/*    value={street}*/}
+                  {/*    inputProps={{ maxLength: 800 }}*/}
+                  {/*    onChange={handleChangeStreet}*/}
+                  {/*/>*/}
                   <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
                     <InputLabel id="repairer-type-label">
                       Type de réparateur
