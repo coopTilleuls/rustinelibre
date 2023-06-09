@@ -8,11 +8,12 @@ use App\Entity\User;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class HashPasswordSubscriber implements EventSubscriber
 {
-    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher, private readonly RequestStack $requestStack)
     {
     }
 
@@ -40,6 +41,10 @@ final class HashPasswordSubscriber implements EventSubscriber
         $entity = $args->getObject();
 
         if (!$entity instanceof User) {
+            return;
+        }
+
+        if ('auth' == $this->requestStack->getCurrentRequest()->attributes->get('_route')) {
             return;
         }
 

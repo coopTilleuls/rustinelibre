@@ -16,7 +16,7 @@ import {RequestBody} from "@interfaces/Resource";
 import {userResource} from "@resources/userResource";
 import {UserFormContext} from "@contexts/UserFormContext";
 
-const Login= (): JSX.Element => {
+const UpdatePassword = (): JSX.Element => {
     const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
     const [successOldPassword, setSuccessOldPassword] = useState<boolean>(false);
     const [successNewPassword, setSuccessNewPassword] = useState<boolean>(false);
@@ -78,10 +78,11 @@ const Login= (): JSX.Element => {
         setPendingLogin(true);
         if(checkPassword == newPassword){
             try {
-                const bodyRequest: RequestBody = {
-                    plainPassword: newPassword,
-                };
-                await userResource.putById(user.id, bodyRequest);
+
+                await userResource.putById(user.id, {
+                    email: user.email,
+                    plainPassword: newPassword
+                });
 
                 setSuccessNewPassword(true);
                 setTimeout(() => {
@@ -209,4 +210,4 @@ const Login= (): JSX.Element => {
     );
 };
 
-export default Login;
+export default UpdatePassword;
