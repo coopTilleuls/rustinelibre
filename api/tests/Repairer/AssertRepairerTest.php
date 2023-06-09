@@ -179,6 +179,8 @@ class AssertRepairerTest extends AbstractTestCase
                 'description' => 'Tests Asserts on repairer',
                 'mobilePhone' => '0720596321',
                 'city' => 'Lille',
+                'streetNumber' => "117",
+                'street' => "rue d'artois",
                 'postcode' => '59000',
                 'country' => 'France',
                 'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
