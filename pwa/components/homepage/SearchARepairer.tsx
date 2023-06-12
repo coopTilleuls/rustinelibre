@@ -136,7 +136,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                 px={4}>
                 <Autocomplete
                   filterOptions={(options, state) => options}
-                  sx={{width: '40%'}}
+                  sx={{width: '50%'}}
                   ref={listContainerRef}
                   freeSolo
                   value={city}

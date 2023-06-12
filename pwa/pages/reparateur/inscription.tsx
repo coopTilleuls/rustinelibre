@@ -47,7 +47,6 @@ import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
 import {searchCity, searchStreet} from '@utils/apiCity';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
 import {Street} from "@interfaces/Street";
 
 type RepairerRegistrationProps = {
