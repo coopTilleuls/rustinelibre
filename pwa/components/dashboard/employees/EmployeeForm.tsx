@@ -54,9 +54,8 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
     setPassword('');
   }, [repairerEmployee, setEmail, setFirstName, setLastName, setPassword]);
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+
     event.preventDefault();
     if (passwordError || !email || !firstName || !lastName) {
       return;
@@ -137,7 +136,7 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 3,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
