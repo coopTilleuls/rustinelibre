@@ -70,27 +70,19 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
 
     private function generateRandomTempPassword(): string
     {
-        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=';
-        $password = '';
-        while (strlen($password) < 12) {
-            $bytes = random_bytes(1);
-            $char = substr($alphabet, ord($bytes) % strlen($alphabet), 1);
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $randomPassword = '';
 
-            if (ctype_upper($char)) {
-                $hasUppercase = true;
-            } elseif (ctype_digit($char)) {
-                $hasDigit = true;
-            } else {
-                $hasSpecial = true;
-            }
+        $randomPassword .= chr(rand(65, 90));
+        $randomPassword .= chr(rand(97, 122));
+        $randomPassword .= rand(0, 9);
 
-            $password .= $char;
+        for ($i = 0; $i < 12 - 3; ++$i) {
+            $randomPassword .= $characters[rand(0, strlen($characters) - 1)];
         }
 
-        if (!isset($hasUppercase) || !isset($hasDigit) || !isset($hasSpecial)) {
-            return $this->generateRandomTempPassword();
-        }
+        $randomPassword = str_shuffle($randomPassword);
 
-        return $password;
+        return sprintf('%s!', $randomPassword);
     }
 }
