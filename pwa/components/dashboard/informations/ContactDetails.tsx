@@ -39,7 +39,7 @@ export const ContactDetails = ({
       setStreetNumber(repairer.streetNumber ? repairer.streetNumber : '');
       setCityInput(repairer.city ? repairer.city : '');
     }
-  }, [repairer, setName, setStreet, setCityInput]);
+  }, [repairer, setName, setStreet, setCityInput]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchCitiesResult = useCallback(async (cityStr: string) => {
     const citiesResponse = await searchCity(cityStr, useNominatim);

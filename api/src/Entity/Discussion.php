@@ -27,8 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or (user.repairer and user.repairer == object.repairer) 
 or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
-#[Post(security: "is_granted('ROLE_ADMIN') or (user.repairer and user.repairer == object.repairer) 
-or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
+#[Post(security: "is_granted('ROLE_ADMIN') or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact'])]
 #[ApiFilter(OrderFilter::class)]

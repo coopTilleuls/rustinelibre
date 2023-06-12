@@ -110,7 +110,8 @@ const InformationsContainer = ({bikeTypes , repairerTypes, repairerFetch, fetchR
         setOptionalPage,
         setCityInput,
         setStreet,
-    ]);
+        setStreetNumber,
+    ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSubmit = async (
         event: React.FormEvent<HTMLFormElement>
