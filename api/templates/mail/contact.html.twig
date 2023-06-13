@@ -1,0 +1,17 @@
+{% extends 'mail/mail_layout.html.twig' %}
+
+{% block body_mail %}
+    <p>
+     Un message a été reçu sur La rustine libre :
+
+        <br />
+        <br />
+        Auteur : {{ contact.firstname }} {{ contact.lastName }} ({{ contact.email }}
+        <br />
+        <br />
+
+        {{ contact.content }}
+        <br />
+        <br />
+    </p>
+{% endblock %}

@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\RepairerType;
+use App\Entity\Contact;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RepairerTypeRepository extends ServiceEntityRepository
+class ContactRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, RepairerType::class);
+        parent::__construct($registry, Contact::class);
     }
 
-    public function save(RepairerType $entity, bool $flush = false): void
+    public function save(Contact $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -24,7 +24,7 @@ class RepairerTypeRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(RepairerType $entity, bool $flush = false): void
+    public function remove(Contact $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
