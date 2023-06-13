@@ -30,7 +30,7 @@ class CreateUserAndRepairerTest extends AbstractTestCase
             'plainPassword' => 'Test1passwordOk!',
             'name' => 'Nouvel atelier',
             'street' => 'rue de la justice',
-            'streetNumber' => "8",
+            'streetNumber' => '8',
             'city' => 'Lille',
             'postcode' => '59000',
             'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
