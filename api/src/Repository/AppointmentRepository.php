@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Appointment;
 use App\Entity\Repairer;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -102,5 +103,20 @@ class AppointmentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function getThreeLastAppointmentsRepairersIds(User $user): array
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->select('DISTINCT r.id as repairerId')
+            ->leftJoin('a.repairer', 'r')
+            ->addSelect('a.id as HIDDEN id')
+            ->andWhere('a.customer = :customer')
+            ->orderBy('a.id', 'DESC')
+            ->setParameter('customer', $user->id)
+            ->setMaxResults(3)
+        ;
+
+        return array_column($qb->getQuery()->getArrayResult(), 'repairerId');
     }
 }

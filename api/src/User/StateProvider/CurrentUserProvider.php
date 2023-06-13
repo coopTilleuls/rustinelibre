@@ -7,6 +7,8 @@ namespace App\User\StateProvider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\User;
+use App\Repository\AppointmentRepository;
+use App\Repository\RepairerRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
@@ -16,6 +18,8 @@ final class CurrentUserProvider implements ProviderInterface
 {
     public function __construct(
         private Security $security,
+        private AppointmentRepository $appointmentRepository,
+        private RepairerRepository $repairerRepository,
     ) {
     }
 
@@ -27,6 +31,9 @@ final class CurrentUserProvider implements ProviderInterface
         if (!$user instanceof User) {
             return null;
         }
+
+        $threeLastRepairersIds = $this->appointmentRepository->getThreeLastAppointmentsRepairersIds($user);
+        $user->lastRepairers = $this->repairerRepository->findRepairersInIds($threeLastRepairersIds);
 
         return $user;
     }

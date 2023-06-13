@@ -73,7 +73,7 @@ class SlotsTestCase extends AbstractTestCase
                 'description' => 'On aime réparer des trucs',
                 'mobilePhone' => '0720596321',
                 'street' => 'rue de la clé',
-                'streetNumber' => "8",
+                'streetNumber' => '8',
                 'city' => 'Lille',
                 'postcode' => '59000',
                 'latitude' => '50.62544631958008',
