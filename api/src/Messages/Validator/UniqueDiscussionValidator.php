@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Discussion\Validator;
+namespace App\Messages\Validator;
 
 use App\Entity\Discussion;
 use App\Repository\DiscussionRepository;
