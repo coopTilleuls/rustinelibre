@@ -47,7 +47,11 @@ const RepairerSlots: NextPageWithLayout = () => {
 
   const handleSelectSlot = (day: string, time: string): void => {
     setSlotSelected(day + 'T' + time + ':00.000Z');
-    setTunnelStep('optionalPage');
+    if (repairer?.optionalPage && repairer.optionalPage !== '') {
+      setTunnelStep('optionalPage');
+    } else {
+      setTunnelStep('confirm')
+    }
   };
 
   const confirmAppointmentRequest = () => {
