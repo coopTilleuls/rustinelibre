@@ -1,3 +1,5 @@
+import {Repairer} from "@interfaces/Repairer";
+
 export interface User {
     '@id': string;
     '@type': string;
@@ -12,4 +14,5 @@ export interface User {
     plainPassword: string;
     lastConnect?: string;
     emailConfirmed: boolean;
+    lastRepairersf: Repairer[];
 }
