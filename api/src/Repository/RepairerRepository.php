@@ -8,14 +8,6 @@ use App\Entity\Repairer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Repairer>
- *
- * @method Repairer|null find($id, $lockMode = null, $lockVersion = null)
- * @method Repairer|null findOneBy(array $criteria, array $orderBy = null)
- * @method Repairer[]    findAll()
- * @method Repairer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class RepairerRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
