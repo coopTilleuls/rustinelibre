@@ -137,6 +137,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ])]
     public Collection $bikes;
 
+    #[Groups([self::USER_READ])]
+    public array $lastRepairers;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups([self::USER_READ, Repairer::REPAIRER_COLLECTION_READ])]
     public ?\DateTimeImmutable $lastConnect = null;

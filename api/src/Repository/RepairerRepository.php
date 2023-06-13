@@ -81,4 +81,13 @@ class RepairerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findRepairersInIds(array $ids): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.id IN (:repairersIds)')
+            ->setParameter('repairersIds', $ids)
+            ->getQuery()
+            ->getResult();
+    }
 }

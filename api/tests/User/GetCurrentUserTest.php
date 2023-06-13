@@ -39,4 +39,12 @@ class GetCurrentUserTest extends AbstractTestCase
         // Will be false if $response['lastConnect'] is not a dateTime
         $this->assertNotFalse($dateTime);
     }
+
+    public function testLastThreeRepairers(): void
+    {
+        $response = $this->createClientAuthAsUser()->request('GET', sprintf('/me'))->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertIsArray($response['lastRepairers']);
+    }
 }
