@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 #[ApiResource]
@@ -27,15 +28,36 @@ class Contact
     #[ApiProperty(identifier: true)]
     public ?int $id = null;
 
-    #[ORM\Column(length: 100, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 2,
+        max : 100,
+    )]
+    #[ORM\Column(length: 100)]
     public ?string $firstName = null;
 
-    #[ORM\Column(length: 100, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 2,
+        max : 100,
+    )]
+    #[ORM\Column(length: 100)]
     public ?string $lastName = null;
 
-    #[ORM\Column(length: 100, nullable: false)]
+    #[Assert\Email]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 2,
+        max : 100,
+    )]
+    #[ORM\Column(length: 100)]
     public ?string $email = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min : 10,
+        max : 1000,
+    )]
     #[ORM\Column(length: 1000)]
     public ?string $content = null;
 }
