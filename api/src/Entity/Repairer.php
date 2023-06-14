@@ -93,7 +93,7 @@ class Repairer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ])]
     public ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
@@ -128,32 +128,32 @@ class Repairer
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 800, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
     public ?string $street = null;
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 30, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
     public ?string $streetNumber = null;
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
     public ?string $city = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
     public ?string $postcode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public ?string $country = null;
 
     #[ORM\ManyToMany(targetEntity: BikeType::class, inversedBy: 'repairers')]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public Collection $bikeTypesSupported;
 
     #[Assert\Type('string')]
@@ -199,7 +199,7 @@ class Repairer
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
     public ?MediaObject $thumbnail = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
