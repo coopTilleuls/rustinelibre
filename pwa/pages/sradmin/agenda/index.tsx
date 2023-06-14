@@ -15,10 +15,12 @@ const Agenda: NextPageWithLayout = () => {
 
   useEffect(() => {
     async function fetchRepairer() {
+
+
       if (user && user.repairer) {
         setLoading(true);
         const repairerFetch: Repairer = await repairerResource.get(
-          user.repairer
+          user.repairer['@id']
         );
         setRepairer(repairerFetch);
         setLoading(false);

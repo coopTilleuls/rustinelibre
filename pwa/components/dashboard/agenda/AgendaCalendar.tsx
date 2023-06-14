@@ -56,7 +56,6 @@ export const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => 
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const buildCalendarEvents = async (start: string, end: string) => {
-
         const appointmentsFetch = await appointmentResource.getAll(true, {
             'slotTime[after]': start,
             'slotTime[before]': end

@@ -29,7 +29,7 @@ export const EmployeesList = ({currentBoss}: EmployeesListProps): JSX.Element =>
     if (currentBoss && currentBoss.repairer) {
         setLoadingList(true);
         const response = await repairerEmployeesResource.getAll(true, {
-          'repairer': currentBoss.repairer
+          'repairer': currentBoss.repairer['@id']
         });
         setEmployees(response['hydra:member']);
         setLoadingList(false);

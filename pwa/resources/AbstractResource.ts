@@ -234,6 +234,7 @@ export abstract class AbstractResource<T> {
   }
 
   public getUrl(id?: string, params?: RequestParams): string {
+
     const url = new URL(ENTRYPOINT + (undefined !== id ? id : this.endpoint));
     let queryMultipleMatch: string|null = null;
 

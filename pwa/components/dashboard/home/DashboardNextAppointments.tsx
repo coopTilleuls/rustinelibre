@@ -14,9 +14,10 @@ import {getDateFromDateAsString, getTimeFromDateAsString} from "@helpers/dateHel
 import SearchIcon from '@mui/icons-material/Search';
 import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
 import AddIcon from "@mui/icons-material/Add";
+import {Repairer} from "@interfaces/Repairer";
 
 interface DashboardNextAppointmentsProps {
-    repairer: string;
+    repairer: Repairer;
     appointmentsNext: Appointment[];
     fetchNextAppointments: () => void
     loadingListNext: boolean
