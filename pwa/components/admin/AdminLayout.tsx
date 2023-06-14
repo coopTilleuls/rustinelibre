@@ -142,10 +142,10 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
               path="/admin/utilisateurs"
             />
             <DashboardSidebarListItem
-              text="Messagerie"
+              text="Contact"
               open={true}
               icon={<MessageIcon />}
-              path="/admin/messagerie"
+              path="/admin/contact"
             />
             <DashboardSidebarListItem
               text="Paramètres"
