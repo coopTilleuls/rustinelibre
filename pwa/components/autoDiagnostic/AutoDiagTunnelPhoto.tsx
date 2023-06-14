@@ -108,7 +108,7 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
               <img
                 alt="Photo du diagnostic"
                 src={apiImageUrl(photo.contentUrl)}
-                style={{cursor: 'pointer'}}
+                style={{cursor: 'pointer', width: '80%', marginLeft: '10%'}}
               />
             )}
           </label>
