@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,7 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Post]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'createdAt'], arguments: ['orderParameterName' => 'order'])]
+#[Put(security: "is_granted('ROLE_ADMIN')")]
+#[ApiFilter(OrderFilter::class)]
 class Contact
 {
     #[ORM\Id]
