@@ -125,13 +125,11 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?string $mobilePhone = null;
 
-    #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 800, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]
     public ?string $street = null;
 
-    #[Assert\NotBlank]
     #[Assert\Type('string')]
     #[ORM\Column(length: 30, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ])]

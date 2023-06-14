@@ -1,7 +1,7 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {
     useState,
-    useEffect,
+    useEffect, useContext,
 } from 'react';
 import Head from 'next/head';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
@@ -14,10 +14,12 @@ import {repairerResource} from '@resources/repairerResource';
 import {Repairer} from "@interfaces/Repairer";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import {RepairerCard} from "@components/repairers/RepairerCard";
+import {SearchRepairerContext} from "@contexts/SearchRepairerContext";
 
 const RepairersList: NextPageWithLayout = () => {
     const [repairers, setRepairers] = useState<Repairer[]>([]);
     const [isLoading, setIsLoading] = useState<Boolean>(false);
+    const {setSelectedRepairer} = useContext(SearchRepairerContext);
 
     const fetchRepairers = async(): Promise<void> => {
         setIsLoading(true);
@@ -32,6 +34,7 @@ const RepairersList: NextPageWithLayout = () => {
     }
 
     useEffect(() => {
+        setSelectedRepairer('');
         fetchRepairers();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -15,9 +15,8 @@ type RepairerPageProps = {
   repairerProps: Repairer | null;
 };
 
-const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
-  repairerProps,
-}) => {
+const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({repairerProps}) => {
+
   const router = useRouter();
   const {id} = router.query;
   const [loading, setLoading] = useState<boolean>(false);
@@ -95,6 +94,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
       repairerProps,
     },
     revalidate: 10,
+    fallback: true
   };
 };
 
