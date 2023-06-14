@@ -15,9 +15,10 @@ import {getDateFromDateAsString, getTimeFromDateAsString} from "@helpers/dateHel
 import SearchIcon from '@mui/icons-material/Search';
 import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import {Repairer} from "@interfaces/Repairer";
 
 interface DashboardWaitingAppointmentsProps {
-    repairer: string;
+    repairer: Repairer;
     appointmentsWaiting: Appointment[];
     fetchWaitingAppointments: () => Promise<void>;
     fetchNextAppointments: () => Promise<void>;

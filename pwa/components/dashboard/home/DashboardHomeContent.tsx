@@ -9,9 +9,10 @@ import {RequestParams} from "@interfaces/Resource";
 import {dateObjectAsString} from "@helpers/dateHelper";
 import DashboardHomeEmployees from "@components/dashboard/home/DashboardHomeEmployees";
 import {User} from "@interfaces/User";
+import {Repairer} from "@interfaces/Repairer";
 
 interface DashboardHomeContentProps {
-    repairer: string;
+    repairer: Repairer;
     currentBoss: User;
 }
 
@@ -26,7 +27,7 @@ export const DashboardHomeContent = ({repairer, currentBoss}: DashboardHomeConte
         setLoadingListNext(true);
         const nextAppointments = await fetchAppointments({
             itemsPerPage: '6',
-            repairer: repairer,
+            repairer: repairer['@id'],
             'order[slotTime]': 'DESC',
             'slotTime[after]': dateObjectAsString(new Date()),
             status: 'validated'
@@ -40,7 +41,7 @@ export const DashboardHomeContent = ({repairer, currentBoss}: DashboardHomeConte
         setLoadingListWait(true);
         const waitAppointments = await fetchAppointments({
             itemsPerPage: '6',
-            repairer: repairer,
+            repairer: repairer['@id'],
             'order[slotTime]': 'ASC',
             status: 'pending_repairer',
             'slotTime[after]': dateObjectAsString(new Date()),

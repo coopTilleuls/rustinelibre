@@ -10,7 +10,7 @@ export interface User {
     street?: string;
     email: string;
     roles: string[];
-    repairer: string,
+    repairer: Repairer,
     plainPassword: string;
     lastConnect?: string;
     emailConfirmed: boolean;
