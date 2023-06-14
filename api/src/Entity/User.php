@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
+use App\Controller\UserValidationCodeController;
 use App\Repository\UserRepository;
 use App\User\Filter\UserSearchFilter;
 use App\User\StateProvider\CurrentUserProvider;
@@ -35,6 +36,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Get(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object))")]
 #[Post(security: "is_granted('ROLE_ADMIN') or !user")]
+#[Post(
+    uriTemplate: '/validation-code',
+    controller: UserValidationCodeController::class,
+    security: "is_granted('IS_AUTHENTICATED_FULLY')"
+)]
 #[Put(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
 #[Get(
     uriTemplate: '/me',
@@ -51,7 +57,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS') or is_granted('ROLE_EMPLOYEE')",
-    name: 'Get customers list',
+    name: 'customers_list',
     provider: CustomersProvider::class,
 )]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
@@ -91,6 +97,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', nullable: false)]
     #[Groups([self::USER_READ])]
     public bool $emailConfirmed = true;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    public ?int $validationCode = null;
 
     #[ORM\Column(type: 'string')]
     public ?string $password = null;
