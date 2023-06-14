@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,6 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Post]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
+#[Put(security: "is_granted('ROLE_ADMIN')")]
+#[ApiFilter(OrderFilter::class)]
 class Contact
 {
     #[ORM\Id]
@@ -60,4 +65,18 @@ class Contact
     )]
     #[ORM\Column(length: 1000)]
     public ?string $content = null;
+
+    #[Assert\NotNull]
+    #[Assert\Type('boolean')]
+    #[ORM\Column]
+    public ?bool $alreadyRead = false;
+
+    #[Assert\NotNull]
+    #[ORM\Column]
+    public ?\DateTimeImmutable $createdAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+    }
 }
