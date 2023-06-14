@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
   Typography,
@@ -11,8 +11,14 @@ import {
 import {AutodiagContext} from '@contexts/AutodiagContext';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {autoDiagnosticResource} from '@resources/autoDiagResource';
+import {Intervention} from "@interfaces/Intervention";
+import {interventionResource} from "@resources/interventionResource";
 
 export const AutoDiagTunnelPrestation = (): JSX.Element => {
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [interventions, setInterventions] = useState<Intervention[]>([]);
+
   const {
     prestation,
     appointment,
@@ -51,6 +57,19 @@ export const AutoDiagTunnelPrestation = (): JSX.Element => {
     setTunnelStep('photo');
   };
 
+  const fetchInterventions = async () => {
+    setLoading(true);
+    const interventionsFetch = await interventionResource.getAll(false, {
+      isAdmin: true
+    });
+    setInterventions(interventionsFetch['hydra:member']);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchInterventions();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <Stack
       spacing={4}
@@ -69,13 +88,9 @@ export const AutoDiagTunnelPrestation = (): JSX.Element => {
           value={prestation}
           label="Type de prestation"
           onChange={handleChangePrestation}>
-          <MenuItem value="Entretien classique">Entretien classique</MenuItem>
-          <MenuItem value="Électrifier mon vélo">Électrifier mon vélo</MenuItem>
-          <MenuItem value="Problème de frein">Problème de frein</MenuItem>
-          <MenuItem value="Problème de pneu">Problème de pneu</MenuItem>
-          <MenuItem value="Problème de roue">Problème de roue</MenuItem>
-          <MenuItem value="Problème de vitesse">Problème de vitesse</MenuItem>
-          <MenuItem value="Autre prestation">Autre prestation</MenuItem>
+            {interventions.map(intervention => {
+              return <MenuItem key={intervention['@id']} value={intervention.description}>{intervention.description}</MenuItem>
+            })}
         </Select>
       </FormControl>
       <Box

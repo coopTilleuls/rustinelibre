@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import {CircularProgress} from "@mui/material";
-import {appointmentResource} from "@resources/appointmentResource";
 import {Appointment} from "@interfaces/Appointment";
 import AppointmentContent from "@components/dashboard/appointments/AppointmentContent";
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -36,6 +36,7 @@ const ModalShowAppointment = ({appointment, openModal, handleCloseModal}: ModalS
             aria-describedby="popup_show_appointment"
         >
             <Box sx={style}>
+                <CloseIcon sx={{position: 'absolute', top: 10, right : 10, cursor: 'pointer', fontSize: '2em'}} onClick={() => handleCloseModal(false)} />
                 <Box sx={{ mt: 1 }}>
                     {loading && <CircularProgress />}
                     {!loading && appointment &&

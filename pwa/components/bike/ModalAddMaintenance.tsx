@@ -206,7 +206,16 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = n
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
                             >
-                                {!pendingAdd ? maintenance ? 'Modifier cette réparation' : 'Ajouter cette réparation' : <CircularProgress sx={{color: 'white'}} size={20} />}
+                                {!pendingAdd ? 'Modifier cette réparation' : <CircularProgress sx={{color: 'white'}} size={20} />}
+                            </Button>
+                        }
+                        {
+                            user && !maintenance && <Button
+                                type="submit"
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                {!pendingAdd ? 'Ajouter cette réparation' : <CircularProgress sx={{color: 'white'}} size={20} />}
                             </Button>
                         }
                     </Box>

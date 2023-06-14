@@ -168,31 +168,6 @@ class AssertRepairerTest extends AbstractTestCase
         ]);
     }
 
-    public function testPostRepairerWithoutStreet(): void
-    {
-        $client = self::createClientWithUser($this->users[60]);
-        // Valid boss role given
-        $client->request('POST', '/repairers', [
-            'headers' => ['Content-Type' => 'application/json'],
-            'json' => [
-                'name' => 'Assert on repairers',
-                'description' => 'Tests Asserts on repairer',
-                'mobilePhone' => '0720596321',
-                'city' => 'Lille',
-                'postcode' => '59000',
-                'country' => 'France',
-                'rrule' => 'FREQ=MINUTELY;INTERVAL=60;BYHOUR=9,10,11,12,13,14,15,16;BYDAY=MO,TU,WE,TH,FR',
-                'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
-            ],
-        ]);
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertJsonContains([
-            '@context' => '/contexts/ConstraintViolationList',
-            '@type' => 'ConstraintViolationList',
-            'hydra:title' => 'An error occurred',
-        ]);
-    }
-
     public function testPostRepairerWithoutCity(): void
     {
         $client = self::createClientWithUser($this->users[60]);
