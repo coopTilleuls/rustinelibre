@@ -55,7 +55,7 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bi
 
     if (user && user.repairer) {
       setLoading(true);
-      const repairerFetch: Repairer = await repairerResource.get(user.repairer);
+      const repairerFetch: Repairer = await repairerResource.get(user.repairer['@id']);
       setRepairer(repairerFetch);
       setLoading(false);
     }

@@ -58,7 +58,7 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
             itemsPerPage: 20,
             'order[id]': 'DESC',
             customer: customer.id,
-            repairer: user.repairer
+            repairer: user.repairer['@id']
         };
         const response = await appointmentResource.getAll(true, params);
         setAppointments(response['hydra:member']);
