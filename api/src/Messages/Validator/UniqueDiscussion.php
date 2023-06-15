@@ -7,9 +7,9 @@ namespace App\Messages\Validator;
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute]
-class MessageDiscussionCheck extends Constraint
+class UniqueDiscussion extends Constraint
 {
-    public string $message = 'Your are not participating to this discussion';
+    public string $message = 'Cannot create two discussions for the same repairer and customer';
 
     public function getTargets(): string
     {
