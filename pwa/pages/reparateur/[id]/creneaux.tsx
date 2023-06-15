@@ -2,10 +2,12 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useEffect, useState} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {repairerResource} from '@resources/repairerResource';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
-import {Repairer} from '@interfaces/Repairer';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import {repairerResource} from '@resources/repairerResource';
+import useMediaQuery from '@hooks/useMediaQuery';
+import {appointmentResource} from '@resources/appointmentResource';
+import {useAccount} from '@contexts/AuthContext';
 import {
   Container,
   CircularProgress,
@@ -15,12 +17,14 @@ import {
   Stack,
   Button,
 } from '@mui/material';
-import useMediaQuery from '@hooks/useMediaQuery';
-import {appointmentResource} from '@resources/appointmentResource';
-import {useAccount} from '@contexts/AuthContext';
+import WebsiteLayout from '@components/layout/WebsiteLayout';
 import SlotsStep from '@components/rendez-vous/SlotsStep';
 import OptionalStep from '@components/rendez-vous/OptionalStep';
 import RecapStep from '@components/rendez-vous/RecapStep';
+const PinMap = dynamic(() => import('@components/rendez-vous/PinMap'), {
+  ssr: false,
+});
+import {Repairer} from '@interfaces/Repairer';
 
 const RepairerSlots: NextPageWithLayout = () => {
   const router = useRouter();
@@ -28,6 +32,9 @@ const RepairerSlots: NextPageWithLayout = () => {
   const [slotSelected, setSlotSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [repairer, setRepairer] = useState<Repairer | null>(null);
+  const [latitude, setLatitude] = useState<string>('');
+  const [longitude, setLongitude] = useState<string>('');
+
   const isMobile = useMediaQuery('(max-width: 1024px)');
   const {id} = router.query;
   const {user} = useAccount({});
@@ -47,10 +54,24 @@ const RepairerSlots: NextPageWithLayout = () => {
 
   const handleSelectSlot = (day: string, time: string): void => {
     setSlotSelected(day + 'T' + time + ':00.000Z');
+    if (repairer?.repairerType.name === 'Réparateur itinérant') {
+      setTunnelStep('pinMap');
+    } else if (repairer?.optionalPage && repairer.optionalPage !== '') {
+      setTunnelStep('optionalPage');
+    } else {
+      setTunnelStep('confirm');
+    }
+  };
+
+  const cancelPinMap = () => {
+    setTunnelStep('slots');
+  };
+
+  const confirmPinMap = () => {
     if (repairer?.optionalPage && repairer.optionalPage !== '') {
       setTunnelStep('optionalPage');
     } else {
-      setTunnelStep('confirm')
+      setTunnelStep('confirm');
     }
   };
 
@@ -65,7 +86,9 @@ const RepairerSlots: NextPageWithLayout = () => {
 
     const newAppointment = await appointmentResource.post({
       repairer: repairer['@id'],
-      slotTime: slotSelected
+      slotTime: slotSelected,
+      latitude: latitude,
+      longitude: longitude,
     });
 
     if (newAppointment) {
@@ -155,6 +178,17 @@ const RepairerSlots: NextPageWithLayout = () => {
                         <SlotsStep
                           handleSelectSlot={handleSelectSlot}
                           repairer={repairer}
+                        />
+                      )}
+                      {user && repairer && tunnelStep == 'pinMap' && (
+                        <PinMap
+                          cancelPinMap={cancelPinMap}
+                          confirmPinMap={confirmPinMap}
+                          repairer={repairer}
+                          latitude={latitude}
+                          longitude={longitude}
+                          setLatitude={setLatitude}
+                          setLongitude={setLongitude}
                         />
                       )}
                       {user && tunnelStep == 'optionalPage' && (
