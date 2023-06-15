@@ -47,7 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     openapi: new Model\Operation(
         summary: 'Retrieves the current User ressource',
         description: 'Retrieves the current User ressource'),
-    security: "is_granted('ROLE_ADMIN') or (object == user)",
+    security: "is_granted('ROLE_ADMIN') or object == user",
     provider: CurrentUserProvider::class,
 )]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
