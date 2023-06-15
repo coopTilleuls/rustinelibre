@@ -29,11 +29,8 @@ final class BikeOwnerExtension implements QueryCollectionExtensionInterface
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
         $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            return;
-        }
 
-        if (Bike::class !== $resourceClass || $user->isAdmin() || $user->isBoss() || $user->isEmployee()) {
+        if (Bike::class !== $resourceClass || !$user instanceof User || $user->isAdmin() || $user->isBoss() || $user->isEmployee()) {
             return;
         }
 
