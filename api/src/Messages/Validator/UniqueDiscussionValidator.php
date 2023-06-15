@@ -26,7 +26,7 @@ class UniqueDiscussionValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, UniqueDiscussion::class);
         }
 
-        if (count($this->discussionRepository->findBy(['repairer' => $value->repairer, 'customer' => $value->customer])) > 0) {
+        if ($this->discussionRepository->findOneBy(['repairer' => $value->repairer, 'customer' => $value->customer])) {
             $this->context->buildViolation((string) $constraint->message)
                 ->addViolation();
         }
