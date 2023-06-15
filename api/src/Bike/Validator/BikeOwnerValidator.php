@@ -22,7 +22,7 @@ final class BikeOwnerValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, BikeOwner::class);
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN') || !$value) {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_BOSS') ||$this->security->isGranted('ROLE_EMPLOYEE') || !$value) {
             return;
         }
 

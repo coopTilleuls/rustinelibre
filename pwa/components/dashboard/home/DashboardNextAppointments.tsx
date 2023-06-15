@@ -7,7 +7,7 @@ import {
     TableCell,
     TableBody,
     TableContainer,
-    CircularProgress, Box, Typography, Button,
+    CircularProgress, Box, Typography, Button, Link,
 } from '@mui/material';
 import {Appointment} from "@interfaces/Appointment";
 import {getDateFromDateAsString, getTimeFromDateAsString} from "@helpers/dateHelper";
@@ -64,14 +64,18 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
         setAppointmentSelected(appointment);
     }
 
+
+
     return (
         <Box>
             <Typography variant="h5">
                 Prochains rendez-vous
+                <Link href={'/sradmin/creer-rendez-vous'}>
                 <Button variant="contained" sx={{float: 'right'}} size="small">
                     <AddIcon />
                     Créer un rendez-vous
                 </Button>
+                </Link>
             </Typography>
             {loadingListNext && <CircularProgress sx={{ml: 10, mt: 10}} />}
             {!loadingListNext && <TableContainer elevation={4} component={Paper} sx={{mt: 3}}>
