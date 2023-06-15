@@ -28,10 +28,11 @@ class CustomerVoter extends Voter
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
 
-        if (!$currentUser || !$currentUser->repairer) {
+        // Should be at least repairer's boss or employee
+        if (!$currentUser || (!$currentUser->repairer && !$currentUser->repairerEmployee)) {
             return false;
         }
 
-        return (bool) $this->appointmentRepository->findOneBy(['repairer' => $currentUser->repairer, 'customer' => $subject]);
+        return (bool) $this->appointmentRepository->findOneBy(['repairer' => $currentUser->repairer ?: ($currentUser->repairerEmployee?->repairer), 'customer' => $subject]);
     }
 }

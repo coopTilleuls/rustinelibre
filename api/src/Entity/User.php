@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::USER_READ]],
     denormalizationContext: ['groups' => [self::USER_WRITE]]
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object))")]
+#[Get(security: "is_granted('ROLE_ADMIN') or (object == user) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object)) or (is_granted('ROLE_EMPLOYEE') and is_granted('CUSTOMER_READ', object))")]
 #[Post(security: "is_granted('ROLE_ADMIN') or !user")]
 #[Post(
     uriTemplate: '/validation-code',
@@ -47,7 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     openapi: new Model\Operation(
         summary: 'Retrieves the current User ressource',
         description: 'Retrieves the current User ressource'),
-    security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)",
+    security: "is_granted('ROLE_ADMIN') or (object == user)",
     provider: CurrentUserProvider::class,
 )]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]

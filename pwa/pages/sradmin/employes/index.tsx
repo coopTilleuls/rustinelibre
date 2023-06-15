@@ -7,6 +7,7 @@ import EmployeesList from '@components/dashboard/employees/EmployeesList';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
+import {isBoss} from "@helpers/rolesHelpers";
 
 const Employees = () => {
   const {user} = useAccount({redirectIfNotFound: '/'});
@@ -24,7 +25,7 @@ const Employees = () => {
               Ajouter un employé
             </Button>
           </Link>
-            {(user && user.repairer) && <EmployeesList currentBoss={user} />}
+            {(user && isBoss(user) && user.repairer) && <EmployeesList currentBoss={user} />}
         </Box>
       </DashboardLayout>
     </>
