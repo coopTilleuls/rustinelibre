@@ -11,6 +11,8 @@ import FavoriteRepairers from '@components/homepage/FavoriteRepairers';
 const Home = () => {
   const {user} = useAccount({});
 
+  console.log(user);
+
   return (
     <>
       <Head>
@@ -20,7 +22,7 @@ const Home = () => {
         <Container sx={{px: {xs: 0}}}>
           <Stack spacing={{xs: 6, md: 14}} sx={{mt: {xs: 2, md: 6}, mb: 12}}>
             <SearchARepairer />
-            {user && <FavoriteRepairers />}
+            {!!user?.roles.includes('ROLE_USER') && <FavoriteRepairers />}
             <CreateMaintenanceBooklet />
             <JoinTheCollective />
           </Stack>

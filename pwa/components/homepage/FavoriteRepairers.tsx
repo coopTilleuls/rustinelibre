@@ -2,12 +2,13 @@ import Link from 'next/link';
 import {useAccount} from '@contexts/AuthContext';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {Box, CardMedia, Typography} from '@mui/material';
+import Grid2 from '@mui/material/Unstable_Grid2';
 
 const FavoriteRepairers = () => {
   const {user} = useAccount({});
 
   return (
-    <Box px={{xs: 2, md: 0}}>
+    <Box px={{xs: 2, md: 0}} width="100%">
       <Typography
         fontSize={22}
         fontWeight={600}
@@ -15,31 +16,24 @@ const FavoriteRepairers = () => {
         textAlign={{xs: 'center', md: 'start'}}>
         Mes réparateurs
       </Typography>
-      <Box
-        display="flex"
-        gap={4}
-        flexDirection={{xs: 'column', md: 'row'}}
-        justifyContent="space-between"
-        alignItems={{sm: 'center', md: 'none'}}
-        width="100%">
+      <Grid2 container spacing={3}>
         {user?.lastRepairers.map(
           ({id, name, streetNumber, street, postcode, city, thumbnail}) => {
             return (
-              <Box
-                key={id}
-                borderRadius={4}
-                p={2}
-                width={{sm: '50%', md: '30%'}}
-                sx={{
-                  backgroundColor: 'grey.200',
-                  '&:hover': {
-                    boxShadow: 2,
-                  },
-                }}>
+              <Grid2 xs={12} sm={6} lg={4} key={id}>
                 <Link
                   href={`/reparateur/${id}`}
                   style={{textDecoration: 'none'}}>
-                  <Box display="flex" width="100%">
+                  <Box
+                    display="flex"
+                    p={2}
+                    sx={{
+                      backgroundColor: 'grey.200',
+                      '&:hover': {
+                        boxShadow: 2,
+                      },
+                      borderRadius: 2,
+                    }}>
                     <CardMedia
                       width="30%"
                       component="img"
@@ -49,6 +43,7 @@ const FavoriteRepairers = () => {
                         mr: 2,
                         borderRadius: '50%',
                         objectFit: 'cover',
+                        boxShadow: 4,
                       }}
                       image={
                         thumbnail
@@ -75,11 +70,11 @@ const FavoriteRepairers = () => {
                     </Box>
                   </Box>
                 </Link>
-              </Box>
+              </Grid2>
             );
           }
         )}
-      </Box>
+      </Grid2>
     </Box>
   );
 };
