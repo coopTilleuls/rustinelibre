@@ -26,6 +26,10 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
+    App\User\EventSubscriber\ValidationCodeSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
+
     App\Repairers\EventSubscriber\GpsPointEventSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
