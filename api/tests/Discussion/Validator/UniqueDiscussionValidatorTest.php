@@ -8,7 +8,7 @@ use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 
-class DiscussionValidatorTest extends AbstractTestCase
+class UniqueDiscussionValidatorTest extends AbstractTestCase
 {
     private UserRepository $userRepository;
 
