@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     controller: UserValidationCodeController::class,
     security: "is_granted('IS_AUTHENTICATED_FULLY')"
 )]
-#[Put(security: "is_granted('ROLE_ADMIN') or (object == user and user.emailConfirmed == true)")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[Get(
     uriTemplate: '/me',
     openapi: new Model\Operation(
