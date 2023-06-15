@@ -29,14 +29,15 @@ readonly class AppointmentRepairerExtension implements QueryCollectionExtensionI
         /** @var ?User $user */
         $user = $this->security->getUser();
 
-        if (null === $user || Appointment::class !== $resourceClass || $this->security->isGranted('ROLE_ADMIN') || !in_array('ROLE_BOSS', $user->getRoles(), true)) {
+        // return if neither boss nor employee
+        if (null === $user || Appointment::class !== $resourceClass || (!$user->isBoss() && !$user->isEmployee())) {
             return;
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder
-            ->innerJoin(sprintf('%s.repairer', $rootAlias), 'r')
-            ->andWhere('r.owner = :owner');
-        $queryBuilder->setParameter('owner', $user->id);
+            ->andWhere(sprintf('%s.repairer = :repairerId', $rootAlias))
+            ->setParameter('repairerId', $user->repairer ? $user->repairer->id : ($user->repairerEmployee?->repairer->id))
+        ;
     }
 }

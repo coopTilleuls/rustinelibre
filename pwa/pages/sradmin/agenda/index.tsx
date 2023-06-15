@@ -10,26 +10,18 @@ import AgendaCalendar from '@components/dashboard/agenda/AgendaCalendar';
 
 const Agenda: NextPageWithLayout = () => {
   const [repairer, setRepairer] = useState<Repairer | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const {user} = useAccount({});
 
-  useEffect(() => {
-    async function fetchRepairer() {
+    useEffect(() => {
+        if (user && user.repairer) {
+            setRepairer(user.repairer);
+            return;
+        }
+        if (user && user.repairerEmployee) {
+            setRepairer(user.repairerEmployee.repairer);
+        }
 
-
-      if (user && user.repairer) {
-        setLoading(true);
-        const repairerFetch: Repairer = await repairerResource.get(
-          user.repairer['@id']
-        );
-        setRepairer(repairerFetch);
-        setLoading(false);
-      }
-    }
-    if (user) {
-      fetchRepairer();
-    }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -38,8 +30,7 @@ const Agenda: NextPageWithLayout = () => {
       </Head>
       <DashboardLayout>
         <Box component="main" maxWidth="1200">
-          {loading && <CircularProgress />}
-          {repairer && !loading && <AgendaCalendar repairer={repairer} />}
+          {repairer && <AgendaCalendar repairer={repairer} />}
         </Box>
       </DashboardLayout>
     </>

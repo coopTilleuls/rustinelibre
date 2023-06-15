@@ -25,8 +25,6 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bi
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [success, setSuccess] = useState<boolean>(false);
-  const [tabValue, setTabValue] = React.useState<number>(0);
   const {user} = useAccount({});
 
   const fetchRepairerTypes = async () => {
@@ -52,7 +50,6 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bi
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairer = async () => {
-
     if (user && user.repairer) {
       setLoading(true);
       const repairerFetch: Repairer = await repairerResource.get(user.repairer['@id']);
@@ -62,7 +59,9 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({bi
   };
 
   useEffect(() => {
-      fetchRepairer();
+      if (user && user.repairer) {
+        setRepairer(user.repairer);
+      }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
