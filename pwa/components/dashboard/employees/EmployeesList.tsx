@@ -15,6 +15,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
 import {User} from '@interfaces/User';
+import {isBoss} from "@helpers/rolesHelpers";
 
 interface EmployeesListProps {
   currentBoss: User;
@@ -26,7 +27,7 @@ export const EmployeesList = ({currentBoss}: EmployeesListProps): JSX.Element =>
   const [employees, setEmployees] = useState<RepairerEmployee[]>([]);
 
   const fetchEmployees = async () => {
-    if (currentBoss && currentBoss.repairer) {
+    if (currentBoss && isBoss(currentBoss) && currentBoss.repairer) {
         setLoadingList(true);
         const response = await repairerEmployeesResource.getAll(true, {
           'repairer': currentBoss.repairer['@id']

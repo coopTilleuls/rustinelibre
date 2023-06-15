@@ -20,6 +20,7 @@ import {formatDate} from 'helpers/dateHelper';
 import {getAppointmentStatus} from "@helpers/appointmentStatus";
 import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
 import {useAccount} from "@contexts/AuthContext";
+import {Repairer} from "@interfaces/Repairer";
 
 interface CustomerAppointmentsListProps {
     customer: Customer
@@ -48,7 +49,12 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
     }
 
     const fetchAppointments = async () => {
-        if (!user || !user.repairer) {
+        if (!user) {
+            return;
+        }
+
+        const repairer: Repairer|undefined = user.repairer ? user.repairer : user.repairerEmployee?.repairer;
+        if (!repairer) {
             return;
         }
 
@@ -58,7 +64,7 @@ export const CustomerAppointmentsList =  ({customer}: CustomerAppointmentsListPr
             itemsPerPage: 20,
             'order[id]': 'DESC',
             customer: customer.id,
-            repairer: user.repairer['@id']
+            repairer: repairer['@id']
         };
         const response = await appointmentResource.getAll(true, params);
         setAppointments(response['hydra:member']);

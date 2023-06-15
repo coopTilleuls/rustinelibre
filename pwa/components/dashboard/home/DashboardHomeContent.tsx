@@ -10,13 +10,14 @@ import {dateObjectAsString} from "@helpers/dateHelper";
 import DashboardHomeEmployees from "@components/dashboard/home/DashboardHomeEmployees";
 import {User} from "@interfaces/User";
 import {Repairer} from "@interfaces/Repairer";
+import {isBoss} from "@helpers/rolesHelpers";
 
 interface DashboardHomeContentProps {
     repairer: Repairer;
-    currentBoss: User;
+    currentUser: User;
 }
 
-export const DashboardHomeContent = ({repairer, currentBoss}: DashboardHomeContentProps): JSX.Element => {
+export const DashboardHomeContent = ({repairer, currentUser}: DashboardHomeContentProps): JSX.Element => {
 
     const [loadingListNext, setLoadingListNext] = useState<boolean>(false);
     const [loadingListWait, setLoadingListWait] = useState<boolean>(false);
@@ -66,9 +67,11 @@ export const DashboardHomeContent = ({repairer, currentBoss}: DashboardHomeConte
                     <Grid item xs={6}>
                         <DashboardWaitingAppointments repairer={repairer} appointmentsWaiting={appointmentsWaiting} fetchNextAppointments={fetchNextAppointments} fetchWaitingAppointments={fetchWaitingAppointments} loadingListWait={loadingListWait} />
                     </Grid>
-                    <Grid item xs={12}>
-                        <DashboardHomeEmployees currentBoss={currentBoss} />
-                    </Grid>
+                    {isBoss(currentUser) &&
+                        <Grid item xs={12}>
+                            <DashboardHomeEmployees currentBoss={currentUser} />
+                        </Grid>
+                    }
                 </Grid>}
         </Box>
     );
