@@ -75,7 +75,9 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
       flexDirection="column"
       alignItems="start">
       <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
-        Choisissez votre créneau :
+        {openingHours && Object.entries(openingHours).length > 0 ?
+            "Choisissez votre créneau :" :
+            "Votre réparateur n'a pas actuellement de créneau disponible. Veuillez prendre contact avec lui directement par téléphone."}
       </Typography>
       <Stack spacing={4} width={'100%'}>
 
