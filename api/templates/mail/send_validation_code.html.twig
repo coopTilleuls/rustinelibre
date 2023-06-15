@@ -1,0 +1,11 @@
+{% extends 'mail/mail_layout.html.twig' %}
+
+{% block body_mail %}
+    <p>
+        Votre code de validation La Rustine Libre
+
+        <br />
+        <br />
+        {{ user.validationCode }}
+    </p>
+{% endblock %}
