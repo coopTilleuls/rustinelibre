@@ -25,7 +25,6 @@ import {useAccount} from '@contexts/AuthContext';
 import {RequestBody} from '@interfaces/Resource';
 import {Repairer} from '@interfaces/Repairer';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
-import {formatDate} from '@helpers/dateHelper';
 
 export const AppointmentCreate = (): JSX.Element => {
   const {user} = useAccount({});
@@ -150,6 +149,8 @@ export const AppointmentCreate = (): JSX.Element => {
     }, 5000);
   };
 
+  console.log(selectedBike);
+
   return (
     <>
       <Box>
@@ -194,6 +195,7 @@ export const AppointmentCreate = (): JSX.Element => {
                       {bike.name}
                     </MenuItem>
                   ))}
+                  <MenuItem value="Autre">Autre</MenuItem>
                 </Select>
               </FormControl>
             </Box>
