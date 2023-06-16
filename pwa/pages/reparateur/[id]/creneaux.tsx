@@ -30,7 +30,7 @@ const RepairerSlots: NextPageWithLayout = () => {
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const isMobile = useMediaQuery('(max-width: 1024px)');
   const {id} = router.query;
-  const {user} = useAccount({});
+  const {user} = useAccount({redirectIfMailNotConfirm: router.asPath});
 
   async function fetchRepairer() {
     if (id) {
@@ -44,13 +44,6 @@ const RepairerSlots: NextPageWithLayout = () => {
   useEffect(() => {
     fetchRepairer();
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-
-  useEffect(() => {
-    if (user && !user.emailConfirmed) {
-        router.push(`/inscription?next=${encodeURIComponent(router.asPath)}`);
-    }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSelectSlot = (day: string, time: string): void => {
     setSlotSelected(day + 'T' + time + ':00.000Z');

@@ -52,9 +52,11 @@ export const AuthProvider = ({children}: PropsWithChildren): JSX.Element => {
 export const useAccount = ({
   redirectIfFound,
   redirectIfNotFound,
+  redirectIfMailNotConfirm
 }: {
   redirectIfFound?: string;
   redirectIfNotFound?: string;
+  redirectIfMailNotConfirm?: string;
 }) => {
   const {user, isLoadingFetchUser} = useAuth();
 
@@ -63,6 +65,8 @@ export const useAccount = ({
       Router.push(redirectIfFound);
     } else if (!isLoadingFetchUser && !user && redirectIfNotFound) {
       Router.push(redirectIfNotFound);
+    } else if (!isLoadingFetchUser && user && !user.emailConfirmed && redirectIfMailNotConfirm) {
+      Router.push(`/inscription?next=${encodeURIComponent(redirectIfMailNotConfirm)}`);
     }
   }, [redirectIfFound, redirectIfNotFound, user, isLoadingFetchUser]);
 

@@ -12,14 +12,8 @@ import {useRouter} from "next/router";
 
 const Home = () => {
     const router = useRouter();
-    const {user} = useAccount({});
-
-    useEffect(() => {
-        if (user && !user.emailConfirmed) {
-            router.push(`/inscription?next=${encodeURIComponent(router.asPath)}`);
-        }
-    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
-
+    const {user} = useAccount({redirectIfMailNotConfirm: '/'});
+    
     return (
     <>
       <Head>

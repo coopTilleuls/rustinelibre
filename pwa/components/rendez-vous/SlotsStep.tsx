@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import useMediaQuery from '@hooks/useMediaQuery';
-import {Box, Typography, Button, Stack, Collapse, Divider} from '@mui/material';
+import {Box, Typography, Button, Stack, Collapse, Divider, CircularProgress} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {openingHoursResource} from "@resources/openingHours";
@@ -19,7 +19,7 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const [loading, setLoading] = useState<boolean>(true);
-  const [openingHours, setOpeningHours] = useState<OpeningsObjectType|null>(null);
+  const [openingHours, setOpeningHours] = useState<OpeningsObjectType|[]>([]);
   const [displayCount, setDisplayCount] = useState<number>(7);
 
   const fetchOpeningHours = async () => {
@@ -75,9 +75,9 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
       flexDirection="column"
       alignItems="start">
       <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
-        {openingHours && Object.entries(openingHours).length > 0 ?
-            "Choisissez votre créneau :" :
-            "Votre réparateur n'a pas actuellement de créneau disponible. Veuillez prendre contact avec lui directement par téléphone."}
+        {loading && <CircularProgress />}
+        {!loading && openingHours.length === 0 && "Votre réparateur n'a pas actuellement de créneau disponible. Veuillez prendre contact avec lui directement par téléphone." }
+        {!loading && openingHours.length > 0 && "Choisissez votre créneau :"}
       </Typography>
       <Stack spacing={4} width={'100%'}>
 
