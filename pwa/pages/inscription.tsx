@@ -1,8 +1,8 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, ChangeEvent, useEffect} from 'react';
 import Head from 'next/head';
 import {userResource} from '@resources/userResource';
-import {useAccount} from '@contexts/AuthContext';
+import {useAccount, useAuth} from '@contexts/AuthContext';
 import {UserFormContext} from '@contexts/UserFormContext';
 import {
   Container,
@@ -11,19 +11,37 @@ import {
   Avatar,
   Typography,
   CircularProgress,
-  Paper,
+  Paper, TextField,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import UserForm from '@components/profile/UserForm';
-import Link from 'next/link';
+import {useRouter} from "next/router";
+import {User} from "@interfaces/User";
 
 const Registration: NextPageWithLayout = ({}) => {
 
   const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
+  const [pendingValidation, setPendingValidation] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const {user} = useAccount({redirectIfFound: '/'});
+  const [errorMessageValidation, setErrorMessageValidation] = useState<string | null>(null);
+  const [code, setCode] = useState<string>('');
+  const {user} = useAccount({});
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
+  const {login, setUser} = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user && user.emailConfirmed) {
+      const next = Array.isArray(router.query.next)
+          ? router.query.next.join('')
+          : router.query.next || '/';
+
+      router.push(next);
+    } else if (user && !user.emailConfirmed) {
+        setInscriptionSuccess(true);
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {firstName, lastName, email, password, passwordError, city, street} =
     useContext(UserFormContext);
@@ -51,11 +69,42 @@ const Registration: NextPageWithLayout = ({}) => {
     } catch (e) {
       setErrorMessage('Inscription impossible');
     } finally {
+      // Directly authenticate this new user
+      await login({
+        email: email,
+        password: password
+      });
+
       setInscriptionSuccess(true);
     }
 
     setPendingRegistration(false);
   };
+
+  const handleChangeCode = (event: ChangeEvent<HTMLInputElement>): void => {
+    setCode(event.target.value);
+  };
+
+  const handleKeyDown = (event: any): void => {
+    if (event.keyCode === 13 && !event.shiftKey && code.length > 0) {
+      handleValidCode();
+    }
+  };
+
+  const handleValidCode = async() => {
+    setPendingValidation(true);
+    try {
+      const userUpdate: User = await userResource.validCode({
+        code: parseInt(code),
+      });
+
+      setUser(userUpdate);
+    } catch (e) {
+      setErrorMessageValidation('Code non valide');
+    }
+
+    setPendingValidation(false);
+  }
 
   return (
     <>
@@ -120,16 +169,26 @@ const Registration: NextPageWithLayout = ({}) => {
                 textAlign: 'justify',
               }}>
               <Box>
-                Veuillez désormais cliquer sur le lien de confirmation envoyé
-                par email pour finaliser votre inscription.
+                Veuillez indiquer le code de confirmation envoyé par email pour finaliser votre inscription.
                 <br />
-                <Link href="/login">
-                  <Button
-                    variant="outlined"
-                    sx={{marginTop: '30px', marginLeft: '30%'}}>
-                    Se connecter
-                  </Button>
-                </Link>
+
+                <TextField
+                    label="Code de validation"
+                    type="number"
+                    value={code}
+                    onChange={handleChangeCode}
+                    onKeyDown={handleKeyDown}
+                    inputProps={{ maxLength: 4 }}
+                    sx={{marginLeft: '15%', marginTop: '20px'}}
+                /><br />
+                <Button disabled={code.length < 4} sx={{marginLeft: '30%', marginTop: '20px'}} variant="contained" color="primary" onClick={handleValidCode}>
+                  {pendingValidation ? <CircularProgress /> : 'Valider'}
+                </Button>
+                {errorMessageValidation && (
+                    <Typography variant="body1" color="error">
+                      {errorMessageValidation}
+                    </Typography>
+                )}
               </Box>
             </Paper>
           )}

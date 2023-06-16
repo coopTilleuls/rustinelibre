@@ -45,7 +45,7 @@ App\Entity\User:
     street: <address()>
     city: <city()>
   user_{3..6}:
-    roles: [ "ROLE_USER", "ROLE_EMPLOYEE" ]
+    roles: [ "ROLE_EMPLOYEE" ]
     email: <email()>
     firstName: <firstName()>
     lastName: <lastName()>

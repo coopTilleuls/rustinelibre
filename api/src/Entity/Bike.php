@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => [self::READ]],
     denormalizationContext: ['groups' => [self::WRITE]]
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Get(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_EMPLOYEE') or is_granted('ROLE_BOSS') or object.owner == user")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user")]

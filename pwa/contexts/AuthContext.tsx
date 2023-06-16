@@ -3,7 +3,7 @@ import {
   useEffect,
   createContext,
   useContext,
-  PropsWithChildren,
+  PropsWithChildren, Dispatch, SetStateAction,
 } from 'react';
 import Router from 'next/router';
 import {userResource} from '@resources/userResource';
@@ -26,6 +26,7 @@ interface AuthContextType {
   user: User | null;
   login: (data: AuthenticationValues) => Promise<boolean | null>;
   logout: () => void;
+  setUser: Dispatch<SetStateAction<User | null>>;
   isLoadingFetchUser?: boolean;
   fetchUser: () => void;
 }
@@ -123,6 +124,7 @@ const useProviderAuth = () => {
 
   return {
     user,
+    setUser,
     login,
     logout,
     isAuthenticated: !!user,
