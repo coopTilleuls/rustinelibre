@@ -40,6 +40,6 @@ class RepairerType
         max : 50,
     )]
     #[ORM\Column(length: 255)]
-    #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, self::REPAIRER_TYPE_WRITE, Repairer::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, self::REPAIRER_TYPE_WRITE, Repairer::REPAIRER_COLLECTION_READ, User::USER_READ])]
     public ?string $name = null;
 }

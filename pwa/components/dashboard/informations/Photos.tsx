@@ -5,9 +5,9 @@ import {repairerResource} from '@resources/repairerResource';
 import {InputLabel, Box, Grid, Button, Typography} from '@mui/material';
 import {getToken} from '@helpers/localHelper';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
+import {checkFileSize} from '@helpers/checkFileSize';
 import {MediaObject} from '@interfaces/MediaObject';
 import {Repairer} from '@interfaces/Repairer';
-import {checkFileSize} from "@helpers/checkFileSize";
 
 interface DashboardInfosPhotosProps {
   repairer: Repairer | null;
@@ -18,8 +18,7 @@ export const DashboardInfosPhotos = ({
   repairer,
   fetchRepairer,
 }: DashboardInfosPhotosProps): JSX.Element => {
-  const {thumbnail, setThumbnail, descriptionPicture, setDescriptionPicture} =
-    useContext(RepairerFormContext);
+  const {setThumbnail, setDescriptionPicture} = useContext(RepairerFormContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
@@ -60,8 +59,8 @@ export const DashboardInfosPhotos = ({
             descriptionPicture: mediaObjectResponse['@id'],
           });
         }
-        fetchRepairer();
         setLoading(false);
+        fetchRepairer();
       }
     }
   };
@@ -95,12 +94,12 @@ export const DashboardInfosPhotos = ({
       <InputLabel>Photo de profil</InputLabel>
       <Grid container spacing={2}>
         <Grid item>
-          {thumbnail && (
+          {repairer?.thumbnail && (
             <img
               alt="thumbnail"
               width="500"
               height="auto"
-              src={apiImageUrl(thumbnail.contentUrl)}
+              src={apiImageUrl(repairer.thumbnail.contentUrl)}
             />
           )}
         </Grid>
@@ -113,18 +112,20 @@ export const DashboardInfosPhotos = ({
           onChange={(e) => handleFileChange(e, 'thumbnail')}
         />
       </Button>
-      {imageTooHeavy && <Typography sx={{textAlign: 'center', color: 'red'}}>
-        Votre photo dépasse la taille maximum autorisée (5mo)
-      </Typography>}
+      {imageTooHeavy && (
+        <Typography sx={{textAlign: 'center', color: 'red'}}>
+          Votre photo dépasse la taille maximum autorisée (5mo)
+        </Typography>
+      )}
       <InputLabel sx={{mt: 4}}>Photo de description</InputLabel>
       <Grid container spacing={2} sx={{marginTop: '10'}}>
         <Grid item>
-          {descriptionPicture && (
+          {repairer?.descriptionPicture && (
             <img
               alt="photo de description"
               width="500"
               height="auto"
-              src={apiImageUrl(descriptionPicture.contentUrl)}
+              src={apiImageUrl(repairer.descriptionPicture.contentUrl)}
             />
           )}
         </Grid>
@@ -137,9 +138,11 @@ export const DashboardInfosPhotos = ({
           onChange={(e) => handleFileChange(e, 'description')}
         />
       </Button>
-      {imageTooHeavy && <Typography sx={{textAlign: 'center', color: 'red'}}>
-        Votre photo dépasse la taille maximum autorisée (5mo)
-      </Typography>}
+      {imageTooHeavy && (
+        <Typography sx={{textAlign: 'center', color: 'red'}}>
+          Votre photo dépasse la taille maximum autorisée (5mo)
+        </Typography>
+      )}
     </Box>
   );
 };
