@@ -91,12 +91,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Groups([self::USER_READ])]
-    public array $roles = [];
+    public array $roles = ['ROLE_USER'];
 
     #[Assert\Type('boolean')]
     #[ORM\Column(type: 'boolean', nullable: false)]
     #[Groups([self::USER_READ])]
-    public bool $emailConfirmed = true;
+    public bool $emailConfirmed = false;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     public ?int $validationCode = null;
@@ -147,7 +147,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public Collection $bikes;
 
     #[Groups([self::USER_READ])]
-    public array $lastRepairers;
+    public array $lastRepairers = [];
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups([self::USER_READ, Repairer::REPAIRER_COLLECTION_READ])]
