@@ -56,8 +56,10 @@ type SearchRepairerProps = {
   repairerTypesFetched: RepairerType[];
 };
 
-const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetched = [], repairerTypesFetched = []}) => {
-
+const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
+  bikeTypesFetched = [],
+  repairerTypesFetched = [],
+}) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [pendingSearchCity, setPendingSearchCity] = useState<boolean>(false);
@@ -112,7 +114,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRepairers = useCallback(async (): Promise<void> => {
-
     if (!selectedBike || !city) {
       return;
     }
@@ -150,7 +151,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
       params = {...{availability: 'ASC'}, ...params};
     }
 
-
     if (repairerTypeSelected.length > 0) {
       let repairerTypesIterate: RepairerType[] = [];
 
@@ -162,7 +162,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
       }
 
       const ids = repairerTypeSelected.map((name) => {
-        const repairerType = repairerTypesIterate.find((type) => type.name === name);
+        const repairerType = repairerTypesIterate.find(
+          (type) => type.name === name
+        );
         return repairerType ? repairerType.id : null;
       });
 
@@ -200,7 +202,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
   useEffect((): void => {
     fetchRepairers();
     scrollToTop();
-
   }, [currentPage, setCurrentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchCitiesResult = useCallback(
@@ -359,7 +360,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
                           : `${city.name}  (${city.postcode})`
                       }
                       onChange={(event, value) => setCity(value as City)}
-                      onInputChange={(event, value) => {setCityInput(value)}}
+                      onInputChange={(event, value) => {
+                        setCityInput(value);
+                      }}
                       renderInput={(params) => (
                         <TextField
                           required
@@ -371,19 +374,18 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
                     />
                   </Box>
                   <Box
-                      display={{xs: 'none', md: 'flex'}}
-                      alignItems="center"
-                      sx={{mt: 0}}
-                  >
+                    display={{xs: 'none', md: 'flex'}}
+                    alignItems="center"
+                    sx={{mt: 0}}>
                     <Button
-                        type="submit"
-                        variant="contained"
-                        sx={{
-                          border: '2px solid',
-                          borderColor: 'primary.main',
-                          borderRadius: '5px',
-                          ml: {xs: 0, md: 2},
-                        }}>
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        border: '2px solid',
+                        borderColor: 'primary.main',
+                        borderRadius: '5px',
+                        ml: {xs: 0, md: 2},
+                      }}>
                       <SearchIcon sx={{color: 'white'}} />
                     </Button>
                   </Box>
@@ -419,7 +421,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({bikeTypesFetch
             </Box>
 
             {!pendingSearchCity && totalItems > 20 && (
-                <PaginationBlock onPageChange={handlePageChange} />
+              <PaginationBlock onPageChange={handlePageChange} />
             )}
           </Container>
         </Box>
@@ -444,7 +446,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       bikeTypesFetched,
-      repairerTypesFetched
+      repairerTypesFetched,
     },
     revalidate: 10,
   };

@@ -2,11 +2,10 @@ import React, {useContext, useState} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import {MapContainer, Marker, TileLayer, useMapEvents} from 'react-leaflet';
 import {LeafletEvent, LeafletMouseEvent} from 'leaflet';
-import Box from '@mui/material/Box';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import {Alert, Button, CircularProgress} from '@mui/material';
+import {Button, CircularProgress} from '@mui/material';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {RequestBody} from '@interfaces/Resource';
 
@@ -64,16 +63,12 @@ export const MapPosition = ({
   };
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        height: '500px',
-      }}>
+    <>
       <MapContainer
         center={mapCenter}
         zoom={shopPosition[0] ? 15 : 6}
         scrollWheelZoom={false}
-        style={{height: '100%', width: '100%'}}>
+        style={{height: '500px', width: '100%'}}>
         <UpdateMarkerPositionOnMapClick />
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {shopPosition[0] && shopPosition[1] && (
@@ -99,7 +94,7 @@ export const MapPosition = ({
           )}
         </Button>
       </div>
-    </Box>
+    </>
   );
 };
 
