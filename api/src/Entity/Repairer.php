@@ -103,7 +103,7 @@ class Repairer
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
     public ?RepairerType $repairerType;
 
     #[Assert\NotBlank]
@@ -117,12 +117,12 @@ class Repairer
 
     #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public ?string $description = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public ?string $mobilePhone = null;
 
     #[Assert\Type('string')]
@@ -156,12 +156,12 @@ class Repairer
 
     #[Assert\Type('string')]
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
     public ?string $latitude = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
     public ?string $longitude = null;
 
     #[ORM\Column(
@@ -180,12 +180,12 @@ class Repairer
 
     #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public ?string $openingHours = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public ?string $optionalPage = null;
 
     #[ORM\Column]
@@ -203,7 +203,7 @@ class Repairer
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public ?MediaObject $descriptionPicture = null;
 
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerEmployee::class, orphanRemoval: true)]

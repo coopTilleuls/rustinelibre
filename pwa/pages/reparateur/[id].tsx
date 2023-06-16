@@ -7,8 +7,7 @@ import {ENTRYPOINT} from '@config/entrypoint';
 import {repairerResource} from '@resources/repairerResource';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import RepairerPresentation from '@components/repairers/RepairerPresentation';
-import Box from '@mui/material/Box';
-import {CircularProgress} from '@mui/material';
+import {CircularProgress, Box} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 
 type RepairerPageProps = {
@@ -48,7 +47,6 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
         <main>
           <Box
             sx={{
-              pt: 10,
               bgcolor: 'background.paper',
               mt: {md: 8},
               mb: 10,
