@@ -30,7 +30,7 @@ const RepairerSlots: NextPageWithLayout = () => {
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const isMobile = useMediaQuery('(max-width: 1024px)');
   const {id} = router.query;
-  const {user} = useAccount({});
+  const {user} = useAccount({redirectIfMailNotConfirm: router.asPath});
 
   async function fetchRepairer() {
     if (id) {

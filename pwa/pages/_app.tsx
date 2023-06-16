@@ -4,27 +4,23 @@ import type {DehydratedState} from 'react-query';
 import Head from 'next/head';
 import {NextPage} from 'next';
 import type {ReactElement, ReactNode} from 'react';
-import {AuthProvider} from '@contexts/AuthContext';
+import {AuthProvider, useAccount} from '@contexts/AuthContext';
 import {SearchRepairerProvider} from '@contexts/SearchRepairerContext';
 import {RepairerFormProvider} from '@contexts/RepairerFormContext';
 import {UserFormProvider} from '@contexts/UserFormContext';
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../styles/theme';
-import {AutodiagProvider} from "@contexts/AutodiagContext";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
-};
-
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
 };
 
 function MyApp({
   Component,
   pageProps,
 }: AppProps<{dehydratedState: DehydratedState}>) {
+
   return (
     <AuthProvider>
       <SearchRepairerProvider>

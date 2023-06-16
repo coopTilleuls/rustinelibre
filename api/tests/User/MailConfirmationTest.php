@@ -19,7 +19,7 @@ class MailConfirmationTest extends AbstractTestCase
         $this->createClientAuthAsUser()->request('POST', '/validation-code', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'code' => 6666,
+                'code' => 9999,
             ],
         ]);
 
@@ -38,6 +38,6 @@ class MailConfirmationTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_OK);
+        self::assertResponseStatusCodeSame(RESPONSE::HTTP_CREATED);
     }
 }
