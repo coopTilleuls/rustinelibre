@@ -171,7 +171,6 @@ const Registration: NextPageWithLayout = ({}) => {
               <Box>
                 Veuillez indiquer le code de confirmation envoyé par email pour finaliser votre inscription.
                 <br />
-
                 <TextField
                     label="Code de validation"
                     type="number"
