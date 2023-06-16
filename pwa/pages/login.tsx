@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, ChangeEvent} from 'react';
+import React, {useState, ChangeEvent, useEffect} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {useAccount, useAuth} from 'contexts/AuthContext';
@@ -22,10 +22,18 @@ const Login: NextPageWithLayout = ({}) => {
   const [password, setPassword] = useState<string>('');
   const [pendingLogin, setPendingLogin] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const {user} = useAccount({redirectIfFound: '/'});
+  const {user} = useAccount({});
   const {login} = useAuth();
   const router = useRouter();
-
+  
+  useEffect(() => {
+    if (user && user.emailConfirmed) {
+      router.push('/');
+    } else if (user && !user.emailConfirmed) {
+      router.push(`/inscription`);
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage(null);
