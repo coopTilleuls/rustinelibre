@@ -45,7 +45,7 @@ class BikeType
         max : 100,
     )]
     #[ORM\Column(length: 255)]
-    #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ, self::BIKE_TYPE_WRITE, Bike::READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ, self::BIKE_TYPE_WRITE, Bike::READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
     public ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Repairer::class, mappedBy: 'bikeTypesSupported')]

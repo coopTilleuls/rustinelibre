@@ -1,12 +1,22 @@
-import React, {ChangeEvent, SyntheticEvent, useCallback, useContext, useEffect} from 'react';
+import React, {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useContext,
+  useEffect,
+} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {searchCity} from '@utils/apiCity';
-import {City, createCitiesWithGouvAPI, createCitiesWithNominatimAPI} from '@interfaces/City';
+import {
+  City,
+  createCitiesWithGouvAPI,
+  createCitiesWithNominatimAPI,
+} from '@interfaces/City';
 import {City as GouvCity} from '@interfaces/Gouv';
-import {City as NominatimCity} from "@interfaces/Nominatim";
+import {City as NominatimCity} from '@interfaces/Nominatim';
 
 interface ContactDetailsProps {
   repairer: Repairer | null;
@@ -41,13 +51,16 @@ export const ContactDetails = ({
     }
   }, [repairer, setName, setStreet, setCityInput]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const fetchCitiesResult = useCallback(async (cityStr: string) => {
-    const citiesResponse = await searchCity(cityStr, useNominatim);
-    const cities: City[] = useNominatim
+  const fetchCitiesResult = useCallback(
+    async (cityStr: string) => {
+      const citiesResponse = await searchCity(cityStr, useNominatim);
+      const cities: City[] = useNominatim
         ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[])
         : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
-    setCitiesList(cities);
-  }, [setCitiesList, useNominatim]);
+      setCitiesList(cities);
+    },
+    [setCitiesList, useNominatim]
+  );
 
   useEffect(() => {
     if (cityInput === '' || cityInput.length < 3) {
@@ -69,7 +82,9 @@ export const ContactDetails = ({
     setStreet(event.target.value);
   };
 
-  const handleChangeStreetNumber = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeStreetNumber = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
     setStreetNumber(event.target.value);
   };
 
@@ -99,7 +114,7 @@ export const ContactDetails = ({
         name="name"
         autoComplete="name"
         value={name}
-        inputProps={{ maxLength: 80 }}
+        inputProps={{maxLength: 80}}
         onChange={handleChangeName}
       />
       <TextField
@@ -110,7 +125,7 @@ export const ContactDetails = ({
         name="name"
         autoComplete="mobilePhone"
         value={mobilePhone}
-        inputProps={{ maxLength: 30 }}
+        inputProps={{maxLength: 30}}
         onChange={handleChangeMobilePhone}
       />
       <TextField
@@ -122,7 +137,7 @@ export const ContactDetails = ({
         name="streetNumber"
         autoComplete="streetNumber"
         value={streetNumber}
-        inputProps={{ maxLength: 30 }}
+        inputProps={{maxLength: 30}}
         onChange={handleChangeStreetNumber}
       />
       <TextField
@@ -134,11 +149,11 @@ export const ContactDetails = ({
         name="street"
         autoComplete="street"
         value={street}
-        inputProps={{ maxLength: 800 }}
+        inputProps={{maxLength: 800}}
         onChange={handleChangeStreet}
       />
       <Autocomplete
-        sx={{mt: 2, mb: 1}}
+        sx={{mt: 2, mb: 1, p: 0}}
         freeSolo
         value={cityInput}
         options={citiesList.map((optionCity) => optionCity.name)}
@@ -149,7 +164,7 @@ export const ContactDetails = ({
             label="Ville"
             {...params}
             value={cityInput}
-            inputProps={{ maxLength: 60 }}
+            inputProps={{maxLength: 60}}
             onChange={(e) => handleCityChange(e)}
           />
         )}

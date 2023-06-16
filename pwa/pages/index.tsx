@@ -1,8 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {useAccount} from '@contexts/AuthContext';
 import {Container, Stack} from '@mui/material';
+import WebsiteLayout from '@components/layout/WebsiteLayout';
 import SearchARepairer from '@components/homepage/SearchARepairer';
 import CreateMaintenanceBooklet from '@components/homepage/CreateMaintenanceBooklet';
 import JoinTheCollective from '@components/homepage/JoinTheCollective';
@@ -10,8 +10,6 @@ import FavoriteRepairers from '@components/homepage/FavoriteRepairers';
 
 const Home = () => {
   const {user} = useAccount({});
-
-  console.log(user);
 
   return (
     <>
