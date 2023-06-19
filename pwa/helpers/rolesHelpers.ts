@@ -1,4 +1,5 @@
 import {User} from "@interfaces/User";
+import {Repairer} from "@interfaces/Repairer";
 
 export const isBoss = (user: User): boolean => {
     return user.roles.includes('ROLE_BOSS');
@@ -6,4 +7,15 @@ export const isBoss = (user: User): boolean => {
 
 export const isEmployee = (user: User): boolean => {
     return user.roles.includes('ROLE_EMPLOYEE');
+}
+
+export const isItinerant = (user: User): boolean => {
+
+    const repairer = user.repairer ? user.repairer : user.repairerEmployee ? user.repairerEmployee.repairer : null;
+
+    if (!repairer) {
+        return false;
+    }
+
+    return repairer.repairerType.name.includes('itinérant');
 }

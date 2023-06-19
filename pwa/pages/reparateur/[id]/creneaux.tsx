@@ -34,6 +34,7 @@ const RepairerSlots: NextPageWithLayout = () => {
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const [latitude, setLatitude] = useState<string>('');
   const [longitude, setLongitude] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
 
   const isMobile = useMediaQuery('(max-width: 1024px)');
   const {id} = router.query;
@@ -87,8 +88,9 @@ const RepairerSlots: NextPageWithLayout = () => {
     const newAppointment = await appointmentResource.post({
       repairer: repairer['@id'],
       slotTime: slotSelected,
-      latitude: latitude,
-      longitude: longitude,
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+      address: address
     });
 
     if (newAppointment) {
@@ -189,6 +191,8 @@ const RepairerSlots: NextPageWithLayout = () => {
                           longitude={longitude}
                           setLatitude={setLatitude}
                           setLongitude={setLongitude}
+                          address={address}
+                          setAddress={setAddress}
                         />
                       )}
                       {user && tunnelStep == 'optionalPage' && (

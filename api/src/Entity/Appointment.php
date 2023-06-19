@@ -114,6 +114,10 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $longitude = null;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    public ?string $address = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
