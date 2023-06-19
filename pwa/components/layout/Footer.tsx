@@ -11,6 +11,7 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {User} from '@interfaces/User';
 import {useRouter} from 'next/router';
+import {isBoss, isEmployee} from '@helpers/rolesHelpers';
 
 interface FooterProps {
   user?: User;
@@ -56,16 +57,18 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             label={!isMobile && 'Mes vélos'}
             icon={<DirectionsBikeIcon />}
           />
-          <BottomNavigationAction
-            component={NextLinkComposed}
-            to={{pathname: user ? '/messagerie' : '/'}}
-            label={!isMobile && 'Messages'}
-            icon={<ChatBubbleIcon />}
-            disabled={!user}
-            sx={{
-              opacity: user ? 1 : 0.5,
-            }}
-          />
+          {!isBoss && !isEmployee && (
+            <BottomNavigationAction
+              component={NextLinkComposed}
+              to={{pathname: user ? '/messagerie' : '/'}}
+              label={!isMobile && 'Messages'}
+              icon={<ChatBubbleIcon />}
+              disabled={!user}
+              sx={{
+                opacity: user ? 1 : 0.5,
+              }}
+            />
+          )}
           {user ? (
             <BottomNavigationAction
               component={NextLinkComposed}
