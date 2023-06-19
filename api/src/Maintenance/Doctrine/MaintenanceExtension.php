@@ -8,6 +8,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\Maintenance;
+use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -27,7 +28,7 @@ final class MaintenanceExtension implements QueryCollectionExtensionInterface
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (Maintenance::class !== $resourceClass || $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_BOSS') || $this->security->isGranted('ROLE_EMPLOYEE') || null === $user = $this->security->getUser()) {
+        if (Maintenance::class !== $resourceClass || $this->security->isGranted(User::ROLE_ADMIN) || $this->security->isGranted(User::ROLE_BOSS) || $this->security->isGranted(User::ROLE_EMPLOYEE) || null === $user = $this->security->getUser()) {
             return;
         }
 
