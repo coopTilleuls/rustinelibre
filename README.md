@@ -120,4 +120,4 @@ password:   Test1passwordOk!
 ## Pour modifier le sitemap
 Le sitemap.xml est disponible via la route suivante : `/sitemap.xml`
 
-Côté front, dès que vous ajouter une nouvelle route disponible publiquement, c'est à dire sans authentification, il faut modifier le controlleur `SitemapController` présent côté back, afin que le sitemap soit mis à jour.
+Côté front, dès que vous ajouter une nouvelle route disponible publiquement, c'est à dire sans authentification, il faut modifier le controller `SitemapController` présent côté back, afin que le sitemap soit mis à jour.

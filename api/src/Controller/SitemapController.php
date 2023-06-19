@@ -41,11 +41,11 @@ class SitemapController extends AbstractController
     private function buildUrlsWithRepairerId(array $endpoints): array
     {
         $result = [];
-        $repairers = $this->repairerRepository->findAll();
+        $ids = $this->repairerRepository->getAllIds();
 
         foreach ($endpoints as $endpoint) {
-            foreach ($repairers as $repairer) {
-                $result[] = sprintf($endpoint, $repairer->id);
+            foreach ($ids as $id) {
+                $result[] = sprintf($endpoint, $id);
             }
         }
 
