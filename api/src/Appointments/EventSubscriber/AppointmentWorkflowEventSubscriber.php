@@ -50,7 +50,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         /** @var Appointment $appointment */
         $appointment = $event->getSubject();
 
-        if (!$this->security->isGranted(User::ROLE_ADMIN) && !$this->security->isGranted(User::ROLE_BOSS) && !$this->security->isGranted(User::ROLE_BOSS)) {
+        if (!$this->security->isGranted(User::ROLE_ADMIN) && !$this->security->isGranted(User::ROLE_BOSS) && !$this->security->isGranted(User::ROLE_EMPLOYEE)) {
             throw new AccessDeniedHttpException();
         }
 
