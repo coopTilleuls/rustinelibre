@@ -69,6 +69,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity('email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public const ROLE_BOSS = 'ROLE_BOSS';
+    public const ROLE_EMPLOYEE = 'ROLE_EMPLOYEE';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
     private const EMAIL_MAX_LENGTH = 180;
     public const USER_READ = 'user_read';
     public const CUSTOMER_READ = 'customer_read';
@@ -187,7 +190,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAdmin(): bool
     {
-        if (in_array('ROLE_ADMIN', $this->roles)) {
+        if (in_array(self::ROLE_ADMIN, $this->roles)) {
             return true;
         }
 
@@ -196,7 +199,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isBoss(): bool
     {
-        if (in_array('ROLE_BOSS', $this->roles)) {
+        if (in_array(self::ROLE_BOSS, $this->roles)) {
             return true;
         }
 
@@ -205,7 +208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isEmployee(): bool
     {
-        if (in_array('ROLE_EMPLOYEE', $this->roles)) {
+        if (in_array(self::ROLE_EMPLOYEE, $this->roles)) {
             return true;
         }
 
