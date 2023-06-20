@@ -82,4 +82,17 @@ class RepairerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return array<int>
+     */
+    public function getAllIds(): array
+    {
+        $ids = $this->createQueryBuilder('r')
+            ->select('r.id')
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_column($ids, 'id');
+    }
 }
