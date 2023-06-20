@@ -58,7 +58,7 @@ const CustomerDiscussionList = ({
 
   return (
     <>
-      {discussions.length && (
+      {discussions.length ? (
         <Box
           flexDirection="column"
           width={{xs: '100%', md: '30%'}}
@@ -99,7 +99,7 @@ const CustomerDiscussionList = ({
             );
           })}
         </Box>
-      )}
+      ) : null}
     </>
   );
 };
