@@ -25,6 +25,11 @@ export const TourAppointmentsList =  ({appointments}: TourAppointmentsListProps)
         setOpenModal(true);
     };
 
+    const handleOpenGPS = (latitude: number, longitude: number) => {
+        const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+        window.open(url, '_blank');
+    };
+
     return (
         <Box>
             {appointments.map((appointment, key) => {
@@ -40,9 +45,9 @@ export const TourAppointmentsList =  ({appointments}: TourAppointmentsListProps)
                             {appointment.address}
 
                             <Box sx={{display: 'flex', marginTop: '10px'}}>
-                                <Button variant="outlined" size="small" sx={{marginRight: '5px'}}>
+                                {appointment.latitude && appointment.longitude && <Button variant="contained" size="small" sx={{marginRight: '5px'}} onClick={() => handleOpenGPS(Number(appointment.latitude), Number(appointment.longitude))}>
                                     Aller au RDV
-                                </Button>
+                                </Button>}
                                 <Button variant="outlined" size="small" onClick={() => handleClickShowAppointment(appointment)}>
                                     Détail du RDV
                                 </Button>

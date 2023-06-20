@@ -48,7 +48,9 @@ const Tour = () => {
         setLoading(true);
         const response = await appointmentResource.getAll(true, {
             'slotTime[after]': dateObjectAsString(fromDate, false),
-            'slotTime[strictly_before]': dateObjectAsString(toDate, false)
+            'slotTime[strictly_before]': dateObjectAsString(toDate, false),
+            'order[slotTime]': 'ASC',
+            status: 'validated'
         })
 
         setAppointments(response['hydra:member']);
