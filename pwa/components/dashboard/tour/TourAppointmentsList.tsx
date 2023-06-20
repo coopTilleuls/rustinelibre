@@ -1,15 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Typography, Button,} from '@mui/material';
 import Box from "@mui/material/Box";
 import {Appointment} from "@interfaces/Appointment";
 import {getTimeFromDateAsString} from 'helpers/dateHelper';
 import Grid from '@mui/material/Grid';
+import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
 
 interface TourAppointmentsListProps {
     appointments: Appointment[]
 }
 
 export const TourAppointmentsList =  ({appointments}: TourAppointmentsListProps): JSX.Element => {
+
+    const [openModal, setOpenModal] = useState<boolean>(false);
+    const [appointmentSelected, setAppointmentSelected] = useState<Appointment|null>(null);
+
+    const handleCloseModal = (): void => {
+        setOpenModal(false);
+        setAppointmentSelected(null);
+    };
+
+    const handleClickShowAppointment = (appointment : Appointment): void => {
+        setAppointmentSelected(appointment);
+        setOpenModal(true);
+    };
 
     return (
         <Box>
@@ -29,7 +43,7 @@ export const TourAppointmentsList =  ({appointments}: TourAppointmentsListProps)
                                 <Button variant="outlined" size="small" sx={{marginRight: '5px'}}>
                                     Aller au RDV
                                 </Button>
-                                <Button variant="outlined" size="small">
+                                <Button variant="outlined" size="small" onClick={() => handleClickShowAppointment(appointment)}>
                                     Détail du RDV
                                 </Button>
                             </Box>
@@ -37,6 +51,14 @@ export const TourAppointmentsList =  ({appointments}: TourAppointmentsListProps)
                     </Grid>
                 </Box>
             })}
+
+            {appointmentSelected &&
+                <ModalShowAppointment
+                    appointment={appointmentSelected}
+                    openModal={openModal}
+                    handleCloseModal={handleCloseModal}
+                />
+            }
         </Box>
     );
 };
