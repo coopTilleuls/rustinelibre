@@ -8,7 +8,7 @@ const DashboardMessages = () => {
   return (
     <>
       <Head>
-        <title>Messagerie Réparatgeur</title>
+        <title>Messagerie Réparateur</title>
       </Head>
       <DashboardLayout>
         <Typography fontSize={{xs: 28, md: 30}} fontWeight={600} pb={1} pl={2}>
