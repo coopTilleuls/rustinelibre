@@ -17,7 +17,7 @@ const Home = () => {
     return (
         <>
             <Head>
-                <title>Bienvenue sur la page d’accueil!</title>
+                <title>La rustine libre</title>
             </Head>
             <WebsiteLayout>
                 <Container sx={{px: {xs: 0}}}>
