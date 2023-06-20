@@ -68,7 +68,7 @@ export const useAccount = ({
     } else if (!isLoadingFetchUser && user && !user.emailConfirmed && redirectIfMailNotConfirm) {
       Router.push(`/inscription?next=${encodeURIComponent(redirectIfMailNotConfirm)}`);
     }
-  }, [redirectIfFound, redirectIfNotFound, user, isLoadingFetchUser]);
+  }, [redirectIfFound, redirectIfNotFound, user, isLoadingFetchUser, redirectIfMailNotConfirm]);
 
   return {user, isLoadingFetchUser};
 };

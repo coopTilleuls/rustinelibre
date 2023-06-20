@@ -15,4 +15,7 @@ export interface Appointment {
     status: string;
     bike?: Bike;
     bikeType?: BikeType;
+    latitude?: string;
+    longitude?: string;
+    address?: string;
 }

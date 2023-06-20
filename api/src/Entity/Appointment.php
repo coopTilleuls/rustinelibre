@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     paginationClientItemsPerPage: true,
 )]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact', 'status' => 'exact'])]
-#[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'slotTime'], arguments: ['orderParameterName' => 'order'])]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user or (user.repairerEmployee and object.repairer == user.repairerEmployee.repairer)")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(
@@ -113,6 +113,10 @@ class Appointment
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $longitude = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    public ?string $address = null;
 
     public function __construct()
     {

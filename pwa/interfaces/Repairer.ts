@@ -8,7 +8,7 @@ export interface Repairer {
   '@type': string;
   id: string;
   owner: User;
-  name?: string;
+  name: string;
   description?: string;
   city?: string;
   distance?: number;
