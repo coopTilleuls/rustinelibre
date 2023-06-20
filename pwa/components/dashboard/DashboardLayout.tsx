@@ -16,7 +16,8 @@ import {useAccount} from '@contexts/AuthContext';
 import useMediaQuery from '@hooks/useMediaQuery';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Link from "next/link";
-import {isBoss, isEmployee} from "@helpers/rolesHelpers";
+import {isBoss, isEmployee, isItinerant} from "@helpers/rolesHelpers";
+import RouteIcon from '@mui/icons-material/Route';
 
 const drawerWidth = 240;
 
@@ -144,6 +145,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                             icon={<CalendarMonthIcon />}
                             path="/sradmin/agenda"
                         />
+                        {user && isItinerant(user) && <DashboardSidebarListItem
+                            text="Tournée"
+                            open={true}
+                            icon={<RouteIcon />}
+                            path="/sradmin/tour"
+                        />}
                         <DashboardSidebarListItem
                             text="Messages"
                             open={true}

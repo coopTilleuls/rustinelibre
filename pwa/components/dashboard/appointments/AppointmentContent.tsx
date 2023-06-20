@@ -86,9 +86,9 @@ const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentCon
         if (response['hydra:member'].length === 0) {
             const discussionCreate = await createDiscussion(appointment.repairer['@id'], appointment.customer['@id']);
             setDiscussion(discussionCreate)
+        } else {
+            setDiscussion(response['hydra:member'][0]);
         }
-
-        setDiscussion(response['hydra:member'][0]);
     }
 
     const checkSlotTimePast = async () => {
