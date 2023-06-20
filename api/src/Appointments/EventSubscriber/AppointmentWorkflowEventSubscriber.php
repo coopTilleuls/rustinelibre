@@ -133,7 +133,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
 
     private function sendAcceptanceEmail(Appointment $appointment): void
     {
-        if (in_array($this->kernel->getEnvironment(), ['dev', 'test'])) {
+        if ('test' === $this->kernel->getEnvironment()) {
             return;
         }
 
