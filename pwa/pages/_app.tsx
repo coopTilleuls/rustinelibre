@@ -11,6 +11,8 @@ import {UserFormProvider} from '@contexts/UserFormContext';
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../styles/theme';
+import {A2HS} from '@components/banner/A2HS';
+import {A2HSIOS} from '@components/banner/A2HSIOS';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -20,27 +22,28 @@ function MyApp({
   Component,
   pageProps,
 }: AppProps<{dehydratedState: DehydratedState}>) {
-
   return (
     <AuthProvider>
       <SearchRepairerProvider>
         <RepairerFormProvider>
           <UserFormProvider>
-              <>
-                <Head>
-                  <meta
-                    name="viewport"
-                    charSet="utf-8"
-                    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
-                </Head>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline>
-                    <Layout dehydratedState={pageProps.dehydratedState}>
-                      <Component {...pageProps} />
-                    </Layout>
-                  </CssBaseline>
-                </ThemeProvider>
-              </>
+            <>
+              <Head>
+                <meta
+                  name="viewport"
+                  charSet="utf-8"
+                  content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
+              </Head>
+              <A2HS />
+              <A2HSIOS />
+              <ThemeProvider theme={theme}>
+                <CssBaseline>
+                  <Layout dehydratedState={pageProps.dehydratedState}>
+                    <Component {...pageProps} />
+                  </Layout>
+                </CssBaseline>
+              </ThemeProvider>
+            </>
           </UserFormProvider>
         </RepairerFormProvider>
       </SearchRepairerProvider>
