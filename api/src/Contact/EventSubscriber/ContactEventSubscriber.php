@@ -38,7 +38,7 @@ readonly class ContactEventSubscriber implements EventSubscriberInterface
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$object instanceof Contact || Request::METHOD_POST !== $method || in_array($this->kernel->getEnvironment(), ['dev', 'test'])) {
+        if (!$object instanceof Contact || Request::METHOD_POST !== $method || 'test' === $this->kernel->getEnvironment()) {
             return;
         }
 
