@@ -33,9 +33,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
   };
 
   useEffect(() => {
-    if (!repairer) {
       fetchRepairer();
-    }
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
