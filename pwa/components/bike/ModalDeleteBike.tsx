@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import router from 'next/router';
-import {Box, Button, Typography, Modal} from '@mui/material';
+import {Box, Button, Typography, Modal, CircularProgress} from '@mui/material';
 import {bikeResource} from '@resources/bikeResource';
 import {Bike} from '@interfaces/Bike';
 
@@ -26,8 +26,8 @@ const ModalDeleteBike = ({
     } catch (e) {
       setErrorMessage('Suppression du vélo impossible, veuillez réessayer');
     }
-    setLoading(false);
     router.push('/velos/mes-velos');
+    setLoading(false);
   };
 
   return (
@@ -60,7 +60,7 @@ const ModalDeleteBike = ({
             Annuler
           </Button>
           <Button variant="contained" onClick={handleDelete}>
-            Valider
+            {loading ? <CircularProgress sx={{color: 'white'}} /> : 'Valider'}
           </Button>
         </Box>
         {errorMessage && (
