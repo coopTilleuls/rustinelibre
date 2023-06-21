@@ -5,7 +5,7 @@ import DashboardLayout from '@components/dashboard/DashboardLayout';
 import {useAccount} from "@contexts/AuthContext";
 import {Repairer} from "@interfaces/Repairer";
 import {CircularProgress, Typography} from "@mui/material";
-import {dateObjectAsString, getDateFormattedWithCompleteName} from "@helpers/dateHelper";
+import {dateObjectAsString} from "@helpers/dateHelper";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {appointmentResource} from "@resources/appointmentResource";
@@ -64,6 +64,13 @@ const Tour = () => {
 
     }, [date]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const currentDate = new Date(date).toLocaleString('fr-FR', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+    });
+
     return (
         <>
             <Head>
@@ -74,7 +81,7 @@ const Tour = () => {
                     <Box>
                         <Typography variant="h4" sx={{textAlign: 'center'}}>
                             <ArrowBackIosIcon sx={{marginRight: 5, cursor: 'pointer', fontSize: '1.5em'}} onClick={handlePreviousDate} />
-                            {getDateFormattedWithCompleteName(date)}
+                            {currentDate}
                             <ArrowForwardIosIcon sx={{marginLeft: 5, cursor: 'pointer', fontSize: '1.5em'}} onClick={handleNextDate} />
                         </Typography>
                     </Box>
