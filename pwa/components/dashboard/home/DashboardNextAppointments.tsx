@@ -15,6 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
 import AddIcon from "@mui/icons-material/Add";
 import {Repairer} from "@interfaces/Repairer";
+import ModalAppointmentCreate from "@components/dashboard/appointments/ModalAppointmentCreate";
 
 interface DashboardNextAppointmentsProps {
     repairer: Repairer;
@@ -27,6 +28,7 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
 
     const [appointmentSelected, setAppointmentSelected] = useState<Appointment|null>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);
+    const [openModalCreateAppointment, setOpenModalCreateAppointment] = useState<boolean>(false);
 
     const handleCloseModal = async (refresh = true): Promise<void> => {
         setOpenModal(false);
@@ -39,6 +41,9 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
         fetchNextAppointments();
     }, [repairer]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const handleCloseModalCreateAppointment = () => {
+        setOpenModalCreateAppointment(false);
+    };
     const getAppointmentName = (appointment: Appointment): string => {
         if (appointment.autoDiagnostic) {
             return appointment.autoDiagnostic.prestation;
@@ -64,18 +69,14 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
         setAppointmentSelected(appointment);
     }
 
-
-
     return (
         <Box>
             <Typography variant="h5">
                 Prochains rendez-vous
-                <Link href={'/sradmin/creer-rendez-vous'}>
-                <Button variant="contained" sx={{float: 'right'}} size="small">
+                <Button variant="contained" sx={{float: 'right'}} size="small" onClick={()=>setOpenModalCreateAppointment(true)}>
                     <AddIcon />
                     Créer un rendez-vous
                 </Button>
-                </Link>
             </Typography>
             {loadingListNext && <CircularProgress sx={{ml: 10, mt: 10}} />}
             {!loadingListNext && <TableContainer elevation={4} component={Paper} sx={{mt: 3}}>
@@ -121,6 +122,7 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
                 </Table>
             </TableContainer>}
 
+            <ModalAppointmentCreate repairer={repairer} appointmentSelectedDate={null} openModal={openModalCreateAppointment} handleCloseModal={handleCloseModalCreateAppointment}/>
             {appointmentSelected && <ModalShowAppointment appointment={appointmentSelected} openModal={openModal} handleCloseModal={handleCloseModal} />}
         </Box>
     );

@@ -9,7 +9,8 @@ import {Appointment} from '@interfaces/Appointment';
 import {appointmentResource} from '@resources/appointmentResource';
 import {EventImpl} from '@fullcalendar/core/internal';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
-
+import ModalAppointmentCreate from "@components/dashboard/appointments/ModalAppointmentCreate";
+import router from 'next/router';
 const getFirstDaysOfMonth = (): {
   firstDayOfMonth: string;
   firstDayOfNextMonth: string;
@@ -44,123 +45,152 @@ interface AgendaCalendarProps {
 }
 
 export const AgendaCalendar = ({
-  repairer,
+    repairer,
 }: AgendaCalendarProps): JSX.Element => {
-  const [appointment, setAppointment] = useState<Appointment | null>(null);
-  const [calendarEvents, setCalendarEvents] = useState<
-    {title: string; id: string}[]
-  >([]);
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const {firstDayOfMonth, firstDayOfNextMonth} = getFirstDaysOfMonth();
-  const [startDate, setStartDate] = useState<string>(firstDayOfMonth);
-  const [endDate, setEndDate] = useState<string>(firstDayOfNextMonth);
 
-  const handleCloseModal = (refresh = true): void => {
-    setOpenModal(false);
-    setAppointment(null);
-    if (refresh) {
-      buildCalendarEvents(startDate, endDate);
-    }
-  };
+    const [appointment, setAppointment] = useState<Appointment | null>(null);
+    const [calendarEvents, setCalendarEvents] = useState<{ title: string; id: string }[]>([]);
+    const [openModal, setOpenModal] = useState<boolean>(false);
+    const {firstDayOfMonth, firstDayOfNextMonth} = getFirstDaysOfMonth();
+    const [startDate, setStartDate] = useState<string>(firstDayOfMonth);
+    const [endDate, setEndDate] = useState<string>(firstDayOfNextMonth);
+    const [selectedDate, setSelectedDate] = useState<string>('');
+    const [initialDate, setInitialDate] = useState<Date|null>(null);
+    const [openModalCreateAppointment, setOpenModalCreateAppointment] = useState<boolean>(false);
 
-  useEffect(() => {
-    buildCalendarEvents(startDate, endDate);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const handleCloseModal = (refresh = true): void => {
+        setOpenModal(false);
+        setAppointment(null);
+        if (refresh) {
+            buildCalendarEvents(startDate, endDate);
+        }
+    };
 
-  const buildCalendarEvents = async (start: string, end: string) => {
-    const appointmentsFetch = await appointmentResource.getAll(true, {
-      'slotTime[after]': start,
-      'slotTime[before]': end,
-    });
-    const appointments = appointmentsFetch['hydra:member'];
+    const handleCloseModalCreateAppointment = () => {
+        setOpenModalCreateAppointment(false);
+        setSelectedDate('');
+    };
 
-    const appointmentsEvents = appointments.map((appointment) => {
-      const {customer, autoDiagnostic, slotTime} = appointment;
-      const title: string = customer
-        ? `${customer.firstName} ${customer.lastName}`
-        : 'Nom inconnu';
-      const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
+    useEffect(() => {
+        buildCalendarEvents(startDate, endDate);
+        const dateQueryUrl = router.query.selectedDate;
+        if (dateQueryUrl) {
 
-      let color = 'grey';
-      switch (appointment.status) {
-        case 'validated':
-          color = 'green';
-          break;
-        case 'pending_repairer':
-          color = 'grey';
-          break;
-        case 'pending_cyclist':
-          color = 'orange';
-          break;
-        case 'cancel':
-          color = 'red';
-          break;
-        case 'refused':
-          color = 'red';
-          break;
-      }
+            if (typeof dateQueryUrl === "string") {
+                setInitialDate(new Date(dateQueryUrl.split('T')[0]))
+            }
 
-      return {
-        title: `${
-          appointment.status === 'pending_repairer' ? '⌛' : ''
-        }️ ${title} ${prestation}`,
-        start: slotTime,
-        end: getEndAppointment(slotTime, repairer.durationSlot ?? 60),
-        id: appointment['@id'],
-        color: color,
-        display: 'block',
-      };
-    });
 
-    setCalendarEvents(appointmentsEvents);
-  };
+        } else {
+            setInitialDate(new Date)
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const buildCalendarEvents = async (start: string, end: string) => {
+        const appointmentsFetch = await appointmentResource.getAll(true, {
+            'slotTime[after]': start,
+            'slotTime[before]': end
+        });
+        const appointments = appointmentsFetch['hydra:member'];
+
+        const appointmentsEvents = appointments.map((appointment) => {
+            const {customer, autoDiagnostic, slotTime} = appointment;
+            const title: string = customer ? `${customer.firstName} ${customer.lastName}` : 'Nom inconnu';
+            const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
+
+            let color = 'grey';
+            switch (appointment.status) {
+                case 'validated':
+                    color = 'green';
+                    break;
+                case 'pending_repairer':
+                    color = 'grey';
+                    break;
+                case 'pending_cyclist':
+                    color = 'orange';
+                    break;
+                case 'cancel':
+                    color = 'red';
+                    break;
+                case 'refused':
+                    color = 'red';
+                    break;
+            }
+
+            return {
+                title: `${appointment.status === 'pending_repairer' ? '⌛' : ''}️ ${title} ${prestation}`,
+                start: slotTime,
+                end: getEndAppointment(slotTime, repairer.durationSlot ?? 60),
+                id: appointment['@id'],
+                color: color,
+                display: 'block'
+            };
+        });
+
+        setCalendarEvents(appointmentsEvents);
+    };
   const clickAppointment = async (event: EventImpl) => {
     setOpenModal(true);
     const appointmentFetch = await appointmentResource.get(event.id, true);
     setAppointment(appointmentFetch);
   };
 
-  const handleDateChange = (payload: any) => {
-    if (payload.startStr === startDate && payload.endStr === endDate) {
-      return;
-    }
+    const handleDateChange = (payload: any) => {
 
-    setStartDate(payload.startStr);
-    setEndDate(payload.endStr);
-    buildCalendarEvents(payload.startStr, payload.endStr);
-  };
+        if (payload.startStr === startDate && payload.endStr === endDate) {
+            return;
+        }
 
-  return (
-    <>
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="timeGridDay"
-        datesSet={handleDateChange}
-        weekends={true}
-        locales={[frLocale]}
-        locale="fr"
-        eventClick={(info) => clickAppointment(info.event)}
-        headerToolbar={{
-          left: 'prev,next',
-          center: 'title',
-          right: 'timeGridDay,dayGridWeek,dayGridMonth',
-        }}
-        events={calendarEvents}
-        eventMouseEnter={(info) => {
-          info.el.style.cursor = 'pointer';
-        }}
-      />
+        setStartDate(payload.startStr)
+        setEndDate(payload.endStr)
+        buildCalendarEvents(payload.startStr, payload.endStr);
+    };
 
-      {appointment && (
-        <ModalShowAppointment
-          appointment={appointment}
-          openModal={openModal}
-          handleCloseModal={handleCloseModal}
-        />
-      )}
-    </>
-  );
+    const handleDateClick = (arg: React.SetStateAction<any | null>) => {
+        if (arg) {
+            setSelectedDate(arg["dateStr"]);
+            setOpenModalCreateAppointment(true)
+        }
+    };
+
+    return (
+        <>
+            {initialDate && <FullCalendar
+                plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
+                initialView="timeGridDay"
+                initialDate={initialDate}
+                datesSet={handleDateChange}
+                weekends={false}
+                locales={[frLocale]}
+                locale="fr"
+                eventClick={(info) => clickAppointment(info.event)}
+                headerToolbar={{
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'timeGridDay,dayGridWeek,dayGridMonth',
+                }}
+                events={calendarEvents}
+                eventMouseEnter={(info) => {info.el.style.cursor = 'pointer'}}
+                dateClick={handleDateClick}
+            />}
+
+            {
+                appointment && <ModalShowAppointment
+                    appointment={appointment}
+                    openModal={openModal}
+                    handleCloseModal={handleCloseModal}
+                />
+            }
+            {
+                selectedDate && <ModalAppointmentCreate
+                    repairer={repairer}
+                    appointmentSelectedDate={selectedDate}
+                    openModal={openModalCreateAppointment}
+                    handleCloseModal={handleCloseModalCreateAppointment}
+                />
+            }
+        </>
+    );
 };
 
 export default AgendaCalendar;

@@ -20,6 +20,7 @@ use App\Appointments\Validator\AppointmentState;
 use App\Bike\Validator\BikeOwner;
 use App\Controller\AppointmentStatusAction;
 use App\Repository\AppointmentRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -114,9 +115,14 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $longitude = null;
 
+
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $address = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    private ?string $comment = null;
 
     public function __construct()
     {
@@ -131,5 +137,17 @@ class Appointment
     public function setStatus(?string $status): void
     {
         $this->status = $status;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 }

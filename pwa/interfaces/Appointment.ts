@@ -18,4 +18,5 @@ export interface Appointment {
     latitude?: string;
     longitude?: string;
     address?: string;
+    comment?: string
 }
