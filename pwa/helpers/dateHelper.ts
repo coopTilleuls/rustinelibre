@@ -3,12 +3,7 @@ export const formatDate = (dateString: string | undefined, withHour: boolean = t
     return '';
   }
 
-  let date = new Date(dateString);
-
-  // convert for timezone of user
-  const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-  date = new Date(date.getTime() + userTimezoneOffset);
-
+  let date = getDateTimeZoned(dateString);
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const year = date.getFullYear();
@@ -55,7 +50,7 @@ export const getTimeFromObjectAsString = (date: Date, withHours: boolean = true)
 }
 
 export const getDateFromDateAsString = (slotTime: string): string => {
-  const dateObj = new Date(slotTime);
+  const dateObj = getDateTimeZoned(slotTime)
   const year = dateObj.getFullYear();
   const month = padNumber(dateObj.getMonth() + 1);
   const day = padNumber(dateObj.getDate());
@@ -64,7 +59,7 @@ export const getDateFromDateAsString = (slotTime: string): string => {
 }
 
 export const getTimeFromDateAsString = (slotTime: string): string => {
-  const dateObj = new Date(slotTime);
+  const dateObj = getDateTimeZoned(slotTime);
   const hours = padNumber(dateObj.getHours());
   const minutes = padNumber(dateObj.getMinutes());
 
@@ -76,15 +71,11 @@ const padNumber = (number: number): string => {
   return number.toString().padStart(2, '0');
 }
 
+export const getDateTimeZoned = (dateString: string|null = null): Date => {
 
-export const getDateFormattedWithCompleteName = (date: Date): string => {
+  let date = new Date(dateString ? dateString : '');
+  const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+  date = new Date(date.getTime() + userTimezoneOffset);
 
-  const daysOfWeek = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-  const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-
-  const dayWeek = daysOfWeek[date.getDay()];
-  const dayMonth = date.getDate();
-  const monthName = months[date.getMonth()];
-
-  return `${dayWeek} ${dayMonth} ${monthName}`;
+  return date;
 }
