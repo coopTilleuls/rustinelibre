@@ -14,6 +14,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DashboardSidebarListItem from "@components/dashboard/DashboardSidebarListItem";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import Link from "next/link";
+import {useEffect, useState} from "react";
+import {MediaObject} from "@interfaces/MediaObject";
+import {isAdmin, isBoss} from "@helpers/rolesHelpers";
+import {contactResource} from "@resources/ContactResource";
+import Badge from '@mui/material/Badge';
 
 const drawerWidth = 240;
 
@@ -95,10 +100,23 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
   const {user} = useAccount({redirectIfNotFound: '/login'});
   const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 640px)');
+  const [contactUnread, setContactUnread] = useState<number>(0);
 
-  if (user && !user.roles.includes('ROLE_ADMIN')) {
+  if (user && !isAdmin(user)) {
     router.push('/');
   }
+
+  const countContactUnread = async() => {
+      const response = await contactResource.getAll(true, {
+        alreadyRead: false
+      })
+
+      setContactUnread(response['hydra:totalItems']);
+  }
+
+  useEffect(() => {
+      countContactUnread();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -144,7 +162,9 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
             <DashboardSidebarListItem
               text="Contact"
               open={true}
-              icon={<MessageIcon />}
+              icon={<Badge badgeContent={contactUnread} color="error">
+                <MessageIcon />
+              </Badge>}
               path="/admin/contact"
             />
             <DashboardSidebarListItem
