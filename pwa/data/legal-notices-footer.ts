@@ -1,8 +1,7 @@
 export const legalNoticesFooter = [
   {
     name: 'Contact',
-    link: '/',
-    disabled: true,
+    link: '/contact',
   },
   {
     name: 'Plan de site',
