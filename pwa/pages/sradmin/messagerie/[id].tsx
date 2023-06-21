@@ -1,48 +1,57 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import Head from 'next/head';
-import DashboardLayout from '@components/dashboard/DashboardLayout';
-import Box from '@mui/material/Box';
 import {useRouter} from 'next/router';
-import {CircularProgress} from '@mui/material';
-import {discussionResource} from "@resources/discussionResource";
-import {Discussion} from "@interfaces/Discussion";
-import MessagesContent from "@components/messagerie/MessagesContent";
+import {discussionResource} from '@resources/discussionResource';
+import {Box, Typography} from '@mui/material';
+import DashboardLayout from '@components/dashboard/DashboardLayout';
+import RepairerMessagesContent from '@components/messagerie/RepairerMessagesContent';
+import RepairerDiscussionList from '@components/messagerie/RepairerDiscussionList';
+import BackToDiscussions from '@components/messagerie/BackToDiscussions';
+import {Discussion} from '@interfaces/Discussion';
 
 const SrAdminMessagerie: NextPageWithLayout = () => {
-    const router = useRouter();
-    const {id} = router.query;
-    const [discussion, setDiscussion] = useState<Discussion | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const {id} = router.query;
+  const [discussion, setDiscussion] = useState<Discussion | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-    const fetchDiscussion = async(id: string) => {
-        setLoading(true);
-        const response: Discussion = await discussionResource.getById(id);
-        setDiscussion(response);
-        setLoading(false);
+  const fetchDiscussion = async (id: string) => {
+    setLoading(true);
+    const response: Discussion = await discussionResource.getById(id);
+    setDiscussion(response);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchDiscussion(id as string);
     }
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-        if (id) {
-            fetchDiscussion(id as string);
-        }
-    }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    return (
-        <>
-            <Head>
-                <title>Messagerie</title>
-            </Head>
-            <DashboardLayout />
-            <Box
-                component="main"
-                sx={{marginLeft: '20%', marginRight: '5%', marginTop: '100px'}}>
-
-                {loading && <CircularProgress />}
-                {!loading && discussion && <MessagesContent discussion={discussion} />}
-            </Box>
-        </>
-    );
+  return (
+    <>
+      <Head>
+        <title>Messagerie Réparateur</title>
+      </Head>
+      <DashboardLayout>
+        <BackToDiscussions isRepairer />
+        <Typography
+          fontSize={{xs: 28, md: 30}}
+          fontWeight={600}
+          pb={1}
+          pl={{md: 2}}>
+          Messages
+        </Typography>
+        {!loading && discussion && (
+          <Box display="flex" gap={4}>
+            <RepairerDiscussionList display={{xs: 'none', md: 'block'}} />
+            <RepairerMessagesContent discussion={discussion} />
+          </Box>
+        )}
+      </DashboardLayout>
+    </>
+  );
 };
 
 export default SrAdminMessagerie;

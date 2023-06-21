@@ -9,16 +9,17 @@ import Box from '@mui/material/Box';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
-import useMediaQuery from "@hooks/useMediaQuery";
+import useMediaQuery from '@hooks/useMediaQuery';
 
 export const RepairersResults = (): JSX.Element => {
-
-    const isMobile = useMediaQuery('(max-width: 640px)');
-    const {showMap, setSelectedRepairer, repairers} = useContext(SearchRepairerContext);
+  const isMobile = useMediaQuery('(max-width: 640px)');
+  const {city, showMap, setSelectedRepairer, repairers} = useContext(
+    SearchRepairerContext
+  );
 
   const [mapCenter, setMapCenter] = useState<[number, number]>([
-    Number(repairers[0].latitude),
-    Number(repairers[0].longitude),
+    Number(city?.lat),
+    Number(city?.lon),
   ]);
 
   const handleSelectRepairer = (id: string) => {
@@ -61,50 +62,52 @@ export const RepairersResults = (): JSX.Element => {
           </Grid2>
         </Box>
       )}
-      {(showMap || !isMobile) && <Box
-        sx={{
-          display: {xs: 'block', md: 'block'},
-          width: {xs: '100%', md: '50%'},
-          height: 'calc(100vh - 335px)',
-          position: 'sticky',
-          top: '198px',
-        }}>
-        <MapContainer
-          center={mapCenter}
-          zoom={13}
-          scrollWheelZoom={false}
-          style={{
-            zIndex: 1,
-            height: '100%',
-            borderRadius: 5,
+      {(showMap || !isMobile) && (
+        <Box
+          sx={{
+            display: {xs: 'block', md: 'block'},
+            width: {xs: '100%', md: '50%'},
+            height: 'calc(100vh - 335px)',
+            position: 'sticky',
+            top: '198px',
           }}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {repairers.map((repairer) => {
+          <MapContainer
+            center={mapCenter}
+            zoom={13}
+            scrollWheelZoom={false}
+            style={{
+              zIndex: 1,
+              height: '100%',
+              borderRadius: 5,
+            }}>
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            {repairers.map((repairer) => {
+              if (!repairer.latitude || !repairer.longitude) {
+                return;
+              }
 
-            if (!repairer.latitude || !repairer.longitude) {
-              return;
-            }
-
-            return <Marker
-                key={repairer.id}
-                position={[Number(repairer.latitude), Number(repairer.longitude)]}
-                eventHandlers={{
-                  // mouseover: (event) => {
-                  //     handleHoverPin(event, repairer);
-                  // },
-                  click: (event) => {
-                    handleClipMapPin(event, repairer);
-                  },
-                }}>
-              <Popup>
-                {isMobile && <RepairerCard repairer={repairer} />}
-                {!isMobile && repairer.name}
-              </Popup>
-            </Marker>
-            }
-          )}
-        </MapContainer>
-      </Box>}
+              return (
+                <Marker
+                  key={repairer.id}
+                  position={[
+                    Number(repairer.latitude),
+                    Number(repairer.longitude),
+                  ]}
+                  eventHandlers={{
+                    click: (event) => {
+                      handleClipMapPin(event, repairer);
+                    },
+                  }}>
+                  <Popup>
+                    {isMobile && <RepairerCard repairer={repairer} />}
+                    {!isMobile && repairer.name}
+                  </Popup>
+                </Marker>
+              );
+            })}
+          </MapContainer>
+        </Box>
+      )}
     </Box>
   );
 };

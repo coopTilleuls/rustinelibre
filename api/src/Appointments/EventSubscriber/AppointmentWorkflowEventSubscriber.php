@@ -50,7 +50,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         /** @var Appointment $appointment */
         $appointment = $event->getSubject();
 
-        if (!$this->security->isGranted('ROLE_ADMIN') && !$this->security->isGranted('ROLE_BOSS') && !$this->security->isGranted('ROLE_EMPLOYEE')) {
+        if (!$this->security->isGranted(User::ROLE_ADMIN) && !$this->security->isGranted(User::ROLE_BOSS) && !$this->security->isGranted(User::ROLE_EMPLOYEE)) {
             throw new AccessDeniedHttpException();
         }
 
@@ -133,7 +133,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
 
     private function sendAcceptanceEmail(Appointment $appointment): void
     {
-        if (in_array($this->kernel->getEnvironment(), ['dev', 'test'])) {
+        if ('test' === $this->kernel->getEnvironment()) {
             return;
         }
 

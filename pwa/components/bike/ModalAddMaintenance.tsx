@@ -139,7 +139,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = n
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Ajouter une réparation
+                    {maintenance ? 'Modifier une réparation' : 'Ajouter une réparation'}
                 </Typography>
                 {photo && <img width={isMobile ? "80%" : "200"} src={apiImageUrl(photo.contentUrl)} alt="Photo de la réparation" />}
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -201,7 +201,7 @@ const ModalAddMaintenance = ({bike, openModal, handleCloseModal, maintenance = n
                             Fermer
                         </Button>
                         {
-                            maintenance && user && maintenance.bike.owner.id === user.id && <Button
+                            maintenance && user && <Button
                                 type="submit"
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}

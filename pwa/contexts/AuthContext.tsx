@@ -3,7 +3,7 @@ import {
   useEffect,
   createContext,
   useContext,
-  PropsWithChildren,
+  PropsWithChildren, Dispatch, SetStateAction,
 } from 'react';
 import Router from 'next/router';
 import {userResource} from '@resources/userResource';
@@ -26,6 +26,7 @@ interface AuthContextType {
   user: User | null;
   login: (data: AuthenticationValues) => Promise<boolean | null>;
   logout: () => void;
+  setUser: Dispatch<SetStateAction<User | null>>;
   isLoadingFetchUser?: boolean;
   fetchUser: () => void;
 }
@@ -51,9 +52,11 @@ export const AuthProvider = ({children}: PropsWithChildren): JSX.Element => {
 export const useAccount = ({
   redirectIfFound,
   redirectIfNotFound,
+  redirectIfMailNotConfirm
 }: {
   redirectIfFound?: string;
   redirectIfNotFound?: string;
+  redirectIfMailNotConfirm?: string;
 }) => {
   const {user, isLoadingFetchUser} = useAuth();
 
@@ -62,8 +65,10 @@ export const useAccount = ({
       Router.push(redirectIfFound);
     } else if (!isLoadingFetchUser && !user && redirectIfNotFound) {
       Router.push(redirectIfNotFound);
+    } else if (!isLoadingFetchUser && user && !user.emailConfirmed && redirectIfMailNotConfirm) {
+      Router.push(`/inscription?next=${encodeURIComponent(redirectIfMailNotConfirm)}`);
     }
-  }, [redirectIfFound, redirectIfNotFound, user, isLoadingFetchUser]);
+  }, [redirectIfFound, redirectIfNotFound, user, isLoadingFetchUser, redirectIfMailNotConfirm]);
 
   return {user, isLoadingFetchUser};
 };
@@ -123,6 +128,7 @@ const useProviderAuth = () => {
 
   return {
     user,
+    setUser,
     login,
     logout,
     isAuthenticated: !!user,

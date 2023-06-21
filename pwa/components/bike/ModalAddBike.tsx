@@ -138,7 +138,7 @@ const ModalAddBike = ({
             height="auto"
             src={apiImageUrl(photo.contentUrl)}
             alt="Photo du vélo"
-            style={{marginLeft: isMobile ? '10%' : '300'}}
+            style={{marginLeft: isMobile ? '10%' : '20%'}}
           />
         )}
         <Box

@@ -16,6 +16,8 @@ import {useAccount} from '@contexts/AuthContext';
 import useMediaQuery from '@hooks/useMediaQuery';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Link from "next/link";
+import {isBoss, isEmployee, isItinerant} from "@helpers/rolesHelpers";
+import RouteIcon from '@mui/icons-material/Route';
 
 const drawerWidth = 240;
 
@@ -98,7 +100,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 640px)');
 
-    if (user && !user.roles.includes('ROLE_BOSS')) {
+    if (user && !isBoss(user) && !isEmployee(user)) {
         router.push('/');
     }
 
@@ -143,6 +145,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                             icon={<CalendarMonthIcon />}
                             path="/sradmin/agenda"
                         />
+                        {user && isItinerant(user) && <DashboardSidebarListItem
+                            text="Tournée"
+                            open={true}
+                            icon={<RouteIcon />}
+                            path="/sradmin/tour"
+                        />}
                         <DashboardSidebarListItem
                             text="Messages"
                             open={true}
@@ -155,27 +163,33 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                             icon={<FolderSharedIcon />}
                             path="/sradmin/clients"
                         />
-                        <DashboardSidebarListItem
-                            text="Paramètres Agenda"
-                            open={true}
-                            icon={<HandymanIcon />}
-                            path="/sradmin/agenda/parametres"
-                        />
-                        <DashboardSidebarListItem
-                            text="Employés"
-                            open={true}
-                            icon={<EngineeringIcon />}
-                            path="/sradmin/employes"
-                        />
+                        {user && isBoss(user) &&
+                            <DashboardSidebarListItem
+                                text="Paramètres Agenda"
+                                open={true}
+                                icon={<HandymanIcon />}
+                                path="/sradmin/agenda/parametres"
+                            />
+                        }
+                        {user && isBoss(user) &&
+                            <DashboardSidebarListItem
+                                text="Employés"
+                                open={true}
+                                icon={<EngineeringIcon />}
+                                path="/sradmin/employes"
+                            />
+                        }
                     </List>
                     <Divider />
                     <List>
-                        <DashboardSidebarListItem
-                            text="Informations"
-                            open={true}
-                            icon={<InfoIcon />}
-                            path="/sradmin/informations"
-                        />
+                        {user && isBoss(user) &&
+                                <DashboardSidebarListItem
+                                text="Informations"
+                                open={true}
+                                icon={<InfoIcon />}
+                                path="/sradmin/informations"
+                            />
+                        }
                         <DashboardSidebarListItem
                             text="Retourner sur le site"
                             open={true}

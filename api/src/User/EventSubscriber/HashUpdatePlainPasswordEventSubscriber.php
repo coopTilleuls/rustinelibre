@@ -30,7 +30,7 @@ final readonly class HashUpdatePlainPasswordEventSubscriber implements EventSubs
         $user = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$user instanceof User || !$user->plainPassword || Request::METHOD_PUT !== $method || 'auth' == $event->getRequest()->attributes->get('_route')) {
+        if (!$user instanceof User || !$user->plainPassword || Request::METHOD_PUT !== $method || 'auth' === $event->getRequest()->attributes->get('_route')) {
             return;
         }
 

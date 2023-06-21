@@ -12,7 +12,6 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\Messages\Validator\MessageDiscussionCheck;
 use App\Repository\DiscussionMessageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -20,19 +19,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DiscussionMessageRepository::class)]
 #[ApiResource(
-    order: ['createdAt' => 'DESC'],
-    paginationClientItemsPerPage: true,
     normalizationContext: ['groups' => [self::MESSAGE_READ]],
     denormalizationContext: ['groups' => [self::MESSAGE_WRITE]],
     mercure: true,
+    order: ['createdAt' => 'DESC'],
+    paginationClientItemsPerPage: true,
 )]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.sender == user or object.discussion.customer == user or (user.repairer and user.repairer == object.discussion.repairer) 
 or (user.repairerEmployee and user.repairerEmployee.repairer == object.discussion.repairer)")]
-#[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
+#[Post(securityPostDenormalize: '(object.discussion.customer and object.discussion.customer == user) or (object.discussion.repairer and object.discussion.repairer.owner and object.discussion.repairer.owner == user)')]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 #[ApiFilter(SearchFilter::class, properties: ['discussion' => 'exact'])]
-#[MessageDiscussionCheck]
 class DiscussionMessage
 {
     public const MESSAGE_READ = 'message_read';

@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
-import useMediaQuery from "@hooks/useMediaQuery";
 import {Appointment} from "@interfaces/Appointment";
 
 interface AppointmentCardProps extends PropsWithRef<any> {
@@ -19,7 +18,7 @@ interface AppointmentCardProps extends PropsWithRef<any> {
 export const AppointmentCard = ({appointment}: AppointmentCardProps): JSX.Element => {
     
     return (
-        <Link href={``} style={{textDecoration: 'none'}}>
+        <Link href={`/reparateur/${appointment.repairer.id}`} style={{textDecoration: 'none'}}>
             <Card
                 sx={{
                     boxShadow: 0,

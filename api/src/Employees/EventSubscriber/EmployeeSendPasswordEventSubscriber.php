@@ -36,7 +36,7 @@ final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof RepairerEmployee || in_array($this->kernel->getEnvironment(), ['dev', 'test'])) {
+        if (!$entity instanceof RepairerEmployee || 'test' === $this->kernel->getEnvironment()) {
             return;
         }
 

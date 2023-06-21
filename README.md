@@ -116,3 +116,8 @@ Pour se connecter en tant que cycliste
 mail:       user1@test.com
 password:   Test1passwordOk!   
 ```
+
+## Pour modifier le sitemap
+Le sitemap.xml est disponible via la route suivante : `/sitemap.xml`
+
+Côté front, dès que vous ajouter une nouvelle route disponible publiquement, c'est à dire sans authentification, il faut modifier le controller `SitemapController` présent côté back, afin que le sitemap soit mis à jour.
