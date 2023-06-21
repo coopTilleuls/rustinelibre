@@ -9,6 +9,10 @@ export const isEmployee = (user: User): boolean => {
     return user.roles.includes('ROLE_EMPLOYEE');
 }
 
+export const isAdmin = (user: User): boolean => {
+    return user.roles.includes('ROLE_ADMIN');
+}
+
 export const isItinerant = (user: User): boolean => {
 
     const repairer = user.repairer ? user.repairer : user.repairerEmployee ? user.repairerEmployee.repairer : null;
