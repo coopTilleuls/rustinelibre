@@ -15,8 +15,7 @@ import DashboardSidebarListItem from "@components/dashboard/DashboardSidebarList
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import Link from "next/link";
 import {useEffect, useState} from "react";
-import {MediaObject} from "@interfaces/MediaObject";
-import {isAdmin, isBoss} from "@helpers/rolesHelpers";
+import {isAdmin} from "@helpers/rolesHelpers";
 import {contactResource} from "@resources/ContactResource";
 import Badge from '@mui/material/Badge';
 
