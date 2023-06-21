@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {Container, Box, Typography, Paper, Stack, Button} from '@mui/material';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
@@ -14,14 +15,15 @@ interface RepairerPresentationProps {
 }
 
 const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
+  const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 1024px)');
 
   return (
     <Container maxWidth="md" sx={{padding: {xs: 0}}}>
       <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
-        <Link href={`/reparateur/chercher-un-reparateur`}>
-          <Button variant="outlined">Retour</Button>
-        </Link>
+        <Button variant="outlined" onClick={() => router.back()}>
+          Retour
+        </Button>
         <Stack
           spacing={5}
           marginBottom={4}
