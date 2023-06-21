@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {userResource} from "@resources/userResource";
+import {validatePassword} from "@utils/passwordValidator";
 
 const UpdatePassword = (): JSX.Element => {
     const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
@@ -23,6 +24,8 @@ const UpdatePassword = (): JSX.Element => {
     const [checkPassword, setCheckPassword] = useState<string>('');
     const [pendingLogin, setPendingLogin] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [passwordErrorText, setPasswordErrorText] = useState<string | null>(null);
+    const [checkPasswordErrorText, setCheckPasswordErrorText] = useState<string | null>(null);
     const {login} = useAuth();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -56,11 +59,24 @@ const UpdatePassword = (): JSX.Element => {
     const handleChangeOldPassword = (event: ChangeEvent<HTMLInputElement>) => {
         setOldPassword(event.target.value);
     };
+
     const handleChangeNewPassword = (event: ChangeEvent<HTMLInputElement>) => {
         setNewPassword(event.target.value);
-    };
+        if (!validatePassword(event.target.value)) {
+            setPasswordErrorText('Votre mot de passe doit contenir 12 caractères, une majuscule, un caractère spécial et des chiffres.')
+        } else {
+            setPasswordErrorText(null)
+        }
+    }
+
     const handleChangeCheckPassword = (event: ChangeEvent<HTMLInputElement>) => {
         setCheckPassword(event.target.value);
+
+        if (!validatePassword(event.target.value)) {
+            setCheckPasswordErrorText('Votre mot de passe doit contenir 12 caractères, une majuscule, un caractère spécial et des chiffres.')
+        } else {
+            setCheckPasswordErrorText(null)
+        }
     };
 
     const handleUpdatePassword = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -160,6 +176,8 @@ const UpdatePassword = (): JSX.Element => {
                                 id="newPassword"
                                 autoFocus
                                 value={newPassword}
+                                error={!!passwordErrorText}
+                                helperText={passwordErrorText}
                                 onChange={handleChangeNewPassword}
                             />
 
@@ -172,6 +190,8 @@ const UpdatePassword = (): JSX.Element => {
                                 type="password"
                                 id="checkPassword"
                                 value={checkPassword}
+                                error={!!checkPasswordErrorText}
+                                helperText={checkPasswordErrorText}
                                 onChange={handleChangeCheckPassword}
                             />
                             <Box display="flex" flexDirection="column" alignItems="center">

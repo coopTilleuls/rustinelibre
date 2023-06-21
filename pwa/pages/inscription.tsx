@@ -67,6 +67,7 @@ const Registration: NextPageWithLayout = ({}) => {
         street: street
       });
     } catch (e) {
+      setPendingRegistration(false);
       setErrorMessage('Inscription impossible');
     } finally {
       // Directly authenticate this new user
