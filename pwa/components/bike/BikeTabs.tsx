@@ -13,10 +13,11 @@ import {useAccount} from '@contexts/AuthContext';
 
 type BikeTabsProps = {
   bike: Bike;
+  setBike: (bike: Bike) => void;
   bikeTypes: BikeType[];
 };
 
-const BikeTabs = ({bike, bikeTypes}: BikeTabsProps): JSX.Element => {
+const BikeTabs = ({bike, setBike, bikeTypes}: BikeTabsProps): JSX.Element => {
   const {user} = useAccount({});
   const [tabValue, setTabValue] = useState<number>(0);
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -55,7 +56,7 @@ const BikeTabs = ({bike, bikeTypes}: BikeTabsProps): JSX.Element => {
       </Tabs>
 
       <Box sx={{marginTop: 2}}>
-        {tabValue === 0 && <BikeIdentity bike={bike} bikeTypes={bikeTypes} />}
+        {tabValue === 0 && <BikeIdentity bike={bike} setBike={setBike} bikeTypes={bikeTypes} />}
         {tabValue === 1 && (
           <BikeMaintenance
             bike={bike}
