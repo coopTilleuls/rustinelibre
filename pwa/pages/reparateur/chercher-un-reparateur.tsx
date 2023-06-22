@@ -421,7 +421,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
             </Box>
 
             {!pendingSearchCity && totalItems > 20 && (
-              <PaginationBlock onPageChange={handlePageChange} />
+              <Box sx={{marginLeft: '10%'}}>
+                <PaginationBlock onPageChange={handlePageChange} />
+              </Box>
             )}
           </Container>
         </Box>
