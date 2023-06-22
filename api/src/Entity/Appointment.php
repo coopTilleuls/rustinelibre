@@ -137,5 +137,4 @@ class Appointment
     {
         $this->status = $status;
     }
-
 }
