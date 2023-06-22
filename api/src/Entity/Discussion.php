@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
     mercure: true,
-)]
+)]g
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or (user.repairer and user.repairer == object.repairer) 
 or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
@@ -42,7 +42,7 @@ class Discussion
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::DISCUSSION_READ])]
+    #[Groups([self::DISCUSSION_READ, Appointment::APPOINTMENT_READ])]
     public ?int $id = null;
 
     #[Assert\NotNull]
