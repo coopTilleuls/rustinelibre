@@ -76,16 +76,14 @@ export const AppointmentCard = ({appointment, future, fetchAppointments}: Appoin
                         </Typography>
                     </div>
                     <div>
-                        <Typography fontSize={{xs: 12, md: 16}}>
-                            <strong>{appointment.repairer.name}</strong>
+                        <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
+                            {appointment.repairer.name}
                         </Typography>
-                        <Typography fontSize={{xs: 12, md: 16}}>
-                            <strong>
-                                {appointment.repairer.streetNumber}
-                                {appointment.repairer.street},
-                                {appointment.repairer.postcode}
-                                {appointment.repairer.city}
-                            </strong>
+                        <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
+                            {appointment.repairer.streetNumber}
+                            {appointment.repairer.street},
+                            {appointment.repairer.postcode}
+                            {appointment.repairer.city}
                         </Typography>
                         {appointment.autoDiagnostic && <Typography color="text.secondary" fontSize={{xs: 12, md: 16, mt: 10}}>
                             {appointment.autoDiagnostic.prestation}
