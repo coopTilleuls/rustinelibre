@@ -23,10 +23,12 @@ import {BikeType} from '@interfaces/BikeType';
 
 type BikeIdentityProps = {
   bike: Bike;
+  setBike: (bike: Bike) => void;
   bikeTypes: BikeType[];
 };
 
-const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
+const BikeIdentity = ({bike, setBike, bikeTypes}: BikeIdentityProps): JSX.Element => {
+
   const [addDescription, setAddDescription] = useState<boolean>(false);
   const [brand, setBrand] = useState<string>(bike.brand ? bike.brand : '');
   const [description, setDescription] = useState<string>(
@@ -89,6 +91,7 @@ const BikeIdentity = ({bike, bikeTypes}: BikeIdentityProps): JSX.Element => {
       }
 
       bike = await bikeResource.put(bike['@id'], bodyRequest);
+      setBike(bike);
     } catch (e) {
       setErrorMessage('Mise à jour du vélo impossible');
     }

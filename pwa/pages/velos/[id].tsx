@@ -12,23 +12,15 @@ import Link from 'next/link';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import BikeTabs from '@components/bike/BikeTabs';
 import Container from '@mui/material/Container';
-import {GetStaticProps} from 'next';
-import {ENTRYPOINT} from '@config/entrypoint';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {BikeType} from '@interfaces/BikeType';
-import {Collection} from '@interfaces/Resource';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModalDeleteBike from '@components/bike/ModalDeleteBike';
 import {useAccount} from '@contexts/AuthContext';
 import useMediaQuery from "@hooks/useMediaQuery";
 
-type EditBikeProps = {
-  bikeTypesFetched: BikeType[];
-};
+const EditBike: NextPageWithLayout = ({}) => {
 
-const EditBike: NextPageWithLayout<EditBikeProps> = ({
-  bikeTypesFetched = [],
-}) => {
   const router: NextRouter = useRouter();
   const {user, isLoadingFetchUser} = useAccount({
     redirectIfNotFound: '/velos/mes-velos',
@@ -36,7 +28,7 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
   const {id} = router.query;
   const [bike, setBike] = useState<Bike | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const isMobile = useMediaQuery('(max-width: 1024px)');
 
@@ -46,9 +38,7 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
   }
 
   useEffect(() => {
-    if (bikeTypes.length === 0) {
       fetchBikeTypes();
-    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -117,7 +107,7 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
                   style={{marginLeft: isMobile ? '5%' : '20%'}}
                 />
               )}
-              <BikeTabs bike={bike} bikeTypes={bikeTypes} />
+              <BikeTabs bike={bike} setBike={setBike} bikeTypes={bikeTypes} />
             </Box>
           )}
           <ModalDeleteBike
@@ -130,32 +120,5 @@ const EditBike: NextPageWithLayout<EditBikeProps> = ({
     </>
   );
 };
-
-export const getStaticProps: GetStaticProps = async () => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-      revalidate: 0,
-    };
-  }
-
-  const bikeTypesCollection: Collection<BikeType> =
-    await bikeTypeResource.getAll(false);
-  const bikeTypesFetched: BikeType[] = bikeTypesCollection['hydra:member'];
-
-  return {
-    props: {
-      bikeTypesFetched,
-    },
-    revalidate: 10,
-  };
-};
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
-  };
-}
 
 export default EditBike;
