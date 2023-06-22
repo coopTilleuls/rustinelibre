@@ -123,6 +123,9 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $comment = null;
 
+    #[Groups([self::APPOINTMENT_READ])]
+    public ?Discussion $discussion = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));

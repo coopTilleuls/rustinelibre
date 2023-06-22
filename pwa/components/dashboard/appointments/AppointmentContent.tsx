@@ -26,8 +26,6 @@ import {maintenanceResource} from "@resources/MaintenanceResource";
 import {Bike} from "@interfaces/Bike";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
-import {Discussion} from "@interfaces/Discussion";
-import {discussionResource} from "@resources/discussionResource";
 
 type AppointmentContentProps = {
     appointmentProps: Appointment;
@@ -49,16 +47,11 @@ const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentCon
     const [selectedDate, setSelectedDate] = useState<string|undefined>(undefined);
     const [selectedTime, setSelectedTime] = useState<string|undefined>('');
     const [bikes, setBikes] = useState<number>(0);
-    const [discussion, setDiscussion] = useState<Discussion|null>(null);
 
     useEffect(() => {
         if (appointment.bike) {
             fetchMaintenances(appointment.bike);
         }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        getOrCreateDiscussion();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
@@ -73,24 +66,6 @@ const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentCon
         setBikes(maintenancesFetch['hydra:totalItems']);
     }
 
-    const getOrCreateDiscussion = async () => {
-        if (!appointment.customer) {
-            return;
-        }
-
-        const response = await discussionResource.getAll(true, {
-            repairer: appointment.repairer['@id'],
-            customer: appointment.customer['@id'],
-        })
-
-        if (response['hydra:member'].length === 0) {
-            const discussionCreate = await createDiscussion(appointment.repairer['@id'], appointment.customer['@id']);
-            setDiscussion(discussionCreate)
-        } else {
-            setDiscussion(response['hydra:member'][0]);
-        }
-    }
-
     const checkSlotTimePast = async () => {
 
         const date = new Date(appointment.slotTime);
@@ -102,13 +77,6 @@ const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentCon
 
             setAppointment(appointmentUpdate);
         }
-    }
-
-    const createDiscussion = async (repairer: string, customer: string): Promise<Discussion> => {
-        return await discussionResource.post( {
-            repairer: appointment.repairer['@id'],
-            customer: appointment.customer['@id'],
-        })
     }
 
     const cancelAppointment = async () => {
@@ -259,14 +227,14 @@ const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentCon
                 </Grid>
                 <Grid item xs={6}>
                     {
-                        discussion && <Link href={`/sradmin/messagerie/${discussion.id}`}>
+                        appointment.discussion && <Link href={`/sradmin/messagerie/${appointment.discussion.id}`}>
                             <Button variant="outlined">
                                 Envoyer un message
                             </Button>
                         </Link>
                     }
                     {
-                        !discussion && <Button disabled variant="outlined">
+                        !appointment.discussion && <Button disabled variant="outlined">
                                 Envoyer un message
                             </Button>
                     }

@@ -3,6 +3,7 @@ import {Repairer} from '@interfaces/Repairer';
 import {AutoDiagnostic} from "@interfaces/AutoDiagnostic";
 import {Bike} from "@interfaces/Bike";
 import {BikeType} from "@interfaces/BikeType";
+import {Discussion} from "@interfaces/Discussion";
 
 export interface Appointment {
     '@id': string;
@@ -19,4 +20,5 @@ export interface Appointment {
     longitude?: string;
     address?: string;
     comment?: string
+    discussion?: Discussion
 }

@@ -9,9 +9,10 @@ import Grid from '@mui/material/Grid';
 
 interface MyFutureAppointmentProps {
     currentUser: User;
+    future: boolean;
 }
 
-const MyFutureAppointment = ({currentUser}: MyFutureAppointmentProps) => {
+const MyFutureAppointment = ({currentUser, future}: MyFutureAppointmentProps) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -22,6 +23,7 @@ const MyFutureAppointment = ({currentUser}: MyFutureAppointmentProps) => {
             customer: currentUser.id,
             'order[slotTime]': 'DESC',
             'slotTime[after]': dateObjectAsString(new Date()),
+            'status': 'validated'
         });
 
         setAppointments(response['hydra:member']);
@@ -42,7 +44,7 @@ const MyFutureAppointment = ({currentUser}: MyFutureAppointmentProps) => {
                     <Grid container spacing={2}>
                         {!loading && appointments.map(appointment => {
                             return <Grid item xs={12} md={6} key={appointment.id}>
-                                <AppointmentCard appointment={appointment} />
+                                <AppointmentCard appointment={appointment} future={future} fetchAppointments={fetchAppointments} />
                             </Grid>
                         })}
                     </Grid>
