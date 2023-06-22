@@ -11,7 +11,9 @@ interface AppointmentCreateAddPhotoProps {
     photo: MediaObject | null;
     setPhoto: React.Dispatch<React.SetStateAction<MediaObject | null>>;
 }
+
 const AppointmentCreateAddPhoto = ({photo, setPhoto}: AppointmentCreateAddPhotoProps): JSX.Element => {
+
     const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
     const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
@@ -21,22 +23,25 @@ const AppointmentCreateAddPhoto = ({photo, setPhoto}: AppointmentCreateAddPhotoP
         if (event.target.files) {
             setImageTooHeavy(false);
             const file = event.target.files[0];
+
             if (!checkFileSize(file)) {
                 setImageTooHeavy(true);
                 return;
             }
+
             setLoadingPhoto(true);
             if (photo) {
                 await mediaObjectResource.delete(photo['@id']);
             }
+
             // Upload new picture
             const response = await uploadFile(file);
             const mediaObjectResponse = (await response?.json()) as MediaObject;
             if (mediaObjectResponse) {
                 // Display new photo
                 setPhoto(mediaObjectResponse);
-                // Update autodiag
             }
+
             setLoadingPhoto(false);
         }
     };

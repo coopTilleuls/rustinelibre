@@ -1,8 +1,5 @@
-import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
-import {
-    Typography,
-    Stack,
-} from '@mui/material';
+import React, {ChangeEvent} from 'react';
+import {Stack} from '@mui/material';
 import TextField from "@mui/material/TextField";
 
 interface AppointmentCreateAddCommentProps {
@@ -11,7 +8,6 @@ interface AppointmentCreateAddCommentProps {
 }
 
 const AppointmentCreateAddComment = ({comment, setComment}: AppointmentCreateAddCommentProps): JSX.Element => {
-    const [loading, setLoading] = useState<boolean>(false);
 
     const handleChangeComment = (event: ChangeEvent<HTMLInputElement>): void => {
         setComment(event.target.value as string);

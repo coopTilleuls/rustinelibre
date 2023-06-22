@@ -1,19 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-    Button,
-    Typography,
     Stack,
     MenuItem,
-    Box,
     FormControl,
     InputLabel,
 } from '@mui/material';
-import {AutodiagContext} from '@contexts/AutodiagContext';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
-import {autoDiagnosticResource} from '@resources/autoDiagResource';
 import {Intervention} from "@interfaces/Intervention";
 import {interventionResource} from "@resources/interventionResource";
-
 
 interface AppointmentCreateAddPrestationProps {
     prestation: string;

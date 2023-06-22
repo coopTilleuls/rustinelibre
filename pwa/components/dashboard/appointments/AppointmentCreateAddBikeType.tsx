@@ -1,7 +1,6 @@
-import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Stack,
-    CircularProgress,
     FormControl,
     InputLabel, MenuItem,
 } from '@mui/material';
@@ -14,20 +13,18 @@ interface AppointmentCreateAddBikeTypeProps {
     setSelectedBikeType: React.Dispatch<React.SetStateAction<BikeType | null>>;
 }
 const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeType}: AppointmentCreateAddBikeTypeProps): JSX.Element => {
-    const [loading, setLoading] = useState<boolean>(false);
 
     const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
 
-    async function fetchBikeTypes() {
+    const fetchBikeTypes = async() => {
         const responseBikeTypes = await bikeTypeResource.getAll(false);
         setBikeTypes(responseBikeTypes['hydra:member']);
     }
 
     useEffect(() => {
-        if (bikeTypes?.length === 0) {
-            fetchBikeTypes();
-        }
+        fetchBikeTypes();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
     const handleBikeChange = (event: SelectChangeEvent): void => {
         const selectedBikeType = bikeTypes?.find(
             (bt) => bt.name === event.target.value
@@ -44,8 +41,6 @@ const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeType}: A
             display="flex"
             flexDirection="column"
             alignItems={'center'}>
-            {loading && <CircularProgress />}
-            {bikeTypes && bikeTypes.length > 0 &&
                 <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
                     <InputLabel id="bike-type-label">Type de vélo</InputLabel>
                     <Select
@@ -65,8 +60,8 @@ const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeType}: A
                             </MenuItem>
                         ))}
                     </Select>
-                </FormControl>}
-                </Stack>
+                </FormControl>
+            </Stack>
 
 )};
 export default AppointmentCreateAddBikeType;

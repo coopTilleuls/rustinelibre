@@ -109,6 +109,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
             throw new AccessDeniedHttpException('This shop is not yours');
         }
 
+        $object->status = 'validated';
         $this->persistAppointment($object, $slotsAvailable);
     }
 

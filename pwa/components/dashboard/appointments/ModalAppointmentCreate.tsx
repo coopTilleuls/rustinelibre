@@ -15,7 +15,6 @@ import {appointmentResource} from '@resources/appointmentResource';
 import {useAccount} from '@contexts/AuthContext';
 import {RequestBody} from '@interfaces/Resource';
 import {Repairer} from '@interfaces/Repairer';
-import {RepairerEmployee} from '@interfaces/RepairerEmployee';
 import AppointmentCreateAddPhoto from "@components/dashboard/appointments/AppointmentCreateAddPhoto";
 import AppointmentCreateAddPrestation from "@components/dashboard/appointments/AppointmentCreateAddPrestation";
 import AppointmentCreateAddBikeType from "@components/dashboard/appointments/AppointmentCreateAddBikeType";
@@ -34,14 +33,14 @@ interface AppointmentCreateProps {
   handleCloseModal: () => void;
   handleRedirectToAgenda?: () => void
 }
+
 const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, handleCloseModal,  handleRedirectToAgenda}: AppointmentCreateProps ): JSX.Element => {
+
   const {user} = useAccount({});
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [customerInput, setCustomerInput] = useState<string>('');
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null
-  );
-  const [tunnelStep, setTunnelStep] = useState<string>('');
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
   const [slotSelected, setSlotSelected] = useState<string>();
   const selectedDate = appointmentSelectedDate? appointmentSelectedDate : null;
   const [prestation, setPrestation] = useState<string>('');
@@ -64,23 +63,19 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   }, [customerInput]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if(selectedDate){
+    if (selectedDate){
       setSlotSelected(selectedDate)
     } else {
       setSlotSelected(repairer.firstSlotAvailable)
     }
   }, [repairer.firstSlotAvailable, selectedDate]);
 
-  const handleCustomerChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): Promise<void> => {
+  const handleCustomerChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
     setCustomerInput(event.target.value);
   };
 
-  const handleSelectCustomer = (customer: Customer) => {
+  const handleSelectCustomer = (customer: Customer): void => {
     setSelectedCustomer(customer);
-    handleConfirmAppointment(customer);
-    setTunnelStep('customerSelected')
   };
 
   const slotDate = new Date(slotSelected!).toLocaleString('fr-FR', {
@@ -91,16 +86,17 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
     minute: 'numeric',
   });
 
-  const handleConfirmAppointment = async (customer: Customer) => {
-    if (!user || !repairer || !customer || !slotSelected) {
+  const handleCreateAppointment = async (customer: Customer) => {
+    if (!user || !repairer || !selectedCustomer || !slotSelected) {
       return;
     }
 
     const requestBody: RequestBody = {
       repairer: repairer['@id'],
       slotTime: slotSelected,
-      customer: customer['@id'],
+      customer: selectedCustomer['@id'],
     };
+
     setNewAppointment(await appointmentResource.post(requestBody));
   };
   const handleAddInformations = async ()=>{
@@ -134,29 +130,28 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
       }
     await appointmentResource.put(newAppointment['@id'], putRequest)
     }
-    setTunnelStep('success');
+
+    setSuccess(true);
+
     setTimeout(async () => {
-      await appointmentResource.updateAppointmentStatus(newAppointment.id, {
-        transition: 'validated_by_repairer',
-      });
       handleCloseModal();
       router.push(`/sradmin/agenda?selectedDate=${slotSelected}`)
       setSelectedCustomer(null);
       setCustomerInput('');
-      setTunnelStep('')
+      setSuccess(false)
     }, 3000);
   }
 
   const handleResetStates = () => {
     setSelectedCustomer(null);
-    setTunnelStep('');
     setCustomers([]);
     setCustomerInput('');
+    setNewAppointment(null);
     setSelectedBikeType(null);
     setPrestation('');
     setPhoto(null);
     setComment('');
-    handleCloseModal()
+    handleCloseModal();
   };
 
   return (
@@ -180,36 +175,37 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
           <Typography align="justify" sx={{mt: 2}}>
             {`Rendez-vous le ${slotDate} `}
           </Typography>
-          {selectedCustomer &&
-            <Typography align="justify" sx={{mt: 2}}>
-              {`Avec ${selectedCustomer?.firstName} ${selectedCustomer?.lastName} `}
-            </Typography>
-          }
-          {tunnelStep == '' &&(
-          <Autocomplete
-            sx={{mt: 2, mb: 1}}
-            freeSolo
-            value={customerInput}
-            options={customers}
-            getOptionLabel={(customer) =>
-              typeof customer === 'string'
-                ? customer
-                : `${customer.firstName} ${customer.lastName} (${customer.email})`
-            }
-            onChange={(event, value) => handleSelectCustomer(value as User)}
-            renderInput={(params) => (
-              <TextField
-                label="Client"
-                required
-                {...params}
-                value={customerInput}
-                onChange={(e) => handleCustomerChange(e)}
-              />
-            )}
-          />
+          {!newAppointment &&(
+              <>
+                <Autocomplete
+                  sx={{mt: 2, mb: 1}}
+                  freeSolo
+                  value={customerInput}
+                  options={customers}
+                  getOptionLabel={(customer) => typeof customer === 'string'
+                      ? customer
+                      : `${customer.firstName} ${customer.lastName} (${customer.email})`}
+                  onChange={(event, value) => handleSelectCustomer(value as User)}
+                  renderInput={(params) => (
+                      <TextField
+                          label="Client"
+                          required
+                          {...params}
+                          value={customerInput}
+                          onChange={(e) => handleCustomerChange(e)}/>
+                  )}/>
+                {selectedCustomer &&
+                <Button onClick={()=>handleCreateAppointment(selectedCustomer)} variant="contained" sx={{my: 2}}>
+                  Créer le rendez vous
+                </Button>
+                }
+              </>
           )}
-          {tunnelStep == 'customerSelected' &&(
+          {newAppointment &&(
           <Box>
+            <Typography align="justify" sx={{mt: 2}}>
+              {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
+            </Typography>
             <AppointmentCreateAddPrestation prestation={prestation} setPrestation={setPrestation}/>
             <AppointmentCreateAddBikeType selectedBikeType={selectedBikeType} setSelectedBikeType={setSelectedBikeType}/>
             <AppointmentCreateAddPhoto photo={photo} setPhoto={setPhoto}/>
@@ -219,7 +215,7 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
             </Button>
           </Box>
           )}
-        {tunnelStep == 'success' && (
+        {success && (
           <Alert sx={{width: '100%'}} severity="success">
             Rendez-vous créé avec succès
           </Alert>
