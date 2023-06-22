@@ -15,15 +15,26 @@ interface RepairerPresentationProps {
 }
 
 const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
-  const router = useRouter();
+  const {query} = useRouter();
   const isMobile = useMediaQuery('(max-width: 1024px)');
+
+  let linkHref;
+
+  if (query.favorite) {
+    linkHref = '/';
+  } else if (query.appointment) {
+    linkHref = '/rendez-vous/mes-rendez-vous';
+  } else {
+    linkHref = '/reparateur/chercher-un-reparateur';
+  }
 
   return (
     <Container maxWidth="md" sx={{padding: {xs: 0}}}>
       <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
-        <Button variant="outlined" onClick={() => router.back()}>
-          Retour
-        </Button>
+        <Link href={linkHref}>
+          <Button variant="outlined">Retour</Button>
+        </Link>
+
         <Stack
           spacing={5}
           marginBottom={4}
