@@ -115,14 +115,13 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $longitude = null;
 
-
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $address = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    private ?string $comment = null;
+    public ?string $comment = null;
 
     public function __construct()
     {
@@ -139,15 +138,4 @@ class Appointment
         $this->status = $status;
     }
 
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?string $comment): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
 }

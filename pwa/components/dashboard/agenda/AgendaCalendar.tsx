@@ -3,7 +3,7 @@ import {Repairer} from '@interfaces/Repairer';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, {DateClickArg} from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 import {Appointment} from '@interfaces/Appointment';
 import {appointmentResource} from '@resources/appointmentResource';
@@ -11,6 +11,7 @@ import {EventImpl} from '@fullcalendar/core/internal';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
 import ModalAppointmentCreate from "@components/dashboard/appointments/ModalAppointmentCreate";
 import router from 'next/router';
+import { DatesSetArg } from '@fullcalendar/core';
 const getFirstDaysOfMonth = (): {
   firstDayOfMonth: string;
   firstDayOfNextMonth: string;
@@ -44,7 +45,7 @@ interface AgendaCalendarProps {
   repairer: Repairer;
 }
 
-export const AgendaCalendar = ({
+const AgendaCalendar = ({
     repairer,
 }: AgendaCalendarProps): JSX.Element => {
 
@@ -98,7 +99,7 @@ export const AgendaCalendar = ({
             const title: string = customer ? `${customer.firstName} ${customer.lastName}` : 'Nom inconnu';
             const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
 
-            let color = 'grey';
+            let color;
             switch (appointment.status) {
                 case 'validated':
                     color = 'green';
@@ -115,6 +116,8 @@ export const AgendaCalendar = ({
                 case 'refused':
                     color = 'red';
                     break;
+                default:
+                    color = 'grey';
             }
 
             return {
@@ -135,7 +138,7 @@ export const AgendaCalendar = ({
     setAppointment(appointmentFetch);
   };
 
-    const handleDateChange = (payload: any) => {
+    const handleDateChange = (payload: DatesSetArg) => {
 
         if (payload.startStr === startDate && payload.endStr === endDate) {
             return;
@@ -146,7 +149,7 @@ export const AgendaCalendar = ({
         buildCalendarEvents(payload.startStr, payload.endStr);
     };
 
-    const handleDateClick = (arg: React.SetStateAction<any | null>) => {
+    const handleDateClick = (arg: DateClickArg) => {
         if (arg) {
             setSelectedDate(arg["dateStr"]);
             setOpenModalCreateAppointment(true)

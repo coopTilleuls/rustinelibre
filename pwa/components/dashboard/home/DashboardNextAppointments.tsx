@@ -24,7 +24,7 @@ interface DashboardNextAppointmentsProps {
     loadingListNext: boolean
 }
 
-export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNextAppointments, loadingListNext}: DashboardNextAppointmentsProps): JSX.Element => {
+const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNextAppointments, loadingListNext}: DashboardNextAppointmentsProps): JSX.Element => {
 
     const [appointmentSelected, setAppointmentSelected] = useState<Appointment|null>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);

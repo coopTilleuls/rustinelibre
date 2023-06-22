@@ -10,7 +10,7 @@ interface AppointmentCreateAddCommentProps {
     setComment: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const AppointmentCreateAddComment = ({comment, setComment}: AppointmentCreateAddCommentProps): JSX.Element => {
+const AppointmentCreateAddComment = ({comment, setComment}: AppointmentCreateAddCommentProps): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleChangeComment = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -23,9 +23,6 @@ export const AppointmentCreateAddComment = ({comment, setComment}: AppointmentCr
             display="flex"
             flexDirection="column"
             alignItems="center">
-            <Typography component="h2" fontSize={14} fontWeight={600} my={{xs: 2}}>
-                Détail de la demande
-            </Typography>
             <TextField
                 margin="normal"
                 fullWidth

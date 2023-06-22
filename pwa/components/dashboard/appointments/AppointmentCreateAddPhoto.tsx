@@ -11,7 +11,7 @@ interface AppointmentCreateAddPhotoProps {
     photo: MediaObject | null;
     setPhoto: React.Dispatch<React.SetStateAction<MediaObject | null>>;
 }
-export const AppointmentCreateAddPhoto = ({photo, setPhoto}: AppointmentCreateAddPhotoProps): JSX.Element => {
+const AppointmentCreateAddPhoto = ({photo, setPhoto}: AppointmentCreateAddPhotoProps): JSX.Element => {
     const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
     const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 

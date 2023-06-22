@@ -20,7 +20,7 @@ interface AppointmentCreateAddPrestationProps {
     setPrestation: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const AppointmentCreateAddPrestation = ({prestation, setPrestation}: AppointmentCreateAddPrestationProps): JSX.Element => {
+const AppointmentCreateAddPrestation = ({prestation, setPrestation}: AppointmentCreateAddPrestationProps): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false);
     const [interventions, setInterventions] = useState<Intervention[]>([]);
 
@@ -47,9 +47,6 @@ export const AppointmentCreateAddPrestation = ({prestation, setPrestation}: Appo
             display="flex"
             flexDirection="column"
             alignItems="center">
-            <Typography component="h2" fontSize={14} fontWeight={600} my={{xs: 2}}>
-                Type de prestation
-            </Typography>
             <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
                 <InputLabel id="service-type-label">Type de prestation</InputLabel>
                 <Select
@@ -59,8 +56,8 @@ export const AppointmentCreateAddPrestation = ({prestation, setPrestation}: Appo
                     value={prestation}
                     label="Type de prestation"
                     onChange={handleChangePrestation}>
-                    {interventions.map(intervention => {
-                        return <MenuItem key={intervention['@id']} value={intervention.description}>{intervention.description}</MenuItem>
+                    {interventions.map(({id, description }) => {
+                        return <MenuItem key={id} value={description}>{description}</MenuItem>
                     })}
                 </Select>
             </FormControl>

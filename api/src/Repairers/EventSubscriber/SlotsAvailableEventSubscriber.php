@@ -88,13 +88,14 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
 
         // I am simple cyclist
         if (!$currentUser->isBoss() && !$currentUser->isEmployee()) {
-
             // If slot is not available
             if (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true)) {
                 throw new BadRequestHttpException('This slot is not available.');
             }
 
             $this->persistAppointment($object, $slotsAvailable);
+
+            return;
         }
 
         // Current user does not have any shop
@@ -111,7 +112,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         $this->persistAppointment($object, $slotsAvailable);
     }
 
-    private function persistAppointment(Appointment $appointment, array $slotsAvailable)
+    private function persistAppointment(Appointment $appointment, array $slotsAvailable): void
     {
         $this->entityManager->persist($appointment);
         $this->entityManager->flush();

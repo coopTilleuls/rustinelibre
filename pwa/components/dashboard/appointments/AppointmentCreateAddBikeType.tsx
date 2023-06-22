@@ -13,7 +13,7 @@ interface AppointmentCreateAddBikeTypeProps {
     selectedBikeType: BikeType | null
     setSelectedBikeType: React.Dispatch<React.SetStateAction<BikeType | null>>;
 }
-export const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeType}: AppointmentCreateAddBikeTypeProps): JSX.Element => {
+const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeType}: AppointmentCreateAddBikeTypeProps): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
@@ -55,7 +55,7 @@ export const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeT
                         labelId="bike-type-label"
                         onChange={handleBikeChange}
                         value={selectedBikeType?.name}
-                        style={{width: '100%'}}>
+                        sx={{width: '100%'}}>
                         <MenuItem disabled value="">
                             Choisissez un type de vélo
                         </MenuItem>

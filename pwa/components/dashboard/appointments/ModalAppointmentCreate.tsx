@@ -34,10 +34,8 @@ interface AppointmentCreateProps {
   handleCloseModal: () => void;
   handleRedirectToAgenda?: () => void
 }
-export const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, handleCloseModal,  handleRedirectToAgenda}: AppointmentCreateProps ): JSX.Element => {
+const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, handleCloseModal,  handleRedirectToAgenda}: AppointmentCreateProps ): JSX.Element => {
   const {user} = useAccount({});
-  const [currentRepairer, setCurrentRepairer] = useState<Repairer>(repairer);
-  const [loadingList, setLoadingList] = useState<boolean>(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [customerInput, setCustomerInput] = useState<string>('');
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
@@ -45,7 +43,7 @@ export const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openM
   );
   const [tunnelStep, setTunnelStep] = useState<string>('');
   const [slotSelected, setSlotSelected] = useState<string>();
-  const [selectedDate, setSelectedDate]= useState<string | null>(appointmentSelectedDate? appointmentSelectedDate : null)
+  const selectedDate = appointmentSelectedDate? appointmentSelectedDate : null;
   const [prestation, setPrestation] = useState<string>('');
   const [selectedBikeType, setSelectedBikeType]= useState<BikeType | null>(null);
   const [photo, setPhoto]= useState<MediaObject | null>(null)
@@ -53,12 +51,10 @@ export const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openM
   const [comment, setComment] = useState<string>('');
 
   const fetchCustomers = async () => {
-    setLoadingList(true);
     const response = await customerResource.getAll(true, {
       userSearch: customerInput,
     });
     setCustomers(response['hydra:member']);
-    setLoadingList(false);
   };
 
   useEffect(() => {
@@ -71,9 +67,9 @@ export const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openM
     if(selectedDate){
       setSlotSelected(selectedDate)
     } else {
-      setSlotSelected(currentRepairer.firstSlotAvailable)
+      setSlotSelected(repairer.firstSlotAvailable)
     }
-  }, [currentRepairer.firstSlotAvailable, selectedDate]);
+  }, [repairer.firstSlotAvailable, selectedDate]);
 
   const handleCustomerChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -138,11 +134,11 @@ export const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openM
       }
     await appointmentResource.put(newAppointment['@id'], putRequest)
     }
-    await appointmentResource.updateAppointmentStatus(newAppointment.id, {
-      transition: 'validated_by_repairer',
-    });
     setTunnelStep('success');
-    setTimeout(() => {
+    setTimeout(async () => {
+      await appointmentResource.updateAppointmentStatus(newAppointment.id, {
+        transition: 'validated_by_repairer',
+      });
       handleCloseModal();
       router.push(`/sradmin/agenda?selectedDate=${slotSelected}`)
       setSelectedCustomer(null);
@@ -151,10 +147,22 @@ export const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openM
     }, 3000);
   }
 
+  const handleResetStates = () => {
+    setSelectedCustomer(null);
+    setTunnelStep('');
+    setCustomers([]);
+    setCustomerInput('');
+    setSelectedBikeType(null);
+    setPrestation('');
+    setPhoto(null);
+    setComment('');
+    handleCloseModal()
+  };
+
   return (
       <Modal
           open={openModal}
-          onClose={handleCloseModal}
+          onClose={handleResetStates}
           aria-labelledby="Créer un rendez-vous"
           aria-describedby="popup_appointment_create">
         <Stack
@@ -173,9 +181,9 @@ export const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openM
             {`Rendez-vous le ${slotDate} `}
           </Typography>
           {selectedCustomer &&
-          <Typography align="justify" sx={{mt: 2}}>
-            {`Avec ${selectedCustomer?.firstName} ${selectedCustomer?.lastName} `}
-          </Typography>
+            <Typography align="justify" sx={{mt: 2}}>
+              {`Avec ${selectedCustomer?.firstName} ${selectedCustomer?.lastName} `}
+            </Typography>
           }
           {tunnelStep == '' &&(
           <Autocomplete
