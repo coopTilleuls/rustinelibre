@@ -17,8 +17,11 @@ interface FooterProps {
   user?: User;
 }
 const Footer = ({user}: FooterProps): JSX.Element => {
+
   const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 640px)');
+  // const next = Array.isArray(router.query.next) ? router.query.next.join('') : router.query.next || '/';
+  // const isAdmin = next.includes('admin');
 
   return (
     <Box

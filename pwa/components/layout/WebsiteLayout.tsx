@@ -7,7 +7,9 @@ import LegalNoticesFooter from './LegaNoticesFooter';
 import Box from '@mui/material/Box';
 
 const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
-  const {user} = useAccount({});
+
+    const {user} = useAccount({});
+
   return (
     <Box
       pt={{xs: '60px', md: '80px'}}
