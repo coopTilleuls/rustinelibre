@@ -283,7 +283,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   return (
     <>
       <Head>
-        <title>Inscription</title>
+        <title>Devenir réparateur</title>
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '50%'}}}>
@@ -291,7 +291,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
             <Paper
               elevation={4}
               sx={{
-                maxWidth: 400,
+                maxWidth: 600,
                 p: 4,
                 mt: 4,
                 mb: {xs: 10, md: 12},
@@ -308,7 +308,14 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                   <BuildIcon />
                 </Avatar>
                 <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
-                  Tu es réparateur
+                  Devenir réparateur
+                </Typography>
+                <Typography sx={{mt: 5, fontSize: '1.3em'}} variant="body1">
+                  Tu es réparateur ? <br />
+                  Tu as envie de rejoindre un collectif de pairs sur ton territoire ? <br />
+                  Tu cherches un outil numérique qui te référence et qui te permet de gérer tes rendez-vous avec tes usagers ?<br /><br />
+
+                  Contacte-nous !
                 </Typography>
                 <Box
                   component="form"
