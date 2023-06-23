@@ -7,6 +7,7 @@ namespace App\AutoDiagnostics\Validator;
 use App\Entity\Appointment;
 use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
@@ -28,8 +29,15 @@ class AutoDiagnosticAppointmentValidator extends ConstraintValidator
 
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
+        if (!$currentUser) {
+            throw new AccessDeniedHttpException();
+        }
 
-        if (!$currentUser || (!$currentUser->isAdmin() && $value->customer->id !== $this->security->getUser()->id)) {
+        if ($value->customer && $value->customer->id === $currentUser->id) {
+            return;
+        }
+
+        if ($value->customer && $value->customer->id !== $currentUser->id && !$currentUser->isBoss() && !$currentUser->isEmployee() && !$currentUser->isAdmin()) {
             $this->context->buildViolation($constraint->messageNotYourAppointment)->addViolation();
         }
     }

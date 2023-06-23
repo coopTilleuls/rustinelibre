@@ -175,7 +175,7 @@ class Repairer
     public ?string $gpsPoint;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
     public ?\DateTimeInterface $firstSlotAvailable = null;
 
     #[Assert\Type('string')]

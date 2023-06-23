@@ -7,7 +7,7 @@ import {
     TableCell,
     TableBody,
     TableContainer,
-    CircularProgress, Box, Typography, Button,
+    CircularProgress, Box, Typography, Button, Link,
 } from '@mui/material';
 import {Appointment} from "@interfaces/Appointment";
 import {getDateFromDateAsString, getTimeFromDateAsString} from "@helpers/dateHelper";
@@ -15,6 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ModalShowAppointment from "@components/dashboard/agenda/ModalShowAppointment";
 import AddIcon from "@mui/icons-material/Add";
 import {Repairer} from "@interfaces/Repairer";
+import ModalAppointmentCreate from "@components/dashboard/appointments/ModalAppointmentCreate";
 
 interface DashboardNextAppointmentsProps {
     repairer: Repairer;
@@ -23,10 +24,11 @@ interface DashboardNextAppointmentsProps {
     loadingListNext: boolean
 }
 
-export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNextAppointments, loadingListNext}: DashboardNextAppointmentsProps): JSX.Element => {
+const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNextAppointments, loadingListNext}: DashboardNextAppointmentsProps): JSX.Element => {
 
     const [appointmentSelected, setAppointmentSelected] = useState<Appointment|null>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);
+    const [openModalCreateAppointment, setOpenModalCreateAppointment] = useState<boolean>(false);
 
     const handleCloseModal = async (refresh = true): Promise<void> => {
         setOpenModal(false);
@@ -39,6 +41,12 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
         fetchNextAppointments();
     }, [repairer]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const handleCloseModalCreateAppointment =  async (refresh: boolean = true): Promise<void> => {
+        setOpenModalCreateAppointment(false);
+        if (refresh) {
+            await fetchNextAppointments();
+        }
+    };
     const getAppointmentName = (appointment: Appointment): string => {
         if (appointment.autoDiagnostic) {
             return appointment.autoDiagnostic.prestation;
@@ -68,7 +76,7 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
         <Box>
             <Typography variant="h5">
                 Prochains rendez-vous
-                <Button variant="contained" sx={{float: 'right'}} size="small">
+                <Button variant="contained" sx={{float: 'right'}} size="small" onClick={()=>setOpenModalCreateAppointment(true)}>
                     <AddIcon />
                     Créer un rendez-vous
                 </Button>
@@ -117,6 +125,7 @@ export const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNext
                 </Table>
             </TableContainer>}
 
+            <ModalAppointmentCreate repairer={repairer} appointmentSelectedDate={null} openModal={openModalCreateAppointment} handleCloseModal={handleCloseModalCreateAppointment}/>
             {appointmentSelected && <ModalShowAppointment appointment={appointmentSelected} openModal={openModal} handleCloseModal={handleCloseModal} />}
         </Box>
     );
