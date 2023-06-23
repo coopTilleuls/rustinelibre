@@ -52,7 +52,7 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   const [loading, setLoading] = useState<boolean>(false);
   const [details, setDetails] = useState<boolean>(true);
 
-
+  console.log(repairer.firstSlotAvailable)
 
   const fetchCustomers = async () => {
     const response = await customerResource.getAll(true, {
@@ -84,6 +84,7 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   };
 
   const slotDate = new Date(slotSelected!).toLocaleString('fr-FR', {
+    timeZone: 'UTC',
     weekday: 'long',
     month: 'long',
     day: 'numeric',

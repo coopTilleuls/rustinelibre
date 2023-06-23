@@ -10,36 +10,10 @@ import {appointmentResource} from '@resources/appointmentResource';
 import {EventImpl} from '@fullcalendar/core/internal';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
 import ModalAppointmentCreate from "@components/dashboard/appointments/ModalAppointmentCreate";
+import {getFirstDaysOfMonth} from "@helpers/firstDayOfMonthHelper";
+import {getEndAppointment} from "@helpers/endAppointmentHelper";
 import router from 'next/router';
 import { DatesSetArg } from '@fullcalendar/core';
-const getFirstDaysOfMonth = (): {
-  firstDayOfMonth: string;
-  firstDayOfNextMonth: string;
-} => {
-  const today = new Date();
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const firstDayOfNextMonth = new Date(
-    today.getFullYear(),
-    today.getMonth() + 1,
-    1
-  );
-
-  const firstDayOfMonthFormatted = firstDayOfMonth.toISOString().split('T')[0];
-  const firstDayOfNextMonthFormatted = firstDayOfNextMonth
-    .toISOString()
-    .split('T')[0];
-
-  return {
-    firstDayOfMonth: firstDayOfMonthFormatted,
-    firstDayOfNextMonth: firstDayOfNextMonthFormatted,
-  };
-};
-
-const getEndAppointment = (givenDate: string, duration: number): string => {
-  const date = new Date(givenDate);
-  const updatedDate = new Date(date.getTime() + duration * 60 * 1000);
-  return updatedDate.toISOString();
-};
 
 interface AgendaCalendarProps {
   repairer: Repairer;
@@ -166,7 +140,7 @@ const AgendaCalendar = ({
                 initialView="timeGridDay"
                 initialDate={initialDate}
                 datesSet={handleDateChange}
-                weekends={false}
+                weekends={true}
                 locales={[frLocale]}
                 locale="fr"
                 eventClick={(info) => clickAppointment(info.event)}

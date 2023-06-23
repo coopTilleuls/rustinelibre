@@ -40,7 +40,7 @@ const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeType}: A
             spacing={4}
             display="flex"
             flexDirection="column"
-            alignItems={'center'}>
+            alignItems='center'>
                 <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
                     <InputLabel id="bike-type-label">Type de vélo</InputLabel>
                     <Select
@@ -54,9 +54,9 @@ const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeType}: A
                         <MenuItem disabled value="">
                             Choisissez un type de vélo
                         </MenuItem>
-                        {bikeTypes.map((bike) => (
-                            <MenuItem key={bike.id} value={bike.name}>
-                                {bike.name}
+                        {bikeTypes.map(({id, name}) => (
+                            <MenuItem key={id} value={name}>
+                                {name}
                             </MenuItem>
                         ))}
                     </Select>
