@@ -9,6 +9,7 @@ import LocationCity from '@mui/icons-material/LocationCity';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
+import {link} from 'fs';
 
 interface RepairerPresentationProps {
   repairer: Repairer;
@@ -24,8 +25,12 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
     linkHref = '/';
   } else if (query.appointment) {
     linkHref = '/rendez-vous/mes-rendez-vous';
-  } else {
+  } else if (query.repairerList) {
+    linkHref = '/liste-des-reparateurs';
+  } else if (query.searchRepairer) {
     linkHref = '/reparateur/chercher-un-reparateur';
+  } else {
+    linkHref = '/';
   }
 
   return (
