@@ -34,7 +34,7 @@ const AppointmentCreateAddBikeType = ({selectedBikeType, setSelectedBikeType}: A
 
     return (
         <Stack
-            width={{xs: '100%', sm: '65%', md: '50%'}}
+            width={{xs: '100%', sm: '65%', md: '45%'}}
             py={2}
             mx="auto"
             spacing={4}

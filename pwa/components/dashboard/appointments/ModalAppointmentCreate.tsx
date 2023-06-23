@@ -5,7 +5,7 @@ import {
   Button,
   Stack,
   Typography,
-  Alert,
+  Alert, CircularProgress,
 } from '@mui/material';
 import {customerResource} from '@resources/customerResource';
 import Box from '@mui/material/Box';
@@ -25,6 +25,7 @@ import {autoDiagnosticResource} from "@resources/autoDiagResource";
 import {Appointment} from "@interfaces/Appointment";
 import AppointmentCreateAddComment from './AppointmentCreateAddComment';
 import router from "next/router";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface AppointmentCreateProps {
   repairer: Repairer
@@ -48,6 +49,10 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   const [photo, setPhoto]= useState<MediaObject | null>(null)
   const [newAppointment, setNewAppointment] = useState<Appointment | null>(null)
   const [comment, setComment] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [details, setDetails] = useState<boolean>(true);
+
+
 
   const fetchCustomers = async () => {
     const response = await customerResource.getAll(true, {
@@ -86,7 +91,8 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
     minute: 'numeric',
   });
 
-  const handleCreateAppointment = async (customer: Customer) => {
+  const handleCreateAppointment = async (selectedCustomer: Customer) => {
+    setLoading(true)
     if (!user || !repairer || !selectedCustomer || !slotSelected) {
       return;
     }
@@ -98,8 +104,10 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
     };
 
     setNewAppointment(await appointmentResource.post(requestBody));
+    setLoading(false)
   };
   const handleAddInformations = async ()=>{
+    setLoading(true)
     if (!newAppointment) {
       return;
     }
@@ -130,9 +138,13 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
       }
     await appointmentResource.put(newAppointment['@id'], putRequest)
     }
+    setLoading(false)
+    handleSuccess();
 
+  }
+
+  const handleSuccess = () => {
     setSuccess(true);
-
     setTimeout(async () => {
       handleCloseModal();
       router.push(`/sradmin/agenda?selectedDate=${slotSelected}`)
@@ -142,6 +154,11 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
     }, 3000);
   }
 
+  const handleCreateWithoutDetails = (selectedCustomer: Customer) =>{
+    setDetails(false)
+    handleCreateAppointment(selectedCustomer);
+    handleSuccess()
+  }
   const handleResetStates = () => {
     setSelectedCustomer(null);
     setCustomers([]);
@@ -164,14 +181,16 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
             position={'absolute'}
             top={'50%'}
             left={'50%'}
-            width={{xs: '85%', md: '40%'}}
-            maxWidth={700}
+            width={{xs: '85%', md: '100%'}}
+            maxWidth={900}
             p={4}
             boxShadow={24}
             sx={{
+              overflow: 'scroll',
               backgroundColor: 'background.paper',
               transform: 'translate(-50%, -50%)',
             }}>
+          <CloseIcon sx={{position: 'absolute', top: 10, right : 10, cursor: 'pointer', fontSize: '2em'}} onClick={handleResetStates} />
           <Typography align="justify" sx={{mt: 2}}>
             {`Rendez-vous le ${slotDate} `}
           </Typography>
@@ -194,31 +213,47 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
                           value={customerInput}
                           onChange={(e) => handleCustomerChange(e)}/>
                   )}/>
+                {loading && <CircularProgress />}
                 {selectedCustomer &&
-                <Button onClick={()=>handleCreateAppointment(selectedCustomer)} variant="contained" sx={{my: 2}}>
-                  Créer le rendez vous
-                </Button>
+                <Box sx={{display:'flex', justifyContent:'space-around'}}>
+                  <Button onClick={()=>handleCreateAppointment(selectedCustomer)} variant="contained" sx={{my: 2}}>
+                  Compléter le rendez vous
+                  </Button>
+                  <Button onClick={()=>handleCreateWithoutDetails(selectedCustomer)} variant="outlined" sx={{my: 2}}>
+                  Créer sans ajouter de détails
+                  </Button>
+                </Box>
                 }
               </>
           )}
-          {newAppointment &&(
+          {newAppointment && details &&(
           <Box>
             <Typography align="justify" sx={{mt: 2}}>
               {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
             </Typography>
+            <Box sx={{display:'flex'}}>
             <AppointmentCreateAddPrestation prestation={prestation} setPrestation={setPrestation}/>
             <AppointmentCreateAddBikeType selectedBikeType={selectedBikeType} setSelectedBikeType={setSelectedBikeType}/>
+            </Box>
             <AppointmentCreateAddPhoto photo={photo} setPhoto={setPhoto}/>
             <AppointmentCreateAddComment comment={comment} setComment={setComment}/>
-            <Button onClick={handleAddInformations} variant="contained" sx={{my: 2}}>
-              Enregistrer le rendez vous
-            </Button>
-          </Box>
+              {loading && <CircularProgress />}
+              <Button onClick={handleAddInformations} variant="contained" sx={{my: 2}}>
+                Ajouter les éléments au rendez vous
+              </Button>
+            </Box>
           )}
         {success && (
-          <Alert sx={{width: '100%'}} severity="success">
-            Rendez-vous créé avec succès
-          </Alert>
+            <Box>
+              {!details && newAppointment &&
+                  <Typography align="justify" sx={{mt: 2}}>
+                    {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
+                  </Typography>
+              }
+              <Alert sx={{width: '100%'}} severity="success">
+                Rendez-vous créé avec succès
+              </Alert>
+            </Box>
         )}
         </Stack>
       </Modal>

@@ -119,7 +119,6 @@ const AgendaCalendar = ({
                 default:
                     color = 'grey';
             }
-
             return {
                 title: `${appointment.status === 'pending_repairer' ? '⌛' : ''}️ ${title} ${prestation}`,
                 start: slotTime,
@@ -159,6 +158,7 @@ const AgendaCalendar = ({
     return (
         <>
             {initialDate && <FullCalendar
+                timeZone="Europe/Paris"
                 plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
                 initialView="timeGridDay"
                 initialDate={initialDate}

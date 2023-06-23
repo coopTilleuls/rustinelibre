@@ -74,7 +74,7 @@ const AppointmentCreateAddPhoto = ({photo, setPhoto}: AppointmentCreateAddPhotoP
                             <img
                                 alt="Photo du diagnostic"
                                 src={apiImageUrl(photo.contentUrl)}
-                                style={{cursor: 'pointer', width: '80%', marginLeft: '10%'}}
+                                style={{cursor: 'pointer', width: '50%', marginLeft: '10%'}}
                             />
                         )}
                     </label>

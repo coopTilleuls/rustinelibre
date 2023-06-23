@@ -37,7 +37,10 @@ const AppointmentCreateAddPrestation = ({prestation, setPrestation}: Appointment
 
     return (
         <Stack
+            width={{xs: '100%', sm: '65%', md: '45%'}}
             spacing={4}
+            py={2}
+            mx="auto"
             display="flex"
             flexDirection="column"
             alignItems="center">
