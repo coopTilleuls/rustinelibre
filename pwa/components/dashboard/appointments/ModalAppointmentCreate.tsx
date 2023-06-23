@@ -52,8 +52,6 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   const [loading, setLoading] = useState<boolean>(false);
   const [details, setDetails] = useState<boolean>(true);
 
-  console.log(repairer.firstSlotAvailable)
-
   const fetchCustomers = async () => {
     const response = await customerResource.getAll(true, {
       userSearch: customerInput,
