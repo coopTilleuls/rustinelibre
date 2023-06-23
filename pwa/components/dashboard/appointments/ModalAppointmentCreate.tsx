@@ -31,7 +31,7 @@ interface AppointmentCreateProps {
   repairer: Repairer
   appointmentSelectedDate: string | null;
   openModal: boolean;
-  handleCloseModal: () => void;
+  handleCloseModal: (refresh: boolean) => void;
   handleRedirectToAgenda?: () => void
 }
 
@@ -108,6 +108,7 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   };
   const handleAddInformations = async ()=>{
     setLoading(true)
+    setDetails(true)
     if (!newAppointment) {
       return;
     }
@@ -146,7 +147,7 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   const handleSuccess = () => {
     setSuccess(true);
     setTimeout(async () => {
-      handleCloseModal();
+      handleCloseModal(true);
       router.push(`/sradmin/agenda?selectedDate=${slotSelected}`)
       setSelectedCustomer(null);
       setCustomerInput('');
@@ -168,7 +169,7 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
     setPrestation('');
     setPhoto(null);
     setComment('');
-    handleCloseModal();
+    handleCloseModal(false);
   };
 
   return (
@@ -217,7 +218,7 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
                 {selectedCustomer &&
                 <Box sx={{display:'flex', justifyContent:'space-around'}}>
                   <Button onClick={()=>handleCreateAppointment(selectedCustomer)} variant="contained" sx={{my: 2}}>
-                  Compléter le rendez vous
+                  Créer et Compléter le rendez vous
                   </Button>
                   <Button onClick={()=>handleCreateWithoutDetails(selectedCustomer)} variant="outlined" sx={{my: 2}}>
                   Créer sans ajouter de détails

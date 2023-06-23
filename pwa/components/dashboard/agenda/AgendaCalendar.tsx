@@ -67,9 +67,12 @@ const AgendaCalendar = ({
         }
     };
 
-    const handleCloseModalCreateAppointment = () => {
+    const handleCloseModalCreateAppointment = (refresh: boolean = true) => {
         setOpenModalCreateAppointment(false);
         setSelectedDate('');
+        if (refresh) {
+            buildCalendarEvents(startDate, endDate);
+        }
     };
 
     useEffect(() => {

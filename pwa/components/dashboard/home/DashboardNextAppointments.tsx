@@ -41,8 +41,11 @@ const DashboardNextAppointments = ({repairer, appointmentsNext, fetchNextAppoint
         fetchNextAppointments();
     }, [repairer]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleCloseModalCreateAppointment = () => {
+    const handleCloseModalCreateAppointment =  async (refresh: boolean = true): Promise<void> => {
         setOpenModalCreateAppointment(false);
+        if (refresh) {
+            await fetchNextAppointments();
+        }
     };
     const getAppointmentName = (appointment: Appointment): string => {
         if (appointment.autoDiagnostic) {
