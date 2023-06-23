@@ -12,6 +12,7 @@ import Grid2 from '@mui/material/Unstable_Grid2';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 import useMediaQuery from '@hooks/useMediaQuery';
+import {Divider} from '@mui/material';
 
 export const RepairersResults = (): JSX.Element => {
   const isMobile = useMediaQuery('(max-width: 640px)');
@@ -51,22 +52,27 @@ export const RepairersResults = (): JSX.Element => {
           <Grid2 container spacing={2}>
             {repairers.map((repairer) => {
               return (
-                <Grid2
-                  id={repairer.id}
-                  key={repairer.id}
-                  xs={12}
-                  pt="198px"
-                  mt="-198px">
-                  <RepairerCard
-                    repairer={repairer}
-                    onClick={() =>
-                      router.push({
-                        pathname: `/reparateur/${repairer.id}`,
-                        query: {searchRepairer: 1},
-                      })
-                    }
-                  />
-                </Grid2>
+                <>
+                  <Grid2
+                    id={repairer.id}
+                    key={repairer.id}
+                    xs={12}
+                    pt="198px"
+                    mt="-198px">
+                    <RepairerCard
+                      repairer={repairer}
+                      onClick={() =>
+                        router.push({
+                          pathname: `/reparateur/${repairer.id}`,
+                          query: {searchRepairer: 1},
+                        })
+                      }
+                    />
+                  </Grid2>
+                  {isMobile && (
+                    <Divider sx={{width: '90%', mx: 'auto', mb: 1}} />
+                  )}
+                </>
               );
             })}
           </Grid2>
@@ -95,7 +101,6 @@ export const RepairersResults = (): JSX.Element => {
               if (!repairer.latitude || !repairer.longitude) {
                 return;
               }
-
               return (
                 <Marker
                   key={repairer.id}
