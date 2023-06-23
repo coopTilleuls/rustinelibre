@@ -1,4 +1,5 @@
 import React, {useContext, useState} from 'react';
+import router from 'next/router';
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import {LeafletMouseEvent} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -55,7 +56,15 @@ export const RepairersResults = (): JSX.Element => {
                   xs={12}
                   pt="198px"
                   mt="-198px">
-                  <RepairerCard repairer={repairer} />
+                  <RepairerCard
+                    repairer={repairer}
+                    onClick={() =>
+                      router.push({
+                        pathname: `/reparateur/${repairer.id}`,
+                        query: {searchRepairer: 1},
+                      })
+                    }
+                  />
                 </Grid2>
               );
             })}
