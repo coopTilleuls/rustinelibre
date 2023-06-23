@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
+import {isAdmin, isBoss, isEmployee} from "@helpers/rolesHelpers";
 
 const Login: NextPageWithLayout = ({}) => {
   const [email, setEmail] = useState<string>('');
@@ -25,10 +26,17 @@ const Login: NextPageWithLayout = ({}) => {
   const {user} = useAccount({});
   const {login} = useAuth();
   const router = useRouter();
-  
+  const next = Array.isArray(router.query.next) ? router.query.next.join('') : router.query.next || '/';
+
   useEffect(() => {
     if (user && user.emailConfirmed) {
-      router.push('/');
+      if (isBoss(user) || isEmployee(user)) {
+        router.push('/sradmin');
+      } else if (isAdmin(user)) {
+        router.push('/admin/reparateurs');
+      } else {
+        router.push(next);
+      }
     } else if (user && !user.emailConfirmed) {
       router.push(`/inscription`);
     }
@@ -44,13 +52,7 @@ const Login: NextPageWithLayout = ({}) => {
       password: password,
     });
 
-    if (connectionSuccess) {
-      const next = Array.isArray(router.query.next)
-        ? router.query.next.join('')
-        : router.query.next || '/';
-
-      router.push(next);
-    } else {
+    if (!connectionSuccess) {
       setErrorMessage('Ces identifiants de connexion ne sont pas valides');
     }
 

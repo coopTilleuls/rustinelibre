@@ -15,8 +15,8 @@ interface NavbarDesktopProps {
 
 const NavbarDesktop = ({pages, boss, user, employee, admin, logOut}: NavbarDesktopProps): JSX.Element => {
 
-    const router = useRouter();
-    const { asPath } = router;
+  const router = useRouter();
+  const { asPath } = router;
 
   return (
     <Box

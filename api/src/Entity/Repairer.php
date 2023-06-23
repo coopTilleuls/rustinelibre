@@ -203,7 +203,7 @@ class Repairer
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ, self::REPAIRER_COLLECTION_READ])]
     public ?MediaObject $descriptionPicture = null;
 
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerEmployee::class, orphanRemoval: true)]
