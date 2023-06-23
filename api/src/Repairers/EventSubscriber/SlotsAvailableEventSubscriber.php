@@ -9,13 +9,16 @@ use App\Entity\Appointment;
 use App\Entity\Repairer;
 use App\Entity\RepairerExceptionalClosure;
 use App\Entity\RepairerOpeningHours;
+use App\Entity\User;
 use App\Repairers\Slots\ComputeAvailableSlotsByRepairer;
 use App\Repairers\Slots\FirstSlotAvailableCalculator;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -26,6 +29,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
         private ComputeAvailableSlotsByRepairer $computeAvailableSlotsByRepairer,
         private AppointmentRepository $appointmentRepository,
+        private Security $security
     ) {
     }
 
@@ -79,21 +83,48 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         }
 
         $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($object->repairer);
+        /** @var User $currentUser */
+        $currentUser = $this->security->getUser();
 
-        if (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true)) {
-            throw new BadRequestHttpException('This slot is not available.');
+        // I am simple cyclist
+        if (!$currentUser->isBoss() && !$currentUser->isEmployee()) {
+            // If slot is not available
+            if (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true)) {
+                throw new BadRequestHttpException('This slot is not available.');
+            }
+
+            $this->persistAppointment($object, $slotsAvailable);
+
+            return;
         }
 
-        $this->entityManager->persist($object);
+        // Current user does not have any shop
+        $curentRepairer = $currentUser->repairer ?: ($currentUser->repairerEmployee?->repairer);
+        if (!$curentRepairer) {
+            throw new AccessDeniedHttpException('You should belong a shop to create an appointment');
+        }
+
+        // This shop is not mine
+        if ($curentRepairer !== $object->repairer) {
+            throw new AccessDeniedHttpException('This shop is not yours');
+        }
+
+        $object->status = 'validated';
+        $this->persistAppointment($object, $slotsAvailable);
+    }
+
+    private function persistAppointment(Appointment $appointment, array $slotsAvailable): void
+    {
+        $this->entityManager->persist($appointment);
         $this->entityManager->flush();
 
-        $appointmentsWithRepairerAndSlotTime = $this->appointmentRepository->findBy(['repairer' => $object->repairer, 'slotTime' => $object->slotTime]);
+        $appointmentsWithRepairerAndSlotTime = $this->appointmentRepository->findBy(['repairer' => $appointment->repairer, 'slotTime' => $appointment->slotTime]);
 
-        if (count($appointmentsWithRepairerAndSlotTime) >= $object->repairer->numberOfSlots) {
-            unset($slotsAvailable[$object->slotTime->format('Y-m-d')][array_search($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true)]);
+        if (count($appointmentsWithRepairerAndSlotTime) >= $appointment->repairer->numberOfSlots) {
+            unset($slotsAvailable[$appointment->slotTime->format('Y-m-d')][array_search($appointment->slotTime->format('H:i'), $slotsAvailable[$appointment->slotTime->format('Y-m-d')], true)]);
         }
 
-        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($object->repairer, true, $slotsAvailable);
+        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($appointment->repairer, true, $slotsAvailable);
     }
 
     public function preUpdateAppointment(ViewEvent $event): void

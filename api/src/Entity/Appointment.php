@@ -20,6 +20,7 @@ use App\Appointments\Validator\AppointmentState;
 use App\Bike\Validator\BikeOwner;
 use App\Controller\AppointmentStatusAction;
 use App\Repository\AppointmentRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -116,6 +117,10 @@ class Appointment
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $address = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    public ?string $comment = null;
 
     #[Groups([self::APPOINTMENT_READ])]
     public ?Discussion $discussion = null;
