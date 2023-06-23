@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
 import {RepairerCard} from 'components/repairers/RepairerCard';
+import {PopUpRepairerCard} from 'components/repairers/PopUpRepairerCard';
 import Box from '@mui/material/Box';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
@@ -108,8 +109,19 @@ export const RepairersResults = (): JSX.Element => {
                     },
                   }}>
                   <Popup>
-                    {isMobile && <RepairerCard repairer={repairer} />}
-                    {!isMobile && repairer.name}
+                    {isMobile ? (
+                      <PopUpRepairerCard
+                        repairer={repairer}
+                        onClick={() =>
+                          router.push({
+                            pathname: `/reparateur/${repairer.id}`,
+                            query: {searchRepairer: 1},
+                          })
+                        }
+                      />
+                    ) : (
+                      `${repairer.name}`
+                    )}
                   </Popup>
                 </Marker>
               );
