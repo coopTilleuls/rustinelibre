@@ -164,13 +164,13 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
 
   const handleSuccess = () => {
     setSuccess(true);
+    router.push(`/sradmin/agenda?selectedDate=${slotSelected}`)
     setTimeout(async () => {
       handleCloseModal(true);
-      router.push(`/sradmin/agenda?selectedDate=${slotSelected}`)
       setSelectedCustomer(null);
       setCustomerInput('');
       setSuccess(false)
-    }, 3000);
+    }, 2000);
   }
 
   const handleCreateWithoutDetails = (selectedCustomer: Customer) =>{
