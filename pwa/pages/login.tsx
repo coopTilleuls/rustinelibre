@@ -33,7 +33,7 @@ const Login: NextPageWithLayout = ({}) => {
       if (isBoss(user) || isEmployee(user)) {
         router.push('/sradmin');
       } else if (isAdmin(user)) {
-        router.push('/admin');
+        router.push('/admin/reparateurs');
       } else {
         router.push(next);
       }

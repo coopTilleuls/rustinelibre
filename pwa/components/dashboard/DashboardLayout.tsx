@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useRouter} from 'next/router';
 import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
-import {Box, Toolbar, List, Divider, ListItem, Typography} from '@mui/material';
+import {Box, Toolbar, List, Divider, ListItem, Typography, Button} from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import DashboardSidebarListItem from '@components/dashboard/DashboardSidebarListItem';
@@ -12,7 +12,7 @@ import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import InfoIcon from '@mui/icons-material/Info';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EngineeringIcon from '@mui/icons-material/Engineering';
-import {useAccount} from '@contexts/AuthContext';
+import {useAccount, useAuth} from '@contexts/AuthContext';
 import useMediaQuery from '@hooks/useMediaQuery';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Link from "next/link";
@@ -99,10 +99,16 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     const router = useRouter();
     const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`});
     const isMobile = useMediaQuery('(max-width: 640px)');
+    const {logout} = useAuth();
 
     if (user && !isBoss(user) && !isEmployee(user)) {
         router.push('/');
     }
+
+    const clickLogOut = async () => {
+        await logout();
+        await router.push(`/login?next=${encodeURIComponent(router.asPath)}`);
+    };
 
     return (
         <>
@@ -116,6 +122,10 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                                 </Typography>
                             </ListItem>
                         </List>
+
+                        <Button onClick={clickLogOut} variant="contained" sx={{float: 'right', color: '#1876d2', backgroundColor: 'white', position: 'absolute', right: '10px'}}>
+                            Déconnexion
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 <Box sx={{display: 'flex'}}>

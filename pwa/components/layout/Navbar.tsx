@@ -20,8 +20,6 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
   const [employee, setEmployee] = useState<boolean>(false);
   const [admin, setAdmin] = useState<boolean>(false);
   const {logout} = useAuth();
-  const next = Array.isArray(router.query.next) ? router.query.next.join('') : router.query.next || '/';
-  const isAdmin = next.includes('admin');
 
   useEffect(() => {
 
@@ -47,7 +45,7 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
 
   return (
     <AppBar position="fixed">
-      {!isAdmin && <Toolbar sx={{backgroundColor: 'white'}}>
+      <Toolbar sx={{backgroundColor: 'white'}}>
         <NavbarDesktop
           pages={pages}
           boss={boss}
@@ -67,7 +65,7 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
           logOut={clickLogOut}
           anchorElNav={anchorElNav}
         />
-      </Toolbar>}
+      </Toolbar>
     </AppBar>
   );
 };

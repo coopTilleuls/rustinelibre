@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {useRouter} from 'next/router';
 import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
-import {Box, Toolbar, List, Divider, ListItem, Typography} from '@mui/material';
+import {Box, Toolbar, List, Divider, ListItem, Typography, Button} from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {useAccount} from '@contexts/AuthContext';
+import {useAccount, useAuth} from '@contexts/AuthContext';
 import useMediaQuery from '@hooks/useMediaQuery';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import MessageIcon from '@mui/icons-material/Message';
@@ -100,6 +100,7 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
   const {user} = useAccount({redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`});
   const isMobile = useMediaQuery('(max-width: 640px)');
   const [contactUnread, setContactUnread] = useState<number>(0);
+  const {logout} = useAuth();
 
   if (user && !isAdmin(user)) {
     router.push('/');
@@ -117,6 +118,11 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
       setContactUnread(response['hydra:totalItems']);
   }
 
+  const clickLogOut = async () => {
+    await logout();
+    await router.push(`/login?next=${encodeURIComponent(router.asPath)}`);
+  };
+
   useEffect(() => {
       countContactUnread();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -133,6 +139,10 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
                 </Typography>
               </ListItem>
             </List>
+
+            <Button onClick={clickLogOut} variant="contained" sx={{float: 'right', color: '#1876d2', backgroundColor: 'white', position: 'absolute', right: '10px'}}>
+              Déconnexion
+            </Button>
           </Toolbar>
         </AppBar>
         <Box sx={{display: 'flex'}}>
