@@ -15,7 +15,6 @@ class AppointmentState extends Constraint
         Appointment::CANCEL,
         Appointment::REFUSED,
         Appointment::PENDING_REPAIRER,
-        Appointment::PENDING_CYCLIST,
     ];
 
     public string $message = 'This state is not a valid status';

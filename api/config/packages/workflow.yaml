@@ -12,7 +12,6 @@ framework:
             initial_marking: pending_repairer
             places:
                 - pending_repairer
-                - pending_cyclist
                 - validated
                 - refused
                 - cancel
@@ -20,15 +19,12 @@ framework:
                 validated_by_repairer:
                     from: pending_repairer
                     to:   validated
-                validated_by_cyclist:
-                    from: pending_cyclist
-                    to:   validated
                 refused:
-                    from: [pending_repairer, pending_cyclist]
+                    from: [pending_repairer]
                     to:   refused
                 propose_another_slot:
-                    from: [pending_repairer, pending_cyclist, validated]
-                    to:   pending_cyclist
+                    from: [pending_repairer, validated]
+                    to:   validated
                 cancellation:
-                    from: [pending_repairer, pending_cyclist, validated]
+                    from: [pending_repairer, validated]
                     to:   cancel
