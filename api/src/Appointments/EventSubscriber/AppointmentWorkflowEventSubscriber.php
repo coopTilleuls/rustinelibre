@@ -4,33 +4,25 @@ declare(strict_types=1);
 
 namespace App\Appointments\EventSubscriber;
 
+use App\Emails\ConfirmationEmail;
 use App\Entity\Appointment;
 use App\Entity\User;
 use App\Repairers\Slots\FirstSlotAvailableCalculator;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Workflow\Event\Event;
-use Twig\Environment;
 
 readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private MailerInterface $mailer,
-                                private string $mailerSender,
-                                private KernelInterface $kernel,
-                                private LoggerInterface $logger,
+    public function __construct(private ConfirmationEmail $confirmationEmail,
                                 private EntityManagerInterface $entityManager,
                                 private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
                                 private RequestStack $requestStack,
-                                private Security $security,
-                                private Environment $twig)
+                                private Security $security)
     {
     }
 
@@ -57,7 +49,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment->status = Appointment::VALIDATED;
         $this->entityManager->flush();
 
-        $this->sendAcceptanceEmail($appointment);
+        $this->confirmationEmail->sendConfirmationEmail($appointment);
     }
 
     public function onValidatedByCyclist(Event $event): void
@@ -95,6 +87,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $this->entityManager->flush();
 
         $this->firstSlotAvailableCalculator->setFirstSlotAvailable($appointment->repairer, true);
+        $this->confirmationEmail->sendConfirmationEmail($appointment);
     }
 
     public function onRefused(Event $event): void
@@ -129,26 +122,5 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $this->entityManager->flush();
 
         $this->firstSlotAvailableCalculator->setFirstSlotAvailable($appointment->repairer, true);
-    }
-
-    private function sendAcceptanceEmail(Appointment $appointment): void
-    {
-        if ('test' === $this->kernel->getEnvironment()) {
-            return;
-        }
-
-        $email = (new Email())
-            ->from($this->mailerSender)
-            ->to($appointment->customer->email)
-            ->subject('Votre rendez-vous a été accepté')
-            ->html($this->twig->render('mail/appointment_accepted.html.twig', [
-                'appointment' => $appointment,
-            ]));
-
-        try {
-            $this->mailer->send($email);
-        } catch (\Exception $e) {
-            $this->logger->alert(sprintf('Accepted appointment mail not send: %s', $e->getMessage()));
-        }
     }
 }
