@@ -29,30 +29,6 @@ class AppointmentStatusRefusedTest extends AbstractTestCase
         self::assertSame('refused', $this->appointmentRepository->find($appointment->id)->status);
     }
 
-    public function testCyclistCannotRefuseFromPendingCyclist(): void
-    {
-        $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
-            'json' => [
-                'transition' => 'refused',
-            ],
-        ]);
-        self::assertResponseStatusCodeSame(403);
-        self::assertSame('pending_cyclist', $this->appointmentRepository->find($appointment->id)->status);
-    }
-
-    public function testRepairerCanRefuseFromPendingCyclist(): void
-    {
-        $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
-            'json' => [
-                'transition' => 'refused',
-            ],
-        ]);
-        self::assertResponseIsSuccessful();
-        self::assertSame('refused', $this->appointmentRepository->find($appointment->id)->status);
-    }
-
     public function testCyclistCannotRefuseFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);

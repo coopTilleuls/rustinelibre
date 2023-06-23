@@ -29,18 +29,6 @@ class AppointmentStatusCancellationTest extends AbstractTestCase
         self::assertSame('cancel', $this->appointmentRepository->find($appointment->id)->status);
     }
 
-    public function testRepairerCanCancelFromPendingCyclist(): void
-    {
-        $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
-            'json' => [
-                'transition' => 'cancellation',
-            ],
-        ]);
-        self::assertResponseIsSuccessful();
-        self::assertSame('cancel', $this->appointmentRepository->find($appointment->id)->status);
-    }
-
     public function testRepairerCanCancelFromValidated(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'validated']);
@@ -68,18 +56,6 @@ class AppointmentStatusCancellationTest extends AbstractTestCase
     public function testCyclistCanCancelFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
-        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
-            'json' => [
-                'transition' => 'cancellation',
-            ],
-        ]);
-        self::assertResponseIsSuccessful();
-        self::assertSame('cancel', $this->appointmentRepository->find($appointment->id)->status);
-    }
-
-    public function testCyclistCanCancelFromPendingCyclist(): void
-    {
-        $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
         $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'cancellation',

@@ -89,9 +89,6 @@ export const AgendaCalendar = ({
         case 'pending_repairer':
           color = 'grey';
           break;
-        case 'pending_cyclist':
-          color = 'orange';
-          break;
         case 'cancel':
           color = 'red';
           break;

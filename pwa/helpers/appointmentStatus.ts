@@ -2,8 +2,6 @@ export const getAppointmentStatus = (status: string): string => {
     switch (status) {
         case 'pending_repairer':
             return 'En attente';
-        case 'pending_cyclist':
-            return 'En attente';
         case 'validated':
             return 'Validé';
         case 'refused':
