@@ -66,17 +66,15 @@ const Registration: NextPageWithLayout = ({}) => {
         city: city,
         street: street
       });
-    } catch (e) {
-      setPendingRegistration(false);
-      setErrorMessage('Inscription impossible');
-    } finally {
-      // Directly authenticate this new user
+
       await login({
         email: email,
         password: password
       });
 
       setInscriptionSuccess(true);
+    } catch (e) {
+      setErrorMessage('Inscription impossible');
     }
 
     setPendingRegistration(false);
