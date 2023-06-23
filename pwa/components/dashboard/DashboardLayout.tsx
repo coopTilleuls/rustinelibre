@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useRouter} from 'next/router';
 import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
-import {Box, Toolbar, List, Divider, ListItem, Typography} from '@mui/material';
+import {Box, Toolbar, List, Divider, ListItem, Typography, Button} from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import DashboardSidebarListItem from '@components/dashboard/DashboardSidebarListItem';
@@ -12,7 +12,7 @@ import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import InfoIcon from '@mui/icons-material/Info';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EngineeringIcon from '@mui/icons-material/Engineering';
-import {useAccount} from '@contexts/AuthContext';
+import {useAccount, useAuth} from '@contexts/AuthContext';
 import useMediaQuery from '@hooks/useMediaQuery';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Link from "next/link";
@@ -96,112 +96,124 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({children}: DashboardLayoutProps) => {
     const theme = useTheme();
-    const {user} = useAccount({redirectIfNotFound: '/login'});
     const router = useRouter();
+    const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`});
     const isMobile = useMediaQuery('(max-width: 640px)');
+    const {logout} = useAuth();
 
     if (user && !isBoss(user) && !isEmployee(user)) {
         router.push('/');
     }
 
+    const clickLogOut = async () => {
+        await logout();
+        await router.push(`/login?next=${encodeURIComponent(router.asPath)}`);
+    };
+
     return (
         <>
-            <AppBar position="sticky" open={!isMobile}>
-                <Toolbar>
-                    <List>
-                        <ListItem key="1" disablePadding>
-                            <Typography fontWeight={600}>
-                                Bonjour {user?.firstName} !
-                            </Typography>
-                        </ListItem>
-                    </List>
-                </Toolbar>
-            </AppBar>
-            <Box sx={{display: 'flex'}}>
-                <Drawer variant={'permanent'} open={!isMobile} anchor="left">
-                    <DrawerHeader>
-                        <Link href="/" style={{textDecoration: 'none'}}>
-                            <Typography
-                                color="primary"
-                                sx={{
-                                    fontSize: 17,
-                                    fontWeight: 600,
-                                }}>
-                                La Rustine Libre
-                            </Typography>
-                        </Link>
-                    </DrawerHeader>
-                    <Divider />
-                    <List>
-                        <DashboardSidebarListItem
-                            text="Tableau de bord"
-                            open={true}
-                            icon={<HomeIcon />}
-                            path="/sradmin"
-                        />
-                        <DashboardSidebarListItem
-                            text="Agenda"
-                            open={true}
-                            icon={<CalendarMonthIcon />}
-                            path="/sradmin/agenda"
-                        />
-                        {user && isItinerant(user) && <DashboardSidebarListItem
-                            text="Tournée"
-                            open={true}
-                            icon={<RouteIcon />}
-                            path="/sradmin/tour"
-                        />}
-                        <DashboardSidebarListItem
-                            text="Messages"
-                            open={true}
-                            icon={<ForumIcon />}
-                            path="/sradmin/messagerie"
-                        />
-                        <DashboardSidebarListItem
-                            text="Clients"
-                            open={true}
-                            icon={<FolderSharedIcon />}
-                            path="/sradmin/clients"
-                        />
-                        {user && isBoss(user) &&
+            {user && <Box>
+                <AppBar position="sticky" open={!isMobile}>
+                    <Toolbar>
+                        <List>
+                            <ListItem key="1" disablePadding>
+                                <Typography fontWeight={600}>
+                                    Bonjour {user?.firstName} !
+                                </Typography>
+                            </ListItem>
+                        </List>
+
+                        <Button onClick={clickLogOut} variant="contained" sx={{float: 'right', color: '#1876d2', backgroundColor: 'white', position: 'absolute', right: '10px'}}>
+                            Déconnexion
+                        </Button>
+                    </Toolbar>
+                </AppBar>
+                <Box sx={{display: 'flex'}}>
+                    <Drawer variant={'permanent'} open={!isMobile} anchor="left">
+                        <DrawerHeader>
+                            <Link href="/" style={{textDecoration: 'none'}}>
+                                <Typography
+                                    color="primary"
+                                    sx={{
+                                        fontSize: 17,
+                                        fontWeight: 600,
+                                    }}>
+                                    La Rustine Libre
+                                </Typography>
+                            </Link>
+                        </DrawerHeader>
+                        <Divider />
+                        <List>
                             <DashboardSidebarListItem
-                                text="Paramètres Agenda"
+                                text="Tableau de bord"
                                 open={true}
-                                icon={<HandymanIcon />}
-                                path="/sradmin/agenda/parametres"
+                                icon={<HomeIcon />}
+                                path="/sradmin"
                             />
-                        }
-                        {user && isBoss(user) &&
                             <DashboardSidebarListItem
-                                text="Employés"
+                                text="Agenda"
                                 open={true}
-                                icon={<EngineeringIcon />}
-                                path="/sradmin/employes"
+                                icon={<CalendarMonthIcon />}
+                                path="/sradmin/agenda"
                             />
-                        }
-                    </List>
-                    <Divider />
-                    <List>
-                        {user && isBoss(user) &&
+                            {user && isItinerant(user) && <DashboardSidebarListItem
+                                text="Tournée"
+                                open={true}
+                                icon={<RouteIcon />}
+                                path="/sradmin/tour"
+                            />}
+                            <DashboardSidebarListItem
+                                text="Messages"
+                                open={true}
+                                icon={<ForumIcon />}
+                                path="/sradmin/messagerie"
+                            />
+                            <DashboardSidebarListItem
+                                text="Clients"
+                                open={true}
+                                icon={<FolderSharedIcon />}
+                                path="/sradmin/clients"
+                            />
+                            {user && isBoss(user) &&
                                 <DashboardSidebarListItem
-                                text="Informations"
+                                    text="Paramètres Agenda"
+                                    open={true}
+                                    icon={<HandymanIcon />}
+                                    path="/sradmin/agenda/parametres"
+                                />
+                            }
+                            {user && isBoss(user) &&
+                                <DashboardSidebarListItem
+                                    text="Employés"
+                                    open={true}
+                                    icon={<EngineeringIcon />}
+                                    path="/sradmin/employes"
+                                />
+                            }
+                        </List>
+                        <Divider />
+                        <List>
+                            {user && isBoss(user) &&
+                                    <DashboardSidebarListItem
+                                    text="Informations"
+                                    open={true}
+                                    icon={<InfoIcon />}
+                                    path="/sradmin/informations"
+                                />
+                            }
+                            <DashboardSidebarListItem
+                                text="Retourner sur le site"
                                 open={true}
-                                icon={<InfoIcon />}
-                                path="/sradmin/informations"
+                                icon={<ArrowBackIcon />}
+                                path="/"
                             />
-                        }
-                        <DashboardSidebarListItem
-                            text="Retourner sur le site"
-                            open={true}
-                            icon={<ArrowBackIcon />}
-                            path="/"
-                        />
-                    </List>
-                </Drawer>
-                <Box sx={{flexGrow: 1}} p={3}>
-                    {children}
+                        </List>
+                    </Drawer>
+                    <Box sx={{flexGrow: 1}} p={3}>
+                        {children}
+                    </Box>
                 </Box>
-            </Box>
+            </Box>}
         </>
     );
 };
