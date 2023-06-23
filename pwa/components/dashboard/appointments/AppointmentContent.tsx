@@ -70,8 +70,8 @@ const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentCon
 
         const date = new Date(appointment.slotTime);
         const currentDate = new Date();
-        if (date < currentDate && (appointment.status === 'pending_repairer' || appointment.status === 'pending_cyclist')) {
-           const appointmentUpdate = await appointmentResource.updateAppointmentStatus(appointment.id, {
+        if (date < currentDate && appointment.status === 'pending_repairer') {
+           const appointmentUpdate = await appointmentResoudrce.updateAppointmentStatus(appointment.id, {
                transition: 'cancellation'
            })
 

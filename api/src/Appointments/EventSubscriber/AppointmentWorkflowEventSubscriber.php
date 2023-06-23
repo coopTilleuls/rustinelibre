@@ -90,7 +90,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             throw new BadRequestHttpException(sprintf('You should provide a new slotTime in your body request for the transition : %s', $event->getTransition()->getName()));
         }
 
-        $appointment->status = Appointment::PENDING_CYCLIST;
+        $appointment->status = Appointment::VALIDATED;
         $appointment->slotTime = new \DateTimeImmutable($contentRequest['slotTime']);
         $this->entityManager->flush();
 
