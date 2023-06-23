@@ -150,6 +150,9 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
                   </List>
                 </Box>
               )}
+              <Button variant="contained" onClick={handleOpenModal}>
+                <AddIcon /> Ajouter un vélo
+              </Button>
               <Grid2 container sx={{width: '100%', py: 6}} spacing={4}>
                 {bikes.length
                   ? !loading &&
@@ -162,9 +165,6 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
                     })
                   : null}
               </Grid2>
-              <Button variant="contained" onClick={handleOpenModal}>
-                <AddIcon /> Ajouter un vélo
-              </Button>
               <ModalAddBike
                 openModal={openModal}
                 handleCloseModal={handleCloseModal}
