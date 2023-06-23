@@ -15,7 +15,6 @@ interface AppointmentCreateAddPrestationProps {
 }
 
 const AppointmentCreateAddPrestation = ({prestation, setPrestation}: AppointmentCreateAddPrestationProps): JSX.Element => {
-    const [loading, setLoading] = useState<boolean>(false);
     const [interventions, setInterventions] = useState<Intervention[]>([]);
 
     const handleChangePrestation = (event: SelectChangeEvent): void => {
@@ -23,12 +22,10 @@ const AppointmentCreateAddPrestation = ({prestation, setPrestation}: Appointment
     };
 
     const fetchInterventions = async () => {
-        setLoading(true);
         const interventionsFetch = await interventionResource.getAll(false, {
             isAdmin: true
         });
         setInterventions(interventionsFetch['hydra:member']);
-        setLoading(false);
     };
 
     useEffect(() => {

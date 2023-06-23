@@ -26,6 +26,7 @@ import {Appointment} from "@interfaces/Appointment";
 import AppointmentCreateAddComment from './AppointmentCreateAddComment';
 import router from "next/router";
 import CloseIcon from "@mui/icons-material/Close";
+import {dateObjectAsString, getDateTimeZoned} from "@helpers/dateHelper";
 
 interface AppointmentCreateProps {
   repairer: Repairer
@@ -51,6 +52,7 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   const [comment, setComment] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [details, setDetails] = useState<boolean>(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchCustomers = async () => {
     const response = await customerResource.getAll(true, {
@@ -69,7 +71,9 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
     if (selectedDate){
       setSlotSelected(selectedDate)
     } else {
-      setSlotSelected(repairer.firstSlotAvailable)
+      const date = getDateTimeZoned( repairer.firstSlotAvailable)
+      const stringDate = dateObjectAsString(date)
+      setSlotSelected(stringDate)
     }
   }, [repairer.firstSlotAvailable, selectedDate]);
 
@@ -82,7 +86,6 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
   };
 
   const slotDate = new Date(slotSelected!).toLocaleString('fr-FR', {
-    timeZone: 'UTC',
     weekday: 'long',
     month: 'long',
     day: 'numeric',
@@ -102,9 +105,16 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
       customer: selectedCustomer['@id'],
     };
 
-    setNewAppointment(await appointmentResource.post(requestBody));
+    try {
+     const appointment = await appointmentResource.post(requestBody);
+     setNewAppointment(appointment)
+    } catch (e) {
+      setErrorMessage('Création du rendez-vous impossible, veuillez réessayer');
+    }
+
     setLoading(false)
   };
+
   const handleAddInformations = async ()=>{
     setLoading(true)
     setDetails(true)
@@ -123,12 +133,16 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
         requestBody['photo'] = photo['@id'];
       }
 
-      await autoDiagnosticResource.post(requestBody
-      );
+      try {
+        await autoDiagnosticResource.post(requestBody);
+      } catch (e) {
+        setErrorMessage('Ajout d\'autodiagnostic impossible, veuillez réessayer');
+      }
+
     }
-    if(selectedBikeType || comment) {
-      const putRequest: RequestBody = {
-      };
+
+    if (selectedBikeType || comment) {
+      const putRequest: RequestBody = {};
 
       if (selectedBikeType) {
         putRequest['bikeType'] = selectedBikeType['@id'];
@@ -136,11 +150,16 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
       if (comment) {
         putRequest['comment'] = comment;
       }
-    await appointmentResource.put(newAppointment['@id'], putRequest)
+
+      try {
+        await appointmentResource.put(newAppointment['@id'], putRequest)
+      } catch (e) {
+        setErrorMessage('mise à jour du rendez-vous impossible, veuillez réessayer');
+      }
+
     }
     setLoading(false)
     handleSuccess();
-
   }
 
   const handleSuccess = () => {
@@ -254,6 +273,11 @@ const ModalAppointmentCreate = ({repairer, appointmentSelectedDate, openModal, h
                 Rendez-vous créé avec succès
               </Alert>
             </Box>
+        )}
+        {errorMessage && (
+            <Typography color="error" textAlign="center" sx={{pt: 4}}>
+              {errorMessage}
+            </Typography>
         )}
         </Stack>
       </Modal>
