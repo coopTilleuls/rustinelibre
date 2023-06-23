@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Appointments\Serializer;
 
 use App\Entity\Appointment;
-use App\Entity\Discussion;
-use App\Repository\DiscussionRepository;
+use App\Messages\Helpers\DiscussionManager;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -17,7 +16,7 @@ final class AppointmentDiscussionNormalizer implements NormalizerInterface, Norm
 
     private const ALREADY_CALLED = 'APPOINTMENT_NORMALIZER_ALREADY_CALLED';
 
-    public function __construct(private readonly DiscussionRepository $discussionRepository)
+    public function __construct(private readonly DiscussionManager $discussionManager)
     {
     }
 
@@ -28,24 +27,10 @@ final class AppointmentDiscussionNormalizer implements NormalizerInterface, Norm
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $discussion = $this->getOrCreateDiscussion($object);
+        $discussion = $this->discussionManager->getOrCreateDiscussion($object);
         $object->discussion = $discussion;
 
         return $this->normalizer->normalize($object, $format, $context);
-    }
-
-    private function getOrCreateDiscussion(Appointment $appointment): Discussion
-    {
-        $discussion = $this->discussionRepository->findOneBy(['repairer' => $appointment->repairer, 'customer' => $appointment->customer]);
-
-        if (!$discussion) {
-            $discussion = new Discussion();
-            $discussion->repairer = $appointment->repairer;
-            $discussion->customer = $appointment->customer;
-            $this->discussionRepository->save($discussion, true);
-        }
-
-        return $discussion;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool
