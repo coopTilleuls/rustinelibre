@@ -32,15 +32,13 @@ readonly class ConfirmationEmail
 
         $email = (new Email())
             ->from($this->mailerSender)
-            // ->to($appointment->customer->email)
-            ->to('clement@les-tilleuls.coop')
+            ->to($appointment->customer->email)
             ->subject('Votre rendez-vous est confirmé')
             ->html($this->twig->render('mail/appointment_accepted.html.twig', [
                 'appointment' => $appointment,
                 'discussionUrl' => sprintf('%s/messagerie/%s', $this->webAppUrl, $this->discussionManager->getOrCreateDiscussion($appointment)->id),
                 'annulationUrl' => sprintf('%s/annulation/%s', $this->webAppUrl, $appointment->id),
             ]));
-
         try {
             $this->mailer->send($email);
         } catch (\Exception $e) {
