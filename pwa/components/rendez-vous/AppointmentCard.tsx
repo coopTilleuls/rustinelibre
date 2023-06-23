@@ -22,7 +22,6 @@ export const AppointmentCard = ({appointment, future, fetchAppointments}: Appoin
 
     const [loading, setLoading] = useState<boolean>(false);
 
-
     const cancelAppointment = async (appointment: Appointment) => {
 
         setLoading(true);
@@ -40,6 +39,7 @@ export const AppointmentCard = ({appointment, future, fetchAppointments}: Appoin
                 boxShadow: 0,
                 border: (theme) => `4px solid ${theme.palette.grey[300]}`,
                 display: 'flex',
+                height: '200px'
             }}
         >
             <CardMedia
@@ -76,15 +76,19 @@ export const AppointmentCard = ({appointment, future, fetchAppointments}: Appoin
                         </Typography>
                     </div>
                     <div>
-                        <Typography
-                            color="text.secondary"
-                            fontSize={{xs: 12, md: 16}}
-                            fontWeight={300}>
-                            Réparateur :
+                        <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
+                            {appointment.repairer.name}
                         </Typography>
-                        <Typography color="text.secondary" fontSize={{xs: 12, md: 16}}>
-                            <strong>{appointment.repairer.name}</strong>
+                        <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
+                            {appointment.repairer.streetNumber}
+                            {appointment.repairer.street},
+                            {appointment.repairer.postcode}
+                            {appointment.repairer.city}
                         </Typography>
+                        {appointment.autoDiagnostic && <Typography color="text.secondary" fontSize={{xs: 12, md: 16, mt: 10}}>
+                            {appointment.autoDiagnostic.prestation}
+                            </Typography>
+                        }
                     </div>
                     <Box sx={{display: 'inline-flex'}}>
                         {future && <Box>
