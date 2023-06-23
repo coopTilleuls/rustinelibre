@@ -56,7 +56,6 @@ class Appointment
     public const APPOINTMENT_WRITE = 'appointment_write';
 
     public const PENDING_REPAIRER = 'pending_repairer';
-    public const PENDING_CYCLIST = 'pending_cyclist';
     public const VALIDATED = 'validated';
     public const REFUSED = 'refused';
     public const CANCEL = 'cancel';

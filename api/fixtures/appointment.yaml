@@ -11,16 +11,11 @@ App\Entity\Appointment:
     customer: '@user_<numberBetween(10, 20)>'
     repairer: '@repairer_13'
     slotTime: <dateTimeImmutableFromInterval('+1 month')>
-  appointment_pending_repairer_{1..10}:
+  appointment_pending_repairer_{1..20}:
     customer: '@user_<numberBetween(10, 20)>'
     repairer: '@repairer_<numberBetween(2, 20)>'
     slotTime: <dateTimeImmutableFromInterval('+1 day')>
     status: 'pending_repairer'
-  appointment_pending_cyclist_{1..10}:
-    customer: '@user_<numberBetween(10, 20)>'
-    repairer: '@repairer_<numberBetween(2, 20)>'
-    slotTime: <dateTimeImmutableFromInterval('+1 day')>
-    status: 'pending_cyclist'
   appointment_validated_{1..10}:
     customer: '@user_<numberBetween(10, 20)>'
     repairer: '@repairer_<numberBetween(2, 20)>'

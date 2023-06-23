@@ -59,7 +59,6 @@ class AppointmentRepository extends ServiceEntityRepository
             'end_date' => $end,
             'numberOfSlots' => $repairer->numberOfSlots ?? 1,
             'excludeStates' => [
-                Appointment::PENDING_CYCLIST,
                 Appointment::PENDING_REPAIRER,
                 Appointment::VALIDATED,
             ],
@@ -95,11 +94,10 @@ class AppointmentRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('a')
             ->andWhere('a.slotTime <= :now')
-            ->orWhere('(a.createdAt IS NOT NULL AND a.createdAt <= :back72Hours) AND (a.status = :pendingRepairer OR a.status = :pendingCyclist)')
+            ->orWhere('(a.createdAt IS NOT NULL AND a.createdAt <= :back72Hours) AND (a.status = :pendingRepairer)')
             ->setParameter('now', $now)
             ->setParameter('back72Hours', $back72Hours)
             ->setParameter('pendingRepairer', Appointment::PENDING_REPAIRER)
-            ->setParameter('pendingCyclist', Appointment::PENDING_CYCLIST)
             ->getQuery()
             ->getResult()
         ;

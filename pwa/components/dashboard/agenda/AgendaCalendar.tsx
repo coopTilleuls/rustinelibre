@@ -71,10 +71,12 @@ const AgendaCalendar = ({
         });
         const appointments = appointmentsFetch['hydra:member'];
 
-        const appointmentsEvents = appointments.map((appointment) => {
-            const {customer, autoDiagnostic, slotTime} = appointment;
-            const title: string = customer ? `${customer.firstName} ${customer.lastName}` : 'Nom inconnu';
-            const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
+    const appointmentsEvents = appointments.map((appointment) => {
+      const {customer, autoDiagnostic, slotTime} = appointment;
+      const title: string = customer
+        ? `${customer.firstName} ${customer.lastName}`
+        : 'Nom inconnu';
+      const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
 
             let color;
             switch (appointment.status) {
@@ -120,10 +122,10 @@ const AgendaCalendar = ({
             return;
         }
 
-        setStartDate(payload.startStr)
-        setEndDate(payload.endStr)
-        buildCalendarEvents(payload.startStr, payload.endStr);
-    };
+    setStartDate(payload.startStr);
+    setEndDate(payload.endStr);
+    buildCalendarEvents(payload.startStr, payload.endStr);
+  };
 
     const handleDateClick = (arg: DateClickArg) => {
         if (arg) {

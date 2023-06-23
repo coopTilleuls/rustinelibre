@@ -29,18 +29,6 @@ class AppointmentStatusValidateByRepairerTest extends AbstractTestCase
         self::assertSame('validated', $this->appointmentRepository->find($appointment->id)->status);
     }
 
-    public function testRepairerCannotValidateFromPendingCyclist(): void
-    {
-        $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_cyclist']);
-        $this->createClientWithUser($appointment->repairer->owner)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
-            'json' => [
-                'transition' => 'validated_by_repairer',
-            ],
-        ]);
-        self::assertResponseStatusCodeSame(400);
-        self::assertNotSame('validated', $this->appointmentRepository->find($appointment->id)->status);
-    }
-
     public function testRepairerCannotValidateFromRefuse(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'refused']);
