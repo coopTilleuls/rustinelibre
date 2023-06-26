@@ -11,20 +11,23 @@ import {
   Avatar,
   Typography,
   CircularProgress,
-  Paper, TextField,
+  Paper,
+  TextField,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import UserForm from '@components/profile/UserForm';
-import {useRouter} from "next/router";
-import {User} from "@interfaces/User";
+import {useRouter} from 'next/router';
+import {User} from '@interfaces/User';
+import UserForm from '@components/form/UserForm';
 
 const Registration: NextPageWithLayout = ({}) => {
-
-  const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
+  const [pendingRegistration, setPendingRegistration] =
+    useState<boolean>(false);
   const [pendingValidation, setPendingValidation] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [errorMessageValidation, setErrorMessageValidation] = useState<string | null>(null);
+  const [errorMessageValidation, setErrorMessageValidation] = useState<
+    string | null
+  >(null);
   const [code, setCode] = useState<string>('');
   const {user} = useAccount({});
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
@@ -34,12 +37,12 @@ const Registration: NextPageWithLayout = ({}) => {
   useEffect(() => {
     if (user && user.emailConfirmed) {
       const next = Array.isArray(router.query.next)
-          ? router.query.next.join('')
-          : router.query.next || '/';
+        ? router.query.next.join('')
+        : router.query.next || '/';
 
       router.push(next);
     } else if (user && !user.emailConfirmed) {
-        setInscriptionSuccess(true);
+      setInscriptionSuccess(true);
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -64,12 +67,12 @@ const Registration: NextPageWithLayout = ({}) => {
         email: email,
         plainPassword: password,
         city: city,
-        street: street
+        street: street,
       });
 
       await login({
         email: email,
-        password: password
+        password: password,
       });
 
       setInscriptionSuccess(true);
@@ -90,7 +93,7 @@ const Registration: NextPageWithLayout = ({}) => {
     }
   };
 
-  const handleValidCode = async() => {
+  const handleValidCode = async () => {
     setPendingValidation(true);
     try {
       const userUpdate: User = await userResource.validCode({
@@ -103,7 +106,7 @@ const Registration: NextPageWithLayout = ({}) => {
     }
 
     setPendingValidation(false);
-  }
+  };
 
   return (
     <>
@@ -168,24 +171,31 @@ const Registration: NextPageWithLayout = ({}) => {
                 textAlign: 'justify',
               }}>
               <Box>
-                Veuillez indiquer le code de confirmation envoyé par email pour finaliser votre inscription.
+                Veuillez indiquer le code de confirmation envoyé par email pour
+                finaliser votre inscription.
                 <br />
                 <TextField
-                    label="Code de validation"
-                    type="number"
-                    value={code}
-                    onChange={handleChangeCode}
-                    onKeyDown={handleKeyDown}
-                    inputProps={{ maxLength: 4 }}
-                    sx={{marginLeft: '15%', marginTop: '20px'}}
-                /><br />
-                <Button disabled={code.length < 4} sx={{marginLeft: '30%', marginTop: '20px'}} variant="contained" color="primary" onClick={handleValidCode}>
+                  label="Code de validation"
+                  type="number"
+                  value={code}
+                  onChange={handleChangeCode}
+                  onKeyDown={handleKeyDown}
+                  inputProps={{maxLength: 4}}
+                  sx={{marginLeft: '15%', marginTop: '20px'}}
+                />
+                <br />
+                <Button
+                  disabled={code.length < 4}
+                  sx={{marginLeft: '30%', marginTop: '20px'}}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleValidCode}>
                   {pendingValidation ? <CircularProgress /> : 'Valider'}
                 </Button>
                 {errorMessageValidation && (
-                    <Typography variant="body1" color="error">
-                      {errorMessageValidation}
-                    </Typography>
+                  <Typography variant="body1" color="error">
+                    {errorMessageValidation}
+                  </Typography>
                 )}
               </Box>
             </Paper>
