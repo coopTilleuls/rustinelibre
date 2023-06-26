@@ -64,7 +64,7 @@ const EditRepairer: NextPageWithLayout = () => {
                 sx={{marginLeft: '20%', marginRight: '5%'}}>
 
                 {loading && <CircularProgress />}
-                {!loading && repairer && <InformationsContainer repairerTypes={repairerTypes} bikeTypes={bikeTypes} repairerFetch={repairer} fetchRepairer={fetchRepairer} />}
+                {!loading && repairer && <InformationsContainer repairerTypes={repairerTypes} bikeTypes={bikeTypes} repairerFetch={repairer} />}
             </Box>
         </>
     );
