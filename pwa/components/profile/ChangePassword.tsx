@@ -10,6 +10,7 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
+import {authenticationResource} from "@resources/authenticationResource";
 
 const UpdatePassword = (): JSX.Element => {
   const {user} = useAccount({redirectIfNotFound: '/login'});
@@ -37,15 +38,16 @@ const UpdatePassword = (): JSX.Element => {
     setErrorMessage(null);
     setPendingLogin(true);
 
-    const connectionSuccess = await login({
+
+    const response = await authenticationResource.checkCurrentPassword({
       email: email,
       password: oldPassword,
     });
 
-    if (connectionSuccess) {
+    if (response.ok) {
       setSuccessOldPassword(true);
     } else {
-      setErrorMessage('Ces identifiants de connexion ne sont pas valides');
+      setErrorMessage('Ce mot de passe n\'est pas valide');
     }
 
     setPendingLogin(false);
@@ -168,11 +170,6 @@ const UpdatePassword = (): JSX.Element => {
                   <CircularProgress size={20} sx={{color: 'white'}} />
                 )}
               </Button>
-              {errorMessage && (
-                <Typography variant="body1" color="error">
-                  {errorMessage}
-                </Typography>
-              )}
             </Box>
           )}
         </Box>
@@ -225,7 +222,7 @@ const UpdatePassword = (): JSX.Element => {
               variant="contained"
               sx={{
                 mt: 3,
-                textTransform: 'capitalize',
+                textTransform: 'none',
                 width: {xs: '100%', md: 'auto'},
               }}>
               {!pendingLogin ? (
