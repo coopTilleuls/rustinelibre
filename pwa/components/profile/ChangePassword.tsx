@@ -44,8 +44,6 @@ const UpdatePassword = (): JSX.Element => {
       password: oldPassword,
     });
 
-    console.log(response.ok);
-
     if (response.ok) {
       setSuccessOldPassword(true);
     } else {
