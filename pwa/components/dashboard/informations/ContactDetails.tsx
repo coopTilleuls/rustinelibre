@@ -49,7 +49,6 @@ export const ContactDetails = ({
   } = useContext(RepairerFormContext);
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [loading, setLoading] = useState<boolean>(false);
-  const [initialCity, setInitialCity] = useState<City | null>(null);
 
   useEffect(() => {
     if (repairer) {
@@ -62,14 +61,15 @@ export const ContactDetails = ({
   }, [repairer, setName, setStreet, setCityInput]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!initialCity && repairer && repairer.city){
-      fetchCitiesResult(repairer.city);
-      citiesList.forEach((city: City) => {
-        if (city.name === repairer.city && city.postcode === repairer.postcode) {
-          setInitialCity(city);
-        }
-      });
-      setCitiesList([]);
+    if (!city && repairer && repairer.city && repairer.postcode){
+      setCity({
+        formatted_name: `${repairer.city} (${repairer.postcode})`,
+        id: 0,
+        lat: 0,
+        lon: 0,
+        name: repairer.city,
+        postcode: repairer.postcode,
+      } as City)
     }
   });
 
@@ -191,7 +191,7 @@ export const ContactDetails = ({
                 <Autocomplete
                     sx={{mt: 2, mb: 1, p: 0}}
                     freeSolo
-                    value={city ?? initialCity}
+                    value={city}
                     options={citiesList}
                     getOptionLabel={(city) =>
                         typeof city === 'string'
