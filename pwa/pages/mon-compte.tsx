@@ -4,7 +4,7 @@ import Head from 'next/head';
 import {Typography, Box, CircularProgress, Container} from '@mui/material';
 import {useAccount} from '@contexts/AuthContext';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import UserForm from '@components/profile/UserForm';
+import MyAccountForm from '@components/profile/MyAccountForm';
 import ChangePassword from '@components/profile/ChangePassword';
 
 const MyProfile: NextPageWithLayout = () => {
@@ -34,7 +34,7 @@ const MyProfile: NextPageWithLayout = () => {
                 fontWeight={600}>
                 Mon Compte
               </Typography>
-              <UserForm user={user} />
+              <MyAccountForm user={user} />
               <ChangePassword />
             </Box>
           )}
