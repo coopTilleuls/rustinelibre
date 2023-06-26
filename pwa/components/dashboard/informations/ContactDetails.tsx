@@ -17,7 +17,6 @@ import {
 } from '@interfaces/City';
 import {Alert, Button, CircularProgress, Typography, Box} from "@mui/material";
 import {RequestBody} from "@interfaces/Resource";
-import {repairerResource} from "@resources/repairerResource";
 
 interface ContactDetailsProps {
   repairer: Repairer | null;
@@ -52,26 +51,24 @@ export const ContactDetails = ({
 
   useEffect(() => {
     if (repairer) {
-      setName(repairer.name ? repairer.name : '');
-      setStreet(repairer.street ? repairer.street : '');
-      setStreetNumber(repairer.streetNumber ? repairer.streetNumber : '');
-      setCityInput(repairer.city ? repairer.city : '');
-      setMobilePhone(repairer.mobilePhone ? repairer.mobilePhone : '');
+      setName(repairer.name ?? '');
+      setStreet(repairer.street ?? '');
+      setStreetNumber(repairer.streetNumber ?? '');
+      setCityInput(repairer.city ?? '');
+      setMobilePhone(repairer.mobilePhone ?? '');
+
+      if (!city && repairer.city && repairer.postcode){
+        setCity({
+          formatted_name: `${repairer.city} (${repairer.postcode})`,
+          id: 0,
+          lat: 0,
+          lon: 0,
+          name: repairer.city,
+          postcode: repairer.postcode,
+        } as City)
+      }
     }
   }, [repairer, setName, setStreet, setCityInput]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (!city && repairer && repairer.city && repairer.postcode){
-      setCity({
-        formatted_name: `${repairer.city} (${repairer.postcode})`,
-        id: 0,
-        lat: 0,
-        lon: 0,
-        name: repairer.city,
-        postcode: repairer.postcode,
-      } as City)
-    }
-  });
 
   const fetchCitiesResult = useCallback(async (cityStr: string) => {
       const citiesResponse = await searchCity(cityStr, useNominatim);
@@ -81,11 +78,11 @@ export const ContactDetails = ({
     [setCitiesList, useNominatim]
   );
 
-  useEffect(() => {
-    if (cityInput === '' || cityInput.length < 3) {
+  const handleCityChange = (value: string): void => {
+    if (value === '' || value.length < 3) {
       setCitiesList([]);
-    } else fetchCitiesResult(cityInput);
-  }, [setCitiesList, fetchCitiesResult, cityInput]);
+    } else fetchCitiesResult(value);
+  };
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void => {
     setName(event.target.value);
@@ -200,7 +197,7 @@ export const ContactDetails = ({
                     }
                     onChange={(event, value) => handleCitySelect(event, value)}
                     onInputChange={(event, value) => {
-                      setCityInput(value);
+                      handleCityChange(value);
                     }}
                     renderInput={(params) => (
                         <TextField
