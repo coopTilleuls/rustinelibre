@@ -103,8 +103,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setCity,
     citiesList,
     setCitiesList,
-    timeoutId,
-    setTimeoutId,
     pendingRegistration,
     setPendingRegistration,
     errorMessage,
