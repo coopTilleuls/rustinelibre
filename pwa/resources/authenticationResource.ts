@@ -25,6 +25,20 @@ class AuthenticationResource extends AbstractResource<AuthenticationResponse> {
 
     return await this.getResult(doFetch);
   }
+
+  async checkCurrentPassword(body: RequestBody = {}): Promise<Response> {
+    const doFetch = async () => {
+      return await fetch(this.getUrl('/auth'), {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+    };
+
+    return doFetch()
+  }
 }
 
 export const authenticationResource = new AuthenticationResource();
