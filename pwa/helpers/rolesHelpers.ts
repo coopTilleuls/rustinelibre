@@ -23,3 +23,7 @@ export const isItinerant = (user: User): boolean => {
 
     return repairer.repairerType.name.includes('itinérant');
 }
+
+export const isRepairerItinerant = (repairer: Repairer): boolean => {
+    return repairer.repairerType.name.includes('itinérant');
+}
