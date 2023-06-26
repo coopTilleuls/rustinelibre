@@ -5,19 +5,20 @@ import {LeafletEvent, LeafletMouseEvent} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import {Button, CircularProgress} from '@mui/material';
+import {Alert, Button, CircularProgress, Typography} from '@mui/material';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {RequestBody} from '@interfaces/Resource';
 
 interface MapPositionProps {
   repairer: Repairer;
-  uploadRepairer: (bodyRequest: RequestBody) => Promise<void>;
+  updateRepairer: (iri: string, requestBody: RequestBody) => void;
 }
 
 export const MapPosition = ({
   repairer,
-  uploadRepairer,
+  updateRepairer,
 }: MapPositionProps): JSX.Element => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [mapCenter, setMapCenter] = useState<[number, number]>([
     repairer.latitude ? Number(repairer.latitude) : 46.2276,
     repairer.longitude ? Number(repairer.longitude) : 2.2137,
@@ -30,9 +31,8 @@ export const MapPosition = ({
   ]);
   const {
     pendingRegistration,
-    setPendingRegistration,
-    setErrorMessage,
     errorMessage,
+    success,
   } = useContext(RepairerFormContext);
 
   const handleMarkerDragEnd = (event: LeafletEvent) => {
@@ -59,7 +59,7 @@ export const MapPosition = ({
       longitude: shopPosition[1].toString(),
     };
 
-    await uploadRepairer(newPosition);
+    await updateRepairer(repairer['@id'], newPosition);
   };
 
   return (
@@ -94,6 +94,18 @@ export const MapPosition = ({
           )}
         </Button>
       </div>
+
+      {!loading && errorMessage && (
+          <Typography variant="body1" color="error">
+            {errorMessage}
+          </Typography>
+      )}
+
+      {success && (
+          <Alert severity="success">
+            Informations mises à jour
+          </Alert>
+      )}
     </>
   );
 };

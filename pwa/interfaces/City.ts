@@ -10,6 +10,10 @@ export interface City {
     lon: number;
 }
 
+export const createCities = (citiesResponse: Gouv[]|Nominatim[], useNominatim: boolean): City[] => {
+    return useNominatim ? createCitiesWithNominatimAPI(citiesResponse as Nominatim[]) : createCitiesWithGouvAPI(citiesResponse as Gouv[]);
+}
+
 export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]): City[] => {
 
     let cities: City[] = [];

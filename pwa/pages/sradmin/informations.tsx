@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import Head from 'next/head';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
-import {repairerResource} from '@resources/repairerResource';
 import {useAccount} from '@contexts/AuthContext';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import InformationsContainer from '@components/dashboard/informations/InformationsContainer';
@@ -50,17 +49,6 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const fetchRepairer = async () => {
-    if (user && user.repairer) {
-      setLoading(true);
-      const repairerFetch: Repairer = await repairerResource.get(
-        user.repairer['@id']
-      );
-      setRepairer(repairerFetch);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (user && user.repairer) {
       setRepairer(user.repairer);
@@ -79,7 +67,6 @@ const RepairerInformations: NextPageWithLayout<RepairerInformationsProps> = ({
             bikeTypes={bikeTypes}
             repairerTypes={repairerTypes}
             repairerFetch={repairer}
-            fetchRepairer={fetchRepairer}
           />
         )}
       </DashboardLayout>

@@ -1,13 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ENTRYPOINT} from '@config/entrypoint';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {repairerResource} from '@resources/repairerResource';
 import {InputLabel, Box, Grid, Button, Typography} from '@mui/material';
-import {getToken} from '@helpers/localHelper';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {checkFileSize} from '@helpers/checkFileSize';
 import {MediaObject} from '@interfaces/MediaObject';
 import {Repairer} from '@interfaces/Repairer';
+import {uploadFile} from '@helpers/uploadFile';
 
 interface DashboardInfosPhotosProps {
   repairer: Repairer | null;
@@ -24,10 +23,8 @@ export const DashboardInfosPhotos = ({
 
   useEffect(() => {
     if (repairer) {
-      setThumbnail(repairer.thumbnail ? repairer.thumbnail : null);
-      setDescriptionPicture(
-        repairer.descriptionPicture ? repairer.descriptionPicture : null
-      );
+      setThumbnail(repairer.thumbnail ?? null);
+      setDescriptionPicture(repairer.descriptionPicture ?? null);
     }
   }, [repairer, setThumbnail, setDescriptionPicture]);
 
@@ -61,30 +58,11 @@ export const DashboardInfosPhotos = ({
         }
         setLoading(false);
         fetchRepairer();
+        setThumbnail(repairer.thumbnail ?? null);
+        setDescriptionPicture(repairer.descriptionPicture ?? null);
       }
     }
   };
-
-  async function uploadFile(file: File): Promise<Response | undefined> {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await fetch(ENTRYPOINT + '/media_objects', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-      body: formData,
-    });
-
-    if (response.ok) {
-      return response;
-    }
-
-    if (!response.ok) {
-      throw new Error(`Failed to upload file: ${response.statusText}`);
-    }
-  }
 
   return (
     <Box
