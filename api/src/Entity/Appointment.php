@@ -75,7 +75,7 @@ class Appointment
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    #[Assert\NotNull, Assert\NotBlank]
+    #[Assert\NotBlank(message: 'appointment.repairer.not_blank')]
     public Repairer $repairer;
 
     #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
@@ -84,7 +84,7 @@ class Appointment
 
     #[ORM\Column]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    #[Assert\NotNull, Assert\NotBlank, Assert\GreaterThan('now')]
+    #[Assert\NotBlank(message: 'appointment.slotTime.not_blank'), Assert\GreaterThan('now', message: 'appointment.slotTime.greater_than')]
     public ?\DateTimeImmutable $slotTime = null;
 
     #[ORM\Column(nullable: true)]

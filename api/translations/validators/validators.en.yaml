@@ -1,0 +1,81 @@
+# User assert validation messages
+
+#Email
+user.email.not_blank: Please enter an email address.
+user.email.length: The email address cannot be longer than 180 characters.
+user.email.valid: Please enter a valid email address.
+
+#Password
+user.password.regex: The password must contain 12 characters, a capital letter, a special character and numbers.
+
+#LastName
+user.lastName.min_length: The lastName must contain at least 2 characters.
+user.lastName.max_length: The lastName can contain 50 characters maximum.
+user.lastName.not_blank: Please enter a lastName.
+
+#FirstName
+user.firstName.min_length: The firstName must contain at least 2 characters.
+user.firstName.max_length: The firstName can contain 50 characters maximum.
+user.firstName.not_blank: Please enter a firstName.
+
+# Appointment assert validation messages
+
+#Repairer
+appointment.repairer.not_blank: Appointment should have a repairer.
+
+#SlotTime
+appointment.slotTime.not_blank: Appointment should have a selected slotTime.
+appointment.slotTime.greater_than: Appointment's slotTime should be greater than {{ compared_value }}.
+
+# AutoDiagnostic assert validation messages
+
+autoDiagnostic.appointment.owner: This appointment does not belong to you.
+
+# Bike-type assert validation messages
+
+#Name
+bikeType.name.not_blank: bike-type must have a name.
+bikeType.name.min_length: bike-type name must contain at least 2 characters.
+bikeType.name.max_length: bike-type name can contain 100 characters maximum.
+
+# Contact assert validation messages (same message thant user for "email", "lastName" and "firstName")
+
+#Content
+contact.content.not_blank: The message content cannot be empty.
+contact.content.min_length: The message content must contain at least 10 characters.
+contact.content.max_length: The message content can contain 1000 characters maximum.
+
+#Discussion assert validation messages
+#Repairer
+discussion.repairer.not_null: Discussion's repairer is missing
+#Customer
+discussion.customer.not_null: Discussion's customer is missing
+
+#Discussion message assert validation messages
+
+#Discussion
+discussion.message.discussion: Message should be related to a discussion
+
+#Content
+discussion.message.content.not_blank: The message content cannot be empty.
+discussion.message.content.max_length: The message content can contain 1000 characters maximum.
+
+#MediaObject assert validation messages
+
+mediaObject.file.not_null: Please add a file
+
+#Repairer assert validation messages
+
+#Name
+repairer.name.not_blank: repairer must have a name.
+repairer.name.min_length: repairer name must contain at least 2 characters.
+repairer.name.max_length: repairer name can contain 80 characters maximum.
+
+#Number of slots
+repairer.number_of_slots.range: You must have a number of slots between {{ min }} and {{ max }}.
+
+#RepairerIntervention assert validation messages
+
+
+#RepairerOpeningHours
+#RepairerType

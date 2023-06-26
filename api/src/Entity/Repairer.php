@@ -106,10 +106,12 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
     public ?RepairerType $repairerType;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairer.name.not_blank')]
     #[Assert\Length(
         min : 2,
         max : 80,
+        minMessage: 'repairer.name.min_length',
+        maxMessage: 'repairer.name.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ])]
@@ -235,7 +237,7 @@ class Repairer
     #[ORM\Column(nullable: true)]
     #[Assert\Type('integer')]
     #[Assert\Range(
-        notInRangeMessage: 'You must have a number of slots between {{ min }} and {{ max }}',
+        notInRangeMessage: 'repairer.number_of_slots.range',
         min: 1,
         max: 10,
     )]

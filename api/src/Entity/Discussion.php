@@ -45,13 +45,13 @@ class Discussion
     #[Groups([self::DISCUSSION_READ, Appointment::APPOINTMENT_READ])]
     public ?int $id = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: 'discussion.repairer.not_null')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::DISCUSSION_READ, self::DISCUSSION_WRITE])]
     public ?Repairer $repairer = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: 'discussion.customer.not_null')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::DISCUSSION_READ, self::DISCUSSION_WRITE])]

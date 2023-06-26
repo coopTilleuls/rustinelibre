@@ -1,0 +1,73 @@
+# User assert validation messages
+user.email.not_blank: Merci de renseigner une adresse email.
+user.email.length: L'adresse email ne peut excéder 180 caractères.
+user.email.valid: Merci de renseigner une adresse email valide.
+
+#Password
+user.password.regex: Le mot de passe doit contenir 12 caractères, une majuscule, un caractère spécial et des chiffres.
+
+#LastName
+user.lastName.min_length: Le nom de famille doit contenir au moins 2 caractères.
+user.lastName.max_length: Le nom de famille peut contenir au maximum 50 caractères.
+user.lastName.not_blank: Merci de renseigner votre nom de famille.
+
+#FirstName
+user.firstName.min_length: Le prénom doit contenir au moins 2 caractères.
+user.firstName.max_length: Le prénom peut contenir au maximum 50 caractères.
+user.firstName.not_blank: Merci de renseigner votre prénom.
+
+# Appointment assert validation messages
+
+#Repairer
+appointment.repairer.not_null/not_blank: Un réparateur doit être renseigné pour prendre rendez-vous.
+
+#SlotTime
+appointment.slotTime.not_null/not_blank: Un créneau doit être sélectionné pour prendre rendez-vous.
+appointment.slotTime.greater_than: Le créneau sélectionné doit être postérieur à {{ compared_value }}.
+
+# AutoDiagnostic assert validation messages
+autoDiagnostic.appointment.owner: Ce rendez-vous concerne un autre utilisateur.
+
+# Bike-type assert validation messages
+bikeType.name.not_blank: Le type de vélo doit être renseigné.
+bikeType.name.min_length: Le type de vélo doit contenir au moins 2 caractères.
+bikeType.name.max_length: Le type de vélo peut contenir au maximum 100 caractères.
+
+# Contact assert validation messages (same message thant user for "email", "lastName" and "firstName")
+
+#Content
+contact.content.not_blank: Le contenu du message ne peut être vide.
+contact.content.min_length: Le message doit contenir au moins 10 caractères.
+contact.content.max_length: Le message peut contenir au maximum 1000 caractères.
+
+#Discussion assert validation messages
+
+discussion.repairer.not_null: Cette conversation doit avoir un réparateur
+discussion.customer.not_null: Cette conversation doit avoir un consommateur
+
+#Discussion messages assert validation messages
+
+#Discussion
+discussion.message.discussion: Un message doit être lié à une discussion
+
+#Content
+discussion.message.content.not_blank: Le contenu du message ne peut être vide.
+discussion.message.content.max_length: Le message peut contenir au maximum 1000 caractères.
+
+#MediaObject assert validation messages
+
+mediaObject.file.not_null: Veuillez ajouter un fichier
+
+#Repairer assert validation messages
+
+#Name
+repairer.name.not_blank: Une solution de réparation doit avoir un nom.
+repairer.name.min_length: Le nom de votre solution de réparation doit contenir au moins deux caractères.
+repairer.name.max_length: Le nom de votre solution de réparation peut contenir au maximum 80 caractères.
+
+#Number of slots
+repairer.number_of_slots.range: Le nombre de créneau doit être compris entre {{ min }} et {{ max }}
+
+#RepairerIntervention assert validation messages
+#RepairerOpeningHours
+#RepairerType

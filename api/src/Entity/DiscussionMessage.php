@@ -43,7 +43,7 @@ class DiscussionMessage
     #[Groups([self::MESSAGE_READ])]
     public ?int $id = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message:'discussion.message.discussion')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::MESSAGE_READ, self::MESSAGE_WRITE])]
@@ -54,7 +54,11 @@ class DiscussionMessage
     #[Groups([self::MESSAGE_READ, self::MESSAGE_WRITE])]
     public ?User $sender = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'discussion.message.content.not_blank')]
+    #[Assert\Length(
+        max : 1000,
+        maxMessage: 'discussion.message.content.max_length',
+    )]
     #[ORM\Column(length: 1000)]
     #[Groups([self::MESSAGE_READ, self::MESSAGE_WRITE])]
     public ?string $content = null;
