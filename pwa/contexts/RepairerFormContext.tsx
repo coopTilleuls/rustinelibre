@@ -23,7 +23,7 @@ interface RepairerFormContext {
     pendingRegistration: boolean,
     errorMessage: string|null,
     success: boolean,
-    bikeTypesSelected: string[],
+    selectedBikeTypes: string[],
     openingHours: string,
     optionalPage: string,
     thumbnail: MediaObject|null,
@@ -42,7 +42,7 @@ interface RepairerFormContext {
     setRepairerTypeSelected: (value: RepairerType|null) => void,
     setPendingRegistration: (value: boolean) => void,
     setErrorMessage: (value: string|null) => void,
-    setBikeTypesSelected: (value: string[]) => void,
+    setSelectedBikeTypes: (value: string[]) => void,
     setOpeningHours: (value: string) => void,
     setOptionalPage: (value: string) => void,
     setThumbnail: (value: MediaObject|null) => void,
@@ -65,7 +65,7 @@ const initialValue = {
     repairerTypeSelected: null,
     pendingRegistration: false,
     errorMessage: null,
-    bikeTypesSelected: [],
+    selectedBikeTypes: [],
     openingHours: '',
     optionalPage: '',
     thumbnail: null,
@@ -85,7 +85,7 @@ const initialValue = {
     setRepairerTypeSelected: () => null,
     setPendingRegistration: () => null,
     setErrorMessage: () => null,
-    setBikeTypesSelected: () => null,
+    setSelectedBikeTypes: () => null,
     setOpeningHours: () => null,
     setOptionalPage: () => null,
     setThumbnail: () => null,
@@ -110,7 +110,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
     const [repairerTypeSelected, setRepairerTypeSelected] = useState<RepairerType | null>(null);
     const [pendingRegistration, setPendingRegistration] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string|null>(null);
-    const [bikeTypesSelected, setBikeTypesSelected] = useState<string[]>([]);
+    const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
     const [openingHours, setOpeningHours] = useState<string>('');
     const [optionalPage, setOptionalPage] = useState<string>('');
     const [thumbnail, setThumbnail] = useState<MediaObject | null>(null);
@@ -134,7 +134,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 repairerTypeSelected,
                 pendingRegistration,
                 errorMessage,
-                bikeTypesSelected,
+                selectedBikeTypes,
                 openingHours,
                 optionalPage,
                 thumbnail,
@@ -154,7 +154,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 setRepairerTypeSelected,
                 setPendingRegistration,
                 setErrorMessage,
-                setBikeTypesSelected,
+                setSelectedBikeTypes,
                 setOpeningHours,
                 setOptionalPage,
                 setThumbnail,

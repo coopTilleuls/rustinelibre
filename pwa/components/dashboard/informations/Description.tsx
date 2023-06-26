@@ -34,13 +34,13 @@ export const ContactDetails = ({
 }: ContactDetailsProps): JSX.Element => {
   const {
     description,
-    bikeTypesSelected,
+    selectedBikeTypes,
     repairerTypeSelected,
     errorMessage,
     success,
     pendingRegistration,
     setDescription,
-    setBikeTypesSelected,
+    setSelectedBikeTypes,
     setRepairerTypeSelected,
   } = useContext(RepairerFormContext);
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,11 +50,11 @@ export const ContactDetails = ({
       setDescription(repairer.description ?? '');
       setRepairerTypeSelected(repairer.repairerType ?? null);
       const bikeTypesSupported = repairer.bikeTypesSupported.map((bt) => bt.name);
-      setBikeTypesSelected(bikeTypes.map((bikeType) => {
+      setSelectedBikeTypes(bikeTypes.map((bikeType) => {
         return bikeType.name;
       }).filter((bikeTypeId) => bikeTypesSupported.includes(bikeTypeId)));
     }
-  }, [bikeTypes, repairer, setBikeTypesSelected, setDescription, setRepairerTypeSelected]);
+  }, [bikeTypes, repairer, setSelectedBikeTypes, setDescription, setRepairerTypeSelected]);
 
   const handleChangeRepairerType = (event: SelectChangeEvent): void => {
     const selectedRepairerType = repairerTypes.find(
@@ -62,9 +62,9 @@ export const ContactDetails = ({
     );
     setRepairerTypeSelected(selectedRepairerType ?? null);
   };
-  const handleChangeBikeRepaired = (event: SelectChangeEvent<typeof bikeTypesSelected>) => {
+  const handleChangeBikeRepaired = (event: SelectChangeEvent<typeof selectedBikeTypes>) => {
     const value = event.target.value;
-    setBikeTypesSelected(typeof value === 'string' ? value.split(',') : value);
+    setSelectedBikeTypes(typeof value === 'string' ? value.split(',') : value);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -73,7 +73,7 @@ export const ContactDetails = ({
     const requestBody: RequestBody = {};
 
     const selectedBikeTypeIRIs: string[] = bikeTypes
-        .filter((bikeType) => bikeTypesSelected.includes(bikeType.name))
+        .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
         .map((bikeType) => bikeType['@id']);
 
     if (description) requestBody['description'] = description;
@@ -121,14 +121,14 @@ export const ContactDetails = ({
                   required
                   multiple
                   fullWidth
-                  value={bikeTypesSelected}
+                  value={selectedBikeTypes}
                   onChange={handleChangeBikeRepaired}
                   input={<OutlinedInput label="Type de vélos" />}
                   renderValue={(selected) => selected.join(', ')}>
                   {bikeTypes.map((bikeType) => (
                     <MenuItem key={bikeType['@id']} value={bikeType.name}>
                       <Checkbox
-                        checked={bikeTypesSelected.includes(bikeType.name)}
+                        checked={selectedBikeTypes.includes(bikeType.name)}
                       />
                       <ListItemText primary={bikeType.name} />
                     </MenuItem>
