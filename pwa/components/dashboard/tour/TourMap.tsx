@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {MapContainer, TileLayer, Marker} from 'react-leaflet';
+import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
@@ -7,6 +7,8 @@ import Box from '@mui/material/Box';
 import {Repairer} from '@interfaces/Repairer';
 import {Appointment} from "@interfaces/Appointment";
 import L from 'leaflet';
+import {PopUpRepairerCard} from "@components/repairers/PopUpRepairerCard";
+import router from "next/router";
 
 interface TourMapProps {
     repairer: Repairer;
@@ -50,7 +52,19 @@ export const TourMap = ({repairer, appointments}: TourMapProps): JSX.Element => 
                             html: `<span style="background-color: #1876d2; border-radius: 50px; padding: 5px; color: white; font-size: 0.7em">${key+1}</span>`
                         });
 
-                        return <Marker key={key} icon={customIcon} position={[Number(appointment.latitude), Number(appointment.longitude)]} />
+                        return <Marker key={key} icon={customIcon} position={[Number(appointment.latitude), Number(appointment.longitude)]}>
+                            <Popup>
+                                <PopUpRepairerCard
+                                    repairer={repairer}
+                                    onClick={() =>
+                                        router.push({
+                                            pathname: `/reparateur/${repairer.id}`,
+                                            query: {searchRepairer: 1},
+                                        })
+                                    }
+                                />
+                            </Popup>
+                        </Marker>
                     })}
                 </MapContainer>
             </Box>
