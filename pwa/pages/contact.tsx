@@ -1,6 +1,8 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {ChangeEvent, useState} from 'react';
 import Head from 'next/head';
+import {contactResource} from '@resources/ContactResource';
+import {Turnstile} from '@marsidev/react-turnstile';
 import {
   Container,
   Typography,
@@ -10,10 +12,13 @@ import {
   Button,
   TextField,
   Alert,
+  CircularProgress,
 } from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
-import {contactResource} from '@resources/ContactResource';
+
+const cfTurnstileAPIKey = process.env
+  .NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY as string;
 
 const Contact: NextPageWithLayout = () => {
   const [lastName, setLastName] = useState<string>('');
@@ -30,7 +35,9 @@ const Contact: NextPageWithLayout = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+
   const [isValid, setIsValid] = useState<boolean>(false);
+  const [status, setStatus] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -43,8 +50,14 @@ const Contact: NextPageWithLayout = () => {
       });
       setLoading(false);
       setIsValid(true);
+      setTimeout(() => {
+        setLastName('');
+        setFirstName('');
+        setEmail('');
+        setMessage('');
+        setIsValid(false);
+      }, 3000);
     } catch (e) {
-      console.error(e);
       setError(true);
     }
   };
@@ -54,7 +67,6 @@ const Contact: NextPageWithLayout = () => {
     setError(false);
     setIsValid(false);
     setLastName(value);
-
     if (value.length < 2) {
       setLastNameError('Le nom doit comporter au moins 2 caractères.');
     } else {
@@ -109,7 +121,8 @@ const Contact: NextPageWithLayout = () => {
     !!email &&
     !emailError &&
     !!message &&
-    !messageError;
+    !messageError &&
+    status === 'solved';
 
   return (
     <>
@@ -118,7 +131,7 @@ const Contact: NextPageWithLayout = () => {
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '50%'}}}>
-          <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
+          <Paper elevation={4} sx={{maxWidth: 400, p: 4, my: 4, mx: 'auto'}}>
             <Box
               sx={{
                 width: '100%',
@@ -141,7 +154,7 @@ const Contact: NextPageWithLayout = () => {
                   label="Nom"
                   name="lastName"
                   autoComplete="lastName"
-                  autoFocus
+                  value={lastName}
                   error={!!lastName && !!lastNameError}
                   helperText={!!lastName && lastNameError}
                   onChange={handleChangeLastName}
@@ -187,13 +200,33 @@ const Contact: NextPageWithLayout = () => {
                   helperText={!!message && messageError}
                   onChange={handleChangeMessage}
                 />
+                <Box
+                  mt={2}
+                  display="flex"
+                  justifyContent="center"
+                  width={'100%'}>
+                  <Turnstile
+                    siteKey={cfTurnstileAPIKey}
+                    options={{
+                      action: 'submit-form',
+                      theme: 'light',
+                      language: 'fr',
+                    }}
+                    scriptOptions={{
+                      appendTo: 'body',
+                    }}
+                    onError={() => setStatus('error')}
+                    onExpire={() => setStatus('expired')}
+                    onSuccess={() => setStatus('solved')}
+                  />
+                </Box>
                 <Button
+                  onClick={handleSubmit}
                   sx={{mt: 3}}
                   fullWidth
                   disabled={!validForm}
-                  onClick={handleSubmit}
                   variant="contained">
-                  Valider
+                  {!loading ? 'Valider' : <CircularProgress />}
                 </Button>
                 {error && (
                   <Alert severity="error" sx={{mt: 3}}>
