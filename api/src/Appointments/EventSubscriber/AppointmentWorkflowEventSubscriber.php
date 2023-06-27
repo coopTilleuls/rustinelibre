@@ -43,7 +43,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment = $event->getSubject();
 
         if (!$this->security->isGranted(User::ROLE_ADMIN) && !$this->security->isGranted(User::ROLE_BOSS) && !$this->security->isGranted(User::ROLE_EMPLOYEE)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedHttpException('access.denied.role');
         }
 
         $appointment->status = Appointment::VALIDATED;
@@ -70,7 +70,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             null === $user ||
             !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedHttpException('access.denied.role');
         }
 
         /** @var Appointment $appointment */
@@ -99,7 +99,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             null === $user ||
             !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedHttpException('access.denied.role');
         }
 
         /** @var Appointment $appointment */

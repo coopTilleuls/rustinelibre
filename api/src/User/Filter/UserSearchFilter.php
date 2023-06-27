@@ -22,7 +22,7 @@ final class UserSearchFilter extends AbstractFilter
         }
 
         if (!is_string($value)) {
-            throw new BadRequestHttpException('Wrong format provided for user search, should be a string as : ?userSearch=raphael');
+            throw new BadRequestHttpException('badRequest.user.search.filter');
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];

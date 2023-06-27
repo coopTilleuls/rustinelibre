@@ -82,7 +82,7 @@ class RetrieveEmployeesTest extends AbstractTestCase
         }
 
         if (!$firstRandomBoss) {
-            throw new NotFoundHttpException('No boss found');
+            throw new NotFoundHttpException('notFound.boss');
         }
 
         // Boss of repairer 1 try to get an employee of repairer 2

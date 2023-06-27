@@ -26,7 +26,7 @@ final class AroundFilter extends AbstractFilter
         }
 
         if (!is_array($value) || empty($value)) {
-            throw new BadRequestHttpException('Wrong format provided for the filter, should be : ?around[cityName]=latitude,longitude');
+            throw new BadRequestHttpException('badRequest.around.filter');
         }
 
         $city = key($value);

@@ -52,7 +52,7 @@ readonly class RepairerInterventionEventSubscriber implements EventSubscriberInt
         }
 
         if (null === $user->repairer) {
-            throw new AccessDeniedException('You need to have a repairer profile to link to an intervention');
+            throw new AccessDeniedException('access.denied.repairer.intervention.link');
         }
 
         /** @var ?Intervention $adminIntervention */
@@ -63,7 +63,7 @@ readonly class RepairerInterventionEventSubscriber implements EventSubscriberInt
         }
 
         if (!$adminIntervention->isAdmin) {
-            throw new AccessDeniedException('You can only link repairers to interventions created by admin');
+            throw new AccessDeniedException('access.denied.admin.intervention.link');
         }
 
         $object->repairer = $user->repairer;

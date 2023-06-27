@@ -25,11 +25,11 @@ final class AppointmentStatusAction extends AbstractController
         $content = json_decode($request->getContent(), true);
 
         if (!array_key_exists('transition', $content)) {
-            throw new BadRequestHttpException('You should provide a transition name');
+            throw new BadRequestHttpException('badRequest.appointment.transition');
         }
 
         if (!$this->appointmentAcceptanceStateMachine->can($appointment, $content['transition'])) {
-            throw new BadRequestHttpException('This transition is currently not available');
+            throw new BadRequestHttpException('badRequest.appointment.transition.not.available');
         }
 
         $this->appointmentAcceptanceStateMachine->apply($appointment, $content['transition']);

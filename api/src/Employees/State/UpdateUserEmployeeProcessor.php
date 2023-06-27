@@ -30,12 +30,12 @@ final class UpdateUserEmployeeProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): RepairerEmployee
     {
         if (!array_key_exists('id', $uriVariables)) {
-            throw new BadRequestHttpException('You should provide a repairer employee ID to update it');
+            throw new BadRequestHttpException('badRequest.update.employee');
         }
 
         $repairerEmployee = $this->repairerEmployeeRepository->find($uriVariables['id']);
         if (!$repairerEmployee) {
-            throw new NotFoundHttpException('this repairer employee does not exist');
+            throw new NotFoundHttpException('notFound.repairer.employee');
         }
 
         $repairerEmployee->enabled = boolval($data->enabled);

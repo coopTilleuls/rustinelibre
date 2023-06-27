@@ -30,7 +30,7 @@ class AutoDiagnosticAppointmentValidator extends ConstraintValidator
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedHttpException('access.denied.role');
         }
 
         if ($value->customer && $value->customer->id === $currentUser->id) {

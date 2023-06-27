@@ -90,7 +90,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         if (!$currentUser->isBoss() && !$currentUser->isEmployee()) {
             // If slot is not available
             if (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true)) {
-                throw new BadRequestHttpException('This slot is not available.');
+                throw new BadRequestHttpException('badRequest.slot.not.available');
             }
 
             $this->persistAppointment($object, $slotsAvailable);
@@ -101,12 +101,12 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         // Current user does not have any shop
         $curentRepairer = $currentUser->repairer ?: ($currentUser->repairerEmployee?->repairer);
         if (!$curentRepairer) {
-            throw new AccessDeniedHttpException('You should belong a shop to create an appointment');
+            throw new AccessDeniedHttpException('access.denied.repairer.belong.shop');
         }
 
         // This shop is not mine
         if ($curentRepairer !== $object->repairer) {
-            throw new AccessDeniedHttpException('This shop is not yours');
+            throw new AccessDeniedHttpException('access.denied.repairer.shop.owner');
         }
 
         $object->status = 'validated';
@@ -146,7 +146,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
 
             // The slot change, and the new slot is not available
             if ($originalEntityData['slotTime'] !== $object->slotTime && (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true))) {
-                throw new BadRequestHttpException('This slot is not available.');
+                throw new BadRequestHttpException('badRequest.slot.not.available');
             }
 
             // Flush the RDV now to get infos in database if necessary

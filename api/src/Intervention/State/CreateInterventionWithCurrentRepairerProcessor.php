@@ -31,7 +31,7 @@ final readonly class CreateInterventionWithCurrentRepairerProcessor implements P
         /** @var ?User $user */
         $user = $this->security->getUser();
         if (!$user) {
-            throw new AccessDeniedException('You must be logged in to create an intervention');
+            throw new AccessDeniedException('access.denied.logged');
         }
 
         $intervention = new Intervention();
@@ -40,10 +40,10 @@ final readonly class CreateInterventionWithCurrentRepairerProcessor implements P
 
         if ($user->isBoss()) {
             if (null === $data->price) {
-                throw new BadRequestHttpException('Price is required');
+                throw new BadRequestHttpException('badRequest.intervention.price');
             }
             if (null === $user->repairer) {
-                throw new BadRequestHttpException('You must have a repairer to create an intervention');
+                throw new BadRequestHttpException('badRequest.repairer.create.intervention');
             }
             $repairerIntervention = new RepairerIntervention();
             $repairerIntervention->price = $data->price;

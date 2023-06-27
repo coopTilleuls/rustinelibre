@@ -29,11 +29,11 @@ final class UserValidationCodeController
 
         $requestContent = json_decode($request->getContent(), true);
         if (!array_key_exists('code', $requestContent)) {
-            throw new BadRequestHttpException('You should provide a code to validate it');
+            throw new BadRequestHttpException('badRequest.validation.code');
         }
 
         if (!in_array((int) $requestContent['code'], [$currentUser->validationCode, 6666])) { // @todo change this when mail OK
-            throw new AccessDeniedHttpException('Validation code invalid');
+            throw new AccessDeniedHttpException('access.denied.validation.code');
         }
 
         $currentUser->emailConfirmed = true;

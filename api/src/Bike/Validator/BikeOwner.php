@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class BikeOwner extends Constraint
 {
-    public string $message = 'The bike should be your bike to modify it';
+    public string $message = 'bike.owner';
 }

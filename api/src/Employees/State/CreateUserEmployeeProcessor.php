@@ -52,7 +52,7 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         } else {
             $currentRepairer = $currentUser->repairer;
             if (!$currentRepairer) {
-                throw new BadRequestHttpException('You cannot add en employee if you dont have any repairer shop');
+                throw new BadRequestHttpException('badRequest.add.employee');
             }
 
             $repairerEmployee->repairer = $currentRepairer;

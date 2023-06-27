@@ -22,7 +22,7 @@ class FirstSlotAvailableFilter extends AbstractFilter
         }
 
         if (!in_array($value, ['DESC', 'ASC'], true)) {
-            throw new BadRequestHttpException('The "availability" filter accepts only "ASC" or "DESC" as value');
+            throw new BadRequestHttpException('badRequest.availability.filter');
         }
 
         $queryBuilder->addOrderBy('o.firstSlotAvailable', $value);

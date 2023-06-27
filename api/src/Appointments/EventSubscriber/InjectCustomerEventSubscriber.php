@@ -64,6 +64,6 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
             }
         }
 
-        throw new AccessDeniedHttpException('Cet utilisateur n\'est pas un de vos client');
+        throw new AccessDeniedHttpException('access.denied.customer');
     }
 }
