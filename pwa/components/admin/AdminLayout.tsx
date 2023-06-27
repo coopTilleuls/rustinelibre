@@ -107,10 +107,6 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
   }
 
   const countContactUnread = async() => {
-      if (!user) {
-        return;
-      }
-
       const response = await contactResource.getAll(true, {
         alreadyRead: false
       })
