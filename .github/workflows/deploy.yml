@@ -8,7 +8,9 @@ on:
         required: true
       domain:
         description: Main project deploy domain used in URLs
-        required: true 
+        required: true
+      mailer-dsn:
+          description: MAILER DSN
 
 jobs:
   deploy:
@@ -46,7 +48,8 @@ jobs:
               # Tags are deployed in prod
               CONTEXT=prod
               IMAGE_TAG=${{ github.ref_name }}
-              RELEASE_NAME=demo
+              RELEASE_NAME=demo             
+              MAILER_DSN='${{ secrets.mailer-dsn }}'
               URL=demo.${{ secrets.domain }}; 
           else
               CONTEXT=nonprod
@@ -57,6 +60,7 @@ jobs:
                   RELEASE_NAME=${{ github.ref_name }}
               fi
               URL=${RELEASE_NAME}.nonprod.${{ secrets.domain }}
+              MAILER_DSN="smtp://maildev-maildev.maildev:1025"
           fi
           export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
           export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
@@ -78,7 +82,7 @@ jobs:
             --set=ingress.tls[0].secretName=${RELEASE_NAME}-tls \
             --set=ingress.tls[0].hosts[0]=${URL} \
             --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
-            --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
+            --set=mailer.dsn=$MAILER_DSN \
             --set=php.corsAllowOrigin="https?://${URL}$" \
             --set=php.trustedHosts="${TRUSTED_HOSTS//./\\\\.}" \
             --set=php.jwt.secretKey="${APP_JWT_SECRET_KEY}" \
