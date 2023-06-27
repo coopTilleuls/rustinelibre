@@ -36,3 +36,4 @@ jobs:
     secrets:
       kubeconfig: ${{ secrets.KUBECONFIG }}
       domain: ${{ secrets.DOMAIN }}
+      mailer-dns: ${{ secret.MAILER_DSN }}
