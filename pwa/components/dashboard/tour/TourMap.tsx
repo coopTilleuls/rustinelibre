@@ -7,8 +7,7 @@ import Box from '@mui/material/Box';
 import {Repairer} from '@interfaces/Repairer';
 import {Appointment} from "@interfaces/Appointment";
 import L from 'leaflet';
-import {PopUpRepairerCard} from "@components/repairers/PopUpRepairerCard";
-import router from "next/router";
+import {TourMapPopUp} from "@components/dashboard/tour/TourMapPopUp";
 
 interface TourMapProps {
     repairer: Repairer;
@@ -54,14 +53,8 @@ export const TourMap = ({repairer, appointments}: TourMapProps): JSX.Element => 
 
                         return <Marker key={key} icon={customIcon} position={[Number(appointment.latitude), Number(appointment.longitude)]}>
                             <Popup>
-                                <PopUpRepairerCard
-                                    repairer={repairer}
-                                    onClick={() =>
-                                        router.push({
-                                            pathname: `/reparateur/${repairer.id}`,
-                                            query: {searchRepairer: 1},
-                                        })
-                                    }
+                                <TourMapPopUp
+                                    appointment={appointment}
                                 />
                             </Popup>
                         </Marker>
