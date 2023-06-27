@@ -15,6 +15,7 @@ import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
 import {Appointment} from '@interfaces/Appointment';
 import {appointmentResource} from '@resources/appointmentResource';
+import ModalCancelAppointment from './ModalCancelAppointment';
 
 interface AppointmentCardProps extends PropsWithRef<any> {
   appointment: Appointment;
@@ -28,13 +29,13 @@ export const AppointmentCard = ({
   fetchAppointments,
 }: AppointmentCardProps): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const cancelAppointment = async (appointment: Appointment) => {
     setLoading(true);
     await appointmentResource.updateAppointmentStatus(appointment.id, {
       transition: 'cancellation',
     });
-
     await fetchAppointments();
     setLoading(false);
   };
@@ -102,21 +103,17 @@ export const AppointmentCard = ({
               <Box>
                 <Button
                   variant="outlined"
-                  color={`warning`}
+                  color="warning"
                   size="small"
-                  onClick={() => cancelAppointment(appointment)}>
-                  {loading ? <CircularProgress /> : 'Annuler le RDV'}
+                  onClick={() => setOpenModal(true)}>
+                  Annuler le RDV
                 </Button>
-                {!appointment.discussion && (
-                  <Button
-                    onClick={() => cancelAppointment(appointment)}
-                    disabled={true}
-                    variant="contained"
-                    size="small"
-                    sx={{marginLeft: '5px'}}>
-                    Envoyer un message
-                  </Button>
-                )}
+                <ModalCancelAppointment
+                  openModal={openModal}
+                  loading={loading}
+                  handleCloseModal={() => setOpenModal(false)}
+                  handleCancelAppointment={() => cancelAppointment(appointment)}
+                />
                 {appointment.discussion && (
                   <Link href={`/messagerie/${appointment.discussion.id}`}>
                     <Button
