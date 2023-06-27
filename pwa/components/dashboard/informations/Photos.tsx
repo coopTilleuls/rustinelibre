@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {repairerResource} from '@resources/repairerResource';
-import {InputLabel, Box, Grid, Button, Typography} from '@mui/material';
+import {InputLabel, Box, Grid, Button, Typography, CircularProgress} from '@mui/material';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {checkFileSize} from '@helpers/checkFileSize';
 import {MediaObject} from '@interfaces/MediaObject';
@@ -17,6 +17,8 @@ export const DashboardInfosPhotos = ({
   repairer,
   fetchRepairer,
 }: DashboardInfosPhotosProps): JSX.Element => {
+  const [thumbnailLoading, setThumbnailLoading] = useState<boolean>(false);
+  const [descriptionLoading, setDescriptionLoading] = useState<boolean>(false);
   const {setThumbnail, setDescriptionPicture} = useContext(RepairerFormContext);
   const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
@@ -32,6 +34,8 @@ export const DashboardInfosPhotos = ({
     pictureType: string
   ) => {
     if (event.target.files && repairer) {
+      if ("thumbnail" === pictureType) setThumbnailLoading(true);
+      if ("description" === pictureType) setDescriptionLoading(true);
       setImageTooHeavy(false);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
@@ -56,6 +60,8 @@ export const DashboardInfosPhotos = ({
         fetchRepairer();
         setThumbnail(repairer.thumbnail ?? null);
         setDescriptionPicture(repairer.descriptionPicture ?? null);
+        setThumbnailLoading(false);
+        setDescriptionLoading(false);
       }
     }
   };
@@ -79,12 +85,17 @@ export const DashboardInfosPhotos = ({
         </Grid>
       </Grid>
       <Button variant="contained" component="label" sx={{my: 2}}>
-        Changer de photo de profil
-        <input
-          type="file"
-          hidden
-          onChange={(e) => handleFileChange(e, 'thumbnail')}
-        />
+        {thumbnailLoading && <CircularProgress sx={{color: "white"}} size={20}/>}
+        {!thumbnailLoading && (
+            <>
+              Changer de photo de profil
+              <input
+                type="file"
+                hidden
+                onChange={(e) => handleFileChange(e, 'thumbnail')}
+              />
+            </>
+          )}
       </Button>
       {imageTooHeavy && (
         <Typography sx={{textAlign: 'center', color: 'red'}}>
@@ -105,12 +116,17 @@ export const DashboardInfosPhotos = ({
         </Grid>
       </Grid>
       <Button variant="contained" component="label" sx={{my: 2}}>
-        Changer de photo de description
-        <input
-          type="file"
-          hidden
-          onChange={(e) => handleFileChange(e, 'description')}
-        />
+        {descriptionLoading && <CircularProgress sx={{color: "white"}} size={20}/>}
+        {!descriptionLoading && (
+            <>
+              Changer de photo de description
+              <input
+                type="file"
+                hidden
+                onChange={(e) => handleFileChange(e, 'description')}
+              />
+            </>
+        )}
       </Button>
       {imageTooHeavy && (
         <Typography sx={{textAlign: 'center', color: 'red'}}>
