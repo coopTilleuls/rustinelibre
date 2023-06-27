@@ -22,6 +22,7 @@ interface RepairerFormContext {
     repairerTypeSelected: RepairerType|null,
     pendingRegistration: boolean,
     errorMessage: string|null,
+    success: boolean,
     selectedBikeTypes: string[],
     openingHours: string,
     optionalPage: string,
@@ -46,6 +47,7 @@ interface RepairerFormContext {
     setOptionalPage: (value: string) => void,
     setThumbnail: (value: MediaObject|null) => void,
     setDescriptionPicture: (value: MediaObject|null) => void,
+    setSuccess: (value: boolean) => void,
 }
 
 const initialValue = {
@@ -68,6 +70,7 @@ const initialValue = {
     optionalPage: '',
     thumbnail: null,
     descriptionPicture: null,
+    success: false,
     setName: () => null,
     setMobilePhone: () => null,
     setDescription: () => null,
@@ -87,6 +90,7 @@ const initialValue = {
     setOptionalPage: () => null,
     setThumbnail: () => null,
     setDescriptionPicture: () => null,
+    setSuccess: () => null,
 };
 
 export const RepairerFormContext = createContext<RepairerFormContext>(initialValue);
@@ -111,6 +115,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
     const [optionalPage, setOptionalPage] = useState<string>('');
     const [thumbnail, setThumbnail] = useState<MediaObject | null>(null);
     const [descriptionPicture, setDescriptionPicture] = useState<MediaObject | null>(null);
+    const [success, setSuccess] = useState<boolean>(false);
 
     return (
         <RepairerFormContext.Provider
@@ -134,6 +139,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 optionalPage,
                 thumbnail,
                 descriptionPicture,
+                success,
                 setName,
                 setStreetNumber,
                 setMobilePhone,
@@ -153,6 +159,7 @@ export const RepairerFormProvider = ({ children }: ProviderProps): JSX.Element =
                 setOptionalPage,
                 setThumbnail,
                 setDescriptionPicture,
+                setSuccess,
             }}
         >
             {children}

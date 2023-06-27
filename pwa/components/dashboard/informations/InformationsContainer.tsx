@@ -8,8 +8,6 @@ import {
   Tabs,
   Tab,
   Typography,
-  Button,
-  Alert,
   CircularProgress,
   Container,
 } from '@mui/material';
@@ -33,162 +31,47 @@ type InformationsContainerProps = {
   bikeTypes: BikeType[];
   repairerTypes: RepairerType[];
   repairerFetch: Repairer;
-  fetchRepairer: () => Promise<void>;
 };
 
 const InformationsContainer = ({
   bikeTypes,
   repairerTypes,
   repairerFetch,
-  fetchRepairer,
 }: InformationsContainerProps) => {
   const [repairer, setRepairer] = useState<Repairer>(repairerFetch);
   const [loading, setLoading] = useState<boolean>(true);
-  const [success, setSuccess] = useState<boolean>(false);
   const [tabValue, setTabValue] = React.useState<number>(0);
-  const {user} = useAccount({});
+  const {user} = useAccount({redirectIfMailNotConfirm: '/login'});
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
   const {
-    name,
-    setName,
-    setDescription,
-    street,
-    setStreet,
-    streetNumber,
-    setStreetNumber,
-    cityInput,
-    setCityInput,
-    city,
-    pendingRegistration,
     setPendingRegistration,
-    errorMessage,
     setErrorMessage,
-    selectedBikeTypes,
-    setOptionalPage,
-    description,
-    openingHours,
-    optionalPage,
-    mobilePhone,
-    setOpeningHours,
-    repairerTypeSelected,
-    setRepairerTypeSelected,
-    setSelectedBikeTypes,
-    setMobilePhone,
+    setSuccess,
   } = useContext(RepairerFormContext);
 
   useEffect(() => {
     if (repairer) {
       setLoading(false);
-      setName(repairer.name ? repairer.name : '');
-      setMobilePhone(repairer.mobilePhone ? repairer.mobilePhone : '');
-      setDescription(repairer.description ? repairer.description : '');
-      setStreet(repairer.street ? repairer.street : '');
-      setStreetNumber(repairer.streetNumber ? repairer.streetNumber : '');
-      setCityInput(repairer.city ? repairer.city : '');
-      setOptionalPage(repairer.optionalPage ? repairer.optionalPage : '');
-      setOpeningHours(repairer.openingHours ? repairer.openingHours : '');
-      setRepairerTypeSelected(
-        repairer.repairerType ? repairer.repairerType : null
-      );
-
-      const bikeTypesSupported: string[] = [];
-      repairer.bikeTypesSupported.map((bikeTypeSupported) => {
-        bikeTypesSupported.push(bikeTypeSupported.name);
-      });
-      setSelectedBikeTypes(bikeTypesSupported);
     }
-  }, [
-    repairer,
-    setDescription,
-    setLoading,
-    setName,
-    setMobilePhone,
-    setSelectedBikeTypes,
-    setRepairerTypeSelected,
-    setOpeningHours,
-    setOptionalPage,
-    setCityInput,
-    setStreet,
-    setStreetNumber,
-  ]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [repairer, setLoading]);
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    event.preventDefault();
+  const updateRepairer = async (iri: string, bodyRequest: RequestBody) => {
     if (!repairer) return;
-
-    const selectedBikeTypeIRIs: string[] = bikeTypes
-      .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
-      .map((bikeType) => bikeType['@id']);
-
-    const bodyRequest: RequestBody = {};
-
-    if (mobilePhone) {
-      bodyRequest['mobilePhone'] = mobilePhone;
-    }
-
-    if (name && name !== '') {
-      bodyRequest['name'] = name;
-    }
-
-    if (streetNumber && streetNumber !== '') {
-      bodyRequest['streetNumber'] = streetNumber;
-    }
-
-    if (street && street !== '') {
-      bodyRequest['street'] = street;
-    }
-
-    if (description && description !== '') {
-      bodyRequest['description'] = description;
-    }
-
-    if (repairerTypeSelected) {
-      bodyRequest['repairerType'] = repairerTypeSelected['@id'];
-    }
-
-    if (selectedBikeTypeIRIs.length > 0) {
-      bodyRequest['bikeTypesSupported'] = selectedBikeTypeIRIs;
-    }
-
-    if (city) {
-      bodyRequest['city'] = city.name;
-      bodyRequest['postcode'] = city.postcode;
-    }
-
-    if (optionalPage && optionalPage !== '') {
-      bodyRequest['optionalPage'] = optionalPage;
-    }
-    if (openingHours && openingHours !== '') {
-      bodyRequest['openingHours'] = openingHours;
-    }
-    if (mobilePhone && mobilePhone !== '') {
-      bodyRequest['mobilePhone'] = mobilePhone;
-    }
-
-    await uploadRepairer(bodyRequest);
-  };
-
-  const uploadRepairer = async (bodyRequest: RequestBody) => {
-    if (!repairer) {
-      return;
-    }
     setErrorMessage(null);
     setPendingRegistration(true);
     try {
-      await repairerResource.put(repairer['@id'], bodyRequest);
+      await repairerResource.put(iri, bodyRequest);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
 
       const repairerFetch: Repairer = await repairerResource.get(
-        repairer['@id']
+        iri
       );
       setRepairer(repairerFetch);
     } catch (e) {
@@ -197,68 +80,61 @@ const InformationsContainer = ({
     setPendingRegistration(false);
   };
 
+  const fetchRepairer = async () => {
+    if (user && user.repairer) {
+      const repairerFetch: Repairer = await repairerResource.get(
+          user.repairer['@id']
+      );
+      setRepairer(repairerFetch);
+    }
+  };
+
   return (
     <Container component="main" sx={{ml: 0}}>
-      <form onSubmit={handleSubmit}>
-        <Tabs value={tabValue} onChange={handleChangeTab}>
-          <Tab label="Coordonnées" />
-          <Tab label="Description" />
-          <Tab label="Photos" />
-          <Tab label="Horaires" />
-          <Tab label="Informations complémentaires" />
-          <Tab label={`Position sur la carte`} />
-        </Tabs>
+      <Tabs value={tabValue} onChange={handleChangeTab}>
+        <Tab label="Coordonnées"/>
+        <Tab label="Description"/>
+        <Tab label="Photos"/>
+        <Tab label="Horaires"/>
+        <Tab label="Informations complémentaires"/>
+        <Tab label="Position sur la carte"/>
+      </Tabs>
 
-        <Box sx={{marginTop: 3}}>
-          {loading && <CircularProgress />}
-          {!loading && !repairer && (
+      <Box sx={{ marginTop: 3 }}>
+        {loading ? (
+            <CircularProgress />
+        ) : !repairer ? (
             <Typography>Vous ne gérez pas de solution de réparation</Typography>
-          )}
-          {!loading && tabValue === 0 && <ContactDetails repairer={repairer} />}
-          {!loading && tabValue === 1 && (
-            <Description
-              repairer={repairer}
-              bikeTypes={bikeTypes}
-              repairerTypes={repairerTypes}
-            />
-          )}
-          {!loading && tabValue === 2 && (
-            <DashboardInfosPhotos
-              repairer={repairer}
-              fetchRepairer={fetchRepairer}
-            />
-          )}
-          {!loading && tabValue === 3 && <OpeningHours repairer={repairer} />}
-          {!loading && tabValue === 4 && <OptionalInfos repairer={repairer} />}
-          {!loading && tabValue === 5 && repairer && (
-            <MapPosition repairer={repairer} uploadRepairer={uploadRepairer} />
-          )}
-        </Box>
-
-        {!loading && tabValue !== 2 && tabValue !== 5 && (
-          <div>
-            <Button type="submit" variant="contained" sx={{my: 2}}>
-              {!pendingRegistration ? (
-                'Enregistrer mes informations'
-              ) : (
-                <CircularProgress size={20} sx={{color: 'white'}} />
+        ) : (
+            <>
+              {tabValue === 0 && (
+                  <ContactDetails
+                      repairer={repairer}
+                      updateRepairer={updateRepairer}
+                  />
               )}
-            </Button>
-          </div>
+              {tabValue === 1 && (
+                  <Description
+                      repairer={repairer}
+                      bikeTypes={bikeTypes}
+                      repairerTypes={repairerTypes}
+                      updateRepairer={updateRepairer}
+                  />
+              )}
+              {tabValue === 2 && (
+                  <DashboardInfosPhotos
+                      repairer={repairer}
+                      fetchRepairer={fetchRepairer}
+                  />
+              )}
+              {tabValue === 3 && <OpeningHours repairer={repairer} updateRepairer={updateRepairer} />}
+              {tabValue === 4 && <OptionalInfos repairer={repairer} updateRepairer={updateRepairer} />}
+              {tabValue === 5 && repairer && (
+                  <MapPosition repairer={repairer} updateRepairer={updateRepairer} />
+              )}
+            </>
         )}
-
-        {!loading && errorMessage && (
-          <Typography variant="body1" color="error">
-            {errorMessage}
-          </Typography>
-        )}
-
-        {success && (
-          <Alert sx={{marginTop: '65px'}} severity="success">
-            Informations mises à jour
-          </Alert>
-        )}
-      </form>
+      </Box>
     </Container>
   );
 };
