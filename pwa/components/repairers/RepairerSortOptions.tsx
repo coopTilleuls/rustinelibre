@@ -16,6 +16,7 @@ import {
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 import {RepairerType} from '@interfaces/RepairerType';
+import useMediaQuery from '@hooks/useMediaQuery';
 
 const sortOptions: Record<string, string> = {
   availability: 'Disponibilité',
@@ -37,6 +38,8 @@ const RepairerSortOptions = ({
   const {repairers, sortChosen, showMap, setShowMap, repairerTypeSelected} =
     useContext(SearchRepairerContext);
 
+  const isMobile = useMediaQuery('(max-width: 640px)');
+
   return (
     <Box
       display="flex"
@@ -44,59 +47,110 @@ const RepairerSortOptions = ({
       alignItems="center"
       width="100%"
       pt={{xs: 2, md: 5}}>
-      <FormControl sx={{width: {xs: '30%', md: '20%'}}} size="small">
-        <InputLabel id="sort-results-label">Trier</InputLabel>
-        <Select
-          label="trier"
-          labelId="sort-results-label"
-          id="sort-results"
-          onChange={handleSelectSortOption}
-          value={sortChosen}>
-          <MenuItem disabled value="">
-            <em>Trier</em>
-          </MenuItem>
-          {Object.entries(sortOptions).map(([key, option]) => (
-            <MenuItem key={key} value={key}>
-              {option}
+      {isMobile ? (
+        <FormControl sx={{width: {xs: '30%', md: '20%'}}} size="small">
+          <InputLabel
+            shrink={false}
+            id="sort-results-label"
+            sx={{color: 'black'}}>
+            Trier
+          </InputLabel>
+          <Select
+            labelId="sort-results-label"
+            id="sort-results"
+            displayEmpty
+            onChange={handleSelectSortOption}>
+            {Object.entries(sortOptions).map(([key, option]) => (
+              <MenuItem key={key} value={key}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ) : (
+        <FormControl sx={{width: {xs: '30%', md: '20%'}}} size="small">
+          <InputLabel id="sort-results-label" sx={{color: 'black'}}>
+            Trier
+          </InputLabel>
+          <Select
+            label="trier"
+            labelId="sort-results-label"
+            id="sort-results"
+            onChange={handleSelectSortOption}
+            value={sortChosen}>
+            <MenuItem disabled value="">
+              <em>Trier</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl
-        sx={{width: {xs: '30%', md: '30%'}, ml: {md: 2}}}
-        size="small">
-        <InputLabel id="filter-results-label" sx={{color: 'black'}}>
-          Type de réparateur
-        </InputLabel>
-        <Select
-          labelId="filter-results-label"
-          id="filter-results"
-          multiple
-          value={repairerTypeSelected}
-          onChange={handleChangeRepairerType}
-          input={<OutlinedInput label="Type de réparateur" />}
-          renderValue={(selected) =>
-            selected.length > 0
-              ? `${selected.length} ${
-                  selected.length > 1
-                    ? 'filtres sélectionnés'
-                    : 'filtre sélectionné'
-                }`
-              : '0 filtre sélectionné'
-          }>
-          <MenuItem disabled value="">
-            <em>Type de réparateur</em>
-          </MenuItem>
-          {repairerTypes.map((repairerType) => (
-            <MenuItem key={repairerType.id} value={repairerType.name}>
-              <Checkbox
-                checked={repairerTypeSelected.indexOf(repairerType.name) > -1}
-              />
-              <ListItemText primary={repairerType.name} />
+            {Object.entries(sortOptions).map(([key, option]) => (
+              <MenuItem key={key} value={key}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+      {isMobile ? (
+        <FormControl
+          sx={{width: {xs: '30%', md: '30%'}, ml: {md: 2}}}
+          size="small">
+          <InputLabel shrink={false} id="filter-results-label">
+            Filtrer
+          </InputLabel>
+          <Select
+            labelId="filter-results-label"
+            id="filter-results"
+            multiple
+            displayEmpty
+            value={repairerTypeSelected}
+            onChange={handleChangeRepairerType}
+            renderValue={() => 'Filtrer'}>
+            {repairerTypes.map((repairerType) => (
+              <MenuItem key={repairerType.id} value={repairerType.name}>
+                <Checkbox
+                  checked={repairerTypeSelected.indexOf(repairerType.name) > -1}
+                />
+                <ListItemText primary={repairerType.name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ) : (
+        <FormControl
+          sx={{width: {xs: '30%', md: '30%'}, ml: {md: 2}}}
+          size="small">
+          <InputLabel id="filter-results-label" sx={{color: 'black'}}>
+            Type de réparateur
+          </InputLabel>
+          <Select
+            labelId="filter-results-label"
+            id="filter-results"
+            multiple
+            value={repairerTypeSelected}
+            onChange={handleChangeRepairerType}
+            input={<OutlinedInput label="Type de réparateur" />}
+            renderValue={(selected) =>
+              selected.length > 0
+                ? `${selected.length} ${
+                    selected.length > 1
+                      ? 'filtres sélectionnés'
+                      : 'filtre sélectionné'
+                  }`
+                : '0 filtre sélectionné'
+            }>
+            <MenuItem disabled value="">
+              <em>Type de réparateur</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+            {repairerTypes.map((repairerType) => (
+              <MenuItem key={repairerType.id} value={repairerType.name}>
+                <Checkbox
+                  checked={repairerTypeSelected.indexOf(repairerType.name) > -1}
+                />
+                <ListItemText primary={repairerType.name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
       {repairers.length ? (
         <Button
           sx={{
