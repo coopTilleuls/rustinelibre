@@ -5,6 +5,7 @@
 
 {$SERVER_NAME}
 
+trusted_proxies private_ranges
 log
 
 # Matches requests for HTML documents, for static files and for Next.js files,
