@@ -18,8 +18,7 @@ export const MapPosition = ({
   repairer,
   updateRepairer,
 }: MapPositionProps): JSX.Element => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([
+  const [mapCenter] = useState<[number, number]>([
     repairer.latitude ? Number(repairer.latitude) : 46.2276,
     repairer.longitude ? Number(repairer.longitude) : 2.2137,
   ]);
@@ -81,21 +80,19 @@ export const MapPosition = ({
             }}></Marker>
         )}
       </MapContainer>
-      <div>
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{my: 2}}
-          onClick={uploadPosition}>
-          {!pendingRegistration ? (
-            'Enregistrer la nouvelle position'
-          ) : (
-            <CircularProgress size={20} sx={{color: 'white'}} />
-          )}
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{my: 2}}
+        onClick={uploadPosition}>
+        {!pendingRegistration ? (
+          'Enregistrer la nouvelle position'
+        ) : (
+          <CircularProgress size={20} sx={{color: 'white'}} />
+        )}
+      </Button>
 
-      {!loading && errorMessage && (
+      {errorMessage && (
           <Typography variant="body1" color="error">
             {errorMessage}
           </Typography>

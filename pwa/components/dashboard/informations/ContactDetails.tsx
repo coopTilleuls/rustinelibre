@@ -7,15 +7,21 @@ import React, {
   useState,
 } from 'react';
 import {Repairer} from '@interfaces/Repairer';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {searchCity} from '@utils/apiCity';
 import {
   City,
   createCities,
 } from '@interfaces/City';
-import {Alert, Button, CircularProgress, Typography, Box} from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Typography,
+  Box,
+  TextField,
+  Autocomplete
+} from "@mui/material";
 import {RequestBody} from "@interfaces/Resource";
 
 interface ContactDetailsProps {
@@ -32,7 +38,6 @@ export const ContactDetails = ({
     streetNumber,
     mobilePhone,
     street,
-    cityInput,
     city,
     citiesList,
     pendingRegistration,
@@ -129,114 +134,109 @@ export const ContactDetails = ({
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <Box sx={{marginTop: 3}}>
-          {loading && <CircularProgress />}
-          {!loading && !repairer && (
-              <Typography>Vous ne gérez pas de solution de réparation</Typography>
-          )}
-          {!loading && (
-              <div>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Nom de votre enseigne"
-                  name="name"
-                  autoComplete="name"
-                  value={name}
-                  inputProps={{maxLength: 80}}
-                  onChange={handleChangeName}
-                />
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  id="mobilePhone"
-                  label="Numéro de téléphone"
-                  name="name"
-                  autoComplete="mobilePhone"
-                  value={mobilePhone}
-                  inputProps={{maxLength: 30}}
-                  onChange={handleChangeMobilePhone}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="streetNumber"
-                  label="Numéro dans la rue"
-                  name="streetNumber"
-                  autoComplete="streetNumber"
-                  value={streetNumber}
-                  inputProps={{maxLength: 30}}
-                  onChange={handleChangeStreetNumber}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="street"
-                  label="Rue"
-                  name="street"
-                  autoComplete="street"
-                  value={street}
-                  inputProps={{maxLength: 800}}
-                  onChange={handleChangeStreet}
-                />
-                <Autocomplete
-                    sx={{mt: 2, mb: 1, p: 0}}
-                    freeSolo
-                    value={city}
-                    options={citiesList}
-                    getOptionLabel={(city) =>
-                        typeof city === 'string'
-                            ? city
-                            : `${city.name}  (${city.postcode})`
-                    }
-                    onChange={(event, value) => handleCitySelect(event, value)}
-                    onInputChange={(event, value) => {
-                      handleCityChange(value);
-                    }}
-                    renderInput={(params) => (
-                        <TextField
-                            required
-                            label="Ville"
-                            {...params}
-                            size="medium"
-                        />
-                    )}
-                />
-          </div>)}
+    <Box sx={{marginTop: 3}} component="form" onSubmit={handleSubmit} >
+      {loading && <CircularProgress />}
+      {!loading && !repairer && (
+          <Typography>Vous ne gérez pas de solution de réparation</Typography>
+      )}
+      {!loading && (
+          <div>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Nom de votre enseigne"
+              name="name"
+              autoComplete="name"
+              value={name}
+              inputProps={{maxLength: 80}}
+              onChange={handleChangeName}
+            />
+            <TextField
+              margin="normal"
+              fullWidth
+              id="mobilePhone"
+              label="Numéro de téléphone"
+              name="name"
+              autoComplete="mobilePhone"
+              value={mobilePhone}
+              inputProps={{maxLength: 30}}
+              onChange={handleChangeMobilePhone}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="streetNumber"
+              label="Numéro dans la rue"
+              name="streetNumber"
+              autoComplete="streetNumber"
+              value={streetNumber}
+              inputProps={{maxLength: 30}}
+              onChange={handleChangeStreetNumber}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="street"
+              label="Rue"
+              name="street"
+              autoComplete="street"
+              value={street}
+              inputProps={{maxLength: 800}}
+              onChange={handleChangeStreet}
+            />
+            <Autocomplete
+                sx={{mt: 2, mb: 1, p: 0}}
+                freeSolo
+                value={city}
+                options={citiesList}
+                getOptionLabel={(city) =>
+                    typeof city === 'string'
+                        ? city
+                        : `${city.name}  (${city.postcode})`
+                }
+                onChange={(event, value) => handleCitySelect(event, value)}
+                onInputChange={(event, value) => {
+                  handleCityChange(value);
+                }}
+                renderInput={(params) => (
+                    <TextField
+                        required
+                        label="Ville"
+                        {...params}
+                        size="medium"
+                    />
+                )}
+            />
+      </div>)}
 
-          {!loading && (
-              <div>
-                <Button type="submit" variant="contained" sx={{my: 2}}>
-                  {!pendingRegistration ? (
-                      'Enregistrer mes informations'
-                  ) : (
-                      <CircularProgress size={20} sx={{color: 'white'}} />
-                  )}
-                </Button>
-              </div>
-          )}
+      {!loading && (
+          <div>
+            <Button type="submit" variant="contained" sx={{my: 2}}>
+              {!pendingRegistration ? (
+                  'Enregistrer mes informations'
+              ) : (
+                  <CircularProgress size={20} sx={{color: 'white'}} />
+              )}
+            </Button>
+          </div>
+      )}
 
-          {!loading && errorMessage && (
-              <Typography variant="body1" color="error">
-                {errorMessage}
-              </Typography>
-          )}
+      {!loading && errorMessage && (
+          <Typography variant="body1" color="error">
+            {errorMessage}
+          </Typography>
+      )}
 
-          {success && (
-              <Alert severity="success">
-                Informations mises à jour
-              </Alert>
-          )}
-        </Box>
-
-      </form>
-    </>
+      {success && (
+          <Alert severity="success">
+            Informations mises à jour
+          </Alert>
+      )}
+    </Box>
   );
 };
 

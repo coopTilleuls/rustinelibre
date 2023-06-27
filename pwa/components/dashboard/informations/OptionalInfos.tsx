@@ -2,11 +2,11 @@ import React, {useContext, useEffect, useState} from 'react';
 import dynamic from 'next/dynamic';
 import {InputLabel, Box, Button, CircularProgress, Typography, Alert} from '@mui/material';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
+import {Repairer} from '@interfaces/Repairer';
+import {RequestBody} from "@interfaces/Resource";
 const Editor = dynamic(() => import('@components/form/Editor'), {
   ssr: false,
 });
-import {Repairer} from '@interfaces/Repairer';
-import {RequestBody} from "@interfaces/Resource";
 
 interface OptionnalInfosProps {
   repairer: Repairer | null;
@@ -14,7 +14,6 @@ interface OptionnalInfosProps {
 }
 
 export const OptionalInfos = ({repairer, updateRepairer}: OptionnalInfosProps): JSX.Element => {
-  const [loading, setLoading] = useState<boolean>(false);
   const {
     optionalPage,
     errorMessage,
@@ -40,39 +39,32 @@ export const OptionalInfos = ({repairer, updateRepairer}: OptionnalInfosProps): 
   };
 
   return (
-      <form onSubmit={handleSubmit}>
-        <Box sx={{marginTop: 3}}>
-          <InputLabel sx={{mt: 4, mb: -2, ml: 1}}>
-            Informations complémentaires (page visible avant la prise de rendez
-            vous)
-          </InputLabel>
-          <Editor content={optionalPage} setContent={setOptionalPage} />
+    <Box sx={{marginTop: 3}} component="form" onSubmit={handleSubmit}>
+      <InputLabel sx={{mt: 4, mb: -2, ml: 1}}>
+        Informations complémentaires (page visible avant la prise de rendez
+        vous)
+      </InputLabel>
+      <Editor content={optionalPage} setContent={setOptionalPage} />
+      <Button type="submit" variant="contained" sx={{my: 2}}>
+        {!pendingRegistration ? (
+            'Enregistrer mes informations'
+        ) : (
+            <CircularProgress size={20} sx={{color: 'white'}} />
+        )}
+      </Button>
 
-          {!loading && (
-              <div>
-                <Button type="submit" variant="contained" sx={{my: 2}}>
-                  {!pendingRegistration ? (
-                      'Enregistrer mes informations'
-                  ) : (
-                      <CircularProgress size={20} sx={{color: 'white'}} />
-                  )}
-                </Button>
-              </div>
-          )}
+      {errorMessage && (
+          <Typography variant="body1" color="error">
+            {errorMessage}
+          </Typography>
+      )}
 
-          {!loading && errorMessage && (
-              <Typography variant="body1" color="error">
-                {errorMessage}
-              </Typography>
-          )}
-
-          {success && (
-              <Alert severity="success">
-                Informations mises à jour
-              </Alert>
-          )}
-        </Box>
-      </form>
+      {success && (
+          <Alert severity="success">
+            Informations mises à jour
+          </Alert>
+      )}
+    </Box>
   );
 };
 

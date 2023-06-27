@@ -18,7 +18,6 @@ export const DashboardInfosPhotos = ({
   fetchRepairer,
 }: DashboardInfosPhotosProps): JSX.Element => {
   const {setThumbnail, setDescriptionPicture} = useContext(RepairerFormContext);
-  const [loading, setLoading] = useState<boolean>(false);
   const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
   useEffect(() => {
@@ -40,8 +39,6 @@ export const DashboardInfosPhotos = ({
         return;
       }
 
-      setLoading(true);
-
       const response = await uploadFile(file);
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
@@ -56,7 +53,6 @@ export const DashboardInfosPhotos = ({
             descriptionPicture: mediaObjectResponse['@id'],
           });
         }
-        setLoading(false);
         fetchRepairer();
         setThumbnail(repairer.thumbnail ?? null);
         setDescriptionPicture(repairer.descriptionPicture ?? null);

@@ -1,12 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import dynamic from 'next/dynamic';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
-const Editor = dynamic(() => import('@components/form/Editor'), {
-    ssr: false,
-});
 import {Repairer} from '@interfaces/Repairer';
 import {Alert, Box, Button, CircularProgress, InputLabel, Typography} from "@mui/material";
 import {RequestBody} from "@interfaces/Resource";
+const Editor = dynamic(() => import('@components/form/Editor'), {
+    ssr: false,
+});
 
 interface OpeningHoursProps {
     repairer: Repairer | null;
@@ -14,7 +14,6 @@ interface OpeningHoursProps {
 }
 
 export const OpeningHours = ({repairer, updateRepairer}: OpeningHoursProps): JSX.Element => {
-    const [loading, setLoading] = useState<boolean>(false);
     const {
         openingHours,
         pendingRegistration,
@@ -40,36 +39,33 @@ export const OpeningHours = ({repairer, updateRepairer}: OpeningHoursProps): JSX
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Box sx={{marginTop: 3}}>
-                <InputLabel sx={{mb: -2, ml: 1}}>Horaires d&apos;ouverture</InputLabel>
-                <Editor content={openingHours} setContent={setOpeningHours} />
+        <Box sx={{marginTop: 3}} component="form" onSubmit={handleSubmit}>
+            {repairer && (
+                <>
+                    <InputLabel sx={{mb: -2, ml: 1}}>Horaires d&apos;ouverture</InputLabel>
+                    <Editor content={openingHours} setContent={setOpeningHours} />
+                    <Button type="submit" variant="contained" sx={{my: 2}}>
+                        {!pendingRegistration ? (
+                            'Enregistrer mes informations'
+                        ) : (
+                            <CircularProgress size={20} sx={{color: 'white'}} />
+                        )}
+                    </Button>
 
-                {!loading && (
-                    <div>
-                        <Button type="submit" variant="contained" sx={{my: 2}}>
-                            {!pendingRegistration ? (
-                                'Enregistrer mes informations'
-                            ) : (
-                                <CircularProgress size={20} sx={{color: 'white'}} />
-                            )}
-                        </Button>
-                    </div>
-                )}
+                    {errorMessage && (
+                        <Typography variant="body1" color="error">
+                            {errorMessage}
+                        </Typography>
+                    )}
 
-                {!loading && errorMessage && (
-                    <Typography variant="body1" color="error">
-                        {errorMessage}
-                    </Typography>
-                )}
-
-                {success && (
-                    <Alert severity="success">
-                        Informations mises à jour
-                    </Alert>
-                )}
-            </Box>
-        </form>
+                    {success && (
+                        <Alert severity="success">
+                            Informations mises à jour
+                        </Alert>
+                    )}
+                </>
+            )}
+        </Box>
     );
 };
 

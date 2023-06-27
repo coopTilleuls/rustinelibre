@@ -97,7 +97,7 @@ const InformationsContainer = ({
         <Tab label="Photos"/>
         <Tab label="Horaires"/>
         <Tab label="Informations complémentaires"/>
-        <Tab label={`Position sur la carte`}/>
+        <Tab label="Position sur la carte"/>
       </Tabs>
 
       <Box sx={{ marginTop: 3 }}>
