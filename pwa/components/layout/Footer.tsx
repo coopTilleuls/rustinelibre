@@ -57,7 +57,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             label={!isMobile && 'Mes vélos'}
             icon={<DirectionsBikeIcon />}
           />
-          {!isBoss && !isEmployee && (
+          {user && !isBoss(user) && !isEmployee(user) && (
             <BottomNavigationAction
               component={NextLinkComposed}
               to={{pathname: user ? '/messagerie' : '/'}}
