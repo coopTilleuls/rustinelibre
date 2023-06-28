@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Entity\Repairer;
 use App\Repairers\Slots\ComputeAvailableSlotsByRepairer;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -18,8 +17,7 @@ final class BuildRepairerSlotsAvailableAction
     {
     }
 
-    #[ParamConverter('repairer', class: Repairer::class)]
-    public function __invoke(Request $request, Repairer $repairer): JsonResponse
+    public function __invoke(Repairer $repairer, Request $request): JsonResponse
     {
         $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($repairer);
 

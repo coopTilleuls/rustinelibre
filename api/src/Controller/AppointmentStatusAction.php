@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Appointment;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 #[AsController]
-final class AppointmentStatusAction extends AbstractController
+final class AppointmentStatusAction
 {
     public function __construct(private WorkflowInterface $appointmentAcceptanceStateMachine)
     {
     }
 
-    #[ParamConverter('appointment', class: Appointment::class)]
-    public function __invoke(Request $request, Appointment $appointment): Appointment
+    public function __invoke(Appointment $appointment, Request $request): Appointment
     {
         $content = json_decode($request->getContent(), true);
 

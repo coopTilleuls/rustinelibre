@@ -39,11 +39,11 @@ class DeleteTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
     }
 
-   public function testUserCannotDeleteMaintenanceForOtherBike(): void
-   {
-       $maintenance = $this->maintenances[0];
+    public function testUserCannotDeleteMaintenanceForOtherBike(): void
+    {
+        $maintenance = $this->maintenances[0];
 
-       $this->createClientAuthAsUser()->request('DELETE', sprintf('/maintenances/%d', $maintenance->id));
-       $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-   }
+        $this->createClientAuthAsUser()->request('DELETE', sprintf('/maintenances/%d', $maintenance->id));
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
 }

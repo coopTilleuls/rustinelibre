@@ -10,6 +10,12 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @template T of string
+ * @template TSubject of mixed
+ *
+ * @template-extends Voter<T, TSubject>
+ */
 class CustomerVoter extends Voter
 {
     public function __construct(

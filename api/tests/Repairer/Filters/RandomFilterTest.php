@@ -33,9 +33,9 @@ class RandomFilterTest extends AbstractTestCase
 
             $idsForThisResponse = [];
             foreach ($response as $key => $repairer) {
-                if (array_key_exists($key + 1, $response) &&
-                    array_key_exists('firstSlotAvailable', $repairer) &&
-                    array_key_exists('firstSlotAvailable', $response[$key + 1])
+                if (array_key_exists($key + 1, $response)
+                    && array_key_exists('firstSlotAvailable', $repairer)
+                    && array_key_exists('firstSlotAvailable', $response[$key + 1])
                 ) {
                     // Check that each result has a firstSlotAvailable less or equal to next result
                     $this->assertLessThanOrEqual($response[$key + 1]['firstSlotAvailable'], $repairer['firstSlotAvailable']);

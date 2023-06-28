@@ -19,10 +19,10 @@ use Symfony\Component\Workflow\Event\Event;
 readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private ConfirmationEmail $confirmationEmail,
-                                private EntityManagerInterface $entityManager,
-                                private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
-                                private RequestStack $requestStack,
-                                private Security $security)
+        private EntityManagerInterface $entityManager,
+        private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
+        private RequestStack $requestStack,
+        private Security $security)
     {
     }
 
@@ -67,8 +67,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $user = $this->security->getUser();
 
         if (
-            null === $user ||
-            !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
+            null === $user
+            || !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
             throw new AccessDeniedHttpException();
         }
@@ -96,8 +96,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $user = $this->security->getUser();
 
         if (
-            null === $user ||
-            !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
+            null === $user
+            || !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
             throw new AccessDeniedHttpException();
         }

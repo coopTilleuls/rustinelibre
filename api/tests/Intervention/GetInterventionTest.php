@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Intervention;
 
 use App\Entity\RepairerIntervention;
-use App\Entity\User;
 
 class GetInterventionTest extends InterventionAbstractTestCase
 {

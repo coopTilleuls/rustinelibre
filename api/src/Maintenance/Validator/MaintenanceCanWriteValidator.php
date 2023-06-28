@@ -38,8 +38,8 @@ class MaintenanceCanWriteValidator extends ConstraintValidator
         }
 
         if (
-            !($this->security->isGranted('ROLE_EMPLOYEE') && $currentUser->repairerEmployee && $repairerFromEmployee) &&
-            !($this->security->isGranted('ROLE_BOSS') && $repairerFromBoss)
+            !($this->security->isGranted('ROLE_EMPLOYEE') && $currentUser->repairerEmployee && $repairerFromEmployee)
+            && !($this->security->isGranted('ROLE_BOSS') && $repairerFromBoss)
         ) {
             $this->context->buildViolation($constraint->messageCannotWriteMaintenanceForThisBike)->addViolation();
 

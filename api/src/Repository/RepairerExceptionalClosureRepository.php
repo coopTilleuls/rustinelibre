@@ -34,7 +34,7 @@ class RepairerExceptionalClosureRepository extends ServiceEntityRepository
         }
     }
 
-    public function findExceptionalClosureByRepairerBetweenDates(Repairer $repairer, ?\DateTimeInterface $from = new \DateTime(), ?\DateTimeInterface $to = null)
+    public function findExceptionalClosureByRepairerBetweenDates(Repairer $repairer, ?\DateTimeInterface $from = new \DateTime(), \DateTimeInterface $to = null)
     {
         if (!$to) {
             $to = new \DateTime();
