@@ -10,7 +10,11 @@ use ApiPlatform\Metadata\Operation;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @property TranslatorInterface $translator
+ */
 final class ProximityFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'proximity';
@@ -26,7 +30,7 @@ final class ProximityFilter extends AbstractFilter
             $latitude = $coordinates[0];
             $longitude = $coordinates[1];
         } catch (\Exception $exception) {
-            throw new BadRequestHttpException('badRequest.proximity.filter');
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.proximity.filter', domain:'validators'));
         }
 
         $queryBuilder->addSelect('ST_Distance(o.gpsPoint, ST_SetSRID(ST_MakePoint(:proximity_latitude, :proximity_longitude), 4326)) as HIDDEN distance');

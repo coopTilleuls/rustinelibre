@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class RepairerInterventionEventSubscriber implements EventSubscriberInterface
 {
@@ -25,6 +26,7 @@ readonly class RepairerInterventionEventSubscriber implements EventSubscriberInt
         private InterventionRepository $interventionRepository,
         private Security $security,
         private ValidatorInterface $validator,
+        private TranslatorInterface $translator
     ) {
     }
 
@@ -52,18 +54,20 @@ readonly class RepairerInterventionEventSubscriber implements EventSubscriberInt
         }
 
         if (null === $user->repairer) {
-            throw new AccessDeniedException('access.denied.repairer.intervention.link');
+            throw new AccessDeniedException($this->translator->trans('403_access.denied.repairer.intervention.link', domain:'validators'));
         }
 
         /** @var ?Intervention $adminIntervention */
         $adminIntervention = $this->interventionRepository->findOneBy(['id' => $object->intervention->id]);
 
         if (null === $adminIntervention) {
-            throw new NotFoundHttpException(sprintf('Intervention with id %s not found', $object->intervention->id));
+            throw new NotFoundHttpException($this->translator->trans('404_notFound.intervention', [
+                '%id%'=> $object->intervention->id,
+            ], domain:'validators'));
         }
 
         if (!$adminIntervention->isAdmin) {
-            throw new AccessDeniedException('access.denied.admin.intervention.link');
+            throw new AccessDeniedException($this->translator->trans('403_access.denied.admin.intervention.link', domain:'validators'));
         }
 
         $object->repairer = $user->repairer;

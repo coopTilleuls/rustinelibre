@@ -121,9 +121,12 @@ repairer.duration.slot: La durée des créneaux doit être de 30, 60 ou 180 (min
 400_badRequest.validation.code: Vous devez fournir un code pour pouvoir le valider.
 400_badRequest.appointment.transition: Vous devez fournir un intitulé de transition.
 400_badRequest.appointment.transition.not.available: Cette transition n'est pas disponible actuellement.
+400_badRequest.appointment.transition.slotTime: Vous devez fournir un nouveau créneau (slotTime) dans le corps de la requête pour la transition %transition%.
+400_badRequest.around.filter.resource.class: Il manque une propriété latitude ou longitude à votre classe ressource %resource%.
 
 #Not Found Exceptions
 
-notFound.repairer.employee: Ce "repairer employee" n'existe pas.
-notFound.customer: il n'y a pas de client pour vous.
-notFound.boss: Pas de gérant trouvé.
+404_notFound.repairer.employee: Ce "repairer employee" n'existe pas.
+404_notFound.customer: Il n'y a pas de client pour vous.
+404_notFound.boss: Pas de gérant trouvé.
+404_notFound.intervention: La prestation ayant l'id %id% n'existe pas.

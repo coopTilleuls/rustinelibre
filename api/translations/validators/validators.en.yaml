@@ -123,9 +123,12 @@ repairer.duration.slot: The duration slot should be one of 30 / 60 / 180 (min).
 400_badRequest.validation.code: You should provide a code to validate it.
 400_badRequest.appointment.transition: You should provide a transition name.
 400_badRequest.appointment.transition.not.available: This transition is currently not available.
+400_badRequest.appointment.transition.slotTime: You should provide a new slotTime in your body request for the transition %transition%.
+400_badRequest.around.filter.resource.class: Your resource class %resource% has no latitude or longitude property.
 
 #Not Found Exceptions
 
-notFound.repairer.employee: This repairer employee does not exist.
-notFound.customer: There's no customer for you.
-notFound.boss: No boss found.
+404_notFound.repairer.employee: This repairer employee does not exist.
+404_notFound.customer: There's no customer for you.
+404_notFound.boss: No boss found.
+404_notFound.intervention: Intervention with id %id% not found.

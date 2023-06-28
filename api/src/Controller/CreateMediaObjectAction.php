@@ -10,11 +10,12 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
 final class CreateMediaObjectAction extends AbstractController
 {
-    public function __construct(private readonly Security $security)
+    public function __construct(private readonly Security $security, private readonly TranslatorInterface $translator)
     {
     }
 
@@ -22,7 +23,7 @@ final class CreateMediaObjectAction extends AbstractController
     {
         $uploadedFile = $request->files->get('file');
         if (!$uploadedFile) {
-            throw new BadRequestHttpException('badRequest.file.required');
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.file.required', domain:'validators'));
         }
 
         $mediaObject = new MediaObject();

@@ -10,7 +10,11 @@ use ApiPlatform\Metadata\Operation;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @property TranslatorInterface $translator
+ */
 final class UserSearchFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'userSearch';
@@ -22,7 +26,7 @@ final class UserSearchFilter extends AbstractFilter
         }
 
         if (!is_string($value)) {
-            throw new BadRequestHttpException('badRequest.user.search.filter');
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.user.search.filter', domain:'validators'));
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];

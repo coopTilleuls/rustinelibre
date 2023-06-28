@@ -11,11 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
 final class UserValidationCodeController
 {
-    public function __construct(private Security $security, private UserRepository $userRepository)
+    public function __construct(private readonly Security $security, private readonly UserRepository $userRepository, private readonly TranslatorInterface $translator)
     {
     }
 
@@ -29,11 +30,11 @@ final class UserValidationCodeController
 
         $requestContent = json_decode($request->getContent(), true);
         if (!array_key_exists('code', $requestContent)) {
-            throw new BadRequestHttpException('badRequest.validation.code');
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.validation.code', domain:'validators'));
         }
 
         if (!in_array((int) $requestContent['code'], [$currentUser->validationCode, 6666])) { // @todo change this when mail OK
-            throw new AccessDeniedHttpException('access.denied.validation.code');
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.validation.code', domain:'validators'));
         }
 
         $currentUser->emailConfirmed = true;

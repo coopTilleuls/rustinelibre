@@ -81,7 +81,9 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $contentRequest = json_decode($this->requestStack->getCurrentRequest()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         if (!array_key_exists('slotTime', $contentRequest)) {
-            throw new BadRequestHttpException(sprintf('You should provide a new slotTime in your body request for the transition : %s', $event->getTransition()->getName()));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition.slotTime',[
+                '%transition%'=> $event->getTransition()->getName(),
+            ], domain:'validators'));
         }
 
         $appointment->status = Appointment::VALIDATED;

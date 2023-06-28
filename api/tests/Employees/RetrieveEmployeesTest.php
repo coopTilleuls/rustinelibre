@@ -10,7 +10,11 @@ use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @property TranslatorInterface $translator
+ */
 class RetrieveEmployeesTest extends AbstractTestCase
 {
     private array $repairerEmployees = [];
@@ -82,7 +86,7 @@ class RetrieveEmployeesTest extends AbstractTestCase
         }
 
         if (!$firstRandomBoss) {
-            throw new NotFoundHttpException('notFound.boss');
+            throw new NotFoundHttpException($this->translator->trans('404_notFound.boss', domain:'validators'));
         }
 
         // Boss of repairer 1 try to get an employee of repairer 2
