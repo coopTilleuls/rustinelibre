@@ -5,7 +5,6 @@
 
 {$SERVER_NAME}
 
-trusted_proxies private_ranges
 log
 
 # Matches requests for HTML documents, for static files and for Next.js files,
@@ -44,9 +43,12 @@ route {
 
     # Comment the following line if you don't want Next.js to catch requests for HTML documents.
     # In this case, they will be handled by the PHP app.
-    reverse_proxy @pwa http://{$PWA_UPSTREAM}
-
-    php_fastcgi unix//var/run/php/php-fpm.sock
+    reverse_proxy @pwa http://{$PWA_UPSTREAM} {
+        trusted_proxies private_ranges
+    }
+    php_fastcgi unix//var/run/php/php-fpm.sock {
+        trusted_proxies private_ranges
+    }
     encode zstd gzip
     file_server
 }
