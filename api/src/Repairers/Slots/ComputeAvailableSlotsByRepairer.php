@@ -16,8 +16,8 @@ use Spatie\OpeningHours\TimeRange;
 final class ComputeAvailableSlotsByRepairer
 {
     public function __construct(private RepairerOpeningHoursRepository $repairerOpeningHoursRepository,
-                                private AppointmentRepository $appointmentRepository,
-                                private RepairerExceptionalClosureRepository $repairerExceptionalClosureRepository)
+        private AppointmentRepository $appointmentRepository,
+        private RepairerExceptionalClosureRepository $repairerExceptionalClosureRepository)
     {
     }
 

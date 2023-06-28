@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\AutoDiagnostic\Security;
 
 use App\Entity\AutoDiagnostic;
-use App\Entity\User;
 use App\Repository\AutoDiagnosticRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;

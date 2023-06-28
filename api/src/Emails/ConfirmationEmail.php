@@ -15,12 +15,12 @@ use Twig\Environment;
 readonly class ConfirmationEmail
 {
     public function __construct(private MailerInterface $mailer,
-                                private string $mailerSender,
-                                private string $webAppUrl,
-                                private KernelInterface $kernel,
-                                private LoggerInterface $logger,
-                                private DiscussionManager $discussionManager,
-                                private Environment $twig)
+        private string $mailerSender,
+        private string $webAppUrl,
+        private KernelInterface $kernel,
+        private LoggerInterface $logger,
+        private DiscussionManager $discussionManager,
+        private Environment $twig)
     {
     }
 

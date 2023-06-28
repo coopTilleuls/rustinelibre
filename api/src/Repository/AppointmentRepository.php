@@ -36,7 +36,7 @@ class AppointmentRepository extends ServiceEntityRepository
         }
     }
 
-    public function findFullSlots(Repairer $repairer, ?\DateTimeInterface $start = new \DateTime(), ?\DateTimeInterface $end = null): array
+    public function findFullSlots(Repairer $repairer, ?\DateTimeInterface $start = new \DateTime(), \DateTimeInterface $end = null): array
     {
         if (!$end) {
             $end = new \DateTime();

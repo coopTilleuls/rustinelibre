@@ -23,7 +23,7 @@ final class AppointmentDiscussionNormalizer implements NormalizerInterface, Norm
     /**
      * @param Appointment $object
      */
-    public function normalize($object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+    public function normalize($object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $context[self::ALREADY_CALLED] = true;
 
@@ -33,7 +33,7 @@ final class AppointmentDiscussionNormalizer implements NormalizerInterface, Norm
         return $this->normalizer->normalize($object, $format, $context);
     }
 
-    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
+    public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
             return false;
