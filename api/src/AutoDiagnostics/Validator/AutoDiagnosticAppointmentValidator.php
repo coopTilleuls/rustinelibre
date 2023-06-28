@@ -11,10 +11,11 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AutoDiagnosticAppointmentValidator extends ConstraintValidator
 {
-    public function __construct(private readonly Security $security)
+    public function __construct(private readonly Security $security, private readonly TranslatorInterface $translator)
     {
     }
 
@@ -30,7 +31,7 @@ class AutoDiagnosticAppointmentValidator extends ConstraintValidator
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
         if (!$currentUser) {
-            throw new AccessDeniedHttpException('access.denied.role');
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
         }
 
         if ($value->customer && $value->customer->id === $currentUser->id) {

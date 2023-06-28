@@ -70,14 +70,14 @@ class CreateTest extends AbstractTestCase
                 'appointment' => sprintf('/appointments/%d', $appointment->id),
                 'prestation' => 'test prestation',
             ],
-        ]);
+        ])->toArray();
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'appointment: This appointment does not belong to you.',
+            'hydra:description' => 'appointment: Ce rendez-vous concerne un autre utilisateur.',
         ]);
     }
 }

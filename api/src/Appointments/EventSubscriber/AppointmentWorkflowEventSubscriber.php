@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Workflow\Event\Event;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInterface
 {
@@ -22,7 +23,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
                                 private EntityManagerInterface $entityManager,
                                 private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
                                 private RequestStack $requestStack,
-                                private Security $security)
+                                private Security $security,
+                                private TranslatorInterface $translator)
     {
     }
 
@@ -43,7 +45,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment = $event->getSubject();
 
         if (!$this->security->isGranted(User::ROLE_ADMIN) && !$this->security->isGranted(User::ROLE_BOSS) && !$this->security->isGranted(User::ROLE_EMPLOYEE)) {
-            throw new AccessDeniedHttpException('access.denied.role');
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
         }
 
         $appointment->status = Appointment::VALIDATED;
@@ -70,7 +72,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             null === $user ||
             !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
-            throw new AccessDeniedHttpException('access.denied.role');
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
         }
 
         /** @var Appointment $appointment */
@@ -99,7 +101,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             null === $user ||
             !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
-            throw new AccessDeniedHttpException('access.denied.role');
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
         }
 
         /** @var Appointment $appointment */

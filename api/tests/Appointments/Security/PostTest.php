@@ -106,7 +106,7 @@ class PostTest extends SlotsTestCase
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_FORBIDDEN);
         self::assertJsonContains([
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'Cet utilisateur n\'est pas un de vos client',
+            'hydra:description' => 'Cet utilisateur n\'est pas un de vos client.',
         ]);
     }
 
@@ -146,7 +146,7 @@ class PostTest extends SlotsTestCase
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_FORBIDDEN);
         self::assertJsonContains([
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'Cet utilisateur n\'est pas un de vos client',
+            'hydra:description' => 'Cet utilisateur n\'est pas un de vos client.',
         ]);
     }
 }

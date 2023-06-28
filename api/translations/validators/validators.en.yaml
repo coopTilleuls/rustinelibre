@@ -98,30 +98,31 @@ repairer.opening.overlapped: The hours are overlapped.
 repairer.duration.slot: The duration slot should be one of 30 / 60 / 180 (min).
 
 #Access Denied Exceptions
-access.denied.role: You don't have permissions to access to this space.
-access.denied.logged: You have to be logged to access to this space.
-access.denied.customer: This user is not one of your customer.
-access.denied.validation.code: This validation code is not valid.
-access.denied.repairer.intervention.link: You need to have a repairer profile to link to an intervention.
-access.denied.admin.intervention.link: You can only link repairers to interventions created by admin.
-access.denied.repairer.belong.shop: You should belong a shop to create an appointment.
-access.denied.repairer.shop.owner: This shop is not yours.
+403_access.denied.role: You don't have permissions to access to this space.
+403_access.denied.logged: You have to be logged to access to this space.
+403_access.denied.validation.code: This validation code is not valid.
+403_access.denied.repairer.intervention.link: You need to have a repairer profile to link to an intervention.
+403_access.denied.admin.intervention.link: You can only link repairers to interventions created by admin.
+403_access.denied.repairer.belong.shop: You should belong a shop to create an appointment.
+403_access.denied.repairer.shop.owner: This shop is not yours.
+403_access.denied.customer: This user is not one of your customer.
+
 
 #Bad Request Exceptions
-badRequest.file.required: file is required.
-badRequest.add.employee: You cannot add en employee if you dont have any repairer shop.
-badRequest.update.employee: You should provide a 'repairer employee' ID to update it.
-badRequest.repairer.employee.not.exist: this 'repairer employee' does not exist.
-badRequest.intervention.price: Price is required.
-badRequest.repairer.create.intervention: You must have a repairer to create an intervention.
-badRequest.slot.not.available: This slot is not available.
-badRequest.availability.filter: The "availability" filter accepts only "ASC" or "DESC" as value.
-badRequest.proximity.filter: The parameters provided in the proximity filter have the wrong format, it should be ?proximity=50.43321,3.03943.
-badRequest.user.search.filter: Wrong format provided for user search, should be a string as ?userSearch=raphael.
-badRequest.around.filter: Wrong format provided for the around filter, should be ?around[cityName]=latitude,longitude.
-badRequest.validation.code: You should provide a code to validate it.
-badRequest.appointment.transition: You should provide a transition name.
-badRequest.appointment.transition.not.available: This transition is currently not available.
+400_badRequest.file.required: file is required.
+400_badRequest.add.employee: You cannot add en employee if you dont have any repairer shop.
+400_badRequest.update.employee: You should provide a 'repairer employee' ID to update it.
+400_badRequest.repairer.employee.not.exist: this 'repairer employee' does not exist.
+400_badRequest.intervention.price: Price is required.
+400_badRequest.repairer.create.intervention: You must have a repairer to create an intervention.
+400_badRequest.slot.not.available: This slot is not available.
+400_badRequest.availability.filter: The "availability" filter accepts only "ASC" or "DESC" as value.
+400_badRequest.proximity.filter: The parameters provided in the proximity filter have the wrong format, it should be ?proximity=50.43321,3.03943.
+400_badRequest.user.search.filter: Wrong format provided for user search, should be a string as ?userSearch=raphael.
+400_badRequest.around.filter: Wrong format provided for the around filter, should be ?around[cityName]=latitude,longitude.
+400_badRequest.validation.code: You should provide a code to validate it.
+400_badRequest.appointment.transition: You should provide a transition name.
+400_badRequest.appointment.transition.not.available: This transition is currently not available.
 
 #Not Found Exceptions
 

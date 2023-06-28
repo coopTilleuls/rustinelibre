@@ -19,10 +19,10 @@ user.firstName.not_blank: Merci de renseigner votre prénom.
 
 #Appointment assert validation messages
 #Repairer
-appointment.repairer.not_null/not_blank: Un réparateur doit être renseigné pour prendre rendez-vous.
+appointment.repairer.not_blank: Un réparateur doit être renseigné pour prendre rendez-vous.
 
 #SlotTime
-appointment.slotTime.not_null/not_blank: Un créneau doit être sélectionné pour prendre rendez-vous.
+appointment.slotTime.not_blank: Un créneau doit être sélectionné pour prendre rendez-vous.
 appointment.slotTime.greater_than: Le créneau sélectionné doit être postérieur à {{ compared_value }}.
 
 #Appointment state
@@ -97,30 +97,30 @@ repairer.opening.overlapped: Les heures ne peuvent pas se chevaucher.
 repairer.duration.slot: La durée des créneaux doit être de 30, 60 ou 180 (min).
 
 #Access Denied Exceptions
-access.denied.role: Vous n'avez pas les droits pour accéder à cet espace.
-access.denied.logged: Vous devez être connecté pour accéder à cet espace.
-access.denied.customer: Cet utilisateur n'est pas un de vos client.
-access.denied.validation.code: Ce code de validation n'est pas valide.
-access.denied.repairer.intervention.link: Vous devez avoir un profil réparateur pour lier une prestation.
-access.denied.admin.intervention.link: Vous pouvez uniquement lier un réparateur à une prestation créée par un administrateur.
-access.denied.repairer.belong.shop: Vous devez appartenir à une solution de réparation pour créer un rendez-vous.
-access.denied.repairer.shop.owner: Cette solution de réparation n'est pas la votre.
+403_access.denied.role: Vous n'avez pas les droits pour accéder à cet espace.
+403_access.denied.logged: Vous devez être connecté pour accéder à cet espace.
+403_access.denied.validation.code: Ce code de validation n'est pas valide.
+403_access.denied.repairer.intervention.link: Vous devez avoir un profil réparateur pour lier une prestation.
+403_access.denied.admin.intervention.link: Vous pouvez uniquement lier un réparateur à une prestation créée par un administrateur.
+403_access.denied.repairer.belong.shop: Vous devez appartenir à une solution de réparation pour créer un rendez-vous.
+403_access.denied.repairer.shop.owner: Cette solution de réparation n'est pas la votre.
+403_access.denied.customer: "Cet utilisateur n'est pas un de vos clients."
 
 #Bad Request Exceptions
-badRequest.file.required: Le fichier est requis.
-badRequest.add.employee: Vous ne pouvez pas ajouter d'employé si vous n'avez pas de solution de réparation.
-badRequest.update.employee: Vous devez fournir un id de 'repairer employee' pour le mettre à jour.
-badRequest.repairer.employee.not.exist: Ce 'repairer employee' n'existe pas.
-badRequest.intervention.price: Le prix est requis.
-badRequest.repairer.create.intervention: Il doit y avoir une solution de réparation pour créer une prestation.
-badRequest.slot.not.available: Ce créneau n'est pas disponible.
-badRequest.availability.filter: Le filtre des créneaux disponibles ("availability filter")n'accepte que les valeurs "ASC" ou "DESC".
-badRequest.proximity.filter: Les paramètres donnés dans ke filtre de proximité ("proximity filter") n'ont pas le bon format, cela devrait être ?proximity=50.43321,3.03943.
-badRequest.user.search.filter: Le format donné pour la recherche d'utilisateur est incorrect, il doit être sous la forme ?userSearch=raphael.
-badRequest.around.filter: Le format donné pour le filtre de la recherche aux alentours est incorrect, il doit être sous la forme ?around[cityName]=latitude,longitude.
-badRequest.validation.code: Vous devez fournir un code pour pouvoir le valider.
-badRequest.appointment.transition: Vous devez fournir un intitulé de transition.
-badRequest.appointment.transition.not.available: Cette transition n'est pas disponible actuellement.
+400_badRequest.file.required: Le fichier est requis.
+400_badRequest.add.employee: Vous ne pouvez pas ajouter d'employé si vous n'avez pas de solution de réparation.
+400_badRequest.update.employee: Vous devez fournir un id de 'repairer employee' pour le mettre à jour.
+400_badRequest.repairer.employee.not.exist: Ce 'repairer employee' n'existe pas.
+400_badRequest.intervention.price: Le prix est requis.
+400_badRequest.repairer.create.intervention: Il doit y avoir une solution de réparation pour créer une prestation.
+400_badRequest.slot.not.available: Ce créneau n'est pas disponible.
+400_badRequest.availability.filter: Le filtre des créneaux disponibles ("availability filter")n'accepte que les valeurs "ASC" ou "DESC".
+400_badRequest.proximity.filter: Les paramètres donnés dans ke filtre de proximité ("proximity filter") n'ont pas le bon format, cela devrait être ?proximity=50.43321,3.03943.
+400_badRequest.user.search.filter: Le format donné pour la recherche d'utilisateur est incorrect, il doit être sous la forme ?userSearch=raphael.
+400_badRequest.around.filter: Le format donné pour le filtre de la recherche aux alentours est incorrect, il doit être sous la forme ?around[cityName]=latitude,longitude.
+400_badRequest.validation.code: Vous devez fournir un code pour pouvoir le valider.
+400_badRequest.appointment.transition: Vous devez fournir un intitulé de transition.
+400_badRequest.appointment.transition.not.available: Cette transition n'est pas disponible actuellement.
 
 #Not Found Exceptions
 
