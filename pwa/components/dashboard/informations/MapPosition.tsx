@@ -5,20 +5,20 @@ import {LeafletEvent, LeafletMouseEvent} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import {Button, CircularProgress} from '@mui/material';
+import {Alert, Button, CircularProgress, Typography} from '@mui/material';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {RequestBody} from '@interfaces/Resource';
 
 interface MapPositionProps {
   repairer: Repairer;
-  uploadRepairer: (bodyRequest: RequestBody) => Promise<void>;
+  updateRepairer: (iri: string, requestBody: RequestBody) => void;
 }
 
 export const MapPosition = ({
   repairer,
-  uploadRepairer,
+  updateRepairer,
 }: MapPositionProps): JSX.Element => {
-  const [mapCenter, setMapCenter] = useState<[number, number]>([
+  const [mapCenter] = useState<[number, number]>([
     repairer.latitude ? Number(repairer.latitude) : 46.2276,
     repairer.longitude ? Number(repairer.longitude) : 2.2137,
   ]);
@@ -30,9 +30,8 @@ export const MapPosition = ({
   ]);
   const {
     pendingRegistration,
-    setPendingRegistration,
-    setErrorMessage,
     errorMessage,
+    success,
   } = useContext(RepairerFormContext);
 
   const handleMarkerDragEnd = (event: LeafletEvent) => {
@@ -59,7 +58,7 @@ export const MapPosition = ({
       longitude: shopPosition[1].toString(),
     };
 
-    await uploadRepairer(newPosition);
+    await updateRepairer(repairer['@id'], newPosition);
   };
 
   return (
@@ -81,19 +80,29 @@ export const MapPosition = ({
             }}></Marker>
         )}
       </MapContainer>
-      <div>
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{my: 2}}
-          onClick={uploadPosition}>
-          {!pendingRegistration ? (
-            'Enregistrer la nouvelle position'
-          ) : (
-            <CircularProgress size={20} sx={{color: 'white'}} />
-          )}
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{my: 2}}
+        onClick={uploadPosition}>
+        {!pendingRegistration ? (
+          'Enregistrer la nouvelle position'
+        ) : (
+          <CircularProgress size={20} sx={{color: 'white'}} />
+        )}
+      </Button>
+
+      {errorMessage && (
+          <Typography variant="body1" color="error">
+            {errorMessage}
+          </Typography>
+      )}
+
+      {success && (
+          <Alert severity="success">
+            Informations mises à jour
+          </Alert>
+      )}
     </>
   );
 };

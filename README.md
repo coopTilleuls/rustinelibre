@@ -1,4 +1,3 @@
-
 # Bikelib
 
 Plateforme de mise en relation avec des réparateurs de vélos
@@ -9,8 +8,8 @@ Plateforme de mise en relation avec des réparateurs de vélos
 - [Gestionnaire de tâches](https://github.com/orgs/coopTilleuls/projects/28/views/2?filterQuery=)
 - [Prototype](https://www.figma.com/file/91BAjXJqYT4Ecj12xECtlz/Untitled?node-id=336-484)
 
-
 ## URL du projet en local
+
 - [Documentation de l'API (Swagger)](https://localhost/docs)
 - [Frontend](https://localhost/)
 
@@ -24,7 +23,7 @@ Les tags/releases sont déployées sur [demo.bikelib.preprod-tilleuls.ovh](https
 
 ## Installation / utilisation du projet
 
-``` shell
+```shell
 git clone git@github.com:coopTilleuls/bikelib.git   # Clone du projet
 cd bikelib              # Se place dans le dossier du projet
 docker-compose build    # Installation du projet
@@ -33,52 +32,57 @@ docker-compose exec php sh  # "Entrer" dans le container PHP
 ```
 
 ## Pour générer la base de données
-``` shell
+
+```shell
 bin/console d:d:c           # Créer la BDD
 bin/console d:m:m           # Lance les migrations
 bin/console h:f:l -e dev    # Injecte les fixtures
 ```
 
 ## Pour exécuter l'intégralité des tests de l'API
-``` shell
+
+```shell
 bin/console d:d:d --env=test --force
 bin/console d:d:c --env=test
 bin/console d:m:m --env=test
 bin/console h:f:l --env=test
-php -d memory_limit=512M vendor/bin/phpunit   
+php -d memory_limit=512M vendor/bin/phpunit
 ```
 
 ## Pour lancer un test seul
-``` shell
-vendor/bin/phpunit  <chemin/vers/votre/test>  
-```
 
+```shell
+vendor/bin/phpunit  <chemin/vers/votre/test>
+```
 
 ## Pour obtenir un token JWT (JsonWebToken)
+
 Faites une request POST sur cette URL : https://localhost/auth avec ce contenu
+
 ```
 {
-    "email": "clement@les-tilleuls.coop", 
+    "email": "clement@les-tilleuls.coop",
     "password": "Test1passwordOk!"
 }
 ```
 
 Permet d'obtenir le token suivant
+
 ```
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Nzk2NTQxOTgsImV4cCI6MTY3OTY1Nzc5OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImNsZW1lbnRAbGVzLXRpbGxldWxzLmNvb3AifQ.OmmLYlmeriqt-SSIgseyTDDYcAOFs_ws4p7FmbBbExpPn3JQOyrIQk3zs-NKOIupxT8grB42KPnCa_cm08i6Mu1p4Bm-lBWe2N95rNCTRAhazFirwVCx5Jgkp1QD2ICUElOyw6pid8oroTQ903XhtHJnK8tRADArDZqz64U3p4eHcMbappjyJCQhVeV50oYsqcmR3gPWkO5uNt-9lMz4prOasz4rRPXY3MIVrGX6NJTCGkQjQPD0ibcqofJxoXpWmYvzIMNfRw7Wb0yd7guQxm7rWRVAwjBWFiW1eLou4upuq_KREojGLJwcTHVODeCrJcsQyRPtW1SRvrtP-PJ3tA"
 }
 ```
 
-Ensuite passer le token JWT en header à vos requêtes   `Authorization: Bearer {token}`
-
+Ensuite passer le token JWT en header à vos requêtes `Authorization: Bearer {token}`
 
 ## Pour l'envoi des emails
+
 Par défaut dans ce projet nous utilisons symfony/mailer et mailgun pour envoyer nos emails.
 Vous êtes libre d'implémenter une autre solution pour cette partie.
 
 Vous avez juste à changer les variables d'environnement suivantes et installer la librairie
-compatible avec symfony/mailer  (gmail, amazon, mailchimp, mailjet etc...)
+compatible avec symfony/mailer (gmail, amazon, mailchimp, mailjet etc...)
 
 ```
 MAILER_SENDER
@@ -87,37 +91,45 @@ MAILER_DSN
 
 Toute la documentation est disponible ici : https://symfony.com/doc/current/mailer.html
 
-
-## Pour se connecter 
+## Pour se connecter
 
 En tant qu'admin
 
 ```
 mail:       clement@les-tilleuls.coop
-password:   Test1passwordOk!   
+password:   Test1passwordOk!
 ```
-
 
 En tant que boss d'une solution de réparation
 
 ```
 mail:       boss@test.com
-password:   Test1passwordOk!   
+password:   Test1passwordOk!
 ```
+
 Ou
 
 ```
 mail:       boss2@test.com
-password:   Test1passwordOk!   
+password:   Test1passwordOk!
 ```
 
 Pour se connecter en tant que cycliste
+
 ```
 mail:       user1@test.com
-password:   Test1passwordOk!   
+password:   Test1passwordOk!
 ```
 
 ## Pour modifier le sitemap
+
 Le sitemap.xml est disponible via la route suivante : `/sitemap.xml`
 
 Côté front, dès que vous ajouter une nouvelle route disponible publiquement, c'est à dire sans authentification, il faut modifier le controller `SitemapController` présent côté back, afin que le sitemap soit mis à jour.
+
+## Captcha
+
+Le captcha est celui de Cloudflare : Turnstile.
+
+Il suffit d'aller dans votre pwa/.env.local et d'y ajouter la variable présente dans pwa/.env tout en y mettant la sitekey dédiée présente sur notre compte Cloudflare Tilleuls à cette adresse :
+https://dash.cloudflare.com/login

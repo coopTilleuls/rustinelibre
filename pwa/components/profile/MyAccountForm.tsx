@@ -11,11 +11,11 @@ import {
   Typography,
 } from '@mui/material';
 
-interface UserFormProps {
+interface MyAccountFormProps {
   user: User | null;
 }
 
-export const UserForm = ({user}: UserFormProps): JSX.Element => {
+export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
@@ -180,4 +180,4 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
   );
 };
 
-export default UserForm;
+export default MyAccountForm;
