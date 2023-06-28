@@ -52,7 +52,7 @@ export const RepairersResults = (): JSX.Element => {
           <Grid2 container spacing={2}>
             {repairers.map((repairer) => {
               return (
-                <>
+                <Box key={repairer.id} width="100%">
                   <Grid2
                     id={repairer.id}
                     key={repairer.id}
@@ -72,7 +72,7 @@ export const RepairersResults = (): JSX.Element => {
                   {isMobile && (
                     <Divider sx={{width: '90%', mx: 'auto', mb: 1}} />
                   )}
-                </>
+                </Box>
               );
             })}
           </Grid2>
