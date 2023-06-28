@@ -17,11 +17,11 @@ use Twig\Environment;
 final class EmployeeSendPasswordEventSubscriber implements EventSubscriber
 {
     public function __construct(private readonly MailerInterface $mailer,
-                                private readonly string $mailerSender,
-                                private readonly string $webAppUrl,
-                                private readonly KernelInterface $kernel,
-                                private readonly LoggerInterface $logger,
-                                private readonly Environment $twig)
+        private readonly string $mailerSender,
+        private readonly string $webAppUrl,
+        private readonly KernelInterface $kernel,
+        private readonly LoggerInterface $logger,
+        private readonly Environment $twig)
     {
     }
 

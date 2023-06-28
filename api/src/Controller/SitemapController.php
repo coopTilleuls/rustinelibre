@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Repository\RepairerRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
-class SitemapController extends AbstractController
+#[AsController]
+class SitemapController
 {
     public function __construct(
         private readonly RepairerRepository $repairerRepository,
+        private readonly Environment $twig,
     ) {
     }
 
@@ -24,13 +27,14 @@ class SitemapController extends AbstractController
             $this->buildUrlsWithRepairerId(['/reparateur/%d', '/reparateur/%d/creneaux']),
         );
 
-        $response = new Response();
-        $response->headers->set('Content-Type', 'text/xml');
-
-        return $this->render('sitemap/sitemap.xml.twig', [
+        $response = new Response($this->twig->render('sitemap/sitemap.xml.twig', [
             'urls' => $urls,
             'hostname' => $_ENV['WEB_APP_URL'],
-        ], $response);
+        ]));
+
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
     }
 
     /**
