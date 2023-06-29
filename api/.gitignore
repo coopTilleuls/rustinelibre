@@ -31,6 +31,10 @@ Makefile
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
+###> Firebase SDK
+/config/firebase/*.json
+###< Firebase SDK
+
 ###> Images
 /public/media/*
 

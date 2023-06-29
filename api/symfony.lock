@@ -159,6 +159,9 @@
             "config/packages/jsor_doctrine_postgis.yaml"
         ]
     },
+    "kreait/firebase-bundle": {
+        "version": "5.0.0"
+    },
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
