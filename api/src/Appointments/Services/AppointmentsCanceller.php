@@ -20,7 +20,9 @@ readonly class AppointmentsCanceller
         $appointmentsToCancel = $this->appointmentRepository->getOldOrDelayedAppointments();
 
         foreach ($appointmentsToCancel as $appointment) {
-            $this->appointmentAcceptanceStateMachine->apply($appointment, 'cancellation');
+            if ($this->appointmentAcceptanceStateMachine->can($appointment, 'cancellation')) {
+                $this->appointmentAcceptanceStateMachine->apply($appointment, 'cancellation');
+            }
         }
     }
 }

@@ -93,8 +93,8 @@ class AppointmentRepository extends ServiceEntityRepository
         $back72Hours = $now->sub(new \DateInterval('PT72H'));
 
         return $this->createQueryBuilder('a')
-            ->andWhere('a.slotTime <= :now')
-            ->orWhere('(a.createdAt IS NOT NULL AND a.createdAt <= :back72Hours) AND (a.status = :pendingRepairer)')
+            ->andWhere('a.slotTime <= :now AND a.status = :pendingRepairer') // Old appointment never accepted
+            ->orWhere('a.createdAt IS NOT NULL AND a.createdAt <= :back72Hours AND a.status = :pendingRepairer') // Appointment without response since 72h
             ->setParameter('now', $now)
             ->setParameter('back72Hours', $back72Hours)
             ->setParameter('pendingRepairer', Appointment::PENDING_REPAIRER)
