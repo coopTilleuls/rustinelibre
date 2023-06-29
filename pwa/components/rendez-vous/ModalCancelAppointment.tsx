@@ -16,8 +16,6 @@ const ModalCancelAppointment = ({
   handleCloseModal,
   handleCancelAppointment,
 }: ModalCancelAppointmentProps): JSX.Element => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   return (
     <Modal
       open={openModal}
