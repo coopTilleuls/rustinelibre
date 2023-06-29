@@ -86,7 +86,7 @@ class RetrieveEmployeesTest extends AbstractTestCase
         }
 
         if (!$firstRandomBoss) {
-            throw new NotFoundHttpException($this->translator->trans('404_notFound.boss', domain:'validators'));
+            throw new NotFoundHttpException($this->translator->trans('404_notFound.boss', domain: 'validators'));
         }
 
         // Boss of repairer 1 try to get an employee of repairer 2

@@ -137,7 +137,7 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
     public ?string $streetNumber = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairer.city.not_blank')]
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, User::USER_READ])]

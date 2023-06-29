@@ -42,7 +42,7 @@ class DiscussionMessage
     #[Groups([self::MESSAGE_READ])]
     public ?int $id = null;
 
-    #[Assert\NotNull(message:'discussion.message.discussion')]
+    #[Assert\NotNull(message: 'discussion.message.discussion')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::MESSAGE_READ, self::MESSAGE_WRITE])]

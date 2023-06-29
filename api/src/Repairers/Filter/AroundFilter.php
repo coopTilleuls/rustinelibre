@@ -12,12 +12,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @property TranslatorInterface $translator
- */
 final class AroundFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'around';
+
+    private readonly TranslatorInterface $translator;
 
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
@@ -26,13 +25,11 @@ final class AroundFilter extends AbstractFilter
         }
 
         if (!property_exists($resourceClass, 'latitude') || !property_exists($resourceClass, 'longitude')) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.around.filter.resource.class', [
-                '%resource%'=> $resourceClass
-            ], domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.around.filter.resource.class', ['%resource%' => $resourceClass], domain: 'validators'));
         }
 
         if (!is_array($value) || empty($value)) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.around.filter', domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.around.filter', domain: 'validators'));
         }
 
         $city = key($value);

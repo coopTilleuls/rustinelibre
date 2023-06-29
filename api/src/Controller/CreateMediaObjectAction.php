@@ -23,7 +23,7 @@ final class CreateMediaObjectAction extends AbstractController
     {
         $uploadedFile = $request->files->get('file');
         if (!$uploadedFile) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.file.required', domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.file.required', domain: 'validators'));
         }
 
         $mediaObject = new MediaObject();

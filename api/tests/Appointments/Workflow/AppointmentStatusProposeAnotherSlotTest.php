@@ -46,13 +46,12 @@ class AppointmentStatusProposeAnotherSlotTest extends AbstractTestCase
     public function testCyclistCannotProposeAnotherSlotFromPendingRepairer(): void
     {
         $appointment = $this->appointmentRepository->findOneBy(['status' => 'pending_repairer']);
-        $response = $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
+        $this->createClientWithUser($appointment->customer)->request('PUT', sprintf('/appointment_transition/%d', $appointment->id), [
             'json' => [
                 'transition' => 'propose_another_slot',
                 'slotTime' => (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
             ],
-        ])->toArray();
-        dd($response);
+        ]);
         self::assertResponseStatusCodeSame(403);
         self::assertNotSame('validated', $this->appointmentRepository->find($appointment->id)->status);
     }

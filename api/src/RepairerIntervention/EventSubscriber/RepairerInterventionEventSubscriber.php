@@ -54,20 +54,18 @@ readonly class RepairerInterventionEventSubscriber implements EventSubscriberInt
         }
 
         if (null === $user->repairer) {
-            throw new AccessDeniedException($this->translator->trans('403_access.denied.repairer.intervention.link', domain:'validators'));
+            throw new AccessDeniedException($this->translator->trans('403_access.denied.repairer.intervention.link', domain: 'validators'));
         }
 
         /** @var ?Intervention $adminIntervention */
         $adminIntervention = $this->interventionRepository->findOneBy(['id' => $object->intervention->id]);
 
         if (null === $adminIntervention) {
-            throw new NotFoundHttpException($this->translator->trans('404_notFound.intervention', [
-                '%id%'=> $object->intervention->id,
-            ], domain:'validators'));
+            throw new NotFoundHttpException($this->translator->trans('404_notFound.intervention', ['%id%' => $object->intervention->id], domain: 'validators'));
         }
 
         if (!$adminIntervention->isAdmin) {
-            throw new AccessDeniedException($this->translator->trans('403_access.denied.admin.intervention.link', domain:'validators'));
+            throw new AccessDeniedException($this->translator->trans('403_access.denied.admin.intervention.link', domain: 'validators'));
         }
 
         $object->repairer = $user->repairer;

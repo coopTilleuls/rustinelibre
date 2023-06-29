@@ -20,11 +20,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private ConfirmationEmail $confirmationEmail,
-                                private EntityManagerInterface $entityManager,
-                                private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
-                                private RequestStack $requestStack,
-                                private Security $security,
-                                private TranslatorInterface $translator)
+        private EntityManagerInterface $entityManager,
+        private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
+        private RequestStack $requestStack,
+        private Security $security,
+        private TranslatorInterface $translator)
     {
     }
 
@@ -45,7 +45,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment = $event->getSubject();
 
         if (!$this->security->isGranted(User::ROLE_ADMIN) && !$this->security->isGranted(User::ROLE_BOSS) && !$this->security->isGranted(User::ROLE_EMPLOYEE)) {
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain: 'validators'));
         }
 
         $appointment->status = Appointment::VALIDATED;
@@ -72,7 +72,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             null === $user
             || !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain: 'validators'));
         }
 
         /** @var Appointment $appointment */
@@ -81,9 +81,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $contentRequest = json_decode($this->requestStack->getCurrentRequest()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         if (!array_key_exists('slotTime', $contentRequest)) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition.slotTime',[
-                '%transition%'=> $event->getTransition()->getName(),
-            ], domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition.slotTime', ['%transition%' => $event->getTransition()->getName()], domain: 'validators'));
         }
 
         $appointment->status = Appointment::VALIDATED;
@@ -103,7 +101,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             null === $user
             || !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain: 'validators'));
         }
 
         /** @var Appointment $appointment */

@@ -16,7 +16,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private Security $security, private AppointmentRepository $appointmentRepository, private TranslatorInterface $translator)
@@ -66,6 +65,6 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
             }
         }
 
-        throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.customer', domain:'validators'));
+        throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.customer', domain: 'validators'));
     }
 }

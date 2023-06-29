@@ -67,8 +67,9 @@ class Contact
 
     #[Assert\Email(message: 'user.email.valid')]
     #[Assert\NotBlank(message: 'user.email.not_blank')]
-    #[Assert\Length(max: user::EMAIL_MAX_LENGTH, maxMessage: 'user.email.length')]
+    #[Assert\Length(max: User::EMAIL_MAX_LENGTH, maxMessage: 'user.email.length')]
     #[ORM\Column(length: 180)]
+    #[Groups([self::READ, self::WRITE])]
     public ?string $email = null;
 
     #[Assert\NotBlank(message: 'contact.content.not_blank')]

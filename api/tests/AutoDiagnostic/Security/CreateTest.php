@@ -9,6 +9,7 @@ use App\Repository\AppointmentRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\AppointmentTrait;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CreateTest extends AbstractTestCase
 {
@@ -19,11 +20,14 @@ class CreateTest extends AbstractTestCase
 
     private AppointmentRepository $appointmentRepository;
 
+    private TranslatorInterface $translator;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->appointmentRepository = static::getContainer()->get(AppointmentRepository::class);
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
     }
 
     public function testUserCanCreateAutoDiagnostic(): void
@@ -70,14 +74,14 @@ class CreateTest extends AbstractTestCase
                 'appointment' => sprintf('/appointments/%d', $appointment->id),
                 'prestation' => 'test prestation',
             ],
-        ])->toArray();
+        ]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'appointment: Ce rendez-vous concerne un autre utilisateur.',
+            'hydra:description' => sprintf('appointment: %s', $this->translator->trans('autoDiagnostic.appointment.owner', domain: 'validators')),
         ]);
     }
 }

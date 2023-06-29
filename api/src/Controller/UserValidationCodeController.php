@@ -30,11 +30,11 @@ final class UserValidationCodeController
 
         $requestContent = json_decode($request->getContent(), true);
         if (!array_key_exists('code', $requestContent)) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.validation.code', domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.validation.code', domain: 'validators'));
         }
 
         if (!in_array((int) $requestContent['code'], [$currentUser->validationCode, 6666])) { // @todo change this when mail OK
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.validation.code', domain:'validators'));
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.validation.code', domain: 'validators'));
         }
 
         $currentUser->emailConfirmed = true;

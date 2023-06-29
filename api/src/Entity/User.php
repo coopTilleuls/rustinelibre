@@ -66,7 +66,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(UserSearchFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: ['firstName' => 'ipartial', 'lastName' => 'ipartial'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
-#[UniqueEntity('email')]
+#[UniqueEntity('email', message: 'user.email.unique')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const ROLE_BOSS = 'ROLE_BOSS';

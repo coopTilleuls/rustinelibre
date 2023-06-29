@@ -39,10 +39,12 @@ class BikeType
     #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ])]
     public ?int $id = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'bikeType.name.not_blank')]
     #[Assert\Length(
         min : 2,
         max : 100,
+        minMessage: 'bikeType.name.min_length',
+        maxMessage: 'bikeType.name.max_length',
     )]
     #[ORM\Column(length: 255)]
     #[Groups([Repairer::REPAIRER_READ, self::BIKE_TYPE_READ, self::BIKE_TYPE_WRITE, Bike::READ, Appointment::APPOINTMENT_READ, User::USER_READ])]

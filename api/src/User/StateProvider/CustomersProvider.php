@@ -41,7 +41,7 @@ final class CustomersProvider implements ProviderInterface
         $repairerFromEmployee = $user?->repairerEmployee?->repairer;
         $repairerFromBoss = $user?->repairer;
         if (!$repairerFromEmployee && !$repairerFromBoss) {
-            throw new NotFoundHttpException($this->translator->trans('404_notFound.customer', domain:'validators'));
+            throw new NotFoundHttpException($this->translator->trans('404_notFound.customer', domain: 'validators'));
         }
 
         $customersIdsQueryBuilder = $this->appointmentRepository->getAppointmentCustomersIdsQueryBuilder();

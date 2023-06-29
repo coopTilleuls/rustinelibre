@@ -12,12 +12,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @property TranslatorInterface $translator
- */
 class FirstSlotAvailableFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'availability';
+
+    private readonly TranslatorInterface $translator;
 
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
@@ -26,7 +25,7 @@ class FirstSlotAvailableFilter extends AbstractFilter
         }
 
         if (!in_array($value, ['DESC', 'ASC'], true)) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.availability.filter', domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.availability.filter', domain: 'validators'));
         }
 
         $queryBuilder->addOrderBy('o.firstSlotAvailable', $value);

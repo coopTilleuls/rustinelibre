@@ -92,7 +92,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         if (!$currentUser->isBoss() && !$currentUser->isEmployee()) {
             // If slot is not available
             if (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true)) {
-                throw new BadRequestHttpException($this->translator->trans('400_badRequest.slot.not.available', domain:'validators'));
+                throw new BadRequestHttpException($this->translator->trans('400_badRequest.slot.not.available', domain: 'validators'));
             }
 
             $this->persistAppointment($object, $slotsAvailable);
@@ -103,12 +103,12 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         // Current user does not have any shop
         $curentRepairer = $currentUser->repairer ?: ($currentUser->repairerEmployee?->repairer);
         if (!$curentRepairer) {
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.repairer.belong.shop', domain:'validators'));
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.repairer.belong.shop', domain: 'validators'));
         }
 
         // This shop is not mine
         if ($curentRepairer !== $object->repairer) {
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.repairer.shop.owner', domain:'validators'));
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.repairer.shop.owner', domain: 'validators'));
         }
 
         $object->status = 'validated';
@@ -148,7 +148,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
 
             // The slot change, and the new slot is not available
             if ($originalEntityData['slotTime'] !== $object->slotTime && (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true))) {
-                throw new BadRequestHttpException($this->translator->trans('400_badRequest.slot.not.available', domain:'validators'));
+                throw new BadRequestHttpException($this->translator->trans('400_badRequest.slot.not.available', domain: 'validators'));
             }
 
             // Flush the RDV now to get infos in database if necessary

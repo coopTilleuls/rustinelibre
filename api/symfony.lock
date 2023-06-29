@@ -549,7 +549,7 @@
         "version": "v6.0.2"
     },
     "symfony/translation": {
-        "version": "6.2",
+        "version": "6.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",

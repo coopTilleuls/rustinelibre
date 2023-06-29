@@ -54,7 +54,7 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         } else {
             $currentRepairer = $currentUser->repairer;
             if (!$currentRepairer) {
-                throw new BadRequestHttpException($this->translator->trans('400_badRequest.add.employee', domain:'validators'));
+                throw new BadRequestHttpException($this->translator->trans('400_badRequest.add.employee', domain: 'validators'));
             }
 
             $repairerEmployee->repairer = $currentRepairer;

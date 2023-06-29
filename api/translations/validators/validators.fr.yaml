@@ -1,8 +1,9 @@
 #User assert validation messages
 #Email
-user.email.not_blank: Merci de renseigner une adresse email.
+user.email.not_blank: Veuillez renseigner une adresse email.
 user.email.length: L'adresse email ne peut excéder 180 caractères.
-user.email.valid: Merci de renseigner une adresse email valide.
+user.email.valid: Veuillez renseigner une adresse email valide.
+user.email.unique: Un compte utilisant cet email existe déjà.
 
 #Password
 user.password.regex: Le mot de passe doit contenir 12 caractères, une majuscule, un caractère spécial et des chiffres.
@@ -69,7 +70,8 @@ mediaObject.file.not_null: Veuillez ajouter un fichier.
 repairer.name.not_blank: Une solution de réparation doit avoir un nom.
 repairer.name.min_length: Le nom de votre solution de réparation doit contenir au moins deux caractères.
 repairer.name.max_length: Le nom de votre solution de réparation peut contenir au maximum 80 caractères.
-
+#City
+repairer.city.not_blank: Veuillez renseigner une ville.
 #Number of slots
 repairer.number_of_slots.range: Le nombre de créneau doit être compris entre {{ min }} et {{ max }}.
 
@@ -77,7 +79,7 @@ repairer.number_of_slots.range: Le nombre de créneau doit être compris entre {
 repairerIntervention.intervention: Veuillez renseigner une prestation.
 
 #RepairerOpeningHours assert validation messages
-repairer.openingHours.format: Veuillez renseigner des horaires au format "hh:mm".
+repairer.openingHours.format: Veuillez renseigner des horaires au format hh:mm aux minutes terminant par 00 ou 30.
 
 #RepairerType assert validation messages
 repairerType.name.not_blank: Veuillez renseigner un type de réparateur.
@@ -90,8 +92,8 @@ maintenance.writer: Vous ne pouvez pas créer de maintenance pour ce vélo, vous
 #Repairer Closing
 repairer.closing.valid_date: La date de fin ne peut pas être avant la date de départ.
 #Repairer Opening
-repairer.opening.valid_days: Ce jour n'est pas disponible, il doit faire partie de lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche.
-repairer.opening.valid_time: L'heure de fermeture ne peut pas être avant l'heure d'ouverture.
+repairer.opening.valid_days: Ce jour est indisponible, il doit faire partie de lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche.
+repairer.opening.valid_time: Les horaires de fermeture ne peuvent pas être plus tôt que les horaires d ouverture.
 repairer.opening.overlapped: Les heures ne peuvent pas se chevaucher.
 #Repairer slot
 repairer.duration.slot: La durée des créneaux doit être de 30, 60 ou 180 (min).
@@ -104,7 +106,7 @@ repairer.duration.slot: La durée des créneaux doit être de 30, 60 ou 180 (min
 403_access.denied.admin.intervention.link: Vous pouvez uniquement lier un réparateur à une prestation créée par un administrateur.
 403_access.denied.repairer.belong.shop: Vous devez appartenir à une solution de réparation pour créer un rendez-vous.
 403_access.denied.repairer.shop.owner: Cette solution de réparation n'est pas la votre.
-403_access.denied.customer: "Cet utilisateur n'est pas un de vos clients."
+403_access.denied.customer: Cet utilisateur n'est pas un de vos clients.
 
 #Bad Request Exceptions
 400_badRequest.file.required: Le fichier est requis.
@@ -130,3 +132,6 @@ repairer.duration.slot: La durée des créneaux doit être de 30, 60 ou 180 (min
 404_notFound.customer: Il n'y a pas de client pour vous.
 404_notFound.boss: Pas de gérant trouvé.
 404_notFound.intervention: La prestation ayant l'id %id% n'existe pas.
+
+#HTTP UNAUTHORIZED
+401_invalid.credentials: Identifiants invalides.

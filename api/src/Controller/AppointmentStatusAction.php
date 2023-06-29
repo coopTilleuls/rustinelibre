@@ -23,11 +23,11 @@ final class AppointmentStatusAction
         $content = json_decode($request->getContent(), true);
 
         if (!array_key_exists('transition', $content)) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition', domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition', domain: 'validators'));
         }
 
         if (!$this->appointmentAcceptanceStateMachine->can($appointment, $content['transition'])) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition.not.available', domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition.not.available', domain: 'validators'));
         }
 
         $this->appointmentAcceptanceStateMachine->apply($appointment, $content['transition']);

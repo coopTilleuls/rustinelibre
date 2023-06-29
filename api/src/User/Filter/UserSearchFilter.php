@@ -12,12 +12,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @property TranslatorInterface $translator
- */
 final class UserSearchFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'userSearch';
+
+    private readonly TranslatorInterface $translator;
 
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
@@ -26,7 +25,7 @@ final class UserSearchFilter extends AbstractFilter
         }
 
         if (!is_string($value)) {
-            throw new BadRequestHttpException($this->translator->trans('400_badRequest.user.search.filter', domain:'validators'));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.user.search.filter', domain: 'validators'));
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];

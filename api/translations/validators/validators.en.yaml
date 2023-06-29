@@ -3,6 +3,7 @@
 user.email.not_blank: Please enter an email address.
 user.email.length: The email address cannot be longer than 180 characters.
 user.email.valid: Please enter a valid email address.
+user.email.unique: There is already an account with this email address.
 
 #Password
 user.password.regex: The password must contain 12 characters, a capital letter, a special character and numbers.
@@ -70,6 +71,8 @@ mediaObject.file.not_null: Please add a file.
 repairer.name.not_blank: Please enter a repairer name.
 repairer.name.min_length: Repairer name must contain at least 2 characters.
 repairer.name.max_length: Repairer name can contain 80 characters maximum.
+#City
+repairer.city.not_blank: Please enter a city.
 #Number of slots
 repairer.number_of_slots.range: You must have a number of slots between {{ min }} and {{ max }}.
 
@@ -77,7 +80,7 @@ repairer.number_of_slots.range: You must have a number of slots between {{ min }
 repairerIntervention.intervention: Please enter an intervention.
 
 #RepairerOpeningHours
-repairer.openingHours.format: Please enter opening hours on format "hh:mm".
+repairer.openingHours.format: Please enter opening hours on format "hh:mm" with minutes like "00" or "30".
 
 #RepairerType
 repairerType.name.not_blank: Please enter a Repairer-type.
@@ -132,3 +135,6 @@ repairer.duration.slot: The duration slot should be one of 30 / 60 / 180 (min).
 404_notFound.customer: There's no customer for you.
 404_notFound.boss: No boss found.
 404_notFound.intervention: Intervention with id %id% not found.
+
+#HTTP UNAUTHORIZED
+401_invalid.credentials: Invalid credentials.

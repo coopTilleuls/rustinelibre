@@ -33,7 +33,7 @@ final readonly class CreateInterventionWithCurrentRepairerProcessor implements P
         /** @var ?User $user */
         $user = $this->security->getUser();
         if (!$user) {
-            throw new AccessDeniedException($this->translator->trans('403_access.denied.logged', domain:'validators'));
+            throw new AccessDeniedException($this->translator->trans('403_access.denied.logged', domain: 'validators'));
         }
 
         $intervention = new Intervention();
@@ -42,10 +42,10 @@ final readonly class CreateInterventionWithCurrentRepairerProcessor implements P
 
         if ($user->isBoss()) {
             if (null === $data->price) {
-                throw new BadRequestHttpException($this->translator->trans('400_badRequest.intervention.price', domain:'validators'));
+                throw new BadRequestHttpException($this->translator->trans('400_badRequest.intervention.price', domain: 'validators'));
             }
             if (null === $user->repairer) {
-                throw new BadRequestHttpException($this->translator->trans('400_badRequest.repairer.create.intervention', domain:'validators'));
+                throw new BadRequestHttpException($this->translator->trans('400_badRequest.repairer.create.intervention', domain: 'validators'));
             }
             $repairerIntervention = new RepairerIntervention();
             $repairerIntervention->price = $data->price;
