@@ -10,14 +10,14 @@ use Doctrine\ORM\EntityManagerInterface;
 final class FirstSlotAvailableCalculator
 {
     public function __construct(private readonly ComputeAvailableSlotsByRepairer $computeAvailableSlotsByRepairer,
-                                private EntityManagerInterface $entityManager)
+        private EntityManagerInterface $entityManager)
     {
     }
 
     /**
      * @param ?array<string, array<int, string>> $slotsAvailable
      */
-    public function setFirstSlotAvailable(Repairer $repairer, ?bool $flush = false, ?array $slotsAvailable = null): void
+    public function setFirstSlotAvailable(Repairer $repairer, ?bool $flush = false, array $slotsAvailable = null): void
     {
         if (null === $slotsAvailable) {
             $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($repairer);

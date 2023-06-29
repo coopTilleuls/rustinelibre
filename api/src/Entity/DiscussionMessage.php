@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => [self::MESSAGE_READ]],
     denormalizationContext: ['groups' => [self::MESSAGE_WRITE]],
-    mercure: true,
     order: ['createdAt' => 'DESC'],
     paginationClientItemsPerPage: true,
 )]

@@ -125,11 +125,11 @@ class SecurityUserTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
-   public function testGetUserCollection(): void
-   {
-       $this->createClientAuthAsAdmin()->request('GET', '/users');
-       $this->assertResponseIsSuccessful();
-   }
+    public function testGetUserCollection(): void
+    {
+        $this->createClientAuthAsAdmin()->request('GET', '/users');
+        $this->assertResponseIsSuccessful();
+    }
 
     public function testGetUserCollectionFail(): void
     {

@@ -69,8 +69,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $user = $this->security->getUser();
 
         if (
-            null === $user ||
-            !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
+            null === $user
+            || !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
             throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
         }
@@ -100,8 +100,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $user = $this->security->getUser();
 
         if (
-            null === $user ||
-            !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
+            null === $user
+            || !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
         ) {
             throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain:'validators'));
         }
