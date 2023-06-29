@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class RepairerClosing extends Constraint
 {
-    public string $messageNotValidTime = 'The endDate cannot be before startDate';
+    public string $messageNotValidTime = 'repairer.closing.valid_date';
 
     public function getTargets(): string
     {

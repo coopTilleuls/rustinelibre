@@ -37,7 +37,7 @@ class RepairerIntervention
     #[ORM\JoinColumn]
     public Repairer $repairer;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: 'repairerIntervention.intervention')]
     #[ORM\ManyToOne(inversedBy: 'repairerInterventions')]
     #[ORM\JoinColumn]
     #[Groups([self::WRITE])]

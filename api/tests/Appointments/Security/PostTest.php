@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Repository\RepairerEmployeeRepository;
 use App\Tests\Repairer\Slots\SlotsTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PostTest extends SlotsTestCase
 {
@@ -22,10 +23,13 @@ class PostTest extends SlotsTestCase
 
     private Repairer $repairerWithoutAppointment;
 
+    private TranslatorInterface $translator;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->repairerEmployeeRepository = static::getContainer()->get(RepairerEmployeeRepository::class);
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
         $this->userWithoutAppointment = $this->userRepository->findOneBy(['email' => 'user1@test.com']);
         $boss = $this->userRepository->findOneBy(['email' => 'boss@test.com']);
         $boss2 = $this->userRepository->findOneBy(['email' => 'boss2@test.com']);
@@ -106,7 +110,7 @@ class PostTest extends SlotsTestCase
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_FORBIDDEN);
         self::assertJsonContains([
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'Cet utilisateur n\'est pas un de vos client',
+            'hydra:description' => $this->translator->trans('403_access.denied.customer', domain: 'validators'),
         ]);
     }
 
@@ -146,7 +150,7 @@ class PostTest extends SlotsTestCase
         self::assertResponseStatusCodeSame(RESPONSE::HTTP_FORBIDDEN);
         self::assertJsonContains([
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'Cet utilisateur n\'est pas un de vos client',
+            'hydra:description' => $this->translator->trans('403_access.denied.customer', domain: 'validators'),
         ]);
     }
 }

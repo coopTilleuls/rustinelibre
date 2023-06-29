@@ -504,6 +504,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     flexDirection="column"
                     alignItems="center">
                     <Button
+                      disabled={!firstName || !lastName || !city || !streetSelected || !streetNumber || !repairerTypeSelected || !name || !email || !password}
                       type="submit"
                       variant="contained"
                       sx={{mt: 2, mx: 'auto'}}>

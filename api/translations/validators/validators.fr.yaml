@@ -1,0 +1,137 @@
+#User assert validation messages
+#Email
+user.email.not_blank: Veuillez renseigner une adresse email.
+user.email.length: L'adresse email ne peut excéder 180 caractères.
+user.email.valid: Veuillez renseigner une adresse email valide.
+user.email.unique: Un compte utilisant cet email existe déjà.
+
+#Password
+user.password.regex: Le mot de passe doit contenir 12 caractères, une majuscule, un caractère spécial et des chiffres.
+
+#LastName
+user.lastName.min_length: Le nom de famille doit contenir au moins 2 caractères.
+user.lastName.max_length: Le nom de famille peut contenir au maximum 50 caractères.
+user.lastName.not_blank: Merci de renseigner votre nom de famille.
+
+#FirstName
+user.firstName.min_length: Le prénom doit contenir au moins 2 caractères.
+user.firstName.max_length: Le prénom peut contenir au maximum 50 caractères.
+user.firstName.not_blank: Merci de renseigner votre prénom.
+
+#Appointment assert validation messages
+#Repairer
+appointment.repairer.not_blank: Un réparateur doit être renseigné pour prendre rendez-vous.
+
+#SlotTime
+appointment.slotTime.not_blank: Un créneau doit être sélectionné pour prendre rendez-vous.
+appointment.slotTime.greater_than: Le créneau sélectionné doit être postérieur à {{ compared_value }}.
+
+#Appointment state
+appointment.state.status: Cet état n'est pas un status valide.
+
+# AutoDiagnostic assert validation messages
+autoDiagnostic.appointment.owner: Ce rendez-vous concerne un autre utilisateur.
+
+#Bike assert validation messages
+bike.owner: Ce vélo doit vous appartenir pour le modifier ou, au moins, avoir un rendez-vous avec le propriétaire du vélo.
+
+# Bike-type assert validation messages
+#Name
+bikeType.name.not_blank: Le type de vélo doit être renseigné.
+bikeType.name.min_length: Le type de vélo doit contenir au moins 2 caractères.
+bikeType.name.max_length: Le type de vélo peut contenir au maximum 100 caractères.
+
+# Contact assert validation messages (same message thant user for "email", "lastName" and "firstName")
+#Content
+contact.content.not_blank: Le contenu du message ne peut être vide.
+contact.content.min_length: Le message doit contenir au moins 10 caractères.
+contact.content.max_length: Le message peut contenir au maximum 1000 caractères.
+
+#Discussion assert validation messages
+#Repairer
+discussion.repairer.not_null: Cette conversation doit avoir un réparateur.
+#Customer
+discussion.customer.not_null: Cette conversation doit avoir un consommateur.
+#Unique Discussion
+discussion.unique: Une discussion existe déjà entre ce réparateur et ce client, vous ne pouvez pas en créer une autre.
+
+#Discussion messages assert validation messages
+#Discussion
+discussion.message.discussion: Un message doit être lié à une discussion.
+#Content
+discussion.message.content.not_blank: Le contenu du message ne peut être vide.
+discussion.message.content.max_length: Le message peut contenir au maximum 1000 caractères.
+
+#MediaObject assert validation messages
+mediaObject.file.not_null: Veuillez ajouter un fichier.
+
+#Repairer assert validation messages
+#Name
+repairer.name.not_blank: Une solution de réparation doit avoir un nom.
+repairer.name.min_length: Le nom de votre solution de réparation doit contenir au moins deux caractères.
+repairer.name.max_length: Le nom de votre solution de réparation peut contenir au maximum 80 caractères.
+#City
+repairer.city.not_blank: Veuillez renseigner une ville.
+#Number of slots
+repairer.number_of_slots.range: Le nombre de créneau doit être compris entre {{ min }} et {{ max }}.
+
+#RepairerIntervention assert validation messages
+repairerIntervention.intervention: Veuillez renseigner une prestation.
+
+#RepairerOpeningHours assert validation messages
+repairer.openingHours.format: Veuillez renseigner des horaires au format hh:mm aux minutes terminant par 00 ou 30.
+
+#RepairerType assert validation messages
+repairerType.name.not_blank: Veuillez renseigner un type de réparateur.
+repairerType.name.min_length: Le type de réparateur doit contenir au moins 2 caractères.
+repairerType.name.max_length: Le type de réparateur peut contenir au maximum 50 caractères.
+
+#Maintenance can write assert validation messages
+maintenance.writer: Vous ne pouvez pas créer de maintenance pour ce vélo, vous devez en être le propriétaire ou, au moins, avoir un rendez-vous avec le propriétaire du vélo.
+
+#Repairer Closing
+repairer.closing.valid_date: La date de fin ne peut pas être avant la date de départ.
+#Repairer Opening
+repairer.opening.valid_days: Ce jour est indisponible, il doit faire partie de lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche.
+repairer.opening.valid_time: Les horaires de fermeture ne peuvent pas être plus tôt que les horaires d ouverture.
+repairer.opening.overlapped: Les heures ne peuvent pas se chevaucher.
+#Repairer slot
+repairer.duration.slot: La durée des créneaux doit être de 30, 60 ou 180 (min).
+
+#Access Denied Exceptions
+403_access.denied.role: Vous n'avez pas les droits pour accéder à cet espace.
+403_access.denied.logged: Vous devez être connecté pour accéder à cet espace.
+403_access.denied.validation.code: Ce code de validation n'est pas valide.
+403_access.denied.repairer.intervention.link: Vous devez avoir un profil réparateur pour lier une prestation.
+403_access.denied.admin.intervention.link: Vous pouvez uniquement lier un réparateur à une prestation créée par un administrateur.
+403_access.denied.repairer.belong.shop: Vous devez appartenir à une solution de réparation pour créer un rendez-vous.
+403_access.denied.repairer.shop.owner: Cette solution de réparation n'est pas la votre.
+403_access.denied.customer: Cet utilisateur n'est pas un de vos clients.
+
+#Bad Request Exceptions
+400_badRequest.file.required: Le fichier est requis.
+400_badRequest.add.employee: Vous ne pouvez pas ajouter d'employé si vous n'avez pas de solution de réparation.
+400_badRequest.update.employee: Vous devez fournir un id de 'repairer employee' pour le mettre à jour.
+400_badRequest.repairer.employee.not.exist: Ce 'repairer employee' n'existe pas.
+400_badRequest.intervention.price: Le prix est requis.
+400_badRequest.repairer.create.intervention: Il doit y avoir une solution de réparation pour créer une prestation.
+400_badRequest.slot.not.available: Ce créneau n'est pas disponible.
+400_badRequest.availability.filter: Le filtre des créneaux disponibles ("availability filter")n'accepte que les valeurs "ASC" ou "DESC".
+400_badRequest.proximity.filter: Les paramètres donnés dans ke filtre de proximité ("proximity filter") n'ont pas le bon format, cela devrait être ?proximity=50.43321,3.03943.
+400_badRequest.user.search.filter: Le format donné pour la recherche d'utilisateur est incorrect, il doit être sous la forme ?userSearch=raphael.
+400_badRequest.around.filter: Le format donné pour le filtre de la recherche aux alentours est incorrect, il doit être sous la forme ?around[cityName]=latitude,longitude.
+400_badRequest.validation.code: Vous devez fournir un code pour pouvoir le valider.
+400_badRequest.appointment.transition: Vous devez fournir un intitulé de transition.
+400_badRequest.appointment.transition.not.available: Cette transition n'est pas disponible actuellement.
+400_badRequest.appointment.transition.slotTime: Vous devez fournir un nouveau créneau (slotTime) dans le corps de la requête pour la transition %transition%.
+400_badRequest.around.filter.resource.class: Il manque une propriété latitude ou longitude à votre classe ressource %resource%.
+
+#Not Found Exceptions
+
+404_notFound.repairer.employee: Ce "repairer employee" n'existe pas.
+404_notFound.customer: Il n'y a pas de client pour vous.
+404_notFound.boss: Pas de gérant trouvé.
+404_notFound.intervention: La prestation ayant l'id %id% n'existe pas.
+
+#HTTP UNAUTHORIZED
+401_invalid.credentials: Identifiants invalides.

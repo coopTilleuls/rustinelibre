@@ -7,15 +7,19 @@ namespace App\Tests\RepairerExceptionnalClosure;
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AssertRepairerExceptionnalClosureTest extends AbstractTestCase
 {
     private RepairerRepository $repairerRepository;
 
+    private TranslatorInterface $translator;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->repairerRepository = self::getContainer()->get(RepairerRepository::class);
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
     }
 
     public function testCreateWithEndDateBeforeStartDate(): void
@@ -32,6 +36,6 @@ class AssertRepairerExceptionnalClosureTest extends AbstractTestCase
         );
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertStringContainsString('The endDate cannot be before startDate', $response->getContent(false));
+        self::assertStringContainsString($this->translator->trans('repairer.closing.valid_date', domain: 'validators'), $response->getContent(false));
     }
 }
