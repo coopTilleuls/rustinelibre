@@ -39,11 +39,11 @@ jobs:
       run: |       
         set -o pipefail
         if [[ "${{ github.ref }}" == 'refs/heads/prod' ]]; then
-            SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }} >> "$GITHUB_ENV"
+            echo "SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
         elif [[ "${{ github.ref }}" == *"tag"* ]]; then
-            SITE_KEY=${{ vars.DEMO_CF_TURNSTILE_SITE_KEY }} >> "$GITHUB_ENV"
+            echo "SITE_KEY=${{ vars.DEMO_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
         else
-            SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }} >> "$GITHUB_ENV"
+            echo "SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
         fi
 
     - name: Build/Push
