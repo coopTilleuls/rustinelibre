@@ -8,7 +8,9 @@ on:
         required: true
       domain:
         description: Main project deploy domain used in URLs
-        required: true 
+        required: true
+      mailer-dsn:
+          description: MAILER DSN
 
 jobs:
   deploy:
@@ -46,7 +48,7 @@ jobs:
               # Tags are deployed in prod
               CONTEXT=prod
               IMAGE_TAG=${{ github.ref_name }}
-              RELEASE_NAME=demo
+              RELEASE_NAME=demo             
               URL=demo.${{ secrets.domain }}; 
           else
               CONTEXT=nonprod
@@ -78,7 +80,7 @@ jobs:
             --set=ingress.tls[0].secretName=${RELEASE_NAME}-tls \
             --set=ingress.tls[0].hosts[0]=${URL} \
             --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
-            --set=mailer.dsn="smtp://maildev-maildev.maildev:1025" \
+            --set=mailer.dsn='${{ secrets.mailer-dsn }}' \
             --set=php.corsAllowOrigin="https?://${URL}$" \
             --set=php.trustedHosts="${TRUSTED_HOSTS//./\\\\.}" \
             --set=php.jwt.secretKey="${APP_JWT_SECRET_KEY}" \
