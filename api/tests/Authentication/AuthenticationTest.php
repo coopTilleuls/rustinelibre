@@ -6,9 +6,18 @@ namespace App\Tests\Authentication;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AuthenticationTest extends ApiTestCase
 {
+    private TranslatorInterface $translator;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->translator = self::getContainer()->get(TranslatorInterface::class);
+    }
+
     public function testLogin(): void
     {
         $client = self::createClient();
@@ -50,7 +59,7 @@ class AuthenticationTest extends ApiTestCase
         self::assertResponseHeaderSame('content-type', 'application/json');
         self::assertJsonEquals([
             'code' => Response::HTTP_UNAUTHORIZED,
-            'message' => 'Invalid credentials.',
+            'message' => $this->translator->trans('401_invalid.credentials', domain: 'validators'),
         ]);
     }
 }

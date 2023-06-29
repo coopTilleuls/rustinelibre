@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class RepairerSlots extends Constraint
 {
-    public string $messageNotValidDurationSlot = 'The duration slot should be one of : 30 / 60 / 180 (min)';
+    public string $messageNotValidDurationSlot = 'repairer.duration.slot';
 
     public function getTargets(): string
     {

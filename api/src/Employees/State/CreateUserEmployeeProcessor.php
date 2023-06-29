@@ -13,13 +13,15 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class CreateUserEmployeeProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly ValidatorInterface $validator,
         private readonly Security $security,
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TranslatorInterface $translator
     ) {
     }
 
@@ -52,7 +54,7 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         } else {
             $currentRepairer = $currentUser->repairer;
             if (!$currentRepairer) {
-                throw new BadRequestHttpException('You cannot add en employee if you dont have any repairer shop');
+                throw new BadRequestHttpException($this->translator->trans('400_badRequest.add.employee', domain: 'validators'));
             }
 
             $repairerEmployee->repairer = $currentRepairer;

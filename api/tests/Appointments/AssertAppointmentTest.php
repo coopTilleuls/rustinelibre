@@ -31,8 +31,7 @@ class AssertAppointmentTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'repairer: This value should not be null.
-repairer: This value should not be blank.',
+            'hydra:description' => 'repairer: Un réparateur doit être renseigné pour prendre rendez-vous.',
         ]);
     }
 
@@ -50,8 +49,7 @@ repairer: This value should not be blank.',
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'slotTime: This value should not be null.
-slotTime: This value should not be blank.',
+            'hydra:description' => 'slotTime: Un créneau doit être sélectionné pour prendre rendez-vous.',
         ]);
     }
 
@@ -66,7 +64,7 @@ slotTime: This value should not be blank.',
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertStringContainsString('slotTime: This value should be greater than', $response->getContent(false));
+        self::assertStringContainsString('slotTime: Le créneau sélectionné doit être postérieur à', $response->getContent(false));
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',

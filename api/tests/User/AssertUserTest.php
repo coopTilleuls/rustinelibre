@@ -8,10 +8,19 @@ use App\Entity\User;
 use App\Tests\AbstractTestCase;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AssertUserTest extends AbstractTestCase
 {
     use RefreshDatabaseTrait;
+
+    private TranslatorInterface $translator;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
+    }
 
     public function testBadEmail(): void
     {
@@ -32,7 +41,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'email: This value is not a valid email address.',
+            'hydra:description' => sprintf('email: %s', $this->translator->trans('user.email.valid', domain: 'validators')),
         ]);
     }
 
@@ -55,7 +64,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'plainPassword: This value is not valid.',
+            'hydra:description' => sprintf('plainPassword: %s', $this->translator->trans('user.password.regex', domain: 'validators')),
         ]);
     }
 
@@ -96,7 +105,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'firstName: This value should not be blank.',
+            'hydra:description' => sprintf('firstName: %s', $this->translator->trans('user.firstName.not_blank', domain: 'validators')),
         ]);
     }
 
@@ -119,7 +128,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'firstName: This value is too short. It should have 2 characters or more.',
+            'hydra:description' => sprintf('firstName: %s', $this->translator->trans('user.firstName.min_length', domain: 'validators')),
         ]);
     }
 
@@ -143,7 +152,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'firstName: This value is too long. It should have 50 characters or less.',
+            'hydra:description' => sprintf('firstName: %s', $this->translator->trans('user.firstName.max_length', domain: 'validators')),
         ]);
     }
 
@@ -165,7 +174,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'lastName: This value should not be blank.',
+            'hydra:description' => sprintf('lastName: %s', $this->translator->trans('user.lastName.not_blank', domain: 'validators')),
         ]);
     }
 
@@ -188,7 +197,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'lastName: This value is too short. It should have 2 characters or more.',
+            'hydra:description' => sprintf('lastName: %s', $this->translator->trans('user.lastName.min_length', domain: 'validators')),
         ]);
     }
 
@@ -211,7 +220,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'lastName: This value is too long. It should have 50 characters or less.',
+            'hydra:description' => sprintf('lastName: %s', $this->translator->trans('user.lastName.max_length', domain: 'validators')),
         ]);
     }
 
@@ -290,7 +299,7 @@ class AssertUserTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'email: This value is already used.',
+            'hydra:description' => sprintf('email: %s', $this->translator->trans('user.email.unique', domain: 'validators')),
         ]);
     }
 }

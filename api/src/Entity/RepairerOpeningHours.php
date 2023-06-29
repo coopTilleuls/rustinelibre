@@ -50,12 +50,12 @@ class RepairerOpeningHours
     #[Groups([self::READ, self::WRITE])]
     public ?string $day = null;
 
-    #[Assert\Regex('/^([01]?[0-9]|2[0-3]):([03]0)$/')]
+    #[Assert\Regex('/^([01]?[0-9]|2[0-3]):([03]0)$/', message: 'repairer.openingHours.format')]
     #[ORM\Column]
     #[Groups([self::READ, self::WRITE])]
     public ?string $startTime = null;
 
-    #[Assert\Regex('/^([01]?[0-9]|2[0-3]):([03]0)$/')]
+    #[Assert\Regex('/^([01]?[0-9]|2[0-3]):([03]0)$/', message: 'repairer.openingHours.format')]
     #[ORM\Column]
     #[Groups([self::READ, self::WRITE])]
     public ?string $endTime = null;

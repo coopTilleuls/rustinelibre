@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class AutoDiagnosticAppointment extends Constraint
 {
-    public string $messageNotYourAppointment = 'This appointment does not belong to you.';
+    public string $messageNotYourAppointment = 'autoDiagnostic.appointment.owner';
 
     public string $mode = 'strict';
 }

@@ -10,10 +10,13 @@ use ApiPlatform\Metadata\Operation;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AroundFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'around';
+
+    private readonly TranslatorInterface $translator;
 
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
@@ -22,11 +25,11 @@ final class AroundFilter extends AbstractFilter
         }
 
         if (!property_exists($resourceClass, 'latitude') || !property_exists($resourceClass, 'longitude')) {
-            throw new BadRequestHttpException(sprintf('Your resource class %s has no latitude or longitude property', $resourceClass));
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.around.filter.resource.class', ['%resource%' => $resourceClass], domain: 'validators'));
         }
 
         if (!is_array($value) || empty($value)) {
-            throw new BadRequestHttpException('Wrong format provided for the filter, should be : ?around[cityName]=latitude,longitude');
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.around.filter', domain: 'validators'));
         }
 
         $city = key($value);

@@ -14,13 +14,15 @@ use App\Repository\RepairerEmployeeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class UpdateUserEmployeeProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly RepairerEmployeeRepository $repairerEmployeeRepository,
         private readonly ValidatorInterface $validator,
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TranslatorInterface $translator
     ) {
     }
 
@@ -30,12 +32,12 @@ final class UpdateUserEmployeeProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): RepairerEmployee
     {
         if (!array_key_exists('id', $uriVariables)) {
-            throw new BadRequestHttpException('You should provide a repairer employee ID to update it');
+            throw new BadRequestHttpException($this->translator->trans('400_badRequest.update.employee', domain: 'validators'));
         }
 
         $repairerEmployee = $this->repairerEmployeeRepository->find($uriVariables['id']);
         if (!$repairerEmployee) {
-            throw new NotFoundHttpException('this repairer employee does not exist');
+            throw new NotFoundHttpException($this->translator->trans('404_notFound.repairer.employee', domain: 'validators'));
         }
 
         $repairerEmployee->enabled = boolval($data->enabled);

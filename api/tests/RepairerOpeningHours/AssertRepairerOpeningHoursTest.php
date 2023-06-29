@@ -9,6 +9,7 @@ use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\RepairerTrait;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AssertRepairerOpeningHoursTest extends AbstractTestCase
 {
@@ -16,11 +17,14 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
 
     private RepairerOpeningHoursRepository $repairerOpeningHoursRepository;
 
+    private TranslatorInterface $translator;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->repairerRepository = self::getContainer()->get(RepairerRepository::class);
         $this->repairerOpeningHoursRepository = self::getContainer()->get(RepairerOpeningHoursRepository::class);
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
     }
 
     public function testCreateWithBadFormattedStartTime(): void
@@ -36,7 +40,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertStringContainsString('startTime: This value is not valid.', $response->getContent(false));
+        self::assertStringContainsString($this->translator->trans('repairer.openingHours.format', domain: 'validators'), $response->getContent(false));
     }
 
     public function testCreateWithBadFormattedEndTime(): void
@@ -52,7 +56,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertStringContainsString('endTime: This value is not valid.', $response->getContent(false));
+        self::assertStringContainsString($this->translator->trans('repairer.openingHours.format', domain: 'validators'), $response->getContent(false));
     }
 
     public function testCreateWithStartTimeGreatherThanEndTime(): void
@@ -68,7 +72,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertStringContainsString('The endTime cannot be before startTime', $response->getContent(false));
+        self::assertStringContainsString($this->translator->trans('repairer.opening.valid_time', domain: 'validators'), $response->getContent(false));
     }
 
     public function testCreateWithBadDay(): void
@@ -84,7 +88,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertStringContainsString('This day is not available, should be one of : monday, tuesday, wednesday, thursday, friday, saturday, sunday', $response->getContent(false));
+        self::assertStringContainsString($this->translator->trans('repairer.opening.valid_days', domain: 'validators'), $response->getContent(false));
     }
 
     public function testCreateWithOverlappedHours(): void
@@ -116,7 +120,7 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        self::assertStringContainsString('The hours are overlapped', $response->getContent(false));
+        self::assertStringContainsString($this->translator->trans('repairer.opening.overlapped', domain: 'validators'), $response->getContent(false));
     }
 
     public function testCreateWithNotOverlappedHours(): void
