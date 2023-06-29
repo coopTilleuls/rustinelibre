@@ -40,6 +40,8 @@ FROM builder_base AS builder
 COPY --link . .
 COPY --from=deps --link /srv/app/node_modules ./node_modules
 
+ARG NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY
+
 RUN pnpm run build
 
 
