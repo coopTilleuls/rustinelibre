@@ -9,6 +9,7 @@ use App\Entity\MediaObject;
 use App\Flysystem\FileManager;
 use App\Flysystem\ImageManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -40,7 +41,7 @@ final class UploadImageEventSubscriber implements EventSubscriberInterface
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$object instanceof MediaObject || Request::METHOD_POST !== $method) {
+        if (!$object instanceof MediaObject || Request::METHOD_POST !== $method || !$object->file instanceof UploadedFile) {
             return;
         }
 
