@@ -108,7 +108,7 @@ const UpdatePassword = (): JSX.Element => {
         }, 3000);
         setSuccessOldPassword(false);
       } catch (e:any) {
-        setErrorMessage(e.message.split(':').pop());
+        setErrorMessage(e.message?.replace(/^\w+:\s(.*)/g, "$1"));
         setSuccessOldPassword(false);
       }
     } else {
