@@ -76,4 +76,10 @@ class MediaObject
 
     #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
+
+    #[Groups([self::MEDIA_OBJECT_CREATE])]
+    public bool $visibility = false;
+
+    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, Appointment::APPOINTMENT_READ, AutoDiagnostic::READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
+    public ?bool $viewable = null;
 }

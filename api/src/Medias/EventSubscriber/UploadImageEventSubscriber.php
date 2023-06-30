@@ -6,7 +6,7 @@ namespace App\Medias\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\MediaObject;
-use League\Flysystem\FilesystemOperator;
+use App\Flysystem\ImageManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final class UploadImageEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private FilesystemOperator $imagesStorage,
+        private ImageManager $imagesStorage,
     ) {
     }
 
@@ -36,9 +36,6 @@ final class UploadImageEventSubscriber implements EventSubscriberInterface
         }
 
         $object->filePath = sprintf('%d-%s', time(), $object->file->getClientOriginalName());
-        $this->imagesStorage->write(
-            $object->filePath,
-            $object->file->getContent()
-        );
+        $this->imagesStorage->uploadImage($object);
     }
 }
