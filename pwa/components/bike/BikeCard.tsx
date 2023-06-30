@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {Typography, Paper, Card, CardContent, CardMedia} from '@mui/material';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import EditIcon from '@mui/icons-material/Edit';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {Bike} from '@interfaces/Bike';
 
 type BikeCardProps = {
@@ -33,7 +32,7 @@ const BikeCard = ({bike}: BikeCardProps): JSX.Element => {
               component="img"
               alt="Photo du vélo"
               height="140"
-              image={apiImageUrl(bike.picture?.contentUrl)}
+              image={bike.picture?.contentUrl}
             />
           ) : (
             <DirectionsBikeIcon fontSize="large" />

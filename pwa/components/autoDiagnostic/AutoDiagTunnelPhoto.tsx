@@ -5,7 +5,6 @@ import {autoDiagnosticResource} from '@resources/autoDiagResource';
 import {AutodiagContext} from '@contexts/AutodiagContext';
 import {Button, CircularProgress, Typography, Stack, Box} from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {uploadFile} from '@helpers/uploadFile';
 import {MediaObject} from '@interfaces/MediaObject';
 import {checkFileSize} from "@helpers/checkFileSize";
@@ -107,7 +106,7 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
             ) : (
               <img
                 alt="Photo du diagnostic"
-                src={apiImageUrl(photo.contentUrl)}
+                src={photo.contentUrl}
                 style={{cursor: 'pointer', width: '80%', marginLeft: '10%'}}
               />
             )}

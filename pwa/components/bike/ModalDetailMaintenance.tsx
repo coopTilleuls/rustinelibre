@@ -11,7 +11,6 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import {formatDate} from "@helpers/dateHelper";
 import EventIcon from '@mui/icons-material/Event';
 import ModeIcon from '@mui/icons-material/Mode';
-import {apiImageUrl} from "@helpers/apiImagesHelper";
 import {Button} from "@mui/material";
 import ModalAddMaintenance from "@components/bike/ModalAddMaintenance";
 
@@ -88,7 +87,7 @@ const ModalDetailMaintenance = ({maintenance, openModal, handleCloseModal}: Moda
                                 </ListItem>}
                         </List>
                     }
-                    {maintenance && maintenance.photo && <img width="400" height="auto" alt="Image de la réparation" src={apiImageUrl(maintenance.photo.contentUrl)} />}
+                    {maintenance && maintenance.photo && <img width="400" height="auto" alt="Image de la réparation" src={maintenance.photo.contentUrl} />}
 
                     <Box>
                         <Button variant="contained" onClick={() => setOpenModalEdit(true)} sx={{mt: 2}}>

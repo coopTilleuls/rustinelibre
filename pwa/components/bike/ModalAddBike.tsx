@@ -10,7 +10,6 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {BikeType} from '@interfaces/BikeType';
 import {MediaObject} from '@interfaces/MediaObject';
 import {uploadFile} from '@helpers/uploadFile';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {bikeResource} from '@resources/bikeResource';
 import {RequestBody} from '@interfaces/Resource';
@@ -136,7 +135,7 @@ const ModalAddBike = ({
           <img
             width={isMobile ? '80%' : '300'}
             height="auto"
-            src={apiImageUrl(photo.contentUrl)}
+            src={photo.contentUrl}
             alt="Photo du vélo"
             style={{marginLeft: isMobile ? '10%' : '20%'}}
           />

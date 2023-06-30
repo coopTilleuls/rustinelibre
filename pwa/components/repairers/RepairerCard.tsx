@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
 
@@ -33,24 +32,12 @@ export const RepairerCard = ({
       <Card
         elevation={1}
         sx={{
-          display: 'flex',
-          height: '100%',
-          flexDirection: 'row',
-          borderRadius: 6,
-          outlineOffset: '-1px',
-          transition: 'all ease 0.5s',
-          justifyContent: {xs: 'center', sm: 'flex-start'},
-          width: '100%',
-          p: 0,
-          backgroundColor:
-            repairer.id === selectedRepairer ? 'lightsecondary.main' : 'white',
-          ':hover': {
-            boxShadow: 5,
-            '& .MuiButtonBase-root': {
-              bgcolor: 'primary.main',
-            },
-          },
-        }}>
+          width: {xs: 100, md: 150},
+          height: {xs: 100, md: 150},
+          p: 2,
+          borderRadius: '50%',
+        }}
+      >
         <CardMedia
           component="img"
           sx={{

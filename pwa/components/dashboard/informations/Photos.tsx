@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {repairerResource} from '@resources/repairerResource';
 import {InputLabel, Box, Grid, Button, Typography, CircularProgress} from '@mui/material';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {checkFileSize} from '@helpers/checkFileSize';
 import {MediaObject} from '@interfaces/MediaObject';
 import {Repairer} from '@interfaces/Repairer';
