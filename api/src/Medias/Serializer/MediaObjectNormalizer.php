@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Medias\Serializer;
 
 use App\Entity\MediaObject;
+use App\Flysystem\FileManager;
 use App\Flysystem\ImageManager;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -22,6 +23,7 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
 
     public function __construct(
         private ImageManager $imageManager,
+        private FileManager $fileManager,
     ) {
     }
 
@@ -31,16 +33,28 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
     public function normalize($object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $context[self::ALREADY_CALLED] = true;
-        $operator = $this->imageManager->getOperator();
-
-        if ($operator->fileExists($object->filePath)) {
-            $object->contentUrl = 'public' === $operator->visibility($object->filePath) ?
-                $operator->publicUrl($object->filePath) :
-                $this->imageManager->getPreSignedUrl($object->filePath);
-            $object->viewable = in_array($operator->mimeType($object->filePath), self::VIEWABLE_MIME_TYPES);
-        }
+        $object = $this->fillMediaObject($object);
 
         return $this->normalizer->normalize($object, $format, $context);
+    }
+
+    private function fillMediaObject(MediaObject $mediaObject): MediaObject
+    {
+        if ($this->imageManager->getOperator()->fileExists($mediaObject->filePath)) {
+            $manager = $this->imageManager;
+        } elseif ($this->fileManager->getOperator()->fileExists($mediaObject->filePath)) {
+            $manager = $this->fileManager;
+        } else {
+            return $mediaObject;
+        }
+
+        $operator = $manager->getOperator();
+        $mediaObject->contentUrl = 'public' === $operator->visibility($mediaObject->filePath) ?
+            $operator->publicUrl($mediaObject->filePath) :
+            $manager->getPreSignedUrl($mediaObject->filePath);
+        $mediaObject->viewable = in_array($operator->mimeType($mediaObject->filePath), self::VIEWABLE_MIME_TYPES, true);
+
+        return $mediaObject;
     }
 
     public function supportsNormalization($data, string $format = null, array $context = []): bool

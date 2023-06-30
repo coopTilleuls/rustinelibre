@@ -1,19 +1,22 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import {CircularProgress} from '@mui/material';
-import TextField from '@mui/material/TextField';
+import {
+  CircularProgress,
+  Link,
+  TextField,
+  Button,
+  Box,
+  Modal,
+  Typography,
+  InputLabel,
+} from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
 import {MediaObject} from '@interfaces/MediaObject';
-import {uploadFile} from '@helpers/uploadFile';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
+import {uploadFile, uploadImage} from '@helpers/uploadFile';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {RequestBody} from '@interfaces/Resource';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import {Bike} from '@interfaces/Bike';
-import InputLabel from '@mui/material/InputLabel';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
@@ -51,7 +54,9 @@ const ModalAddMaintenance = ({
   const [name, setName] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
+  const [loadingInvoice, setLoadingInvoice] = useState<boolean>(false);
   const [photo, setPhoto] = useState<MediaObject | null>(null);
+  const [invoice, setInvoice] = useState<MediaObject | null>(null);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const {user} = useAccount({});
@@ -59,10 +64,9 @@ const ModalAddMaintenance = ({
   useEffect(() => {
     if (maintenance) {
       setName(maintenance.name);
-      if (maintenance.description) {
-        setDescription(maintenance.description);
-      }
-      setPhoto(maintenance.photo ? maintenance.photo : null);
+      setDescription(maintenance.description ?? null);
+      setPhoto(maintenance.photo ?? null);
+      setInvoice(maintenance.invoice ?? null);
     }
   }, [maintenance]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -91,6 +95,9 @@ const ModalAddMaintenance = ({
       if (photo) {
         bodyRequest['photo'] = photo['@id'];
       }
+      if (invoice) {
+        bodyRequest['invoice'] = invoice['@id'];
+      }
       if (maintenance) {
         maintenance = await maintenanceResource.put(
           maintenance['@id'],
@@ -101,6 +108,7 @@ const ModalAddMaintenance = ({
         setName('');
         setDescription('');
         setPhoto(null);
+        setInvoice(null);
         setSelectedDate(null);
       }
 
@@ -108,7 +116,6 @@ const ModalAddMaintenance = ({
     } catch (e) {
       setErrorMessage('Ajout de cette réparation impossible');
     }
-
     setPendingAdd(false);
   };
 
@@ -123,20 +130,24 @@ const ModalAddMaintenance = ({
   };
 
   const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
+    mediaObject: MediaObject | null,
+    type: string
   ): Promise<void> => {
-    if (photo) {
-      await mediaObjectResource.delete(photo['@id']);
+    if (mediaObject) {
+      await mediaObjectResource.delete(mediaObject['@id']);
     }
 
     if (event.target.files) {
-      setLoadingPhoto(true);
-
+      const isPhoto = type === 'photo';
+      isPhoto ? setLoadingPhoto(true) : setLoadingInvoice(true);
       const response = await uploadFile(event.target.files[0]);
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
-        setPhoto(mediaObjectResponse);
-        setLoadingPhoto(false);
+        isPhoto
+          ? setPhoto(mediaObjectResponse)
+          : setInvoice(mediaObjectResponse);
+        isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
       }
     }
   };
@@ -154,7 +165,7 @@ const ModalAddMaintenance = ({
         {photo && (
           <img
             width={isMobile ? '80%' : '200'}
-            src={apiImageUrl(photo.contentUrl)}
+            src={photo.contentUrl}
             alt="Photo de la réparation"
           />
         )}
@@ -212,8 +223,44 @@ const ModalAddMaintenance = ({
             ) : (
               'Ajouter une photo'
             )}
-            <input type="file" hidden onChange={(e) => handleFileChange(e)} />
+            <input
+              type="file"
+              hidden
+              onChange={(e) => handleFileChange(e, photo, 'photo')}
+            />
           </Button>
+          <Button
+            variant="outlined"
+            component="label"
+            sx={{mt: 2, mb: 2, ml: 2}}>
+            {loadingInvoice ? (
+              <CircularProgress />
+            ) : invoice ? (
+              'Changer de facture'
+            ) : (
+              'Ajouter une facture'
+            )}
+            <input
+              type="file"
+              hidden
+              accept={'.pdf, .doc, .docx, .odt, .xls, .csv, .png, .jpg, .jpeg'}
+              onChange={(e) => handleFileChange(e, invoice, 'invoice')}
+            />
+          </Button>
+          {invoice && (
+            <Button
+              variant="outlined"
+              component="label"
+              sx={{mt: 2, mb: 2, ml: 2}}>
+              <DownloadIcon />
+              <Link
+                href={invoice.contentUrl}
+                target="_blank"
+                sx={{ml: 1, textDecoration: 'none'}}>
+                Télécharger la facture
+              </Link>
+            </Button>
+          )}
           <Box sx={{float: 'right', mt: 5}}>
             <Button
               onClick={() => handleCloseModal(false)}
