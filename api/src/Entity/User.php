@@ -108,6 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $password = null;
 
     #[Assert\Regex(self::PASSWORD_REGEX, message: 'user.password.regex')]
+    #[Assert\NotBlank(message: 'user.password.regex')]
     #[Groups([self::USER_READ, self::USER_WRITE])]
     public ?string $plainPassword = null;
 

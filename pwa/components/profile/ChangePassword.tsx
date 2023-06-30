@@ -104,10 +104,11 @@ const UpdatePassword = (): JSX.Element => {
         setSuccessNewPassword(true);
         setTimeout(() => {
           setSuccessNewPassword(false);
+          setOldPassword('');
         }, 3000);
         setSuccessOldPassword(false);
-      } catch (e) {
-        setErrorMessage('Mise à jour impossible');
+      } catch (e:any) {
+        setErrorMessage(e.message.split(':').pop());
         setSuccessOldPassword(false);
       }
     } else {
