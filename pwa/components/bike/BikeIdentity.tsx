@@ -27,8 +27,11 @@ type BikeIdentityProps = {
   bikeTypes: BikeType[];
 };
 
-const BikeIdentity = ({bike, setBike, bikeTypes}: BikeIdentityProps): JSX.Element => {
-
+const BikeIdentity = ({
+  bike,
+  setBike,
+  bikeTypes,
+}: BikeIdentityProps): JSX.Element => {
   const [addDescription, setAddDescription] = useState<boolean>(false);
   const [brand, setBrand] = useState<string>(bike.brand ? bike.brand : '');
   const [description, setDescription] = useState<string>(
@@ -120,7 +123,7 @@ const BikeIdentity = ({bike, setBike, bikeTypes}: BikeIdentityProps): JSX.Elemen
             autoComplete="name"
             autoFocus
             value={name}
-            inputProps={{ maxLength: 255 }}
+            inputProps={{maxLength: 255}}
             onChange={handleChangeName}
           />
           <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
@@ -153,7 +156,7 @@ const BikeIdentity = ({bike, setBike, bikeTypes}: BikeIdentityProps): JSX.Elemen
             autoComplete="brand"
             autoFocus
             value={brand}
-            inputProps={{ maxLength: 255 }}
+            inputProps={{maxLength: 255}}
             onChange={handleChangeBrand}
           />
           {addDescription && (
@@ -165,45 +168,31 @@ const BikeIdentity = ({bike, setBike, bikeTypes}: BikeIdentityProps): JSX.Elemen
               value={description}
               rows={3}
               maxRows={6}
-              inputProps={{ maxLength: 2000 }}
+              inputProps={{maxLength: 2000}}
               onChange={handleChangeDescription}
             />
           )}
         </CardContent>
-        <CardActions
-          sx={{
-            display: 'flex',
-            flexDirection: {xs: 'column', md: 'row'},
-            justifyContent: {md: 'center'},
-          }}>
+        <CardActions>
           {!addDescription && (
             <Button
               onClick={handleAddDescription}
               size="small"
-              sx={{padding: '10px'}}
-              variant="contained">
-              <AddIcon /> Ajouter une description
+              startIcon={<AddIcon />}>
+              Ajouter une description
             </Button>
           )}
-        </CardActions>
-        <CardActions
-          sx={{
-            display: 'flex',
-            flexDirection: {xs: 'column', md: 'row'},
-            justifyContent: {md: 'center'},
-          }}>
           {pendingUpdate ? (
-              <CircularProgress />
+            <CircularProgress />
           ) : (
-              <Button
-                  onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-                      handleSubmit(e)
-                  }
-                  size="small"
-                  variant="contained"
-                  sx={{my: 2, textAlign: 'center', padding: '10px'}}>
-                <SaveIcon /> Enregistrer
-              </Button>
+            <Button
+              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                handleSubmit(e)
+              }
+              size="small"
+              startIcon={<SaveIcon />}>
+              Enregistrer
+            </Button>
           )}
         </CardActions>
       </Card>

@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {useAccount} from '@contexts/AuthContext';
-import {Container, Stack} from '@mui/material';
+import {Box, Container, Stack} from '@mui/material';
 import SearchARepairer from '@components/homepage/SearchARepairer';
 import CreateMaintenanceBooklet from '@components/homepage/CreateMaintenanceBooklet';
 import JoinTheCollective from '@components/homepage/JoinTheCollective';
@@ -18,15 +18,39 @@ const Home = () => {
         <title>La rustine libre</title>
       </Head>
       <WebsiteLayout>
+        <Box
+          gap={{xs: 6, md: 14}}
+          width="100%"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          pb={{xs: 6, md: 8}}>
+          <Box
+            bgcolor="cream.main"
+            width="100%"
+            paddingY={6}
+            minHeight={{
+              xs: 'calc(100vh - 112px)',
+              sm: 'calc(100vh - 120px)',
+              lg: 'calc(100vh - 152px)',
+            }}>
+            <Container sx={{px: {xs: 0}}}>
+              <SearchARepairer />
+            </Container>
+          </Box>
+        </Box>
         <Container sx={{px: {xs: 0}}}>
-          <Stack spacing={{xs: 6, md: 14}} sx={{mt: {xs: 2, md: 6}, mb: 12}}>
-            <SearchARepairer />
+          <Box
+            gap={{xs: 6, md: 8}}
+            width="100%"
+            display="flex"
+            flexDirection="column">
             {user && !isBoss(user) && !isEmployee(user) && (
               <FavoriteRepairers user={user} />
             )}
             <CreateMaintenanceBooklet />
             <JoinTheCollective />
-          </Stack>
+          </Box>
         </Container>
       </WebsiteLayout>
     </>

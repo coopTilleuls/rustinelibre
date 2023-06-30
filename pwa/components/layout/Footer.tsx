@@ -30,14 +30,12 @@ const Footer = ({user}: FooterProps): JSX.Element => {
         zIndex: 10,
       }}>
       <Box
-        sx={{backgroundColor: 'grey.200'}}
+        bgcolor="white"
+        boxShadow="0 -5px 10px rgba(0, 0, 0, 0.04), 0 -10px 20px rgba(0, 0, 0, 0.02)"
         py={{md: 1}}
         width={'100%'}
         height={'100%'}>
-        <BottomNavigation
-          showLabels
-          value={router.pathname}
-          sx={{backgroundColor: 'grey.200'}}>
+        <BottomNavigation showLabels value={router.pathname}>
           <BottomNavigationAction
             component={NextLinkComposed}
             to={{pathname: '/'}}

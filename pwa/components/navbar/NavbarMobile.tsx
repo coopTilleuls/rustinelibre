@@ -10,6 +10,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import {Page} from '@interfaces/Page';
 import {User} from '@interfaces/User';
+import Logo from '@components/common/Logo';
 
 interface MobileNavbarProps {
   pages: Page[];
@@ -47,15 +48,10 @@ const MobileNavbar = ({
           display: {xs: 'flex', md: 'none'},
           alignItems: 'center',
         }}>
-        <Link href="/" style={{textDecoration: 'none'}}>
-          <Typography
-            color="primary"
-            sx={{
-              fontSize: 18,
-              fontWeight: 600,
-            }}>
-            Rustine Libre
-          </Typography>
+        <Link href="/">
+          <Box height="30px" display="flex" justifyContent="center">
+            <Logo inline color="primary" />
+          </Box>
         </Link>
       </Box>
       <Box>
@@ -66,7 +62,7 @@ const MobileNavbar = ({
           aria-haspopup="true"
           onClick={handleOpen}
           color="primary"
-          sx={{pr: 0}}>
+          sx={{mr: -1}}>
           <MenuIcon />
         </IconButton>
         <Menu
