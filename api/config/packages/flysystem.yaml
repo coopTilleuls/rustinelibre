@@ -4,3 +4,11 @@ flysystem:
             adapter: 'local'
             options:
                 directory: '%kernel.project_dir%/public/media'
+        images.storage:
+            adapter: 'aws'
+            visibility: 'public'
+            options:
+                client: 'Aws\S3\S3Client' # The service ID of the Aws\S3\S3Client instance
+                bucket: 'lt-mut-nonprod-bikelib-flysystem'
+                prefix: 'images'
+                streamReads: true

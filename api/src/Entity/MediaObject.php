@@ -71,7 +71,6 @@ class MediaObject
     #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, Appointment::APPOINTMENT_READ, AutoDiagnostic::READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
     public ?string $contentUrl = null;
 
-    #[Vich\UploadableField(mapping: 'media_object', fileNameProperty: 'filePath')]
     #[Assert\NotNull(message: 'mediaObject.file.not_null', groups: [self::MEDIA_OBJECT_CREATE])]
     public ?File $file = null;
 

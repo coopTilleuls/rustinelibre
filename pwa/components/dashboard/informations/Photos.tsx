@@ -79,7 +79,7 @@ export const DashboardInfosPhotos = ({
               alt="thumbnail"
               width="500"
               height="auto"
-              src={apiImageUrl(repairer.thumbnail.contentUrl)}
+              src={repairer.thumbnail.contentUrl}
             />
           )}
         </Grid>
@@ -110,7 +110,7 @@ export const DashboardInfosPhotos = ({
               alt="photo de description"
               width="500"
               height="auto"
-              src={apiImageUrl(repairer.descriptionPicture.contentUrl)}
+              src={repairer.descriptionPicture.contentUrl}
             />
           )}
         </Grid>
