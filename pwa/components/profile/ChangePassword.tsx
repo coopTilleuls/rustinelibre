@@ -95,6 +95,11 @@ const UpdatePassword = (): JSX.Element => {
     }
     setErrorMessage(null);
     setPendingLogin(true);
+    if (newPassword == '' ){
+      setErrorMessage('Le nouveau mot de passe ne peut pas être vide.');
+      setPendingLogin(false);
+      return;
+    }
     if (checkPassword == newPassword) {
       try {
         await userResource.putById(user.id, {
