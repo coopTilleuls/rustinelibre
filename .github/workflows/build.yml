@@ -51,6 +51,7 @@ jobs:
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
        
   build-push-pwa:
+    needs: [setup-build]
     runs-on: ubuntu-latest
     steps:
     - name: Define Env
