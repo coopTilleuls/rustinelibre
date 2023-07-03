@@ -26,6 +26,11 @@ jobs:
     name: Build
     if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
     uses: ./.github/workflows/build.yml
+    with:
+      tags: |
+        type=ref,event=pr,prefix=pr-,priority=1000
+        type=edge,branch=$repo.default_branch,priority=900
+        type=raw,value=latest,enable={{is_default_branch}},priority=900 
 
   deploy:
     name: Deploy
