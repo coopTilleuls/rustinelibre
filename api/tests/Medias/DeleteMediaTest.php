@@ -14,14 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DeleteMediaTest extends AbstractTestCase
 {
-    private FilesystemOperator $imagesStorage;
+    private FilesystemOperator $defaultStorage;
 
     private MediaObjectRepository $mediaObjectRepository;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->imagesStorage = self::getContainer()->get('images.storage');
+        $this->defaultStorage = self::getContainer()->get('default.storage');
         $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
     }
 
@@ -42,13 +42,13 @@ class DeleteMediaTest extends AbstractTestCase
         $filePath = $this->mediaObjectRepository->find(basename($response->toArray()['@id']))->filePath;
 
         // Check file exist
-        $this->assertTrue($this->imagesStorage->fileExists($filePath));
+        $this->assertTrue($this->defaultStorage->has($filePath));
 
         // Remove media object resource
         $this->createClientAuthAsAdmin()->request('DELETE', $response->toArray()['@id']);
 
         // Check file does not exist
-        $this->assertFalse($this->imagesStorage->fileExists($filePath));
+        $this->assertFalse($this->defaultStorage->has($filePath));
     }
 
     public function testMediaRemoveIfBikeRemove(): void
@@ -67,7 +67,7 @@ class DeleteMediaTest extends AbstractTestCase
         // Check file exist
         $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
         $filePath = $this->mediaObjectRepository->find(basename($mediaResponse->toArray()['@id']))->filePath;
-        $this->assertTrue($this->imagesStorage->fileExists($filePath));
+        $this->assertTrue($this->defaultStorage->has($filePath));
 
         // Update a random bike with new picture
         $randomBike = self::getContainer()->get(BikeRepository::class)->findOneBy([]);
@@ -88,7 +88,7 @@ class DeleteMediaTest extends AbstractTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
 
         // File should not exist
-        $this->assertFalse($this->imagesStorage->fileExists($filePath));
+        $this->assertFalse($this->defaultStorage->has($filePath));
     }
 
     public function testMediaRemoveIfMaintenanceRemove(): void
@@ -107,7 +107,7 @@ class DeleteMediaTest extends AbstractTestCase
         // Check file exist
         $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
         $filePath = $this->mediaObjectRepository->find(basename($mediaResponse->toArray()['@id']))->filePath;
-        $this->assertTrue($this->imagesStorage->fileExists($filePath));
+        $this->assertTrue($this->defaultStorage->has($filePath));
 
         // Update a random maintenance with new picture
         $randomMaintenance = self::getContainer()->get(MaintenanceRepository::class)->findOneBy([]);
@@ -128,6 +128,6 @@ class DeleteMediaTest extends AbstractTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
 
         // File should not exist
-        $this->assertFalse($this->imagesStorage->fileExists($filePath));
+        $this->assertFalse($this->defaultStorage->has($filePath));
     }
 }

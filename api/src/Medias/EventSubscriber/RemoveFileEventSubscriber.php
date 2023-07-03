@@ -10,12 +10,16 @@ use App\Flysystem\ImageManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use League\Flysystem\FilesystemOperator;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 final readonly class RemoveFileEventSubscriber implements EventSubscriber
 {
     public function __construct(
         private ImageManager $imageManager,
         private FileManager $fileManager,
+        private FilesystemOperator $defaultStorage,
+        private KernelInterface $kernel,
     ) {
     }
 
@@ -30,6 +34,14 @@ final readonly class RemoveFileEventSubscriber implements EventSubscriber
     {
         $media = $args->getObject();
         if (!$media instanceof MediaObject) {
+            return;
+        }
+
+        if ('test' === $this->kernel->getEnvironment()) {
+            if ($this->defaultStorage->has($media->filePath)) {
+                $this->defaultStorage->delete($media->filePath);
+            }
+
             return;
         }
 

@@ -14,14 +14,14 @@ class MediasTest extends AbstractTestCase
 {
     public const IMAGE_NAME = 'ratpi.png';
 
-    private FilesystemOperator $imagesStorage;
+    private FilesystemOperator $defaultStorage;
 
     private MediaObjectRepository $mediaObjectRepository;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->imagesStorage = self::getContainer()->get('images.storage');
+        $this->defaultStorage = self::getContainer()->get('default.storage');
         $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
     }
 
@@ -42,6 +42,6 @@ class MediasTest extends AbstractTestCase
         // Check file exist
         $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
         $filePath = $this->mediaObjectRepository->find(basename($response->toArray()['@id']))->filePath;
-        self::assertTrue($this->imagesStorage->fileExists($filePath));
+        self::assertTrue($this->defaultStorage->has($filePath));
     }
 }

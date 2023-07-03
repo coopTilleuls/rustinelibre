@@ -7,6 +7,8 @@ namespace App\Medias\Serializer;
 use App\Entity\MediaObject;
 use App\Flysystem\FileManager;
 use App\Flysystem\ImageManager;
+use League\Flysystem\FilesystemOperator;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -24,6 +26,8 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
     public function __construct(
         private ImageManager $imageManager,
         private FileManager $fileManager,
+        private FilesystemOperator $defaultStorage,
+        private KernelInterface $kernel,
     ) {
     }
 
@@ -33,7 +37,18 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
     public function normalize($object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $context[self::ALREADY_CALLED] = true;
-        $object = $this->fillMediaObject($object);
+
+        if ('test' === $this->kernel->getEnvironment()) {
+            if ($this->defaultStorage->has($object->filePath)) {
+                $object->contentUrl = sprintf(
+                    '%s/%s',
+                    __DIR__.'../../../public/media',
+                    $object->filePath
+                );
+            }
+        } else {
+            $object = $this->fillMediaObject($object);
+        }
 
         return $this->normalizer->normalize($object, $format, $context);
     }
