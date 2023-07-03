@@ -7,7 +7,6 @@ namespace App\Medias\Serializer;
 use App\Entity\MediaObject;
 use App\Flysystem\FileManager;
 use App\Flysystem\ImageManager;
-use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
