@@ -95,6 +95,11 @@ const UpdatePassword = (): JSX.Element => {
     }
     setErrorMessage(null);
     setPendingLogin(true);
+    if (newPassword === '' ){
+      setErrorMessage('Le nouveau mot de passe ne peut pas être vide.');
+      setPendingLogin(false);
+      return;
+    }
     if (checkPassword == newPassword) {
       try {
         await userResource.putById(user.id, {
@@ -104,10 +109,11 @@ const UpdatePassword = (): JSX.Element => {
         setSuccessNewPassword(true);
         setTimeout(() => {
           setSuccessNewPassword(false);
+          setOldPassword('');
         }, 3000);
         setSuccessOldPassword(false);
-      } catch (e) {
-        setErrorMessage('Mise à jour impossible');
+      } catch (e:any) {
+        setErrorMessage(e.message?.replace(/(\w+):\s(.*?)(?=\n\w+:|$)/g, "$2"))
         setSuccessOldPassword(false);
       }
     } else {
