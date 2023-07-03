@@ -230,7 +230,7 @@ export abstract class AbstractResource<T> {
       let violation = (result as ResponseError)['violations'][0]['message']
       if(violation)
       {
-        throw new Error((result as ResponseError)['violations'][0]['message']);
+        throw new Error(violation);
       }
       throw new Error((result as ResponseError)['hydra:description']);
     }
