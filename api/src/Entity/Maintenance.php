@@ -66,7 +66,6 @@ class Maintenance
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    #[ApiProperty(types: ['https://schema.org/image'])] // TODO: quel type pour les fichiers ?
     #[Groups([self::READ, self::WRITE])]
     public ?MediaObject $invoice = null;
 
