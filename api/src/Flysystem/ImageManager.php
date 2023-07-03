@@ -26,7 +26,7 @@ readonly class ImageManager
         );
     }
 
-    public function getPreSignedUrl(string $path, string $duration = '+1 minute'): string
+    public function getPreSignedUrl(string $path, string $duration = '+60 minutes'): string
     {
         $command = $this->s3Client->getCommand('getObject', [
             'Bucket' => $this->storageBucket,
