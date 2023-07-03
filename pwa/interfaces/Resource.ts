@@ -11,11 +11,6 @@ export interface ResponseError {
   '@type': string;
   'hydra:description': string;
   'hydra:title': string;
-  'violations':{
-    '0': {
-      'message' : string;
-    }
-  };
 }
 
 export interface Collection<T> {
