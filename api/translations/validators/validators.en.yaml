@@ -65,6 +65,9 @@ discussion.message.content.max_length: The message content can contain 1000 char
 
 #MediaObject assert validation messages
 mediaObject.file.not_null: Please add a file.
+mediaObject.file.image.format: Only images with .jpeg, .jpg, .png ou .webp format are accepted.
+mediaObject.file.file.format: Only files with .pdf, .doc, .docx, .odt, .xls ou .csv format are accepted.
+mediaObject.file.maxSize: The file should not exceed 5MB.
 
 #Repairer assert validation messages
 #PlainPassword

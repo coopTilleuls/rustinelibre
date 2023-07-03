@@ -5,7 +5,7 @@ import {InputLabel, Box, Grid, Button, Typography, CircularProgress} from '@mui/
 import {checkFileSize} from '@helpers/checkFileSize';
 import {MediaObject} from '@interfaces/MediaObject';
 import {Repairer} from '@interfaces/Repairer';
-import {uploadFile} from '@helpers/uploadFile';
+import {uploadImage} from '@helpers/uploadFile';
 
 interface DashboardInfosPhotosProps {
   repairer: Repairer | null;
@@ -42,7 +42,7 @@ export const DashboardInfosPhotos = ({
         return;
       }
 
-      const response = await uploadFile(file);
+      const response = await uploadImage(file);
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
         if (pictureType === 'thumbnail') {

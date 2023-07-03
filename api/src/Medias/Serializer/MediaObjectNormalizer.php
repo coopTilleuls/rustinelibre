@@ -38,17 +38,7 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
     {
         $context[self::ALREADY_CALLED] = true;
 
-        if ('test' === $this->kernel->getEnvironment()) {
-            if ($this->defaultStorage->has($object->filePath)) {
-                $object->contentUrl = sprintf(
-                    '%s/%s',
-                    __DIR__.'../../../public/media',
-                    $object->filePath
-                );
-            }
-        } else {
-            $object = $this->fillMediaObject($object);
-        }
+        $object = $this->fillMediaObject($object);
 
         return $this->normalizer->normalize($object, $format, $context);
     }

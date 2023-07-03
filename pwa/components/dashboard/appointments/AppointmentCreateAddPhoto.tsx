@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {CircularProgress, Typography, Stack, Box} from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {uploadFile} from '@helpers/uploadFile';
+import {uploadImage} from '@helpers/uploadFile';
 import {MediaObject} from '@interfaces/MediaObject';
 import {checkFileSize} from "@helpers/checkFileSize";
 
@@ -34,7 +34,7 @@ const AppointmentCreateAddPhoto = ({photo, setPhoto}: AppointmentCreateAddPhotoP
             }
 
             // Upload new picture
-            const response = await uploadFile(file);
+            const response = await uploadImage(file);
             const mediaObjectResponse = (await response?.json()) as MediaObject;
             if (mediaObjectResponse) {
                 // Display new photo

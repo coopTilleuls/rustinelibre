@@ -5,7 +5,7 @@ import {autoDiagnosticResource} from '@resources/autoDiagResource';
 import {AutodiagContext} from '@contexts/AutodiagContext';
 import {Button, CircularProgress, Typography, Stack, Box} from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {uploadFile} from '@helpers/uploadFile';
+import {uploadImage} from '@helpers/uploadFile';
 import {MediaObject} from '@interfaces/MediaObject';
 import {checkFileSize} from "@helpers/checkFileSize";
 
@@ -62,7 +62,7 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
         await mediaObjectResource.delete(photo['@id']);
       }
       // Upload new picture
-      const response = await uploadFile(file);
+      const response = await uploadImage(file);
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
         // Display new photo

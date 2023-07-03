@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {BikeType} from '@interfaces/BikeType';
 import {MediaObject} from '@interfaces/MediaObject';
-import {uploadFile} from '@helpers/uploadFile';
+import {uploadImage} from '@helpers/uploadFile';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {bikeResource} from '@resources/bikeResource';
 import {RequestBody} from '@interfaces/Resource';
@@ -101,7 +101,7 @@ const ModalAddBike = ({
       }
 
       setLoadingPhoto(true);
-      const response = await uploadFile(file);
+      const response = await uploadImage(file);
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
         setPhoto(mediaObjectResponse);
