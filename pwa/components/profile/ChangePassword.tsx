@@ -95,7 +95,7 @@ const UpdatePassword = (): JSX.Element => {
     }
     setErrorMessage(null);
     setPendingLogin(true);
-    if (newPassword == '' ){
+    if (newPassword === '' ){
       setErrorMessage('Le nouveau mot de passe ne peut pas être vide.');
       setPendingLogin(false);
       return;
