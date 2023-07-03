@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final readonly class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwareInterface
+final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
@@ -24,9 +24,9 @@ final readonly class MediaObjectNormalizer implements NormalizerInterface, Norma
     ];
 
     public function __construct(
-        private ImageManager $imageManager,
-        private FileManager $fileManager,
-        private KernelInterface $kernel,
+        private readonly ImageManager $imageManager,
+        private readonly FileManager $fileManager,
+        private readonly KernelInterface $kernel,
     ) {
     }
 
