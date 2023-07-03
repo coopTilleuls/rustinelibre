@@ -19,6 +19,7 @@ import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {useRouter} from 'next/router';
 import {User} from '@interfaces/User';
 import UserForm from '@components/form/UserForm';
+import{errorRegex} from "@utils/errorRegex";
 
 const Registration: NextPageWithLayout = ({}) => {
   const [pendingRegistration, setPendingRegistration] =
@@ -49,6 +50,8 @@ const Registration: NextPageWithLayout = ({}) => {
   const {firstName, lastName, email, password, passwordError, city, street} =
     useContext(UserFormContext);
 
+  const invalidForm = !email || !password || passwordError || !firstName || !lastName;
+
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -76,8 +79,8 @@ const Registration: NextPageWithLayout = ({}) => {
       });
 
       setInscriptionSuccess(true);
-    } catch (e) {
-      setErrorMessage('Inscription impossible');
+    } catch (e: any) {
+      setErrorMessage(e.message?.replace(errorRegex, "$2"));
     }
 
     setPendingRegistration(false);
@@ -127,7 +130,7 @@ const Registration: NextPageWithLayout = ({}) => {
                   <PersonIcon />
                 </Avatar>
                 <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
-                  Je créé mon compte
+                  Je crée mon compte
                 </Typography>
                 <Box
                   display="flex"
@@ -138,7 +141,7 @@ const Registration: NextPageWithLayout = ({}) => {
                   noValidate
                   sx={{mt: 1}}>
                   <UserForm user={null} />
-                  <Button type="submit" variant="contained" sx={{my: 2}}>
+                  <Button type="submit" variant="contained" sx={{my: 2}} disabled={invalidForm}>
                     {!pendingRegistration ? (
                       'Créer mon compte'
                     ) : (
