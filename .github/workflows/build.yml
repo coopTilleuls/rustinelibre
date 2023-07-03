@@ -9,19 +9,6 @@ on:
         required: true
 
 jobs:
-  setup-build:
-    runs-on: ubuntu-latest
- 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3.5.2
-    - name: Login to registry
-      uses: docker/login-action@v1
-      with:
-        registry: ghcr.io/cooptilleuls
-        username: _json_key
-        password: ${{ secrets.GITHUB_TOKEN }}  
-
   build-push-php:
     runs-on: ubuntu-latest
  
@@ -51,9 +38,16 @@ jobs:
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
        
   build-push-pwa:
-    needs: [setup-build]
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v3.5.2
+    - name: Login to registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io/cooptilleuls
+        username: _json_key
+        password: ${{ secrets.GITHUB_TOKEN }} 
     - name: Define Env
       run: |       
         set -o pipefail
