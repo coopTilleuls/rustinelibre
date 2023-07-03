@@ -1,20 +1,37 @@
+parameters:
+    storage_bucket: '%env(resolve:STORAGE_BUCKET)%'
+
 flysystem:
     storages:
-        default.storage:
-            adapter: 'local'
-            options:
-                directory: '%kernel.project_dir%/public/media'
         images.storage:
             adapter: 'aws'
             visibility: 'public'
             options:
                 client: 'Aws\S3\S3Client'
-                bucket: 'lt-mut-nonprod-bikelib-flysystem'
+                bucket: '%storage_bucket%'
                 prefix: 'images'
         files.storage:
             adapter: 'aws'
             visibility: 'private'
             options:
                 client: 'Aws\S3\S3Client'
-                bucket: 'lt-mut-nonprod-bikelib-flysystem'
+                bucket: '%storage_bucket%'
                 prefix: 'files'
+
+when@test:
+    flysystem:
+        storages:
+            images.storage:
+                adapter: 'aws'
+                visibility: 'public'
+                options:
+                    client: 'Aws\S3\S3Client'
+                    bucket: '%storage_bucket%'
+                    prefix: 'tests/images'
+            files.storage:
+                adapter: 'aws'
+                visibility: 'private'
+                options:
+                    client: 'Aws\S3\S3Client'
+                    bucket: '%storage_bucket%'
+                    prefix: 'tests/files'

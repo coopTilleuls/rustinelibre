@@ -23,6 +23,7 @@ trait MediaTrait
                 $path,
                 'ratpi.png',
             );
+            $media->filePath = 'ratpi.png';
             $this->mediaRepository->save($media, true);
         }
 
