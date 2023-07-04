@@ -29,7 +29,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Post(
-    '/media_objects/images',
+    uriTemplate: '/media_objects/images',
     controller: CreateMediaObjectAction::class,
     openapi: new Model\Operation(
         requestBody: new Model\RequestBody(
@@ -54,7 +54,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     name: 'media_object_add_image'
 )]
 #[Post(
-    '/media_objects/files',
+    uriTemplate: '/media_objects/files',
     controller: CreateMediaObjectAction::class,
     openapi: new Model\Operation(
         requestBody: new Model\RequestBody(
