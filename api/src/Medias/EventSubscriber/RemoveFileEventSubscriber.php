@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Medias\EventSubscriber;
 
 use App\Entity\MediaObject;
-use App\Flysystem\FileManager;
-use App\Flysystem\ImageManager;
+use App\Flysystem\MediaObjectManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -14,8 +13,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 final readonly class RemoveFileEventSubscriber implements EventSubscriber
 {
     public function __construct(
-        private ImageManager $imageManager,
-        private FileManager $fileManager,
+        private MediaObjectManager $mediaObjectManager,
     ) {
     }
 
@@ -33,10 +31,11 @@ final readonly class RemoveFileEventSubscriber implements EventSubscriber
             return;
         }
 
-        if ($this->imageManager->getOperator()->fileExists($media->filePath)) {
-            $this->imageManager->getOperator()->delete($media->filePath);
-        } elseif ($this->fileManager->getOperator()->fileExists($media->filePath)) {
-            $this->fileManager->getOperator()->delete($media->filePath);
+        $prefix = $this->mediaObjectManager->getPrefixOfMediaObject($media);
+        if (!$prefix) {
+            return;
         }
+
+        $this->mediaObjectManager->getOperator($prefix)->delete($media->filePath);
     }
 }

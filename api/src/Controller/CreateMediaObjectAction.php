@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\MediaObject;
-use App\Flysystem\ImageManager;
+use App\Flysystem\MediaObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,12 +16,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
-final class CreateMediaObjectImageAction extends AbstractController
+final class CreateMediaObjectAction extends AbstractController
 {
     public function __construct(
         private readonly Security $security,
         private readonly TranslatorInterface $translator,
-        private readonly ImageManager $imagesManager,
+        private readonly MediaObjectManager $mediaObjectManager,
         private readonly SluggerInterface $slugger
     ) {
     }
@@ -36,13 +36,14 @@ final class CreateMediaObjectImageAction extends AbstractController
         $mediaObject = new MediaObject();
         $mediaObject->file = $uploadedFile;
         $mediaObject->owner = $this->security->getUser();
-        $mediaObject->visibility = $request->request->get('visibility') ?? 'private';
-        $this->uploadImage($mediaObject);
+        $mediaObject = $this->addFilePath($mediaObject);
+        $prefix = '/media_objects/images' === $request->getRequestUri() ? 'images' : 'files';
+        $this->mediaObjectManager->upload($mediaObject, $prefix);
 
         return $mediaObject;
     }
 
-    public function uploadImage(MediaObject $mediaObject): void
+    public function addFilePath(MediaObject $mediaObject): MediaObject
     {
         if (!$mediaObject->file instanceof UploadedFile) {
             $randomString = bin2hex(random_bytes(16));
@@ -53,6 +54,6 @@ final class CreateMediaObjectImageAction extends AbstractController
             $mediaObject->filePath = sprintf('%d-%s.%s', time(), $slugName, $mediaObject->file->getClientOriginalExtension());
         }
 
-        $this->imagesManager->uploadImage($mediaObject);
+        return $mediaObject;
     }
 }

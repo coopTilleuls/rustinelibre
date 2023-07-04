@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Medias\Serializer;
 
 use App\Entity\MediaObject;
-use App\Flysystem\FileManager;
-use App\Flysystem\ImageManager;
+use App\Flysystem\MediaObjectManager;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -17,14 +16,9 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
     use NormalizerAwareTrait;
 
     private const ALREADY_CALLED = 'MEDIA_OBJECT_NORMALIZER_ALREADY_CALLED';
-    private const VIEWABLE_MIME_TYPES = [
-        'image/png',
-        'image/jpeg',
-    ];
 
     public function __construct(
-        private readonly ImageManager $imageManager,
-        private readonly FileManager $fileManager,
+        private readonly MediaObjectManager $mediaObjectManager,
         private readonly KernelInterface $kernel,
     ) {
     }
@@ -43,19 +37,16 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
 
     private function fillMediaObject(MediaObject $mediaObject): MediaObject
     {
-        if ($this->imageManager->getOperator()->fileExists($mediaObject->filePath)) {
-            $manager = $this->imageManager;
-        } elseif ($this->fileManager->getOperator()->fileExists($mediaObject->filePath)) {
-            $manager = $this->fileManager;
-        } else {
+        $prefix = $this->mediaObjectManager->getPrefixOfMediaObject($mediaObject);
+        if (!$prefix) {
             return $mediaObject;
         }
 
-        $operator = $manager->getOperator();
-        $mediaObject->contentUrl = 'public' === $operator->visibility($mediaObject->filePath) ?
-            $operator->publicUrl($mediaObject->filePath) :
-            $manager->getPreSignedUrl($mediaObject->filePath);
-        $mediaObject->viewable = in_array($operator->mimeType($mediaObject->filePath), self::VIEWABLE_MIME_TYPES, true);
+        $filePath = $mediaObject->filePath;
+        $mediaObject->contentUrl = 'public' === $this->mediaObjectManager->visibility($filePath, $prefix) ?
+            $this->mediaObjectManager->publicUrl($filePath, $prefix) :
+            $this->mediaObjectManager->getPreSignedUrl($filePath, $prefix);
+        $mediaObject->viewable = in_array($this->mediaObjectManager->getOperator($prefix)->mimeType($filePath), MediaObject::MIME_TYPE_IMAGE_ACCEPTED, true);
 
         return $mediaObject;
     }
