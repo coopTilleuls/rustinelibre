@@ -49,10 +49,10 @@ export const RepairersResults = (): JSX.Element => {
             pr: {md: 2},
             width: {xs: '100%', md: '50%'},
           }}>
-          <Grid2 container spacing={2}>
+          <Grid2 container spacing={4} sx={{py: 2}}>
             {repairers.map((repairer) => {
               return (
-                <Box key={repairer.id} width="100%">
+                <>
                   <Grid2
                     id={repairer.id}
                     key={repairer.id}
@@ -60,6 +60,7 @@ export const RepairersResults = (): JSX.Element => {
                     pt="198px"
                     mt="-198px">
                     <RepairerCard
+                      withButton
                       repairer={repairer}
                       onClick={() =>
                         router.push({
@@ -72,7 +73,7 @@ export const RepairersResults = (): JSX.Element => {
                   {isMobile && (
                     <Divider sx={{width: '90%', mx: 'auto', mb: 1}} />
                   )}
-                </Box>
+                </>
               );
             })}
           </Grid2>

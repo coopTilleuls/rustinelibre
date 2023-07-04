@@ -38,12 +38,26 @@ const RepairersList: NextPageWithLayout = () => {
         <title>Liste des réparateurs</title>
       </Head>
       <WebsiteLayout>
+        <Box
+          bgcolor="lightprimary.main"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
         <Container
           sx={{
-            mt: 10,
+            py: 10,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            minHeight: {
+              xs: 'calc(100vh - 112px)',
+              sm: 'calc(100vh - 120px)',
+              md: 'calc(100vh - 152px)',
+            },
           }}>
           <Typography variant="h1" textAlign="center" mb={5} color="primary">
             Liste des réparateurs
@@ -55,10 +69,20 @@ const RepairersList: NextPageWithLayout = () => {
           </Typography>
           {isLoading && <CircularProgress />}
           {!isLoading && (
-            <Grid2 container spacing={4}>
+            <Grid2
+              container
+              spacing={4}
+              justifyContent="flex-start"
+              maxWidth="1200px">
               {repairers.map((repairer) => {
                 return (
-                  <Grid2 id={repairer.id} key={repairer.id} xs={12} sm={6}>
+                  <Grid2
+                    id={repairer.id}
+                    key={repairer.id}
+                    xs={12}
+                    md={6}
+                    width="100%"
+                    mx="auto">
                     <RepairerCard
                       repairer={repairer}
                       onClick={() =>

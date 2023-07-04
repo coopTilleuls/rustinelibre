@@ -35,7 +35,6 @@ const LegalNoticesFooter = (): JSX.Element => {
           gap: 1,
           justifyContent: 'center',
           pt: 3,
-          backgroundColor: 'white',
         }}>
         {legalNoticesFooter.map(({name, link, disabled}, index) => {
           const isLastItem = index === legalNoticesFooter.length - 1;

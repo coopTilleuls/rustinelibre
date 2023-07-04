@@ -70,6 +70,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
         bottom: 0,
         left: 0,
         right: 0,
+        zIndex: 5,
         boxShadow:
           '0 -5px 10px rgba(0, 0, 0, 0.04), 0 -10px 20px rgba(0, 0, 0, 0.02)',
       }}

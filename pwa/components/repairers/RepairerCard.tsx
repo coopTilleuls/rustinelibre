@@ -1,20 +1,18 @@
 import React, {PropsWithRef, useContext} from 'react';
-import Link from 'next/link';
 import {
   Box,
   Button,
-  Stack,
   Card,
   CardContent,
   CardMedia,
   Typography,
+  ButtonBase,
 } from '@mui/material';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
-import useMediaQuery from '@hooks/useMediaQuery';
 
 interface RepairerProps extends PropsWithRef<any> {
   repairer: Repairer;
@@ -25,108 +23,114 @@ export const RepairerCard = ({
   repairer,
   onClick,
 }: RepairerProps): JSX.Element => {
-  const {sortChosen, selectedRepairer} = useContext(SearchRepairerContext);
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const {selectedRepairer} = useContext(SearchRepairerContext);
 
   return (
-    <Card
-      sx={{
-        boxShadow: 0,
-        border: (theme) =>
-          !isMobile ? `4px solid ${theme.palette.grey[300]}` : '',
-        display: 'flex',
-        backgroundColor:
-          repairer.id === selectedRepairer ? 'lightsecondary.main' : 'white',
-      }}>
-      <CardMedia
-        component="img"
+    <ButtonBase
+      component="div"
+      sx={{borderRadius: 6, width: '100%', height: '100%'}}
+      onClick={onClick}>
+      <Card
+        elevation={1}
         sx={{
-          width: {xs: 100, md: 150},
-          height: {xs: 100, md: 150},
-          p: 2,
-          borderRadius: '50%',
-        }}
-        image={
-          repairer.thumbnail
-            ? apiImageUrl(repairer.thumbnail.contentUrl)
-            : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'
-        }
-        alt="Photo du réparateur"
-      />
-      <CardContent
-        sx={{
-          pl: 0,
-          pr: 2,
-          py: 2,
-          flexGrow: 1,
           display: 'flex',
-          flexDirection: 'column',
+          height: '100%',
+          flexDirection: 'row',
+          borderRadius: 6,
+          outlineOffset: '-1px',
+          transition: 'all ease 0.5s',
+          justifyContent: {xs: 'center', sm: 'flex-start'},
+          width: '100%',
+          p: 0,
+          backgroundColor:
+            repairer.id === selectedRepairer ? 'lightsecondary.main' : 'white',
+          ':hover': {
+            boxShadow: 5,
+            '& .MuiButtonBase-root': {
+              bgcolor: 'primary.main',
+            },
+          },
         }}>
-        <Stack spacing={{xs: 1, md: 2}}>
-          <div>
+        <CardMedia
+          component="img"
+          sx={{
+            p: {xs: 2, sm: 0},
+            width: {xs: 100, lg: 170},
+            minWidth: {xs: 'none', sm: '30%'},
+            height: {xs: 100, sm: '100%'},
+            borderRadius: {xs: '50%', sm: '0'},
+          }}
+          image={
+            repairer.thumbnail
+              ? apiImageUrl(repairer.thumbnail.contentUrl)
+              : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'
+          }
+          alt="Photo du réparateur"
+        />
+        <CardContent sx={{flex: 1}}>
+          <Box mb={3}>
             <Typography
-              fontSize={{xs: 16, md: 24}}
-              fontWeight={600}
+              variant="h5"
+              color="primary.main"
+              component="div"
               sx={{wordBreak: 'break-word'}}>
               {repairer.name}
             </Typography>
             {repairer.latitude && repairer.longitude && repairer.distance && (
               <Typography
-                fontSize={{xs: 12, md: 14}}
+                variant="caption"
+                mb={2}
+                fontWeight={600}
                 color="primary"
                 display="flex"
                 alignItems="center">
-                <FmdGoodIcon /> {repairer.distance} m
+                <FmdGoodIcon fontSize="small" /> {repairer.distance} m
               </Typography>
             )}
-          </div>
-          <div>
-            <Typography
-              color="text.secondary"
-              fontSize={{xs: 14, md: 16}}
-              fontWeight={600}>
-              Adresse :
-            </Typography>
-            <Typography color="text.secondary" fontSize={{xs: 14, md: 16}}>
-              {repairer.streetNumber} {repairer.street}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              textTransform="capitalize"
-              fontSize={{xs: 14, md: 16}}>
-              {repairer.postcode} - {repairer.city}
-            </Typography>
-          </div>
+            <div>
+              <Typography color="text.secondary" variant="body2">
+                {repairer.streetNumber} {repairer.street}
+              </Typography>
+              <Typography
+                color="text.secondary"
+                textTransform="capitalize"
+                variant="body2">
+                {repairer.postcode} - {repairer.city}
+              </Typography>
+            </div>
+          </Box>
           <Box
             display="flex"
+            width="100%"
             flexDirection={{xs: 'column', md: 'row'}}
+            gap={3}
             justifyContent="space-between"
-            alignItems={{xs: 'start', md: 'center'}}>
+            flexWrap="wrap"
+            alignItems="start">
             <div>
               <Typography
                 color="text.secondary"
-                fontSize={{xs: 14, md: 16}}
-                fontWeight={600}>
-                Prochaine disponibilité :
+                variant="body2"
+                fontWeight={700}
+                component="div">
+                Prochaine disponibilité&nbsp;:
               </Typography>
-              <Typography
-                paragraph
-                fontSize={{xs: 14, md: 16}}
-                color="text.secondary">
+              <Typography variant="body2" color="text.secondary">
                 {repairer.firstSlotAvailable
                   ? formatDate(repairer.firstSlotAvailable)
                   : 'Pas de créneau indiqué'}
               </Typography>
             </div>
             <Button
-              variant="contained"
-              sx={{textTransform: 'capitalize'}}
-              onClick={onClick}>
-              Je réserve
+              onClick={onClick}
+              size="medium"
+              color="secondary"
+              variant="contained">
+              Je&nbsp;réserve
             </Button>
           </Box>
-        </Stack>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </ButtonBase>
   );
 };
