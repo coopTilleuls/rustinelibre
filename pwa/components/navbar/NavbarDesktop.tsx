@@ -71,10 +71,8 @@ const NavbarDesktop = ({
       display={{xs: 'none', md: 'flex'}}
       justifyContent="space-between"
       alignItems="center">
-      <NextLink href="/">
-        <Box height="30px" display="flex" justifyContent="center">
-          <Logo inline color="primary" />
-        </Box>
+      <NextLink href="/" style={{height: '35px', display: 'block'}}>
+        <Logo inline color="primary" />
       </NextLink>
       <Box display="flex" gap={4} justifyContent="flex" alignItems="center">
         {pages.map(({name, link, disabled}) => {

@@ -19,7 +19,7 @@ const CreateMaintenanceBooklet = () => {
         display="flex"
         flexDirection="column"
         alignItems={{xs: 'center', md: 'start'}}>
-        <Typography variant="h1" component="h2">
+        <Typography variant="h2" component="h2">
           Mon carnet d&apos;entretien
         </Typography>
         <Box width={{md: '80%'}}>

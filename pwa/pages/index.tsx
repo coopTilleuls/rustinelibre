@@ -26,15 +26,15 @@ const Home = () => {
           alignItems="center"
           pb={{xs: 6, md: 8}}>
           <Box
-            bgcolor="cream.main"
+            bgcolor="lightprimary.main"
             width="100%"
             paddingY={6}
             minHeight={{
               xs: 'calc(100vh - 112px)',
               sm: 'calc(100vh - 120px)',
-              lg: 'calc(100vh - 152px)',
+              md: 'calc(100vh - 152px)',
             }}>
-            <Container sx={{px: {xs: 0}}}>
+            <Container>
               <SearchARepairer />
             </Container>
           </Box>

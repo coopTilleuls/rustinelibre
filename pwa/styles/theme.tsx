@@ -9,14 +9,14 @@ import '@fontsource-variable/pathway-extreme';
 declare module '@mui/material/styles' {
   // eslint-disable-next-line no-unused-vars
   interface Palette {
-    white: SimplePaletteColorOptions;
+    lightsecondary: SimplePaletteColorOptions;
     black: SimplePaletteColorOptions;
-    cream: SimplePaletteColorOptions;
+    lightprimary: SimplePaletteColorOptions;
   }
   // eslint-disable-next-line no-unused-vars
   interface PaletteOptions {
-    white?: SimplePaletteColorOptions;
-    cream?: SimplePaletteColorOptions;
+    lightsecondary?: SimplePaletteColorOptions;
+    lightprimary?: SimplePaletteColorOptions;
     black?: SimplePaletteColorOptions;
   }
 }
@@ -27,29 +27,32 @@ const theme = createTheme({
       main: '#ee721e',
     },
     secondary: {
-      main: '#55267a',
+      main: '#3b2767',
     },
-    cream: {
+    lightprimary: {
       main: '#fff7f1',
+    },
+    lightsecondary: {
+      main: '#f7f2f9',
     },
   },
   typography: {
     fontFamily: 'Pathway Extreme Variable',
     h1: {
       fontWeight: 900,
-      fontSize: 56,
+      fontSize: 48,
     },
     h2: {
       fontWeight: 900,
-      fontSize: 44,
+      fontSize: 34,
     },
     h3: {
       fontWeight: 800,
-      fontSize: 32,
+      fontSize: 24,
     },
     h4: {
       fontWeight: 700,
-      fontSize: 26,
+      fontSize: 22,
     },
   },
   shadows: [
@@ -62,6 +65,14 @@ const theme = createTheme({
     ...Array(20).fill('none'),
   ] as Shadows,
   components: {
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({theme}) => ({
+          fontWeight: '800',
+          color: theme.palette.secondary.main,
+        }),
+      },
+    },
     MuiButton: {
       defaultProps: {
         disableElevation: true,

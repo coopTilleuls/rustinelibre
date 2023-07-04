@@ -36,7 +36,7 @@ export const RepairerCard = ({
           !isMobile ? `4px solid ${theme.palette.grey[300]}` : '',
         display: 'flex',
         backgroundColor:
-          repairer.id === selectedRepairer ? 'lightblue' : 'white',
+          repairer.id === selectedRepairer ? 'lightsecondary.main' : 'white',
       }}>
       <CardMedia
         component="img"
