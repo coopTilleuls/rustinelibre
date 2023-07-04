@@ -68,13 +68,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(UserSearchFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: ['firstName' => 'ipartial', 'lastName' => 'ipartial'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
-#[UniqueEntity('email')]
+#[UniqueEntity('email', message: 'user.email.unique')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const ROLE_BOSS = 'ROLE_BOSS';
     public const ROLE_EMPLOYEE = 'ROLE_EMPLOYEE';
     public const ROLE_ADMIN = 'ROLE_ADMIN';
-    private const EMAIL_MAX_LENGTH = 180;
+    public const EMAIL_MAX_LENGTH = 180;
     public const USER_READ = 'user_read';
     public const CUSTOMER_READ = 'customer_read';
     public const USER_WRITE = 'user_write';
@@ -87,9 +87,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ, self::CUSTOMER_READ, Maintenance::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
     public int $id;
 
-    #[Assert\Length(max: self::EMAIL_MAX_LENGTH)]
-    #[Assert\NotBlank]
-    #[Assert\Email]
+    #[Assert\Length(max: self::EMAIL_MAX_LENGTH, maxMessage: 'user.email.length')]
+    #[Assert\NotBlank(message: 'user.email.not_blank')]
+    #[Assert\Email(message: 'user.email.valid')]
     #[ORM\Column(length: 180, unique: true)]
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Repairer::REPAIRER_COLLECTION_READ])]
     public ?string $email = null;
@@ -109,7 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     public ?string $password = null;
 
-    #[Assert\Regex(self::PASSWORD_REGEX)]
+    #[Assert\Regex(self::PASSWORD_REGEX, message: 'user.password.regex')]
     #[Groups([self::USER_READ, self::USER_WRITE])]
     public ?string $plainPassword = null;
 
@@ -125,19 +125,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ])]
     public ?Repairer $repairer = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'user.lastName.not_blank')]
     #[Assert\Length(
         min : 2,
         max : 50,
+        minMessage: 'user.lastName.min_length',
+        maxMessage: 'user.lastName.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
     public ?string $lastName = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'user.firstName.not_blank')]
     #[Assert\Length(
         min : 2,
         max : 50,
+        minMessage: 'user.firstName.min_length',
+        maxMessage: 'user.firstName.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]

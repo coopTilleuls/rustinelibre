@@ -20,6 +20,8 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 const cfTurnstileAPIKey = process.env
   .NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY as string;
 
+type Status = 'error' | 'expired' | 'solved';
+
 const Contact: NextPageWithLayout = () => {
   const [lastName, setLastName] = useState<string>('');
   const [lastNameError, setLastNameError] = useState<string>('');
@@ -37,7 +39,7 @@ const Contact: NextPageWithLayout = () => {
   const [error, setError] = useState<boolean>(false);
 
   const [isValid, setIsValid] = useState<boolean>(false);
-  const [status, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<Status | null>(null);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -200,20 +202,14 @@ const Contact: NextPageWithLayout = () => {
                   helperText={!!message && messageError}
                   onChange={handleChangeMessage}
                 />
-                <Box
-                  mt={2}
-                  display="flex"
-                  justifyContent="center"
-                  width={'100%'}>
+                <Box mt={2} display="flex" justifyContent="center" width="100%">
                   <Turnstile
+                    id="widget-1"
                     siteKey={cfTurnstileAPIKey}
                     options={{
                       action: 'submit-form',
                       theme: 'light',
                       language: 'fr',
-                    }}
-                    scriptOptions={{
-                      appendTo: 'body',
                     }}
                     onError={() => setStatus('error')}
                     onExpire={() => setStatus('expired')}

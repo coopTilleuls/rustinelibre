@@ -22,7 +22,6 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
   const {logout} = useAuth();
 
   useEffect(() => {
-
     if (user) {
       const roles = getRoles();
       roles?.includes('ROLE_ADMIN') ? setAdmin(true) : setAdmin(false);
@@ -44,8 +43,8 @@ const Navbar = ({user}: NavbarProps): JSX.Element => {
   };
 
   return (
-    <AppBar position="fixed">
-      <Toolbar sx={{backgroundColor: 'white'}}>
+    <AppBar position="fixed" color="inherit">
+      <Toolbar>
         <NavbarDesktop
           pages={pages}
           boss={boss}

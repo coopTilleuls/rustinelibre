@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f84db1555176fe7955a8e2ae5ea3c322",
+    "content-hash": "d566a088ed2f47395acb5d3a42b30977",
     "packages": [
         {
             "name": "api-platform/core",
@@ -1854,20 +1854,21 @@
         },
         {
             "name": "gesdinet/jwt-refresh-token-bundle",
-            "version": "v1.1.1",
+            "version": "v1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/markitosgv/JWTRefreshTokenBundle.git",
-                "reference": "8970ae1a602fb74e434964d03c969d883cfed376"
+                "reference": "71ec44ce4820e19570fba5cd7616882644aeb103"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/8970ae1a602fb74e434964d03c969d883cfed376",
-                "reference": "8970ae1a602fb74e434964d03c969d883cfed376",
+                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/71ec44ce4820e19570fba5cd7616882644aeb103",
+                "reference": "71ec44ce4820e19570fba5cd7616882644aeb103",
                 "shasum": ""
             },
             "require": {
-                "lexik/jwt-authentication-bundle": "^2.0",
+                "doctrine/persistence": "^1.3.3|^2.0|^3.0",
+                "lexik/jwt-authentication-bundle": "^2.0|^3.0",
                 "php": ">=7.4",
                 "symfony/config": "^4.4|^5.4|^6.0",
                 "symfony/console": "^4.4|^5.4|^6.0",
@@ -1883,15 +1884,14 @@
                 "symfony/security-http": "^4.4|^5.4|^6.0"
             },
             "conflict": {
-                "doctrine/mongodb-odm": "<2.0",
-                "doctrine/orm": "<2.7",
-                "doctrine/persistence": "<1.3.3"
+                "doctrine/mongodb-odm": "<2.2",
+                "doctrine/orm": "<2.7"
             },
             "require-dev": {
+                "doctrine/annotations": "^1.13|^2.0",
                 "doctrine/cache": "^1.11|^2.0",
-                "doctrine/mongodb-odm": "^2.0",
+                "doctrine/mongodb-odm": "^2.2",
                 "doctrine/orm": "^2.7",
-                "doctrine/persistence": "^1.3.3|^2.0",
                 "matthiasnoback/symfony-config-test": "^4.2",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.2",
                 "phpunit/phpunit": "^9.5",
@@ -1928,9 +1928,9 @@
             ],
             "support": {
                 "issues": "https://github.com/markitosgv/JWTRefreshTokenBundle/issues",
-                "source": "https://github.com/markitosgv/JWTRefreshTokenBundle/tree/v1.1.1"
+                "source": "https://github.com/markitosgv/JWTRefreshTokenBundle/tree/v1.1.3"
             },
-            "time": "2022-04-11T14:46:00+00:00"
+            "time": "2023-07-01T08:23:12+00:00"
         },
         {
             "name": "google/auth",
@@ -2684,16 +2684,16 @@
         },
         {
             "name": "kreait/firebase-php",
-            "version": "7.5.0",
+            "version": "7.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kreait/firebase-php.git",
-                "reference": "e71fd6a33b04c1bbdfc81fba91ebbaf07f69c0ca"
+                "reference": "04ab10eff95e914bbd11ab3b288e99bc41a33eac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kreait/firebase-php/zipball/e71fd6a33b04c1bbdfc81fba91ebbaf07f69c0ca",
-                "reference": "e71fd6a33b04c1bbdfc81fba91ebbaf07f69c0ca",
+                "url": "https://api.github.com/repos/kreait/firebase-php/zipball/04ab10eff95e914bbd11ab3b288e99bc41a33eac",
+                "reference": "04ab10eff95e914bbd11ab3b288e99bc41a33eac",
                 "shasum": ""
             },
             "require": {
@@ -2775,7 +2775,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-26T22:13:56+00:00"
+            "time": "2023-06-29T21:43:45+00:00"
         },
         {
             "name": "kreait/firebase-tokens",
@@ -3258,16 +3258,16 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v2.19.0",
+            "version": "v2.19.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "1305d7ec0ee540340d9041bd97659a13a0d1e6ed"
+                "reference": "2db3658bcb7902b63f09f23ebbefa77a94d3f55d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/1305d7ec0ee540340d9041bd97659a13a0d1e6ed",
-                "reference": "1305d7ec0ee540340d9041bd97659a13a0d1e6ed",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/2db3658bcb7902b63f09f23ebbefa77a94d3f55d",
+                "reference": "2db3658bcb7902b63f09f23ebbefa77a94d3f55d",
                 "shasum": ""
             },
             "require": {
@@ -3361,7 +3361,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lexik/LexikJWTAuthenticationBundle/issues",
-                "source": "https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.19.0"
+                "source": "https://github.com/lexik/LexikJWTAuthenticationBundle/tree/v2.19.1"
             },
             "funding": [
                 {
@@ -3373,7 +3373,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-06T15:58:15+00:00"
+            "time": "2023-07-04T01:04:21+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3894,16 +3894,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.22.0",
+            "version": "1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "ec58baf7b3c7f1c81b3b00617c953249fb8cf30c"
+                "reference": "65c39594fbd8c67abfc68bb323f86447bab79cc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/ec58baf7b3c7f1c81b3b00617c953249fb8cf30c",
-                "reference": "ec58baf7b3c7f1c81b3b00617c953249fb8cf30c",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/65c39594fbd8c67abfc68bb323f86447bab79cc0",
+                "reference": "65c39594fbd8c67abfc68bb323f86447bab79cc0",
                 "shasum": ""
             },
             "require": {
@@ -3935,9 +3935,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.22.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.22.1"
             },
-            "time": "2023-06-01T12:35:21+00:00"
+            "time": "2023-06-29T20:46:06+00:00"
         },
         {
             "name": "psr/cache",
@@ -4248,16 +4248,16 @@
         },
         {
             "name": "psr/http-message",
-            "version": "1.1",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba"
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
-                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
                 "shasum": ""
             },
             "require": {
@@ -4266,7 +4266,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -4281,7 +4281,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "homepage": "https://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for HTTP messages",
@@ -4295,9 +4295,9 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-message/tree/1.1"
+                "source": "https://github.com/php-fig/http-message/tree/2.0"
             },
-            "time": "2023-04-04T09:50:52+00:00"
+            "time": "2023-04-04T09:54:51+00:00"
         },
         {
             "name": "psr/link",
@@ -8652,6 +8652,100 @@
             "time": "2023-03-21T21:06:29+00:00"
         },
         {
+            "name": "symfony/translation",
+            "version": "v6.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation.git",
+                "reference": "f72b2cba8f79dd9d536f534f76874b58ad37876f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/f72b2cba8f79dd9d536f534f76874b58ad37876f",
+                "reference": "f72b2cba8f79dd9d536f534f76874b58ad37876f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/polyfill-mbstring": "~1.0",
+                "symfony/translation-contracts": "^2.5|^3.0"
+            },
+            "conflict": {
+                "symfony/config": "<5.4",
+                "symfony/console": "<5.4",
+                "symfony/dependency-injection": "<5.4",
+                "symfony/http-client-contracts": "<2.5",
+                "symfony/http-kernel": "<5.4",
+                "symfony/service-contracts": "<2.5",
+                "symfony/twig-bundle": "<5.4",
+                "symfony/yaml": "<5.4"
+            },
+            "provide": {
+                "symfony/translation-implementation": "2.3|3.0"
+            },
+            "require-dev": {
+                "nikic/php-parser": "^4.13",
+                "psr/log": "^1|^2|^3",
+                "symfony/config": "^5.4|^6.0",
+                "symfony/console": "^5.4|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/finder": "^5.4|^6.0",
+                "symfony/http-client-contracts": "^2.5|^3.0",
+                "symfony/http-kernel": "^5.4|^6.0",
+                "symfony/intl": "^5.4|^6.0",
+                "symfony/polyfill-intl-icu": "^1.21",
+                "symfony/routing": "^5.4|^6.0",
+                "symfony/service-contracts": "^2.5|^3",
+                "symfony/yaml": "^5.4|^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "Resources/functions.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Component\\Translation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides tools to internationalize your application",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/translation/tree/v6.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-05-19T12:46:45+00:00"
+        },
+        {
             "name": "symfony/translation-contracts",
             "version": "v3.3.0",
             "source": {
@@ -9949,16 +10043,16 @@
         },
         {
             "name": "api-platform/schema-generator",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/api-platform/schema-generator.git",
-                "reference": "8b66b379ff1166c98824ff72237cbebd6c2c0256"
+                "reference": "1c59759450ba042cf938424c66cfc6217c5f3ebf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/api-platform/schema-generator/zipball/8b66b379ff1166c98824ff72237cbebd6c2c0256",
-                "reference": "8b66b379ff1166c98824ff72237cbebd6c2c0256",
+                "url": "https://api.github.com/repos/api-platform/schema-generator/zipball/1c59759450ba042cf938424c66cfc6217c5f3ebf",
+                "reference": "1c59759450ba042cf938424c66cfc6217c5f3ebf",
                 "shasum": ""
             },
             "require": {
@@ -9968,7 +10062,7 @@
                 "friendsofphp/php-cs-fixer": "^2.15 || ^3.0",
                 "league/html-to-markdown": "^5.0",
                 "nette/php-generator": "^3.6 || ^4.0",
-                "nette/utils": "^3.1 || ^4.0-dev",
+                "nette/utils": "^3.1",
                 "nikic/php-parser": "^4.13",
                 "php": ">=7.4",
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
@@ -10026,9 +10120,9 @@
             ],
             "support": {
                 "issues": "https://github.com/api-platform/schema-generator/issues",
-                "source": "https://github.com/api-platform/schema-generator/tree/v5.2.0"
+                "source": "https://github.com/api-platform/schema-generator/tree/v5.2.1"
             },
-            "time": "2022-12-13T17:05:12+00:00"
+            "time": "2023-06-29T13:44:15+00:00"
         },
         {
             "name": "cebe/php-openapi",
@@ -11412,30 +11506,29 @@
         },
         {
             "name": "nette/utils",
-            "version": "v4.0.0",
+            "version": "v3.2.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "cacdbf5a91a657ede665c541eda28941d4b09c1e"
+                "reference": "c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/cacdbf5a91a657ede665c541eda28941d4b09c1e",
-                "reference": "cacdbf5a91a657ede665c541eda28941d4b09c1e",
+                "url": "https://api.github.com/repos/nette/utils/zipball/c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c",
+                "reference": "c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0 <8.3"
+                "php": ">=7.2 <8.3"
             },
             "conflict": {
-                "nette/finder": "<3",
-                "nette/schema": "<1.2.2"
+                "nette/di": "<3.0.6"
             },
             "require-dev": {
                 "jetbrains/phpstorm-attributes": "dev-master",
-                "nette/tester": "^2.4",
+                "nette/tester": "~2.0",
                 "phpstan/phpstan": "^1.0",
-                "tracy/tracy": "^2.9"
+                "tracy/tracy": "^2.3"
             },
             "suggest": {
                 "ext-gd": "to use Image",
@@ -11449,7 +11542,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -11493,9 +11586,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
-                "source": "https://github.com/nette/utils/tree/v4.0.0"
+                "source": "https://github.com/nette/utils/tree/v3.2.9"
             },
-            "time": "2023-02-02T10:41:53+00:00"
+            "time": "2023-01-18T03:26:20+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -13114,16 +13207,16 @@
         },
         {
             "name": "sweetrdf/easyrdf",
-            "version": "1.9.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sweetrdf/easyrdf.git",
-                "reference": "feaeb6f602d989c6bc6e482d27426a212e76289a"
+                "reference": "2c57de7380ed16f5017e95810bcd08c0dffae640"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/easyrdf/zipball/feaeb6f602d989c6bc6e482d27426a212e76289a",
-                "reference": "feaeb6f602d989c6bc6e482d27426a212e76289a",
+                "url": "https://api.github.com/repos/sweetrdf/easyrdf/zipball/2c57de7380ed16f5017e95810bcd08c0dffae640",
+                "reference": "2c57de7380ed16f5017e95810bcd08c0dffae640",
                 "shasum": ""
             },
             "require": {
@@ -13132,11 +13225,10 @@
                 "ext-pcre": "*",
                 "ext-xmlreader": "*",
                 "lib-libxml": "*",
-                "php": "^8.0",
-                "sweetrdf/rdf-helpers": "^1.0"
+                "php": "^7.1|^8.0"
             },
             "replace": {
-                "easyrdf/easyrdf": "1.1.*"
+                "easyrdf/easyrdf": "1.0.*|1.1.*"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -13144,7 +13236,7 @@
                 "ml/json-ld": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.5.0|^10.0.0",
+                "phpunit/phpunit": "^7.5|^8.5|^9.5",
                 "semsol/arc2": "^2.4",
                 "zendframework/zend-http": "^2"
             },
@@ -13189,107 +13281,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sweetrdf/easyrdf/issues",
-                "source": "https://github.com/sweetrdf/easyrdf/tree/1.9.0"
+                "source": "https://github.com/sweetrdf/easyrdf/tree/1.8.0"
             },
-            "time": "2023-06-20T15:05:17+00:00"
-        },
-        {
-            "name": "sweetrdf/rdf-helpers",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sweetrdf/rdfHelpers.git",
-                "reference": "e0ae1d528766aae4c3bfa9e4312f02efbb6830b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/rdfHelpers/zipball/e0ae1d528766aae4c3bfa9e4312f02efbb6830b5",
-                "reference": "e0ae1d528766aae4c3bfa9e4312f02efbb6830b5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0",
-                "sweetrdf/rdf-interface": "^1.0.0",
-                "zozlak/rdf-constants": "^1.1"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "*",
-                "phpunit/php-code-coverage": "^9.2",
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "rdfHelpers\\": "src/rdfHelpers"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mateusz Żółtak",
-                    "email": "zozlak@zozlak.org",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Set of low level helpers for implementing rdfInterface",
-            "homepage": "https://github.com/sweetrdf/rdfHelpers",
-            "support": {
-                "issues": "https://github.com/sweetrdf/rdfHelpers/issues",
-                "source": "https://github.com/sweetrdf/rdfHelpers/tree/1.0.1"
-            },
-            "time": "2023-04-02T08:59:30+00:00"
-        },
-        {
-            "name": "sweetrdf/rdf-interface",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sweetrdf/rdfInterface.git",
-                "reference": "1d7645cc2f138017fe7d1421e3b0b479d6bee4a5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/rdfInterface/zipball/1d7645cc2f138017fe7d1421e3b0b479d6bee4a5",
-                "reference": "1d7645cc2f138017fe7d1421e3b0b479d6bee4a5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0",
-                "psr/http-message": "^1.0",
-                "zozlak/rdf-constants": "*"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "*",
-                "squizlabs/php_codesniffer": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "rdfInterface\\": "src/rdfInterface"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mateusz Żółtak",
-                    "email": "zozlak@zozlak.org",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A common RDF interface for PHP RDF libraries.",
-            "homepage": "https://github.com/sweetrdf/rdfInterface",
-            "support": {
-                "issues": "https://github.com/sweetrdf/rdfInterface/issues",
-                "source": "https://github.com/sweetrdf/rdfInterface/tree/1.0.0"
-            },
-            "time": "2022-11-01T09:27:45+00:00"
+            "time": "2023-01-16T11:43:21+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -14130,44 +14124,6 @@
                 "source": "https://github.com/vimeo/psalm/tree/5.13.1"
             },
             "time": "2023-06-27T16:39:49+00:00"
-        },
-        {
-            "name": "zozlak/rdf-constants",
-            "version": "1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zozlak/RdfConstants.git",
-                "reference": "a8de0b50d23b213a68784ec2cec22b4ad838012b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zozlak/RdfConstants/zipball/a8de0b50d23b213a68784ec2cec22b4ad838012b",
-                "reference": "a8de0b50d23b213a68784ec2cec22b4ad838012b",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "zozlak\\": "src/zozlak"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mateusz Żółtak",
-                    "email": "zozlak@zozlak.org"
-                }
-            ],
-            "description": "A set of commonly used RDF and XSD constants",
-            "homepage": "https://github.com/zozlak/RdfConstants",
-            "support": {
-                "issues": "https://github.com/zozlak/RdfConstants/issues",
-                "source": "https://github.com/zozlak/RdfConstants/tree/1.2.1"
-            },
-            "time": "2022-08-05T12:50:50+00:00"
         }
     ],
     "aliases": [],

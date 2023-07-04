@@ -7,6 +7,7 @@ namespace App\Tests\Discussion\Validator;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UniqueDiscussionValidatorTest extends AbstractTestCase
 {
@@ -14,11 +15,14 @@ class UniqueDiscussionValidatorTest extends AbstractTestCase
 
     private RepairerRepository $repairerRepository;
 
+    private TranslatorInterface $translator;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->userRepository = self::getContainer()->get(UserRepository::class);
         $this->repairerRepository = self::getContainer()->get(RepairerRepository::class);
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
     }
 
     public function testCannotCreateTwoDiscussionForSameRepairerAndCustomer(): void
@@ -43,7 +47,7 @@ class UniqueDiscussionValidatorTest extends AbstractTestCase
         ]);
         self::assertResponseStatusCodeSame(422);
         self::assertJsonContains([
-            'hydra:description' => 'Cannot create two discussions for the same repairer and customer',
+            'hydra:description' => sprintf($this->translator->trans('discussion.unique', domain: 'validators')),
         ]);
     }
 }

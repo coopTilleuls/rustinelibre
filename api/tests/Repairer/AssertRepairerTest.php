@@ -9,6 +9,7 @@ use App\Repository\BikeTypeRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AssertRepairerTest extends AbstractTestCase
 {
@@ -17,12 +18,15 @@ class AssertRepairerTest extends AbstractTestCase
     /** @var User[] */
     private array $users = [];
 
+    private TranslatorInterface $translator;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->users = static::getContainer()->get(UserRepository::class)->findAll();
         $this->bikeTypes = static::getContainer()->get(BikeTypeRepository::class)->findAll();
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
     }
 
     public function testPostRepairerWithoutName(): void
@@ -48,7 +52,7 @@ class AssertRepairerTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'name: This value should not be blank.',
+            'hydra:description' => sprintf('name: %s', $this->translator->trans('repairer.name.not_blank', domain: 'validators')),
         ]);
     }
 
@@ -77,7 +81,7 @@ class AssertRepairerTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'name: This value is too short. It should have 2 characters or more.',
+            'hydra:description' => sprintf('name: %s', $this->translator->trans('repairer.name.min_length', domain: 'validators')),
         ]);
     }
 
@@ -106,7 +110,7 @@ class AssertRepairerTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'name: This value is too long. It should have 80 characters or less.',
+            'hydra:description' => sprintf('name: %s', $this->translator->trans('repairer.name.max_length', domain: 'validators')),
         ]);
     }
 
@@ -191,7 +195,7 @@ class AssertRepairerTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'city: This value should not be blank.',
+            'hydra:description' => sprintf('city: %s', $this->translator->trans('repairer.city.not_blank', domain: 'validators')),
         ]);
     }
 

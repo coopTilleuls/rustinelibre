@@ -4,7 +4,7 @@ import type {DehydratedState} from 'react-query';
 import Head from 'next/head';
 import {NextPage} from 'next';
 import type {ReactElement, ReactNode} from 'react';
-import {AuthProvider, useAccount} from '@contexts/AuthContext';
+import {AuthProvider} from '@contexts/AuthContext';
 import {SearchRepairerProvider} from '@contexts/SearchRepairerContext';
 import {RepairerFormProvider} from '@contexts/RepairerFormContext';
 import {UserFormProvider} from '@contexts/UserFormContext';
@@ -25,33 +25,32 @@ function MyApp({
   Component,
   pageProps,
 }: AppProps<{dehydratedState: DehydratedState}>) {
-
   return (
     <AuthProvider>
-      <NotificationProvider>
-        <SearchRepairerProvider>
-          <RepairerFormProvider>
+      <SearchRepairerProvider>
+        <RepairerFormProvider>
+          <NotificationProvider>
             <UserFormProvider>
-                <>
-                  <Head>
-                    <meta
-                      name="viewport"
-                      charSet="utf-8"
-                      content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
-                  </Head>
+              <>
+                <Head>
+                  <meta
+                    name="viewport"
+                    charSet="utf-8"
+                    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
+                </Head>
+                <ThemeProvider theme={theme}>
                   <Notification />
-                  <ThemeProvider theme={theme}>
-                    <CssBaseline>
-                      <Layout dehydratedState={pageProps.dehydratedState}>
-                        <Component {...pageProps} />
-                      </Layout>
-                    </CssBaseline>
-                  </ThemeProvider>
-                </>
+                  <CssBaseline>
+                    <Layout dehydratedState={pageProps.dehydratedState}>
+                      <Component {...pageProps} />
+                    </Layout>
+                  </CssBaseline>
+                </ThemeProvider>
+              </>
             </UserFormProvider>
-          </RepairerFormProvider>
-        </SearchRepairerProvider>
-      </NotificationProvider>
+          </NotificationProvider>
+        </RepairerFormProvider>
+      </SearchRepairerProvider>
     </AuthProvider>
   );
 }

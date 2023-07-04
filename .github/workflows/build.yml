@@ -2,6 +2,11 @@ name: Build
 
 on:
   workflow_call:
+    inputs:
+      tags:
+        type: string
+        description: The Docker Tags (see docker/metadata-action@v4 for available values)
+        required: true
 
 jobs:
   build-push-php:
@@ -31,15 +36,53 @@ jobs:
         BUILD_TARGET: app_caddy
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
-
+       
   build-push-pwa:
     runs-on: ubuntu-latest
     steps:
-    - name: Build/Push
-      uses: coopTilleuls/action-docker-build-push@v6
+    - name: Checkout code
+      uses: actions/checkout@v3.5.2
+    - name: Login to registry
+      uses: docker/login-action@v1
       with:
-        IMAGE_NAME: bikelib-pwa
-        BUILD_CONTEXT: pwa
-        BUILD_TARGET: prod
-        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
-        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+        registry: ghcr.io/cooptilleuls
+        username: _json_key
+        password: ${{ secrets.GITHUB_TOKEN }} 
+    - name: Define Env
+      run: |       
+        set -o pipefail
+        if [[ "${{ github.ref }}" == 'refs/heads/prod' ]]; then
+            echo "SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
+        else
+            echo "SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
+        fi
+    - name: Docker metadata
+      id: docker-metadata
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ vars.IMAGE_REPOSITORY_NAME }}/${{ vars.PWA_IMAGE_NAME }}
+        tags: |
+          type=raw,value=${{ github.sha }},priority=9999
+          ${{ inputs.tags }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v4    
+      with:
+        context: pwa
+        target: prod
+        pull: true
+        push: true
+        tags: ${{ steps.docker-metadata.outputs.tags }}
+        labels: ${{ steps.docker-metadata.outputs.labels }}
+        build-args: NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
+        cache-from: type=registry,ref=${{ vars.IMAGE_REPOSITORY_NAME }}/${{ vars.PWA_IMAGE_NAME }}:buildcache
+
+    # - name: Build/Push
+    #   uses: coopTilleuls/action-docker-build-push@v7
+    #   with:
+    #     # BUILD_ARGS: NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
+    #     IMAGE_NAME: bikelib-pwa
+    #     BUILD_CONTEXT: pwa
+    #     BUILD_TARGET: prod
+    #     REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+    #     IMAGE_REPOSITORY: ghcr.io/cooptilleuls

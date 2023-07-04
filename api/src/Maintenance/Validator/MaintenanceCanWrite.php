@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class MaintenanceCanWrite extends Constraint
 {
-    public string $messageCannotWriteMaintenanceForThisBike = 'You cannot write a new maintenance intervention for this bike, you should be the bike owner, or have unless an appointment with the bike owner';
+    public string $messageCannotWriteMaintenanceForThisBike = 'maintenance.writer';
 
     public function getTargets(): string
     {

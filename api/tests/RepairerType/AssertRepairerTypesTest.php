@@ -6,9 +6,18 @@ namespace App\Tests\RepairerType;
 
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AssertRepairerTypesTest extends AbstractTestCase
 {
+    private TranslatorInterface $translator;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
+    }
+
     public function testPostEmptyName(): void
     {
         $this->createClientAuthAsAdmin()->request('POST', '/repairer_types', ['json' => [
@@ -18,7 +27,7 @@ class AssertRepairerTypesTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'name: This value should not be blank.',
+            'hydra:description' => sprintf('name: %s', $this->translator->trans('repairerType.name.not_blank', domain: 'validators')),
         ]);
     }
 
@@ -32,7 +41,7 @@ class AssertRepairerTypesTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'name: This value is too short. It should have 2 characters or more.',
+            'hydra:description' => sprintf('name: %s', $this->translator->trans('repairerType.name.min_length', domain: 'validators')),
         ]);
     }
 
@@ -46,7 +55,7 @@ class AssertRepairerTypesTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'name: This value is too long. It should have 50 characters or less.',
+            'hydra:description' => sprintf('name: %s', $this->translator->trans('repairerType.name.max_length', domain: 'validators')),
         ]);
     }
 }

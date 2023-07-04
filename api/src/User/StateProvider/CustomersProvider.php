@@ -15,6 +15,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @template-implements ProviderInterface<User>
@@ -25,6 +26,7 @@ final class CustomersProvider implements ProviderInterface
         private readonly Security $security,
         private readonly UserRepository $userRepository,
         private readonly AppointmentRepository $appointmentRepository,
+        private readonly TranslatorInterface $translator,
         #[TaggedIterator('api_platform.doctrine.orm.query_extension.collection')] private readonly iterable $collectionExtensions = []
     ) {
     }
@@ -39,7 +41,7 @@ final class CustomersProvider implements ProviderInterface
         $repairerFromEmployee = $user?->repairerEmployee?->repairer;
         $repairerFromBoss = $user?->repairer;
         if (!$repairerFromEmployee && !$repairerFromBoss) {
-            throw new NotFoundHttpException('No customers for you ');
+            throw new NotFoundHttpException($this->translator->trans('404_notFound.customer', domain: 'validators'));
         }
 
         $customersIdsQueryBuilder = $this->appointmentRepository->getAppointmentCustomersIdsQueryBuilder();

@@ -1,7 +1,9 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": "next/core-web-vitals",
+  "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
   "rules": {
-    "@next/next/no-img-element": "off"
+    "@next/next/no-img-element": "off",
+    "no-unused-vars": 1,
+    "prettier/prettier": 1
   }
 }

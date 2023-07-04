@@ -17,6 +17,7 @@ use App\Repository\RepairerEmployeeRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CreateTest extends AbstractTestCase
 {
@@ -36,6 +37,8 @@ class CreateTest extends AbstractTestCase
 
     protected RepairerEmployee $repairerEmployee;
 
+    private TranslatorInterface $translator;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -48,6 +51,7 @@ class CreateTest extends AbstractTestCase
         $this->customer = $this->appointment->customer;
         $this->repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $this->repairerWithAppointment]);
         $this->bike = static::getContainer()->get(BikeRepository::class)->findOneBy(['owner' => $this->customer]);
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
     }
 
     public function testUserCanCreateMaintenanceForOwnBike(): void
@@ -82,7 +86,7 @@ class CreateTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'You cannot write a new maintenance intervention for this bike, you should be the bike owner, or have unless an appointment with the bike owner',
+            'hydra:description' => $this->translator->trans('maintenance.writer', domain: 'validators'),
         ]);
     }
 
@@ -119,7 +123,7 @@ class CreateTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'You cannot write a new maintenance intervention for this bike, you should be the bike owner, or have unless an appointment with the bike owner',
+            'hydra:description' => $this->translator->trans('maintenance.writer', domain: 'validators'),
         ]);
     }
 
@@ -155,7 +159,7 @@ class CreateTest extends AbstractTestCase
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
             'hydra:title' => 'An error occurred',
-            'hydra:description' => 'You cannot write a new maintenance intervention for this bike, you should be the bike owner, or have unless an appointment with the bike owner',
+            'hydra:description' => $this->translator->trans('maintenance.writer', domain: 'validators'),
         ]);
     }
 }

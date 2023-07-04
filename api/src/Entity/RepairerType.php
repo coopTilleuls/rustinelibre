@@ -34,10 +34,12 @@ class RepairerType
     #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ])]
     public ?int $id = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairerType.name.not_blank')]
     #[Assert\Length(
         min : 2,
         max : 50,
+        minMessage: 'repairerType.name.min_length',
+        maxMessage: 'repairerType.name.max_length',
     )]
     #[ORM\Column(length: 255)]
     #[Groups([self::REPAIRER_TYPE_READ, Repairer::REPAIRER_READ, self::REPAIRER_TYPE_WRITE, Repairer::REPAIRER_COLLECTION_READ, User::USER_READ])]

@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 class UniqueDiscussion extends Constraint
 {
-    public string $message = 'Cannot create two discussions for the same repairer and customer';
+    public string $message = 'discussion.unique';
 
     public function getTargets(): string
     {

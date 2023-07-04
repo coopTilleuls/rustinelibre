@@ -26,6 +26,14 @@ jobs:
     name: Build
     if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
     uses: ./.github/workflows/build.yml
+    with:
+      tags: |
+        type=ref,event=branch
+        type=ref,event=pr
+        type=ref,event=tag
+        type=semver,pattern={{version}}
+        type=semver,pattern={{major}}.{{minor}}
+        type=sha
 
   deploy:
     name: Deploy
@@ -36,3 +44,4 @@ jobs:
     secrets:
       kubeconfig: ${{ secrets.KUBECONFIG }}
       domain: ${{ secrets.DOMAIN }}
+      mailer-dsn: ${{ secrets.MAILER_DSN }}
