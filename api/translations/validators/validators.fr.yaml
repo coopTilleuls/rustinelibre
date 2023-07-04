@@ -18,6 +18,8 @@ user.firstName.min_length: Le prénom doit contenir au moins 2 caractères.
 user.firstName.max_length: Le prénom peut contenir au maximum 50 caractères.
 user.firstName.not_blank: Merci de renseigner votre prénom.
 
+
+
 #Appointment assert validation messages
 #Repairer
 appointment.repairer.not_blank: Un réparateur doit être renseigné pour prendre rendez-vous.
@@ -66,12 +68,17 @@ discussion.message.content.max_length: Le message peut contenir au maximum 1000 
 mediaObject.file.not_null: Veuillez ajouter un fichier.
 
 #Repairer assert validation messages
+#PlainPassword
+repairer.plainPassword.notBlank: Veuillez entrer un mot de passe.
 #Name
 repairer.name.not_blank: Une solution de réparation doit avoir un nom.
 repairer.name.min_length: Le nom de votre solution de réparation doit contenir au moins deux caractères.
 repairer.name.max_length: Le nom de votre solution de réparation peut contenir au maximum 80 caractères.
 #City
 repairer.city.not_blank: Veuillez renseigner une ville.
+repairer.street.not_blank: Veuillez renseigner un nom de rue.
+repairer.street.number.not_blank: Veuillez renseigner un numéro de rue.
+repairer.postcode.not_blank: Veuillez renseigner un code postal.
 #Number of slots
 repairer.number_of_slots.range: Le nombre de créneau doit être compris entre {{ min }} et {{ max }}.
 

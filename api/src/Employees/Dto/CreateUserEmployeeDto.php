@@ -11,18 +11,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class CreateUserEmployeeDto
 {
-    #[Assert\Email]
+    #[Assert\Email(message: 'user.email.valid')]
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?string $email = null;
 
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?string $plainPassword = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'user.firstName.not_blank')]
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?string $firstName = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'user.lastName.not_blank')]
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?string $lastName = null;
 
