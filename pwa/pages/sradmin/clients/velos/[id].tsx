@@ -19,6 +19,7 @@ import Button from "@mui/material/Button";
 import TableContainer from "@mui/material/TableContainer";
 import ModalDetailMaintenance from "@components/bike/ModalDetailMaintenance";
 import ModalAddMaintenance from "@components/bike/ModalAddMaintenance";
+import Link from "next/link";
 
 const CustomerBikes: NextPageWithLayout = () => {
     const router = useRouter();
@@ -87,7 +88,7 @@ const CustomerBikes: NextPageWithLayout = () => {
                 {loading && <CircularProgress />}
                 {!loading && bike &&
                     <h3>
-                        Carnet d&#39;entretien : <u>{bike.name}</u> ({bike.owner.firstName} {bike.owner.lastName})
+                        Carnet d&#39;entretien : <u>{bike.name}</u> <Link href={`/sradmin/clients/${bike.owner.id}`}>({bike.owner.firstName} {bike.owner.lastName})</Link>
 
                         <Button variant="outlined" onClick={() => setOpenModalAddMaintenance(true)} sx={{float: 'right'}}>
                             Ajouter une entrée au carnet d&#39;entretien

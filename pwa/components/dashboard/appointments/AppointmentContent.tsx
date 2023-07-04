@@ -46,25 +46,10 @@ const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentCon
     const [times, setTimes] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<string|undefined>(undefined);
     const [selectedTime, setSelectedTime] = useState<string|undefined>('');
-    const [bikes, setBikes] = useState<number>(0);
-
-    useEffect(() => {
-        if (appointment.bike) {
-            fetchMaintenances(appointment.bike);
-        }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         checkSlotTimePast();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const fetchMaintenances = async(bike: Bike) => {
-        const maintenancesFetch = await maintenanceResource.getAll(true,{
-            'bike': bike['@id'],
-        });
-
-        setBikes(maintenancesFetch['hydra:totalItems']);
-    }
 
     const checkSlotTimePast = async () => {
 
@@ -216,7 +201,7 @@ const AppointmentContent = ({appointmentProps, handleCloseModal}: AppointmentCon
 
 
                 <Grid item xs={6}>
-                    {(appointment.bike && bikes > 0) ?
+                    {appointment.bike ?
                         <Link href={`/sradmin/clients/velos/${appointment.bike.id}`}>
                             <Button variant="outlined">
                                  Voir le carnet du vélo
