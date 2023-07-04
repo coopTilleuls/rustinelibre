@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
@@ -42,6 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('IS_AUTHENTICATED_FULLY')"
 )]
 #[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
+#[Patch(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[Get(
     uriTemplate: '/me',
     openapi: new Model\Operation(
@@ -155,6 +157,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups([self::USER_READ, Repairer::REPAIRER_COLLECTION_READ])]
     public ?\DateTimeImmutable $lastConnect = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([self::USER_READ, self::USER_WRITE])]
+    public ?string $firebaseToken;
 
     public function __construct()
     {

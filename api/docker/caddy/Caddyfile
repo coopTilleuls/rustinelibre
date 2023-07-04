@@ -16,7 +16,7 @@ log
             '*.json*', '*.html', '*.csv', '*.yml', '*.yaml', '*.xml'
         )
     )
-    || path('/favicon.ico', '/manifest.json', '/robots.txt', '/_next*')`
+    || path('/favicon.ico', '/manifest.json', '/robots.txt', '/_next*', '/firebase-messaging-sw.js')`
 
 route {
     root * /srv/app/public

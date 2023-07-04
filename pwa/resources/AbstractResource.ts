@@ -153,6 +153,25 @@ export abstract class AbstractResource<T> {
     return await this.getResult(doFetch);
   }
 
+  async patchById(
+    id: string,
+    body: RequestBody = {},
+    headers?: RequestHeaders
+  ): Promise<T> {
+    const doFetch = async () => {
+      return await fetch(`${this.getUrl()}/${id}`, {
+        headers: {
+          ...this.getDefaultHeadersPatch(),
+          ...headers,
+        },
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      });
+    };
+
+    return await this.getResult(doFetch);
+  }
+
   async delete(id: string, headers?: RequestHeaders): Promise<boolean> {
     const response = await fetch(this.getUrl(id), {
       headers: {
@@ -176,6 +195,24 @@ export abstract class AbstractResource<T> {
     const defaultHeaders: Record<string, string> = {
       Accept: 'application/ld+json',
       'Content-Type': 'application/ld+json',
+    };
+
+    if (withAuth) {
+      const currentToken = getToken();
+      if (!!currentToken) {
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
+      }
+    }
+
+    return defaultHeaders;
+  }
+
+  protected getDefaultHeadersPatch(
+    withAuth: boolean = true
+  ): Record<string, string> {
+    const defaultHeaders: Record<string, string> = {
+      Accept: 'application/ld+json',
+      'Content-Type': 'application/merge-patch+json',
     };
 
     if (withAuth) {

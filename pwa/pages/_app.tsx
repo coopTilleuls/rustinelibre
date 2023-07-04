@@ -11,6 +11,11 @@ import {UserFormProvider} from '@contexts/UserFormContext';
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../styles/theme';
+import {NotificationProvider} from "@components/notifications/NotificationContext";
+import dynamic from 'next/dynamic';
+const Notification = dynamic(() => import('@components/notifications/Notification'), {
+  ssr: false,
+});
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -23,27 +28,30 @@ function MyApp({
 
   return (
     <AuthProvider>
-      <SearchRepairerProvider>
-        <RepairerFormProvider>
-          <UserFormProvider>
-              <>
-                <Head>
-                  <meta
-                    name="viewport"
-                    charSet="utf-8"
-                    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
-                </Head>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline>
-                    <Layout dehydratedState={pageProps.dehydratedState}>
-                      <Component {...pageProps} />
-                    </Layout>
-                  </CssBaseline>
-                </ThemeProvider>
-              </>
-          </UserFormProvider>
-        </RepairerFormProvider>
-      </SearchRepairerProvider>
+      <NotificationProvider>
+        <SearchRepairerProvider>
+          <RepairerFormProvider>
+            <UserFormProvider>
+                <>
+                  <Head>
+                    <meta
+                      name="viewport"
+                      charSet="utf-8"
+                      content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
+                  </Head>
+                  <Notification />
+                  <ThemeProvider theme={theme}>
+                    <CssBaseline>
+                      <Layout dehydratedState={pageProps.dehydratedState}>
+                        <Component {...pageProps} />
+                      </Layout>
+                    </CssBaseline>
+                  </ThemeProvider>
+                </>
+            </UserFormProvider>
+          </RepairerFormProvider>
+        </SearchRepairerProvider>
+      </NotificationProvider>
     </AuthProvider>
   );
 }
