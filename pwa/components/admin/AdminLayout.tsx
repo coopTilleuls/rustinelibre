@@ -125,7 +125,7 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
 
   return (
     <>
-      {user && <Box>
+      {user && isAdmin(user) && <Box>
           <AppBar position="sticky" open={!isMobile}>
           <Toolbar>
             <List>
