@@ -1,0 +1,1 @@
+export const DAYS_TO_ADD_FOR_NEW_PROPOSAL = 15;

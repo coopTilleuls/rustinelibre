@@ -5,7 +5,6 @@ type ColorKey = keyof Theme['palette'];
 const Logo = ({color, inline}: {color: ColorKey; inline?: boolean}) => {
   const theme = useTheme();
   const fillColor = (theme.palette[color] as SimplePaletteColorOptions).main;
-  console.log(fillColor);
   return inline ? (
     <svg
       id="Calque_1"
