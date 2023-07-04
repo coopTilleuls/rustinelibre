@@ -67,12 +67,17 @@ discussion.message.content.max_length: The message content can contain 1000 char
 mediaObject.file.not_null: Please add a file.
 
 #Repairer assert validation messages
+#PlainPassword
+repairer.plainPassword.notBlank: Please enter a password.
 #Name
 repairer.name.not_blank: Please enter a repairer name.
 repairer.name.min_length: Repairer name must contain at least 2 characters.
 repairer.name.max_length: Repairer name can contain 80 characters maximum.
 #City
 repairer.city.not_blank: Please enter a city.
+repairer.street.not_blank: Please enter a street name.
+repairer.street.number.not_blank: Please enter a street number.
+repairer.postcode.not_blank: Please enter a postcode.
 #Number of slots
 repairer.number_of_slots.range: You must have a number of slots between {{ min }} and {{ max }}.
 

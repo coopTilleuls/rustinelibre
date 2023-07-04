@@ -48,6 +48,7 @@ import {validatePassword} from '@utils/passwordValidator';
 import {searchCity, searchStreet} from '@utils/apiCity';
 import Link from 'next/link';
 import {Street} from "@interfaces/Street";
+import {errorRegex} from "@utils/errorRegex";
 
 type RepairerRegistrationProps = {
   bikeTypesFetched: BikeType[];
@@ -201,9 +202,9 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       });
       setPendingRegistration(false);
       setInscriptionSuccess(true);
-    } catch (e) {
+    } catch (e:any) {
       setPendingRegistration(false);
-      setErrorMessage('Inscription impossible');
+      setErrorMessage(e.message?.replace(errorRegex, "$2"));
     }
   };
 
@@ -504,7 +505,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     flexDirection="column"
                     alignItems="center">
                     <Button
-                      disabled={!firstName || !lastName || !city || !streetSelected || !streetNumber || !repairerTypeSelected || !name || !email || !password}
+                      disabled={!firstName || !lastName || !city || !streetSelected || !streetNumber || !repairerTypeSelected || !name || !email || !password || !selectedBikeTypes.length}
                       type="submit"
                       variant="contained"
                       sx={{mt: 2, mx: 'auto'}}>
