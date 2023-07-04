@@ -120,8 +120,10 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
   };
 
   useEffect(() => {
+    if (user && isAdmin(user)) {
       countContactUnread();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
