@@ -42,7 +42,7 @@ export const DashboardInfosPhotos = ({
         return;
       }
 
-      const response = await uploadImage(file);
+      const response = await uploadImage(file, 'public');
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
         if (pictureType === 'thumbnail') {

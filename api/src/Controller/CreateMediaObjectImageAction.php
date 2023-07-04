@@ -36,6 +36,7 @@ final class CreateMediaObjectImageAction extends AbstractController
         $mediaObject = new MediaObject();
         $mediaObject->file = $uploadedFile;
         $mediaObject->owner = $this->security->getUser();
+        $mediaObject->visibility = $request->request->get('visibility') ?? 'private';
         $this->uploadImage($mediaObject);
 
         return $mediaObject;

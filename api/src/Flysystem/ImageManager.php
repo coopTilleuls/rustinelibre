@@ -22,7 +22,7 @@ readonly class ImageManager
         $this->imagesStorage->write(
             $mediaObject->filePath,
             $mediaObject->file->getContent(),
-            ['visibility' => $mediaObject->visibility ? 'public' : 'private']
+            ['visibility' => $mediaObject->visibility]
         );
     }
 

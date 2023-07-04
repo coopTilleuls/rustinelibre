@@ -69,6 +69,7 @@ mediaObject.file.not_null: Veuillez ajouter un fichier.
 mediaObject.file.image.format: Seules les images au format .jpeg, .jpg, .png ou .webp sont acceptées.
 mediaObject.file.file.format: Seuls les fichiers au format .pdf, .doc, .docx, .odt, .xls ou .csv sont acceptés.
 mediaObject.file.maxSize: Le fichier ne doit pas dépasser 5MO.
+mediaObject.visibility.not_valid: La visibilité peut seulement être "public" ou "private".
 
 #Repairer assert validation messages
 #PlainPassword
