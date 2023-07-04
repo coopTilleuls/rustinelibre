@@ -8,6 +8,7 @@ use App\Entity\MediaObject;
 use App\Flysystem\FileManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -42,9 +43,14 @@ final class CreateMediaObjectFileAction extends AbstractController
 
     public function uploadFile(MediaObject $mediaObject): void
     {
-        $parts = explode('.', $mediaObject->file->getClientOriginalName());
-        $slugName = (string) $this->slugger->slug(strtolower($parts[0]));
-        $mediaObject->filePath = sprintf('%d-%s.%s', time(), $slugName, $parts[1]);
+        if (!$mediaObject->file instanceof UploadedFile) {
+            $randomString = bin2hex(random_bytes(16));
+            $mediaObject->filePath = sprintf('%d-%s.%s', time(), $randomString, $mediaObject->file->guessExtension());
+        } else {
+            $parts = explode('.', $mediaObject->file->getClientOriginalName());
+            $slugName = (string) $this->slugger->slug(strtolower($parts[0]));
+            $mediaObject->filePath = sprintf('%d-%s.%s', time(), $slugName, $mediaObject->file->getClientOriginalExtension());
+        }
 
         $this->filesManager->uploadFile($mediaObject);
     }
