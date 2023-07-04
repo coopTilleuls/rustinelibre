@@ -32,6 +32,9 @@ import {
   TextField,
   SelectChangeEvent,
   Button,
+  Link,
+  Avatar,
+  IconButton,
 } from '@mui/material';
 import HomepageImagesGallery from './search-a-repairer/HomepageImagesGallery';
 import ModalSearchRepairer from './ModalSearchRepairer';
@@ -110,20 +113,14 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
         display="flex"
         flexDirection="column"
         alignItems={{xs: 'center', md: 'start'}}>
-        <Stack width={{xs: '100%', md: '80%'}} spacing={{xs: 2, md: 8}}>
+        <Stack width={{xs: '100%', md: '90%'}} spacing={{xs: 2, md: 8}}>
           <Typography
-            fontSize={{xs: 22, md: 64}}
-            fontWeight={600}
+            variant="h1"
+            component="h1"
+            color="primary"
             textAlign={{xs: 'center', md: 'start'}}>
-            Besoin de réparer
-            <br />
-            ton vélo ?
-          </Typography>
-          <Typography
-            fontSize={{xs: 16, md: 24}}
-            fontWeight={600}
-            textAlign={{xs: 'center', md: 'start'}}>
-            Trouve un rendez-vous chez un réparateur
+            Réparation <br />
+            de vélo locale et solidaire
           </Typography>
           <Box display={{xs: 'none', md: 'block'}} width="100%">
             <Box
@@ -132,13 +129,13 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
               width="100%"
               display="flex"
               alignItems="center"
-              border="1px solid grey"
+              boxShadow={1}
+              bgcolor="white"
               borderRadius={20}
-              py={2}
-              px={4}>
+              p={2}>
               <Autocomplete
                 filterOptions={(options, state) => options}
-                sx={{width: '50%'}}
+                sx={{width: '50%', ml: 2}}
                 ref={listContainerRef}
                 freeSolo
                 value={city}
@@ -182,7 +179,10 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                   orientation: 'vertical',
                 }}
               />
-              <FormControl required sx={{width: '60%'}} variant="standard">
+              <FormControl
+                required
+                sx={{width: '60%', mr: 2}}
+                variant="standard">
                 <InputLabel id="bikeType-label" shrink>
                   Type de vélo
                 </InputLabel>
@@ -206,17 +206,17 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                   ))}
                 </Select>
               </FormControl>
-              <Button
+              <IconButton
+                size="large"
                 type="submit"
-                variant="contained"
+                color="primary"
                 sx={{
-                  border: '2px solid',
-                  borderColor: 'primary.main',
-                  borderRadius: 20,
-                  ml: {xs: 0, md: 2},
+                  bgcolor: 'primary.main',
+                  color: 'white',
+                  '&:hover': {bgcolor: 'primary.light'},
                 }}>
                 <SearchIcon sx={{color: 'white'}} />
-              </Button>
+              </IconButton>
             </Box>
           </Box>
         </Stack>

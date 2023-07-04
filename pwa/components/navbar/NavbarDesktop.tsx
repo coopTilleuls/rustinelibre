@@ -1,8 +1,9 @@
-import Link from 'next/link';
-import {Button, Typography, Box} from '@mui/material';
+import NextLink from 'next/link';
+import {Button, Box, Link} from '@mui/material';
 import {Page} from '@interfaces/Page';
 import {User} from '@interfaces/User';
-import {useRouter} from "next/router";
+import {useRouter} from 'next/router';
+import Logo from '@components/common/Logo';
 
 interface NavbarDesktopProps {
   pages: Page[];
@@ -13,10 +14,55 @@ interface NavbarDesktopProps {
   logOut?: () => void;
 }
 
-const NavbarDesktop = ({pages, boss, user, employee, admin, logOut}: NavbarDesktopProps): JSX.Element => {
-
+const NavbarDesktop = ({
+  pages,
+  boss,
+  user,
+  employee,
+  admin,
+  logOut,
+}: NavbarDesktopProps): JSX.Element => {
   const router = useRouter();
-  const { asPath } = router;
+  const {asPath} = router;
+
+  const getButton = () => {
+    let link = '';
+    let text;
+    let onClick;
+
+    if (user && (boss || employee)) {
+      link = '/sradmin';
+      text = 'Accès réparateur';
+    } else if (user && admin) {
+      link = '/admin/reparateurs';
+      text = 'ADMIN';
+    } else if (user) {
+      onClick = logOut;
+      text = 'Déconnexion';
+    } else {
+      link = '/inscription';
+      text = 'Inscription';
+    }
+    const Element = (
+      <Button
+        variant="contained"
+        onClick={onClick}
+        size="medium"
+        sx={{
+          display: 'flex',
+          paddingX: 2,
+        }}>
+        {text}
+      </Button>
+    );
+    return onClick ? (
+      Element
+    ) : (
+      <NextLink legacyBehavior href={link}>
+        {Element}
+      </NextLink>
+    );
+  };
 
   return (
     <Box
@@ -25,139 +71,35 @@ const NavbarDesktop = ({pages, boss, user, employee, admin, logOut}: NavbarDeskt
       display={{xs: 'none', md: 'flex'}}
       justifyContent="space-between"
       alignItems="center">
-      <Link href="/" style={{textDecoration: 'none'}}>
-        <Box display="flex" alignItems="center" height="100%">
-          <Typography
-            color="primary"
-            sx={{
-              mr: 2,
-              fontSize: 16,
-              fontWeight: 900,
-            }}>
-            Rustine Libre
-          </Typography>
+      <NextLink href="/">
+        <Box height="30px" display="flex" justifyContent="center">
+          <Logo inline color="primary" />
         </Box>
-      </Link>
-      <Box display="flex" justifyContent="flex">
+      </NextLink>
+      <Box display="flex" gap={4} justifyContent="flex" alignItems="center">
         {pages.map(({name, link, disabled}) => {
           return (
-            <Link
+            <NextLink
               key={name}
               href={disabled ? '' : link}
-              style={{
-                textDecoration: 'none',
-                cursor: disabled ? 'default' : 'pointer',
-              }}>
-              <Button
-                disabled={disabled}
+              legacyBehavior
+              passHref>
+              <Link
+                variant="body2"
+                color={link === asPath ? 'primary' : 'text.primary'}
+                fontWeight={700}
                 sx={{
-                  textDecoration: link === asPath ? 'underline' : 'none',
-                  display: 'flex',
-                  paddingX: 2,
-                  marginX: 0.5,
-                  textTransform: 'capitalize',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  borderRadius: 20,
                   '&:hover': {
-                    backgroundColor: 'white',
+                    color: 'primary.main',
                   },
-                }}>
+                }}
+                underline={link === asPath ? 'always' : 'none'}>
                 {name}
-              </Button>
-            </Link>
+              </Link>
+            </NextLink>
           );
         })}
-        {user && (boss || employee) && (
-          <Link href="/sradmin" style={{textDecoration: 'none'}}>
-            <Button
-              key="dashboard"
-              sx={{
-                display: 'flex',
-                paddingX: 2,
-                marginX: 1,
-                textTransform: 'capitalize',
-                fontSize: 16,
-                fontWeight: 600,
-                borderRadius: 20,
-                '&:hover': {
-                  color: 'primary.main',
-                  backgroundColor: 'white',
-                },
-              }}>
-              Accès réparateur
-            </Button>
-          </Link>
-        )}
-        {user && admin && (
-          <Link href="/admin/reparateurs" style={{textDecoration: 'none'}}>
-            <Button
-              key="admin"
-              sx={{
-                display: 'flex',
-                paddingX: 2,
-                marginX: 1,
-                textTransform: 'capitalize',
-                fontSize: 16,
-                fontWeight: 600,
-                borderRadius: 20,
-                '&:hover': {
-                  color: 'primary.main',
-                  backgroundColor: 'white',
-                },
-              }}>
-              ADMIN
-            </Button>
-          </Link>
-        )}
-        {user ? (
-          <Button
-            variant="contained"
-            key="logout"
-            onClick={logOut}
-            sx={{
-              display: 'flex',
-              color: 'white',
-              paddingX: 2,
-              marginX: 1,
-              textTransform: 'capitalize',
-              fontSize: 16,
-              fontWeight: 600,
-              borderRadius: 20,
-              '&:hover': {
-                color: 'primary.main',
-                backgroundColor: 'white',
-              },
-            }}>
-            Déconnexion
-          </Button>
-        ) : (
-          <Link
-            href="/inscription"
-            style={{
-              textDecoration: 'none',
-              cursor: 'pointer',
-            }}>
-            <Button
-              variant="contained"
-              sx={{
-                display: 'flex',
-                paddingX: 2,
-                marginX: 0.5,
-                textTransform: 'capitalize',
-                fontSize: 16,
-                fontWeight: 600,
-                borderRadius: 20,
-                color: 'white',
-                '&:hover': {
-                  color: 'primary.main',
-                  backgroundColor: 'white',
-                },
-              }}>
-              Inscription
-            </Button>
-          </Link>
-        )}
+        {getButton()}
       </Box>
     </Box>
   );

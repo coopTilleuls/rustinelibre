@@ -1,45 +1,65 @@
 import React, {Fragment} from 'react';
-import {Container, Button, Link} from '@mui/material';
+import {Box, Container, Link, Typography} from '@mui/material';
+import NextLink from 'next/link';
 import {legalNoticesFooter} from '@data/legal-notices-footer';
+import Image from 'next/image';
+import Logo from '@components/common/Logo';
+import rustineViolet from '@public/img/rustine-violet.svg';
 
 const LegalNoticesFooter = (): JSX.Element => {
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        py: 4,
-        backgroundColor: 'white',
-      }}>
-      {legalNoticesFooter.map(({name, link, disabled}, index) => {
-        const isLastItem = index === legalNoticesFooter.length - 1;
-        return (
-          <Fragment key={name}>
-            <Link
-              href={disabled ? '' : link}
-              style={{
-                textDecoration: 'none',
-                cursor: disabled ? 'default' : 'pointer',
-                pointerEvents: disabled ? 'none' : 'auto',
-              }}>
-              <Button
-                disabled={disabled}
-                sx={{
-                  paddingX: 2,
-                  textTransform: 'capitalize',
-                  fontSize: 12,
-                  fontWeight: 400,
-                  color: disabled ? 'grey' : 'black',
-                }}>
-                {name}
-              </Button>
-            </Link>
-            {!isLastItem && <span>-</span>}
-          </Fragment>
-        );
-      })}
+    <Container sx={{paddingY: 6}}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        justifyContent="center"
+        alignItems="center"
+        maxWidth="100%"
+        width="300px"
+        marginX="auto">
+        <Box flex={1} position="relative" sx={{aspectRatio: '1/1', marginRight: '-5%'}}>
+          <Image fill alt="" src={rustineViolet} />
+        </Box>
+        <Box width="60%">
+          <Logo color="secondary" />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 1,
+          justifyContent: 'center',
+          pt: 3,
+          backgroundColor: 'white',
+        }}>
+        {legalNoticesFooter.map(({name, link, disabled}, index) => {
+          const isLastItem = index === legalNoticesFooter.length - 1;
+          return (
+            <Fragment key={name}>
+              <NextLink href={disabled ? '' : link} legacyBehavior passHref>
+                <Link
+                  variant="caption"
+                  color="grey.600"
+                  underline="none"
+                  style={{
+                    cursor: disabled ? 'default' : 'pointer',
+                    pointerEvents: disabled ? 'none' : 'auto',
+                    fontSize: 'caption.fontsize',
+                  }}>
+                  {name}
+                </Link>
+              </NextLink>
+              {!isLastItem && (
+                <Typography variant="caption" color="grey.600">
+                  |
+                </Typography>
+              )}
+            </Fragment>
+          );
+        })}
+      </Box>
     </Container>
   );
 };

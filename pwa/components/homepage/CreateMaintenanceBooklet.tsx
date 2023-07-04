@@ -19,26 +19,21 @@ const CreateMaintenanceBooklet = () => {
         display="flex"
         flexDirection="column"
         alignItems={{xs: 'center', md: 'start'}}>
-        <Typography fontSize={{xs: 22, md: 48}} fontWeight={600}>
-          Carnet d&apos;entretien
+        <Typography variant="h1" component="h2">
+          Mon carnet d&apos;entretien
         </Typography>
-        <Box width={{md: '50%'}}>
-          <Typography fontSize={14} fontWeight={400}>
+        <Box width={{md: '80%'}}>
+          <Typography variant="h4" component="p" marginBottom={2}>
             Envie de bichonner votre monture ?
           </Typography>
-          <Typography fontSize={14} fontWeight={400}>
-            Créez-lui un carnet d’entretien.
-          </Typography>
-          <Typography
-            fontSize={14}
-            fontWeight={400}
-            display={{xs: 'none', md: 'block'}}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius
-            fermentum finibus.
+          <Typography variant="body1">
+            Créez son carnet d&apos;entretien gratuitement. Son petit nom, sa
+            dernière réparation, son huile de chaîne préférée, ses rendez-vous,
+            vous avez tout son suivi en poche !
           </Typography>
         </Box>
         <Link href="/velos/mes-velos">
-          <Button variant="contained" sx={{textTransform: 'none'}}>
+          <Button variant="contained" size="large">
             Je crée mon carnet
           </Button>
         </Link>

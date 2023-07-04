@@ -38,47 +38,42 @@ const RepairersList: NextPageWithLayout = () => {
         <title>Liste des réparateurs</title>
       </Head>
       <WebsiteLayout>
-        <Box
-          height={{xs: 'calc(100vh - 55px)', md: 'calc(100vh - 70px)'}}
-          display="flex"
-          flexDirection="column"
-          overflow="auto">
-          <Container sx={{mt: 10}}>
-            <Typography variant="h3" sx={{mb: 5, textAlign: 'center'}}>
-              Liste des réparateurs
-            </Typography>
-            <Typography variant="body1" sx={{mb: 5}}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec est
-              magna, finibus in suscipit sit amet, tempor non leo. Aliquam
-              placerat lacinia maximus.
-            </Typography>
-            {isLoading && <CircularProgress />}
-            {!isLoading && (
-              <Grid2 container spacing={4}>
-                {repairers.map((repairer) => {
-                  return (
-                    <Grid2
-                      id={repairer.id}
-                      key={repairer.id}
-                      xs={6}
-                      pt="198px"
-                      mt="-198px">
-                      <RepairerCard
-                        repairer={repairer}
-                        onClick={() =>
-                          router.push({
-                            pathname: `/reparateur/${repairer.id}`,
-                            query: {repairerList: 1},
-                          })
-                        }
-                      />
-                    </Grid2>
-                  );
-                })}
-              </Grid2>
-            )}
-          </Container>
-        </Box>
+        <Container
+          sx={{
+            mt: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          <Typography variant="h1" textAlign="center" mb={5} color="primary">
+            Liste des réparateurs
+          </Typography>
+          <Typography variant="body1" mb={5} textAlign="center" maxWidth="md">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec est
+            magna, finibus in suscipit sit amet, tempor non leo. Aliquam
+            placerat lacinia maximus.
+          </Typography>
+          {isLoading && <CircularProgress />}
+          {!isLoading && (
+            <Grid2 container spacing={4}>
+              {repairers.map((repairer) => {
+                return (
+                  <Grid2 id={repairer.id} key={repairer.id} xs={12} sm={6}>
+                    <RepairerCard
+                      repairer={repairer}
+                      onClick={() =>
+                        router.push({
+                          pathname: `/reparateur/${repairer.id}`,
+                          query: {repairerList: 1},
+                        })
+                      }
+                    />
+                  </Grid2>
+                );
+              })}
+            </Grid2>
+          )}
+        </Container>
       </WebsiteLayout>
     </>
   );
