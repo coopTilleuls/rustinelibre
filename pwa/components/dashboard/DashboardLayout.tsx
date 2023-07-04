@@ -97,7 +97,8 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({children}: DashboardLayoutProps) => {
     const theme = useTheme();
     const router = useRouter();
-    const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`});
+    const {user} = useAccount({redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`});
+    const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
     const isMobile = useMediaQuery('(max-width: 640px)');
     const {logout} = useAuth();
 
@@ -112,7 +113,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
     return (
         <>
-            {user && <Box>
+            {isBossOrEmployee && <Box>
                 <AppBar position="sticky" open={!isMobile}>
                     <Toolbar>
                         <List>
