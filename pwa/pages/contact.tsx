@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
+import {errorRegex} from '@utils/errorRegex';
 
 const cfTurnstileAPIKey = process.env
   .NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY as string;
@@ -36,7 +37,7 @@ const Contact: NextPageWithLayout = () => {
   const [messageError, setMessageError] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const [isValid, setIsValid] = useState<boolean>(false);
   const [status, setStatus] = useState<Status | null>(null);
@@ -59,14 +60,14 @@ const Contact: NextPageWithLayout = () => {
         setMessage('');
         setIsValid(false);
       }, 3000);
-    } catch (e) {
-      setError(true);
+    } catch (e: any) {
+      setError(e.message?.replace(errorRegex, '$2'));
+      setLoading(false);
     }
   };
 
   const handleChangeLastName = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    setError(false);
     setIsValid(false);
     setLastName(value);
     if (value.length < 2) {
@@ -78,7 +79,6 @@ const Contact: NextPageWithLayout = () => {
 
   const handleChangeFirstName = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    setError(false);
     setIsValid(false);
     setFirstName(value);
 
@@ -91,7 +91,6 @@ const Contact: NextPageWithLayout = () => {
 
   const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    setError(false);
     setIsValid(false);
     setEmail(value);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -104,7 +103,6 @@ const Contact: NextPageWithLayout = () => {
 
   const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    setError(false);
     setIsValid(false);
     setMessage(value);
 
@@ -226,8 +224,7 @@ const Contact: NextPageWithLayout = () => {
                 </Button>
                 {error && (
                   <Alert severity="error" sx={{mt: 3}}>
-                    Votre message n&apos;a pas pu être envoyé, veuillez
-                    réessayer.
+                    {error}
                   </Alert>
                 )}
                 {isValid && (
