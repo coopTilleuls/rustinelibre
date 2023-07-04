@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@api-platform/admin':
     specifier: ^3.4.3
@@ -10,6 +14,9 @@ dependencies:
   '@ckeditor/ckeditor5-react':
     specifier: ^6.0.0
     version: 6.0.0(@ckeditor/ckeditor5-core@37.0.1)(@ckeditor/ckeditor5-engine@37.0.1)(@ckeditor/ckeditor5-utils@37.0.1)(@ckeditor/ckeditor5-watchdog@37.0.1)(react@18.2.0)
+  '@fontsource-variable/pathway-extreme':
+    specifier: ^5.0.4
+    version: 5.0.4
   '@fontsource/poppins':
     specifier: ^4.5.10
     version: 4.5.10
@@ -907,6 +914,10 @@ packages:
     resolution: {integrity: sha512-x5vzdtOOGgFVDCUs81QRB2+liax8rFg3+7hqM+QhBG0/G3F1ZsoYl97UrqgHgQ9KKT7G6c4V+aTUCgu/n22v1A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@fontsource-variable/pathway-extreme@5.0.4:
+    resolution: {integrity: sha512-7ik0neGZZJA8fxviZN46Blv3gysgHnEDc8hDxjjoPMtLGciok39hvprPlDppWZXnJ4a2gNjiHd0sDwzgCbnl4g==}
+    dev: false
 
   /@fontsource/poppins@4.5.10:
     resolution: {integrity: sha512-oYZVHsnlwV3VWM1SE/m6SUxVh0QLk5+2wB+lBiXcI7N/0KVQWmV9YykaPqfJHBLvmdya+MAOnv+BQHeLU1vOOw==}
