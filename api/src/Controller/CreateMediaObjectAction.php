@@ -37,7 +37,7 @@ final class CreateMediaObjectAction extends AbstractController
         $mediaObject->file = $uploadedFile;
         $mediaObject->owner = $this->security->getUser();
         $mediaObject = $this->addFilePath($mediaObject);
-        $prefix = '/media_objects/images' === $request->getRequestUri() ? 'images' : 'files';
+        $prefix = 'media_object_add_image' === $request->get('_route') ? 'images' : 'files';
         $this->mediaObjectManager->upload($mediaObject, $prefix);
 
         return $mediaObject;

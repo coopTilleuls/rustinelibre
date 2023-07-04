@@ -50,7 +50,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ),
     security: "is_granted('IS_AUTHENTICATED_FULLY')",
     validationContext: ['groups' => ['Default', self::MEDIA_OBJECT_CREATE_IMAGE]],
-    deserialize: false
+    deserialize: false,
+    name: 'media_object_add_image'
 )]
 #[Post(
     '/media_objects/files',
@@ -74,7 +75,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ),
     security: "is_granted('IS_AUTHENTICATED_FULLY')",
     validationContext: ['groups' => ['Default', self::MEDIA_OBJECT_CREATE_FILE]],
-    deserialize: false
+    deserialize: false,
+    name: 'media_object_add_file'
 )]
 class MediaObject
 {
