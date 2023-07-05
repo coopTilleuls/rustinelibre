@@ -176,6 +176,7 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
             fullWidth
             error={emailError}
             helperText={emailHelperText}
+            type={'email'}
             id="email"
             label="Email"
             name="email"

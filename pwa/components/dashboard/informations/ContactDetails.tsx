@@ -156,6 +156,7 @@ export const ContactDetails = ({
             <TextField
               margin="normal"
               fullWidth
+              type={'tel'}
               id="mobilePhone"
               label="Numéro de téléphone"
               name="name"
