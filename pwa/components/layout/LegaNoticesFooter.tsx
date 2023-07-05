@@ -17,8 +17,11 @@ const LegalNoticesFooter = (): JSX.Element => {
         maxWidth="100%"
         width="300px"
         marginX="auto">
-        <Box flex={1} position="relative" sx={{aspectRatio: '1/1', marginRight: '-5%'}}>
-          <Image fill alt="" src={rustineViolet} />
+        <Box
+          flex={1}
+          position="relative"
+          sx={{aspectRatio: '1/1', marginRight: '-5%'}}>
+          <Image loading="eager" fill alt="" src={rustineViolet} />
         </Box>
         <Box width="60%">
           <Logo color="secondary" />
@@ -32,7 +35,6 @@ const LegalNoticesFooter = (): JSX.Element => {
           gap: 1,
           justifyContent: 'center',
           pt: 3,
-          backgroundColor: 'white',
         }}>
         {legalNoticesFooter.map(({name, link, disabled}, index) => {
           const isLastItem = index === legalNoticesFooter.length - 1;
