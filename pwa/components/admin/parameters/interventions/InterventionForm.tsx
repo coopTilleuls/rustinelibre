@@ -4,6 +4,7 @@ import {Alert, Button, CircularProgress, Container, Link, Paper, TextField, Typo
 import {useRouter} from "next/router";
 import {Intervention} from "@interfaces/Intervention";
 import {interventionResource} from "@resources/interventionResource";
+import {errorRegex} from "@utils/errorRegex";
 
 type InterventionFormProps = {
     intervention: Intervention|null;
@@ -42,8 +43,8 @@ const InterventionForm = ({intervention}: InterventionFormProps): JSX.Element =>
                 });
                 router.push('/admin/parametres')
             }
-        } catch {
-
+        } catch (e: any) {
+            setErrorMessage(e.message?.replace(errorRegex, '$2'))
         }
 
         setPending(false);
