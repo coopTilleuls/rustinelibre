@@ -24,6 +24,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 type AppointmentContentProps = {
   appointmentProps: Appointment;
@@ -177,6 +178,14 @@ const AppointmentContent = ({
               <DirectionsBikeIcon />
             </ListItemIcon>
             <ListItemText primary={appointment.bikeType.name} />
+          </ListItem>
+        )}
+        {appointment.address && (
+          <ListItem>
+            <ListItemIcon>
+              <LocationOnIcon />
+            </ListItemIcon>
+            <ListItemText primary={appointment.address} />
           </ListItem>
         )}
         {appointment.autoDiagnostic && appointment.autoDiagnostic.photo && (
