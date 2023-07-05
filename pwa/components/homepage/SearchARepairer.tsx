@@ -177,6 +177,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                   mx: 2,
                   my: 0,
                   orientation: 'vertical',
+                  bgcolor: 'primary.main',
                 }}
               />
               <FormControl

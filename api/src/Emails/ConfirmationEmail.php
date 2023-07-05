@@ -7,7 +7,6 @@ namespace App\Emails;
 use App\Entity\Appointment;
 use App\Messages\Helpers\DiscussionManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
@@ -17,7 +16,6 @@ readonly class ConfirmationEmail
     public function __construct(private MailerInterface $mailer,
         private string $mailerSender,
         private string $webAppUrl,
-        private KernelInterface $kernel,
         private LoggerInterface $logger,
         private DiscussionManager $discussionManager,
         private Environment $twig)
@@ -26,15 +24,11 @@ readonly class ConfirmationEmail
 
     public function sendConfirmationEmail(Appointment $appointment): void
     {
-        if ('test' === $this->kernel->getEnvironment()) {
-            return;
-        }
-
         try {
             $email = (new Email())
                 ->from($this->mailerSender)
                 ->to($appointment->customer->email)
-                ->subject('Votre rendez-vous est confirmé')
+                ->subject('Confirmation de votre rendez-vous')
                 ->html($this->twig->render('mail/appointment_accepted.html.twig', [
                     'appointment' => $appointment,
                     'discussionUrl' => sprintf('%s/messagerie/%s', $this->webAppUrl, $this->discussionManager->getOrCreateDiscussion($appointment)->id),

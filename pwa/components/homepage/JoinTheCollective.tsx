@@ -1,9 +1,36 @@
 import React from 'react';
 import Link from 'next/link';
-import {Box, Typography, Button} from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Card,
+  CardMedia,
+  CardContent,
+} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
+import bikeRepairer from '@public/img/bike-repairer.jpg';
+import bikeMan from '@public/img/bike-man.jpg';
+import bikeWoman from '@public/img/bike-woman.jpg';
+import Image from 'next/image';
 
-const args = ['Argument 1', 'Argument 2', 'Argument 3'];
+const args = [
+  {
+    title: 'Un câlin à la planête',
+    text: "Vous aimez promouvoir l'idée de réparer plutôt que jeter\u00A0?\nVous êtes Rustine Libre.",
+    img: bikeRepairer,
+  },
+  {
+    title: 'Pignon\nsur rue',
+    text: 'Vous vous facilitez la prise de rendez-vous\u00A0?\nVous êtes Rustine Libre.',
+    img: bikeMan,
+  },
+  {
+    title: 'Libre comme une chambre à air',
+    text: 'Vos horaires, vos conditions, vos tarifs, votre style?\nVous êtes Rustine Libre.',
+    img: bikeWoman,
+  },
+];
 
 const JoinTheCollective = () => {
   return (
@@ -33,29 +60,45 @@ const JoinTheCollective = () => {
         </Link>
       </Box>
       <Grid2
-        display={{xs: 'none', md: 'flex'}}
         container
-        width="100%"
-        spacing={4}>
+        spacing={4}
+        maxWidth={{xs: '450px', md: 'none'}}
+        mx="auto"
+        my={4}>
         {args.map((arg, index) => {
           return (
-            <Grid2
-              key={index}
-              xs={12}
-              md={4}
-              display="flex"
-              flexDirection="column"
-              gap={4}
-              alignItems="center">
-              <Box
-                width={{xs: '80%', md: '100%'}}
-                height={150}
-                bgcolor="grey.300"
-                borderRadius={5}
-              />
-              <Typography variant="h3" component="h3">
-                {arg}
-              </Typography>
+            <Grid2 xs={12} md={4} key={arg.title}>
+              <Card sx={{height: '100%', borderRadius: 8}} elevation={1}>
+                <CardMedia sx={{height: 160}}>
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: '100%',
+                    }}>
+                    <Image
+                      alt=""
+                      src={arg.img}
+                      fill
+                      style={{objectFit: 'cover', objectPosition: 'top'}}
+                    />
+                  </div>
+                </CardMedia>
+                <CardContent sx={{marginY: 3, textAlign: 'center'}}>
+                  <Typography
+                    variant="h3"
+                    gutterBottom
+                    color="primary"
+                    sx={{minHeight: '70px', whiteSpace: 'pre-line', px: 3}}>
+                    {arg.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{px: 4, whiteSpace: 'pre-line'}}>
+                    {arg.text}
+                  </Typography>
+                </CardContent>
+              </Card>
             </Grid2>
           );
         })}

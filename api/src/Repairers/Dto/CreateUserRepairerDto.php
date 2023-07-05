@@ -12,44 +12,50 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class CreateUserRepairerDto
 {
-    #[Assert\Email]
+    #[Assert\Email(message: 'user.email.valid')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $email = null;
 
     #[Assert\Type('string')]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairer.plainPassword.notBlank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $plainPassword = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'user.firstName.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $firstName = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'user.lastName.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $lastName = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairer.name.not_blank')]
+    #[Assert\Length(
+        min : 2,
+        max : 80,
+        minMessage: 'repairer.name.min_length',
+        maxMessage: 'repairer.name.max_length',
+    )]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $name = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairer.street.number.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $streetNumber = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairer.street.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $street = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairer.city.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $city = null;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'repairer.postcode.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $postcode = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: 'repairerType.name.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?RepairerType $repairerType = null;
 
@@ -62,6 +68,7 @@ final class CreateUserRepairerDto
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?float $longitude = null;
 
+    #[Assert\NotBlank(message: 'bikeType.name.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     /** @var BikeType[] */
     public ?array $bikeTypesSupported = null;

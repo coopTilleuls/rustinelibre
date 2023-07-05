@@ -90,6 +90,10 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
             day: 'numeric',
           });
 
+          if (hours.length === 0) {
+            return;
+          }
+
           return (
             <Box key={day} sx={{backgroundColor: 'primary.light'}}>
               <Box

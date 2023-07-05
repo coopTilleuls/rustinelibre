@@ -85,7 +85,7 @@ const Login: NextPageWithLayout = ({}) => {
               <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
                 <LockOutlinedIcon />
               </Avatar>
-              <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+              <Typography variant="h2" component="h1" color="primary">
                 Se connecter
               </Typography>
               <Box
@@ -97,6 +97,7 @@ const Login: NextPageWithLayout = ({}) => {
                   margin="normal"
                   required
                   fullWidth
+                  type={'email'}
                   id="email"
                   label="Adresse email"
                   name="email"

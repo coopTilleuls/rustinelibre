@@ -47,7 +47,8 @@ import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
 import {searchCity, searchStreet} from '@utils/apiCity';
 import Link from 'next/link';
-import {Street} from "@interfaces/Street";
+import {Street} from '@interfaces/Street';
+import {errorRegex} from '@utils/errorRegex';
 
 type RepairerRegistrationProps = {
   bikeTypesFetched: BikeType[];
@@ -58,14 +59,14 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   bikeTypesFetched = [],
   repairerTypesFetched = [],
 }) => {
-
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [comment, setComment] = useState<string>('');
   const [streetList, setStreetList] = useState<Street[]>([]);
-  const [streetSelected, setStreetSelected] = useState<Street|null>(null);
+  const [streetSelected, setStreetSelected] = useState<Street | null>(null);
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
-  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>(repairerTypesFetched);
+  const [repairerTypes, setRepairerTypes] =
+    useState<RepairerType[]>(repairerTypesFetched);
   const [repairerTypeSelected, setRepairerTypeSelected] =
     useState<RepairerType | null>(
       repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null
@@ -197,13 +198,13 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
         comment: comment,
         latitude: streetSelected.lat,
-        longitude: streetSelected.lon
+        longitude: streetSelected.lon,
       });
       setPendingRegistration(false);
       setInscriptionSuccess(true);
-    } catch (e) {
+    } catch (e: any) {
       setPendingRegistration(false);
-      setErrorMessage('Inscription impossible');
+      setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
   };
 
@@ -221,16 +222,19 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setName(event.target.value);
   };
 
-  const handleChangeStreetNumber = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeStreetNumber = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
     setStreetNumber(event.target.value);
   };
 
-  const handleChangeStreet = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
-
+  const handleChangeStreet = async (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): Promise<void> => {
     const adresseSearch = event.target.value;
     if (adresseSearch.length >= 3) {
       const streetApiResponse = await searchStreet(adresseSearch, city);
-      setStreetList(streetApiResponse)
+      setStreetList(streetApiResponse);
     }
   };
 
@@ -310,9 +314,11 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                 </Typography>
                 <Typography sx={{mt: 5, fontSize: '1.3em'}} variant="body1">
                   Tu es réparateur ? <br />
-                  Tu as envie de rejoindre un collectif de pairs sur ton territoire ? <br />
-                  Tu cherches un outil numérique qui te référence et qui te permet de gérer tes rendez-vous avec tes usagers ?<br /><br />
-
+                  Tu as envie de rejoindre un collectif de pairs sur ton
+                  territoire ? <br />
+                  Tu cherches un outil numérique qui te référence et qui te
+                  permet de gérer tes rendez-vous avec tes usagers ?<br />
+                  <br />
                   Contacte-nous !
                 </Typography>
                 <Box
@@ -330,7 +336,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     autoComplete="firstName"
                     autoFocus
                     value={firstName}
-                    inputProps={{ maxLength: 50 }}
+                    inputProps={{maxLength: 50}}
                     onChange={handleChangeFirstName}
                   />
                   <TextField
@@ -342,7 +348,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     name="lastName"
                     autoComplete="lastName"
                     value={lastName}
-                    inputProps={{ maxLength: 50 }}
+                    inputProps={{maxLength: 50}}
                     onChange={handleChangeLastName}
                   />
                   <TextField
@@ -351,12 +357,13 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     fullWidth
                     error={emailError}
                     helperText={emailHelperText}
+                    type={'email'}
                     id="email"
                     label="Email"
                     name="email"
                     autoComplete="email"
                     value={email}
-                    inputProps={{ maxLength: 180 }}
+                    inputProps={{maxLength: 180}}
                     onChange={handleChangeEmail}
                   />
                   <TextField
@@ -382,7 +389,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     name="name"
                     autoComplete="name"
                     value={name}
-                    inputProps={{ maxLength: 80 }}
+                    inputProps={{maxLength: 80}}
                     onChange={handleChangeName}
                   />
                   <Autocomplete
@@ -391,9 +398,9 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     value={cityInput}
                     options={citiesList}
                     getOptionLabel={(city) =>
-                        typeof city === 'string'
-                            ? city
-                            : `${city.name} (${city.postcode})`
+                      typeof city === 'string'
+                        ? city
+                        : `${city.name} (${city.postcode})`
                     }
                     onChange={(event, value) => setCity(value as City)}
                     renderInput={(params) => (
@@ -406,43 +413,45 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       />
                     )}
                   />
-                  {
-                    city &&  <Autocomplete
-                          sx={{mt: 2, mb: 1}}
-                          freeSolo
-                          value={street}
-                          options={streetList}
-                          getOptionLabel={(streetObject) =>
-                              typeof streetObject === 'string'
-                                  ? streetObject
-                                  :`${streetObject.name} (${streetObject.city})`
-                          }
-                          onChange={(event, value) => setStreetSelected(value as Street)}
-                          renderInput={(params) => (
-                              <TextField
-                                  label="Rue"
-                                  required
-                                  {...params}
-                                  value={street}
-                                  onChange={(e) => handleChangeStreet(e)}
-                              />
-                          )}
-                      />
-                  }
-                  {
-                    streetSelected &&  <TextField
-                          margin="normal"
+                  {city && (
+                    <Autocomplete
+                      sx={{mt: 2, mb: 1}}
+                      freeSolo
+                      value={street}
+                      options={streetList}
+                      getOptionLabel={(streetObject) =>
+                        typeof streetObject === 'string'
+                          ? streetObject
+                          : `${streetObject.name} (${streetObject.city})`
+                      }
+                      onChange={(event, value) =>
+                        setStreetSelected(value as Street)
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          label="Rue"
                           required
-                          fullWidth
-                          id="streetNumber"
-                          label="Numéro de la rue"
-                          name="streetNumber"
-                          autoComplete="streetNumber"
-                          value={streetNumber}
-                          inputProps={{ maxLength: 30 }}
-                          onChange={handleChangeStreetNumber}
-                      />
-                  }
+                          {...params}
+                          value={street}
+                          onChange={(e) => handleChangeStreet(e)}
+                        />
+                      )}
+                    />
+                  )}
+                  {streetSelected && (
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="streetNumber"
+                      label="Numéro de la rue"
+                      name="streetNumber"
+                      autoComplete="streetNumber"
+                      value={streetNumber}
+                      inputProps={{maxLength: 30}}
+                      onChange={handleChangeStreetNumber}
+                    />
+                  )}
                   <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
                     <InputLabel id="repairer-type-label">
                       Type de réparateur
@@ -496,7 +505,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     name="comment"
                     autoComplete="comment"
                     value={comment}
-                    inputProps={{ maxLength: 2000 }}
+                    inputProps={{maxLength: 2000}}
                     onChange={handleChangeComments}
                   />
                   <Box
@@ -504,7 +513,18 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     flexDirection="column"
                     alignItems="center">
                     <Button
-                      disabled={!firstName || !lastName || !city || !streetSelected || !streetNumber || !repairerTypeSelected || !name || !email || !password}
+                      disabled={
+                        !firstName ||
+                        !lastName ||
+                        !city ||
+                        !streetSelected ||
+                        !streetNumber ||
+                        !repairerTypeSelected ||
+                        !name ||
+                        !email ||
+                        !password ||
+                        !selectedBikeTypes.length
+                      }
                       type="submit"
                       variant="contained"
                       sx={{mt: 2, mx: 'auto'}}>

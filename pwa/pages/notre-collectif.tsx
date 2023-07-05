@@ -1,9 +1,9 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React from 'react';
 import Head from 'next/head';
-import {Container, Typography, Box, List, ListItem} from '@mui/material';
+import {Container, Typography, Box, List, ListItem, Link} from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import Link from 'next/link';
+import NextLink from 'next/link';
 
 const OurCollective: NextPageWithLayout = () => {
   return (
@@ -19,10 +19,10 @@ const OurCollective: NextPageWithLayout = () => {
             gap={2}
             sx={{mx: 'auto', mt: 8}}>
             <Typography
+              variant="h1"
               component="h1"
               textAlign="center"
-              fontSize={{xs: 28, md: 30}}
-              fontWeight={600}
+              color="primary.main"
               pb={2}>
               Qui sommes-nous ?
             </Typography>
@@ -101,9 +101,11 @@ const OurCollective: NextPageWithLayout = () => {
             </List>
             <Typography>
               Une charte (
-              <Link style={{textDecoration: 'none'}} href="/notre-charte">
-                lien ici
-              </Link>
+              <NextLink href="/notre-charte" legacyBehavior passHref>
+                <Link sx={{fontWeight: 800}} underline="none">
+                  lien ici
+                </Link>
+              </NextLink>
               ) liste les engagements professionnels, coopératifs et sociétaux
               des réparareurs de Rustine libre.
             </Typography>

@@ -131,6 +131,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
           error={emailError}
           helperText={emailHelperText}
           id="email"
+          type={'email'}
           label="Email"
           name="email"
           autoComplete="email"

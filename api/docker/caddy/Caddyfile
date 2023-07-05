@@ -10,13 +10,24 @@ log
 # Matches requests for HTML documents, for static files and for Next.js files,
 # except for known API paths and paths with extensions handled by API Platform
 @pwa expression `(
-        header({'Accept': '*text/html*'})
-        && !path(
-            '/docs*', '/graphql*', '/bundles*', '/contexts*', '/_profiler*', '/_wdt*', '/media*',
-            '*.json*', '*.html', '*.csv', '*.yml', '*.yaml', '*.xml'
-        )
+        {header.Accept}.matches("\\btext/html\\b")
+        && !{path}.matches("(?i)(?:^/docs|^/graphql|^/bundles/|^/_profiler|^/_wdt|\\.(?:json|html$|csv$|ya?ml$|xml$))")
     )
-    || path('/favicon.ico', '/manifest.json', '/robots.txt', '/_next*', '/firebase-messaging-sw.js')`
+    || {path} == "/favicon.ico"
+    || {path} == "/notification_icon.png"
+    || {path} == "/vercel.svg"
+    || {path} == "/manifest.json"
+    || {path} == "/robots.txt"
+    || {path} == "/firebase-messaging-sw.js"
+    || {path}.startsWith("/_next")
+    || {path}.startsWith("/fonts")
+    || {path}.startsWith("/img")
+    || {path}.startsWith("/pwa_icons")
+    || {path}.startsWith("/tarteaucitron")
+    || {path}.startsWith("/sitemap")
+    || {path}.startsWith("/longdesc")
+    || {path}.startsWith("/sw")
+    || {path}.startsWith("/workbox")`
 
 route {
     root * /srv/app/public

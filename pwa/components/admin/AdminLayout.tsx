@@ -120,12 +120,14 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
   };
 
   useEffect(() => {
+    if (user && isAdmin(user)) {
       countContactUnread();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
-      {user && <Box>
+      {user && isAdmin(user) && <Box>
           <AppBar position="sticky" open={!isMobile}>
           <Toolbar>
             <List>

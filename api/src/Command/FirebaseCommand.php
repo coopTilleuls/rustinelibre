@@ -6,17 +6,14 @@ namespace App\Command;
 
 use App\Repository\UserRepository;
 use Kreait\Firebase\Contract\Messaging;
-use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Twig\Cache\FilesystemCache;
 
 #[AsCommand(
     name: 'app:firebase',
@@ -36,6 +33,7 @@ class FirebaseCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $tokenFCM = $this->userRepository->findOneBy(['email' => 'clement@les-tilleuls.coop'])->firebaseToken;
+
         $message = CloudMessage::fromArray([
             'token' => $tokenFCM,
             'notification' => [
