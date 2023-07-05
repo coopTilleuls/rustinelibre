@@ -357,6 +357,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     fullWidth
                     error={emailError}
                     helperText={emailHelperText}
+                    type={'email'}
                     id="email"
                     label="Email"
                     name="email"
