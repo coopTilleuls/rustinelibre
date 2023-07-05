@@ -25,7 +25,7 @@ const PinMap = dynamic(() => import('@components/rendez-vous/PinMap'), {
   ssr: false,
 });
 import {Repairer} from '@interfaces/Repairer';
-import {isBoss, isEmployee} from "@helpers/rolesHelpers";
+import {isBoss, isEmployee} from '@helpers/rolesHelpers';
 
 const RepairerSlots: NextPageWithLayout = () => {
   const router = useRouter();
@@ -92,7 +92,7 @@ const RepairerSlots: NextPageWithLayout = () => {
       slotTime: slotSelected,
       latitude: latitude.toString(),
       longitude: longitude.toString(),
-      address: address
+      address: address,
     });
 
     if (newAppointment) {
@@ -127,18 +127,19 @@ const RepairerSlots: NextPageWithLayout = () => {
               <Box>
                 <Container maxWidth="md" sx={{padding: {xs: 0}}}>
                   <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
-
                     {tunnelStep == 'slots' && (
                       <Link href={`/reparateur/${repairer.id}`}>
                         <Button variant="outlined">Retour</Button>
                       </Link>
                     )}
-                    {
-                      isABossOrAnEmployee && <Typography variant="body1" sx={{textAlign: 'center'}}>
-                        Merci de vous connecter avec un compte utilisateur pour prendre un rendez-vous. <br />
-                        Sinon vous pouvez créer des RDV depuis votre back-office à <Link href={`/sradmin`}>cette adresse</Link>
+                    {isABossOrAnEmployee && (
+                      <Typography variant="body1" sx={{textAlign: 'center'}}>
+                        Merci de vous connecter avec un compte utilisateur pour
+                        prendre un rendez-vous. <br />
+                        Sinon vous pouvez créer des RDV depuis votre back-office
+                        à <Link href={`/sradmin`}>cette adresse</Link>
                       </Typography>
-                    }
+                    )}
                     {tunnelStep == 'optionalPage' && (
                       <Button
                         variant="outlined"
@@ -185,12 +186,15 @@ const RepairerSlots: NextPageWithLayout = () => {
                           </Button>
                         </Stack>
                       )}
-                      {user && repairer && tunnelStep == 'slots' && !isABossOrAnEmployee && (
-                        <SlotsStep
-                          handleSelectSlot={handleSelectSlot}
-                          repairer={repairer}
-                        />
-                      )}
+                      {user &&
+                        repairer &&
+                        tunnelStep == 'slots' &&
+                        !isABossOrAnEmployee && (
+                          <SlotsStep
+                            handleSelectSlot={handleSelectSlot}
+                            repairer={repairer}
+                          />
+                        )}
                       {user && repairer && tunnelStep == 'pinMap' && (
                         <PinMap
                           cancelPinMap={cancelPinMap}
