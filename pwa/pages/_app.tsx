@@ -35,7 +35,7 @@ function MyApp({
                 />
                 <meta name="application-name" content="Rustine Libre" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
-                <meta
+                {/* <meta
                   name="apple-mobile-web-app-status-bar-style"
                   content="default"
                 />
@@ -52,8 +52,8 @@ function MyApp({
                 />
                 <meta name="msapplication-TileColor" content="#2B5797" />
                 <meta name="msapplication-tap-highlight" content="no" />
-                <meta name="theme-color" content="#000000" />
-
+                <meta name="theme-color" content="#000000" /> */}
+                {/* 
                 <link rel="manifest" href="/manifest.json"></link>
                 <link
                   rel="apple-touch-icon"
@@ -177,12 +177,12 @@ function MyApp({
                 <link
                   rel="apple-touch-startup-image"
                   href="pwa_icons/apple-splash-1136-640.jpg"
-                  media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link>
+                  media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link> */}
               </Head>
               <ThemeProvider theme={theme}>
                 <CssBaseline>
-                  <A2HS></A2HS>
-                  <A2HSIOS></A2HSIOS>
+                  {/* <A2HS></A2HS>
+                  <A2HSIOS></A2HSIOS> */}
                   <Layout dehydratedState={pageProps.dehydratedState}>
                     <Component {...pageProps} />
                   </Layout>
