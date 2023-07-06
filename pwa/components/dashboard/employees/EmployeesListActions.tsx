@@ -9,10 +9,11 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  IconButton,
 } from '@mui/material';
 
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForeverSharp';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
 
 interface EmployeesListActionsProps {
@@ -20,8 +21,10 @@ interface EmployeesListActionsProps {
   fetchEmployees: () => Promise<void>;
 }
 
-export const EmployeesListActions = ({employee, fetchEmployees}: EmployeesListActionsProps): JSX.Element => {
-
+export const EmployeesListActions = ({
+  employee,
+  fetchEmployees,
+}: EmployeesListActionsProps): JSX.Element => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
 
@@ -47,14 +50,17 @@ export const EmployeesListActions = ({employee, fetchEmployees}: EmployeesListAc
         <CircularProgress />
       ) : (
         <>
-          <Link href={`/sradmin/employes/edit/${employee.id}`}>
-            <EditIcon color="primary" sx={{color: '#8c83ba'}} />
+          <Link
+            href={`/sradmin/employes/edit/${employee.id}`}
+            legacyBehavior
+            passHref>
+            <IconButton color="secondary">
+              <EditIcon color="secondary" />
+            </IconButton>
           </Link>
-          <DeleteForeverIcon
-            color="error"
-            onClick={() => handleDeleteClick()}
-            sx={{cursor: 'pointer', ml: 1, color: '#8c83ba'}}
-          />
+          <IconButton onClick={() => handleDeleteClick()} color="secondary">
+            <DeleteForeverIcon />
+          </IconButton>
         </>
       )}
       <Dialog
