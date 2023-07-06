@@ -68,7 +68,7 @@ export const DashboardHomeContent = ({repairer, currentUser}: DashboardHomeConte
                         <DashboardWaitingAppointments repairer={repairer} appointmentsWaiting={appointmentsWaiting} fetchNextAppointments={fetchNextAppointments} fetchWaitingAppointments={fetchWaitingAppointments} loadingListWait={loadingListWait} />
                     </Grid>
                     {isBoss(currentUser) &&
-                        <Grid item xs={12}>
+                        <Grid item xs={12} mt={2}>
                             <DashboardHomeEmployees currentBoss={currentUser} />
                         </Grid>
                     }

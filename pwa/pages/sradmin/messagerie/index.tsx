@@ -11,7 +11,7 @@ const DashboardMessages = () => {
         <title>Messagerie Réparateur</title>
       </Head>
       <DashboardLayout>
-        <Typography fontSize={{xs: 28, md: 30}} fontWeight={600} pb={1} pl={2}>
+        <Typography variant="h4" pb={1} pl={2}>
           Messages
         </Typography>
         <RepairerDiscussionList />
