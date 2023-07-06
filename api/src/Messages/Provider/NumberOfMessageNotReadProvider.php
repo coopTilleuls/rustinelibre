@@ -14,6 +14,9 @@ use App\Repository\DiscussionRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * @template-implements ProviderInterface<NumberOfMessageNotReadDto|NumberOfMessageNotReadForDiscussionDto>
+ */
 readonly class NumberOfMessageNotReadProvider implements ProviderInterface
 {
     public function __construct(
