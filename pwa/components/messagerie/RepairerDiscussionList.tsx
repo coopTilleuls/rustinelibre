@@ -85,7 +85,7 @@ const RepairerDiscussionList = ({
                       {customer.lastName}
                     </Typography>
                   </Box>
-                  <Typography fontSize={11}>
+                  <Typography variant="caption" color="textSecondary">
                     {lastMessage
                       ? `Dernier message : ${formatDate(lastMessage, true)}`
                       : 'Pas encore de message'}

@@ -1,7 +1,15 @@
 import * as React from 'react';
 import {useRouter} from 'next/router';
 import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
-import {Box, Toolbar, List, Divider, ListItem, Typography, Button} from '@mui/material';
+import {
+  Box,
+  Toolbar,
+  List,
+  Divider,
+  ListItem,
+  Typography,
+  Button,
+} from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
@@ -10,14 +18,15 @@ import {useAccount, useAuth} from '@contexts/AuthContext';
 import useMediaQuery from '@hooks/useMediaQuery';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import MessageIcon from '@mui/icons-material/Message';
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import DashboardSidebarListItem from "@components/dashboard/DashboardSidebarListItem";
-import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
-import Link from "next/link";
-import {useEffect, useState} from "react";
-import {isAdmin} from "@helpers/rolesHelpers";
-import {contactResource} from "@resources/ContactResource";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DashboardSidebarListItem from '@components/dashboard/DashboardSidebarListItem';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import Link from 'next/link';
+import {useEffect, useState} from 'react';
+import {isAdmin} from '@helpers/rolesHelpers';
+import {contactResource} from '@resources/ContactResource';
 import Badge from '@mui/material/Badge';
+import Logo from '@components/common/Logo';
 
 const drawerWidth = 240;
 
@@ -97,7 +106,9 @@ interface DashboardLayoutProps {
 const AdminLayout = ({children}: DashboardLayoutProps) => {
   const theme = useTheme();
   const router = useRouter();
-  const {user} = useAccount({redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`});
+  const {user} = useAccount({
+    redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
+  });
   const isMobile = useMediaQuery('(max-width: 640px)');
   const [contactUnread, setContactUnread] = useState<number>(0);
   const {logout} = useAuth();
@@ -106,13 +117,13 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
     router.push('/');
   }
 
-  const countContactUnread = async() => {
-      const response = await contactResource.getAll(true, {
-        alreadyRead: false
-      })
+  const countContactUnread = async () => {
+    const response = await contactResource.getAll(true, {
+      alreadyRead: false,
+    });
 
-      setContactUnread(response['hydra:totalItems']);
-  }
+    setContactUnread(response['hydra:totalItems']);
+  };
 
   const clickLogOut = async () => {
     await logout();
@@ -127,86 +138,113 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
 
   return (
     <>
-      {user && isAdmin(user) && <Box>
+      {user && isAdmin(user) && (
+        <Box>
           <AppBar position="sticky" open={!isMobile}>
-          <Toolbar>
-            <List>
-              <ListItem key="1" disablePadding>
-                <Typography fontWeight={600}>
-                  Bonjour {user?.firstName} !
-                </Typography>
-              </ListItem>
-            </List>
+            <Toolbar>
+              <List>
+                <ListItem key="1" disablePadding>
+                  <Typography fontWeight={600}>
+                    Bonjour {user?.firstName} !
+                  </Typography>
+                </ListItem>
+              </List>
 
-            <Button onClick={clickLogOut} variant="contained" sx={{float: 'right', color: '#1876d2', backgroundColor: 'white', position: 'absolute', right: '10px'}}>
-              Déconnexion
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Box sx={{display: 'flex'}}>
-          <Drawer variant={'permanent'} open={!isMobile} anchor="left">
-            <DrawerHeader>
-              <Link href="/" style={{textDecoration: 'none'}}>
-                <Typography
-                    color="primary"
-                    sx={{
-                      fontSize: 17,
-                      fontWeight: 600,
+              <Button
+                onClick={clickLogOut}
+                sx={{
+                  ml: 'auto',
+                  backgroundColor: 'white',
+                  color: 'primary.main',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.8)',
+                    color: 'primary.dark',
+                  },
+                }}
+                variant="contained">
+                Déconnexion
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <Box sx={{display: 'flex'}}>
+            <Drawer variant={'permanent'} open={!isMobile} anchor="left">
+              <DrawerHeader>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  width="100%">
+                  <Link
+                    href="/"
+                    style={{
+                      height: '35px',
+                      display: 'block',
+                      margin: '0 auto',
                     }}>
-                  La Rustine Libre - ADMIN
-                </Typography>
-              </Link>
-            </DrawerHeader>
-            <Divider />
-            <List>
-              <DashboardSidebarListItem
+                    <Logo inline color="primary" />
+                  </Link>
+                  <Typography
+                    textAlign="center"
+                    variant="caption"
+                    fontWeight={600}
+                    color="primary">
+                    ADMIN
+                  </Typography>
+                </Box>
+              </DrawerHeader>
+              <Divider />
+              <List>
+                <DashboardSidebarListItem
                   text="Réparateurs"
                   open={true}
                   icon={<DirectionsBikeIcon />}
                   path="/admin/reparateurs"
-              />
-              <DashboardSidebarListItem
-                text="Utilisateurs"
-                open={true}
-                icon={<AccountCircleIcon />}
-                path="/admin/utilisateurs"
-              />
-              <DashboardSidebarListItem
-                text="Contact"
-                open={true}
-                icon={<Badge badgeContent={contactUnread} color="error">
-                  <MessageIcon />
-                </Badge>}
-                path="/admin/contact"
-              />
-              <DashboardSidebarListItem
-                text="Paramètres"
-                open={true}
-                icon={<FolderSharedIcon />}
-                path="/admin/parametres"
-              />
-              <DashboardSidebarListItem
-                text="Profil"
-                open={true}
-                icon={<CompareArrowsIcon />}
-                path="/admin/profil"
-              />
-            </List>
-            <Divider />
-            <List>
-              <DashboardSidebarListItem
-                text="Retourner sur le site"
-                open={true}
-                icon={<ArrowBackIcon />}
-                path="/"
-              />
-            </List>
-          </Drawer>
-          <Box sx={{flexGrow: 1}} p={3}>
-            {children}
+                />
+                <DashboardSidebarListItem
+                  text="Utilisateurs"
+                  open={true}
+                  icon={<AccountCircleIcon />}
+                  path="/admin/utilisateurs"
+                />
+                <DashboardSidebarListItem
+                  text="Contact"
+                  open={true}
+                  icon={
+                    <Badge badgeContent={contactUnread} color="error">
+                      <MessageIcon />
+                    </Badge>
+                  }
+                  path="/admin/contact"
+                />
+                <DashboardSidebarListItem
+                  text="Paramètres"
+                  open={true}
+                  icon={<FolderSharedIcon />}
+                  path="/admin/parametres"
+                />
+                <DashboardSidebarListItem
+                  text="Profil"
+                  open={true}
+                  icon={<CompareArrowsIcon />}
+                  path="/admin/profil"
+                />
+              </List>
+              <Divider />
+              <List>
+                <DashboardSidebarListItem
+                  text="Retourner sur le site"
+                  open={true}
+                  icon={<ArrowBackIcon />}
+                  path="/"
+                />
+              </List>
+            </Drawer>
+            <Box sx={{flexGrow: 1}} p={3}>
+              {children}
+            </Box>
           </Box>
         </Box>
-      </Box>}
+      )}
     </>
   );
 };
