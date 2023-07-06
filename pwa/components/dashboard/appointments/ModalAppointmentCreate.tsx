@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
   Alert,
-  CircularProgress,
+  CircularProgress, InputLabel,
 } from '@mui/material';
 import {customerResource} from '@resources/customerResource';
 import Box from '@mui/material/Box';
@@ -29,6 +29,11 @@ import router from 'next/router';
 import CloseIcon from '@mui/icons-material/Close';
 import {dateObjectAsString, getDateTimeZoned} from '@helpers/dateHelper';
 import {errorRegex} from '@utils/errorRegex';
+import {DateTimePicker, TimePicker} from "@mui/x-date-pickers";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+
 
 interface AppointmentCreateProps {
   repairer: Repairer;
@@ -85,6 +90,7 @@ const ModalAppointmentCreate = ({
     } else {
       const date = getDateTimeZoned(repairer.firstSlotAvailable);
       const stringDate = dateObjectAsString(date);
+      console.log(stringDate);
       setSlotSelected(stringDate);
     }
   }, [repairer.firstSlotAvailable, selectedDate]);
@@ -202,6 +208,12 @@ const ModalAppointmentCreate = ({
     handleCloseModal(false);
   };
 
+  const handleDatetimePicker = (newValue: any) => {
+    const dateString = newValue.$d.toString();
+    const regex = / GMT[^()]+|\([^)]+\)/g;
+    setSlotSelected(dateString.replace(regex, ''));
+  }
+
   return (
     <Modal
       open={openModal}
@@ -231,9 +243,17 @@ const ModalAppointmentCreate = ({
           }}
           onClick={handleResetStates}
         />
-        <Typography align="justify" sx={{mt: 2}}>
+        <Typography align="justify" sx={{my: 2}}>
           {`Rendez-vous le ${slotDate} `}
         </Typography>
+        <LocalizationProvider locale="fr-FR" dateAdapter={AdapterDayjs}>
+          <InputLabel id="service-type-label">Choisir un créneau</InputLabel>
+          <DateTimePicker
+            defaultValue={dayjs(selectedDate)}
+            format="DD/MM/YYYY HH:mm"
+            onChange={(newValue) => handleDatetimePicker(newValue)}
+          />
+        </LocalizationProvider>
         {!newAppointment && (
           <>
             <Autocomplete
