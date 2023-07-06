@@ -19,7 +19,7 @@ final readonly class AppointmentRefusedNotification
             title: 'Demande de RDV refusée',
             body: sprintf('Votre RDV du %s a été refusé', $appointment->slotTime->format('d-m-Y H:i')),
             params: [
-                'route' => $this->webAppUrl
+                'route' => $this->webAppUrl,
             ]
         );
 

@@ -18,7 +18,7 @@ class Notification
     public string $icon;
     public array $params = [];
 
-    public function __construct(User $recipient, string $title, string $body, ?string $color = '#f45342', ?string $icon = self::DEFAULT_ICON, ?string $image= self::DEFAULT_ICON, ?array $params = [])
+    public function __construct(User $recipient, string $title, string $body, ?string $color = '#f45342', ?string $icon = self::DEFAULT_ICON, ?string $image = self::DEFAULT_ICON, ?array $params = [])
     {
         $this->recipient = $recipient;
         $this->title = $title;

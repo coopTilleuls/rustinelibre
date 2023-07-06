@@ -13,7 +13,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../styles/theme';
 import {NotificationProvider} from "@components/notifications/NotificationContext";
 import dynamic from 'next/dynamic';
-const Notification = dynamic(() => import('@components/notifications/Notification'), {
+const Notifications = dynamic(() => import('@components/notifications/Notifications'), {
   ssr: false,
 });
 import {A2HS} from '@components/banner/A2HS';
@@ -189,7 +189,7 @@ function MyApp({
                   <CssBaseline>
                     <A2HS></A2HS>
                     <A2HSIOS></A2HSIOS>
-                    <Notification></Notification>
+                    <Notifications></Notifications>
                     <Layout dehydratedState={pageProps.dehydratedState}>
                       <Component {...pageProps} />
                     </Layout>

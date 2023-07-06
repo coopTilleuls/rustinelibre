@@ -8,14 +8,11 @@ import {
     getFCMToken,
     getFirebaseApp,
     getMessaging,
-    onMessageListener,
-    requestPermission
 } from "@config/firebase";
 import {userResource} from "@resources/userResource";
 import {User} from "@interfaces/User";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -24,22 +21,30 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export const Notification = (): JSX.Element => {
+export const Notifications = (): JSX.Element => {
     const {user} = useAccount({});
     const [notification, setNotification] = useState<NotificationPayload | undefined>(undefined);
     const [open, setOpen] = useState<boolean>(false);
     const firebaseApp = getFirebaseApp();
     const messaging = getMessaging(firebaseApp);
 
-    // useEffect(() => {
-    //     requestPermission();
-    //     const unsubscribe = onMessageListener().then((payload) => {
-    //         setNotificationTitle('test');
-    //     });
-    //     return () => {
-    //         unsubscribe.catch((err) => console.log('failed: ', err));
-    //     };
-    // }, []);
+    const checkPermission = async() => {
+        if (!Object.hasOwn(window, 'Notification')) {
+            return false;
+        }
+
+        if (Notification.permission === 'granted') {
+          return true;
+        }
+
+        if (Notification.permission !== 'denied') {
+          const permission = await Notification.requestPermission();
+
+          return permission === 'granted';
+        }
+
+        return false;
+    }
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         setOpen(false);
@@ -76,6 +81,11 @@ export const Notification = (): JSX.Element => {
 
     useEffect(() => {
         if (!user) {
+            return;
+        }
+
+        const permission = checkPermission();
+        if (!permission) {
             return;
         }
 
@@ -121,4 +131,4 @@ export const Notification = (): JSX.Element => {
     );
 };
 
-export default Notification;
+export default Notifications;

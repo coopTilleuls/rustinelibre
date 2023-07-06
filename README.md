@@ -133,3 +133,37 @@ Le captcha est celui de Cloudflare : Turnstile.
 
 Il suffit d'aller dans votre pwa/.env.local et d'y ajouter la variable présente dans pwa/.env tout en y mettant la sitekey dédiée présente sur notre compte Cloudflare Tilleuls à cette adresse :
 https://dash.cloudflare.com/login
+
+
+## Notifications
+Le système de notifications push utilise [Firebase Cloud Messaging](https://firebase.google.com/), pour les faire fonctionner
+en local, il est nécessaire d'utiliser un protocole SSL intégral. Afin de tester en conditions de production il est conseillé
+d'installer ngrok pour créer un tunnel vers l'application: 
+
+```
+ngrok http --host-header="localhost:443" localhost:443
+```
+
+L'IP ensuite proposée doit surcharger localchost dans le docker-compose.override :
+
+```
+  php:
+    environment:
+      TRUSTED_HOSTS: ^${SERVER_NAME:-example\.com|localhost|<votre ip ngrok>.ngrok-free.app}|caddy$$```
+
+  pwa:
+    environment:
+      NEXT_PUBLIC_ENTRYPOINT: https://<votre ip ngrok>.ngrok-free.app
+```
+
+Et ajouter dans le .env.local
+
+```
+NEXT_PUBLIC_ENTRYPOINT=https://<votre ip ngrok>.ngrok-free.app
+```
+
+Pour générer les credentials firebase, lancez la commande suivante
+
+```
+php bin/console app:firebase:credentials
+```

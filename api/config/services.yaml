@@ -8,6 +8,17 @@ services:
         bind:
             string $mailerSender: "%env(MAILER_SENDER)%"
             string $webAppUrl: "%env(WEB_APP_URL)%"
+            string $projectDir: "%kernel.project_dir%"
+            string $firebaseProjectId: "%env(FIREBASE_PROJECT_ID)%"
+            string $firebasePrivateKey: "%env(FIREBASE_PRIVATE_KEY)%"
+            string $firebasePrivateKeyId: "%env(FIREBASE_PRIVATE_KEY_ID)%"
+            string $firebaseClientEmail: "%env(FIREBASE_CLIENT_EMAIL)%"
+            string $firebaseClientId: "%env(FIREBASE_CLIENT_ID)%"
+            string $firebaseAuthUri: "%env(FIREBASE_AUTH_URI)%"
+            string $firebaseTokenUri: "%env(FIREBASE_TOKEN_URI)%"
+            string $firebaseAuthProvider: "%env(FIREBASE_AUTH_PROVIDER)%"
+            string $firebaseClientCertUrl: "%env(FIREBASE_CLIENT_CERT_URL)%"
+            string $firebaseUniverseDomain: "%env(FIREBASE_UNIVERSE_DOMAIN)%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

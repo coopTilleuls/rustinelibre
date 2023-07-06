@@ -6,18 +6,18 @@ namespace App\Notifications;
 
 use App\Entity\Appointment;
 
-final readonly class AppointmentConfirmNotification
+final readonly class AppointmentChangeTimeNotification
 {
     public function __construct(private FirebaseNotifier $firebaseNotifier, private string $webAppUrl)
     {
     }
 
-    public function sendAppointmentConfirmNotification(Appointment $appointment): void
+    public function sendAppointmentChangeTimeNotification(Appointment $appointment, string $oldTime): void
     {
         $notification = new Notification(
             recipient: $appointment->customer,
-            title: 'Demande de RDV acceptée',
-            body: sprintf('Votre demande de RDV du %s a été confirmée', $appointment->slotTime->format('d-m-Y H:i')),
+            title: 'Votre RDV a été modifié',
+            body: sprintf('Votre RDV du %s a été modifié', $oldTime),
             params: [
                 'route' => sprintf('%s/rendez-vous/mes-rendez-vous', $this->webAppUrl),
             ]

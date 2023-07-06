@@ -1,15 +1,13 @@
 import {FirebaseApp, initializeApp} from 'firebase/app';
 import {getMessaging as getFirebaseMessaging, getToken, Messaging, onMessage} from 'firebase/messaging';
 
-const VAPID_KEY = "BAjQQI2sY8y9UfSafMoUQE4-dm9M_-IRRxg2bobx2AMcU__3x8zaR-v1Ccpx_4kuDKdEN0u7-amwp32WKhFJAkM";
-
 export const firebaseConfig = {
-    apiKey: "AIzaSyB9p5PbQf3PVyTOCFwubAS3dpTsQyDnf90",
-    authDomain: "rustinelibre.firebaseapp.com",
-    projectId: "rustinelibre",
-    storageBucket: "rustinelibre.appspot.com",
-    messagingSenderId: "629351779518",
-    appId: "1:629351779518:web:5ea1042d5f378e100aa2ef"
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -28,8 +26,7 @@ export async function getFCMToken(messaging: Messaging): Promise<string> {
     const sw = await navigator.serviceWorker.register(`/firebase-messaging-sw.js?firebaseConfig=${config}`);
 
     return await getToken(messaging, {
-        // vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
-        vapidKey: VAPID_KEY,
+        vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
         serviceWorkerRegistration: sw,
     });
 }
@@ -40,16 +37,13 @@ export const requestPermission = () => {
     Notification.requestPermission().then((permission) => {
 
         if (permission === "granted") {
-
             console.log("Notification User Permission Granted.");
             return getFCMToken(messaging)
                 .then((currentToken) => {
 
                     if (currentToken) {
-
                         console.log('Firebase token: ', currentToken);
                     } else {
-
                         console.log('Failed to generate the app registration token.');
                     }
                 })
@@ -62,15 +56,5 @@ export const requestPermission = () => {
             console.log("User Permission Denied.");
         }
     });
-
 }
 
-requestPermission();
-
-
-export const onMessageListener = () =>
-    new Promise((resolve) => {
-        onMessage(messaging, (payload) => {
-            resolve(payload);
-        });
-    });

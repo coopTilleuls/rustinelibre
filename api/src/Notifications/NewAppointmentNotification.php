@@ -19,7 +19,7 @@ final readonly class NewAppointmentNotification
             title: 'Nouvelle demande de RDV',
             body: $appointment->slotTime->format('d-m-Y H:i'),
             params: [
-                'route' => sprintf('%s/sradmin?appointment=%s', $this->webAppUrl, $appointment->id)
+                'route' => sprintf('%s/sradmin?appointment=%s', $this->webAppUrl, $appointment->id),
             ]
         );
 

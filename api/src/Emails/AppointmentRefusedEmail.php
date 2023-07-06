@@ -13,10 +13,10 @@ use Twig\Environment;
 readonly class AppointmentRefusedEmail
 {
     public function __construct(private MailerInterface $mailer,
-                                private string $mailerSender,
-                                private string $webAppUrl,
-                                private LoggerInterface $logger,
-                                private Environment $twig)
+        private string $mailerSender,
+        private string $webAppUrl,
+        private LoggerInterface $logger,
+        private Environment $twig)
     {
     }
 
@@ -29,7 +29,7 @@ readonly class AppointmentRefusedEmail
                 ->subject('Votre demande de RDV a été refusée')
                 ->html($this->twig->render('mail/appointment_refused.html.twig', [
                     'appointment' => $appointment,
-                    'homepageUrl' => $this->webAppUrl
+                    'homepageUrl' => $this->webAppUrl,
                 ]));
 
             $this->mailer->send($email);

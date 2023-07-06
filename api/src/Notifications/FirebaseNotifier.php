@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 final readonly class FirebaseNotifier
 {
-    public function __construct(private Messaging $messaging, private LoggerInterface $logger)
+    public function __construct(private Messaging $messaging, private LoggerInterface $logger, private string $webAppUrl)
     {
     }
 
@@ -20,20 +20,25 @@ final readonly class FirebaseNotifier
     {
         if (!$notification->recipient->firebaseToken) {
             $this->logger->alert(sprintf('Notification not send, user %s does not have firebase token', $notification->recipient->id));
+
             return;
         }
-        
+
         $message = CloudMessage::fromArray([
             'token' => $notification->recipient->firebaseToken,
             'notification' => [
                 'title' => $notification->title,
                 'body' => $notification->body,
             ],
+            'data' => [
+                'image' => $notification->image,
+                'icon' => $notification->icon,
+            ],
             'webpush' => [
                 'headers' => [
-                    'Urgency' => 'high'
-                ]
-            ]
+                    'Urgency' => 'high',
+                ],
+            ],
         ]);
 
         $androidConfig = AndroidConfig::fromArray([
@@ -47,8 +52,8 @@ final readonly class FirebaseNotifier
                 'sound' => 'default',
             ],
             'data' => [
-                'route' => array_key_exists('route', $notification->params) ?? $notification->params['route']
-            ]
+                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : $this->webAppUrl,
+            ],
         ]);
 
         $message = $message->withAndroidConfig($androidConfig);

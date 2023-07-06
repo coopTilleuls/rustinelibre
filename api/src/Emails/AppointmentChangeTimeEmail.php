@@ -10,7 +10,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
-readonly class NewAppointmentEmail
+readonly class AppointmentChangeTimeEmail
 {
     public function __construct(private MailerInterface $mailer,
         private string $mailerSender,
@@ -20,21 +20,22 @@ readonly class NewAppointmentEmail
     {
     }
 
-    public function sendNewAppointmentEmail(Appointment $appointment): void
+    public function sendChangeTimeEmail(Appointment $appointment, string $oldTime): void
     {
         try {
             $email = (new Email())
                 ->from($this->mailerSender)
-                ->to($appointment->repairer->owner->email)
-                ->subject('Nouvelle demande de RDV')
-                ->html($this->twig->render('mail/new_appointment.html.twig', [
+                ->to($appointment->customer->email)
+                ->subject('Votre RDV a été modifié')
+                ->html($this->twig->render('mail/appointment_change_time.html.twig', [
                     'appointment' => $appointment,
-                    'appointmentUrl' => sprintf('%s/sradmin?appointment=%s', $this->webAppUrl, $appointment->id),
+                    'oldTime' => $oldTime,
+                    'rdvUrl' => sprintf('%s/rendez-vous/mes-rendez-vous', $this->webAppUrl),
                 ]));
 
             $this->mailer->send($email);
         } catch (\Exception $e) {
-            $this->logger->alert(sprintf('New appointment mail not send: %s', $e->getMessage()));
+            $this->logger->alert(sprintf('Refused appointment mail not send: %s', $e->getMessage()));
         }
     }
 }
