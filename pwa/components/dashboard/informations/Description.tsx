@@ -1,6 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import dynamic from 'next/dynamic';
-import {RepairerFormContext} from '@contexts/RepairerFormContext';
+import {bikeTypeResource} from '@resources/bikeTypeResource';
+import {repairerTypeResource} from '@resources/repairerTypeResource';
+const Editor = dynamic(() => import('@components/form/Editor'), {
+  ssr: false,
+});
 import {
   MenuItem,
   FormControl,
@@ -21,34 +25,49 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {Repairer} from '@interfaces/Repairer';
 import {RequestBody} from '@interfaces/Resource';
 
-const Editor = dynamic(() => import('@components/form/Editor'), {
-  ssr: false,
-});
-
 interface ContactDetailsProps {
   repairer: Repairer | null;
-  bikeTypes: BikeType[];
-  repairerTypes: RepairerType[];
-  updateRepairer: (iri: string, requestBody: RequestBody) => void;
+  // eslint-disable-next-line no-unused-vars
+  updateRepairer: (iri: string, bodyRequest: RequestBody) => void;
 }
 
 export const ContactDetails = ({
   repairer,
-  bikeTypes,
-  repairerTypes,
   updateRepairer,
 }: ContactDetailsProps): JSX.Element => {
-  const {
-    description,
-    selectedBikeTypes,
-    repairerTypeSelected,
-    errorMessage,
-    success,
-    pendingRegistration,
-    setDescription,
-    setSelectedBikeTypes,
-    setRepairerTypeSelected,
-  } = useContext(RepairerFormContext);
+  const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
+  const [description, setDescription] = useState<string>('');
+  const [repairerTypeSelected, setRepairerTypeSelected] =
+    useState<RepairerType>(repairer?.repairerType!);
+  const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
+
+  const [pendingRegistration, setPendingRegistration] =
+    useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+
+  const fetchRepairerTypes = async () => {
+    const responseRepairerTypes = await repairerTypeResource.getAll(false);
+    setRepairerTypes(responseRepairerTypes['hydra:member']);
+  };
+
+  useEffect(() => {
+    if (repairerTypes.length === 0) {
+      fetchRepairerTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const fetchBikeTypes = async () => {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  };
+
+  useEffect(() => {
+    if (bikeTypes.length === 0) {
+      fetchBikeTypes();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (repairer) {
@@ -77,7 +96,7 @@ export const ContactDetails = ({
     const selectedRepairerType = repairerTypes.find(
       (rt) => rt.name === event.target.value
     );
-    setRepairerTypeSelected(selectedRepairerType ?? null);
+    setRepairerTypeSelected(selectedRepairerType!);
   };
   const handleChangeBikeRepaired = (
     event: SelectChangeEvent<typeof selectedBikeTypes>
@@ -91,22 +110,37 @@ export const ContactDetails = ({
   ): Promise<void> => {
     event.preventDefault();
     if (!repairer) return;
-    const requestBody: RequestBody = {};
 
     const selectedBikeTypeIRIs: string[] = bikeTypes
       .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
       .map((bikeType) => bikeType['@id']);
 
-    if (description) requestBody['description'] = description;
-
-    if (selectedBikeTypeIRIs.length > 0)
-      requestBody['bikeTypesSupported'] = selectedBikeTypeIRIs;
-
-    if (repairerTypeSelected)
-      requestBody['repairerType'] = repairerTypeSelected['@id'];
-
-    updateRepairer(repairer['@id'], requestBody);
+    try {
+      setPendingRegistration(true);
+      await updateRepairer(repairer['@id'], {
+        repairerType: repairerTypeSelected['@id'],
+        bikeTypesSupported: selectedBikeTypeIRIs,
+        description: description,
+      });
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    } catch (e) {
+      setErrorMessage('Mise à jour impossible');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    }
+    setPendingRegistration(false);
   };
+
+  if (!repairerTypeSelected || !selectedBikeTypes || !description)
+    return (
+      <Box textAlign="center">
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box sx={{marginTop: 3}} component="form" onSubmit={handleSubmit}>

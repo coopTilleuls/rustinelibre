@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import {MapContainer, Marker, TileLayer, useMapEvents} from 'react-leaflet';
 import {LeafletEvent, LeafletMouseEvent} from 'leaflet';
@@ -6,11 +6,11 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
 import {Alert, Button, CircularProgress, Typography} from '@mui/material';
-import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {RequestBody} from '@interfaces/Resource';
 
 interface MapPositionProps {
   repairer: Repairer;
+  // eslint-disable-next-line no-unused-vars
   updateRepairer: (iri: string, requestBody: RequestBody) => void;
 }
 
@@ -18,6 +18,11 @@ export const MapPosition = ({
   repairer,
   updateRepairer,
 }: MapPositionProps): JSX.Element => {
+  const [pendingRegistration, setPendingRegistration] =
+    useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+
   const [mapCenter] = useState<[number, number]>([
     repairer.latitude ? Number(repairer.latitude) : 46.2276,
     repairer.longitude ? Number(repairer.longitude) : 2.2137,
@@ -28,11 +33,6 @@ export const MapPosition = ({
     repairer.latitude ? Number(repairer.latitude) : null,
     repairer.longitude ? Number(repairer.longitude) : null,
   ]);
-  const {
-    pendingRegistration,
-    errorMessage,
-    success,
-  } = useContext(RepairerFormContext);
 
   const handleMarkerDragEnd = (event: LeafletEvent) => {
     setShopPosition([event.target._latlng.lat, event.target._latlng.lng]);
@@ -44,7 +44,6 @@ export const MapPosition = ({
         setShopPosition([event.latlng.lat, event.latlng.lng]);
       },
     });
-
     return null;
   };
 
@@ -58,7 +57,20 @@ export const MapPosition = ({
       longitude: shopPosition[1].toString(),
     };
 
-    await updateRepairer(repairer['@id'], newPosition);
+    try {
+      setPendingRegistration(true);
+      await updateRepairer(repairer['@id'], newPosition);
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    } catch (e) {
+      setErrorMessage('Mise à jour impossible');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    }
+    setPendingRegistration(false);
   };
 
   return (
@@ -93,16 +105,12 @@ export const MapPosition = ({
       </Button>
 
       {errorMessage && (
-          <Typography variant="body1" color="error">
-            {errorMessage}
-          </Typography>
+        <Typography variant="body1" color="error">
+          {errorMessage}
+        </Typography>
       )}
 
-      {success && (
-          <Alert severity="success">
-            Informations mises à jour
-          </Alert>
-      )}
+      {success && <Alert severity="success">Informations mises à jour</Alert>}
     </>
   );
 };

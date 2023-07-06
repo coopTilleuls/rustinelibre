@@ -6,7 +6,6 @@ import {NextPage} from 'next';
 import type {ReactElement, ReactNode} from 'react';
 import {AuthProvider} from '@contexts/AuthContext';
 import {SearchRepairerProvider} from '@contexts/SearchRepairerContext';
-import {RepairerFormProvider} from '@contexts/RepairerFormContext';
 import {UserFormProvider} from '@contexts/UserFormContext';
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -25,17 +24,16 @@ function MyApp({
   return (
     <AuthProvider>
       <SearchRepairerProvider>
-        <RepairerFormProvider>
-          <UserFormProvider>
-            <>
-              <Head>
-                <meta
-                  name="viewport"
-                  content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
-                />
-                <meta name="application-name" content="Rustine Libre" />
-                <meta name="apple-mobile-web-app-capable" content="yes" />
-                <meta
+        <UserFormProvider>
+          <>
+            <Head>
+              <meta
+                name="viewport"
+                content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+              />
+              <meta name="application-name" content="Rustine Libre" />
+              <meta name="apple-mobile-web-app-capable" content="yes" />
+              {/* <meta
                   name="apple-mobile-web-app-status-bar-style"
                   content="default"
                 />
@@ -52,7 +50,8 @@ function MyApp({
                 />
                 <meta name="msapplication-TileColor" content="#2B5797" />
                 <meta name="msapplication-tap-highlight" content="no" />
-                <meta name="theme-color" content="#000000" />
+                <meta name="theme-color" content="#000000" /> */}
+              {/* 
                 <link rel="manifest" href="/manifest.json"></link>
                 <link
                   rel="apple-touch-icon"
@@ -176,20 +175,19 @@ function MyApp({
                 <link
                   rel="apple-touch-startup-image"
                   href="pwa_icons/apple-splash-1136-640.jpg"
-                  media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link>
-              </Head>
-              <ThemeProvider theme={theme}>
-                <CssBaseline>
-                  <A2HS></A2HS>
-                  <A2HSIOS></A2HSIOS>
-                  <Layout dehydratedState={pageProps.dehydratedState}>
-                    <Component {...pageProps} />
-                  </Layout>
-                </CssBaseline>
-              </ThemeProvider>
-            </>
-          </UserFormProvider>
-        </RepairerFormProvider>
+                  media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link> */}
+            </Head>
+            <ThemeProvider theme={theme}>
+              <CssBaseline>
+                {/* <A2HS></A2HS>
+                  <A2HSIOS></A2HSIOS> */}
+                <Layout dehydratedState={pageProps.dehydratedState}>
+                  <Component {...pageProps} />
+                </Layout>
+              </CssBaseline>
+            </ThemeProvider>
+          </>
+        </UserFormProvider>
       </SearchRepairerProvider>
     </AuthProvider>
   );
