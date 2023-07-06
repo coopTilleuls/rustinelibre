@@ -14,6 +14,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Controller\SetReadMessageController;
+use App\Messages\Dto\NumberOfMessageNotReadDto;
+use App\Messages\Dto\NumberOfMessageNotReadForDiscussionDto;
+use App\Messages\Provider\NumberOfMessageNotReadProvider;
 use App\Messages\Validator\UniqueDiscussion;
 use App\Repository\DiscussionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,6 +36,17 @@ or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)
     uriTemplate: '/discussions/{id}/set_read',
     controller: SetReadMessageController::class,
     security: 'object.customer == user or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)',
+)]
+#[Get(
+    uriTemplate: '/number_of_message_not_read',
+    output: NumberOfMessageNotReadDto::class,
+    provider: NumberOfMessageNotReadProvider::class,
+)]
+#[Get(
+    uriTemplate: '/number_of_message_not_read/{id}',
+    security: 'object.discussion.customer == user or (user.repairer and user.repairer == object.discussion.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.discussion.repairer)',
+    output: NumberOfMessageNotReadForDiscussionDto::class,
+    provider: NumberOfMessageNotReadProvider::class,
 )]
 #[Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]

@@ -49,4 +49,32 @@ class DiscussionMessageRepository extends ServiceEntityRepository
             ->execute()
         ;
     }
+
+    public function getNumberOfMessageNotReadForDiscussion(int $id, User $user): int
+    {
+        return $this->createQueryBuilder('dm')
+            ->select('COUNT(dm)')
+            ->where('dm.discussion = :id')
+            ->andWhere('dm.sender != :user')
+            ->andWhere('dm.alreadyRead = :alreadyRead')
+            ->setParameter('id', $id)
+            ->setParameter('user', $user)
+            ->setParameter('alreadyRead', false)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getNumberOfMessageNotReadByDiscussion(User $user): array
+    {
+        return $this->createQueryBuilder('dm')
+            ->select('d.id as discussion_id, COUNT(dm) as not_read')
+            ->innerJoin('dm.discussion', 'd')
+            ->where('dm.sender != :user')
+            ->andWhere('dm.alreadyRead = :alreadyRead')
+            ->setParameter('user', $user)
+            ->setParameter('alreadyRead', false)
+            ->groupBy('d.id')
+            ->getQuery()
+            ->getResult();
+    }
 }
