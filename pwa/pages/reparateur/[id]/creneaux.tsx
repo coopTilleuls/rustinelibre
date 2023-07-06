@@ -108,6 +108,10 @@ const RepairerSlots: NextPageWithLayout = () => {
     router.push('/inscription?next=' + encodeURIComponent(router.asPath));
   };
 
+  useEffect(() => {
+    document.getElementById('websitelayout')!.scrollTop = 0;
+  }, [tunnelStep]);
+
   return (
     <div style={{width: '100vw', overflowX: 'hidden'}}>
       <Head>
