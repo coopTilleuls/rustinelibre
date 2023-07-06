@@ -13,7 +13,7 @@ final class NumberOfMessageNotReadForDiscussionDto
         #[Groups([Discussion::DISCUSSION_READ])]
         public Discussion $discussion,
         #[Groups([Discussion::DISCUSSION_READ])]
-        public int $numberOfMessageNotRead,
+        public int $notRead,
     ) {
     }
 }

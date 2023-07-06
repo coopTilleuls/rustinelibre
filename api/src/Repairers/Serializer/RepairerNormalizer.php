@@ -29,7 +29,7 @@ final class RepairerNormalizer implements NormalizerInterface, NormalizerAwareIn
     {
         $context[self::ALREADY_CALLED] = true;
 
-        if ($this->requestStack->getCurrentRequest()->query->has('around')) {
+        if ($this->requestStack->getCurrentRequest() && $this->requestStack->getCurrentRequest()->query->has('around')) {
             $coordinates = explode(',', reset($this->requestStack->getCurrentRequest()->query->all()['around']));
             $distance = $this->repairerRepository->calculateDistanceBetweenRepairerAndCoordinates($object, $coordinates[0], $coordinates[1]);
             $object->distance = $distance;
