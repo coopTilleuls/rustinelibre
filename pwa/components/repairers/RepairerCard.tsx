@@ -49,7 +49,7 @@ export const RepairerCard = ({
           }}
           image={
             repairer.thumbnail
-              ? apiImageUrl(repairer.thumbnail.contentUrl)
+              ? repairer.thumbnail.contentUrl
               : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'
           }
           alt="Photo du réparateur"

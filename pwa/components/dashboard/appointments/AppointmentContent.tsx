@@ -191,7 +191,7 @@ const AppointmentContent = ({
           <img
             style={{marginTop: '20px', marginLeft: isMobile ? '10%' : '20%'}}
             width={isMobile ? '200' : '300'}
-            src={apiImageUrl(appointment.autoDiagnostic.photo.contentUrl)}
+            src={appointment.autoDiagnostic.photo.contentUrl}
             alt="Photo autodiag"
           />
         )}
