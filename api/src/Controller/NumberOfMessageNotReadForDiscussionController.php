@@ -8,11 +8,11 @@ use App\Entity\Discussion;
 use App\Entity\User;
 use App\Repository\DiscussionMessageRepository;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
-readonly class SetReadMessageController
+readonly class NumberOfMessageNotReadForDiscussionController
 {
     public function __construct(
         private DiscussionMessageRepository $discussionMessageRepository,
@@ -20,12 +20,11 @@ readonly class SetReadMessageController
     ) {
     }
 
-    public function __invoke(Discussion $discussion): ?Response
+    public function __invoke(Discussion $discussion): JsonResponse
     {
         /** @var User $user */
         $user = $this->security->getUser();
-        $this->discussionMessageRepository->setReadByDiscussionAndUser($discussion, $user);
 
-        return new Response(null, Response::HTTP_OK);
+        return new JsonResponse(['count' => $this->discussionMessageRepository->getNumberOfMessageNotReadForDiscussion($discussion, $user)]);
     }
 }

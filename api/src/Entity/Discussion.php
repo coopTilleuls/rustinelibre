@@ -13,10 +13,10 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use App\Controller\NumberOfMessageNotReadController;
+use App\Controller\NumberOfMessageNotReadForDiscussionController;
 use App\Controller\SetReadMessageController;
-use App\Messages\Dto\NumberOfMessageNotReadDto;
-use App\Messages\Dto\NumberOfMessageNotReadForDiscussionDto;
-use App\Messages\Provider\NumberOfMessageNotReadProvider;
 use App\Messages\Validator\UniqueDiscussion;
 use App\Repository\DiscussionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
-    mercure: true,
+    //    mercure: true,
 )]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or (user.repairer and user.repairer == object.repairer) 
@@ -37,16 +37,59 @@ or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)
     controller: SetReadMessageController::class,
     security: 'object.customer == user or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)',
 )]
-#[Get(
-    uriTemplate: '/number_of_message_not_read',
-    output: NumberOfMessageNotReadDto::class,
-    provider: NumberOfMessageNotReadProvider::class,
+#[GetCollection(
+    uriTemplate: '/messages_unread',
+    controller: NumberOfMessageNotReadController::class,
+    openapi: new Operation(
+        responses: [
+            '200' => [
+                'description' => 'Number of message not read',
+                'content' => [
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'count' => [
+                                    'type' => 'integer',
+                                    'example' => 2,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        summary: 'Get number of message not read',
+        description: 'Get number of message not read for all discussions',
+    ),
+    paginationEnabled: false,
 )]
 #[Get(
-    uriTemplate: '/number_of_message_not_read/{id}',
-    security: 'object.discussion.customer == user or (user.repairer and user.repairer == object.discussion.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.discussion.repairer)',
-    output: NumberOfMessageNotReadForDiscussionDto::class,
-    provider: NumberOfMessageNotReadProvider::class,
+    uriTemplate: '/messages_unread/{id}',
+    controller: NumberOfMessageNotReadForDiscussionController::class,
+    openapi: new Operation(
+        responses: [
+            '200' => [
+                'description' => 'Number of message not read for a discussion',
+                'content' => [
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'count' => [
+                                    'type' => 'integer',
+                                    'example' => 2,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        summary: 'Get number of message not read for a discussion',
+        description: 'Get number of message not read for a discussion',
+    ),
+    security: 'object.customer == user or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)',
 )]
 #[Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
