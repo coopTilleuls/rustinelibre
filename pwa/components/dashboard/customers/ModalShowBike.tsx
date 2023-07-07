@@ -6,7 +6,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import {apiImageUrl} from "@helpers/apiImagesHelper";
 import {Bike} from "@interfaces/Bike";
 import PedalBikeIcon from '@mui/icons-material/PedalBike';
 import CopyrightIcon from '@mui/icons-material/Copyright';
@@ -92,9 +91,9 @@ const ModalShowBike = ({bike, openModal, handleCloseModal}: ModalShowBikeProps):
                                     </ListItem>
                                 }
 
-                                {bike.picture && <img width="300" height="auto" alt="photo du véo" src={apiImageUrl(bike.picture.contentUrl)}/>}
-                                {bike.wheelPicture && <img width="300" height="auto" alt="photo de la roue" src={apiImageUrl(bike.wheelPicture.contentUrl)}/>}
-                                {bike.transmissionPicture && <img width="300" height="auto" alt="photo de la transmission" src={apiImageUrl(bike.transmissionPicture.contentUrl)}/>}
+                                {bike.picture && <img width="300" height="auto" alt="photo du véo" src={bike.picture.contentUrl}/>}
+                                {bike.wheelPicture && <img width="300" height="auto" alt="photo de la roue" src={bike.wheelPicture.contentUrl}/>}
+                                {bike.transmissionPicture && <img width="300" height="auto" alt="photo de la transmission" src={bike.transmissionPicture.contentUrl}/>}
                             </List>
 
                             <Button variant="outlined" onClick={handleCloseModal} sx={{float: 'right'}}>

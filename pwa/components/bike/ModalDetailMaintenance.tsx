@@ -11,9 +11,9 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import {formatDate} from "@helpers/dateHelper";
 import EventIcon from '@mui/icons-material/Event';
 import ModeIcon from '@mui/icons-material/Mode';
-import {apiImageUrl} from "@helpers/apiImagesHelper";
-import {Button} from "@mui/material";
+import {Button, Link} from "@mui/material";
 import ModalAddMaintenance from "@components/bike/ModalAddMaintenance";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -88,12 +88,22 @@ const ModalDetailMaintenance = ({maintenance, openModal, handleCloseModal}: Moda
                                 </ListItem>}
                         </List>
                     }
-                    {maintenance && maintenance.photo && <img width="400" height="auto" alt="Image de la réparation" src={apiImageUrl(maintenance.photo.contentUrl)} />}
+                    {maintenance && maintenance.photo && <img width="400" height="auto" alt="Image de la réparation" src={maintenance.photo.contentUrl} />}
 
                     <Box>
                         <Button variant="contained" onClick={() => setOpenModalEdit(true)} sx={{mt: 2}}>
                             Modifier
                         </Button>
+                        {maintenance && (
+                            <Button variant="contained" component="label" sx={{mt: 2, ml: 2}} disabled={!maintenance.invoice}>
+                                <DownloadIcon sx={{mr: 1}} />
+                                <Link
+                                    href={maintenance.invoice?.contentUrl}
+                                    target="_blank"
+                                    sx={{ ml: 1, textDecoration: 'none', color: 'white'}}
+                                >Télécharger la facture</Link>
+                            </Button>
+                        )}
                         <Button variant="outlined" onClick={() => handleCloseModal(false)} sx={{mt: 2, float: 'right'}}>
                             Fermer
                         </Button>

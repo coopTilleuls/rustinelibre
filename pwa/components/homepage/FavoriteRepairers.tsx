@@ -1,5 +1,3 @@
-import Link from 'next/link';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {Box, CardMedia, Typography} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import {User} from '@interfaces/User';
@@ -58,7 +56,7 @@ const FavoriteRepairers = ({user}: FavoriteRepairersProps) => {
                         }}
                         image={
                           thumbnail
-                            ? apiImageUrl(thumbnail.contentUrl)
+                            ? thumbnail.contentUrl
                             : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'
                         }
                         alt="Photo du réparateur"

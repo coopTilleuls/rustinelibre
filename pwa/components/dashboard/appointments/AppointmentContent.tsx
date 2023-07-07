@@ -10,7 +10,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
@@ -192,7 +191,7 @@ const AppointmentContent = ({
           <img
             style={{marginTop: '20px', marginLeft: isMobile ? '10%' : '20%'}}
             width={isMobile ? '200' : '300'}
-            src={apiImageUrl(appointment.autoDiagnostic.photo.contentUrl)}
+            src={appointment.autoDiagnostic.photo.contentUrl}
             alt="Photo autodiag"
           />
         )}
