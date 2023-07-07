@@ -15,7 +15,7 @@ class RepairerImagesTest extends AbstractTestCase
     {
         $file = new UploadedFile(sprintf('%s/../../../fixtures/%s', __DIR__, MediasTest::IMAGE_NAME), MediasTest::IMAGE_NAME);
 
-        $response = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
+        $response = $this->createClientAuthAsAdmin()->request('POST', '/media_objects/images', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
                 'files' => [

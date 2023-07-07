@@ -6,10 +6,8 @@ import {Container, Box, Typography, Paper, Stack, Button} from '@mui/material';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import LocationCity from '@mui/icons-material/LocationCity';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
-import {link} from 'fs';
 
 interface RepairerPresentationProps {
   repairer: Repairer;
@@ -101,7 +99,7 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
             <img
               width="100%"
               height="auto"
-              src={apiImageUrl(repairer.descriptionPicture.contentUrl)}
+              src={repairer.descriptionPicture.contentUrl}
               alt="Photo de description du réparateur"
             />
           )}

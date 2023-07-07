@@ -9,9 +9,7 @@ import {
   Typography,
   Box,
   Button,
-  CircularProgress,
 } from '@mui/material';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {formatDate} from 'helpers/dateHelper';
 import {Appointment} from '@interfaces/Appointment';
 import {appointmentResource} from '@resources/appointmentResource';
@@ -58,7 +56,7 @@ export const AppointmentCard = ({
         }}
         image={
           appointment.repairer.thumbnail
-            ? apiImageUrl(appointment.repairer.thumbnail.contentUrl)
+            ? appointment.repairer.thumbnail.contentUrl
             : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'
         }
         alt="Photo du réparateur"

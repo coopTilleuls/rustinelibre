@@ -9,7 +9,6 @@ import {Bike} from '@interfaces/Bike';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import BikeTabs from '@components/bike/BikeTabs';
 import Container from '@mui/material/Container';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
@@ -102,7 +101,7 @@ const EditBike: NextPageWithLayout = ({}) => {
                 <img
                   width="300"
                   height="auto"
-                  src={apiImageUrl(bike.picture.contentUrl)}
+                  src={bike.picture.contentUrl}
                   alt="Photo du vélo"
                   style={{marginLeft: isMobile ? '5%' : '20%'}}
                 />
