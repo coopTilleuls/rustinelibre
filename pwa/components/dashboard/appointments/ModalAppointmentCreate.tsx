@@ -33,6 +33,7 @@ import {DateTimePicker, TimePicker} from "@mui/x-date-pickers";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 
 
 interface AppointmentCreateProps {
@@ -70,6 +71,8 @@ const ModalAppointmentCreate = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [details, setDetails] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [pickedDate, setPickedDate] = useState<any | null>(null);
+  const [pickedTime, setPickedTime] = useState<any | null>(null);
 
   const fetchCustomers = async () => {
     const response = await customerResource.getAll(true, {
@@ -94,6 +97,14 @@ const ModalAppointmentCreate = ({
       setSlotSelected(stringDate);
     }
   }, [repairer.firstSlotAvailable, selectedDate]);
+
+  useEffect(() => {
+    if (pickedTime || pickedDate) {
+      console.log(pickedDate, pickedTime)
+      let newDate= `${pickedDate.$D.toString().padStart(2, "0")}/${(pickedDate.$M + 1).toString().padStart(2, "0")}/${pickedDate.$y} ${pickedTime.$H.toString().padStart(2, "0")}:${pickedTime.$m.toString().padStart(2, "0")}`;
+      console.log(newDate)
+    }
+  }, [pickedTime, pickedDate]);
 
   const handleCustomerChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -247,7 +258,18 @@ const ModalAppointmentCreate = ({
           {`Rendez-vous le ${slotDate} `}
         </Typography>
         <LocalizationProvider locale="fr-FR" dateAdapter={AdapterDayjs}>
-          <InputLabel id="service-type-label">Choisir un créneau</InputLabel>
+          <InputLabel id="service-type-label" sx={{my: 2}}>Définir un autre créneau</InputLabel>
+          <Box sx={{display: 'flex', m: 2}}>
+            <DatePicker
+              defaultValue={dayjs(selectedDate)}
+              format="DD/MM/YYYY"
+              onChange={(newValue) => setPickedDate(newValue)}
+          />
+          <TimePicker defaultValue={dayjs(selectedDate)}
+              format="HH:mm"
+              onChange={(newValue) => setPickedTime(newValue)}
+          />
+          </Box>
           <DateTimePicker
             defaultValue={dayjs(selectedDate)}
             format="DD/MM/YYYY HH:mm"
