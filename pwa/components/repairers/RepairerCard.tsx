@@ -32,12 +32,24 @@ export const RepairerCard = ({
       <Card
         elevation={1}
         sx={{
-          width: {xs: 100, md: 150},
-          height: {xs: 100, md: 150},
-          p: 2,
-          borderRadius: '50%',
-        }}
-      >
+          display: 'flex',
+          height: '100%',
+          flexDirection: 'row',
+          borderRadius: 6,
+          outlineOffset: '-1px',
+          transition: 'all ease 0.5s',
+          justifyContent: {xs: 'center', sm: 'flex-start'},
+          width: '100%',
+          p: 0,
+          backgroundColor:
+            repairer.id === selectedRepairer ? 'lightsecondary.main' : 'white',
+          ':hover': {
+            boxShadow: 5,
+            '& .MuiButtonBase-root': {
+              bgcolor: 'primary.main',
+            },
+          },
+        }}>
         <CardMedia
           component="img"
           sx={{
