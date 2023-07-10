@@ -10,7 +10,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
@@ -24,6 +23,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 type AppointmentContentProps = {
   appointmentProps: Appointment;
@@ -179,11 +179,19 @@ const AppointmentContent = ({
             <ListItemText primary={appointment.bikeType.name} />
           </ListItem>
         )}
+        {appointment.address && (
+          <ListItem>
+            <ListItemIcon>
+              <LocationOnIcon />
+            </ListItemIcon>
+            <ListItemText primary={appointment.address} />
+          </ListItem>
+        )}
         {appointment.autoDiagnostic && appointment.autoDiagnostic.photo && (
           <img
             style={{marginTop: '20px', marginLeft: isMobile ? '10%' : '20%'}}
             width={isMobile ? '200' : '300'}
-            src={apiImageUrl(appointment.autoDiagnostic.photo.contentUrl)}
+            src={appointment.autoDiagnostic.photo.contentUrl}
             alt="Photo autodiag"
           />
         )}

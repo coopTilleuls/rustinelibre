@@ -4,6 +4,7 @@ import {Alert, Button, CircularProgress, TextField, Typography} from '@mui/mater
 import {useRouter} from "next/router";
 import {RepairerType} from "@interfaces/RepairerType";
 import {repairerTypeResource} from "@resources/repairerTypeResource";
+import {errorRegex} from "@utils/errorRegex";
 
 type RepairerTypeFormProps = {
     repairerType: RepairerType|null;
@@ -41,8 +42,8 @@ const RepairerTypeForm = ({repairerType}: RepairerTypeFormProps): JSX.Element =>
                 })
                 router.push('/admin/parametres')
             }
-        } catch {
-
+        } catch(e: any) {
+            setErrorMessage(e.message?.replace(errorRegex, '$2'))
         }
 
         setPending(false);

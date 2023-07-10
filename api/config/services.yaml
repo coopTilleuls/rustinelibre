@@ -1,4 +1,9 @@
 parameters:
+    storage_endpoint: '%env(string:STORAGE_ENDPOINT)%'
+    storage_region: '%env(string:STORAGE_REGION)%'
+    storage_use_path_style_endpoint: '%env(bool:STORAGE_USE_PATH_STYLE_ENDPOINT)%'
+    storage_key: '%env(string:STORAGE_KEY)%'
+    storage_secret: '%env(string:STORAGE_SECRET)%'
 
 services:
     # default configuration for services in *this* file
@@ -8,6 +13,7 @@ services:
         bind:
             string $mailerSender: "%env(MAILER_SENDER)%"
             string $webAppUrl: "%env(WEB_APP_URL)%"
+            string $storageBucket: "%env(STORAGE_BUCKET)%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -50,3 +56,13 @@ services:
     App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
 
     App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
+
+    Aws\S3\S3Client:
+        arguments:
+            -   endpoint: '%storage_endpoint%'
+                version: 'latest'
+                region: '%storage_region%'
+                use_path_style_endpoint: '%storage_use_path_style_endpoint%'
+                credentials:
+                    key: '%storage_key%'
+                    secret: '%storage_secret%'

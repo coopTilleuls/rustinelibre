@@ -32,9 +32,9 @@ const theme = createTheme({
       contrastText: '#fff',
     },
     secondary: {
-      light: lighten('#3b2767', 0.2),
-      main: '#3b2767',
-      dark: darken('#3b2767', 0.4),
+      light: lighten('#55267a', 0.2),
+      main: '#55267a',
+      dark: darken('#55267a', 0.4),
       contrastText: '#fff',
     },
     lightprimary: {

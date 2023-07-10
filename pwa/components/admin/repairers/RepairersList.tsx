@@ -16,13 +16,14 @@ import {
   DialogActions,
   Button,
   Dialog,
+  IconButton,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
 import {InputAdornment} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {Repairer} from '@interfaces/Repairer';
 import {repairerResource} from '@resources/repairerResource';
 import EditIcon from '@mui/icons-material/Edit';
@@ -211,19 +212,19 @@ export const RepairersList = (): JSX.Element => {
                     formatDate(repairer.owner.lastConnect)}
                 </TableCell>
                 <TableCell align="right">
-                  <Link href={`/admin/reparateurs/edit/${repairer.id}`}>
-                    <EditIcon
-                      sx={{
-                        color: '#8c83ba',
-                        fontSize: '2em',
-                        cursor: 'pointer',
-                      }}
-                    />
+                  <Link
+                    href={`/admin/reparateurs/edit/${repairer.id}`}
+                    legacyBehavior
+                    passHref>
+                    <IconButton color="secondary">
+                      <EditIcon color="secondary" />
+                    </IconButton>
                   </Link>
-                  <DeleteIcon
-                    onClick={() => handleDeleteClick(repairer)}
-                    sx={{color: '#8c83ba', fontSize: '2em', cursor: 'pointer'}}
-                  />
+                  <IconButton
+                    color="secondary"
+                    onClick={() => handleDeleteClick(repairer)}>
+                    <DeleteForeverIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

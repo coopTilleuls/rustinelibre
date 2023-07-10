@@ -19,7 +19,7 @@ import {
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
 import {Repairer} from '@interfaces/Repairer';
-import {RequestBody} from "@interfaces/Resource";
+import {RequestBody} from '@interfaces/Resource';
 
 const Editor = dynamic(() => import('@components/form/Editor'), {
   ssr: false,
@@ -54,12 +54,24 @@ export const ContactDetails = ({
     if (repairer) {
       setDescription(repairer.description ?? '');
       setRepairerTypeSelected(repairer.repairerType ?? null);
-      const bikeTypesSupported = repairer.bikeTypesSupported.map((bt) => bt.name);
-      setSelectedBikeTypes(bikeTypes.map((bikeType) => {
-        return bikeType.name;
-      }).filter((bikeTypeId) => bikeTypesSupported.includes(bikeTypeId)));
+      const bikeTypesSupported = repairer.bikeTypesSupported.map(
+        (bt) => bt.name
+      );
+      setSelectedBikeTypes(
+        bikeTypes
+          .map((bikeType) => {
+            return bikeType.name;
+          })
+          .filter((bikeTypeId) => bikeTypesSupported.includes(bikeTypeId))
+      );
     }
-  }, [bikeTypes, repairer, setSelectedBikeTypes, setDescription, setRepairerTypeSelected]);
+  }, [
+    bikeTypes,
+    repairer,
+    setSelectedBikeTypes,
+    setDescription,
+    setRepairerTypeSelected,
+  ]);
 
   const handleChangeRepairerType = (event: SelectChangeEvent): void => {
     const selectedRepairerType = repairerTypes.find(
@@ -67,25 +79,31 @@ export const ContactDetails = ({
     );
     setRepairerTypeSelected(selectedRepairerType ?? null);
   };
-  const handleChangeBikeRepaired = (event: SelectChangeEvent<typeof selectedBikeTypes>) => {
+  const handleChangeBikeRepaired = (
+    event: SelectChangeEvent<typeof selectedBikeTypes>
+  ) => {
     const value = event.target.value;
     setSelectedBikeTypes(typeof value === 'string' ? value.split(',') : value);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     if (!repairer) return;
     const requestBody: RequestBody = {};
 
     const selectedBikeTypeIRIs: string[] = bikeTypes
-        .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
-        .map((bikeType) => bikeType['@id']);
+      .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
+      .map((bikeType) => bikeType['@id']);
 
     if (description) requestBody['description'] = description;
 
-    if (selectedBikeTypeIRIs.length > 0) requestBody['bikeTypesSupported'] = selectedBikeTypeIRIs;
+    if (selectedBikeTypeIRIs.length > 0)
+      requestBody['bikeTypesSupported'] = selectedBikeTypeIRIs;
 
-    if (repairerTypeSelected) requestBody['repairerType'] = repairerTypeSelected['@id'];
+    if (repairerTypeSelected)
+      requestBody['repairerType'] = repairerTypeSelected['@id'];
 
     updateRepairer(repairer['@id'], requestBody);
   };
@@ -93,7 +111,7 @@ export const ContactDetails = ({
   return (
     <Box sx={{marginTop: 3}} component="form" onSubmit={handleSubmit}>
       {!repairer && (
-          <Typography>Vous ne gérez pas de solution de réparation</Typography>
+        <Typography>Vous ne gérez pas de solution de réparation</Typography>
       )}
       {repairer && (
         <>
@@ -137,24 +155,24 @@ export const ContactDetails = ({
               ))}
             </Select>
           </FormControl>
-          <InputLabel sx={{mt: 1, mb: -2, ml: 1}}>Description</InputLabel>
+          <InputLabel shrink sx={{mt: 1, mb: -2, ml: 1}}>
+            Description
+          </InputLabel>
           <Editor content={description} setContent={setDescription} />
           <Button type="submit" variant="contained" sx={{my: 2}}>
             {!pendingRegistration ? (
-                'Enregistrer mes informations'
+              'Enregistrer mes informations'
             ) : (
-                <CircularProgress size={20} sx={{color: 'white'}} />
+              <CircularProgress size={20} sx={{color: 'white'}} />
             )}
           </Button>
           {errorMessage && (
-              <Typography variant="body1" color="error">
-                {errorMessage}
-              </Typography>
+            <Typography variant="body1" color="error">
+              {errorMessage}
+            </Typography>
           )}
           {success && (
-              <Alert severity="success">
-                Informations mises à jour
-              </Alert>
+            <Alert severity="success">Informations mises à jour</Alert>
           )}
         </>
       )}

@@ -10,6 +10,7 @@ import AdminLayout from '@components/admin/AdminLayout';
 import {RequestBody} from '@interfaces/Resource';
 import {UserFormContext} from '@contexts/UserFormContext';
 import UserForm from '@components/form/UserForm';
+import {errorRegex} from "@utils/errorRegex";
 
 const EditUser: NextPageWithLayout = () => {
   const router = useRouter();
@@ -56,8 +57,8 @@ const EditUser: NextPageWithLayout = () => {
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-    } catch (e) {
-      setErrorMessage('Mise à jour impossible');
+    } catch (e: any) {
+      setErrorMessage(e.message?.replace(errorRegex, '$2'))
     }
 
     setPendingUpdate(false);

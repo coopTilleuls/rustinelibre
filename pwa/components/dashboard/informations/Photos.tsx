@@ -2,11 +2,10 @@ import React, {useContext, useEffect, useState} from 'react';
 import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {repairerResource} from '@resources/repairerResource';
 import {InputLabel, Box, Grid, Button, Typography, CircularProgress} from '@mui/material';
-import {apiImageUrl} from '@helpers/apiImagesHelper';
 import {checkFileSize} from '@helpers/checkFileSize';
 import {MediaObject} from '@interfaces/MediaObject';
 import {Repairer} from '@interfaces/Repairer';
-import {uploadFile} from '@helpers/uploadFile';
+import {uploadImage} from '@helpers/uploadFile';
 
 interface DashboardInfosPhotosProps {
   repairer: Repairer | null;
@@ -43,7 +42,7 @@ export const DashboardInfosPhotos = ({
         return;
       }
 
-      const response = await uploadFile(file);
+      const response = await uploadImage(file, 'public');
       const mediaObjectResponse = (await response?.json()) as MediaObject;
       if (mediaObjectResponse) {
         if (pictureType === 'thumbnail') {
@@ -79,7 +78,7 @@ export const DashboardInfosPhotos = ({
               alt="thumbnail"
               width="500"
               height="auto"
-              src={apiImageUrl(repairer.thumbnail.contentUrl)}
+              src={repairer.thumbnail.contentUrl}
             />
           )}
         </Grid>
@@ -110,7 +109,7 @@ export const DashboardInfosPhotos = ({
               alt="photo de description"
               width="500"
               height="auto"
-              src={apiImageUrl(repairer.descriptionPicture.contentUrl)}
+              src={repairer.descriptionPicture.contentUrl}
             />
           )}
         </Grid>

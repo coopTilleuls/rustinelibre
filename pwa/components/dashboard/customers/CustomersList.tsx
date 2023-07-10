@@ -9,6 +9,7 @@ import {
   TableContainer,
   CircularProgress,
   TextField,
+  IconButton,
 } from '@mui/material';
 import {customerResource} from '@resources/customerResource';
 import Link from 'next/link';
@@ -119,9 +120,14 @@ export const CustomersList = (): JSX.Element => {
                 </TableCell>
                 <TableCell align="left">{customer.firstName}</TableCell>
                 <TableCell align="left">{customer.email}</TableCell>
-                <TableCell align="left" sx={{cursor: 'pointer'}}>
-                  <Link href={`/sradmin/clients/${customer.id}`}>
-                    <RemoveRedEyeIcon color="info" />
+                <TableCell align="right">
+                  <Link
+                    href={`/sradmin/clients/${customer.id}`}
+                    legacyBehavior
+                    passHref>
+                    <IconButton color="secondary">
+                      <RemoveRedEyeIcon />
+                    </IconButton>
                   </Link>
                 </TableCell>
               </TableRow>

@@ -6,17 +6,29 @@ namespace App\Tests\Medias;
 
 use App\Repository\BikeRepository;
 use App\Repository\MaintenanceRepository;
+use App\Repository\MediaObjectRepository;
 use App\Tests\AbstractTestCase;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 
 class DeleteMediaTest extends AbstractTestCase
 {
+    private FilesystemOperator $imagesStorage;
+
+    private MediaObjectRepository $mediaObjectRepository;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->imagesStorage = self::getContainer()->get('images.storage');
+        $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
+    }
+
     public function testFileRemoveIfMediaDeleted(): void
     {
         $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, MediasTest::IMAGE_NAME), MediasTest::IMAGE_NAME);
-
-        $response = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
+        $response = $this->createClientAuthAsAdmin()->request('POST', '/media_objects/images', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
                 'files' => [
@@ -24,27 +36,25 @@ class DeleteMediaTest extends AbstractTestCase
                 ],
             ],
         ]);
+        self::assertResponseIsSuccessful();
 
-        $this->assertResponseIsSuccessful();
-        $dirPublicPath = sprintf('%s/../../public', __DIR__);
-        $this->assertDirectoryExists($dirPublicPath);
+        $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
+        $filePath = $this->mediaObjectRepository->find(basename($response->toArray()['@id']))->filePath;
 
         // Check file exist
-        $this->assertFileExists(sprintf('%s%s', $dirPublicPath, $response->toArray()['contentUrl']));
+        $this->assertTrue($this->imagesStorage->has($filePath));
 
         // Remove media object resource
         $this->createClientAuthAsAdmin()->request('DELETE', $response->toArray()['@id']);
 
         // Check file does not exist
-        $this->assertFileDoesNotExist(sprintf('%s%s', $dirPublicPath, $response->toArray()['contentUrl']));
+        $this->assertFalse($this->imagesStorage->has($filePath));
     }
 
     public function testMediaRemoveIfBikeRemove(): void
     {
-        $dirPublicPath = sprintf('%s/../../public', __DIR__);
         $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, MediasTest::IMAGE_NAME), MediasTest::IMAGE_NAME);
-
-        $mediaResponse = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
+        $mediaResponse = $this->createClientAuthAsAdmin()->request('POST', '/media_objects/images', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
                 'files' => [
@@ -52,7 +62,12 @@ class DeleteMediaTest extends AbstractTestCase
                 ],
             ],
         ]);
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
+
+        // Check file exist
+        $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
+        $filePath = $this->mediaObjectRepository->find(basename($mediaResponse->toArray()['@id']))->filePath;
+        $this->assertTrue($this->imagesStorage->has($filePath));
 
         // Update a random bike with new picture
         $randomBike = self::getContainer()->get(BikeRepository::class)->findOneBy([]);
@@ -62,26 +77,24 @@ class DeleteMediaTest extends AbstractTestCase
                 'picture' => $mediaResponse->toArray()['@id'],
             ],
         ]);
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
 
         // Delete bike
         $this->createClientAuthAsAdmin()->request('DELETE', $bikeResponse->toArray()['@id']);
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
 
         // Media should not exist
         $this->createClientAuthAsAdmin()->request('GET', $mediaResponse->toArray()['@id']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
 
         // File should not exist
-        $this->assertFileDoesNotExist(sprintf('%s%s', $dirPublicPath, $mediaResponse->toArray()['contentUrl']));
+        $this->assertFalse($this->imagesStorage->has($filePath));
     }
 
     public function testMediaRemoveIfMaintenanceRemove(): void
     {
-        $dirPublicPath = sprintf('%s/../../public', __DIR__);
         $file = new UploadedFile(sprintf('%s/../../fixtures/%s', __DIR__, MediasTest::IMAGE_NAME), MediasTest::IMAGE_NAME);
-
-        $mediaResponse = $this->createClientAuthAsAdmin()->request('POST', '/media_objects', [
+        $mediaResponse = $this->createClientAuthAsAdmin()->request('POST', '/media_objects/images', [
             'headers' => ['Content-Type' => 'multipart/form-data'],
             'extra' => [
                 'files' => [
@@ -89,7 +102,12 @@ class DeleteMediaTest extends AbstractTestCase
                 ],
             ],
         ]);
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
+
+        // Check file exist
+        $this->mediaObjectRepository = self::getContainer()->get(MediaObjectRepository::class);
+        $filePath = $this->mediaObjectRepository->find(basename($mediaResponse->toArray()['@id']))->filePath;
+        $this->assertTrue($this->imagesStorage->has($filePath));
 
         // Update a random maintenance with new picture
         $randomMaintenance = self::getContainer()->get(MaintenanceRepository::class)->findOneBy([]);
@@ -99,17 +117,17 @@ class DeleteMediaTest extends AbstractTestCase
                 'photo' => $mediaResponse->toArray()['@id'],
             ],
         ]);
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
 
         // Delete bike
         $this->createClientAuthAsAdmin()->request('DELETE', $maintenanceResponse->toArray()['@id']);
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
 
         // Media should not exist
         $this->createClientAuthAsAdmin()->request('GET', $mediaResponse->toArray()['@id']);
-        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
 
         // File should not exist
-        $this->assertFileDoesNotExist(sprintf('%s%s', $dirPublicPath, $mediaResponse->toArray()['contentUrl']));
+        $this->assertFalse($this->imagesStorage->has($filePath));
     }
 }
