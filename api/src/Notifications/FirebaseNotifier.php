@@ -78,6 +78,10 @@ final readonly class FirebaseNotifier
 
         $message = $message->withApnsConfig($config);
 
-        $this->messaging->send($message);
+        try {
+            $this->messaging->send($message);
+        } catch (\Exception $exception) {
+            $this->logger->alert(sprintf('Notification not send, error : %s', $exception->getMessage()));
+        }
     }
 }

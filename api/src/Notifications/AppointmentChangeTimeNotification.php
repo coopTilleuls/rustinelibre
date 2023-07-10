@@ -19,7 +19,7 @@ final readonly class AppointmentChangeTimeNotification
             title: 'Votre RDV a été modifié',
             body: sprintf('Votre RDV du %s a été modifié', $oldTime),
             params: [
-                'route' => '/rendez-vous/mes-rendez-vous'
+                'route' => '/rendez-vous/mes-rendez-vous',
             ]
         );
 

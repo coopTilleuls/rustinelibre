@@ -1,7 +1,7 @@
-import {useCallback, useContext, useEffect, useState, JSX} from 'react';
+import {useCallback, useEffect, useState, JSX} from 'react';
 import * as React from 'react';
 import {FirebaseApp} from 'firebase/app';
-import {onMessage, Messaging, NotificationPayload, MessagePayload} from 'firebase/messaging';
+import {onMessage, Messaging, NotificationPayload} from 'firebase/messaging';
 import {useAccount} from "@contexts/AuthContext";
 import {
     firebaseConfig,
@@ -27,7 +27,6 @@ export const Notifications = (): JSX.Element => {
     const [urlRedirect, setUrlRedirect] = useState<string|null>(null);
     const [notification, setNotification] = useState<NotificationPayload | undefined>(undefined);
     const [open, setOpen] = useState<boolean>(false);
-    const firebaseApp = getFirebaseApp();
 
     const checkPermission = async() => {
         if (!Object.hasOwn(window, 'Notification')) {
@@ -53,7 +52,6 @@ export const Notifications = (): JSX.Element => {
 
     useEffect(() => {
         const firebaseConfigEncoded = encodeURIComponent(JSON.stringify(firebaseConfig));
-        console.log('register service worker');
         navigator.serviceWorker
             .register(`/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`)
             .catch((error) => {
@@ -71,7 +69,6 @@ export const Notifications = (): JSX.Element => {
         }
 
         if (firebaseToken === user.firebaseToken) {
-            console.log('firebase token does not change');
             return;
         }
 
@@ -102,18 +99,13 @@ export const Notifications = (): JSX.Element => {
 
     const handleIncomingFcmMessages = useCallback((messaging: Messaging): void => {
 
-        console.log('handle messages callback');
-
             onMessage(messaging, (payload) => {
-
-                console.log(payload);
-
                 const { title, body, icon, image } = payload.notification ?? {};
                 setNotification({
                     title: title,
                     body: body,
-                    icon: icon || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
-                    image: image,
+                    icon: payload.data ? payload.data.icon : 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
+                    image: payload.data ? payload.data.image : 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
                 });
                 setOpen(true);
                 setUrlRedirect(payload.data ? payload.data.route : null);

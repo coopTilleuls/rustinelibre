@@ -1,5 +1,5 @@
 import {FirebaseApp, initializeApp} from 'firebase/app';
-import {getMessaging as getFirebaseMessaging, getToken, Messaging, onMessage} from 'firebase/messaging';
+import {getMessaging as getFirebaseMessaging, getToken, Messaging} from 'firebase/messaging';
 
 export const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -9,9 +9,6 @@ export const firebaseConfig = {
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
-
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
 
 export function getFirebaseApp(): FirebaseApp {
     return initializeApp(firebaseConfig);
@@ -30,31 +27,3 @@ export async function getFCMToken(messaging: Messaging): Promise<string> {
         serviceWorkerRegistration: sw,
     });
 }
-
-export const requestPermission = () => {
-
-    console.log("Requesting User Permission......");
-    Notification.requestPermission().then((permission) => {
-
-        if (permission === "granted") {
-            console.log("Notification User Permission Granted.");
-            return getFCMToken(messaging)
-                .then((currentToken) => {
-
-                    if (currentToken) {
-                        console.log('Firebase token: ', currentToken);
-                    } else {
-                        console.log('Failed to generate the app registration token.');
-                    }
-                })
-                .catch((err) => {
-
-                    console.log('An error occurred when requesting to receive the token.', err);
-                });
-        } else {
-
-            console.log("User Permission Denied.");
-        }
-    });
-}
-
