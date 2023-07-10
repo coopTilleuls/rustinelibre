@@ -144,7 +144,7 @@ d'installer ngrok pour créer un tunnel vers l'application:
 ngrok http --host-header="localhost:443" localhost:443
 ```
 
-L'IP ensuite proposée doit surcharger localchost dans le docker-compose.override :
+L'IP ensuite proposée doit surcharger localhost dans le docker-compose.override :
 
 ```
   php:
@@ -156,7 +156,7 @@ L'IP ensuite proposée doit surcharger localchost dans le docker-compose.overrid
       NEXT_PUBLIC_ENTRYPOINT: https://<votre ip ngrok>.ngrok-free.app
 ```
 
-Et ajouter dans le .env.local
+Et ajouter dans le .env.local de votre PWA 
 
 ```
 NEXT_PUBLIC_ENTRYPOINT=https://<votre ip ngrok>.ngrok-free.app
