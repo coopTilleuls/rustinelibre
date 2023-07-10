@@ -109,16 +109,16 @@ jobs:
             --set=mercure.publicUrl=https://${URL}/.well-known/mercure \
             --set=mercure.jwtSecret="${MERCURE_JWT_PUBLIC_KEY}" \
             --set=mercure.extraDirectives="${MERCURE_EXTRA_DIRECTIVES}" \
-            --set=php.firebase.projectID='${{ secrets.fb-project-id }}' \
-            --set=php.firebase.privateKeyID='${{ secrets.fb-private-key-id }}' \ 
-            --set=php.firebase.privateKey='${{ secrets.fb-private-key }}' \
-            --set=php.firebase.clientEmail='${{ secrets.fb-client-email }}' \
-            --set=php.firebase.clientID='${{ secrets.fb-client-id }}' \
-            --set=php.firebase.authUri='${{ secrets.fb-auth-uri }}' \
-            --set=php.firebase.tokenUri='${{ secrets.fb-token-uri }}' \
-            --set=php.firebase.authProvider='${{ secrets.fb-auth-provider }}' \
-            --set=php.firebase.clientCertUrl='${{ secrets.fb-client-cert-url }}' \
-            --set=php.firebase.universeDomain='${{ secrets.fb-universe-domain }}' \
+            --set=php.firebase.projectID="${{ secrets.fb-project-id }}" \
+            --set=php.firebase.privateKeyID="${{ secrets.fb-private-key-id }}" \ 
+            --set=php.firebase.privateKey="${{ secrets.fb-private-key }}" \
+            --set=php.firebase.clientEmail="${{ secrets.fb-client-email }}" \
+            --set=php.firebase.clientID="${{ secrets.fb-client-id }}" \
+            --set=php.firebase.authUri="${{ secrets.fb-auth-uri }}" \
+            --set=php.firebase.tokenUri="${{ secrets.fb-token-uri }}" \
+            --set=php.firebase.authProvider="${{ secrets.fb-auth-provider }}" \
+            --set=php.firebase.clientCertUrl="${{ secrets.fb-client-cert-url }}" \
+            --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-prod.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
