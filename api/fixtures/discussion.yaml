@@ -1,0 +1,7 @@
+App\Entity\Discussion:
+    discussion_1:
+        repairer: '@repairer_1'
+        customer: '@user_1'
+    discussion_2:
+        repairer: '@repairer_2'
+        customer: '@user_1'
