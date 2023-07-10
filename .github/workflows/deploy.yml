@@ -110,7 +110,7 @@ jobs:
             --set=mercure.jwtSecret="${MERCURE_JWT_PUBLIC_KEY}" \
             --set=mercure.extraDirectives="${MERCURE_EXTRA_DIRECTIVES}" \
             --set=php.firebase.projectID="${{ secrets.fb-project-id }}" \
-            --set=php.firebase.privateKeyID="${{ secrets.fb-private-key-id }}" \ 
+            --set=php.firebase.privateKeyID="${{ secrets.fb-private-key-id }}" \
             --set=php.firebase.privateKey="${{ secrets.fb-private-key }}" \
             --set=php.firebase.clientEmail="${{ secrets.fb-client-email }}" \
             --set=php.firebase.clientID="${{ secrets.fb-client-id }}" \
