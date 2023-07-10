@@ -1,0 +1,17 @@
+App\Entity\DiscussionMessage:
+    discussion_message_{1..5}:
+        discussion: '@discussion_1'
+        sender: '@user_1'
+        content: "Bonjour, j'ai un problème avec mon vélo."
+    discussion_message_{6..10}:
+        discussion: '@discussion_1'
+        sender: '@boss_1'
+        content: "Bonjour, j'ai un problème avec mon vélo."
+    discussion_message_{11..15}:
+        discussion: '@discussion_2'
+        sender: '@user_1'
+        content: "Bonjour, j'ai un problème avec mon vélo."
+    discussion_message_{16..20}:
+        discussion: '@discussion_2'
+        sender: '@boss_1'
+        content: "Bonjour, j'ai un problème avec mon vélo."

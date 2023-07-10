@@ -44,7 +44,6 @@ export const AppointmentCard = ({
         boxShadow: 0,
         border: (theme) => `4px solid ${theme.palette.grey[300]}`,
         display: 'flex',
-        height: '200px',
       }}>
       <CardMedia
         component="img"
@@ -80,13 +79,16 @@ export const AppointmentCard = ({
             </Typography>
           </div>
           <div>
-            <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
+            <Typography
+              color={'primary'}
+              fontSize={{xs: 12, md: 16, fontWeight: 700}}>
               {appointment.repairer.name}
             </Typography>
             <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
-              {appointment.repairer.streetNumber}
-              {appointment.repairer.street},{appointment.repairer.postcode}
-              {appointment.repairer.city}
+              {appointment.repairer.streetNumber} {appointment.repairer.street}
+            </Typography>
+            <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
+              {appointment.repairer.postcode} {appointment.repairer.city}
             </Typography>
             {appointment.autoDiagnostic && (
               <Typography

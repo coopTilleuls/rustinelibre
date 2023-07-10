@@ -57,7 +57,6 @@ function MyApp({
                 <meta name="msapplication-TileColor" content="#2B5797" />
                 <meta name="msapplication-tap-highlight" content="no" />
                 <meta name="theme-color" content="#000000" />
-
                 <link rel="manifest" href="/manifest.json"></link>
                 <link
                   rel="apple-touch-icon"
