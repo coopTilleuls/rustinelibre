@@ -17,7 +17,7 @@ const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
 
 
   return (
-    <Box height="100vh" overflow="auto">
+    <Box height="100vh" overflow="auto" id="websitelayout">
       {!isAdmin && <Navbar user={user ?? undefined} />}
       <Box
         minHeight="100vh"

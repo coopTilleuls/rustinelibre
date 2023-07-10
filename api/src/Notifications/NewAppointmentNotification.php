@@ -8,7 +8,7 @@ use App\Entity\Appointment;
 
 final readonly class NewAppointmentNotification
 {
-    public function __construct(private FirebaseNotifier $firebaseNotifier, private string $webAppUrl)
+    public function __construct(private FirebaseNotifier $firebaseNotifier)
     {
     }
 
@@ -19,7 +19,7 @@ final readonly class NewAppointmentNotification
             title: 'Nouvelle demande de RDV',
             body: $appointment->slotTime->format('d-m-Y H:i'),
             params: [
-                'route' => sprintf('%s/sradmin?appointment=%s', $this->webAppUrl, $appointment->id),
+                'route' => sprintf('/sradmin?appointment=%s', $appointment->id),
             ]
         );
 

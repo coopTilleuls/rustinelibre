@@ -5,33 +5,37 @@ declare(strict_types=1);
 namespace App\Medias\EventSubscriber;
 
 use App\Entity\MediaObject;
+use App\Flysystem\MediaObjectManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use League\Flysystem\FilesystemOperator;
 
-final class RemoveFileEventSubscriber implements EventSubscriber
+final readonly class RemoveFileEventSubscriber implements EventSubscriber
 {
-    public function __construct(private FilesystemOperator $defaultStorage)
-    {
+    public function __construct(
+        private MediaObjectManager $mediaObjectManager,
+    ) {
     }
 
     public function getSubscribedEvents(): array
     {
         return [
-            Events::postRemove,
+            Events::preRemove,
         ];
     }
 
-    public function postRemove(LifecycleEventArgs $args): void
+    public function preRemove(LifecycleEventArgs $args): void
     {
         $media = $args->getObject();
         if (!$media instanceof MediaObject) {
             return;
         }
 
-        if ($this->defaultStorage->has($media->filePath)) {
-            $this->defaultStorage->delete($media->filePath);
+        $prefix = $this->mediaObjectManager->getPrefixOfMediaObject($media);
+        if (!$prefix) {
+            return;
         }
+
+        $this->mediaObjectManager->getOperator($prefix)->delete($media->filePath);
     }
 }

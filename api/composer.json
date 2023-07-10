@@ -15,6 +15,7 @@
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
         "jsor/doctrine-postgis": "^2.1",
         "kreait/firebase-bundle": "^5.0",
+        "league/flysystem-aws-s3-v3": "^3.15",
         "league/flysystem-bundle": "^3.1",
         "lexik/jwt-authentication-bundle": "^2.18",
         "nelmio/cors-bundle": "^2.2",

@@ -33,6 +33,7 @@ final readonly class FirebaseNotifier
             'data' => [
                 'image' => $notification->image,
                 'icon' => $notification->icon,
+                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : $this->webAppUrl,
             ],
             'webpush' => [
                 'headers' => [
@@ -52,6 +53,7 @@ final readonly class FirebaseNotifier
                 'sound' => 'default',
             ],
             'data' => [
+                'badge' => $notification->icon,
                 'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : $this->webAppUrl,
             ],
         ]);

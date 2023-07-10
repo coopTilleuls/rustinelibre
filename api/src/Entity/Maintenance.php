@@ -64,6 +64,11 @@ class Maintenance
     #[Groups([self::READ, self::WRITE])]
     public ?MediaObject $photo = null;
 
+    #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[Groups([self::READ, self::WRITE])]
+    public ?MediaObject $invoice = null;
+
     #[ORM\Column(nullable: true)]
     #[Groups([self::READ, self::WRITE])]
     public ?\DateTimeImmutable $repairDate = null;

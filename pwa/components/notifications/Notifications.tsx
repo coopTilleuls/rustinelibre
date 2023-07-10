@@ -13,6 +13,7 @@ import {userResource} from "@resources/userResource";
 import {User} from "@interfaces/User";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Link from 'next/link';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -23,10 +24,10 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export const Notifications = (): JSX.Element => {
     const {user} = useAccount({});
+    const [urlRedirect, setUrlRedirect] = useState<string|null>(null);
     const [notification, setNotification] = useState<NotificationPayload | undefined>(undefined);
     const [open, setOpen] = useState<boolean>(false);
     const firebaseApp = getFirebaseApp();
-    const messaging = getMessaging(firebaseApp);
 
     const checkPermission = async() => {
         if (!Object.hasOwn(window, 'Notification')) {
@@ -115,6 +116,11 @@ export const Notifications = (): JSX.Element => {
                     image: image,
                 });
                 setOpen(true);
+                setUrlRedirect(payload.data ? payload.data.route : null);
+                setTimeout(() => {
+                    setOpen(false);
+                    setUrlRedirect(null)
+                }, 7000);
             });
         },
         []
@@ -123,9 +129,11 @@ export const Notifications = (): JSX.Element => {
     return (
         <>
             <Snackbar open={open} autoHideDuration={6000}>
-                <Alert severity="success" sx={{ width: '100%' }} onClose={handleClose}>
-                    {notification?.title}
-                </Alert>
+                <Link href={urlRedirect ?? '/'} style={{textDecoration: 'none'}}>
+                    <Alert severity="success" sx={{ width: '100%' }} onClose={handleClose}>
+                        {notification?.title}
+                    </Alert>
+                </Link>
             </Snackbar>
         </>
     );

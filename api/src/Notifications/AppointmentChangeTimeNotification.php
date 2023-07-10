@@ -8,7 +8,7 @@ use App\Entity\Appointment;
 
 final readonly class AppointmentChangeTimeNotification
 {
-    public function __construct(private FirebaseNotifier $firebaseNotifier, private string $webAppUrl)
+    public function __construct(private FirebaseNotifier $firebaseNotifier)
     {
     }
 
@@ -19,7 +19,7 @@ final readonly class AppointmentChangeTimeNotification
             title: 'Votre RDV a été modifié',
             body: sprintf('Votre RDV du %s a été modifié', $oldTime),
             params: [
-                'route' => sprintf('%s/rendez-vous/mes-rendez-vous', $this->webAppUrl),
+                'route' => '/rendez-vous/mes-rendez-vous'
             ]
         );
 

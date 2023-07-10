@@ -1,5 +1,4 @@
 import {MediaObject} from "@interfaces/MediaObject";
-import {DateObject} from "@interfaces/DateObject";
 import {User} from "@interfaces/User";
 import {Bike} from "@interfaces/Bike";
 
@@ -13,4 +12,5 @@ export interface Maintenance {
     description?: string;
     repairDate?: string;
     photo?: MediaObject;
+    invoice?: MediaObject;
 }

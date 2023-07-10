@@ -8,7 +8,7 @@ use App\Entity\Appointment;
 
 final readonly class AppointmentConfirmNotification
 {
-    public function __construct(private FirebaseNotifier $firebaseNotifier, private string $webAppUrl)
+    public function __construct(private FirebaseNotifier $firebaseNotifier)
     {
     }
 
@@ -19,7 +19,7 @@ final readonly class AppointmentConfirmNotification
             title: 'Demande de RDV acceptée',
             body: sprintf('Votre demande de RDV du %s a été confirmée', $appointment->slotTime->format('d-m-Y H:i')),
             params: [
-                'route' => sprintf('%s/rendez-vous/mes-rendez-vous', $this->webAppUrl),
+                'route' => '/rendez-vous/mes-rendez-vous',
             ]
         );
 

@@ -9,7 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {uploadFile} from "@helpers/uploadFile";
+import {uploadImage} from "@helpers/uploadFile";
 import {bikeResource} from "@resources/bikeResource";
 import {mediaObjectResource} from "@resources/mediaObjectResource";
 import {useAccount} from "@contexts/AuthContext";
@@ -43,7 +43,7 @@ const BikeIdentityPhoto = ({bike, photo, propertyName, title}: BikeIdentityPhoto
             setLoading(true);
 
             // Upload new picture
-            const response = await uploadFile(file);
+            const response = await uploadImage(file);
             const mediaObjectResponse = await response?.json() as MediaObject;
             if (mediaObjectResponse) {
                 // Display new photo
