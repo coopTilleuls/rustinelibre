@@ -1,14 +1,18 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@api-platform/admin':
     specifier: ^3.4.3
     version: 3.4.3(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
   '@ckeditor/ckeditor5-build-classic':
-    specifier: ^37.1.0
+    specifier: ^37.0.1
     version: 37.1.0
   '@ckeditor/ckeditor5-react':
-    specifier: ^6.1.0
+    specifier: ^6.0.0
     version: 6.1.0(@ckeditor/ckeditor5-core@38.1.0)(@ckeditor/ckeditor5-engine@38.1.0)(@ckeditor/ckeditor5-utils@38.1.0)(@ckeditor/ckeditor5-watchdog@38.1.0)(react@18.2.0)
   '@fontsource-variable/pathway-extreme':
     specifier: ^5.0.5
@@ -109,16 +113,16 @@ devDependencies:
     specifier: ^18.16.19
     version: 18.16.19
   '@types/react':
-    specifier: ^18.2.14
+    specifier: ^18.0.35
     version: 18.2.14
   '@types/react-dom':
-    specifier: ^18.2.6
+    specifier: ^18.0.11
     version: 18.2.6
   eslint:
     specifier: ^8.44.0
     version: 8.44.0
   eslint-config-next:
-    specifier: ^13.4.8
+    specifier: ^13.2.4
     version: 13.4.8(eslint@8.44.0)(typescript@4.9.5)
   eslint-config-prettier:
     specifier: ^8.8.0
@@ -7160,7 +7164,3 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
