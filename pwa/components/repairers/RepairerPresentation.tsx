@@ -1,8 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import useMediaQuery from '@hooks/useMediaQuery';
-import {Container, Box, Typography, Paper, Stack, Button} from '@mui/material';
+import {Container, Box, Typography, Stack, Button} from '@mui/material';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import LocationCity from '@mui/icons-material/LocationCity';
@@ -15,7 +14,6 @@ interface RepairerPresentationProps {
 
 const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
   const {query} = useRouter();
-  const isMobile = useMediaQuery('(max-width: 1024px)');
 
   let linkHref;
 
@@ -31,127 +29,172 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
     linkHref = '/';
   }
 
-  return (
-    <Container maxWidth="md" sx={{padding: {xs: 0}}}>
-      <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
-        <Link href={linkHref}>
-          <Button variant="outlined">Retour</Button>
-        </Link>
+  const repairerPicture = repairer.thumbnail
+    ? repairer.thumbnail.contentUrl
+    : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg';
 
-        <Stack
-          spacing={5}
-          marginBottom={4}
-          sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <Box>
-            <Typography
-              component="h1"
-              align="center"
-              fontSize={{xs: 34, md: 50}}
-              fontWeight={600}
-              sx={{mt: 2}}>
-              {repairer.name}
-            </Typography>
-            <Typography
-              component="h2"
-              align="center"
-              fontSize={{xs: 16, md: 20}}
-              color="primary">
-              {repairer.repairerType?.name}
-            </Typography>
-          </Box>
+  return (
+    <>
+      <Box pt={4} pb={8} sx={{overflowX: 'clip'}}>
+        <Box
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
+        <Container
+          sx={{
+            display: 'flex',
+            flexDirection: 'row-reverse',
+            alignItems: 'flex-start',
+            gap: 8,
+            maxWidth: '1000px!important',
+          }}>
           <Box
             sx={{
+              background: 'white',
+              width: '300px',
+              borderRadius: 6,
+              boxShadow: 5,
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'start',
+              overflow: 'hidden',
+              position: 'sticky',
+              top: '112px',
+              zIndex: 2,
+              mb: 2,
             }}>
-            <Typography
-              paragraph
-              fontSize={{xs: 14, md: 18}}
-              color="text.secondary"
-              sx={{display: 'flex', alignItems: 'center'}}>
-              <FmdGoodIcon color="primary" sx={{mr: 1}} />{' '}
-              {repairer.streetNumber} {repairer.street}
-            </Typography>
-            <Typography
-              paragraph
-              fontSize={{xs: 14, md: 18}}
-              color="text.secondary"
-              sx={{display: 'flex', alignItems: 'center'}}>
-              <LocationCity color="primary" sx={{mr: 1}} />
-              {repairer.postcode} {repairer.city}
-            </Typography>
-            <Typography
-              paragraph
-              fontSize={{xs: 14, md: 18}}
-              color="text.secondary"
-              sx={{display: 'flex', alignItems: 'center'}}>
-              <PhoneAndroidIcon color="primary" sx={{mr: 1}} />{' '}
-              {repairer.mobilePhone}
-            </Typography>
-          </Box>
-          <Link
-            href={`/reparateur/${repairer.id}/creneaux`}
-            style={{textDecoration: 'none'}}>
-            <Button variant="contained">Je réserve</Button>
-          </Link>
-          {repairer.descriptionPicture && (
-            <img
-              width="100%"
-              height="auto"
-              src={repairer.descriptionPicture.contentUrl}
-              alt="Photo de description du réparateur"
-            />
-          )}
-          <Box width={{md: '70%'}}>
-            {repairer.description && (
-              <>
-                <Typography fontSize={{xs: 16, md: 18}} fontWeight={600}>
-                  Description :
+            <Box
+              sx={{
+                aspectRatio: '4/3',
+                width: '100%',
+                overflow: 'hidden',
+              }}>
+              <img
+                src={repairerPicture}
+                alt=""
+                style={{width: '100%', height: '100%', objectFit: 'cover'}}
+              />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'start',
+                px: 3,
+                py: 2,
+              }}>
+              <Typography
+                variant="body2"
+                mb={1}
+                color="text.secondary"
+                sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                <FmdGoodIcon color="primary" /> {repairer.streetNumber}{' '}
+                {repairer.street}
+              </Typography>
+              <Typography
+                variant="body2"
+                mb={1}
+                color="text.secondary"
+                sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                <LocationCity color="primary" />
+                {repairer.postcode} {repairer.city}
+              </Typography>
+              {repairer.mobilePhone ? (
+                <Typography
+                  variant="body2"
+                  mb={1}
+                  color="text.secondary"
+                  sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                  <PhoneAndroidIcon color="primary" /> {repairer.mobilePhone}
                 </Typography>
+              ) : null}
+              <Box
+                mt={1}
+                pt={2}
+                borderTop="1px solid"
+                borderColor="grey.300"
+                textAlign="center"
+                width="100%">
+                {repairer.firstSlotAvailable && (
+                  <Box zIndex={1} mb={2}>
+                    <Typography
+                      variant="body2"
+                      color="secondary.main"
+                      fontWeight={600}>
+                      Prochain rendez-vous disponible :
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {formatDate(repairer.firstSlotAvailable)}
+                    </Typography>
+                  </Box>
+                )}
+                <Link
+                  href={`/reparateur/${repairer.id}/creneaux`}
+                  legacyBehavior
+                  passHref>
+                  <Button variant="contained">Je réserve</Button>
+                </Link>
+              </Box>
+            </Box>
+          </Box>
+          <Stack spacing={4} flex={1} pt={2}>
+            <Box>
+              <Link href={linkHref}>
+                <Button variant="outlined" color="secondary" size="small">
+                  Retour
+                </Button>
+              </Link>
+              <Typography
+                component="h1"
+                variant="h1"
+                color="primary.main"
+                sx={{my: 1}}>
+                {repairer.name}
+              </Typography>
+              <Typography variant="h4">
+                {repairer.repairerType?.name}
+              </Typography>
+              {repairer.description && (
                 <Typography
                   paragraph
-                  fontSize={{xs: 16, md: 18}}
                   color="text.secondary"
+                  mt={3}
                   dangerouslySetInnerHTML={{__html: repairer.description}}
                 />
-              </>
-            )}
-            {repairer.firstSlotAvailable && (
-              <>
-                <Typography fontSize={{xs: 16, md: 18}} fontWeight={600}>
-                  Prochain rendez-vous disponible :
-                </Typography>
-                <Typography
-                  paragraph
-                  fontSize={{xs: 16, md: 18}}
-                  color="text.secondary">
-                  {formatDate(repairer.firstSlotAvailable)}
-                </Typography>
-              </>
-            )}
+              )}
+            </Box>
             {repairer.openingHours && (
-              <>
-                <Typography fontSize={{xs: 16, md: 18}} fontWeight={600}>
+              <Box>
+                <Typography variant="h6" color="secondary.main">
                   Horaires :
                 </Typography>
                 <Typography
-                  paragraph
-                  fontSize={{xs: 16, md: 18}}
+                  variant="body1"
                   color="text.secondary"
                   dangerouslySetInnerHTML={{__html: repairer.openingHours}}
                 />
-              </>
+              </Box>
             )}
-          </Box>
-          <Link
-            href={`/reparateur/${repairer.id}/creneaux`}
-            style={{textDecoration: 'none'}}>
-            <Button variant="contained">Je réserve</Button>
-          </Link>
-        </Stack>
-      </Paper>
-    </Container>
+            {repairer.descriptionPicture ? (
+              <img
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  maxHeight: '350px',
+                  alignSelf: 'flex-start',
+                }}
+                src={repairer.descriptionPicture.contentUrl}
+                alt="Photo de description du réparateur"
+              />
+            ) : null}
+          </Stack>
+        </Container>
+      </Box>
+    </>
   );
 };
 

@@ -133,7 +133,12 @@ const RepairerSlots: NextPageWithLayout = () => {
                   <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
                     {tunnelStep == 'slots' && (
                       <Link href={`/reparateur/${repairer.id}`}>
-                        <Button variant="outlined">Retour</Button>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          size="small">
+                          Retour
+                        </Button>
                       </Link>
                     )}
                     {isABossOrAnEmployee && (
