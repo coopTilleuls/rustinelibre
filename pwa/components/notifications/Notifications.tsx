@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState, JSX} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import * as React from 'react';
 import {FirebaseApp} from 'firebase/app';
 import {onMessage, Messaging, NotificationPayload} from 'firebase/messaging';
