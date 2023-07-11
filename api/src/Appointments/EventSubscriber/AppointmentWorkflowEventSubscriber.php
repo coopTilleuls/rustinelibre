@@ -7,6 +7,7 @@ namespace App\Appointments\EventSubscriber;
 use App\Emails\ConfirmationEmail;
 use App\Entity\Appointment;
 use App\Entity\User;
+use App\Notifications\AppointmentConfirmNotification;
 use App\Repairers\Slots\FirstSlotAvailableCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,7 +20,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private ConfirmationEmail $confirmationEmail,
+    public function __construct(
+        private ConfirmationEmail $confirmationEmail,
+        private AppointmentConfirmNotification $appointmentConfirmNotification,
         private EntityManagerInterface $entityManager,
         private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
         private RequestStack $requestStack,
@@ -52,6 +55,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $this->entityManager->flush();
 
         $this->confirmationEmail->sendConfirmationEmail($appointment);
+        $this->appointmentConfirmNotification->sendAppointmentConfirmNotification($appointment);
     }
 
     public function onValidatedByCyclist(Event $event): void

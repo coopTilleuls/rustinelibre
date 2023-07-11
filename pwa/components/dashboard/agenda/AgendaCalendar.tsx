@@ -14,6 +14,7 @@ import {getFirstDaysOfMonth} from '@helpers/firstDayOfMonthHelper';
 import {getEndAppointment} from '@helpers/endAppointmentHelper';
 import router from 'next/router';
 import {DatesSetArg} from '@fullcalendar/core';
+import {Box} from '@mui/material';
 
 interface AgendaCalendarProps {
   repairer: Repairer;
@@ -156,10 +157,10 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
           eventClick={(info) => clickAppointment(info.event)}
           eventContent={(event) => {
             return (
-              <div>
-                <span>{event.timeText}</span>
-                <span>{event.event.title}</span>
-              </div>
+              <Box sx={{whiteSpace: 'initial'}}>
+                {event.timeText}
+                {event.event.title}
+              </Box>
             );
           }}
           headerToolbar={{

@@ -1,0 +1,11 @@
+{% extends 'mail/mail_layout.html.twig' %}
+
+{% block body_mail %}
+    <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 3em">
+        Nouvelle demande de RDV
+    </div> <br />
+
+    <div>
+        Nouvelle demande de rdv : <a href="{{ appointmentUrl }}">{{ appointment.slotTime | date('d/m/Y H:i') }}</a>
+    </div>
+{% endblock %}

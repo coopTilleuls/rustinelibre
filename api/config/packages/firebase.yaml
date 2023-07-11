@@ -1,0 +1,4 @@
+kreait_firebase:
+  projects:
+    rustinelibre:
+      credentials: '%kernel.project_dir%/config/firebase/firebase-credentials.json'

@@ -5,39 +5,37 @@ declare(strict_types=1);
 namespace App\Emails;
 
 use App\Entity\Appointment;
-use App\Messages\Helpers\DiscussionManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
-readonly class ConfirmationEmail
+readonly class AppointmentChangeTimeEmail
 {
     public function __construct(private MailerInterface $mailer,
         private string $mailerSender,
         private string $webAppUrl,
         private LoggerInterface $logger,
-        private DiscussionManager $discussionManager,
         private Environment $twig)
     {
     }
 
-    public function sendConfirmationEmail(Appointment $appointment): void
+    public function sendChangeTimeEmail(Appointment $appointment, string $oldTime): void
     {
         try {
             $email = (new Email())
                 ->from($this->mailerSender)
                 ->to($appointment->customer->email)
-                ->subject('Confirmation de votre rendez-vous')
-                ->html($this->twig->render('mail/appointment_accepted.html.twig', [
+                ->subject('Votre RDV a été modifié')
+                ->html($this->twig->render('mail/appointment_change_time.html.twig', [
                     'appointment' => $appointment,
-                    'discussionUrl' => sprintf('%s/messagerie/%s', $this->webAppUrl, $this->discussionManager->getOrCreateDiscussion($appointment)->id),
-                    'annulationUrl' => sprintf('%s/annulation/%s', $this->webAppUrl, $appointment->id),
+                    'oldTime' => $oldTime,
+                    'rdvUrl' => sprintf('%s/rendez-vous/mes-rendez-vous', $this->webAppUrl),
                 ]));
 
             $this->mailer->send($email);
         } catch (\Exception $e) {
-            $this->logger->alert(sprintf('Accepted appointment mail not send: %s', $e->getMessage()));
+            $this->logger->alert(sprintf('Refused appointment mail not send: %s', $e->getMessage()));
         }
     }
 }
