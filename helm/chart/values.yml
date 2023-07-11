@@ -92,9 +92,9 @@ postgresql:
   global:
     postgresql:
       auth:
-        username: "bikelib.fullname"
+        username: "bikelib"
         password: "!ChangeMe!"
-        database: "bikelib.fullname"
+        database: "bikelib"
   # Persistent Volume Storage configuration.
   # ref: https://kubernetes.io/docs/user-guide/persistent-volumes
   primary:
