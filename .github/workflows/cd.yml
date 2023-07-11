@@ -41,6 +41,9 @@ jobs:
     needs: [ build ]
     uses: ./.github/workflows/deploy.yml
     concurrency: ${{ github.ref }}-deploy
+    with:
+      nonprod-storage-bucket: ${{ vars.NONPROD_STORAGE_BUCKET }}
+      prod-storage-bucket: ${{ vars.PROD_STORAGE_BUCKET }}
     secrets:
       kubeconfig: ${{ secrets.KUBECONFIG }}
       domain: ${{ secrets.DOMAIN }}

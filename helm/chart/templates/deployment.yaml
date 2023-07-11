@@ -169,32 +169,32 @@ spec:
             - name: STORAGE_BUCKET
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "plateformcoop-ebs" . }}
+                  name: {{ include "bikelib.fullname" . }}
                   key: php-storage-bucket
             - name: STORAGE_ENDPOINT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "plateformcoop-ebs" . }}
+                  name: {{ include "bikelib.fullname" . }}
                   key: php-storage-endpoint
             - name: STORAGE_REGION
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "plateformcoop-ebs" . }}
+                  name: {{ include "bikelib.fullname" . }}
                   key: php-storage-region
             - name: STORAGE_USE_PATH_STYLE_ENDPOINT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "plateformcoop-ebs" . }}
+                  name: {{ include "bikelib.fullname" . }}
                   key: php-storage-use-path-style-endpoint
             - name: STORAGE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "plateformcoop-ebs" . }}
+                  name: {{ include "bikelib.fullname" . }}
                   key: php-storage-key
             - name: STORAGE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "plateformcoop-ebs" . }}
+                  name: {{ include "bikelib.fullname" . }}
                   key: php-storage-secret
             - name: FIREBASE_PROJECT_ID
               valueFrom:

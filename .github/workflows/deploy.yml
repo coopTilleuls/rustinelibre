@@ -2,6 +2,15 @@ name: Deploy
 
 on:
   workflow_call:
+    inputs:
+      prod-storage-bucket:
+        description: prod storage bucket name
+        required: true
+        type: string
+      nonprod-storage-bucket:
+        description: nonprod storage bucket name
+        required: true
+        type: string
     secrets:
       kubeconfig:
         description: kubeconfig stored as a base64 encrypted secret

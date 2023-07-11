@@ -29,6 +29,13 @@ php:
       enabled: true
       size: 1Gi
       storageClass: "standard"
+  storage:
+    bucket: ""
+    endpoint: ""
+    region: ""
+    usePathStyleEndpoint: true
+    publicKey: ""
+    secret: ""
   firebase: 
     projectID: "!ChangeMe!"
     privateKeyID: "!ChangeMe!"
@@ -85,9 +92,9 @@ postgresql:
   global:
     postgresql:
       auth:
-        username: "bikelib"
+        username: "bikelib.fullname"
         password: "!ChangeMe!"
-        database: "bikelib"
+        database: "bikelib.fullname"
   # Persistent Volume Storage configuration.
   # ref: https://kubernetes.io/docs/user-guide/persistent-volumes
   primary:
