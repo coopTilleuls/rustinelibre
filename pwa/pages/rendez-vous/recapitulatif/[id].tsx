@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import {RepairerFormProvider} from '@contexts/RepairerFormContext';
 import {Appointment} from '@interfaces/Appointment';
 
 const AppointmentSummary: NextPageWithLayout = () => {
@@ -55,7 +54,7 @@ const AppointmentSummary: NextPageWithLayout = () => {
     .replace(':', 'h');
 
   return (
-    <RepairerFormProvider>
+    <>
       <Head>
         <title>Récapitulatif</title>
       </Head>
@@ -81,10 +80,9 @@ const AppointmentSummary: NextPageWithLayout = () => {
                   my={{xs: 2}}>
                   Votre demande de rendez-vous
                 </Typography>
-                <Typography
-                  component="h4"
-                  my={{xs: 2}}>
-                  Votre demande a bien été envoyée. Le réparateur vous recontactera sous 72 heures maximum.
+                <Typography component="h4" my={{xs: 2}}>
+                  Votre demande a bien été envoyée. Le réparateur vous
+                  recontactera sous 72 heures maximum.
                 </Typography>
                 <Box p={3} sx={{border: '3px solid grey', borderRadius: 1}}>
                   <Box display="flex" justifyContent="center">
@@ -135,7 +133,7 @@ const AppointmentSummary: NextPageWithLayout = () => {
           </Container>
         </main>
       </WebsiteLayout>
-    </RepairerFormProvider>
+    </>
   );
 };
 
