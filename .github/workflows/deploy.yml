@@ -2,6 +2,15 @@ name: Deploy
 
 on:
   workflow_call:
+    inputs:
+      prod-storage-bucket:
+        description: prod storage bucket name
+        required: true
+        type: string
+      nonprod-storage-bucket:
+        description: nonprod storage bucket name
+        required: true
+        type: string
     secrets:
       kubeconfig:
         description: kubeconfig stored as a base64 encrypted secret
@@ -11,6 +20,18 @@ on:
         required: true
       mailer-dsn:
           description: MAILER DSN
+      nonprod-storage-key:
+        description: nonprod storage key
+        required: true
+      nonprod-storage-secret:
+        description: nonprod storage secret
+        required: true
+      prod-storage-key:
+        description: prod storage key
+        required: true
+      prod-storage-secret:
+        description: prod storage secret
+        required: true
       fb-project-id:
         required: true
       fb-private-key-id:
@@ -36,6 +57,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      PROD_STORAGE_BUCKET: ${{ inputs.prod-storage-bucket }}
+      NONPROD_STORAGE_BUCKET: ${{ inputs.nonprod-storage-bucket }}
     #permissions:
     #  contents: 'read'
     #  id-token: 'write'
@@ -68,10 +92,16 @@ jobs:
               CONTEXT=prod
               IMAGE_TAG=${{ github.ref_name }}
               RELEASE_NAME=demo             
-              URL=demo.${{ secrets.domain }}; 
+              URL=demo.${{ secrets.domain }};
+              STORAGE_NAME=${PROD_STORAGE_BUCKET}
+              STORAGE_KEY=${{ secrets.prod-storage-key }}
+              STORAGE_SECRET=${{ secrets.prod-storage-secret }}
           else
               CONTEXT=nonprod
               IMAGE_TAG=sha-${GITHUB_SHA::7}
+              STORAGE_KEY=${{ secrets.nonprod-storage-key }}
+              STORAGE_SECRET=${{ secrets.nonprod-storage-secret }}
+              STORAGE_NAME=${NONPROD_STORAGE_BUCKET}
               if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
                   RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
               else
@@ -109,6 +139,12 @@ jobs:
             --set=mercure.publicUrl=https://${URL}/.well-known/mercure \
             --set=mercure.jwtSecret="${MERCURE_JWT_PUBLIC_KEY}" \
             --set=mercure.extraDirectives="${MERCURE_EXTRA_DIRECTIVES}" \
+            --set=php.storage.bucket="${STORAGE_NAME}" \
+            --set=php.storage.endpoint="https://storage.googleapis.com" \
+            --set=php.storage.region="eu-west-1" \
+            --set=php.storage.usePathStyleEndpoint=true \
+            --set=php.storage.key="${STORAGE_KEY}" \
+            --set=php.storage.secret="${STORAGE_SECRET}" \
             --set=php.firebase.projectID="${{ secrets.fb-project-id }}" \
             --set=php.firebase.privateKeyID="${{ secrets.fb-private-key-id }}" \
             --set=php.firebase.privateKey="${{ secrets.fb-private-key }}" \
