@@ -28,6 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
     mercure: true,
+    paginationClientEnabled: true,
+    paginationClientItemsPerPage: true,
 )]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or (user.repairer and user.repairer == object.repairer) 

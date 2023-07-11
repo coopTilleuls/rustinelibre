@@ -11,7 +11,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {User} from '@interfaces/User';
 import {useRouter} from 'next/router';
 import {isBoss, isEmployee} from '@helpers/rolesHelpers';
-import {Box, Paper, Typography} from '@mui/material';
+import {Paper, Typography} from '@mui/material';
 import {Discussion} from "@interfaces/Discussion";
 import {ENTRYPOINT} from "@config/entrypoint";
 import {discussionResource} from "@resources/discussionResource";
@@ -21,10 +21,10 @@ interface FooterProps {
   user?: User;
 }
 const Footer = ({user}: FooterProps): JSX.Element => {
-  const router = useRouter();
-  const isMobile = useMediaQuery('(max-width: 899px)');
+    const router = useRouter();
+    const isMobile = useMediaQuery('(max-width: 899px)');
     const [discussions, setDiscussions] = useState<Discussion[]>([]);
-    const [unreadMessages, setUnreadMessages] = useState<Number>(0);
+    const [unreadMessages, setUnreadMessages] = useState<number>(0);
 
     const subscribeMercureDiscussions = async (): Promise<void> => {
         const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
@@ -55,6 +55,8 @@ const Footer = ({user}: FooterProps): JSX.Element => {
 
         const response = await discussionResource.getAll(true, {
             customer: user.id,
+            itemsPerPage: 50,
+            'order[id]': 'DESC'
         });
         setDiscussions(response['hydra:member']);
     };
@@ -72,7 +74,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
         }
     }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const links = useMemo(
+    const links = useMemo(
     () =>
       [
         {
@@ -139,15 +141,13 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             value={link}
             label={
               isMobile ? undefined : (
-                  <Badge badgeContent={label === 'Messages' ? unreadMessages : 0} color="primary">
-                      <Typography variant="caption" fontWeight={700}>
-                        {label}
-                      </Typography>
-                  </Badge>
+                  <Typography variant="caption" fontWeight={700}>
+                    {label}
+                  </Typography>
               )
             }
             sx={{color: 'secondary.main', fontWeight: 700, maxWidth: '130px'}}
-            icon={<LinkIcon fontSize="large" />}
+            icon={<Badge badgeContent={label === 'Messages' ? unreadMessages : 0} color="primary"><LinkIcon fontSize="large" /></Badge>}
           />
         ))}
       </BottomNavigation>
