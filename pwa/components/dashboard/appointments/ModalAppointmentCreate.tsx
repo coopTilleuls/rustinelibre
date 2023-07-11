@@ -6,7 +6,8 @@ import {
   Stack,
   Typography,
   Alert,
-  CircularProgress, InputLabel,
+  CircularProgress,
+  InputLabel,
 } from '@mui/material';
 import {customerResource} from '@resources/customerResource';
 import Box from '@mui/material/Box';
@@ -28,11 +29,11 @@ import AppointmentCreateAddComment from './AppointmentCreateAddComment';
 import router from 'next/router';
 import CloseIcon from '@mui/icons-material/Close';
 import {errorRegex} from '@utils/errorRegex';
-import {TimePicker} from "@mui/x-date-pickers";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import {TimePicker} from '@mui/x-date-pickers';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 
 
 interface AppointmentCreateProps {
@@ -107,14 +108,17 @@ const ModalAppointmentCreate = ({
     }
   }, [selectedDate]);
 
+  useEffect(() => {
+    if (!details && newAppointment) {
+      handleSuccess();
+    }
+  }, [details, newAppointment]); // eslint-disable-line react-hooks/exhaustive-deps
   const handleCustomerChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): Promise<void> => {
-
     setCustomerInput(event.target.value);
   };
   const handleSelectCustomer = (customer: Customer): void => {
-
     setSelectedCustomer(customer);
   };
   const slotDate = new Date(slotSelected!).toLocaleString('fr-FR', {
@@ -138,12 +142,17 @@ const ModalAppointmentCreate = ({
     };
 
     try {
+      setErrorMessage(null);
       const appointment = await appointmentResource.post(requestBody);
       setNewAppointment(appointment);
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
+      setLoading(false);
+      return;
     }
-
+    if (!details) {
+      handleSuccess();
+    }
     setLoading(false);
   };
 
@@ -169,6 +178,8 @@ const ModalAppointmentCreate = ({
         await autoDiagnosticResource.post(requestBody);
       } catch (e: any) {
         setErrorMessage(e.message?.replace(errorRegex, '$2'));
+        setLoading(false);
+        return;
       }
     }
 
@@ -186,10 +197,14 @@ const ModalAppointmentCreate = ({
         await appointmentResource.put(newAppointment['@id'], putRequest);
       } catch (e: any) {
         setErrorMessage(e.message?.replace(errorRegex, '$2'));
+        setLoading(false);
+        return;
       }
     }
     setLoading(false);
-    handleSuccess();
+    if (!errorMessage) {
+      handleSuccess();
+    }
   };
 
   const handleSuccess = () => {
@@ -202,12 +217,11 @@ const ModalAppointmentCreate = ({
       setSuccess(false);
     }, 2000);
   };
-
-  const handleCreateWithoutDetails = (selectedCustomer: Customer) => {
-    setDetails(false);
+  const handleCreateWithoutDetails = async (selectedCustomer: Customer) => {
+    await setDetails(false);
     handleCreateAppointment(selectedCustomer);
-    handleSuccess();
   };
+
   const handleResetStates = () => {
     setSelectedCustomer(null);
     setCustomers([]);
@@ -221,19 +235,27 @@ const ModalAppointmentCreate = ({
   };
 
   const handleDatePicker = (newValue: any) => {
-    let newDate = `${newValue.$y}-${(newValue.$M + 1)
-      .toString()
-      .padStart(2, '0')}-${newValue.$D.toString().padStart(2, '0')}`;
-    setPickedDate(newDate);
-    setSlotSelected(`${newDate}T${pickedTime}`);
+    if (newValue && newValue.$y && newValue.$M && newValue.$D) {
+      let newDate = `${newValue.$y}-${(newValue.$M + 1)
+        .toString()
+        .padStart(2, '0')}-${newValue.$D.toString().padStart(2, '0')}`;
+      setPickedDate(newDate);
+      setSlotSelected(`${newDate}T${pickedTime}`);
+    } else {
+      setPickedDate(null);
+    }
   };
 
   const handleTimePicker = (newValue: any) => {
-    let newTime = `${newValue.$H.toString().padStart(2, '0')}:${newValue.$m
-      .toString()
-      .padStart(2, '0')}:${newValue.$s.toString().padStart(2, '0')}`;
-    setPickedTime(newTime);
-    setSlotSelected(`${pickedDate}T${newTime}`);
+    if(newValue && newValue.$H && newValue.$m) {
+      let newTime = `${newValue.$H.toString().padStart(2, '0')}:${newValue.$m
+        .toString()
+        .padStart(2, '0')}:${newValue.$s.toString().padStart(2, '0')}`;
+      setPickedTime(newTime);
+      setSlotSelected(`${pickedDate}T${newTime}`);
+    } else {
+      setPickedTime(null);
+    }
   };
 
   return (
@@ -286,7 +308,7 @@ const ModalAppointmentCreate = ({
               onChange={(newValue) => handleDatePicker(newValue)}
             />
             <TimePicker
-              defaultValue={dayjs(new Date(selectedDate!))}
+              defaultValue={dayjs(selectedDate)}
               format="HH:mm"
               onChange={(newValue) => handleTimePicker(newValue)}
             />
