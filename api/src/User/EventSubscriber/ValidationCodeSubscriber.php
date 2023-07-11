@@ -56,10 +56,6 @@ final class ValidationCodeSubscriber implements EventSubscriber
 
     private function sendValidationCodeByEmail(User $user): void
     {
-        if ('test' === $this->kernel->getEnvironment()) {
-            return;
-        }
-
         $email = (new Email())
             ->from($this->mailerSender)
             ->to($user->email)
