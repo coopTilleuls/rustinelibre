@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useState} from 'react';
+import React, {PropsWithChildren} from 'react';
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import('@components/layout/Navbar'));
 const Footer = dynamic(() => import('@components/layout/Footer'));
@@ -6,9 +6,6 @@ import {useAccount} from '@contexts/AuthContext';
 import LegalNoticesFooter from './LegaNoticesFooter';
 import Box from '@mui/material/Box';
 import {useRouter} from 'next/router';
-import {Discussion} from "@interfaces/Discussion";
-import {ENTRYPOINT} from "@config/entrypoint";
-import {discussionResource} from "@resources/discussionResource";
 
 const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
   const {user} = useAccount({});
@@ -17,6 +14,7 @@ const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
     ? router.query.next.join('')
     : router.query.next || '/';
   const isAdmin = next.includes('admin');
+
 
   return (
     <Box height="100vh" overflow="auto" id="websitelayout">

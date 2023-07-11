@@ -41,7 +41,24 @@ jobs:
     needs: [ build ]
     uses: ./.github/workflows/deploy.yml
     concurrency: ${{ github.ref }}-deploy
+    with:
+      nonprod-storage-bucket: ${{ vars.NONPROD_STORAGE_BUCKET }}
+      prod-storage-bucket: ${{ vars.PROD_STORAGE_BUCKET }}
     secrets:
       kubeconfig: ${{ secrets.KUBECONFIG }}
       domain: ${{ secrets.DOMAIN }}
       mailer-dsn: ${{ secrets.MAILER_DSN }}
+      nonprod-storage-key: ${{ secrets.NONPROD_STORAGE_KEY }}
+      nonprod-storage-secret: ${{ secrets.NONPROD_STORAGE_SECRET }}
+      prod-storage-key: ${{ secrets.PROD_STORAGE_KEY }}
+      prod-storage-secret: ${{ secrets.PROD_STORAGE_SECRET }}
+      fb-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
+      fb-private-key-id: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
+      fb-private-key: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+      fb-client-email: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+      fb-client-id: ${{ secrets.FIREBASE_CLIENT_ID }}
+      fb-auth-uri: ${{ secrets.FIREBASE_AUTH_URI }}
+      fb-token-uri: ${{ secrets.FIREBASE_TOKEN_URI }}
+      fb-auth-provider: ${{ secrets.FIREBASE_AUTH_PROVIDER }}
+      fb-client-cert-url: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
+      fb-universe-domain: ${{ secrets.FIREBASE_UNIVERSE_DOMAIN }}

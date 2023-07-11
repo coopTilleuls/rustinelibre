@@ -47,4 +47,7 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	fi
 fi
 
+# Create firebase.json credentials file
+php bin/console app:firebase:credentials
+
 exec docker-php-entrypoint "$@"

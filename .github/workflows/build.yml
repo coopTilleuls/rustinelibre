@@ -74,7 +74,15 @@ jobs:
         push: true
         tags: ${{ steps.docker-metadata.outputs.tags }}
         labels: ${{ steps.docker-metadata.outputs.labels }}
-        build-args: NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
+        build-args: |
+          NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
+          NEXT_PUBLIC_FIREBASE_API_KEY=${{ vars.FB_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ vars.FB_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ vars.FB_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ vars.FB_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ vars.FB_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID=${{ vars.FB_APP_ID }}
+          NEXT_PUBLIC_VAPID_KEY=${{ vars.VAPID_KEY }}
         cache-from: type=registry,ref=${{ vars.IMAGE_REPOSITORY_NAME }}/${{ vars.PWA_IMAGE_NAME }}:buildcache
 
     # - name: Build/Push
