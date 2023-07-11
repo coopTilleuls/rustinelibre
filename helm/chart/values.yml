@@ -29,6 +29,18 @@ php:
       enabled: true
       size: 1Gi
       storageClass: "standard"
+  firebase: 
+    projectID: "!ChangeMe!"
+    privateKeyID: "!ChangeMe!"
+    privateKey: "!ChangeMe!"
+    clientEmail: "!ChangeMe!"
+    clientID: "!ChangeMe!"
+    authUri: "!ChangeMe!"
+    tokenUri: "!ChangeMe!"
+    authProvider: "!ChangeMe!"
+    clientCertUrl: "!ChangeMe!"
+    universeDomain: "!ChangeMe!"
+
 
 pwa:
   image:
