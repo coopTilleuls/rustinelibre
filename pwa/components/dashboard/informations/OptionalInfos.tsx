@@ -1,26 +1,34 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import dynamic from 'next/dynamic';
-import {InputLabel, Box, Button, CircularProgress, Typography, Alert} from '@mui/material';
-import {RepairerFormContext} from '@contexts/RepairerFormContext';
+import {
+  InputLabel,
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  Alert,
+} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
-import {RequestBody} from "@interfaces/Resource";
+import {RequestBody} from '@interfaces/Resource';
 const Editor = dynamic(() => import('@components/form/Editor'), {
   ssr: false,
 });
 
 interface OptionnalInfosProps {
   repairer: Repairer | null;
-  updateRepairer: (iri : string, body : RequestBody) => Promise<void>;
+  // eslint-disable-next-line no-unused-vars
+  updateRepairer: (iri: string, bodyRequest: RequestBody) => Promise<void>;
 }
 
-export const OptionalInfos = ({repairer, updateRepairer}: OptionnalInfosProps): JSX.Element => {
-  const {
-    optionalPage,
-    errorMessage,
-    success,
-    pendingRegistration,
-    setOptionalPage
-  } = useContext(RepairerFormContext);
+export const OptionalInfos = ({
+  repairer,
+  updateRepairer,
+}: OptionnalInfosProps): JSX.Element => {
+  const [optionalPage, setOptionalPage] = useState<string>('');
+  const [pendingRegistration, setPendingRegistration] =
+    useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
 
   useEffect(() => {
     if (repairer) {
@@ -28,14 +36,27 @@ export const OptionalInfos = ({repairer, updateRepairer}: OptionnalInfosProps): 
     }
   }, [repairer, setOptionalPage]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     if (!repairer) return;
-    const requestBody: RequestBody = {};
-
-    if (optionalPage) requestBody['optionalPage'] = optionalPage;
-
-    await updateRepairer(repairer['@id'], requestBody)
+    try {
+      setPendingRegistration(true);
+      await updateRepairer(repairer['@id'], {
+        optionalPage: optionalPage,
+      });
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    } catch (e) {
+      setErrorMessage('Mise à jour impossible');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    }
+    setPendingRegistration(false);
   };
 
   return (
@@ -47,23 +68,19 @@ export const OptionalInfos = ({repairer, updateRepairer}: OptionnalInfosProps): 
       <Editor content={optionalPage} setContent={setOptionalPage} />
       <Button type="submit" variant="contained" sx={{my: 2}}>
         {!pendingRegistration ? (
-            'Enregistrer mes informations'
+          'Enregistrer mes informations'
         ) : (
-            <CircularProgress size={20} sx={{color: 'white'}} />
+          <CircularProgress size={20} sx={{color: 'white'}} />
         )}
       </Button>
 
       {errorMessage && (
-          <Typography variant="body1" color="error">
-            {errorMessage}
-          </Typography>
+        <Typography variant="body1" color="error">
+          {errorMessage}
+        </Typography>
       )}
 
-      {success && (
-          <Alert severity="success">
-            Informations mises à jour
-          </Alert>
-      )}
+      {success && <Alert severity="success">Informations mises à jour</Alert>}
     </Box>
   );
 };

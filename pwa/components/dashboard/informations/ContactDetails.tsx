@@ -2,17 +2,12 @@ import React, {
   ChangeEvent,
   SyntheticEvent,
   useCallback,
-  useContext,
   useEffect,
   useState,
 } from 'react';
 import {Repairer} from '@interfaces/Repairer';
-import {RepairerFormContext} from '@contexts/RepairerFormContext';
 import {searchCity} from '@utils/apiCity';
-import {
-  City,
-  createCities,
-} from '@interfaces/City';
+import {City, createCities} from '@interfaces/City';
 import {
   Alert,
   Button,
@@ -20,49 +15,42 @@ import {
   Typography,
   Box,
   TextField,
-  Autocomplete
-} from "@mui/material";
-import {RequestBody} from "@interfaces/Resource";
+  Autocomplete,
+} from '@mui/material';
+import {RequestBody} from '@interfaces/Resource';
+
+const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
 interface ContactDetailsProps {
   repairer: Repairer | null;
-  updateRepairer: (iri : string, body : RequestBody) => Promise<void>;
+  // eslint-disable-next-line no-unused-vars
+  updateRepairer: (iri: string, bodyRequest: RequestBody) => Promise<void>;
 }
 
 export const ContactDetails = ({
   repairer,
   updateRepairer,
 }: ContactDetailsProps): JSX.Element => {
-  const {
-    name,
-    streetNumber,
-    mobilePhone,
-    street,
-    city,
-    citiesList,
-    pendingRegistration,
-    errorMessage,
-    success,
-    setName,
-    setStreetNumber,
-    setMobilePhone,
-    setStreet,
-    setCityInput,
-    setCity,
-    setCitiesList,
-  } = useContext(RepairerFormContext);
-  const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
-  const [loading, setLoading] = useState<boolean>(false);
+  const [pendingRegistration, setPendingRegistration] =
+    useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [name, setName] = useState<string>('');
+  const [mobilePhone, setMobilePhone] = useState<string>('');
+  const [streetNumber, setStreetNumber] = useState<string>('');
+  const [street, setStreet] = useState<string>('');
+  const [city, setCity] = useState<City | null>(null);
+  const [citiesList, setCitiesList] = useState<City[]>([]);
 
   useEffect(() => {
     if (repairer) {
-      setName(repairer.name ?? '');
-      setStreet(repairer.street ?? '');
-      setStreetNumber(repairer.streetNumber ?? '');
-      setCityInput(repairer.city ?? '');
-      setMobilePhone(repairer.mobilePhone ?? '');
+      setName(repairer.name!);
+      setStreet(repairer.street!);
+      setStreetNumber(repairer.streetNumber!);
+      setMobilePhone(repairer.mobilePhone!);
 
-      if (!city && repairer.city && repairer.postcode){
+      if (!city && repairer.city && repairer.postcode) {
         setCity({
           formatted_name: `${repairer.city} (${repairer.postcode})`,
           id: 0,
@@ -70,17 +58,18 @@ export const ContactDetails = ({
           lon: 0,
           name: repairer.city,
           postcode: repairer.postcode,
-        } as City)
+        } as City);
       }
     }
-  }, [repairer, setName, setStreet, setCityInput]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [repairer, setName, setStreet]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const fetchCitiesResult = useCallback(async (cityStr: string) => {
+  const fetchCitiesResult = useCallback(
+    async (cityStr: string) => {
       const citiesResponse = await searchCity(cityStr, useNominatim);
       const cities: City[] = createCities(citiesResponse, useNominatim);
       setCitiesList(cities);
     },
-    [setCitiesList, useNominatim]
+    [setCitiesList]
   );
 
   const handleCityChange = (value: string): void => {
@@ -93,7 +82,9 @@ export const ContactDetails = ({
     setName(event.target.value);
   };
 
-  const handleChangeMobilePhone = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeMobilePhone = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
     setMobilePhone(event.target.value);
   };
 
@@ -101,142 +92,148 @@ export const ContactDetails = ({
     setStreet(event.target.value);
   };
 
-  const handleChangeStreetNumber = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeStreetNumber = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
     setStreetNumber(event.target.value);
   };
 
-  const handleCitySelect = (event: SyntheticEvent<Element, Event>,value: string | City | null) => {
+  const handleCitySelect = (
+    event: SyntheticEvent<Element, Event>,
+    value: string | City | null
+  ) => {
     if (!value || typeof value !== 'object') return false;
     const selectedCity = citiesList.find((city) => {
       if (!city.name) return false;
       return city.name === value.name && city.postcode === value.postcode;
     });
     setCity(selectedCity ?? null);
-    setCityInput(value.name);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
-    if (!repairer) return;
-    const requestBody: RequestBody = {};
-
-    if (mobilePhone) requestBody['mobilePhone'] = mobilePhone;
-
-    if (name && name !== '') requestBody['name'] = name;
-
-    if (streetNumber && streetNumber !== '') requestBody['streetNumber'] = streetNumber;
-
-    if (street && street !== '') requestBody['street'] = street;
-
-    if (city) { requestBody['city'] = city.name; requestBody['postcode'] = city.postcode;}
-
-    await updateRepairer(repairer['@id'], requestBody)
+    if (!repairer) {
+      return;
+    }
+    try {
+      setPendingRegistration(true);
+      await updateRepairer(repairer['@id'], {
+        name: name,
+        mobilePhone: mobilePhone,
+        streetNumber: streetNumber,
+        street: street,
+        city: city?.name,
+        postcode: city?.postcode,
+      });
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    } catch (e) {
+      setErrorMessage('Mise à jour impossible');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    }
+    setPendingRegistration(false);
   };
+
+  if (!name || !mobilePhone || !streetNumber || !street || !city) {
+    return (
+      <Box textAlign="center">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
-    <Box sx={{marginTop: 3}} component="form" onSubmit={handleSubmit} >
-      {loading && <CircularProgress />}
-      {!loading && !repairer && (
-          <Typography>Vous ne gérez pas de solution de réparation</Typography>
+    <Box mt={3} component="form" onSubmit={handleSubmit}>
+      {!repairer && (
+        <Typography>Vous ne gérez pas de solution de réparation</Typography>
       )}
-      {!loading && (
-          <div>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="name"
-              label="Nom de votre enseigne"
-              name="name"
-              autoComplete="name"
-              value={name}
-              inputProps={{maxLength: 80}}
-              onChange={handleChangeName}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              type={'tel'}
-              id="mobilePhone"
-              label="Numéro de téléphone"
-              name="name"
-              autoComplete="mobilePhone"
-              value={mobilePhone}
-              inputProps={{maxLength: 30}}
-              onChange={handleChangeMobilePhone}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="streetNumber"
-              label="Numéro dans la rue"
-              name="streetNumber"
-              autoComplete="streetNumber"
-              value={streetNumber}
-              inputProps={{maxLength: 30}}
-              onChange={handleChangeStreetNumber}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="street"
-              label="Rue"
-              name="street"
-              autoComplete="street"
-              value={street}
-              inputProps={{maxLength: 800}}
-              onChange={handleChangeStreet}
-            />
-            <Autocomplete
-                sx={{mt: 2, mb: 1, p: 0}}
-                freeSolo
-                value={city}
-                options={citiesList}
-                getOptionLabel={(city) =>
-                    typeof city === 'string'
-                        ? city
-                        : `${city.name}  (${city.postcode})`
-                }
-                onChange={(event, value) => handleCitySelect(event, value)}
-                onInputChange={(event, value) => {
-                  handleCityChange(value);
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        required
-                        label="Ville"
-                        {...params}
-                        size="medium"
-                    />
-                )}
-            />
-      </div>)}
-
-      {!loading && (
-          <div>
-            <Button type="submit" variant="contained" sx={{my: 2}}>
-              {!pendingRegistration ? (
-                  'Enregistrer mes informations'
-              ) : (
-                  <CircularProgress size={20} sx={{color: 'white'}} />
-              )}
-            </Button>
-          </div>
+      <div>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="name"
+          label="Nom de votre enseigne"
+          name="name"
+          autoComplete="name"
+          value={name}
+          inputProps={{maxLength: 80}}
+          onChange={handleChangeName}
+        />
+        <TextField
+          margin="normal"
+          fullWidth
+          type="tel"
+          id="mobilePhone"
+          label="Numéro de téléphone"
+          name="name"
+          autoComplete="mobilePhone"
+          value={mobilePhone}
+          inputProps={{maxLength: 30}}
+          onChange={handleChangeMobilePhone}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="streetNumber"
+          label="Numéro dans la rue"
+          name="streetNumber"
+          autoComplete="streetNumber"
+          value={streetNumber}
+          inputProps={{maxLength: 30}}
+          onChange={handleChangeStreetNumber}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="street"
+          label="Rue"
+          name="street"
+          autoComplete="street"
+          value={street}
+          inputProps={{maxLength: 800}}
+          onChange={handleChangeStreet}
+        />
+        <Autocomplete
+          sx={{mt: 2, mb: 1, p: 0}}
+          freeSolo
+          value={city}
+          options={citiesList}
+          getOptionLabel={(city) =>
+            typeof city === 'string' ? city : `${city.name}  (${city.postcode})`
+          }
+          onChange={(event, value) => handleCitySelect(event, value)}
+          onInputChange={(event, value) => {
+            handleCityChange(value);
+          }}
+          renderInput={(params) => (
+            <TextField required label="Ville" {...params} size="medium" />
+          )}
+        />
+      </div>
+      <div>
+        <Button type="submit" variant="contained" sx={{my: 2}}>
+          {!pendingRegistration ? (
+            'Enregistrer mes informations'
+          ) : (
+            <CircularProgress size={20} sx={{color: 'white'}} />
+          )}
+        </Button>
+      </div>
+      {errorMessage && (
+        <Typography variant="body1" color="error">
+          {errorMessage}
+        </Typography>
       )}
-
-      {!loading && errorMessage && (
-          <Typography variant="body1" color="error">
-            {errorMessage}
-          </Typography>
-      )}
-
-      {success && (
-          <Alert severity="success">
-            Informations mises à jour
-          </Alert>
-      )}
+      {success && <Alert severity="success">Informations mises à jour</Alert>}
     </Box>
   );
 };

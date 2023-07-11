@@ -14,3 +14,7 @@ data:
   mercure-url: "http://{{ include "bikelib.fullname" . }}/.well-known/mercure"
   mercure-public-url: {{ .Values.mercure.publicUrl | default "http://127.0.0.1/.well-known/mercure" | quote }}
   mercure-extra-directives: {{ .Values.mercure.extraDirectives | quote }}
+  php-storage-bucket: {{ .Values.php.storage.bucket | quote }}
+  php-storage-endpoint: {{ .Values.php.storage.endpoint | quote }}
+  php-storage-region: {{ .Values.php.storage.region | quote }}
+  php-storage-use-path-style-endpoint: {{ .Values.php.storage.usePathStyleEndpoint | quote }}

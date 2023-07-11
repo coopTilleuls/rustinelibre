@@ -241,7 +241,7 @@ class Repairer
         min: 1,
         max: 10,
     )]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public ?int $numberOfSlots = 1;
 
     public function __construct()
