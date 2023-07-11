@@ -12,28 +12,32 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../styles/theme';
 import {A2HS} from '@components/banner/A2HS';
 import {A2HSIOS} from '@components/banner/A2HSIOS';
+import dynamic from 'next/dynamic';
+const Notifications = dynamic(() => import('@components/notifications/Notifications'), {
+  ssr: false,
+});
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
 function MyApp({
-  Component,
-  pageProps,
-}: AppProps<{dehydratedState: DehydratedState}>) {
+                 Component,
+                 pageProps,
+               }: AppProps<{dehydratedState: DehydratedState}>) {
   return (
-    <AuthProvider>
-      <SearchRepairerProvider>
-        <UserFormProvider>
-          <>
-            <Head>
-              <meta
-                name="viewport"
-                content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
-              />
-              <meta name="application-name" content="Rustine Libre" />
-              <meta name="apple-mobile-web-app-capable" content="yes" />
-              {/* <meta
+      <AuthProvider>
+        <SearchRepairerProvider>
+          <UserFormProvider>
+            <>
+              <Head>
+                <meta
+                    name="viewport"
+                    content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+                />
+                <meta name="application-name" content="Rustine Libre" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta
                   name="apple-mobile-web-app-status-bar-style"
                   content="default"
                 />
@@ -50,8 +54,7 @@ function MyApp({
                 />
                 <meta name="msapplication-TileColor" content="#2B5797" />
                 <meta name="msapplication-tap-highlight" content="no" />
-                <meta name="theme-color" content="#000000" /> */}
-              {/* 
+                <meta name="theme-color" content="#000000" />
                 <link rel="manifest" href="/manifest.json"></link>
                 <link
                   rel="apple-touch-icon"
@@ -175,21 +178,22 @@ function MyApp({
                 <link
                   rel="apple-touch-startup-image"
                   href="pwa_icons/apple-splash-1136-640.jpg"
-                  media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link> */}
-            </Head>
-            <ThemeProvider theme={theme}>
-              <CssBaseline>
-                {/* <A2HS></A2HS>
-                  <A2HSIOS></A2HSIOS> */}
-                <Layout dehydratedState={pageProps.dehydratedState}>
-                  <Component {...pageProps} />
-                </Layout>
-              </CssBaseline>
-            </ThemeProvider>
-          </>
-        </UserFormProvider>
-      </SearchRepairerProvider>
-    </AuthProvider>
+                  media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link>
+              </Head>
+              <ThemeProvider theme={theme}>
+                <CssBaseline>
+                  <A2HS></A2HS>
+                  <A2HSIOS></A2HSIOS>
+                  <Notifications></Notifications>
+                  <Layout dehydratedState={pageProps.dehydratedState}>
+                    <Component {...pageProps} />
+                  </Layout>
+                </CssBaseline>
+              </ThemeProvider>
+            </>
+          </UserFormProvider>
+        </SearchRepairerProvider>
+      </AuthProvider>
   );
 }
 

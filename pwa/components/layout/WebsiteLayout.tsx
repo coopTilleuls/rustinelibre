@@ -1,4 +1,4 @@
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, useEffect} from 'react';
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import('@components/layout/Navbar'));
 const Footer = dynamic(() => import('@components/layout/Footer'));
@@ -14,6 +14,7 @@ const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
     ? router.query.next.join('')
     : router.query.next || '/';
   const isAdmin = next.includes('admin');
+
 
   return (
     <Box height="100vh" overflow="auto" id="websitelayout">
