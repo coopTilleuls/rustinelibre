@@ -166,6 +166,56 @@ spec:
                 secretKeyRef:
                   name: {{ include "bikelib.fullname" . }}
                   key: mercure-jwt-secret
+            - name: FIREBASE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-project-id
+            - name: FIREBASE_PRIVATE_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-private-key-id
+            - name: FIREBASE_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-private-key
+            - name: FIREBASE_CLIENT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-client-email
+            - name: FIREBASE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-client-id
+            - name: FIREBASE_AUTH_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-auth-uri
+            - name: FIREBASE_TOKEN_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-token-uri
+            - name: FIREBASE_AUTH_PROVIDER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-auth-provider
+            - name: FIREBASE_CLIENT_CERT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-client-cert-url
+            - name: FIREBASE_UNIVERSE_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bikelib.fullname" . }}
+                  key: firebase-universe-domain                
           volumeMounts:
             {{- if .Values.php.medias.persistence.enabled }}
             - mountPath: /srv/app/public/media
