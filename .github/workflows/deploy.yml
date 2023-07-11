@@ -48,6 +48,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      PROD_STORAGE_BUCKET: ${{ inputs.prod-storage-bucket }}
+      NONPROD_STORAGE_BUCKET: ${{ inputs.nonprod-storage-bucket }}
     #permissions:
     #  contents: 'read'
     #  id-token: 'write'
