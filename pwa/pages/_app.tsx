@@ -6,36 +6,34 @@ import {NextPage} from 'next';
 import type {ReactElement, ReactNode} from 'react';
 import {AuthProvider} from '@contexts/AuthContext';
 import {SearchRepairerProvider} from '@contexts/SearchRepairerContext';
-import {RepairerFormProvider} from '@contexts/RepairerFormContext';
 import {UserFormProvider} from '@contexts/UserFormContext';
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../styles/theme';
+import {A2HS} from '@components/banner/A2HS';
+import {A2HSIOS} from '@components/banner/A2HSIOS';
 import dynamic from 'next/dynamic';
 const Notifications = dynamic(() => import('@components/notifications/Notifications'), {
   ssr: false,
 });
-import {A2HS} from '@components/banner/A2HS';
-import {A2HSIOS} from '@components/banner/A2HSIOS';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
 function MyApp({
-  Component,
-  pageProps,
-}: AppProps<{dehydratedState: DehydratedState}>) {
+                 Component,
+                 pageProps,
+               }: AppProps<{dehydratedState: DehydratedState}>) {
   return (
-    <AuthProvider>
-      <SearchRepairerProvider>
-        <RepairerFormProvider>
+      <AuthProvider>
+        <SearchRepairerProvider>
           <UserFormProvider>
             <>
               <Head>
                 <meta
-                  name="viewport"
-                  content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+                    name="viewport"
+                    content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
                 />
                 <meta name="application-name" content="Rustine Libre" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -194,9 +192,8 @@ function MyApp({
               </ThemeProvider>
             </>
           </UserFormProvider>
-        </RepairerFormProvider>
-      </SearchRepairerProvider>
-    </AuthProvider>
+        </SearchRepairerProvider>
+      </AuthProvider>
   );
 }
 
