@@ -39,7 +39,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
         };
     };
 
-    const countUnread = async () => {
+    const countUnread = async (): Promise<void> => {
         if (!user) {
             return;
         }
@@ -56,7 +56,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
         const response = await discussionResource.getAll(true, {
             customer: user.id,
             itemsPerPage: 50,
-            'order[id]': 'DESC'
+            'order[lastMessage]': 'DESC'
         });
         setDiscussions(response['hydra:member']);
     };

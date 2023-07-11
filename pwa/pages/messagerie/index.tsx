@@ -6,8 +6,10 @@ import WebsiteLayout from '@components/layout/WebsiteLayout';
 import CustomerDiscussionList from '@components/messagerie/CustomerDiscussionList';
 import CustomerMessagesContent from "@components/messagerie/CustomerMessagesContent";
 import {Discussion} from "@interfaces/Discussion";
+import {useAccount} from "@contexts/AuthContext";
 
 const Messages: NextPageWithLayout = () => {
+    useAccount({redirectIfNotFound: '/login'});
     const [discussion, setDiscussion] = useState<Discussion|null>(null);
 
     return (
@@ -25,9 +27,9 @@ const Messages: NextPageWithLayout = () => {
                 Messages
               </Typography>
                 <Box sx={{display: 'flex'}}>
-                    <CustomerDiscussionList display={{xs: 'none', md: 'block'}} />
+                    <CustomerDiscussionList display={{xs: 'none', md: 'block'}} discussion={discussion} setDiscussion={setDiscussion} />
                     {discussion && <Box width={{xs: '100%', md: '70%'}}>
-                        <CustomerMessagesContent discussion={discussion} />
+                        <CustomerMessagesContent discussion={discussion} loading={false} />
                     </Box>}
                 </Box>
             </Container>

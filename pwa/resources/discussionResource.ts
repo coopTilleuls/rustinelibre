@@ -21,6 +21,37 @@ class DiscussionResource extends AbstractResource<Discussion> {
         return await this.getResult(doFetch);
     }
 
+    async countUnreadDiscussion(discussionId: string, headers?: RequestHeaders): Promise<any> {
+        const url = this.getUrl(`/messages_unread/${discussionId}`);
+
+        const doFetch = async () => {
+            return await fetch(url, {
+                headers: {
+                    ...this.getDefaultHeaders(),
+                    ...headers,
+                },
+                method: 'GET',
+            });
+        };
+
+        return await this.getResult(doFetch);
+    }
+
+    async discussionRead(discussionId: string, headers?: RequestHeaders): Promise<any> {
+        const url = this.getUrl(`/discussions/${discussionId}/set_read`);
+
+        const doFetch = async () => {
+            return await fetch(url, {
+                headers: {
+                    ...this.getDefaultHeaders(),
+                    ...headers,
+                },
+                method: 'GET',
+            });
+        };
+
+        return await this.getResult(doFetch);
+    }
 }
 
 export const discussionResource = new DiscussionResource();
