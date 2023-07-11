@@ -105,6 +105,36 @@ spec:
                 secretKeyRef:
                   name: {{ include "bikelib.fullname" . }}
                   key: mercure-jwt-secret
+            - name: STORAGE_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "plateformcoop-ebs" . }}
+                  key: php-storage-bucket
+            - name: STORAGE_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "plateformcoop-ebs" . }}
+                  key: php-storage-endpoint
+            - name: STORAGE_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "plateformcoop-ebs" . }}
+                  key: php-storage-region
+            - name: STORAGE_USE_PATH_STYLE_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "plateformcoop-ebs" . }}
+                  key: php-storage-use-path-style-endpoint
+            - name: STORAGE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "plateformcoop-ebs" . }}
+                  key: php-storage-key
+            - name: STORAGE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "plateformcoop-ebs" . }}
+                  key: php-storage-secret
           lifecycle:
             preStop:
               exec:

@@ -45,6 +45,10 @@ jobs:
       kubeconfig: ${{ secrets.KUBECONFIG }}
       domain: ${{ secrets.DOMAIN }}
       mailer-dsn: ${{ secrets.MAILER_DSN }}
+      nonprod-storage-key: ${{ secrets.NONPROD_STORAGE_KEY }}
+      nonprod-storage-secret: ${{ secrets.NONPROD_STORAGE_SECRET }}
+      prod-storage-key: ${{ secrets.PROD_STORAGE_KEY }}
+      prod-storage-secret: ${{ secrets.PROD_STORAGE_SECRET }}
       fb-project-id: ${{ secrets.FIREBASE_PROJECT_ID }}
       fb-private-key-id: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
       fb-private-key: ${{ secrets.FIREBASE_PRIVATE_KEY }}
