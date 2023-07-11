@@ -50,7 +50,12 @@ class GenerateFirebaseCredentialsCommand extends Command
             'universe_domain' => $this->firebaseUniverseDomain,
         ];
 
-        $filePath = $this->projectDir.'/config/firebase/firebase-credentials.json';
+        $firebaseDir = sprintf('%s/config/firebase', $this->projectDir);
+        if (!is_dir($firebaseDir)) {
+            mkdir($firebaseDir);
+        }
+
+        $filePath = sprintf('%s/firebase-credentials.json', $firebaseDir);
         file_put_contents($filePath, json_encode($credentials, JSON_PRETTY_PRINT));
 
         $io->write('Firebase credentials generated');
