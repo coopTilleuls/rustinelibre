@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useRouter} from 'next/router';
-import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
+import {styled, Theme, CSSObject} from '@mui/material/styles';
 import {
   Box,
   Toolbar,
@@ -9,7 +9,6 @@ import {
   ListItem,
   Typography,
   Button,
-  darken,
 } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
@@ -105,7 +104,6 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout = ({children}: DashboardLayoutProps) => {
-  const theme = useTheme();
   const router = useRouter();
   const {user} = useAccount({
     redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
@@ -145,7 +143,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                   color: 'primary.main',
                   '&:hover': {
                     backgroundColor: 'rgba(255,255,255,0.8)',
-                    color: 'primary.dark'
+                    color: 'primary.dark',
                   },
                 }}
                 variant="contained">

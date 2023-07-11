@@ -1,14 +1,17 @@
 import {NextPageWithLayout} from 'pages/_app';
 import {ENTRYPOINT} from '@config/entrypoint';
-import React, {
-  useState,
-  ChangeEvent,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react';
+import React, {useState, ChangeEvent, useEffect, useCallback} from 'react';
 import {GetStaticProps} from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
+import {bikeTypeResource} from '@resources/bikeTypeResource';
+import {repairerTypeResource} from '@resources/repairerTypeResource';
+import {repairerResource} from '@resources/repairerResource';
+import {validateEmail} from '@utils/emailValidator';
+import {validatePassword} from '@utils/passwordValidator';
+import {searchCity, searchStreet} from '@utils/apiCity';
+import {errorRegex} from '@utils/errorRegex';
+import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {
   Avatar,
   Box,
@@ -28,12 +31,6 @@ import {
 } from '@mui/material';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import BuildIcon from '@mui/icons-material/Build';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
-import {RepairerFormContext} from '@contexts/RepairerFormContext';
-import {UserFormContext} from '@contexts/UserFormContext';
-import {bikeTypeResource} from '@resources/bikeTypeResource';
-import {repairerTypeResource} from '@resources/repairerTypeResource';
-import {repairerResource} from '@resources/repairerResource';
 import {BikeType} from '@interfaces/BikeType';
 import {
   City,
@@ -43,12 +40,9 @@ import {
 import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {RepairerType} from '@interfaces/RepairerType';
-import {validateEmail} from '@utils/emailValidator';
-import {validatePassword} from '@utils/passwordValidator';
-import {searchCity, searchStreet} from '@utils/apiCity';
-import Link from 'next/link';
 import {Street} from '@interfaces/Street';
-import {errorRegex} from '@utils/errorRegex';
+
+const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
 type RepairerRegistrationProps = {
   bikeTypesFetched: BikeType[];
@@ -59,64 +53,41 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   bikeTypesFetched = [],
   repairerTypesFetched = [],
 }) => {
-  const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
-  const [comment, setComment] = useState<string>('');
-  const [streetList, setStreetList] = useState<Street[]>([]);
-  const [streetSelected, setStreetSelected] = useState<Street | null>(null);
-  const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
-  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
-  const [repairerTypes, setRepairerTypes] =
-    useState<RepairerType[]>(repairerTypesFetched);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [emailHelperText, setEmailHelperText] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<boolean>(false);
+  const [passwordHelperText, setPasswordHelperText] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [city, setCity] = useState<City | null>(null);
+  const [street, setStreet] = useState<Street | null>(null);
+  const [streetNumber, setStreetNumber] = useState<string>('');
+  const [cityInput, setCityInput] = useState<string>('');
+  const [citiesList, setCitiesList] = useState<City[]>([]);
   const [repairerTypeSelected, setRepairerTypeSelected] =
     useState<RepairerType | null>(
       repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null
     );
+  const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
+  const [comment, setComment] = useState<string>('');
+  const [streetList, setStreetList] = useState<Street[]>([]);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
+  const [repairerTypes, setRepairerTypes] =
+    useState<RepairerType[]>(repairerTypesFetched);
 
-  const {
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    email,
-    setEmail,
-    password,
-    passwordError,
-    setPasswordError,
-    setPassword,
-    emailError,
-    setEmailError,
-    emailHelperText,
-    setEmailHelperText,
-    passwordInfo,
-    setPasswordInfo,
-  } = useContext(UserFormContext);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [pendingRegistration, setPendingRegistration] =
+    useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const {
-    name,
-    setName,
-    street,
-    setStreet,
-    streetNumber,
-    setStreetNumber,
-    cityInput,
-    setCityInput,
-    city,
-    setCity,
-    citiesList,
-    setCitiesList,
-    pendingRegistration,
-    setPendingRegistration,
-    errorMessage,
-    setErrorMessage,
-    selectedBikeTypes,
-    setSelectedBikeTypes,
-  } = useContext(RepairerFormContext);
-
-  async function fetchRepairerTypes() {
+  const fetchRepairerTypes = async () => {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
     setRepairerTypes(responseRepairerTypes['hydra:member']);
     setRepairerTypeSelected(responseRepairerTypes['hydra:member'][0]);
-  }
+  };
 
   useEffect(() => {
     if (repairerTypes.length === 0) {
@@ -124,10 +95,10 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function fetchBikeTypes() {
+  const fetchBikeTypes = async () => {
     const responseBikeTypes = await bikeTypeResource.getAll(false);
     setBikeTypes(responseBikeTypes['hydra:member']);
-  }
+  };
 
   useEffect(() => {
     if (bikeTypes.length === 0) {
@@ -143,7 +114,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
       setCitiesList(cities);
     },
-    [setCitiesList, useNominatim]
+    [setCitiesList]
   );
 
   useEffect(() => {
@@ -169,43 +140,43 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       !email ||
       !password ||
       !repairerTypeSelected ||
-      !streetSelected ||
+      !street ||
       !city ||
-      Object.keys(selectedBikeTypes).length === 0
+      selectedBikeTypes.length === 0
     ) {
       return;
     }
-
-    setErrorMessage(null);
-    setPendingRegistration(true);
 
     try {
       const selectedBikeTypeIRIs: string[] = bikeTypes
         .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
         .map((bikeType) => bikeType['@id']);
-
+      setPendingRegistration(true);
       await repairerResource.postRepairerAndUser({
         firstName: firstName,
         lastName: lastName,
         email: email,
         plainPassword: password,
         name: name,
-        street: streetSelected.name,
+        street: street.name,
         streetNumber: streetNumber,
         city: city.name,
         postcode: city?.postcode,
         bikeTypesSupported: selectedBikeTypeIRIs,
         repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
         comment: comment,
-        latitude: streetSelected.lat,
-        longitude: streetSelected.lon,
+        latitude: street.lat,
+        longitude: street.lon,
       });
       setPendingRegistration(false);
-      setInscriptionSuccess(true);
+      setSuccess(true);
     } catch (e: any) {
-      setPendingRegistration(false);
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
+    setPendingRegistration(false);
   };
 
   const handleChangeFirstName = (
@@ -257,12 +228,12 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     setPassword(event.target.value);
     if (!validatePassword(event.target.value)) {
       setPasswordError(true);
-      setPasswordInfo(
+      setPasswordHelperText(
         'Votre mot de passe doit contenir 12 caractères, une majuscule, un caractères et des chiffres.'
       );
     } else {
       setPasswordError(false);
-      setPasswordInfo('');
+      setPasswordHelperText('');
     }
   };
 
@@ -289,7 +260,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '50%'}}}>
-          {!inscriptionSuccess && (
+          {!success && (
             <Paper
               elevation={4}
               sx={{
@@ -371,7 +342,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     required
                     fullWidth
                     error={passwordError}
-                    helperText={passwordInfo}
+                    helperText={passwordHelperText}
                     name="password"
                     label="Mot de passe"
                     type="password"
@@ -424,9 +395,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                           ? streetObject
                           : `${streetObject.name} (${streetObject.city})`
                       }
-                      onChange={(event, value) =>
-                        setStreetSelected(value as Street)
-                      }
+                      onChange={(event, value) => setStreet(value as Street)}
                       renderInput={(params) => (
                         <TextField
                           label="Rue"
@@ -438,7 +407,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       )}
                     />
                   )}
-                  {streetSelected && (
+                  {street && (
                     <TextField
                       margin="normal"
                       required
@@ -517,7 +486,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                         !firstName ||
                         !lastName ||
                         !city ||
-                        !streetSelected ||
+                        !street ||
                         !streetNumber ||
                         !repairerTypeSelected ||
                         !name ||
@@ -544,7 +513,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
               </Box>
             </Paper>
           )}
-          {inscriptionSuccess && (
+          {success && (
             <Paper
               elevation={4}
               sx={{
