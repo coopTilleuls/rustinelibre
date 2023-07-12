@@ -1,11 +1,8 @@
 import React, {ChangeEvent, useState} from 'react';
-import {User} from '@interfaces/User';
-import {RequestBody} from '@interfaces/Resource';
 import {userResource} from '@resources/userResource';
 import {
     Box,
     TextField,
-    Alert,
     Button,
     CircularProgress,
     Typography, Paper,
