@@ -14,6 +14,7 @@ import Arg2 from '@public/img/arg2.png';
 import Arg3 from '@public/img/arg3.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import Faq from '@components/homepage/Faq';
 
 const Home = () => {
   const {user} = useAccount({redirectIfMailNotConfirm: '/'});
@@ -110,8 +111,11 @@ const Home = () => {
               </Button>
             </Link>
             <CreateMaintenanceBooklet />
-            <JoinTheCollective />
+            <Faq />
           </Box>
+        </Container>
+        <Container>
+          <JoinTheCollective />
         </Container>
       </WebsiteLayout>
     </>
