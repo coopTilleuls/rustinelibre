@@ -41,6 +41,7 @@ final class ResetPasswordController
 
         $hashedPassword = $this->userPasswordHasher->hashPassword($user, $requestContent['password']);
         $user->password = $hashedPassword;
+        $user->forgotPasswordToken = null;
         $this->userRepository->save($user, true);
 
         return new JsonResponse();
