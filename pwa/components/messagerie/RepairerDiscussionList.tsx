@@ -29,9 +29,14 @@ const RepairerDiscussionList = ({
       return;
     }
 
+    const repairer = user.repairer ? user.repairer : user.repairerEmployee ? user.repairerEmployee.repairer : null;
+    if (!repairer) {
+      return;
+    }
+
     const response = await discussionResource.getAll(true, {
       'order[lastMessage]': 'DESC',
-      repairer: user.repairer!.id,
+      repairer: repairer.id,
       itemsPerPage: 50
     });
 
