@@ -13,17 +13,19 @@ import {
 import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
 import {DiscussionMessage} from '@interfaces/DiscussionMessage';
+import {discussionResource} from "@resources/discussionResource";
 
 type CustomerMessagesContentProps = {
   discussion: Discussion;
+  loading: Boolean;
 };
 
 const CustomerMessagesContent = ({
   discussion,
+  loading
 }: CustomerMessagesContentProps): JSX.Element => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const {user} = useAccount({});
-  const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<DiscussionMessage[]>([]);
   const [messageToSend, setMessageToSend] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -47,11 +49,11 @@ const CustomerMessagesContent = ({
       return;
     }
     setCurrentPage(1);
+    setMessageToSend('');
     await discussionMessageResource.post({
       content: messageToSend,
       discussion: discussion['@id'],
     });
-    setMessageToSend('');
   };
 
   const handleKeyDown = (event: any): void => {
@@ -69,6 +71,7 @@ const CustomerMessagesContent = ({
 
     if (currentPage === 1) {
       setMessages(response['hydra:member']);
+      await discussionResource.discussionRead(discussion.id.toString(), {});
     } else {
       const messagesToDisplay = messages as DiscussionMessage[];
       response['hydra:member'].map((oldMessage) => {
@@ -86,10 +89,8 @@ const CustomerMessagesContent = ({
   }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setLoading(true);
     fetchMessages();
     subscribeMercureDiscussion();
-    setLoading(false);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

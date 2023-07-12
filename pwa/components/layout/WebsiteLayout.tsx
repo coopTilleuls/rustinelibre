@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect} from 'react';
+import React, {PropsWithChildren} from 'react';
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import('@components/layout/Navbar'));
 const Footer = dynamic(() => import('@components/layout/Footer'));
