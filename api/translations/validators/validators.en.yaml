@@ -147,3 +147,9 @@ repairer.duration.slot: The duration slot should be one of 30 / 60 / 180 (min).
 
 #HTTP UNAUTHORIZED
 401_invalid.credentials: Invalid credentials.
+
+#Forgot password
+400_no_email: Thanks to provide a valid email
+400_email_unknown: This email is not registered on our platform
+400_no_token: You cannot update this password
+400_no_password: You should provide a valid password

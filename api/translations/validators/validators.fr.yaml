@@ -146,3 +146,9 @@ repairer.duration.slot: La durée des créneaux doit être de 30, 60 ou 180 (min
 
 #HTTP UNAUTHORIZED
 401_invalid.credentials: Identifiants invalides.
+
+#Forgot password
+400_no_email: Merci de fournir un email valid
+400_email_unknown: Cet email n'est pas inscrit sur notre plateforme
+400_no_token: Vous n'êtes pas autorisé à mettre à jour ce mot de passe
+400_no_password: Vous devez fournir un mot de passe valide
