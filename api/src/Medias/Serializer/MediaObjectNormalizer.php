@@ -6,6 +6,7 @@ namespace App\Medias\Serializer;
 
 use App\Entity\MediaObject;
 use App\Flysystem\MediaObjectManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -20,6 +21,7 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
     public function __construct(
         private readonly MediaObjectManager $mediaObjectManager,
         private readonly KernelInterface $kernel,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -37,7 +39,13 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
 
     private function fillMediaObject(MediaObject $mediaObject): MediaObject
     {
-        $prefix = $this->mediaObjectManager->getPrefixOfMediaObject($mediaObject);
+        try {
+            $prefix = $this->mediaObjectManager->getPrefixOfMediaObject($mediaObject);
+        } catch (\Exception $exception) {
+            $this->logger->alert($exception->getMessage());
+            return $mediaObject;
+        }
+
         if (!$prefix) {
             return $mediaObject;
         }
