@@ -17,6 +17,7 @@ flysystem:
                 client: 'Aws\S3\S3Client'
                 bucket: '%storage_bucket%'
                 prefix: 'files'
+
 when@test:
     flysystem:
         storages:
