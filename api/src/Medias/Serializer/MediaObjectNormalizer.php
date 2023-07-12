@@ -43,6 +43,7 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
             $prefix = $this->mediaObjectManager->getPrefixOfMediaObject($mediaObject);
         } catch (\Exception $exception) {
             $this->logger->alert($exception->getMessage());
+
             return $mediaObject;
         }
 
