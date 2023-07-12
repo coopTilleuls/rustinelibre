@@ -16,7 +16,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Controller\NumberOfMessageNotReadController;
 use App\Controller\NumberOfMessageNotReadForDiscussionController;
-use App\Controller\SetReadMessageController;
+use App\Controller\ReadMessageController;
 use App\Messages\Validator\UniqueDiscussion;
 use App\Repository\DiscussionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,13 +28,15 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
     mercure: true,
+    paginationClientEnabled: true,
+    paginationClientItemsPerPage: true,
 )]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or (user.repairer and user.repairer == object.repairer) 
 or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
 #[Get(
     uriTemplate: '/discussions/{id}/set_read',
-    controller: SetReadMessageController::class,
+    controller: ReadMessageController::class,
     security: 'object.customer == user or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)',
 )]
 #[GetCollection(
@@ -94,7 +96,7 @@ or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)
 #[Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact'])]
-#[ApiFilter(OrderFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['lastMessage' => ['nulls_comparison' => OrderFilter::NULLS_ALWAYS_LAST]])]
 #[UniqueDiscussion]
 class Discussion
 {

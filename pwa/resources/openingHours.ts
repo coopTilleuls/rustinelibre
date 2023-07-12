@@ -20,7 +20,6 @@ class OpeningHoursResource extends AbstractResource<RepairerOpeningHours> {
 
         return await this.getResult(doFetch);
     }
-
 }
 
 export const openingHoursResource = new OpeningHoursResource();

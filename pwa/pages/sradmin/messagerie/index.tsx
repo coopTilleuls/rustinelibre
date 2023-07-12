@@ -14,7 +14,7 @@ const DashboardMessages = () => {
         <Typography variant="h4" pb={1} pl={2}>
           Messages
         </Typography>
-        <RepairerDiscussionList />
+        <RepairerDiscussionList discussionGiven={null} />
       </DashboardLayout>
     </>
   );
