@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
-    // mercure: true,
+    mercure: true,
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
 )]
