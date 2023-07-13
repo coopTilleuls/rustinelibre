@@ -33,7 +33,7 @@ final readonly class FirebaseNotifier
             'data' => [
                 'image' => sprintf('%s/%s', $this->webAppUrl, $notification->image),
                 'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : $this->webAppUrl,
+                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
             ],
             'webpush' => [
                 'headers' => [
@@ -54,7 +54,7 @@ final readonly class FirebaseNotifier
             ],
             'data' => [
                 'badge' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : $this->webAppUrl,
+                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
             ],
         ]);
 
