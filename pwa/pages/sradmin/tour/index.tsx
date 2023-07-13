@@ -91,7 +91,7 @@ const Tour = () => {
             <Typography variant="h4" sx={{textAlign: 'center'}}>
               {currentDate}
             </Typography>
-            <IconButton onClick={handlePreviousDate}>
+            <IconButton onClick={handleNextDate}>
               <ArrowForwardIosIcon />
             </IconButton>
           </Box>
