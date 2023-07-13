@@ -34,6 +34,7 @@ import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, {Dayjs} from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import {padNumber} from '@helpers/dateHelper';
 
 interface AppointmentCreateProps {
@@ -75,7 +76,7 @@ const ModalAppointmentCreate = ({
   const [pickedTime, setPickedTime] = React.useState<Dayjs | null>(null);
 
   dayjs.extend(timezone);
-
+  dayjs.extend(utc);
   const fetchCustomers = async () => {
     const response = await customerResource.getAll(true, {
       userSearch: customerInput,
