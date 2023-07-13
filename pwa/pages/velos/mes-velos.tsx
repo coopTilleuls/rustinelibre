@@ -30,16 +30,12 @@ import BikeCard from '@components/bike/BikeCard';
 import {Bike} from '@interfaces/Bike';
 import {BikeType} from '@interfaces/BikeType';
 
-type MyBikesProps = {
-  bikeTypesFetched: BikeType[];
-};
-
-const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
+const MyBikes: NextPageWithLayout = () => {
   const {user, isLoadingFetchUser} = useAccount({});
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [bikes, setBikes] = useState<Bike[]>([]);
-  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
   const router = useRouter();
 
   async function fetchBikeTypes() {
@@ -176,24 +172,6 @@ const MyBikes: NextPageWithLayout<MyBikesProps> = ({bikeTypesFetched = []}) => {
       </WebsiteLayout>
     </>
   );
-};
-
-export const getStaticProps: GetStaticProps = async () => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-    };
-  }
-
-  const bikeTypesCollection = await bikeTypeResource.getAll(false);
-  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
-
-  return {
-    props: {
-      bikeTypesFetched,
-    },
-    revalidate: 10,
-  };
 };
 
 export default MyBikes;
