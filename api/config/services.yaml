@@ -35,22 +35,6 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\User\EventSubscriber\ValidationCodeSubscriber:
-        tags:
-            - { name: doctrine.event_subscriber }
-
-    App\Repairers\EventSubscriber\GpsPointEventSubscriber:
-        tags:
-            - { name: doctrine.event_subscriber }
-
-    App\Repairers\EventSubscriber\SlugEventSubscriber:
-        tags:
-            - { name: doctrine.event_subscriber }
-
-    App\Medias\EventSubscriber\RemoveFileEventSubscriber:
-        tags:
-            - { name: doctrine.event_subscriber }
-
     App\OpenApi\OpenApiFactory:
         decorates: 'api_platform.openapi.factory'
         arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]

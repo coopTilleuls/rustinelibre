@@ -22,7 +22,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => [self::READ]],
-    denormalizationContext: ['groups' => [self::WRITE]]
+    denormalizationContext: ['groups' => [self::WRITE]],
+    extraProperties: [
+        'standard_put',
+    ]
 )]
 #[Get(security: "is_granted('ROLE_ADMIN')")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]

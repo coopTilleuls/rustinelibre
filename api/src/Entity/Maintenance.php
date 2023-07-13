@@ -25,6 +25,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => [self::WRITE]],
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
+    extraProperties: [
+        'standard_put',
+    ]
 )]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user or is_granted('MAINTENANCE_REPAIRER_READ', object)")]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]

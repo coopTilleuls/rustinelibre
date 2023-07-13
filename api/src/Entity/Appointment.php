@@ -31,6 +31,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
+    extraProperties: [
+        'standard_put',
+    ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact', 'status' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'slotTime'], arguments: ['orderParameterName' => 'order'])]

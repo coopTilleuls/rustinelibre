@@ -25,6 +25,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => [self::READ]],
     denormalizationContext: ['groups' => [self::WRITE]],
+    extraProperties: [
+        'standard_put',
+    ]
 )]
 #[Get]
 #[GetCollection]

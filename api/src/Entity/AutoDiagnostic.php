@@ -19,7 +19,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: AutoDiagnosticRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => [self::READ]],
-    denormalizationContext: ['groups' => [self::WRITE]]
+    denormalizationContext: ['groups' => [self::WRITE]],
+    extraProperties: [
+        'standard_put',
+    ]
 )]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.appointment.customer == user or object.appointment.repairer.owner == user")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]

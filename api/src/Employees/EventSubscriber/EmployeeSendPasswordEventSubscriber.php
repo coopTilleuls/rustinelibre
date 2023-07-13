@@ -10,7 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
 
-#[AsDoctrineListener(event: Events::postPersist, priority: 500, connection: 'default')]
+#[AsDoctrineListener(event: Events::postPersist)]
 final class EmployeeSendPasswordEventSubscriber
 {
     public function __construct(private readonly NewAccountEmail $newAccountEmail)

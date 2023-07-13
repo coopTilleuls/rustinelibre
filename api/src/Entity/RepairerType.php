@@ -18,6 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => [self::REPAIRER_TYPE_READ]],
     denormalizationContext: ['groups' => [self::REPAIRER_TYPE_WRITE]],
+    extraProperties: [
+        'standard_put',
+    ]
 )]
 #[Get]
 #[GetCollection]
