@@ -20,7 +20,7 @@ readonly class AppointmentRefusedEmail
     {
     }
 
-    public function sendNewAppointmentEmail(Appointment $appointment): void
+    public function sendRefusedAppointmentEmail(Appointment $appointment): void
     {
         try {
             $email = (new Email())
