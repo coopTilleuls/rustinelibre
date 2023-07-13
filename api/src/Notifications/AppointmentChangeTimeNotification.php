@@ -23,6 +23,6 @@ final readonly class AppointmentChangeTimeNotification
             ]
         );
 
-        $this->firebaseNotifier->sendNotification($notification);
+        $this->firebaseNotifier->sendNotification(notification: $notification);
     }
 }

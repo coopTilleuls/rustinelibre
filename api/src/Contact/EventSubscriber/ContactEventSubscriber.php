@@ -11,7 +11,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
@@ -20,7 +19,6 @@ readonly class ContactEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private MailerInterface $mailer,
         private string $mailerSender,
-        private KernelInterface $kernel,
         private LoggerInterface $logger,
         private Environment $twig)
     {

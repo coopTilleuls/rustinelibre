@@ -30,8 +30,8 @@ readonly class ReadMessageController
         /** @var User $user */
         $user = $this->security->getUser();
 
-        if (0 < $this->discussionMessageRepository->getNumberOfMessageNotReadForDiscussion($discussion, $user)) {
-            $this->discussionMessageRepository->setReadByDiscussionAndUser($discussion, $user);
+        if (0 < $this->discussionMessageRepository->getNumberOfMessageNotReadForDiscussion(discussion: $discussion, user: $user)) {
+            $this->discussionMessageRepository->setReadByDiscussionAndUser(discussion: $discussion, user: $user);
 
             if ($discussion->lastMessage) {
                 // Here we just add 1 second to our lastMessage datetime to trigger mercure event

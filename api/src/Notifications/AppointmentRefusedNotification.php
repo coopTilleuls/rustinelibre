@@ -23,6 +23,6 @@ final readonly class AppointmentRefusedNotification
             ]
         );
 
-        $this->firebaseNotifier->sendNotification($notification);
+        $this->firebaseNotifier->sendNotification(notification: $notification);
     }
 }
