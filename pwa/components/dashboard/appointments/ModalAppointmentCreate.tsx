@@ -346,20 +346,22 @@ const ModalAppointmentCreate = ({
                 />
               )}
             />
-            {loading && <CircularProgress />}
+
             {selectedCustomer && pickedDate && pickedTime && (
               <Box sx={{display: 'flex', justifyContent: 'space-around'}}>
                 <Button
                   onClick={() => handleCreateAppointment(selectedCustomer)}
                   variant="contained"
                   sx={{my: 2}}>
-                  Créer et Compléter le rendez vous
+                  {loading && <CircularProgress sx={{color: 'white'}} />}
+                  {!loading && <Box>Créer et Compléter le rendez vous</Box>}
                 </Button>
                 <Button
                   onClick={() => handleCreateWithoutDetails(selectedCustomer)}
                   variant="outlined"
                   sx={{my: 2}}>
-                  Créer sans ajouter de détails
+                  {loading && <CircularProgress sx={{color: 'outlined'}} />}
+                  {!loading && <Box>Créer sans ajouter de détails</Box>}
                 </Button>
               </Box>
             )}
@@ -385,12 +387,13 @@ const ModalAppointmentCreate = ({
               comment={comment}
               setComment={setComment}
             />
-            {loading && <CircularProgress />}
+
             <Button
               onClick={handleAddInformations}
               variant="contained"
               sx={{my: 2}}>
-              Ajouter les éléments au rendez vous
+              {!loading && <Box>Ajouter les éléments au rendez vous</Box>}
+              {loading && <CircularProgress sx={{color: 'white'}}/>}
             </Button>
           </Box>
         )}
