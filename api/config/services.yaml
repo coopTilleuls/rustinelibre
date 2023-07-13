@@ -35,14 +35,6 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Employees\EventSubscriber\EmployeeSendPasswordEventSubscriber:
-        tags:
-            - { name: doctrine.event_subscriber }
-
-    App\User\EventSubscriber\HashPasswordSubscriber:
-        tags:
-            - { name: doctrine.event_subscriber }
-
     App\User\EventSubscriber\ValidationCodeSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
