@@ -9,6 +9,7 @@ use App\Emails\ConfirmationEmail;
 use App\Entity\Appointment;
 use App\Entity\User;
 use App\Notifications\AppointmentConfirmNotification;
+use App\Notifications\AppointmentRefusedNotification;
 use App\Repairers\Slots\FirstSlotAvailableCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
