@@ -16,6 +16,8 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
+use App\Controller\ForgotPasswordController;
+use App\Controller\ResetPasswordController;
 use App\Controller\UserValidationCodeController;
 use App\Repository\UserRepository;
 use App\User\Filter\UserSearchFilter;
@@ -41,6 +43,14 @@ use Symfony\Component\Validator\Constraints as Assert;
     uriTemplate: '/validation-code',
     controller: UserValidationCodeController::class,
     security: "is_granted('IS_AUTHENTICATED_FULLY')"
+)]
+#[Post(
+    uriTemplate: '/forgot-password',
+    controller: ForgotPasswordController::class
+)]
+#[Post(
+    uriTemplate: '/reset-password',
+    controller: ResetPasswordController::class
 )]
 #[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or object == user")]
@@ -105,6 +115,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'integer', nullable: true)]
     public ?int $validationCode = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    public ?string $forgotPasswordToken = null;
 
     #[ORM\Column(type: 'string')]
     public ?string $password = null;
