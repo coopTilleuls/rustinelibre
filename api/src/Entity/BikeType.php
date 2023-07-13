@@ -22,6 +22,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => [self::BIKE_TYPE_READ]],
     denormalizationContext: ['groups' => [self::BIKE_TYPE_WRITE]],
+    extraProperties: [
+        'standard_put',
+    ]
 )]
 #[Get]
 #[Put(security: "is_granted('ROLE_ADMIN')")]

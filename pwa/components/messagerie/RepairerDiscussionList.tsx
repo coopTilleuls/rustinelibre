@@ -7,43 +7,44 @@ import {Box, CircularProgress, Typography} from '@mui/material';
 import {Discussion} from '@interfaces/Discussion';
 import {formatDate} from '@helpers/dateHelper';
 import {discussionResource} from '@resources/discussionResource';
+import {isBoss, isEmployee} from "@helpers/rolesHelpers";
+import DiscussionListItem from "@components/messagerie/DiscussionListItem";
 
 type RepairerDiscussionListProps = {
   display?: any;
+  discussionGiven: Discussion|null;
 };
 
 const RepairerDiscussionList = ({
   display,
+  discussionGiven
 }: RepairerDiscussionListProps): JSX.Element => {
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [discussion, setDiscussion] = useState<Discussion|null>(discussionGiven);
   const {user} = useAccount({});
   const router = useRouter();
-
-  const subscribeMercureDiscussions = async (): Promise<void> => {
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
-    discussions.map((discussion) => {
-      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-    });
-
-    const eventSource = new EventSource(hub);
-    eventSource.onmessage = (event) => {
-      fetchDiscussions();
-    };
-  };
 
   const fetchDiscussions = async () => {
     if (!user) {
       return;
     }
-    setLoading(true);
+
+    const repairer = user.repairer ? user.repairer : user.repairerEmployee ? user.repairerEmployee.repairer : null;
+    if (!repairer) {
+      return;
+    }
+
     const response = await discussionResource.getAll(true, {
       'order[lastMessage]': 'DESC',
-      repairer: user.repairer!.id,
+      repairer: repairer.id,
+      itemsPerPage: 50
     });
+
     setDiscussions(response['hydra:member']);
-    setLoading(false);
+
+    if (!discussion && response['hydra:member'].length > 0) {
+      setDiscussion(response['hydra:member'][0]);
+    }
   };
 
   useEffect(() => {
@@ -51,47 +52,18 @@ const RepairerDiscussionList = ({
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (discussions.length > 0) {
-      subscribeMercureDiscussions();
+    if (discussion) {
+      router.push(`/sradmin/messagerie/${discussion.id}`)
     }
-  }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [discussion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box width={{xs: '100%', md: '30%', lg: '20%'}} display={display}>
-      {discussions.length > 0 && (
+      {user && discussions.length > 0 && (
         <Box display="flex" flexDirection="column">
-          {discussions.map(({id, customer, lastMessage}) => {
+          {discussions.map((discussion) => {
             return (
-              <Link
-                key={id}
-                href={`/sradmin/messagerie/${id}`}
-                style={{textDecoration: 'none'}}>
-                <Box
-                  p={2}
-                  mb={1}
-                  sx={{
-                    borderRadius: 2,
-                    color: 'primary.main',
-                    backgroundColor:
-                      +router.query.id! === +id ? 'grey.200' : '',
-                    '&:hover': {
-                      backgroundColor:
-                        +router.query.id! === +id ? '' : 'grey.100',
-                    },
-                  }}>
-                  <Box display="flex">
-                    <Typography sx={{pr: 1}}>{customer.firstName}</Typography>
-                    <Typography fontWeight={600} textTransform="uppercase">
-                      {customer.lastName}
-                    </Typography>
-                  </Box>
-                  <Typography variant="caption" color="textSecondary">
-                    {lastMessage
-                      ? `Dernier message : ${formatDate(lastMessage, true)}`
-                      : 'Pas encore de message'}
-                  </Typography>
-                </Box>
-              </Link>
+                <DiscussionListItem key={discussion.id} discussionGiven={discussion} isCustomer={!(isBoss(user) || isEmployee(user))} />
             );
           })}
         </Box>

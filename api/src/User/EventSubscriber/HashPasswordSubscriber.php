@@ -5,22 +5,16 @@ declare(strict_types=1);
 namespace App\User\EventSubscriber;
 
 use App\Entity\User;
-use Doctrine\Common\EventSubscriber;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs as BaseLifecycleEventArgs;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-final readonly class HashPasswordSubscriber implements EventSubscriber
+#[AsDoctrineListener(event: Events::prePersist)]
+final readonly class HashPasswordSubscriber
 {
     public function __construct(private UserPasswordHasherInterface $userPasswordHasher)
     {
-    }
-
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::prePersist,
-        ];
     }
 
     public function prePersist(BaseLifecycleEventArgs $args): void

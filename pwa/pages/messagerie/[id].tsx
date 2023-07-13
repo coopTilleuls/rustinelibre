@@ -44,11 +44,11 @@ const Messagerie: NextPageWithLayout = () => {
           <Typography fontSize={{xs: 28, md: 30}} fontWeight={600} pb={2}>
             Messages
           </Typography>
-          {!loading && discussion ? (
+          {discussion ? (
             <Box sx={{display: 'flex'}}>
               <CustomerDiscussionList display={{xs: 'none', md: 'block'}} />
               <Box width={{xs: '100%', md: '70%'}}>
-                <CustomerMessagesContent discussion={discussion} />
+                <CustomerMessagesContent discussion={discussion} loading={loading} />
               </Box>
             </Box>
           ) : (

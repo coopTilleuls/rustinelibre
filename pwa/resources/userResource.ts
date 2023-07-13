@@ -40,6 +40,34 @@ class UserResource extends AbstractResource<User> {
 
     return await this.getResult(doFetch);
   }
+
+  async forgotPassword(body: RequestBody = {}): Promise<User> {
+    const doFetch = async () => {
+      return await fetch(this.getUrl(`/forgot-password`), {
+        headers: {
+          ...this.getDefaultHeaders(true),
+        },
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+    };
+
+    return await this.getResult(doFetch);
+  }
+
+  async resetPassword(body: RequestBody = {}): Promise<User> {
+    const doFetch = async () => {
+      return await fetch(this.getUrl(`/reset-password`), {
+        headers: {
+          ...this.getDefaultHeaders(true),
+        },
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+    };
+
+    return await this.getResult(doFetch);
+  }
 }
 
 export const userResource = new UserResource();

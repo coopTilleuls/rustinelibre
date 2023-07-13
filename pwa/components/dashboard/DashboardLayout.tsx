@@ -27,6 +27,11 @@ import Link from 'next/link';
 import {isBoss, isEmployee, isItinerant} from '@helpers/rolesHelpers';
 import RouteIcon from '@mui/icons-material/Route';
 import Logo from '@components/common/Logo';
+import {useEffect, useState} from "react";
+import {Discussion} from "@interfaces/Discussion";
+import {ENTRYPOINT} from "@config/entrypoint";
+import {discussionResource} from "@resources/discussionResource";
+import Badge from '@mui/material/Badge';
 
 const drawerWidth = 240;
 
@@ -111,6 +116,56 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
   const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
   const isMobile = useMediaQuery('(max-width: 640px)');
   const {logout} = useAuth();
+  const [discussions, setDiscussions] = useState<Discussion[]>([]);
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
+
+  const subscribeMercureDiscussions = async (): Promise<void> => {
+    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+    const hub = new URL(hubUrl);
+    discussions.map((discussion) => {
+      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+    });
+
+    const eventSource = new EventSource(hub);
+    eventSource.onmessage = (event) => {
+      countUnread();
+    };
+  };
+
+  const countUnread = async (): Promise<void> => {
+    if (!user) {
+      return;
+    }
+
+    const countUnread = await discussionResource.countUnread({});
+    setUnreadMessages(countUnread.count)
+  };
+
+  const fetchDiscussions = async () => {
+    if (!user || !user.repairer) {
+      return;
+    }
+
+    const response = await discussionResource.getAll(true, {
+      repairer: user.repairer.id,
+      itemsPerPage: 50,
+      'order[lastMessage]': 'DESC'
+    });
+    setDiscussions(response['hydra:member']);
+  };
+
+  useEffect(() => {
+    if (user) {
+      countUnread();
+      fetchDiscussions()
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (discussions.length > 0) {
+      subscribeMercureDiscussions();
+    }
+  }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (user && !isBoss(user) && !isEmployee(user)) {
     router.push('/');
@@ -182,12 +237,13 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                     path="/sradmin/tour"
                   />
                 )}
-                <DashboardSidebarListItem
+                <Badge badgeContent={unreadMessages} color="primary">
+                  <DashboardSidebarListItem
                   text="Messages"
                   open={true}
                   icon={<ForumIcon />}
                   path="/sradmin/messagerie"
-                />
+                /></Badge>
                 <DashboardSidebarListItem
                   text="Clients"
                   open={true}

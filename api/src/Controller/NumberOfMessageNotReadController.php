@@ -23,7 +23,7 @@ readonly class NumberOfMessageNotReadController
     {
         /** @var User $user */
         $user = $this->security->getUser();
-        $notRead = $this->discussionMessageRepository->getNumberOfMessageNotRead($user);
+        $notRead = $this->discussionMessageRepository->getNumberOfMessageNotRead(user: $user);
 
         return new JsonResponse(['count' => $notRead]);
     }

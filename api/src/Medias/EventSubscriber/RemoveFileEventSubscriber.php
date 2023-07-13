@@ -6,22 +6,16 @@ namespace App\Medias\EventSubscriber;
 
 use App\Entity\MediaObject;
 use App\Flysystem\MediaObjectManager;
-use Doctrine\Common\EventSubscriber;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
-final readonly class RemoveFileEventSubscriber implements EventSubscriber
+#[AsDoctrineListener(event: Events::preRemove)]
+final readonly class RemoveFileEventSubscriber
 {
     public function __construct(
         private MediaObjectManager $mediaObjectManager,
     ) {
-    }
-
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::preRemove,
-        ];
     }
 
     public function preRemove(LifecycleEventArgs $args): void
@@ -31,7 +25,7 @@ final readonly class RemoveFileEventSubscriber implements EventSubscriber
             return;
         }
 
-        $prefix = $this->mediaObjectManager->getPrefixOfMediaObject($media);
+        $prefix = $this->mediaObjectManager->getPrefixOfMediaObject(mediaObject: $media);
         if (!$prefix) {
             return;
         }

@@ -24,20 +24,20 @@ dependencies:
     specifier: ^4.5.8
     version: 4.5.8
   '@fullcalendar/core':
-    specifier: ^6.1.7
-    version: 6.1.7
+    specifier: ^6.1.8
+    version: 6.1.8
   '@fullcalendar/daygrid':
-    specifier: ^6.1.7
-    version: 6.1.7(@fullcalendar/core@6.1.7)
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
   '@fullcalendar/interaction':
-    specifier: ^6.1.7
-    version: 6.1.7(@fullcalendar/core@6.1.7)
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
   '@fullcalendar/react':
-    specifier: ^6.1.7
-    version: 6.1.7(@fullcalendar/core@6.1.7)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)(react-dom@18.2.0)(react@18.2.0)
   '@fullcalendar/timegrid':
-    specifier: ^6.1.7
-    version: 6.1.7(@fullcalendar/core@6.1.7)
+    specifier: ^6.1.8
+    version: 6.1.8(@fullcalendar/core@6.1.8)
   '@marsidev/react-turnstile':
     specifier: ^0.2.1
     version: 0.2.1(react-dom@18.2.0)(react@18.2.0)
@@ -696,9 +696,9 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/compat-data': 7.22.5
+      '@babel/compat-data': 7.22.6
       '@babel/core': 7.21.4
-      '@babel/helper-compilation-targets': 7.22.5(@babel/core@7.21.4)
+      '@babel/helper-compilation-targets': 7.22.6(@babel/core@7.21.4)
       '@babel/helper-plugin-utils': 7.22.5
       '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.21.4)
       '@babel/plugin-transform-parameters': 7.22.5(@babel/core@7.21.4)
@@ -2852,47 +2852,47 @@ packages:
     resolution: {integrity: sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==}
     dev: false
 
-  /@fullcalendar/core@6.1.7:
-    resolution: {integrity: sha512-Hc63ARSyABlNo10B3NkA0z8ndaDmq5MKpcBB2iQsGQyn8N8cyn/x6V284Je1EwDoKsBlbrZAj+j+efBO+QQf5g==}
+  /@fullcalendar/core@6.1.8:
+    resolution: {integrity: sha512-i8JBIvZCWGO9dsMEDcx9bnsQZ9PtGSJdOXGgWbhLaGq2iq41OBdp9g9gM4b/Otv2oK8bL5Gl6CsMmb/HkDtA6Q==}
     dependencies:
       preact: 10.12.1
     dev: false
 
-  /@fullcalendar/daygrid@6.1.7(@fullcalendar/core@6.1.7):
-    resolution: {integrity: sha512-IB+QdRcs+TeTlsK8qJFtYZ/2GugmXEFC0C00/n1aLT7GLgFn3ueV1GN0EKvXv9HJ5ai8My65mYbSyQizY/Ishw==}
+  /@fullcalendar/daygrid@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-kCZxQFKb9Vqa3CZRX0v7rMSJ2mlTt4gDpyLfiNJKxUAq7W51uKurPaFZWicaXy1ESHVBxKNlbx5uNjBpyu50JQ==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.7
+      '@fullcalendar/core': ~6.1.8
     dependencies:
-      '@fullcalendar/core': 6.1.7
+      '@fullcalendar/core': 6.1.8
     dev: false
 
-  /@fullcalendar/interaction@6.1.7(@fullcalendar/core@6.1.7):
-    resolution: {integrity: sha512-C2KHSinc9cFUTcGYxRSIj7cBYNSroce+1d2Wa+HKVHguVv4kQuEvm/oPxJpTLXqFjNLfxyxVac7Zd4U0znjFtg==}
+  /@fullcalendar/interaction@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-r6W4E9ohaA87M2uPSlmpE2WT7Fzu7LN0u2pE6D/tThruCEaAPbN8Pw5+sqclsuyTIL09mg0eSJm/ggJekTabSA==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.7
+      '@fullcalendar/core': ~6.1.8
     dependencies:
-      '@fullcalendar/core': 6.1.7
+      '@fullcalendar/core': 6.1.8
     dev: false
 
-  /@fullcalendar/react@6.1.7(@fullcalendar/core@6.1.7)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-Pwe88D4zXwP/XQsYWOa1foroF/OpHSLet5CiE4crnaKvngEtzt3SBDIO01agQOpo+yE1KM/n3yE5ePbdJtVJIQ==}
+  /@fullcalendar/react@6.1.8(@fullcalendar/core@6.1.8)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-E8GQSQyZHkjpwxQW5Vci7iZgN7f33ntuRcvfGii4Fn35t9VHGz2SEyKAWXpVf38elcKTZKVgajU9ipStd+1LEg==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.7
+      '@fullcalendar/core': ~6.1.8
       react: ^16.7.0 || ^17 || ^18
       react-dom: ^16.7.0 || ^17 || ^18
     dependencies:
-      '@fullcalendar/core': 6.1.7
+      '@fullcalendar/core': 6.1.8
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@fullcalendar/timegrid@6.1.7(@fullcalendar/core@6.1.7):
-    resolution: {integrity: sha512-kVgJVswu96LrCozr+GyYzF+LUZjURC4HyDg11tCfrj2wMTsrYKqUxilTGXuD3daD4T7qp3CLCg5GdD6lbYHI7A==}
+  /@fullcalendar/timegrid@6.1.8(@fullcalendar/core@6.1.8):
+    resolution: {integrity: sha512-3+3KHHCoNcaLs/gQt004hAqICbY5+WAffrZ0ePv+80HFB1OVh8BQ5XXLHSOUbTvXdgtUTcfBHuw9fhO31kt5gA==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.7
+      '@fullcalendar/core': ~6.1.8
     dependencies:
-      '@fullcalendar/core': 6.1.7
-      '@fullcalendar/daygrid': 6.1.7(@fullcalendar/core@6.1.7)
+      '@fullcalendar/core': 6.1.8
+      '@fullcalendar/daygrid': 6.1.8(@fullcalendar/core@6.1.8)
     dev: false
 
   /@googlemaps/js-api-loader@1.15.1:
@@ -10215,7 +10215,7 @@ packages:
       '@webassemblyjs/wasm-parser': 1.11.6
       acorn: 8.8.2
       acorn-import-assertions: 1.9.0(acorn@8.8.2)
-      browserslist: 4.21.5
+      browserslist: 4.21.9
       chrome-trace-event: 1.0.3
       enhanced-resolve: 5.15.0
       es-module-lexer: 1.3.0

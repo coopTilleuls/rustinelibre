@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Appointments\EventSubscriber;
 
+use App\Emails\AppointmentRefusedEmail;
 use App\Emails\ConfirmationEmail;
 use App\Entity\Appointment;
 use App\Entity\User;
 use App\Notifications\AppointmentConfirmNotification;
+use App\Notifications\AppointmentRefusedNotification;
 use App\Repairers\Slots\FirstSlotAvailableCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -25,6 +27,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         private AppointmentConfirmNotification $appointmentConfirmNotification,
         private EntityManagerInterface $entityManager,
         private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
+        private AppointmentRefusedNotification $appointmentRefusedNotification,
+        private AppointmentRefusedEmail $appointmentRefusedEmail,
         private RequestStack $requestStack,
         private Security $security,
         private TranslatorInterface $translator)
@@ -54,8 +58,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment->status = Appointment::VALIDATED;
         $this->entityManager->flush();
 
-        $this->confirmationEmail->sendConfirmationEmail($appointment);
-        $this->appointmentConfirmNotification->sendAppointmentConfirmNotification($appointment);
+        $this->confirmationEmail->sendConfirmationEmail(appointment: $appointment);
+        $this->appointmentConfirmNotification->sendAppointmentConfirmNotification(appointment: $appointment);
     }
 
     public function onValidatedByCyclist(Event $event): void
@@ -92,8 +96,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment->slotTime = new \DateTimeImmutable($contentRequest['slotTime']);
         $this->entityManager->flush();
 
-        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($appointment->repairer, true);
-        $this->confirmationEmail->sendConfirmationEmail($appointment);
+        $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $appointment->repairer, flush: true);
+        $this->confirmationEmail->sendConfirmationEmail(appointment: $appointment);
     }
 
     public function onRefused(Event $event): void
@@ -115,7 +119,9 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment->status = Appointment::REFUSED;
         $this->entityManager->flush();
 
-        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($appointment->repairer, true);
+        $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $appointment->repairer, flush: true);
+        $this->appointmentRefusedEmail->sendRefusedAppointmentEmail(appointment: $appointment);
+        $this->appointmentRefusedNotification->sendRefusedAppointmentNotification(appointment: $appointment);
     }
 
     public function onCancellation(Event $event): void
@@ -127,6 +133,6 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment->status = Appointment::CANCEL;
         $this->entityManager->flush();
 
-        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($appointment->repairer, true);
+        $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $appointment->repairer, flush: true);
     }
 }

@@ -40,6 +40,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['admin_only']],
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
+    extraProperties: [
+        'standard_put',
+    ]
 )]
 #[Get(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
 #[GetCollection(normalizationContext: ['groups' => [self::REPAIRER_COLLECTION_READ]])]
