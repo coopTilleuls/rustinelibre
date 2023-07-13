@@ -137,8 +137,14 @@ https://dash.cloudflare.com/login
 
 ## Notifications
 Le système de notifications push utilise [Firebase Cloud Messaging](https://firebase.google.com/), pour les faire fonctionner
-en local, il est nécessaire d'utiliser un protocole SSL intégral. Afin de tester en conditions de production il est conseillé
-d'installer ngrok pour créer un tunnel vers l'application: 
+il faut indiquer des credentials valides dans le .env (et fournies par FCM) et lancer la commande suivante
+
+```
+php bin/console app:firebase:credentials
+```
+
+Il est nécessaire d'utiliser un protocole HTTPS intégral. En environnement local si vous avez des erreurs
+de tunnel SSL dans l'app react il est conseillé d'installer ngrok pour créer un tunnel vers l'application: 
 
 ```
 ngrok http --host-header="localhost:443" localhost:443
