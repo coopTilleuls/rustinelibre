@@ -33,7 +33,7 @@ final class CurrentUserProvider implements ProviderInterface
         }
 
         $threeLastRepairersIds = $this->appointmentRepository->getThreeLastAppointmentsRepairersIds($user);
-        $user->lastRepairers = $this->repairerRepository->findRepairersInIds($threeLastRepairersIds);
+        $user->lastRepairers = $this->repairerRepository->findRepairersInIds(ids: $threeLastRepairersIds);
 
         return $user;
     }

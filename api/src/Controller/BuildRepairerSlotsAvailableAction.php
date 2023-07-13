@@ -19,7 +19,7 @@ final class BuildRepairerSlotsAvailableAction
 
     public function __invoke(Repairer $repairer, Request $request): JsonResponse
     {
-        $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($repairer);
+        $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots(repairer: $repairer);
 
         return new JsonResponse($slotsAvailable);
     }

@@ -20,7 +20,6 @@ readonly class ContactEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private MailerInterface $mailer,
         private string $mailerSender,
-        private KernelInterface $kernel,
         private LoggerInterface $logger,
         private Environment $twig)
     {

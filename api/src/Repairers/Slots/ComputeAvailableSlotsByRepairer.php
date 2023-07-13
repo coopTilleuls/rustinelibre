@@ -24,13 +24,13 @@ final class ComputeAvailableSlotsByRepairer
     public function buildArrayOfAvailableSlots(Repairer $repairer): array
     {
         // Get next 60 default slots
-        $next60DaysSlots = $this->get60NextDaysSLots($repairer);
+        $next60DaysSlots = $this->get60NextDaysSLots(repairer: $repairer);
 
         // Clean the slots of exceptional closures
-        $slotsNoExceptionalClosure = $this->removeExceptionDays($repairer, $next60DaysSlots);
+        $slotsNoExceptionalClosure = $this->removeExceptionDays(repairer: $repairer, slots: $next60DaysSlots);
 
         // Remove appointments from slots
-        $slotsNotFull = $this->removeAppointments($repairer, $slotsNoExceptionalClosure);
+        $slotsNotFull = $this->removeAppointments(repairer: $repairer, slots: $slotsNoExceptionalClosure);
 
         return $slotsNotFull;
     }
@@ -38,7 +38,7 @@ final class ComputeAvailableSlotsByRepairer
     private function removeExceptionDays(Repairer $repairer, array $slots): array
     {
         /** @var RepairerExceptionalClosure[] $exeptionalClosures */
-        $exeptionalClosures = $this->repairerExceptionalClosureRepository->findExceptionalClosureByRepairerBetweenDates($repairer);
+        $exeptionalClosures = $this->repairerExceptionalClosureRepository->findExceptionalClosureByRepairerBetweenDates(repairer: $repairer);
 
         if (empty($exeptionalClosures)) {
             return $slots;
@@ -62,7 +62,7 @@ final class ComputeAvailableSlotsByRepairer
 
     private function removeAppointments(Repairer $repairer, array $slots): array
     {
-        $appointments = $this->appointmentRepository->findFullSlots($repairer);
+        $appointments = $this->appointmentRepository->findFullSlots(repairer: $repairer);
 
         if (empty($appointments)) {
             return $slots;
@@ -91,7 +91,7 @@ final class ComputeAvailableSlotsByRepairer
         $next60days = $this->get60nextDates();
         $openingHoursData = [];
 
-        $availabilitiesByDays = $this->repairerOpeningHoursRepository->findRepairerAvailabilitiesGroupByDay($repairer);
+        $availabilitiesByDays = $this->repairerOpeningHoursRepository->findRepairerAvailabilitiesGroupByDay(repairer: $repairer);
 
         // Loop on each day of week to get the opening hours from the given repairer
         foreach (RepairerOpeningHours::DAYS_OF_WEEK as $dayOfWeek) {

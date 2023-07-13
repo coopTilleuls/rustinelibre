@@ -44,7 +44,7 @@ readonly class AppointementChangeSlotTimeEventSubscriber implements EventSubscri
             return;
         }
 
-        $this->appointmentChangeTimeEmail->sendChangeTimeEmail($object, $originalEntity['slotTime']->format('d/m/Y H:i'));
-        $this->appointmentChangeTimeNotification->sendAppointmentChangeTimeNotification($object, $originalEntity['slotTime']->format('d/m/Y H:i'));
+        $this->appointmentChangeTimeEmail->sendChangeTimeEmail(appointment: $object, oldTime: $originalEntity['slotTime']->format('d/m/Y H:i'));
+        $this->appointmentChangeTimeNotification->sendAppointmentChangeTimeNotification(appointment: $object, oldTime: $originalEntity['slotTime']->format('d/m/Y H:i'));
     }
 }
