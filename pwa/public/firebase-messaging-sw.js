@@ -25,9 +25,9 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener('notificationclick', function (event) {
 
     event.notification.close();
-    const urlToOpen = event.notification.data.url;
-    if (clients.openWindow && urlToOpen) {
-        event.waitUntil(clients.openWindow(urlToOpen));
+    const url = event.notification.data.url;
+    if (clients.openWindow && url) {
+        event.waitUntil(clients.openWindow(url));
     }
 });
 
