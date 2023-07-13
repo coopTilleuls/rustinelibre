@@ -13,9 +13,9 @@ use Twig\Environment;
 readonly class ValidationCodeEmail
 {
     public function __construct(private MailerInterface $mailer,
-                                private string $mailerSender,
-                                private LoggerInterface $logger,
-                                private Environment $twig)
+        private string $mailerSender,
+        private LoggerInterface $logger,
+        private Environment $twig)
     {
     }
 
