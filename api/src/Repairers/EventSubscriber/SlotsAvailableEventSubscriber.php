@@ -123,7 +123,9 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         $appointmentsWithRepairerAndSlotTime = $this->appointmentRepository->findBy(['repairer' => $appointment->repairer, 'slotTime' => $appointment->slotTime]);
 
         if (count($appointmentsWithRepairerAndSlotTime) >= $appointment->repairer->numberOfSlots) {
-            unset($slotsAvailable[$appointment->slotTime->format('Y-m-d')][array_search($appointment->slotTime->format('H:i'), $slotsAvailable[$appointment->slotTime->format('Y-m-d')], true)]);
+            if (array_key_exists($appointment->slotTime->format('Y-m-d'), $slotsAvailable) && false !== array_search($appointment->slotTime->format('H:i'), $slotsAvailable[$appointment->slotTime->format('Y-m-d')], true)) {
+                unset($slotsAvailable[$appointment->slotTime->format('Y-m-d')][array_search($appointment->slotTime->format('H:i'), $slotsAvailable[$appointment->slotTime->format('Y-m-d')], true)]);
+            }
         }
 
         $this->firstSlotAvailableCalculator->setFirstSlotAvailable($appointment->repairer, true, $slotsAvailable);
