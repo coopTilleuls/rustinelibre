@@ -6,6 +6,8 @@ import {City as GouvCity} from "@interfaces/Gouv";
 import {searchCity, searchStreet} from "@utils/apiCity";
 import {createCitiesWithGouvAPI, City} from "@interfaces/City";
 import {Street} from "@interfaces/Street";
+import {isBoss, isEmployee} from "@helpers/rolesHelpers";
+import {useAccount} from "@contexts/AuthContext";
 
 interface PinMapProps {
   repairer: Repairer;
@@ -40,6 +42,8 @@ const PinMap = ({
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [streetList, setStreetList] = useState<Street[]>([]);
   const [streetSelected, setStreetSelected] = useState<Street|null>(null);
+  const {user} = useAccount({});
+  const isABossOrAnEmployee = user && (isBoss(user) || isEmployee(user));
 
 
   const handleChangeStreetNumber = (event: ChangeEvent<HTMLInputElement>) => {
@@ -92,11 +96,12 @@ const PinMap = ({
 
   return (
     <Box width="100%">
+        {!isABossOrAnEmployee &&(
       <Typography pb={2} textAlign="center">
         Placez le repère sur le lieu où vous souhaitez l&apos;intervention du
         réparateur.
       </Typography>
-
+        )}
       <Autocomplete
           sx={{mt: 2, mb: 1}}
           freeSolo
@@ -162,6 +167,7 @@ const PinMap = ({
         longitudeProps={longitudeCalculate}
       />}
 
+        {!isABossOrAnEmployee &&(
       <Box display="flex" justifyContent="space-between" px={2} pt={2}>
         <Button variant="outlined" onClick={cancelPinMap}>
           Retour
@@ -173,6 +179,7 @@ const PinMap = ({
           Suivant
         </Button>
       </Box>
+            )}
     </Box>
   );
 };

@@ -36,6 +36,11 @@ import dayjs, {Dayjs} from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import {padNumber} from '@helpers/dateHelper';
+import {isItinerant} from '@helpers/rolesHelpers';
+import dynamic from 'next/dynamic';
+const PinMap = dynamic(() => import('@components/rendez-vous/PinMap'), {
+  ssr: false,
+});
 
 interface AppointmentCreateProps {
   repairer: Repairer;
@@ -74,6 +79,10 @@ const ModalAppointmentCreate = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pickedDate, setPickedDate] = React.useState<Dayjs | null>(null);
   const [pickedTime, setPickedTime] = React.useState<Dayjs | null>(null);
+  const [latitude, setLatitude] = useState<string>('');
+  const [longitude, setLongitude] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const isItinerantRepairer = user && isItinerant(user);
 
   dayjs.extend(timezone);
   dayjs.extend(utc);
@@ -138,6 +147,12 @@ const ModalAppointmentCreate = ({
       slotTime: slotSelected,
       customer: selectedCustomer['@id'],
     };
+
+    if (isItinerantRepairer && address && latitude && longitude) {
+      requestBody['address'] = address;
+      requestBody['latitude'] = latitude.toString();
+      requestBody['longitude'] = longitude.toString();
+    }
 
     try {
       setErrorMessage(null);
@@ -238,6 +253,13 @@ const ModalAppointmentCreate = ({
       setPickedTime(null);
     }
   };
+  const cancelPinMap = () => {
+    return;
+  };
+
+  const confirmPinMap = () => {
+    return;
+  };
 
   const handleResetStates = () => {
     setSelectedCustomer(null);
@@ -249,8 +271,11 @@ const ModalAppointmentCreate = ({
     setPhoto(null);
     setComment('');
     setPickedTime(null);
-    setPickedDate(null)
+    setPickedDate(null);
     setSlotSelected(undefined);
+    setAddress('');
+    setLatitude('');
+    setLongitude('');
     handleCloseModal(false);
   };
 
@@ -299,32 +324,34 @@ const ModalAppointmentCreate = ({
             {`Rendez-vous le ${slotDate} `}
           </Typography>
         )}
-        <LocalizationProvider adapterlocale="fr-FR" dateAdapter={AdapterDayjs}>
-          {selectedDate && (
-            <InputLabel id="service-type-label" sx={{my: 2}}>
-              Modifier le créneau
-            </InputLabel>
-          )}
-          {!selectedDate && (
-            <InputLabel id="service-type-label" sx={{my: 2}}>
-              Choisir un créneau
-            </InputLabel>
-          )}
-          <Box sx={{display: 'flex', justifyContent: 'space-evenly'}}>
-            <DatePicker
-              defaultValue={dayjs(selectedDate)}
-              format="DD/MM/YYYY"
-              onChange={(newValue) => handleDatePicker(newValue)}
-            />
-            <TimePicker
-              defaultValue={dayjs.tz(selectedDate, 'Europe/Paris')}
-              format="HH:mm"
-              onChange={(newValue) => handleTimePicker(newValue)}
-            />
-          </Box>
-        </LocalizationProvider>
         {!newAppointment && (
           <>
+            <LocalizationProvider
+              adapterlocale="fr-FR"
+              dateAdapter={AdapterDayjs}>
+              {selectedDate && (
+                <InputLabel id="service-type-label" sx={{my: 2}}>
+                  Modifier le créneau
+                </InputLabel>
+              )}
+              {!selectedDate && (
+                <InputLabel id="service-type-label" sx={{my: 2}}>
+                  Choisir un créneau
+                </InputLabel>
+              )}
+              <Box sx={{display: 'flex', justifyContent: 'space-evenly'}}>
+                <DatePicker
+                  defaultValue={dayjs(selectedDate)}
+                  format="DD/MM/YYYY"
+                  onChange={(newValue) => handleDatePicker(newValue)}
+                />
+                <TimePicker
+                  defaultValue={dayjs.tz(selectedDate, 'Europe/Paris')}
+                  format="HH:mm"
+                  onChange={(newValue) => handleTimePicker(newValue)}
+                />
+              </Box>
+            </LocalizationProvider>
             <Autocomplete
               sx={{mt: 2, mb: 1}}
               freeSolo
@@ -346,24 +373,40 @@ const ModalAppointmentCreate = ({
                 />
               )}
             />
-
             {selectedCustomer && pickedDate && pickedTime && (
-              <Box sx={{display: 'flex', justifyContent: 'space-around'}}>
-                <Button
-                  onClick={() => handleCreateAppointment(selectedCustomer)}
-                  variant="contained"
-                  sx={{my: 2}}>
-                  {loading && <CircularProgress sx={{color: 'white'}} />}
-                  {!loading && <Box>Créer et Compléter le rendez vous</Box>}
-                </Button>
-                <Button
-                  onClick={() => handleCreateWithoutDetails(selectedCustomer)}
-                  variant="outlined"
-                  sx={{my: 2}}>
-                  {loading && <CircularProgress sx={{color: 'outlined'}} />}
-                  {!loading && <Box>Créer sans ajouter de détails</Box>}
-                </Button>
-              </Box>
+              <>
+                {isItinerantRepairer && (
+                  <PinMap
+                    repairer={repairer}
+                    latitude={latitude}
+                    longitude={longitude}
+                    cancelPinMap={cancelPinMap}
+                    confirmPinMap={confirmPinMap}
+                    setLatitude={setLatitude}
+                    setLongitude={setLongitude}
+                    address={address}
+                    setAddress={setAddress}
+                  />
+                )}
+                <Box sx={{display: 'flex', justifyContent: 'space-around'}}>
+                  <Button
+                    onClick={() => handleCreateAppointment(selectedCustomer)}
+                    disabled={isItinerantRepairer! && !address}
+                    variant="contained"
+                    sx={{my: 2}}>
+                    {loading && <CircularProgress sx={{color: 'white'}} />}
+                    {!loading && <Box>Créer et Compléter le rendez vous</Box>}
+                  </Button>
+                  <Button
+                    onClick={() => handleCreateWithoutDetails(selectedCustomer)}
+                    disabled={isItinerantRepairer! && !address}
+                    variant="outlined"
+                    sx={{my: 2}}>
+                    {loading && <CircularProgress sx={{color: 'outlined'}} />}
+                    {!loading && <Box>Créer sans ajouter de détails</Box>}
+                  </Button>
+                </Box>
+              </>
             )}
           </>
         )}
@@ -393,7 +436,7 @@ const ModalAppointmentCreate = ({
               variant="contained"
               sx={{my: 2}}>
               {!loading && <Box>Ajouter les éléments au rendez vous</Box>}
-              {loading && <CircularProgress sx={{color: 'white'}}/>}
+              {loading && <CircularProgress sx={{color: 'white'}} />}
             </Button>
           </Box>
         )}
