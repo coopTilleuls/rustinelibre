@@ -9,9 +9,11 @@ import Grid2 from '@mui/material/Unstable_Grid2';
 import {RepairerCard} from '@components/repairers/RepairerCard';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import router from 'next/router';
+import {GetServerSideProps, InferGetServerSidePropsType} from "next";
+import {ENTRYPOINT} from "@config/entrypoint";
 
-const RepairersList: NextPageWithLayout = () => {
-  const [repairers, setRepairers] = useState<Repairer[]>([]);
+const RepairersList: NextPageWithLayout = ({repairersFetch = []}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [repairers, setRepairers] = useState<Repairer[]>(repairersFetch);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const {setSelectedRepairer} = useContext(SearchRepairerContext);
 
@@ -104,3 +106,24 @@ const RepairersList: NextPageWithLayout = () => {
 };
 
 export default RepairersList;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+
+    if (!ENTRYPOINT) {
+        return {
+            props: {},
+        };
+    }
+
+    const response = await repairerResource.getAll(false, {
+        paginatinon: 'false',
+        sort: 'random',
+        enabled: 'true',
+    });
+
+    return {
+        props: {
+            repairersFetch: response['hydra:member']
+        }
+    }
+}
