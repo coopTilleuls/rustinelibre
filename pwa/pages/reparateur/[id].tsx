@@ -88,14 +88,11 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
     false
   );
 
-  console.log(id);
-
   return {
     props: {
       repairerProps,
     },
     revalidate: 10,
-    notFound: !repairerProps,
   };
 };
 
