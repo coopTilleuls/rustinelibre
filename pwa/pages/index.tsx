@@ -43,27 +43,7 @@ const Home = () => {
         <title>La rustine libre</title>
       </Head>
       <WebsiteLayout>
-        <Box
-          gap={{xs: 6, md: 14}}
-          width="100%"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          pb={{xs: 6, md: 8}}>
-          <Box
-            bgcolor="lightprimary.main"
-            width="100%"
-            paddingY={6}
-            minHeight={{
-              xs: 'calc(100vh - 112px)',
-              sm: 'calc(100vh - 120px)',
-              md: 'calc(100vh - 152px)',
-            }}>
-            <Container>
-              <SearchARepairer />
-            </Container>
-          </Box>
-        </Box>
+        <SearchARepairer />
         <Container>
           <Box
             gap={{xs: 6, md: 8}}
@@ -111,9 +91,11 @@ const Home = () => {
               </Button>
             </Link>
             <CreateMaintenanceBooklet />
-            <Faq />
           </Box>
         </Container>
+        <Box my={6}>
+          <Faq />
+        </Box>
         <Container>
           <JoinTheCollective />
         </Container>

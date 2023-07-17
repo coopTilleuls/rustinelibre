@@ -19,9 +19,9 @@ import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {searchCity} from '@utils/apiCity';
 import SearchIcon from '@mui/icons-material/Search';
+import Image from 'next/image';
 import {
   Box,
-  Stack,
   Typography,
   Autocomplete,
   Divider,
@@ -32,12 +32,11 @@ import {
   TextField,
   SelectChangeEvent,
   Button,
-  Link,
-  Avatar,
   IconButton,
+  Container,
 } from '@mui/material';
-import HomepageImagesGallery from './search-a-repairer/HomepageImagesGallery';
 import ModalSearchRepairer from './ModalSearchRepairer';
+import LetterR from '@components/common/LetterR';
 
 const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
@@ -106,22 +105,55 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   };
 
   return (
-    <Box display="flex">
-      <Box
-        px={{xs: 4, md: 0}}
-        width="100%"
-        display="flex"
-        flexDirection="column"
-        alignItems={{xs: 'center', md: 'start'}}>
-        <Stack width={{xs: '100%', md: '90%'}} spacing={{xs: 2, md: 8}}>
-          <Typography
-            variant="h1"
-            component="h1"
-            color="primary"
-            textAlign={{xs: 'center', md: 'start'}}>
-            Réparation <br />
-            de vélo locale et solidaire
-          </Typography>
+    <Box bgcolor="lightprimary.main" position="relative" width="100%" mb={6}>
+      <Container
+        sx={{
+          display: 'flex',
+          gap: 6,
+          minHeight: {
+            xs: 'calc(100vh - 112px)',
+            sm: 'calc(100vh - 120px)',
+            md: 'calc(100vh - 152px)',
+          },
+        }}>
+        <Box
+          px={{xs: 4, md: 2}}
+          paddingY={6}
+          width={{xs: '100%', md: '55%'}}
+          display="flex"
+          flexDirection="column"
+          gap={2}
+          my="auto"
+          alignItems={{xs: 'center', md: 'start'}}>
+          <Box
+            width="100%"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            flexDirection={{xs: 'column', md: 'row'}}
+            position="relative">
+            <Box
+              position="absolute"
+              top="0"
+              left="50%"
+              width="110px"
+              sx={{
+                transform: 'translateY(-90%)',
+                display: {xs: 'none', lg: 'block'},
+              }}>
+              <LetterR color="primary" />
+            </Box>
+            <Typography
+              variant="h1"
+              component="h1"
+              color="primary"
+              textAlign={{xs: 'center', md: 'start'}}
+              sx={{mr: 4}}>
+              Réparation <br />
+              de vélo locale et solidaire
+            </Typography>
+            <img alt="" src="/img/yeah.svg" width="170px" />
+          </Box>
           <Box display={{xs: 'none', md: 'block'}} width="100%">
             <Box
               onSubmit={handleSubmit}
@@ -132,9 +164,9 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
               boxShadow={1}
               bgcolor="white"
               borderRadius={20}
-              p={2}>
+              p={3}>
               <Autocomplete
-                filterOptions={(options, state) => options}
+                filterOptions={(options) => options}
                 sx={{width: '50%', ml: 2}}
                 ref={listContainerRef}
                 freeSolo
@@ -214,29 +246,57 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                 sx={{
                   bgcolor: 'primary.main',
                   color: 'white',
+                  transform: 'scale(1.2)',
                   '&:hover': {bgcolor: 'primary.light'},
                 }}>
                 <SearchIcon sx={{color: 'white'}} />
               </IconButton>
             </Box>
           </Box>
-        </Stack>
-        <Box display={{md: 'none'}}>
-          <Button
-            onClick={handleModal}
-            variant="contained"
-            sx={{textTransform: 'none', display: {md: 'none'}, mt: 4}}>
-            Je recherche
-          </Button>
-          <ModalSearchRepairer
-            openModal={openModal}
-            bikeTypes={bikeTypes}
-            handleCloseModal={() => setOpenModal(false)}
-            citiesList={citiesList}
-          />
+          <Box display={{md: 'none'}}>
+            <Button
+              onClick={handleModal}
+              variant="contained"
+              size="large"
+              sx={{display: {md: 'none'}, mt: 4}}>
+              Je recherche
+            </Button>
+            <ModalSearchRepairer
+              openModal={openModal}
+              bikeTypes={bikeTypes}
+              handleCloseModal={() => setOpenModal(false)}
+              citiesList={citiesList}
+            />
+          </Box>
         </Box>
-      </Box>
-      <HomepageImagesGallery />
+        <Box
+          width="45%"
+          position="relative"
+          display={{xs: 'none', md: 'block'}}>
+          <Box
+            zIndex={5}
+            sx={{
+              position: 'absolute',
+              left: '0',
+              top: '15%',
+              transform: 'translateX(-50%)',
+            }}>
+            <img alt="" src="/img/eclair.svg" width="60px" />
+          </Box>
+          <Box width="50vw" height="100%" position="absolute" left="0" top="0">
+            <Box position="relative" height="100%" width="100%">
+              <Image
+                fill
+                alt=""
+                src="/img/female-worker.jpg"
+                style={{
+                  objectFit: 'cover',
+                }}
+              />
+            </Box>
+          </Box>
+        </Box>
+      </Container>
     </Box>
   );
 };
