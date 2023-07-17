@@ -7,6 +7,7 @@ import {
   Typography,
   Alert,
   CircularProgress,
+  InputLabel,
 } from '@mui/material';
 import {customerResource} from '@resources/customerResource';
 import Box from '@mui/material/Box';
@@ -27,8 +28,14 @@ import {Appointment} from '@interfaces/Appointment';
 import AppointmentCreateAddComment from './AppointmentCreateAddComment';
 import router from 'next/router';
 import CloseIcon from '@mui/icons-material/Close';
-import {dateObjectAsString, getDateTimeZoned} from '@helpers/dateHelper';
 import {errorRegex} from '@utils/errorRegex';
+import {DatePicker, TimePicker} from '@mui/x-date-pickers';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, {Dayjs} from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import {padNumber} from '@helpers/dateHelper';
 
 interface AppointmentCreateProps {
   repairer: Repairer;
@@ -65,7 +72,11 @@ const ModalAppointmentCreate = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [details, setDetails] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [pickedDate, setPickedDate] = React.useState<Dayjs | null>(null);
+  const [pickedTime, setPickedTime] = React.useState<Dayjs | null>(null);
 
+  dayjs.extend(timezone);
+  dayjs.extend(utc);
   const fetchCustomers = async () => {
     const response = await customerResource.getAll(true, {
       userSearch: customerInput,
@@ -82,12 +93,21 @@ const ModalAppointmentCreate = ({
   useEffect(() => {
     if (selectedDate) {
       setSlotSelected(selectedDate);
+      setPickedDate(dayjs(selectedDate));
+      setPickedTime(dayjs(selectedDate));
     } else {
-      const date = getDateTimeZoned(repairer.firstSlotAvailable);
-      const stringDate = dateObjectAsString(date);
-      setSlotSelected(stringDate);
+      if (pickedTime || pickedDate) {
+        let newDate = `${pickedDate?.year()}-${pickedDate?.month()}-${pickedDate?.day()}T${pickedTime?.hour()}:${pickedTime?.minute()}:00`;
+        setSlotSelected(newDate);
+      }
     }
-  }, [repairer.firstSlotAvailable, selectedDate]);
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (!details && newAppointment) {
+      handleSuccess();
+    }
+  }, [details, newAppointment]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCustomerChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -120,12 +140,15 @@ const ModalAppointmentCreate = ({
     };
 
     try {
+      setErrorMessage(null);
       const appointment = await appointmentResource.post(requestBody);
       setNewAppointment(appointment);
+      if (!details) {
+        handleSuccess();
+      }
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
-
     setLoading(false);
   };
 
@@ -151,6 +174,8 @@ const ModalAppointmentCreate = ({
         await autoDiagnosticResource.post(requestBody);
       } catch (e: any) {
         setErrorMessage(e.message?.replace(errorRegex, '$2'));
+        setLoading(false);
+        return;
       }
     }
 
@@ -168,10 +193,65 @@ const ModalAppointmentCreate = ({
         await appointmentResource.put(newAppointment['@id'], putRequest);
       } catch (e: any) {
         setErrorMessage(e.message?.replace(errorRegex, '$2'));
+        setLoading(false);
+        return;
       }
     }
     setLoading(false);
-    handleSuccess();
+    if (!errorMessage) {
+      handleSuccess();
+    }
+  };
+
+  const handleCreateWithoutDetails = async (selectedCustomer: Customer) => {
+    await setDetails(false);
+    handleCreateAppointment(selectedCustomer);
+  };
+
+  const handleDatePicker = (newValue: dayjs.Dayjs | null) => {
+    if (newValue && newValue.year() && newValue.month() && newValue.date()) {
+      let month = padNumber(newValue.month() + 1);
+      let day = padNumber(newValue.date());
+      let newDate = `${newValue.year()}-${month}-${day}`;
+      setPickedDate(dayjs(newDate));
+      setSlotSelected(`${newDate}T${pickedTime?.format('HH:mm')}`);
+    }
+    if (
+      !newValue ||
+      isNaN(newValue.year()) ||
+      isNaN(newValue.month()) ||
+      isNaN(newValue.date())
+    ) {
+      setPickedDate(null);
+    }
+  };
+
+  const handleTimePicker = (newValue: dayjs.Dayjs | null) => {
+    if (newValue && newValue.hour() !== null && newValue.minute() !== null) {
+      let hour = padNumber(newValue.hour());
+      let minutes = padNumber(newValue.minute());
+      let newTime = `${hour}:${minutes}:00`;
+      setPickedTime(dayjs(`2023-01-01T${newTime}`));
+      setSlotSelected(`${pickedDate?.format('YYYY-MM-DD')}T${newTime}`);
+    }
+    if (!newValue || isNaN(newValue.hour()) || isNaN(newValue.minute())) {
+      setPickedTime(null);
+    }
+  };
+
+  const handleResetStates = () => {
+    setSelectedCustomer(null);
+    setCustomers([]);
+    setCustomerInput('');
+    setNewAppointment(null);
+    setSelectedBikeType(null);
+    setPrestation('');
+    setPhoto(null);
+    setComment('');
+    setPickedTime(null);
+    setPickedDate(null)
+    setSlotSelected(undefined);
+    handleCloseModal(false);
   };
 
   const handleSuccess = () => {
@@ -183,23 +263,6 @@ const ModalAppointmentCreate = ({
       setCustomerInput('');
       setSuccess(false);
     }, 2000);
-  };
-
-  const handleCreateWithoutDetails = (selectedCustomer: Customer) => {
-    setDetails(false);
-    handleCreateAppointment(selectedCustomer);
-    handleSuccess();
-  };
-  const handleResetStates = () => {
-    setSelectedCustomer(null);
-    setCustomers([]);
-    setCustomerInput('');
-    setNewAppointment(null);
-    setSelectedBikeType(null);
-    setPrestation('');
-    setPhoto(null);
-    setComment('');
-    handleCloseModal(false);
   };
 
   return (
@@ -217,7 +280,7 @@ const ModalAppointmentCreate = ({
         p={4}
         boxShadow={24}
         sx={{
-          overflow: 'scroll',
+          overflowY: 'scroll',
           backgroundColor: 'background.paper',
           transform: 'translate(-50%, -50%)',
         }}>
@@ -231,9 +294,35 @@ const ModalAppointmentCreate = ({
           }}
           onClick={handleResetStates}
         />
-        <Typography align="justify" sx={{mt: 2}}>
-          {`Rendez-vous le ${slotDate} `}
-        </Typography>
+        {slotSelected && pickedTime && pickedDate && (
+          <Typography align="justify" sx={{my: 2}}>
+            {`Rendez-vous le ${slotDate} `}
+          </Typography>
+        )}
+        <LocalizationProvider adapterlocale="fr-FR" dateAdapter={AdapterDayjs}>
+          {selectedDate && (
+            <InputLabel id="service-type-label" sx={{my: 2}}>
+              Modifier le créneau
+            </InputLabel>
+          )}
+          {!selectedDate && (
+            <InputLabel id="service-type-label" sx={{my: 2}}>
+              Choisir un créneau
+            </InputLabel>
+          )}
+          <Box sx={{display: 'flex', justifyContent: 'space-evenly'}}>
+            <DatePicker
+              defaultValue={dayjs(selectedDate)}
+              format="DD/MM/YYYY"
+              onChange={(newValue) => handleDatePicker(newValue)}
+            />
+            <TimePicker
+              defaultValue={dayjs.tz(selectedDate, 'Europe/Paris')}
+              format="HH:mm"
+              onChange={(newValue) => handleTimePicker(newValue)}
+            />
+          </Box>
+        </LocalizationProvider>
         {!newAppointment && (
           <>
             <Autocomplete
@@ -257,20 +346,22 @@ const ModalAppointmentCreate = ({
                 />
               )}
             />
-            {loading && <CircularProgress />}
-            {selectedCustomer && (
+
+            {selectedCustomer && pickedDate && pickedTime && (
               <Box sx={{display: 'flex', justifyContent: 'space-around'}}>
                 <Button
                   onClick={() => handleCreateAppointment(selectedCustomer)}
                   variant="contained"
                   sx={{my: 2}}>
-                  Créer et Compléter le rendez vous
+                  {loading && <CircularProgress sx={{color: 'white'}} />}
+                  {!loading && <Box>Créer et Compléter le rendez vous</Box>}
                 </Button>
                 <Button
                   onClick={() => handleCreateWithoutDetails(selectedCustomer)}
                   variant="outlined"
                   sx={{my: 2}}>
-                  Créer sans ajouter de détails
+                  {loading && <CircularProgress sx={{color: 'outlined'}} />}
+                  {!loading && <Box>Créer sans ajouter de détails</Box>}
                 </Button>
               </Box>
             )}
@@ -296,12 +387,13 @@ const ModalAppointmentCreate = ({
               comment={comment}
               setComment={setComment}
             />
-            {loading && <CircularProgress />}
+
             <Button
               onClick={handleAddInformations}
               variant="contained"
               sx={{my: 2}}>
-              Ajouter les éléments au rendez vous
+              {!loading && <Box>Ajouter les éléments au rendez vous</Box>}
+              {loading && <CircularProgress sx={{color: 'white'}}/>}
             </Button>
           </Box>
         )}

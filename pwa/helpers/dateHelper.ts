@@ -67,7 +67,7 @@ export const getTimeFromDateAsString = (slotTime: string): string => {
 }
 
 
-const padNumber = (number: number): string => {
+export const padNumber = (number: number): string => {
   return number.toString().padStart(2, '0');
 }
 
