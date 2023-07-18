@@ -327,8 +327,12 @@ const ModalAppointmentCreate = ({
         )}
         {!newAppointment && (
           <>
+            {!address &&(
+                <Box>
             <LocalizationProvider
-              localeText={frFR.components.MuiLocalizationProvider.defaultProps.localeText}
+              localeText={
+                frFR.components.MuiLocalizationProvider.defaultProps.localeText
+              }
               adapterLocale="fr"
               dateAdapter={AdapterDayjs}>
               {selectedDate && (
@@ -376,6 +380,8 @@ const ModalAppointmentCreate = ({
                 />
               )}
             />
+                </Box>
+        )}
             {selectedCustomer && pickedDate && pickedTime && (
               <>
                 {isItinerantRepairer && (
