@@ -92,11 +92,23 @@ const theme = createTheme({
         },
       },
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        notchedOutline: {
+          fontWeight: '800',
+          fontSize: '14px',
+        },
+        root: {
+          borderRadius: '20px',
+        },
+      },
+    },
     MuiInputLabel: {
       styleOverrides: {
         root: ({theme}) => ({
           fontWeight: '800',
-          color: theme.palette.secondary.main,
+          fontSize: '14px',
+          color: theme.palette.secondary.light,
         }),
       },
     },

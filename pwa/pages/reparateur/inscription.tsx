@@ -13,10 +13,8 @@ import {searchCity, searchStreet} from '@utils/apiCity';
 import {errorRegex} from '@utils/errorRegex';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {
-  Avatar,
   Box,
   Container,
-  OutlinedInput,
   MenuItem,
   ListItemText,
   Typography,
@@ -28,9 +26,9 @@ import {
   FormControl,
   Paper,
   Checkbox,
+  Grid,
 } from '@mui/material';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
-import BuildIcon from '@mui/icons-material/Build';
 import {BikeType} from '@interfaces/BikeType';
 import {
   City,
@@ -41,6 +39,7 @@ import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {RepairerType} from '@interfaces/RepairerType';
 import {Street} from '@interfaces/Street';
+import LetterR from '@components/common/LetterR';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -259,259 +258,332 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         <title>Devenir réparateur</title>
       </Head>
       <WebsiteLayout>
-        <Container sx={{width: {xs: '100%', md: '50%'}}}>
+        <Box
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
+        <Container>
           {!success && (
-            <Paper
-              elevation={4}
-              sx={{
-                maxWidth: 600,
-                p: 4,
-                mt: 4,
-                mb: {xs: 10, md: 12},
-                mx: 'auto',
-              }}>
+            <Box
+              py={4}
+              display="flex"
+              flexDirection={{xs: 'column', md: 'row'}}
+              gap={4}
+              position="relative"
+              alignItems="flex-start">
               <Box
-                sx={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
-                <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
-                  <BuildIcon />
-                </Avatar>
-                <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+                minHeight={{xs: '0', md: 'calc(100vh - 200px)'}}
+                justifyContent="center"
+                display="flex"
+                flexDirection="column"
+                alignItems={{xs: 'center', md: 'flex-start'}}
+                textAlign={{xs: 'center', md: 'left'}}
+                width={{xs: '100%', md: '45%'}}
+                mx="auto"
+                maxWidth={{xs: '600px', md: '100%'}}>
+                <Typography variant="h1" sx={{mb: 4}} color="primary">
                   Devenir réparateur
                 </Typography>
-                <Typography sx={{mt: 5, fontSize: '1.3em'}} variant="body1">
+                <Typography variant="body1">
                   Tu es réparateur ? <br />
                   Tu as envie de rejoindre un collectif de pairs sur ton
                   territoire ? <br />
                   Tu cherches un outil numérique qui te référence et qui te
                   permet de gérer tes rendez-vous avec tes usagers ?<br />
-                  <br />
-                  Contacte-nous !
+                </Typography>
+                <Typography my={2} variant="h4" color="secondary">
+                  Inscris-toi !
                 </Typography>
                 <Box
-                  component="form"
-                  onSubmit={handleSubmit}
-                  noValidate
-                  sx={{mt: 1}}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="Prénom"
-                    name="firstName"
-                    autoComplete="firstName"
-                    autoFocus
-                    value={firstName}
-                    inputProps={{maxLength: 50}}
-                    onChange={handleChangeFirstName}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Nom"
-                    name="lastName"
-                    autoComplete="lastName"
-                    value={lastName}
-                    inputProps={{maxLength: 50}}
-                    onChange={handleChangeLastName}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    error={emailError}
-                    helperText={emailHelperText}
-                    type={'email'}
-                    id="email"
-                    label="Email"
-                    name="email"
-                    autoComplete="email"
-                    value={email}
-                    inputProps={{maxLength: 180}}
-                    onChange={handleChangeEmail}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    error={passwordError}
-                    helperText={passwordHelperText}
-                    name="password"
-                    label="Mot de passe"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={handleChangePassword}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="name"
-                    label="Nom de votre enseigne"
-                    name="name"
-                    autoComplete="name"
-                    value={name}
-                    inputProps={{maxLength: 80}}
-                    onChange={handleChangeName}
-                  />
-                  <Autocomplete
-                    sx={{mt: 2, mb: 1}}
-                    freeSolo
-                    value={cityInput}
-                    options={citiesList}
-                    getOptionLabel={(city) =>
-                      typeof city === 'string'
-                        ? city
-                        : `${city.name} (${city.postcode})`
-                    }
-                    onChange={(event, value) => setCity(value as City)}
-                    renderInput={(params) => (
+                  sx={{
+                    transform: {
+                      xs: 'translateX(-30%)',
+                      md: 'translateX(-50%) translateY(20%)',
+                      lg: 'translateX(-125%) translateY(20%)',
+                    },
+                    position: {
+                      xs: 'absolute',
+                      md: 'static',
+                    },
+                    left: '0',
+                    bottom: '10%',
+                  }}>
+                  <img alt="" src="/img/flower.svg" width="110px" />
+                </Box>
+              </Box>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{
+                  mt: 1,
+                  bgcolor: 'white',
+                  px: {xs: 3, md: 5},
+                  py: {xs: 4, md: 5},
+                  boxShadow: 2,
+                  width: {xs: '90%', md: '55%'},
+                  borderRadius: 6,
+                  mx: 'auto',
+                  maxWidth: '700px',
+                  position: 'relative',
+                }}>
+                <Box
+                  position="absolute"
+                  top={{xs: '0', md: '50px'}}
+                  left={{xs: '100%', md: '0%'}}
+                  width={{xs: '80px', md: '110px'}}
+                  sx={{
+                    transform: {
+                      xs: 'translateY(-80%) translateX(-110%)',
+                      md: 'translateX(-85%)',
+                    },
+                  }}>
+                  <LetterR color="secondary" />
+                </Box>
+                <Grid container spacing={2} direction="column">
+                  <Grid container item xs={12} spacing={2} direction="row">
+                    <Grid item xs={12} sm={6} md={12} lg={6}>
                       <TextField
-                        label="Ville"
+                        fullWidth
                         required
-                        {...params}
-                        value={cityInput}
-                        onChange={(e) => handleCityChange(e)}
+                        id="firstName"
+                        label="Prénom"
+                        name="firstName"
+                        autoComplete="firstName"
+                        autoFocus
+                        value={firstName}
+                        inputProps={{maxLength: 50}}
+                        onChange={handleChangeFirstName}
                       />
-                    )}
-                  />
-                  {city && (
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={12} lg={6}>
+                      <TextField
+                        fullWidth
+                        required
+                        id="lastName"
+                        label="Nom"
+                        name="lastName"
+                        autoComplete="lastName"
+                        value={lastName}
+                        inputProps={{maxLength: 50}}
+                        onChange={handleChangeLastName}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      required
+                      error={emailError}
+                      helperText={emailHelperText}
+                      type={'email'}
+                      id="email"
+                      label="Email"
+                      name="email"
+                      autoComplete="email"
+                      value={email}
+                      inputProps={{maxLength: 180}}
+                      onChange={handleChangeEmail}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      required
+                      error={passwordError}
+                      helperText={passwordHelperText}
+                      name="password"
+                      label="Mot de passe"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      value={password}
+                      onChange={handleChangePassword}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      required
+                      id="name"
+                      label="Nom de votre enseigne"
+                      name="name"
+                      autoComplete="name"
+                      value={name}
+                      inputProps={{maxLength: 80}}
+                      onChange={handleChangeName}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
                     <Autocomplete
-                      sx={{mt: 2, mb: 1}}
                       freeSolo
-                      value={street}
-                      options={streetList}
-                      getOptionLabel={(streetObject) =>
-                        typeof streetObject === 'string'
-                          ? streetObject
-                          : `${streetObject.name} (${streetObject.city})`
+                      value={cityInput}
+                      options={citiesList}
+                      getOptionLabel={(city) =>
+                        typeof city === 'string'
+                          ? city
+                          : `${city.name} (${city.postcode})`
                       }
-                      onChange={(event, value) => setStreet(value as Street)}
-                      renderInput={(params) => (
+                      onChange={(event, value) => setCity(value as City)}
+                      renderInput={({
+                        InputLabelProps,
+                        InputProps,
+                        ...params
+                      }) => (
                         <TextField
-                          label="Rue"
+                          label="Ville"
                           required
                           {...params}
-                          value={street}
-                          onChange={(e) => handleChangeStreet(e)}
+                          value={cityInput}
+                          onChange={(e: any) => handleCityChange(e)}
                         />
                       )}
                     />
+                  </Grid>
+                  {city && (
+                    <Grid item xs={12}>
+                      <Autocomplete
+                        freeSolo
+                        value={street}
+                        options={streetList}
+                        getOptionLabel={(streetObject) =>
+                          typeof streetObject === 'string'
+                            ? streetObject
+                            : `${streetObject.name} (${streetObject.city})`
+                        }
+                        onChange={(event, value) => setStreet(value as Street)}
+                        renderInput={({
+                          InputLabelProps,
+                          InputProps,
+                          ...params
+                        }) => (
+                          <TextField
+                            label="Rue"
+                            required
+                            {...params}
+                            value={street}
+                            onChange={(e) => handleChangeStreet(e)}
+                          />
+                        )}
+                      />
+                    </Grid>
                   )}
                   {street && (
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        required
+                        id="streetNumber"
+                        label="Numéro de la rue"
+                        name="streetNumber"
+                        autoComplete="streetNumber"
+                        value={streetNumber}
+                        inputProps={{maxLength: 30}}
+                        onChange={handleChangeStreetNumber}
+                      />
+                    </Grid>
+                  )}
+                  <Grid item xs={12}>
+                    <FormControl fullWidth required>
+                      <InputLabel id="repairer-type-label">
+                        Type de réparateur
+                      </InputLabel>
+                      <Select
+                        required
+                        id="repairer-type"
+                        labelId="repairer-type-label"
+                        label="Type de réparateur"
+                        onChange={handleChangeRepairerType}
+                        value={repairerTypeSelected?.name}
+                        style={{width: '100%'}}>
+                        {repairerTypes.map((repairer) => (
+                          <MenuItem key={repairer.id} value={repairer.name}>
+                            {repairer.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth required>
+                      <InputLabel id="bike-type-label">
+                        Vélos réparés
+                      </InputLabel>
+                      <Select
+                        required
+                        labelId="bike-type-label"
+                        label="Vélos réparés"
+                        id="bike-type"
+                        multiple
+                        fullWidth
+                        value={selectedBikeTypes}
+                        onChange={handleChangeBikeRepaired}
+                        renderValue={(selected) => selected.join(', ')}>
+                        {bikeTypes.map((bikeType) => (
+                          <MenuItem key={bikeType.name} value={bikeType.name}>
+                            <Checkbox
+                              checked={
+                                selectedBikeTypes.indexOf(bikeType.name) > -1
+                              }
+                            />
+                            <ListItemText primary={bikeType.name} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
                     <TextField
-                      margin="normal"
-                      required
                       fullWidth
-                      id="streetNumber"
-                      label="Numéro de la rue"
-                      name="streetNumber"
-                      autoComplete="streetNumber"
-                      value={streetNumber}
-                      inputProps={{maxLength: 30}}
-                      onChange={handleChangeStreetNumber}
+                      multiline
+                      rows={3}
+                      id="comment"
+                      label="Commentaires"
+                      name="comment"
+                      autoComplete="comment"
+                      value={comment}
+                      inputProps={{maxLength: 2000}}
+                      onChange={handleChangeComments}
                     />
-                  )}
-                  <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-                    <InputLabel id="repairer-type-label">
-                      Type de réparateur
-                    </InputLabel>
-                    <Select
-                      required
-                      id="repairer-type"
-                      labelId="repairer-type-label"
-                      label="Type de réparateur"
-                      onChange={handleChangeRepairerType}
-                      value={repairerTypeSelected?.name}
-                      style={{width: '100%'}}>
-                      {repairerTypes.map((repairer) => (
-                        <MenuItem key={repairer.id} value={repairer.name}>
-                          {repairer.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-                    <InputLabel id="bike-type-label">Vélos réparés</InputLabel>
-                    <Select
-                      required
-                      labelId="bike-type-label"
-                      id="bike-type"
-                      multiple
-                      fullWidth
-                      value={selectedBikeTypes}
-                      onChange={handleChangeBikeRepaired}
-                      input={<OutlinedInput label="Type de vélos" />}
-                      renderValue={(selected) => selected.join(', ')}>
-                      {bikeTypes.map((bikeType) => (
-                        <MenuItem key={bikeType.name} value={bikeType.name}>
-                          <Checkbox
-                            checked={
-                              selectedBikeTypes.indexOf(bikeType.name) > -1
-                            }
-                          />
-                          <ListItemText primary={bikeType.name} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <TextField
-                    multiline
-                    rows={3}
-                    margin="normal"
-                    fullWidth
-                    id="comment"
-                    label="Commentaires"
-                    name="comment"
-                    autoComplete="comment"
-                    value={comment}
-                    inputProps={{maxLength: 2000}}
-                    onChange={handleChangeComments}
-                  />
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center">
-                    <Button
-                      disabled={
-                        !firstName ||
-                        !lastName ||
-                        !city ||
-                        !street ||
-                        !streetNumber ||
-                        !repairerTypeSelected ||
-                        !name ||
-                        !email ||
-                        !password ||
-                        !selectedBikeTypes.length
-                      }
-                      type="submit"
-                      variant="contained"
-                      sx={{mt: 2, mx: 'auto'}}>
-                      {!pendingRegistration ? (
-                        'Créer mon compte'
-                      ) : (
-                        <CircularProgress size={20} sx={{color: 'white'}} />
-                      )}
-                    </Button>
-                  </Box>
-                  {errorMessage && (
-                    <Typography variant="body1" color="error">
-                      {errorMessage}
-                    </Typography>
-                  )}
+                  </Grid>
+                </Grid>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Button
+                    disabled={
+                      !firstName ||
+                      !lastName ||
+                      !city ||
+                      !street ||
+                      !streetNumber ||
+                      !repairerTypeSelected ||
+                      !name ||
+                      !email ||
+                      !password ||
+                      !selectedBikeTypes.length
+                    }
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    sx={{mt: 2, mx: 'auto'}}>
+                    {!pendingRegistration ? (
+                      'Créer mon compte'
+                    ) : (
+                      <CircularProgress size={20} sx={{color: 'white'}} />
+                    )}
+                  </Button>
                 </Box>
+                {errorMessage && (
+                  <Typography variant="body1" color="error">
+                    {errorMessage}
+                  </Typography>
+                )}
               </Box>
-            </Paper>
+            </Box>
           )}
           {success && (
             <Paper
