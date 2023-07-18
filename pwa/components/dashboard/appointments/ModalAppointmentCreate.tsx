@@ -321,7 +321,7 @@ const ModalAppointmentCreate = ({
           onClick={handleResetStates}
         />
         {slotSelected && pickedTime && pickedDate && (
-          <Typography align="justify" sx={{display: {xs: 'none', sm: 'none' }, my: 2}}>
+          <Typography align="justify" sx={{display: {xs: 'none', md: 'block'}, my: 2}}>
             {`Rendez-vous le ${slotDate} `}
           </Typography>
         )}
@@ -421,7 +421,7 @@ const ModalAppointmentCreate = ({
         )}
         {newAppointment && details && (
           <Box>
-            <Typography align="justify" sx={{display: {xs: 'none', sm: 'none' }, mt: 2}}>
+            <Typography align="justify" sx={{display: {xs: 'none', md: 'block'}, mt: 2}}>
               {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
             </Typography>
             <Box sx={{display: 'flex'}}>
@@ -452,7 +452,7 @@ const ModalAppointmentCreate = ({
         {success && (
           <Box>
             {!details && newAppointment && (
-              <Typography align="justify" sx={{mt: 2}}>
+              <Typography align="justify" sx={{display: {xs: 'none', md: 'block'}, mt: 2}}>
                 {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
               </Typography>
             )}
