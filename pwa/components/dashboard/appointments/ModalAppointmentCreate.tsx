@@ -321,7 +321,7 @@ const ModalAppointmentCreate = ({
           onClick={handleResetStates}
         />
         {slotSelected && pickedTime && pickedDate && (
-          <Typography align="justify" sx={{my: 2}}>
+          <Typography align="justify" sx={{display: {xs: 'none', sm: 'none' }, my: 2}}>
             {`Rendez-vous le ${slotDate} `}
           </Typography>
         )}
@@ -397,12 +397,12 @@ const ModalAppointmentCreate = ({
                     setAddress={setAddress}
                   />
                 )}
-                <Box sx={{display: 'flex', justifyContent: 'space-around'}}>
+                <Box sx={{display: {sm: 'block', md: 'flex'}, justifyContent: 'space-around'}}>
                   <Button
                     onClick={() => handleCreateAppointment(selectedCustomer)}
                     disabled={isItinerantRepairer! && !address}
                     variant="contained"
-                    sx={{my: 2}}>
+                    sx={{my: 2, size: 'sm'}}>
                     {loading && <CircularProgress sx={{color: 'white'}} />}
                     {!loading && <Box>Créer et Compléter le rendez vous</Box>}
                   </Button>
@@ -421,7 +421,7 @@ const ModalAppointmentCreate = ({
         )}
         {newAppointment && details && (
           <Box>
-            <Typography align="justify" sx={{mt: 2}}>
+            <Typography align="justify" sx={{display: {xs: 'none', sm: 'none' }, mt: 2}}>
               {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
             </Typography>
             <Box sx={{display: 'flex'}}>
