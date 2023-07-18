@@ -3,12 +3,17 @@ import {
   TextField,
   Autocomplete,
   Button,
-  Stack,
   Typography,
   Alert,
   CircularProgress,
   InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {useTheme} from '@mui/material/styles';
 import {customerResource} from '@resources/customerResource';
 import Box from '@mui/material/Box';
 import {Customer} from '@interfaces/Customer';
@@ -20,7 +25,6 @@ import {Repairer} from '@interfaces/Repairer';
 import AppointmentCreateAddPhoto from '@components/dashboard/appointments/AppointmentCreateAddPhoto';
 import AppointmentCreateAddPrestation from '@components/dashboard/appointments/AppointmentCreateAddPrestation';
 import AppointmentCreateAddBikeType from '@components/dashboard/appointments/AppointmentCreateAddBikeType';
-import Modal from '@mui/material/Modal';
 import {BikeType} from '@interfaces/BikeType';
 import {MediaObject} from '@interfaces/MediaObject';
 import {autoDiagnosticResource} from '@resources/autoDiagResource';
@@ -84,6 +88,8 @@ const ModalAppointmentCreate = ({
   const [longitude, setLongitude] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const isItinerantRepairer = user && isItinerant(user);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   dayjs.extend(timezone);
   dayjs.extend(utc);
@@ -292,23 +298,17 @@ const ModalAppointmentCreate = ({
   };
 
   return (
-    <Modal
+    <Dialog
       open={openModal}
       onClose={handleResetStates}
-      aria-labelledby="Créer un rendez-vous"
+      fullScreen={fullScreen}
+      maxWidth={'xl'}
       aria-describedby="popup_appointment_create">
-      <Stack
-        position={'absolute'}
-        top={'50%'}
-        left={'50%'}
-        width={{xs: '85%', md: '100%'}}
-        maxWidth={900}
-        p={4}
-        boxShadow={24}
+      <DialogTitle id="service-type-label">Création de rendez-vous</DialogTitle>
+      <DialogContent
         sx={{
           overflowY: 'scroll',
           backgroundColor: 'background.paper',
-          transform: 'translate(-50%, -50%)',
         }}>
         <CloseIcon
           sx={{
@@ -321,67 +321,77 @@ const ModalAppointmentCreate = ({
           onClick={handleResetStates}
         />
         {slotSelected && pickedTime && pickedDate && (
-          <Typography align="justify" sx={{display: {xs: 'none', md: 'block'}, my: 2}}>
+          <Typography
+            align="justify"
+            sx={{display: {xs: 'none', md: 'block'}, my: 2}}>
             {`Rendez-vous le ${slotDate} `}
           </Typography>
         )}
         {!newAppointment && (
           <>
-            {!address &&(
-                <Box>
-            <LocalizationProvider
-              localeText={
-                frFR.components.MuiLocalizationProvider.defaultProps.localeText
-              }
-              adapterLocale="fr"
-              dateAdapter={AdapterDayjs}>
-              {selectedDate && (
-                <InputLabel id="service-type-label" sx={{my: 2}}>
-                  Modifier le créneau
-                </InputLabel>
-              )}
-              {!selectedDate && (
-                <InputLabel id="service-type-label" sx={{my: 2}}>
-                  Choisir un créneau
-                </InputLabel>
-              )}
-              <Box sx={{display: 'flex', justifyContent: 'space-evenly'}}>
-                <DatePicker
-                  defaultValue={dayjs(selectedDate)}
-                  format="DD/MM/YYYY"
-                  onChange={(newValue) => handleDatePicker(newValue)}
-                />
-                <TimePicker
-                  defaultValue={dayjs.tz(selectedDate, 'Europe/Paris')}
-                  format="HH:mm"
-                  onChange={(newValue) => handleTimePicker(newValue)}
-                  ampm={false}
+            {!address && (
+              <Box>
+                <LocalizationProvider
+                  localeText={
+                    frFR.components.MuiLocalizationProvider.defaultProps
+                      .localeText
+                  }
+                  adapterLocale="fr"
+                  dateAdapter={AdapterDayjs}>
+                  {selectedDate && (
+                    <InputLabel id="service-type-label" sx={{my: 2}}>
+                      Modifier le créneau
+                    </InputLabel>
+                  )}
+                  {!selectedDate && (
+                    <InputLabel id="service-type-label" sx={{my: 2}}>
+                      Choisir un créneau
+                    </InputLabel>
+                  )}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-evenly',
+                      gap: 2,
+                    }}>
+                    <DatePicker
+                      defaultValue={dayjs(selectedDate)}
+                      format="DD/MM/YYYY"
+                      onChange={(newValue) => handleDatePicker(newValue)}
+                    />
+                    <TimePicker
+                      defaultValue={dayjs.tz(selectedDate, 'Europe/Paris')}
+                      format="HH:mm"
+                      onChange={(newValue) => handleTimePicker(newValue)}
+                      ampm={false}
+                    />
+                  </Box>
+                </LocalizationProvider>
+                <Autocomplete
+                  sx={{mt: 2, mb: 1}}
+                  freeSolo
+                  value={customerInput}
+                  options={customers}
+                  getOptionLabel={(customer) =>
+                    typeof customer === 'string'
+                      ? customer
+                      : `${customer.firstName} ${customer.lastName} (${customer.email})`
+                  }
+                  onChange={(event, value) =>
+                    handleSelectCustomer(value as User)
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      label="Client"
+                      required
+                      {...params}
+                      value={customerInput}
+                      onChange={(e) => handleCustomerChange(e)}
+                    />
+                  )}
                 />
               </Box>
-            </LocalizationProvider>
-            <Autocomplete
-              sx={{mt: 2, mb: 1}}
-              freeSolo
-              value={customerInput}
-              options={customers}
-              getOptionLabel={(customer) =>
-                typeof customer === 'string'
-                  ? customer
-                  : `${customer.firstName} ${customer.lastName} (${customer.email})`
-              }
-              onChange={(event, value) => handleSelectCustomer(value as User)}
-              renderInput={(params) => (
-                <TextField
-                  label="Client"
-                  required
-                  {...params}
-                  value={customerInput}
-                  onChange={(e) => handleCustomerChange(e)}
-                />
-              )}
-            />
-                </Box>
-        )}
+            )}
             {selectedCustomer && pickedDate && pickedTime && (
               <>
                 {isItinerantRepairer && (
@@ -397,12 +407,18 @@ const ModalAppointmentCreate = ({
                     setAddress={setAddress}
                   />
                 )}
-                <Box sx={{display: {sm: 'block', md: 'flex'}, justifyContent: 'space-around'}}>
+                <DialogActions
+                  sx={{
+                    display: {md: 'flex'},
+                    flexDirection: {xs: 'column', md: 'row'},
+                    justifyContent: {xs: 'center', md: 'space-around'},
+                    gap: {md: 4},
+                  }}>
                   <Button
                     onClick={() => handleCreateAppointment(selectedCustomer)}
                     disabled={isItinerantRepairer! && !address}
                     variant="contained"
-                    sx={{my: 2, size: 'sm'}}>
+                    sx={{mt: 2, mb: {sm: 1, md: 2}, width: {xs: '100%'}}}>
                     {loading && <CircularProgress sx={{color: 'white'}} />}
                     {!loading && <Box>Créer et Compléter le rendez vous</Box>}
                   </Button>
@@ -410,18 +426,20 @@ const ModalAppointmentCreate = ({
                     onClick={() => handleCreateWithoutDetails(selectedCustomer)}
                     disabled={isItinerantRepairer! && !address}
                     variant="outlined"
-                    sx={{my: 2}}>
+                    sx={{mt: 2, mb: {sm: 1, md: 2}, width: {xs: '100%'}}}>
                     {loading && <CircularProgress sx={{color: 'outlined'}} />}
                     {!loading && <Box>Créer sans ajouter de détails</Box>}
                   </Button>
-                </Box>
+                </DialogActions>
               </>
             )}
           </>
         )}
         {newAppointment && details && (
           <Box>
-            <Typography align="justify" sx={{display: {xs: 'none', md: 'block'}, mt: 2}}>
+            <Typography
+              align="justify"
+              sx={{display: {xs: 'none', md: 'block'}, mt: 2}}>
               {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
             </Typography>
             <Box sx={{display: 'flex'}}>
@@ -439,20 +457,23 @@ const ModalAppointmentCreate = ({
               comment={comment}
               setComment={setComment}
             />
-
-            <Button
-              onClick={handleAddInformations}
-              variant="contained"
-              sx={{my: 2}}>
-              {!loading && <Box>Ajouter les éléments au rendez vous</Box>}
-              {loading && <CircularProgress sx={{color: 'white'}} />}
-            </Button>
+            <DialogActions>
+              <Button
+                onClick={handleAddInformations}
+                variant="contained"
+                sx={{my: 2}}>
+                {!loading && <Box>Ajouter les éléments au rendez vous</Box>}
+                {loading && <CircularProgress sx={{color: 'white'}} />}
+              </Button>
+            </DialogActions>
           </Box>
         )}
         {success && (
           <Box>
             {!details && newAppointment && (
-              <Typography align="justify" sx={{display: {xs: 'none', md: 'block'}, mt: 2}}>
+              <Typography
+                align="justify"
+                sx={{display: {xs: 'none', md: 'block'}, mt: 2}}>
                 {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
               </Typography>
             )}
@@ -466,8 +487,8 @@ const ModalAppointmentCreate = ({
             {errorMessage}
           </Typography>
         )}
-      </Stack>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 };
 
