@@ -29,10 +29,11 @@ import AppointmentCreateAddComment from './AppointmentCreateAddComment';
 import router from 'next/router';
 import CloseIcon from '@mui/icons-material/Close';
 import {errorRegex} from '@utils/errorRegex';
-import {DatePicker, TimePicker} from '@mui/x-date-pickers';
+import {DatePicker, frFR, TimePicker} from '@mui/x-date-pickers';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, {Dayjs} from 'dayjs';
+import 'dayjs/locale/fr';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import {padNumber} from '@helpers/dateHelper';
@@ -327,7 +328,8 @@ const ModalAppointmentCreate = ({
         {!newAppointment && (
           <>
             <LocalizationProvider
-              adapterlocale="fr-FR"
+              localeText={frFR.components.MuiLocalizationProvider.defaultProps.localeText}
+              adapterLocale="fr"
               dateAdapter={AdapterDayjs}>
               {selectedDate && (
                 <InputLabel id="service-type-label" sx={{my: 2}}>
@@ -349,6 +351,7 @@ const ModalAppointmentCreate = ({
                   defaultValue={dayjs.tz(selectedDate, 'Europe/Paris')}
                   format="HH:mm"
                   onChange={(newValue) => handleTimePicker(newValue)}
+                  ampm={false}
                 />
               </Box>
             </LocalizationProvider>
