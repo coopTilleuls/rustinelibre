@@ -38,14 +38,14 @@ const theme = createTheme({
       contrastText: '#fff',
     },
     lightprimary: {
-      light: lighten('#fff7f1', 0.2),
-      main: '#fff7f1',
-      dark: darken('#fff7f1', 0.2),
+      light: lighten('#fff7f0', 0.4),
+      main: '#fff7f0',
+      dark: darken('#fff7f0', 0.2),
     },
     lightsecondary: {
-      light: lighten('#f7f2f9', 0.2),
-      main: '#f7f2f9',
-      dark: darken('#f7f2f9', 0.2),
+      light: lighten('#f8f2fe', 0.2),
+      main: '#f8f2fe',
+      dark: darken('#f8f2fe', 0.2),
     },
   },
   typography: {
