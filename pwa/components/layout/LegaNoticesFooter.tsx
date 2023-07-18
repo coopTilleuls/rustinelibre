@@ -15,7 +15,7 @@ const LegalNoticesFooter = (): JSX.Element => {
         justifyContent="center"
         alignItems="center"
         maxWidth="100%"
-        width="300px"
+        width="240px"
         marginX="auto">
         <Box
           flex={1}

@@ -7,8 +7,9 @@ import {ENTRYPOINT} from '@config/entrypoint';
 import {repairerResource} from '@resources/repairerResource';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import RepairerPresentation from '@components/repairers/RepairerPresentation';
-import {CircularProgress, Box} from '@mui/material';
+import {Box} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
+import FullLoading from '@components/common/FullLoading';
 
 type RepairerPageProps = {
   repairerProps: Repairer | null;
@@ -33,7 +34,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
   };
 
   useEffect(() => {
-      fetchRepairer();
+    fetchRepairer();
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -42,17 +43,18 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
         <title>Réparateur {repairer?.name}</title>
       </Head>
       <WebsiteLayout>
-        <main>
-          <Box
-            sx={{
-              bgcolor: 'background.paper',
-              mt: {md: 8},
-              mb: 10,
-            }}>
-            {loading && <CircularProgress />}
-            {repairer && <RepairerPresentation repairer={repairer} />}
-          </Box>
-        </main>
+        <Box
+          component="main"
+          sx={{
+            minHeight: {
+              xs: 'calc(100vh - 112px)',
+              sm: 'calc(100vh - 120px)',
+              md: 'calc(100vh - 152px)',
+            },
+          }}>
+          {!repairer && <FullLoading />}
+          {repairer && <RepairerPresentation repairer={repairer} />}
+        </Box>
       </WebsiteLayout>
     </div>
   );
