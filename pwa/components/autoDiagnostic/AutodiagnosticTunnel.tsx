@@ -9,6 +9,7 @@ import AutoDiagTunnelPrestation from '@components/autoDiagnostic/AutodiagTunnelP
 import AutoDiagTunnelPhoto from '@components/autoDiagnostic/AutoDiagTunnelPhoto';
 import AutoDiagTunnelChoice from '@components/autoDiagnostic/AutoDiagTunnelChoice';
 import AutoDiagTunnelBikeSelection from "@components/autoDiagnostic/AutoDiagTunnelBikeSelection";
+import {useTheme} from "@mui/material/styles";
 
 interface AutoDiagnosticTunnelProps {
   appointmentId: string;
@@ -18,7 +19,8 @@ export const AutoDiagnosticTunnel = ({
   appointmentId,
 }: AutoDiagnosticTunnelProps): JSX.Element => {
   const router = useRouter();
-  const isMobile = useMediaQuery('(max-width: 1024px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [loading, setLoading] = useState<boolean>(false);
   const {
     tunnelStep,

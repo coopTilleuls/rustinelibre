@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useRouter} from 'next/router';
-import {styled, Theme, CSSObject} from '@mui/material/styles';
+import {styled, Theme, CSSObject, useTheme} from '@mui/material/styles';
 import {
   Box,
   Toolbar,
@@ -114,7 +114,8 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
   });
   const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const {logout} = useAuth();
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);

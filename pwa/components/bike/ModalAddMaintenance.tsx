@@ -23,6 +23,7 @@ import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {Moment} from 'moment';
 import {Maintenance} from '@interfaces/Maintenance';
 import {useAccount} from '@contexts/AuthContext';
+import {useTheme} from "@mui/material/styles";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -57,7 +58,8 @@ const ModalAddMaintenance = ({
   const [loadingInvoice, setLoadingInvoice] = useState<boolean>(false);
   const [photo, setPhoto] = useState<MediaObject | null>(null);
   const [invoice, setInvoice] = useState<MediaObject | null>(null);
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const {user} = useAccount({});
 

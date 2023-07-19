@@ -109,7 +109,7 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
   const {user} = useAccount({
     redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
   });
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [contactUnread, setContactUnread] = useState<number>(0);
   const {logout} = useAuth();
 
