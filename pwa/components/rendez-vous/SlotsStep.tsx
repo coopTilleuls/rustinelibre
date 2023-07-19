@@ -5,6 +5,7 @@ import Grid2 from '@mui/material/Unstable_Grid2';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {openingHoursResource} from "@resources/openingHours";
 import {Repairer} from "@interfaces/Repairer";
+import {useTheme} from "@mui/material/styles";
 
 interface OpeningsObjectType {
   [key: string]: string[];
@@ -17,7 +18,8 @@ interface SlotsStepProps {
 
 const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [loading, setLoading] = useState<boolean>(true);
   const [openingHours, setOpeningHours] = useState<OpeningsObjectType|[]>([]);
   const [displayCount, setDisplayCount] = useState<number>(7);

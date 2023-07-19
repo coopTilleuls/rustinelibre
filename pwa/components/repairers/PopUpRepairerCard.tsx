@@ -14,8 +14,6 @@ export const PopUpRepairerCard = ({
   repairer,
   onClick,
 }: RepairerProps): JSX.Element => {
-  const {selectedRepairer} = useContext(SearchRepairerContext);
-  const isMobile = useMediaQuery('(max-width: 640px)');
 
   return (
     <Box

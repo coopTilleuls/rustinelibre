@@ -1,6 +1,7 @@
 import React from 'react';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {Typography, Button, Stack} from '@mui/material';
+import {useTheme} from "@mui/material/styles";
 
 interface OptionalStepProps {
   optionalPage?: string;
@@ -11,7 +12,8 @@ const OptionalStep = ({
   optionalPage,
   confirmAppointmentRequest,
 }: OptionalStepProps) => {
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <Stack

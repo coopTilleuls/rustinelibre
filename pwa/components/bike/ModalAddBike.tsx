@@ -15,6 +15,7 @@ import {bikeResource} from '@resources/bikeResource';
 import {RequestBody} from '@interfaces/Resource';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {checkFileSize} from "@helpers/checkFileSize";
+import {useTheme} from "@mui/material/styles";
 
 type ModalAddBikeProps = {
   bikeTypes: BikeType[];
@@ -35,7 +36,8 @@ const ModalAddBike = ({
   const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
   const [photo, setPhoto] = useState<MediaObject | null>(null);
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
   const handleBikeChange = (event: SelectChangeEvent): void => {
