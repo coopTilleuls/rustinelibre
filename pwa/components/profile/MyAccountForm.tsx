@@ -10,6 +10,7 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material';
+import {errorRegex} from "@utils/errorRegex";
 
 interface MyAccountFormProps {
   user: User | null;
@@ -18,6 +19,7 @@ interface MyAccountFormProps {
 export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
   const [firstName, setFirstName] = useState<string | null>(user?.firstName!);
   const [lastName, setLastName] = useState<string | null>(user?.lastName!);
@@ -45,8 +47,9 @@ export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-    } catch (e) {
+    } catch (e: any) {
       setError(true);
+      setErrorMessage(`Mise à jour impossible: ${e.message?.replace(errorRegex, '$2')}`)
     }
     setPendingUpdate(false);
   };
@@ -167,7 +170,7 @@ export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
         </Box>
         {error && (
           <Alert sx={{width: '100%', mt: 4}} severity="error">
-            Mise à jour impossible
+            {errorMessage}
           </Alert>
         )}
         {success && (
