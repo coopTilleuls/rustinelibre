@@ -10,9 +10,11 @@ import {SelectChangeEvent} from '@mui/material/Select';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/fr';
 import {Moment} from 'moment';
 import {exceptionalClosureResource} from '@resources/exceptionalClosingResource';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
+import {frFR} from '@mui/x-date-pickers';
 
 const hoursArray: string[] = [];
 for (let i = 0; i <= 23; i++) {
@@ -94,7 +96,13 @@ const ModalAddExceptionalClosure = ({
               <InputLabel id="demo-simple-select-label">
                 Début de la fermeture
               </InputLabel>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                localeText={
+                  frFR.components.MuiLocalizationProvider.defaultProps
+                    .localeText
+                }
+                adapterLocale="fr">
                 <DatePicker
                   format="DD-MM-YYYY"
                   label="Début de la fermeture"
@@ -114,7 +122,13 @@ const ModalAddExceptionalClosure = ({
               <InputLabel id="demo-simple-select-label">
                 Fin de la fermeture (incluse)
               </InputLabel>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                localeText={
+                  frFR.components.MuiLocalizationProvider.defaultProps
+                    .localeText
+                }
+                adapterLocale="fr">
                 <DatePicker
                   format="DD-MM-YYYY"
                   label="Fin"
