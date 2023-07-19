@@ -59,12 +59,12 @@ readonly class MediaObjectManager
         return 'images' === $prefix ? $this->imagesStorage : $this->filesStorage;
     }
 
-    public function visibility(?string $filePath, string $prefix): string
+    public function visibility(string $prefix, ?string $filePath = ''): string
     {
         return $this->getOperator($prefix)->visibility($filePath);
     }
 
-    public function publicUrl(?string $filePath, string $prefix): string
+    public function publicUrl(string $prefix, ?string $filePath = ''): string
     {
         return $this->getOperator($prefix)->publicUrl($filePath);
     }
