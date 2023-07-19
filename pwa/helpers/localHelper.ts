@@ -1,7 +1,6 @@
 import {jwtDecode} from '@helpers/JWTDecoder';
 
 const AUTH_TOKEN = 'bikelib_token';
-const ROLE = 'role';
 const AUTH_REFRESH_TOKEN = 'bikelib_refresh_token';
 
 export const setToken = (token: string): void => {
