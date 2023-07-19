@@ -31,7 +31,9 @@ const RepairersList: NextPageWithLayout = ({repairersFetch = []}: InferGetServer
 
   useEffect(() => {
     setSelectedRepairer('');
-    fetchRepairers();
+    if (repairers.length === 0) {
+        fetchRepairers();
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
