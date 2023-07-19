@@ -37,6 +37,6 @@ final class ValidationCodeSubscriber
             return;
         }
 
-        $this->validationCodeEmail->sendValidationCodeEmail($entity);
+        $this->validationCodeEmail->sendValidationCodeEmail(user: $entity);
     }
 }

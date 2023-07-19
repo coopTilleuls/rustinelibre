@@ -35,7 +35,7 @@ readonly class NotifyNewAppointmentSubscriber implements EventSubscriberInterfac
             return;
         }
 
-        $this->newAppointmentEmail->sendNewAppointmentEmail($object);
-        $this->newAppointmentNotification->sendNewAppointmentNotification($object);
+        $this->newAppointmentEmail->sendNewAppointmentEmail(appointment: $object);
+        $this->newAppointmentNotification->sendNewAppointmentNotification(appointment: $object);
     }
 }
