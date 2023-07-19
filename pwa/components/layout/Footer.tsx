@@ -10,7 +10,7 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {User} from '@interfaces/User';
 import {useRouter} from 'next/router';
-import {isBoss, isEmployee} from '@helpers/rolesHelpers';
+import {isAdmin, isBoss, isEmployee} from '@helpers/rolesHelpers';
 import {Paper, Typography} from '@mui/material';
 import {Discussion} from "@interfaces/Discussion";
 import {ENTRYPOINT} from "@config/entrypoint";
@@ -89,7 +89,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
           label: 'Rendez-vous',
           link: '/rendez-vous/mes-rendez-vous',
           Icon: CalendarMonthIcon,
-          visible: true,
+          visible: user && !isBoss(user) && !isEmployee(user) && !isAdmin(user),
         },
         {
           label: 'Mes vélos',
@@ -101,7 +101,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
           label: 'Messages',
           link: '/messagerie',
           Icon: ChatBubbleIcon,
-          visible: user && !isBoss(user) && !isEmployee(user),
+          visible: user && !isBoss(user) && !isEmployee(user) && !isAdmin(user),
         },
         {
           label: 'Compte',
