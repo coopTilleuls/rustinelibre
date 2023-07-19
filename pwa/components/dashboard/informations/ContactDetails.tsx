@@ -18,6 +18,7 @@ import {
   Autocomplete,
 } from '@mui/material';
 import {RequestBody} from '@interfaces/Resource';
+import {errorRegex} from "@utils/errorRegex";
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -131,8 +132,10 @@ export const ContactDetails = ({
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-    } catch (e) {
-      setErrorMessage('Mise à jour impossible');
+    } catch (e: any) {
+      setErrorMessage(
+        `Mise à jour impossible : ${e.message?.replace(errorRegex, '$2')}`
+      );
       setTimeout(() => {
         setErrorMessage(null);
       }, 3000);
