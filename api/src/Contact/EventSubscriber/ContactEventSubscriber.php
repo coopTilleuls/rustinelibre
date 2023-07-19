@@ -34,6 +34,6 @@ readonly class ContactEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->newContactEmail->sendNewContactEmail($object);
+        $this->newContactEmail->sendNewContactEmail(contact: $object);
     }
 }

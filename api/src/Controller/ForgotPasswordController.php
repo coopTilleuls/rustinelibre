@@ -35,7 +35,7 @@ final class ForgotPasswordController
 
         $user->forgotPasswordToken = bin2hex(random_bytes(100));
         $this->userRepository->save($user, true);
-        $this->forgotPasswordEmail->sendForgotPasswordEmail($user);
+        $this->forgotPasswordEmail->sendForgotPasswordEmail(user: $user);
 
         return new JsonResponse();
     }

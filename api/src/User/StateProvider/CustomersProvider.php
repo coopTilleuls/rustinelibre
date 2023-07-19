@@ -45,7 +45,7 @@ final class CustomersProvider implements ProviderInterface
         }
 
         $customersIdsQueryBuilder = $this->appointmentRepository->getAppointmentCustomersIdsQueryBuilder();
-        $customersQueryBuilder = $this->userRepository->getUsersInQbIdsByRepairer($customersIdsQueryBuilder, $repairerFromEmployee ?? $repairerFromBoss);
+        $customersQueryBuilder = $this->userRepository->getUsersInQbIdsByRepairer(idsQb: $customersIdsQueryBuilder, repairer: $repairerFromEmployee ?? $repairerFromBoss);
         $queryNameGenerator = new QueryNameGenerator();
 
         /** @var QueryCollectionExtensionInterface $extension */
