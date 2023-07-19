@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Repairer} from '@interfaces/Repairer';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -126,10 +126,18 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
     buildCalendarEvents(payload.startStr, payload.endStr);
   };
 
-  const handleDateClick = (arg: DateClickArg) => {
+  const calendarRef = useRef<FullCalendar>(null);
+  const handleDateClick = (arg: DateClickArg, refresh = true) => {
     if (arg) {
-      setSelectedDate(arg['dateStr']);
-      setOpenModalCreateAppointment(true);
+      const dateFormat1 = /^\d{4}-\d{2}-\d{2}$/; // Format: YYYY-MM-DD
+      const dateFormat2 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/; // Format: YYYY-MM-DDTHH:mm:ss
+      if (dateFormat1.test(arg.dateStr)){
+        setSelectedDate(`${arg.dateStr}T00:00:00`);
+        setOpenModalCreateAppointment(true);
+      } else if (dateFormat2.test(arg.dateStr)) {
+        setSelectedDate(arg.dateStr);
+        setOpenModalCreateAppointment(true);
+      }
     }
   };
 
@@ -138,6 +146,7 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
       {initialDate && (
         <FullCalendar
           timeZone="Europe/Paris"
+          ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
           initialDate={initialDate}

@@ -2,7 +2,7 @@ import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect, useContext} from 'react';
 import Head from 'next/head';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import {CircularProgress, Container, Box, Typography} from '@mui/material';
+import {Container, Box, Typography} from '@mui/material';
 import {repairerResource} from '@resources/repairerResource';
 import {Repairer} from '@interfaces/Repairer';
 import Grid2 from '@mui/material/Unstable_Grid2';
@@ -11,6 +11,7 @@ import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import router from 'next/router';
 import {GetServerSideProps, InferGetServerSidePropsType} from "next";
 import {ENTRYPOINT} from "@config/entrypoint";
+import FullLoading from '@components/common/FullLoading';
 
 const RepairersList: NextPageWithLayout = ({repairersFetch = []}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [repairers, setRepairers] = useState<Repairer[]>(repairersFetch);
@@ -43,7 +44,7 @@ const RepairersList: NextPageWithLayout = ({repairersFetch = []}: InferGetServer
       </Head>
       <WebsiteLayout>
         <Box
-          bgcolor="lightprimary.main"
+          bgcolor="lightprimary.light"
           height="100%"
           width="100%"
           position="absolute"
@@ -71,7 +72,7 @@ const RepairersList: NextPageWithLayout = ({repairersFetch = []}: InferGetServer
             magna, finibus in suscipit sit amet, tempor non leo. Aliquam
             placerat lacinia maximus.
           </Typography>
-          {isLoading && <CircularProgress />}
+          {isLoading && <FullLoading />}
           {!isLoading && (
             <Grid2
               container
