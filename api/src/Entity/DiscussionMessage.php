@@ -27,7 +27,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.sender == user or object.discussion.customer == user or (user.repairer and user.repairer == object.discussion.repairer) 
 or (user.repairerEmployee and user.repairerEmployee.repairer == object.discussion.repairer)")]
-#[Post(securityPostDenormalize: '(object.discussion.customer and object.discussion.customer == user) or (object.discussion.repairer and object.discussion.repairer.owner and object.discussion.repairer.owner == user)')]
+#[Post(securityPostDenormalize: '(object.discussion.customer and object.discussion.customer == user) or 
+(object.discussion.repairer and object.discussion.repairer.owner and object.discussion.repairer.owner == user) or 
+(object.discussion.repairer and user.repairerEmployee and object.discussion.repairer === user.repairerEmployee.repairer)')]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 #[ApiFilter(SearchFilter::class, properties: ['discussion' => 'exact'])]
 class DiscussionMessage
