@@ -123,12 +123,12 @@ spec:
                 exec:
                   command:
                     - docker-healthcheck
-                periodSeconds: 3
+                periodSeconds: 30
               livenessProbe:
                 exec:
                   command:
                     - docker-healthcheck
-                periodSeconds: 3
+                periodSeconds: 30
               resources:
                 {{- toYaml .Values.resources.fixtures | nindent 16 }}
             - name: {{ .Chart.Name }}-cronjob
@@ -259,12 +259,12 @@ spec:
                 exec:
                   command:
                     - docker-healthcheck
-                periodSeconds: 3
+                periodSeconds: 30
               livenessProbe:
                 exec:
                   command:
                     - docker-healthcheck
-                periodSeconds: 3
+                periodSeconds: 30
               resources:
                 {{- toYaml .Values.resources.fixtures | nindent 16 }}
 {{- end }}
