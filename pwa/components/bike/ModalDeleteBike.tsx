@@ -3,6 +3,7 @@ import router from 'next/router';
 import {Box, Button, Typography, Modal, CircularProgress} from '@mui/material';
 import {bikeResource} from '@resources/bikeResource';
 import {Bike} from '@interfaces/Bike';
+import {errorRegex} from "@utils/errorRegex";
 
 type ModalDeleteBikeProps = {
   bike: Bike;
@@ -23,8 +24,13 @@ const ModalDeleteBike = ({
     setLoading(true);
     try {
       await bikeResource.delete(bike!['@id']);
-    } catch (e) {
-      setErrorMessage('Suppression du vélo impossible, veuillez réessayer');
+    } catch (e: any) {
+      setErrorMessage(
+        `Suppression du vélo impossible: ${e.message?.replace(
+          errorRegex,
+          '$2'
+        )}, veuillez réessayer`
+      );
     }
     router.push('/velos/mes-velos');
     setLoading(false);

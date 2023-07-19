@@ -24,6 +24,7 @@ import {Moment} from 'moment';
 import {Maintenance} from '@interfaces/Maintenance';
 import {useAccount} from '@contexts/AuthContext';
 import {useTheme} from "@mui/material/styles";
+import {errorRegex} from "@utils/errorRegex";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -115,8 +116,13 @@ const ModalAddMaintenance = ({
       }
 
       handleCloseModal(true);
-    } catch (e) {
-      setErrorMessage('Ajout de cette réparation impossible');
+    } catch (e: any) {
+      setErrorMessage(
+        `Ajout de cette réparation impossible: ${e.message?.replace(
+          errorRegex,
+          '$2'
+        )}`
+      );
     }
     setPendingAdd(false);
   };
