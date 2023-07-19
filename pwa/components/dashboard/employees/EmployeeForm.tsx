@@ -12,6 +12,7 @@ import {useRouter} from 'next/router';
 import {repairerEmployeesResource} from '@resources/repairerEmployeesResource';
 import {RequestBody} from '@interfaces/Resource';
 import {UserFormContext} from '@contexts/UserFormContext';
+import {errorRegex} from "@utils/errorRegex";
 
 interface EmployeeFormProps {
   repairerEmployee: RepairerEmployee | null;
@@ -86,8 +87,12 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
 
       setUpdateSuccess(true);
       await router.push('/sradmin/employes');
-    } catch (e) {
-      setErrorMessage(repairerEmployee ? 'Édition impossible' : 'Inscription impossible');
+    } catch (e: any) {
+      setErrorMessage(
+        `${
+          repairerEmployee ? 'Édition impossible' : 'Inscription impossible'
+        } : ${e.message?.replace(errorRegex, '$2')}`
+      );
     }
 
     setPendingRegistration(false);
