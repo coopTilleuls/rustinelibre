@@ -54,7 +54,7 @@ const RepairersList: NextPageWithLayout = ({repairersFetch = []}: InferGetServer
         />
         <Container
           sx={{
-            py: 10,
+            py: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',

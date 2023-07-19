@@ -193,13 +193,10 @@ const ModalAddMaintenance = ({
           />
           {!maintenance && (
             <Box>
-              <InputLabel id="demo-simple-select-label">
-                Date de la réparation
-              </InputLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   format="DD-MM-YYYY"
-                  label="Date"
+                  label="Date de la réparation"
                   value={selectedDate}
                   onChange={(newValue: string | Moment | null) =>
                     setSelectedDate(

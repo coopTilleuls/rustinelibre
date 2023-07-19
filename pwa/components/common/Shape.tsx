@@ -2,14 +2,16 @@ import {SimplePaletteColorOptions, Theme, useTheme} from '@mui/material';
 
 type ColorKey = keyof Theme['palette'];
 
-const Logo = ({color}: {color: ColorKey}) => {
+const Logo = ({color, outline}: {color: ColorKey; outline?: boolean}) => {
   const theme = useTheme();
   const fillColor = (theme.palette[color] as SimplePaletteColorOptions).main;
 
   return (
     <svg
       id="Shape"
-      fill={fillColor}
+      fill={!outline ? fillColor : 'none'}
+      stroke={outline ? fillColor : undefined}
+      strokeWidth={outline ? 2 : 0}
       viewBox="0 0 175.09 175.08"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMinYMin meet"
