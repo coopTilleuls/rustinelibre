@@ -82,7 +82,9 @@ const theme = createTheme({
     '0 4px 8px rgba(0, 0, 0, 0.06), 0 8px 16px rgba(0, 0, 0, 0.06)',
     '0 5px 10px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.07)',
     '0 6px 12px rgba(0, 0, 0, 0.12), 0 12px 24px rgba(0, 0, 0, 0.12)',
-    ...Array(20).fill('none'),
+    ...Array(20).fill(
+      '0 6px 12px rgba(0, 0, 0, 0.12), 0 12px 24px rgba(0, 0, 0, 0.12)'
+    ),
   ] as Shadows,
   components: {
     MuiContainer: {
@@ -109,6 +111,15 @@ const theme = createTheme({
           fontWeight: '800',
           fontSize: '14px',
           color: theme.palette.secondary.light,
+        }),
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: ({theme}) => ({
+          [theme.breakpoints.up('sm')]: {
+            borderRadius: 3 * theme.shape.borderRadius,
+          },
         }),
       },
     },
