@@ -8,14 +8,6 @@ use App\Entity\RepairerEmployee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<RepairerEmployee>
- *
- * @method RepairerEmployee|null find($id, $lockMode = null, $lockVersion = null)
- * @method RepairerEmployee|null findOneBy(array $criteria, array $orderBy = null)
- * @method RepairerEmployee[]    findAll()
- * @method RepairerEmployee[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class RepairerEmployeeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)

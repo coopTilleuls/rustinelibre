@@ -40,7 +40,7 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
     private function fillMediaObject(MediaObject $mediaObject): MediaObject
     {
         try {
-            $prefix = $this->mediaObjectManager->getPrefixOfMediaObject($mediaObject);
+            $prefix = $this->mediaObjectManager->getPrefixOfMediaObject(mediaObject: $mediaObject);
         } catch (\Exception $exception) {
             $this->logger->alert($exception->getMessage());
 
@@ -52,9 +52,9 @@ final class MediaObjectNormalizer implements NormalizerInterface, NormalizerAwar
         }
 
         $filePath = $mediaObject->filePath;
-        $mediaObject->contentUrl = 'public' === $this->mediaObjectManager->visibility($filePath, $prefix) ?
-            $this->mediaObjectManager->publicUrl($filePath, $prefix) :
-            $this->mediaObjectManager->getPreSignedUrl($filePath, $prefix);
+        $mediaObject->contentUrl = 'public' === $this->mediaObjectManager->visibility(prefix: $prefix, filePath: $filePath) ?
+            $this->mediaObjectManager->publicUrl(prefix: $prefix, filePath: $filePath) :
+            $this->mediaObjectManager->getPreSignedUrl(path: $filePath, prefix: $prefix);
         $mediaObject->viewable = in_array($this->mediaObjectManager->getOperator($prefix)->mimeType($filePath), MediaObject::MIME_TYPE_IMAGE_ACCEPTED, true);
 
         return $mediaObject;
