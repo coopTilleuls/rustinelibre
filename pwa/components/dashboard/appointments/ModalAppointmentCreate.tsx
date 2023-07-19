@@ -302,7 +302,8 @@ const ModalAppointmentCreate = ({
       open={openModal}
       onClose={handleResetStates}
       fullScreen={fullScreen}
-      maxWidth={'xl'}
+      fullWidth={true}
+      maxWidth={'md'}
       aria-describedby="popup_appointment_create">
       <DialogTitle id="service-type-label">Création de rendez-vous</DialogTitle>
       <DialogContent
