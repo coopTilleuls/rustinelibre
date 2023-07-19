@@ -1,7 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import {ENTRYPOINT} from '@config/entrypoint';
 import React, {useEffect, useState} from 'react';
-import {GetStaticProps} from 'next';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {useAccount} from '@contexts/AuthContext';
