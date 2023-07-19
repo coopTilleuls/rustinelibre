@@ -17,6 +17,7 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 import {RepairerType} from '@interfaces/RepairerType';
 import useMediaQuery from '@hooks/useMediaQuery';
+import {useTheme} from "@mui/material/styles";
 
 const sortOptions: Record<string, string> = {
   availability: 'Disponibilité',
@@ -38,7 +39,8 @@ const RepairerSortOptions = ({
   const {repairers, sortChosen, showMap, setShowMap, repairerTypeSelected} =
     useContext(SearchRepairerContext);
 
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <Box

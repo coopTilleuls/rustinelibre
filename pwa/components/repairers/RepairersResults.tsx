@@ -13,9 +13,11 @@ import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {Divider} from '@mui/material';
+import {useTheme} from "@mui/material/styles";
 
 export const RepairersResults = (): JSX.Element => {
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const {city, showMap, setSelectedRepairer, repairers} = useContext(
     SearchRepairerContext
   );

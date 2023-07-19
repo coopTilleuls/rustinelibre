@@ -6,7 +6,6 @@ import {Box, Stack, Button, Typography} from '@mui/material';
 
 export const AutoDiagTunnelChoice = (): JSX.Element => {
   const {appointment, setTunnelStep} = useContext(AutodiagContext);
-  const isMobile = useMediaQuery('(max-width: 640px)');
 
   return (
     <Stack

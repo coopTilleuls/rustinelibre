@@ -16,13 +16,15 @@ import {Discussion} from "@interfaces/Discussion";
 import {ENTRYPOINT} from "@config/entrypoint";
 import {discussionResource} from "@resources/discussionResource";
 import Badge from '@mui/material/Badge';
+import {useTheme} from "@mui/material/styles";
 
 interface FooterProps {
   user?: User;
 }
 const Footer = ({user}: FooterProps): JSX.Element => {
     const router = useRouter();
-    const isMobile = useMediaQuery('(max-width: 899px)');
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [discussions, setDiscussions] = useState<Discussion[]>([]);
     const [unreadMessages, setUnreadMessages] = useState<number>(0);
 

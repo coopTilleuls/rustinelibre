@@ -24,6 +24,7 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import {useTheme} from "@mui/material/styles";
 
 type AppointmentContentProps = {
   appointmentProps: Appointment;
@@ -34,6 +35,8 @@ const AppointmentContent = ({
   appointmentProps,
   handleCloseModal,
 }: AppointmentContentProps): JSX.Element => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [appointment, setAppointment] = useState<Appointment>(appointmentProps);
   const [pendingValid, setPendingValid] = useState<boolean>(false);
   const [pendingRefuse, setPendingRefuse] = useState<boolean>(false);
@@ -41,7 +44,6 @@ const AppointmentContent = ({
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
   const [proposeOtherSlot, setProposeOtherSlot] = useState<boolean>(false);
   const [slotsAvailable, setSlotsAvailable] = useState<any>(null);
-  const isMobile = useMediaQuery('(max-width: 640px)');
   const [dates, setDates] = useState<string[]>([]);
   const [times, setTimes] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | undefined>(
