@@ -20,7 +20,7 @@ const RepairersList: NextPageWithLayout = ({repairersFetch = []}: InferGetServer
   const fetchRepairers = async (): Promise<void> => {
     setIsLoading(true);
     let params = {
-      paginatinon: 'false',
+      pagination: 'false',
       sort: 'random',
       enabled: 'true',
     };
@@ -116,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
 
     const response = await repairerResource.getAll(false, {
-        paginatinon: 'false',
+        pagination: 'false',
         sort: 'random',
         enabled: 'true',
     });
