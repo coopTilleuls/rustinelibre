@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 import {RequestBody} from '@interfaces/Resource';
+import {errorRegex} from "@utils/errorRegex";
 const Editor = dynamic(() => import('@components/form/Editor'), {
   ssr: false,
 });
@@ -50,8 +51,10 @@ export const OptionalInfos = ({
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-    } catch (e) {
-      setErrorMessage('Mise à jour impossible');
+    } catch (e: any) {
+      setErrorMessage(
+        `Mise à jour impossible : ${e.message?.replace(errorRegex, '$2')}`
+      );
       setTimeout(() => {
         setErrorMessage(null);
       }, 3000);

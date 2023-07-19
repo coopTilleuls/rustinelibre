@@ -24,6 +24,7 @@ import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
 import {Repairer} from '@interfaces/Repairer';
 import {RequestBody} from '@interfaces/Resource';
+import {errorRegex} from "@utils/errorRegex";
 
 interface ContactDetailsProps {
   repairer: Repairer | null;
@@ -126,8 +127,10 @@ export const ContactDetails = ({
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-    } catch (e) {
-      setErrorMessage('Mise à jour impossible');
+    } catch (e: any) {
+      setErrorMessage(
+        `Mise à jour impossible : ${e.message?.replace(errorRegex, '$2')}`
+      );
       setTimeout(() => {
         setErrorMessage(null);
       }, 3000);
