@@ -3,6 +3,8 @@ import {Stack, MenuItem, FormControl, InputLabel} from '@mui/material';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {Intervention} from '@interfaces/Intervention';
 import {interventionResource} from '@resources/interventionResource';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {useTheme} from '@mui/material/styles';
 
 interface AppointmentCreateAddPrestationProps {
   prestation: string;
@@ -14,6 +16,8 @@ const AppointmentCreateAddPrestation = ({
   setPrestation,
 }: AppointmentCreateAddPrestationProps): JSX.Element => {
   const [interventions, setInterventions] = useState<Intervention[]>([]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleChangePrestation = (event: SelectChangeEvent): void => {
     setPrestation(event.target.value as string);
@@ -40,12 +44,12 @@ const AppointmentCreateAddPrestation = ({
       flexDirection="column"
       alignItems="center">
       <FormControl fullWidth sx={{mt: 2, mb: 1}}>
-        <InputLabel id="service-type-label">Type de prestation</InputLabel>
+        <InputLabel id="service-type-label">{isMobile ? 'Prestation' : 'Type de prestation'}</InputLabel>
         <Select
           labelId="service-type-label"
           id="service-type"
           value={prestation}
-          label="Type de prestation"
+          label={isMobile ? 'Prestation' : 'Type de prestation'}
           onChange={handleChangePrestation}>
           {interventions.map(({id, description}) => {
             return (
