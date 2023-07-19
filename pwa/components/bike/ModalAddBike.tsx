@@ -16,6 +16,7 @@ import {RequestBody} from '@interfaces/Resource';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {checkFileSize} from "@helpers/checkFileSize";
 import {useTheme} from "@mui/material/styles";
+import {errorRegex} from "@utils/errorRegex";
 
 type ModalAddBikeProps = {
   bikeTypes: BikeType[];
@@ -76,8 +77,10 @@ const ModalAddBike = ({
       setName('');
       setSelectedBike(null);
       handleCloseModal();
-    } catch (e) {
-      setErrorMessage('Ajout du vélo impossible');
+    } catch (e: any) {
+      setErrorMessage(
+        `Ajout du vélo impossible: ${e.message?.replace(errorRegex, '$2')}`
+      );
     }
 
     setPendingAdd(false);

@@ -20,6 +20,7 @@ import BikeIdentityPhoto from '@components/bike/BikeIdentityPhoto';
 import {Bike} from '@interfaces/Bike';
 import {RequestBody} from '@interfaces/Resource';
 import {BikeType} from '@interfaces/BikeType';
+import { errorRegex } from '@utils/errorRegex';
 
 type BikeIdentityProps = {
   bike: Bike;
@@ -95,8 +96,10 @@ const BikeIdentity = ({
 
       bike = await bikeResource.put(bike['@id'], bodyRequest);
       setBike(bike);
-    } catch (e) {
-      setErrorMessage('Mise à jour du vélo impossible');
+    } catch (e: any) {
+      setErrorMessage(
+        `Mise à jour du vélo impossible:${e.message?.replace(errorRegex, '$2')}`
+      );
     }
 
     if (bike) {
