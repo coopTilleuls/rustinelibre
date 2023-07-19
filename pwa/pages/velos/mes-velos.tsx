@@ -7,26 +7,21 @@ import {bikeResource} from '@resources/bikeResource';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {
   Container,
-  CircularProgress,
   Typography,
   Box,
   Paper,
   Button,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  List,
+  ButtonBase,
 } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import AddIcon from '@mui/icons-material/Add';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import BuildIcon from '@mui/icons-material/Build';
 import ModalAddBike from '@components/bike/ModalAddBike';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import BikeCard from '@components/bike/BikeCard';
 import {Bike} from '@interfaces/Bike';
 import {BikeType} from '@interfaces/BikeType';
+import FullLoading from '@components/common/FullLoading';
+import NoBike from '@components/bike/NoBike';
 
 const MyBikes: NextPageWithLayout = () => {
   const {user, isLoadingFetchUser} = useAccount({});
@@ -78,15 +73,23 @@ const MyBikes: NextPageWithLayout = () => {
         <title>Mes vélos</title>
       </Head>
       <WebsiteLayout>
+        <Box
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
         <Container
           sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            mt: 4,
-            mb: 10,
+            py: 8,
           }}>
-          <Typography fontSize={{xs: 24, md: 40}} fontWeight={600} pb={8}>
+          <Typography variant="h1" color="primary" sx={{mb: 4}}>
             Mes vélos
           </Typography>
 
@@ -103,62 +106,64 @@ const MyBikes: NextPageWithLayout = () => {
               <Typography>
                 Connectez-vous pour accéder à la liste de vos vélos
               </Typography>
-              <Button variant="contained" onClick={handleLogin} sx={{mt: 4}}>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleLogin}
+                sx={{mt: 4}}>
                 Me Connecter
               </Button>
             </Paper>
           ) : (
             <>
-              {(loading || isLoadingFetchUser) && <CircularProgress />}
+              {(loading || isLoadingFetchUser) && <FullLoading />}
               {bikes.length === 0 && !loading && !isLoadingFetchUser && (
-                <Box>
-                  <Typography>
-                    Vous n&apos;avez pas encore de vélos enregistrés.
-                  </Typography>
-                  <List
-                    sx={{
-                      width: '100%',
-                      maxWidth: 360,
-                      bgcolor: 'background.paper',
-                    }}
-                    component="nav"
-                    aria-labelledby="nested-list-subheader">
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <DirectionsBikeIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Enregistrez votre vélo" />
-                    </ListItemButton>
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <FactCheckIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Remplissez sa fiche d'identité" />
-                    </ListItemButton>
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <BuildIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Créez un historique des réparations" />
-                    </ListItemButton>
-                  </List>
-                </Box>
+                <NoBike />
               )}
-              <Button variant="contained" onClick={handleOpenModal}>
-                <AddIcon /> Ajouter un vélo
-              </Button>
-              <Grid2 container sx={{width: '100%', py: 6}} spacing={4}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  width: '100%',
+                  gap: 4,
+                  gridTemplateColumns: 'repeat(auto-fit,300px)',
+                  placeContent: 'center',
+                }}>
                 {bikes.length
-                  ? !loading &&
-                    bikes.map((bike) => {
-                      return (
-                        <Grid2 key={bike.id} xs={12} md={6} lg={4}>
-                          <BikeCard bike={bike} />
-                        </Grid2>
-                      );
+                  ? bikes.map((bike) => {
+                      return <BikeCard key={bike.id} bike={bike} />;
                     })
                   : null}
-              </Grid2>
+                <ButtonBase
+                  onClick={handleOpenModal}
+                  sx={{
+                    borderRadius: 6,
+                    width: '100%',
+                    color: 'white',
+                    alignSelf: 'center',
+                  }}>
+                  <Box
+                    width="100%"
+                    height="100%"
+                    bgcolor="secondary.light"
+                    sx={{
+                      borderRadius: 6,
+                      boxShadow: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      minHeight: '180px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      transition: 'all ease 0.5s',
+                      ':hover': {
+                        boxShadow: 5,
+                        bgcolor: 'secondary.main',
+                      },
+                    }}>
+                    <AddIcon color="inherit" fontSize="large" />
+                    <Typography variant="h5">Ajouter un vélo</Typography>
+                  </Box>
+                </ButtonBase>
+              </Box>
               <ModalAddBike
                 openModal={openModal}
                 handleCloseModal={handleCloseModal}

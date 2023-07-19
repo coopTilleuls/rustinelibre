@@ -7,6 +7,14 @@ const nextConfig = withPWA({
   reactStrictMode: true,
   swcMinify: true,
   output: 'standalone',
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
   eslint: {
     ignoreDuringBuilds: true,
     dirs: [
