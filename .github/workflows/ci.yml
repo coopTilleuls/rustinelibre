@@ -21,9 +21,9 @@ jobs:
       - name: pre-build api/app_php
         uses: docker/build-push-action@v4
         with:
-          context: "api"
-          file: "api/Dockerfile"
-          target: "app_php_dev"
+          context: 'api'
+          file: 'api/Dockerfile'
+          target: 'app_php_dev'
           cache-from: type=gha,scope=app_php_dev
           cache-to: type=gha,mode=max,scope=app_php_dev
           push: false
@@ -31,9 +31,9 @@ jobs:
       - name: pre-build api/app_caddy
         uses: docker/build-push-action@v4
         with:
-          context: "api"
-          file: "api/Dockerfile"
-          target: "app_caddy"
+          context: 'api'
+          file: 'api/Dockerfile'
+          target: 'app_caddy'
           cache-from: |
             type=gha,scope=app_php_dev
             type=gha,scope=app_caddy
@@ -44,9 +44,9 @@ jobs:
       - name: pre-build pwa_dev
         uses: docker/build-push-action@v4
         with:
-          context: "pwa"
-          file: "pwa/Dockerfile"
-          target: "dev"
+          context: 'pwa'
+          file: 'pwa/Dockerfile'
+          target: 'dev'
           cache-from: type=gha,scope=pwa_dev
           cache-to: type=gha,mode=max,scope=pwa_dev
           push: false
@@ -54,9 +54,9 @@ jobs:
       - name: pre-build pwa prod
         uses: docker/build-push-action@v4
         with:
-          context: "pwa"
-          file: "pwa/Dockerfile"
-          target: "prod"
+          context: 'pwa'
+          file: 'pwa/Dockerfile'
+          target: 'prod'
           cache-from: type=gha,scope=pwa_prod
           cache-to: type=gha,mode=max,scope=pwa_prod
           push: false
@@ -108,3 +108,5 @@ jobs:
         run: docker compose exec -T php php -d memory_limit=1024M bin/phpunit
       - name: EsLint
         run: docker compose exec -T pwa npm run lint
+      - name: Front Unit Test
+        run: docker compose exec -T pwa npm run test:unit
