@@ -29,7 +29,7 @@ const RemoveAccount = (): JSX.Element => {
     setPendingRemove(true);
 
     try {
-      await userResource.delete(user.id);
+      await userResource.deleteById(user.id);
     } catch (error) {
       setPendingRemove(false);
       setShowModal(false);
