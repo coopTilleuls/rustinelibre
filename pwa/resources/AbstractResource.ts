@@ -172,7 +172,7 @@ export abstract class AbstractResource<T> {
   }
 
   async delete(id: string, headers?: RequestHeaders): Promise<boolean> {
-    const response = await fetch(this.getUrl(id), {
+    const response = await fetch(this.getUrl() + '/' + id, {
       headers: {
         ...this.getDefaultHeaders(),
         ...headers,
@@ -270,14 +270,13 @@ export abstract class AbstractResource<T> {
   }
 
   public getUrl(id?: string, params?: RequestParams): string {
-
     const url = new URL(ENTRYPOINT + (undefined !== id ? id : this.endpoint));
-    let queryMultipleMatch: string|null = null;
+    let queryMultipleMatch: string | null = null;
 
     if (undefined !== params) {
       Object.keys(params).forEach((key) => {
         const queryValue = params[key].toString();
-        if (queryValue.includes("[]=")) {
+        if (queryValue.includes('[]=')) {
           queryMultipleMatch = queryValue;
         } else {
           url.searchParams.append(key, queryValue);
@@ -287,7 +286,7 @@ export abstract class AbstractResource<T> {
 
     let stringUrl: string = url.toString();
     if (queryMultipleMatch !== null) {
-      stringUrl = `${stringUrl}&${queryMultipleMatch}`
+      stringUrl = `${stringUrl}&${queryMultipleMatch}`;
     }
 
     return stringUrl;
