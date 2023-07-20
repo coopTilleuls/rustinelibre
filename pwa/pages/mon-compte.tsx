@@ -18,17 +18,17 @@ const MyProfile: NextPageWithLayout = () => {
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '80%'}}}>
-          {isLoadingFetchUser ? (
+          {isLoadingFetchUser &&
             <Box display="flex" justifyContent="center" my={10}>
               <CircularProgress />
-            </Box>
-          ) : (
-            <Box
-              width="100%"
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-            >
+            </Box>}
+
+            {user && <Box
+                  width="100%"
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                >
               <Typography
                 pt={4}
                 pb={6}
@@ -37,11 +37,11 @@ const MyProfile: NextPageWithLayout = () => {
               >
                 Mon Compte
               </Typography>
-              <MyAccountForm user={user} />
+              <MyAccountForm userLogged={user} />
               <ChangePassword />
               <RemoveAccount />
             </Box>
-          )}
+          }
         </Container>
       </WebsiteLayout>
     </>

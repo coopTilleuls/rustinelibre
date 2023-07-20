@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {User} from '@interfaces/User';
 import {RequestBody} from '@interfaces/Resource';
 import {userResource} from '@resources/userResource';
@@ -11,20 +11,22 @@ import {
   Typography,
 } from '@mui/material';
 import {errorRegex} from "@utils/errorRegex";
+import {isAdmin} from "@helpers/rolesHelpers";
 
 interface MyAccountFormProps {
-  user: User | null;
+  userLogged: User;
 }
 
-export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
+export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
-  const [firstName, setFirstName] = useState<string | null>(user?.firstName!);
-  const [lastName, setLastName] = useState<string | null>(user?.lastName!);
-  const [city, setCity] = useState<string | null>(user?.city!);
-  const [street, setStreet] = useState<string | null>(user?.street!);
+  const [user, setUser] = useState<User>(userLogged);
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [lastName, setLastName] = useState<string | null>(null);
+  const [city, setCity] = useState<string | null>(null);
+  const [street, setStreet] = useState<string | null>(null);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -71,6 +73,21 @@ export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
   const handleChangeCity = (event: ChangeEvent<HTMLInputElement>): void => {
     setCity(event.target.value);
   };
+
+  const fetchMe = async () => {
+    const me = await userResource.getCurrent()
+    setUser(me);
+    setFirstName(me.firstName)
+    setLastName(me.lastName)
+    setCity(me.city ? me.city : null);
+    setStreet(me.street ? me.street : null);
+  }
+
+  useEffect(() => {
+    if (userLogged) {
+      fetchMe();
+    }
+  }, [userLogged]); // eslint-disable-line react-hooks/exhaustive-d
 
   return (
     <Box
