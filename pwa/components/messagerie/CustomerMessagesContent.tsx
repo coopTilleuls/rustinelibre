@@ -91,7 +91,7 @@ const CustomerMessagesContent = ({
   useEffect(() => {
     fetchMessages();
     subscribeMercureDiscussion();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [discussion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     fetchMessages();
