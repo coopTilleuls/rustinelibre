@@ -5,6 +5,7 @@ import {Typography, Box, CircularProgress, Container} from '@mui/material';
 import {useAccount} from '@contexts/AuthContext';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import MyAccountForm from '@components/profile/MyAccountForm';
+import RemoveAccount from '@components/profile/RemoveAccount';
 import ChangePassword from '@components/profile/ChangePassword';
 
 const MyProfile: NextPageWithLayout = () => {
@@ -26,16 +27,19 @@ const MyProfile: NextPageWithLayout = () => {
               width="100%"
               display="flex"
               flexDirection="column"
-              alignItems="center">
+              alignItems="center"
+            >
               <Typography
                 pt={4}
                 pb={6}
                 fontSize={{xs: 28, md: 30}}
-                fontWeight={600}>
+                fontWeight={600}
+              >
                 Mon Compte
               </Typography>
               <MyAccountForm user={user} />
               <ChangePassword />
+              <RemoveAccount />
             </Box>
           )}
         </Container>
