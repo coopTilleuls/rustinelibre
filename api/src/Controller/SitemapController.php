@@ -50,7 +50,7 @@ class SitemapController
             $result[] = sprintf('/reparateur/%d-%s', $id['id'], $id['slug']);
         }
 
-        return $result;gb
+        return $result;
     }
 
     /**
