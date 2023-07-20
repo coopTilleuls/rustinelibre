@@ -171,7 +171,24 @@ export abstract class AbstractResource<T> {
     return await this.getResult(doFetch);
   }
 
-  async delete(id: string, headers?: RequestHeaders): Promise<boolean> {
+  async delete(iri: string, headers?: RequestHeaders): Promise<boolean> {
+    const response = await fetch(this.getUrl(iri), {
+      headers: {
+        ...this.getDefaultHeaders(),
+        ...headers,
+      },
+      method: 'DELETE',
+    });
+
+    // handle response's error
+    if (!response.ok) {
+      throw new Error('Not Found');
+    }
+
+    return response.ok;
+  }
+
+  async deleteById(id: string, headers?: RequestHeaders): Promise<boolean> {
     const response = await fetch(`${this.getUrl()}/${id}`, {
       headers: {
         ...this.getDefaultHeaders(),
