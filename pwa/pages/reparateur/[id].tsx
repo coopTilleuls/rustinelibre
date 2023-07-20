@@ -19,6 +19,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
   repairerProps,
 }) => {
   const router = useRouter();
+
   const {id} = router.query;
   const [loading, setLoading] = useState<boolean>(false);
   const [repairer, setRepairer] = useState<Repairer | null>(repairerProps);
@@ -82,7 +83,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
       revalidate: 10,
     };
   }
-
+  
   const repairerProps: Repairer = await repairerResource.getById(
     id.toString(),
     false
