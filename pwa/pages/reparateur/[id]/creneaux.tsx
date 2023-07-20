@@ -132,7 +132,7 @@ const RepairerSlots: NextPageWithLayout = () => {
                 <Container maxWidth="md" sx={{padding: {xs: 0}}}>
                   <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
                     {tunnelStep == 'slots' && (
-                      <Link href={`/reparateur/${repairer.id}`}>
+                      <Link href={`/reparateur/${repairer.id}-${repairer.slug}`}>
                         <Button
                           variant="outlined"
                           color="secondary"

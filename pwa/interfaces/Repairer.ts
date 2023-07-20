@@ -9,6 +9,7 @@ export interface Repairer {
   id: string;
   owner: User;
   name: string;
+  slug: string;
   description?: string;
   city?: string;
   distance?: number;

@@ -84,15 +84,13 @@ class RepairerRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array<int>
+     * @return array<int, array>
      */
-    public function getAllIds(): array
+    public function getAllIdsAndSlugs(): array
     {
-        $ids = $this->createQueryBuilder('r')
-            ->select('r.id')
+        return $this->createQueryBuilder('r')
+            ->select('r.id', 'r.slug')
             ->getQuery()
             ->getArrayResult();
-
-        return array_column($ids, 'id');
     }
 }

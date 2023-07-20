@@ -24,7 +24,7 @@ log
     || {path}.startsWith("/img")
     || {path}.startsWith("/pwa_icons")
     || {path}.startsWith("/tarteaucitron")
-    || {path}.startsWith("/sitemap")
+    || {path}.startsWith("/sitemap.xml")
     || {path}.startsWith("/longdesc")
     || {path}.startsWith("/sw")
     || {path}.startsWith("/workbox")`

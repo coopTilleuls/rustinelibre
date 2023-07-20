@@ -24,7 +24,8 @@ class SitemapController
     {
         $urls = array_merge(
             $this->getStaticUrls(),
-            $this->buildUrlsWithRepairerId(['/reparateur/%d', '/reparateur/%d/creneaux']),
+            $this->buildUrlsRepairersWithIdAndSlug(),
+            $this->buildUrlsOfSlots()
         );
 
         $response = new Response($this->twig->render('sitemap/sitemap.xml.twig', [
@@ -38,19 +39,30 @@ class SitemapController
     }
 
     /**
-     * @param array<string> $endpoints
-     *
      * @return array<string>
      */
-    private function buildUrlsWithRepairerId(array $endpoints): array
+    private function buildUrlsRepairersWithIdAndSlug(): array
     {
         $result = [];
-        $ids = $this->repairerRepository->getAllIds();
+        $ids = $this->repairerRepository->getAllIdsAndSlugs();
 
-        foreach ($endpoints as $endpoint) {
-            foreach ($ids as $id) {
-                $result[] = sprintf($endpoint, $id);
-            }
+        foreach ($ids as $id) {
+            $result[] = sprintf('/reparateur/%d-%s', $id['id'], $id['slug']);
+        }
+
+        return $result;gb
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function buildUrlsOfSlots(): array
+    {
+        $result = [];
+        $ids = $this->repairerRepository->getAllIdsAndSlugs();
+
+        foreach ($ids as $id) {
+            $result[] = sprintf('/reparateur/%d/creneaux', $id['id']);
         }
 
         return $result;
