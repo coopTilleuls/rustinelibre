@@ -11,7 +11,10 @@ log
 # except for known API paths and paths with extensions handled by API Platform
 @pwa expression `(
         {header.Accept}.matches("\\btext/html\\b")
-        && !{path}.matches("(?i)(?:^/docs|^/graphql|^/bundles/|^/_profiler|^/_wdt|\\.(?:json|html$|csv$|ya?ml$|xml$))")
+        && !path(
+            '/docs*', '/graphql*', '/bundles*', '/contexts*', '/_profiler*', '/_wdt*', '/media*',
+            '*.json*', '*.html', '*.csv', '*.yml', '*.yaml', '*.xml'
+        )
     )
     || {path} == "/favicon.ico"
     || {path} == "/notification_icon.png"
@@ -24,7 +27,6 @@ log
     || {path}.startsWith("/img")
     || {path}.startsWith("/pwa_icons")
     || {path}.startsWith("/tarteaucitron")
-    || {path}.startsWith("/sitemap")
     || {path}.startsWith("/longdesc")
     || {path}.startsWith("/sw")
     || {path}.startsWith("/workbox")`

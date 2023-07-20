@@ -222,7 +222,7 @@ class Repairer
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerIntervention::class, orphanRemoval: true)]
     public Collection $repairerInterventions;
 
-    #[Groups([self::REPAIRER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ])]
     #[ORM\Column(length: 255, nullable: true)]
     public ?string $slug = null;
 

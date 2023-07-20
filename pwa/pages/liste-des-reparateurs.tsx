@@ -92,7 +92,7 @@ const RepairersList: NextPageWithLayout = ({repairersFetch = []}: InferGetServer
                       repairer={repairer}
                       onClick={() =>
                         router.push({
-                          pathname: `/reparateur/${repairer.id}`,
+                          pathname: `/reparateur/${repairer.id}-${repairer.slug}`,
                           query: {repairerList: 1},
                         })
                       }
