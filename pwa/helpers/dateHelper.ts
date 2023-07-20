@@ -1,14 +1,17 @@
-export const formatDate = (dateString: string | undefined, withHour: boolean = true): string => {
+export const formatDate = (
+  dateString: string | undefined,
+  withHour: boolean = true
+): string => {
   if (typeof dateString === 'undefined') {
     return '';
   }
 
   let date = getDateTimeZoned(dateString);
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
 
   if (withHour) {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
@@ -26,9 +29,12 @@ export const isPast = (targetDate: string): boolean => {
   }
 
   return parsedTargetDate < currentDate;
-}
+};
 
-export const dateObjectAsString = (date: Date, withHours: boolean = true): string => {
+export const dateObjectAsString = (
+  date: Date,
+  withHours: boolean = true
+): string => {
   const year = date.getFullYear();
   const month = padNumber(date.getMonth() + 1);
   const day = padNumber(date.getDate());
@@ -40,42 +46,48 @@ export const dateObjectAsString = (date: Date, withHours: boolean = true): strin
   }
 
   return `${year}-${month}-${day}`;
-}
+};
 
-export const getTimeFromObjectAsString = (date: Date, withHours: boolean = true): string => {
+export const getTimeFromObjectAsString = (date: Date): string => {
   const hours = padNumber(date.getHours());
   const minutes = padNumber(date.getMinutes());
 
-  return `${hours} : ${minutes}`;
-}
+  return `${hours}:${minutes}`;
+};
 
 export const getDateFromDateAsString = (slotTime: string): string => {
-  const dateObj = getDateTimeZoned(slotTime)
+  const dateObj = getDateTimeZoned(slotTime);
+
+  if (isNaN(dateObj.getTime())) {
+    return '';
+  }
   const year = dateObj.getFullYear();
   const month = padNumber(dateObj.getMonth() + 1);
   const day = padNumber(dateObj.getDate());
 
   return `${day}/${month}/${year}`;
-}
+};
 
 export const getTimeFromDateAsString = (slotTime: string): string => {
   const dateObj = getDateTimeZoned(slotTime);
+
+  if (isNaN(dateObj.getTime())) {
+    return '';
+  }
   const hours = padNumber(dateObj.getHours());
   const minutes = padNumber(dateObj.getMinutes());
 
   return `${hours}:${minutes}`;
-}
-
+};
 
 export const padNumber = (number: number): string => {
   return number.toString().padStart(2, '0');
-}
+};
 
-export const getDateTimeZoned = (dateString: string|null = null): Date => {
-
+export const getDateTimeZoned = (dateString: string | null = null): Date => {
   let date = new Date(dateString ? dateString : '');
   const userTimezoneOffset = date.getTimezoneOffset() * 60000;
   date = new Date(date.getTime() + userTimezoneOffset);
 
   return date;
-}
+};

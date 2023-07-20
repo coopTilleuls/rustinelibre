@@ -17,7 +17,7 @@ import {RequestBody} from '@interfaces/Resource';
 import AdminLayout from '@components/admin/AdminLayout';
 import Link from 'next/link';
 import UserForm from '@components/form/UserForm';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
 
 const AdminProfile: NextPageWithLayout = () => {
   const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
@@ -51,7 +51,7 @@ const AdminProfile: NextPageWithLayout = () => {
         setSuccess(false);
       }, 3000);
     } catch (e: any) {
-      setErrorMessage(e.message?.replace(errorRegex, '$2'))
+      setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
 
     setPendingUpdate(false);
