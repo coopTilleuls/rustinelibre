@@ -23,10 +23,10 @@ export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
   const [user, setUser] = useState<User>(userLogged);
-  const [firstName, setFirstName] = useState<string | null>(null);
-  const [lastName, setLastName] = useState<string | null>(null);
-  const [city, setCity] = useState<string | null>(null);
-  const [street, setStreet] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [street, setStreet] = useState<string>('');
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -79,8 +79,8 @@ export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => 
     setUser(me);
     setFirstName(me.firstName)
     setLastName(me.lastName)
-    setCity(me.city ? me.city : null);
-    setStreet(me.street ? me.street : null);
+    setCity(me.city ? me.city : '');
+    setStreet(me.street ? me.street : '');
   }
 
   useEffect(() => {
@@ -120,7 +120,7 @@ export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => 
             name="firstName"
             autoComplete="firstName"
             autoFocus
-            value={firstName || user?.firstName}
+            value={firstName}
             sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
             inputProps={{maxLength: 50}}
             onChange={handleChangeFirstName}
@@ -133,7 +133,7 @@ export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => 
             label="Nom de famille"
             name="lastName"
             autoComplete="lastName"
-            value={lastName || user?.lastName}
+            value={lastName}
             sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
             inputProps={{maxLength: 50}}
             onChange={handleChangeLastName}
