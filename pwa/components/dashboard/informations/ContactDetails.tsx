@@ -143,14 +143,6 @@ export const ContactDetails = ({
     setPendingRegistration(false);
   };
 
-  if (!name || !mobilePhone || !streetNumber || !street || !city) {
-    return (
-      <Box textAlign="center">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   return (
     <Box mt={3} component="form" onSubmit={handleSubmit}>
       {!repairer && (
