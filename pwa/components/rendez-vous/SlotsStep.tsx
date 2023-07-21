@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   Box,
   Typography,

@@ -5,7 +5,7 @@ import {useRouter} from 'next/router';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {repairerResource} from '@resources/repairerResource';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {appointmentResource} from '@resources/appointmentResource';
 import {useAccount} from '@contexts/AuthContext';
 import {

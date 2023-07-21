@@ -16,7 +16,7 @@ import {
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 import {RepairerType} from '@interfaces/RepairerType';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
 
 const sortOptions: Record<string, string> = {

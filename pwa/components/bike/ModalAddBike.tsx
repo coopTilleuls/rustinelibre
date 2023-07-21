@@ -23,7 +23,7 @@ import {uploadImage} from '@helpers/uploadFile';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {bikeResource} from '@resources/bikeResource';
 import {RequestBody} from '@interfaces/Resource';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {checkFileSize} from '@helpers/checkFileSize';
 import {useTheme} from '@mui/material/styles';
 import {errorRegex} from '@utils/errorRegex';

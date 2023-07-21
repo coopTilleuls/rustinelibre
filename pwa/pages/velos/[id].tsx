@@ -16,7 +16,7 @@ import {BikeType} from '@interfaces/BikeType';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModalDeleteBike from '@components/bike/ModalDeleteBike';
 import {useAccount} from '@contexts/AuthContext';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const EditBike: NextPageWithLayout = ({}) => {
   const router: NextRouter = useRouter();
