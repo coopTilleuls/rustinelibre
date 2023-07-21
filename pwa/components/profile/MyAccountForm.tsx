@@ -87,7 +87,7 @@ export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => 
     if (userLogged) {
       fetchMe();
     }
-  }, [userLogged]); // eslint-disable-line react-hooks/exhaustive-d
+  }, [userLogged]); // eslint-disable-line
 
   return (
     <Box
