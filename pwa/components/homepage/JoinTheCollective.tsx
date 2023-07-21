@@ -34,13 +34,14 @@ const args = [
 
 const JoinTheCollective = () => {
   return (
-    <Box px={{xs: 4, md: 0}} py={4}>
+    <Box py={4}>
       <Box
         width="100%"
         display="flex"
         flexDirection="column"
         alignItems="center"
         textAlign="center"
+        position="relative"
         marginBottom={4}>
         <Typography
           color="primary"
@@ -58,6 +59,16 @@ const JoinTheCollective = () => {
             Je rejoins le collectif
           </Button>
         </Link>
+        <Box
+          zIndex={5}
+          sx={{
+            position: 'absolute',
+            left: '100%',
+            top: '65%',
+            transform: 'translateY(20%) translateX(-20%)',
+          }}>
+          <img alt="" src="/img/flower.svg" width="100px" />
+        </Box>
       </Box>
       <Grid2
         container
