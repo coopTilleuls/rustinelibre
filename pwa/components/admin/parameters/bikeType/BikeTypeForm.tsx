@@ -49,8 +49,8 @@ const BikeTypeForm = ({bikeType}: BikeTypeFormProps): JSX.Element => {
         });
         router.push('/admin/parametres');
       }
-    } catch (e:any) {
-      setErrorMessage(e.message?.replace(errorRegex, '$2'))
+    } catch (e: any) {
+      setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
 
     setPending(false);

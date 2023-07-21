@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 import {RequestBody} from '@interfaces/Resource';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
 const Editor = dynamic(() => import('@components/form/Editor'), {
   ssr: false,
 });

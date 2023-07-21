@@ -24,7 +24,7 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import {useTheme} from "@mui/material/styles";
+import {useTheme} from '@mui/material/styles';
 
 type AppointmentContentProps = {
   appointmentProps: Appointment;

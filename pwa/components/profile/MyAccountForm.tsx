@@ -10,14 +10,16 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material';
-import {errorRegex} from "@utils/errorRegex";
-import {isAdmin} from "@helpers/rolesHelpers";
+import {errorRegex} from '@utils/errorRegex';
+import {isAdmin} from '@helpers/rolesHelpers';
 
 interface MyAccountFormProps {
   userLogged: User;
 }
 
-export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => {
+export const MyAccountForm = ({
+  userLogged,
+}: MyAccountFormProps): JSX.Element => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -51,7 +53,9 @@ export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => 
       }, 3000);
     } catch (e: any) {
       setError(true);
-      setErrorMessage(`Mise à jour impossible: ${e.message?.replace(errorRegex, '$2')}`)
+      setErrorMessage(
+        `Mise à jour impossible: ${e.message?.replace(errorRegex, '$2')}`
+      );
     }
     setPendingUpdate(false);
   };
@@ -75,13 +79,13 @@ export const MyAccountForm = ({userLogged}: MyAccountFormProps): JSX.Element => 
   };
 
   const fetchMe = async () => {
-    const me = await userResource.getCurrent()
+    const me = await userResource.getCurrent();
     setUser(me);
-    setFirstName(me.firstName)
-    setLastName(me.lastName)
+    setFirstName(me.firstName);
+    setLastName(me.lastName);
     setCity(me.city ? me.city : '');
     setStreet(me.street ? me.street : '');
-  }
+  };
 
   useEffect(() => {
     if (userLogged) {

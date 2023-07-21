@@ -10,7 +10,7 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
-import {authenticationResource} from "@resources/authenticationResource";
+import {authenticationResource} from '@resources/authenticationResource';
 
 const UpdatePassword = (): JSX.Element => {
   const {user} = useAccount({redirectIfNotFound: '/login'});
@@ -38,7 +38,6 @@ const UpdatePassword = (): JSX.Element => {
     setErrorMessage(null);
     setPendingLogin(true);
 
-
     const response = await authenticationResource.checkCurrentPassword({
       email: email,
       password: oldPassword,
@@ -47,7 +46,7 @@ const UpdatePassword = (): JSX.Element => {
     if (response.ok) {
       setSuccessOldPassword(true);
     } else {
-      setErrorMessage('Ce mot de passe n\'est pas valide');
+      setErrorMessage("Ce mot de passe n'est pas valide");
     }
 
     setPendingLogin(false);
@@ -95,7 +94,7 @@ const UpdatePassword = (): JSX.Element => {
     }
     setErrorMessage(null);
     setPendingLogin(true);
-    if (newPassword === '' ){
+    if (newPassword === '') {
       setErrorMessage('Le nouveau mot de passe ne peut pas être vide.');
       setPendingLogin(false);
       return;
@@ -112,8 +111,8 @@ const UpdatePassword = (): JSX.Element => {
           setOldPassword('');
         }, 3000);
         setSuccessOldPassword(false);
-      } catch (e:any) {
-        setErrorMessage(e.message?.replace(/(\w+):\s(.*?)(?=\n\w+:|$)/g, "$2"))
+      } catch (e: any) {
+        setErrorMessage(e.message?.replace(/(\w+):\s(.*?)(?=\n\w+:|$)/g, '$2'));
         setSuccessOldPassword(false);
       }
     } else {

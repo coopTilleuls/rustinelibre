@@ -1,8 +1,8 @@
 import {AbstractResource} from '@resources/AbstractResource';
-import {Maintenance} from "@interfaces/Maintenance";
+import {Maintenance} from '@interfaces/Maintenance';
 
 class MaintenanceResource extends AbstractResource<Maintenance> {
-    protected endpoint = '/maintenances';
+  protected endpoint = '/maintenances';
 }
 
 export const maintenanceResource = new MaintenanceResource();

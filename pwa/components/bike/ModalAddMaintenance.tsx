@@ -23,8 +23,8 @@ import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {Moment} from 'moment';
 import {Maintenance} from '@interfaces/Maintenance';
 import {useAccount} from '@contexts/AuthContext';
-import {useTheme} from "@mui/material/styles";
-import {errorRegex} from "@utils/errorRegex";
+import {useTheme} from '@mui/material/styles';
+import {errorRegex} from '@utils/errorRegex';
 
 const style = {
   position: 'absolute' as 'absolute',

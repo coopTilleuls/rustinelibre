@@ -18,7 +18,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {CardActionArea} from '@mui/material';
 import BuildIcon from '@mui/icons-material/Build';
-import ModalDetailMaintenance from "@components/bike/ModalDetailMaintenance";
+import ModalDetailMaintenance from '@components/bike/ModalDetailMaintenance';
 
 type BikeMaintenanceProps = {
   bike: Bike;
@@ -35,7 +35,8 @@ const BikeMaintenance = ({
 }: BikeMaintenanceProps): JSX.Element => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openModalDetail, setOpenModalDetail] = useState<boolean>(false);
-  const [maintenanceSelected, setMaintenanceSelected] = useState<Maintenance | null>(null);
+  const [maintenanceSelected, setMaintenanceSelected] =
+    useState<Maintenance | null>(null);
 
   const handleOpenModal = (): void => setOpenModal(true);
   const handleCloseModal = async (): Promise<void> => {
@@ -43,7 +44,7 @@ const BikeMaintenance = ({
     await fetchMaintenance();
   };
 
-  const handleCloseModalDetail = async(refresh: boolean): Promise<void> => {
+  const handleCloseModalDetail = async (refresh: boolean): Promise<void> => {
     setOpenModalDetail(false);
     if (refresh) {
       await fetchMaintenance();
@@ -53,7 +54,7 @@ const BikeMaintenance = ({
   const clickMaintenanceDetail = (maintenance: Maintenance) => {
     setOpenModalDetail(true);
     setMaintenanceSelected(maintenance);
-  }
+  };
 
   return (
     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
@@ -93,7 +94,11 @@ const BikeMaintenance = ({
                   </TableCell>
                   <TableCell align="right">{maintenance.name}</TableCell>
                   <TableCell align="right">
-                    <Button variant="outlined" onClick={() => clickMaintenanceDetail(maintenance)}>Détails</Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => clickMaintenanceDetail(maintenance)}>
+                      Détails
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -116,9 +121,9 @@ const BikeMaintenance = ({
       />
 
       <ModalDetailMaintenance
-          maintenance={maintenanceSelected}
-          openModal={openModalDetail}
-          handleCloseModal={handleCloseModalDetail}
+        maintenance={maintenanceSelected}
+        openModal={openModalDetail}
+        handleCloseModal={handleCloseModalDetail}
       />
     </Box>
   );

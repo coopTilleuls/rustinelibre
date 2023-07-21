@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import {isAdmin, isBoss, isEmployee} from "@helpers/rolesHelpers";
+import {isAdmin, isBoss, isEmployee} from '@helpers/rolesHelpers';
 
 const Login: NextPageWithLayout = ({}) => {
   const [email, setEmail] = useState<string>('');
@@ -26,7 +26,9 @@ const Login: NextPageWithLayout = ({}) => {
   const {user} = useAccount({});
   const {login} = useAuth();
   const router = useRouter();
-  const next = Array.isArray(router.query.next) ? router.query.next.join('') : router.query.next || '/';
+  const next = Array.isArray(router.query.next)
+    ? router.query.next.join('')
+    : router.query.next || '/';
 
   useEffect(() => {
     if (user && user.emailConfirmed) {
@@ -41,7 +43,7 @@ const Login: NextPageWithLayout = ({}) => {
       router.push(`/inscription`);
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
-  
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage(null);
@@ -104,7 +106,7 @@ const Login: NextPageWithLayout = ({}) => {
                   autoComplete="email"
                   autoFocus
                   value={email}
-                  inputProps={{ maxLength: 180 }}
+                  inputProps={{maxLength: 180}}
                   onChange={handleChangeEmail}
                 />
                 <TextField

@@ -16,10 +16,9 @@ import {BikeType} from '@interfaces/BikeType';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModalDeleteBike from '@components/bike/ModalDeleteBike';
 import {useAccount} from '@contexts/AuthContext';
-import useMediaQuery from "@hooks/useMediaQuery";
+import useMediaQuery from '@hooks/useMediaQuery';
 
 const EditBike: NextPageWithLayout = ({}) => {
-
   const router: NextRouter = useRouter();
   const {user, isLoadingFetchUser} = useAccount({
     redirectIfNotFound: '/velos/mes-velos',
@@ -37,7 +36,7 @@ const EditBike: NextPageWithLayout = ({}) => {
   }
 
   useEffect(() => {
-      fetchBikeTypes();
+    fetchBikeTypes();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

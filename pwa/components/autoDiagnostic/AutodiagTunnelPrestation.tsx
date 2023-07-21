@@ -11,11 +11,10 @@ import {
 import {AutodiagContext} from '@contexts/AutodiagContext';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {autoDiagnosticResource} from '@resources/autoDiagResource';
-import {Intervention} from "@interfaces/Intervention";
-import {interventionResource} from "@resources/interventionResource";
+import {Intervention} from '@interfaces/Intervention';
+import {interventionResource} from '@resources/interventionResource';
 
 export const AutoDiagTunnelPrestation = (): JSX.Element => {
-
   const [loading, setLoading] = useState<boolean>(false);
   const [interventions, setInterventions] = useState<Intervention[]>([]);
 
@@ -60,7 +59,7 @@ export const AutoDiagTunnelPrestation = (): JSX.Element => {
   const fetchInterventions = async () => {
     setLoading(true);
     const interventionsFetch = await interventionResource.getAll(false, {
-      isAdmin: true
+      isAdmin: true,
     });
     setInterventions(interventionsFetch['hydra:member']);
     setLoading(false);
@@ -88,9 +87,15 @@ export const AutoDiagTunnelPrestation = (): JSX.Element => {
           value={prestation}
           label="Type de prestation"
           onChange={handleChangePrestation}>
-            {interventions.map(intervention => {
-              return <MenuItem key={intervention['@id']} value={intervention.description}>{intervention.description}</MenuItem>
-            })}
+          {interventions.map((intervention) => {
+            return (
+              <MenuItem
+                key={intervention['@id']}
+                value={intervention.description}>
+                {intervention.description}
+              </MenuItem>
+            );
+          })}
         </Select>
       </FormControl>
       <Box
