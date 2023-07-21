@@ -3,7 +3,7 @@ import router from 'next/router';
 import {Box, Button, Typography, Modal, CircularProgress} from '@mui/material';
 import {bikeResource} from '@resources/bikeResource';
 import {Bike} from '@interfaces/Bike';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
 
 type ModalDeleteBikeProps = {
   bike: Bike;

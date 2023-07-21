@@ -18,7 +18,7 @@ import {
   Autocomplete,
 } from '@mui/material';
 import {RequestBody} from '@interfaces/Resource';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 

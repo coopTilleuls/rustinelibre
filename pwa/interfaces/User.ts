@@ -1,5 +1,5 @@
 import {Repairer} from '@interfaces/Repairer';
-import {RepairerEmployee} from "@interfaces/RepairerEmployee";
+import {RepairerEmployee} from '@interfaces/RepairerEmployee';
 
 export interface User {
   '@id': string;

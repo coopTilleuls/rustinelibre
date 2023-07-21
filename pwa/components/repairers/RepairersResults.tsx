@@ -13,7 +13,7 @@ import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {Divider} from '@mui/material';
-import {useTheme} from "@mui/material/styles";
+import {useTheme} from '@mui/material/styles';
 
 export const RepairersResults = (): JSX.Element => {
   const theme = useTheme();

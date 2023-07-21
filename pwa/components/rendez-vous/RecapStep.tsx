@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Typography, Button, Stack} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
-import {isRepairerItinerant} from "@helpers/rolesHelpers";
+import {isRepairerItinerant} from '@helpers/rolesHelpers';
 
 interface RecapStepProps {
   repairer: Repairer;
@@ -30,7 +30,9 @@ const RecapStep = ({
         Récapitulatif
       </Typography>
       <Typography align="justify" sx={{mt: 2, textTransform: 'capitalize'}}>
-          {isRepairerItinerant(repairer) ? `Votre RDV: ${date} avec "${repairer.name}"` : `Votre RDV: ${date} chez ${repairer.name}`}
+        {isRepairerItinerant(repairer)
+          ? `Votre RDV: ${date} avec "${repairer.name}"`
+          : `Votre RDV: ${date} chez ${repairer.name}`}
       </Typography>
 
       <Box>

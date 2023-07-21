@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {User} from '@interfaces/User';
 import {RequestBody} from '@interfaces/Resource';
 import {userResource} from '@resources/userResource';
@@ -10,21 +10,25 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
+import {isAdmin} from '@helpers/rolesHelpers';
 
 interface MyAccountFormProps {
-  user: User | null;
+  userLogged: User;
 }
 
-export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
+export const MyAccountForm = ({
+  userLogged,
+}: MyAccountFormProps): JSX.Element => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
-  const [firstName, setFirstName] = useState<string | null>(user?.firstName!);
-  const [lastName, setLastName] = useState<string | null>(user?.lastName!);
-  const [city, setCity] = useState<string | null>(user?.city!);
-  const [street, setStreet] = useState<string | null>(user?.street!);
+  const [user, setUser] = useState<User>(userLogged);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [street, setStreet] = useState<string>('');
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -49,7 +53,9 @@ export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
       }, 3000);
     } catch (e: any) {
       setError(true);
-      setErrorMessage(`Mise à jour impossible: ${e.message?.replace(errorRegex, '$2')}`)
+      setErrorMessage(
+        `Mise à jour impossible: ${e.message?.replace(errorRegex, '$2')}`
+      );
     }
     setPendingUpdate(false);
   };
@@ -71,6 +77,21 @@ export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
   const handleChangeCity = (event: ChangeEvent<HTMLInputElement>): void => {
     setCity(event.target.value);
   };
+
+  const fetchMe = async () => {
+    const me = await userResource.getCurrent();
+    setUser(me);
+    setFirstName(me.firstName);
+    setLastName(me.lastName);
+    setCity(me.city ? me.city : '');
+    setStreet(me.street ? me.street : '');
+  };
+
+  useEffect(() => {
+    if (userLogged) {
+      fetchMe();
+    }
+  }, [userLogged]); // eslint-disable-line
 
   return (
     <Box
@@ -103,7 +124,7 @@ export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
             name="firstName"
             autoComplete="firstName"
             autoFocus
-            value={firstName || user?.firstName}
+            value={firstName}
             sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
             inputProps={{maxLength: 50}}
             onChange={handleChangeFirstName}
@@ -116,7 +137,7 @@ export const MyAccountForm = ({user}: MyAccountFormProps): JSX.Element => {
             label="Nom de famille"
             name="lastName"
             autoComplete="lastName"
-            value={lastName || user?.lastName}
+            value={lastName}
             sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
             inputProps={{maxLength: 50}}
             onChange={handleChangeLastName}

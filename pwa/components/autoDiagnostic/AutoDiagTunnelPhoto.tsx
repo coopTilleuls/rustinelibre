@@ -7,7 +7,7 @@ import {Button, CircularProgress, Typography, Stack, Box} from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import {uploadImage} from '@helpers/uploadFile';
 import {MediaObject} from '@interfaces/MediaObject';
-import {checkFileSize} from "@helpers/checkFileSize";
+import {checkFileSize} from '@helpers/checkFileSize';
 
 export const AutoDiagTunnelPhoto = (): JSX.Element => {
   const router = useRouter();
@@ -49,7 +49,6 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       return;
     }
     if (event.target.files) {
-
       setImageTooHeavy(false);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
@@ -85,9 +84,11 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
         Ajouter une photo
       </Typography>
-      {imageTooHeavy && <Typography sx={{textAlign: 'center', color: 'red'}}>
-        Votre photo dépasse la taille maximum autorisée (5mo)
-      </Typography>}
+      {imageTooHeavy && (
+        <Typography sx={{textAlign: 'center', color: 'red'}}>
+          Votre photo dépasse la taille maximum autorisée (5mo)
+        </Typography>
+      )}
       <Box border="1px solid grey" p={2} borderRadius={5}>
         {loadingPhoto && <CircularProgress />}
         {!loadingPhoto && (

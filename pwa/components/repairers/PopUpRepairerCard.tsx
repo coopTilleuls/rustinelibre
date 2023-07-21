@@ -12,7 +12,6 @@ export const PopUpRepairerCard = ({
   repairer,
   onClick,
 }: RepairerProps): JSX.Element => {
-
   return (
     <Box
       sx={{

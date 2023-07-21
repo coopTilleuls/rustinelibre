@@ -19,7 +19,6 @@ import {useAccount} from '@contexts/AuthContext';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 const EditBike: NextPageWithLayout = ({}) => {
-
   const router: NextRouter = useRouter();
   const {user, isLoadingFetchUser} = useAccount({
     redirectIfNotFound: '/velos/mes-velos',
@@ -37,7 +36,7 @@ const EditBike: NextPageWithLayout = ({}) => {
   }
 
   useEffect(() => {
-      fetchBikeTypes();
+    fetchBikeTypes();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

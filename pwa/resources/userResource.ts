@@ -1,20 +1,17 @@
 import {AbstractResource} from '@resources/AbstractResource';
 import {User} from '@interfaces/User';
-import {RequestBody, RequestHeaders} from "@interfaces/Resource";
+import {RequestBody, RequestHeaders} from '@interfaces/Resource';
 
 class UserResource extends AbstractResource<User> {
   protected endpoint = '/users';
 
   async getCurrent(): Promise<User> {
-    return await this.get(
-        '/me',
-        true
-    );
+    return await this.get('/me', true);
   }
 
   async register(body: RequestBody = {}): Promise<User> {
     const doFetch = async () => {
-      return await fetch(this.getUrl( '/users'), {
+      return await fetch(this.getUrl('/users'), {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -27,7 +24,6 @@ class UserResource extends AbstractResource<User> {
   }
 
   async validCode(body: RequestBody = {}): Promise<User> {
-
     const doFetch = async () => {
       return await fetch(this.getUrl(`/validation-code`), {
         headers: {

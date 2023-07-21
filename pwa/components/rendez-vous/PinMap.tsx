@@ -2,12 +2,12 @@ import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {Box, Typography, Button, TextField, Autocomplete} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 import MapPositionUser from '@components/dashboard/appointments/MapPositionUser';
-import {City as GouvCity} from "@interfaces/Gouv";
-import {searchCity, searchStreet} from "@utils/apiCity";
-import {createCitiesWithGouvAPI, City} from "@interfaces/City";
-import {Street} from "@interfaces/Street";
-import {isBoss, isEmployee} from "@helpers/rolesHelpers";
-import {useAccount} from "@contexts/AuthContext";
+import {City as GouvCity} from '@interfaces/Gouv';
+import {searchCity, searchStreet} from '@utils/apiCity';
+import {createCitiesWithGouvAPI, City} from '@interfaces/City';
+import {Street} from '@interfaces/Street';
+import {isBoss, isEmployee} from '@helpers/rolesHelpers';
+import {useAccount} from '@contexts/AuthContext';
 
 interface PinMapProps {
   repairer: Repairer;
@@ -30,41 +30,47 @@ const PinMap = ({
   setLatitude,
   setLongitude,
   address,
-  setAddress
+  setAddress,
 }: PinMapProps): JSX.Element => {
-
   const [city, setCity] = useState<City | null>(null);
   const [street, setStreet] = useState<string | null>(null);
   const [streetNumber, setStreetNumber] = useState<string | null>(null);
-  const [latitudeCalculate, setLatitudeCalculate] = useState<string | null>(null);
-  const [longitudeCalculate, setLongitudeCalculate] = useState<string | null>(null);
+  const [latitudeCalculate, setLatitudeCalculate] = useState<string | null>(
+    null
+  );
+  const [longitudeCalculate, setLongitudeCalculate] = useState<string | null>(
+    null
+  );
   const [cityInput, setCityInput] = useState<string>('');
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [streetList, setStreetList] = useState<Street[]>([]);
-  const [streetSelected, setStreetSelected] = useState<Street|null>(null);
+  const [streetSelected, setStreetSelected] = useState<Street | null>(null);
   const {user} = useAccount({});
   const isABossOrAnEmployee = user && (isBoss(user) || isEmployee(user));
 
-
   const handleChangeStreetNumber = (event: ChangeEvent<HTMLInputElement>) => {
-      setStreetNumber(event.target.value);
+    setStreetNumber(event.target.value);
   };
 
-  const handleChangeStreet = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
-        const adresseSearch = event.target.value;
-        if (adresseSearch.length >= 3) {
-            const streetApiResponse = await searchStreet(adresseSearch, city);
-            setStreetList(streetApiResponse)
-        }
+  const handleChangeStreet = async (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): Promise<void> => {
+    const adresseSearch = event.target.value;
+    if (adresseSearch.length >= 3) {
+      const streetApiResponse = await searchStreet(adresseSearch, city);
+      setStreetList(streetApiResponse);
+    }
   };
 
   const fetchCitiesResult = useCallback(
-      async (cityStr: string) => {
-        const citiesResponse = await searchCity(cityStr, false);
-        const cities: City[] =  createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
-        setCitiesList(cities);
-      },
-      [setCitiesList]
+    async (cityStr: string) => {
+      const citiesResponse = await searchCity(cityStr, false);
+      const cities: City[] = createCitiesWithGouvAPI(
+        citiesResponse as GouvCity[]
+      );
+      setCitiesList(cities);
+    },
+    [setCitiesList]
   );
 
   useEffect(() => {
@@ -73,80 +79,81 @@ const PinMap = ({
     } else fetchCitiesResult(cityInput);
   }, [setCitiesList, fetchCitiesResult, cityInput]);
 
-
   useEffect(() => {
     if (streetSelected) {
-        setLatitudeCalculate(streetSelected.lat.toString());
-        setLongitudeCalculate(streetSelected.lon.toString());
+      setLatitudeCalculate(streetSelected.lat.toString());
+      setLongitudeCalculate(streetSelected.lon.toString());
     }
   }, [streetSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (streetNumber) {
-        setAddress(`${streetNumber} ${streetSelected?.name}, ${city?.name} (${city?.postcode})`)
+      setAddress(
+        `${streetNumber} ${streetSelected?.name}, ${city?.name} (${city?.postcode})`
+      );
     }
   }, [streetNumber]); // eslint-disable-line react-hooks/exhaustive-deps
 
-
   const handleCityChange = async (
-      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): Promise<void> => {
     setCityInput(event.target.value);
   };
 
   return (
     <Box width="100%">
-        {!isABossOrAnEmployee &&(
-      <Typography pb={2} textAlign="center">
-        Placez le repère sur le lieu où vous souhaitez l&apos;intervention du
-        réparateur.
-      </Typography>
-        )}
+      {!isABossOrAnEmployee && (
+        <Typography pb={2} textAlign="center">
+          Placez le repère sur le lieu où vous souhaitez l&apos;intervention du
+          réparateur.
+        </Typography>
+      )}
       <Autocomplete
-          sx={{mt: 2, mb: 1}}
-          freeSolo
-          value={cityInput}
-          options={citiesList}
-          getOptionLabel={(city) =>
-              typeof city === 'string'
-                  ? city
-                  : `${city.name} (${city.postcode})`
-          }
-          onChange={(event, value) => setCity(value as City)}
-          renderInput={(params) => (
-              <TextField
-                  label="Ville"
-                  required
-                  {...params}
-                  value={cityInput}
-                  onChange={(e) => handleCityChange(e)}
-              />
-          )}
+        sx={{mt: 2, mb: 1}}
+        freeSolo
+        value={cityInput}
+        options={citiesList}
+        getOptionLabel={(city) =>
+          typeof city === 'string' ? city : `${city.name} (${city.postcode})`
+        }
+        onChange={(event, value) => setCity(value as City)}
+        renderInput={(params) => (
+          <TextField
+            label="Ville"
+            required
+            {...params}
+            value={cityInput}
+            onChange={(e) => handleCityChange(e)}
+          />
+        )}
       />
 
-      {city && <Autocomplete
+      {city && (
+        <Autocomplete
           sx={{mt: 2, mb: 1}}
           freeSolo
           value={street}
           options={streetList}
           getOptionLabel={(streetObject) =>
-              typeof streetObject === 'string'
-                  ? streetObject
-                  :`${streetObject.name} (${streetObject.city})`
+            typeof streetObject === 'string'
+              ? streetObject
+              : `${streetObject.name} (${streetObject.city})`
           }
           onChange={(event, value) => setStreetSelected(value as Street)}
           renderInput={(params) => (
-              <TextField
-                  label="Rue"
-                  required
-                  {...params}
-                  value={street}
-                  onChange={(e) => handleChangeStreet(e)}
-              />
+            <TextField
+              label="Rue"
+              required
+              {...params}
+              value={street}
+              onChange={(e) => handleChangeStreet(e)}
+            />
           )}
-      />}
+        />
+      )}
 
-      {streetSelected && <TextField
+      {streetSelected && (
+        <TextField
           margin="normal"
           required
           fullWidth
@@ -155,31 +162,44 @@ const PinMap = ({
           name="address"
           autoComplete="address"
           value={streetNumber}
-          inputProps={{ maxLength: 250 }}
+          inputProps={{maxLength: 250}}
           onChange={handleChangeStreetNumber}
-      />}
+        />
+      )}
 
-      {city && streetSelected && streetNumber && latitudeCalculate && longitudeCalculate && <MapPositionUser
-        repairer={repairer}
-        setLatitude={setLatitude}
-        setLongitude={setLongitude}
-        latitudeProps={latitudeCalculate}
-        longitudeProps={longitudeCalculate}
-      />}
+      {city &&
+        streetSelected &&
+        streetNumber &&
+        latitudeCalculate &&
+        longitudeCalculate && (
+          <MapPositionUser
+            repairer={repairer}
+            setLatitude={setLatitude}
+            setLongitude={setLongitude}
+            latitudeProps={latitudeCalculate}
+            longitudeProps={longitudeCalculate}
+          />
+        )}
 
-        {!isABossOrAnEmployee &&(
-      <Box display="flex" justifyContent="space-between" px={2} pt={2}>
-        <Button variant="outlined" onClick={cancelPinMap}>
-          Retour
-        </Button>
-        <Button
-          disabled={!longitude || !latitude || !city || !streetSelected || !streetNumber}
-          variant="contained"
-          onClick={confirmPinMap}>
-          Suivant
-        </Button>
-      </Box>
-            )}
+      {!isABossOrAnEmployee && (
+        <Box display="flex" justifyContent="space-between" px={2} pt={2}>
+          <Button variant="outlined" onClick={cancelPinMap}>
+            Retour
+          </Button>
+          <Button
+            disabled={
+              !longitude ||
+              !latitude ||
+              !city ||
+              !streetSelected ||
+              !streetNumber
+            }
+            variant="contained"
+            onClick={confirmPinMap}>
+            Suivant
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
