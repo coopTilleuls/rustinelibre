@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import Link from 'next/link';
 import {AutodiagContext} from '@contexts/AutodiagContext';
-import useMediaQuery from '@hooks/useMediaQuery';
 import {Box, Stack, Button, Typography} from '@mui/material';
 
 export const AutoDiagTunnelChoice = (): JSX.Element => {

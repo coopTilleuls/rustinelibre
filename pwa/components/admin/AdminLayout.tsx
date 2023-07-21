@@ -15,7 +15,7 @@ import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useAccount, useAuth} from '@contexts/AuthContext';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import MessageIcon from '@mui/icons-material/Message';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';

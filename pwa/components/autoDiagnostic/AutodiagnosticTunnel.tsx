@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '@mui/material/Box';
 import {Container, Paper, Stack} from '@mui/material';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {AutodiagContext} from '@contexts/AutodiagContext';
 import {appointmentResource} from '@resources/appointmentResource';
 import {useRouter} from 'next/router';

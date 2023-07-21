@@ -11,7 +11,7 @@ import React, {
 import {GetStaticProps} from 'next';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import RepairerSortOptions from '@components/repairers/RepairerSortOptions';
 import PaginationBlock from '@components/common/PaginationBlock';

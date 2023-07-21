@@ -21,7 +21,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import {useAccount, useAuth} from '@contexts/AuthContext';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Link from 'next/link';
 import {isBoss, isEmployee, isItinerant} from '@helpers/rolesHelpers';
