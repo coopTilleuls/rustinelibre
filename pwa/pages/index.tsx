@@ -50,9 +50,6 @@ const Home = () => {
             width="100%"
             display="flex"
             flexDirection="column">
-            {user && !isBoss(user) && !isEmployee(user) && (
-              <FavoriteRepairers user={user} />
-            )}
             <Grid container spacing={4} width="100%">
               {args.map((arg) => (
                 <Grid xs={12} md={4} key={arg.title}>
@@ -90,6 +87,9 @@ const Home = () => {
                 Je prends rendez-vous
               </Button>
             </Link>
+            {user && !isBoss(user) && !isEmployee(user) && (
+              <FavoriteRepairers user={user} />
+            )}
             <CreateMaintenanceBooklet />
           </Box>
         </Container>
