@@ -138,13 +138,6 @@ export const ContactDetails = ({
     setPendingRegistration(false);
   };
 
-  if (!repairerTypeSelected || !selectedBikeTypes || !description)
-    return (
-      <Box textAlign="center">
-        <CircularProgress />
-      </Box>
-    );
-
   return (
     <Box sx={{marginTop: 3}} component="form" onSubmit={handleSubmit}>
       {!repairer && (

@@ -32,7 +32,7 @@ const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
   const {user} = useAccount({redirectIfMailNotConfirm: '/login'});
 
   const [repairer, setRepairer] = useState<Repairer>(
-    user?.repairer! || editRepairer
+    editRepairer || user?.repairer!
   );
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
