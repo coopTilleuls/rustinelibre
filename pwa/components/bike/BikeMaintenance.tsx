@@ -49,7 +49,6 @@ const BikeMaintenance = ({
   const [openModalDetail, setOpenModalDetail] = useState<boolean>(false);
   const [maintenanceSelected, setMaintenanceSelected] =
     useState<Maintenance | null>(null);
-
   const [selectedMaintenanceToDelete, setSelectedMaintenanceToDelete] =
     useState<Maintenance | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -66,8 +65,10 @@ const BikeMaintenance = ({
       return;
     }
 
+    setErrorMessage(null);
     setRemovePending(true);
     setDeleteDialogOpen(false);
+
     try {
       await maintenanceResource.delete(selectedMaintenanceToDelete['@id']);
     } catch (e) {
