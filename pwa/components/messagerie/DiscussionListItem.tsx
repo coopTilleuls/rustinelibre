@@ -79,7 +79,7 @@ const DiscussionListItem = ({
               color={+router.query.id! === +discussion.id ? 'white' : 'black'}>
               {isCustomer
                 ? discussion.repairer.name
-                : discussion.customer.lastName}
+                : `${discussion.customer.firstName} ${discussion.customer.lastName}`}
             </Typography>
 
             <Typography
