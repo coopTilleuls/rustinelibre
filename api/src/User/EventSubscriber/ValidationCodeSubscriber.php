@@ -22,7 +22,7 @@ final class ValidationCodeSubscriber
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof User) {
+        if (!$entity instanceof User || $entity->isEmployee()) {
             return;
         }
 
@@ -33,7 +33,7 @@ final class ValidationCodeSubscriber
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof User) {
+        if (!$entity instanceof User || $entity->isEmployee()) {
             return;
         }
 
