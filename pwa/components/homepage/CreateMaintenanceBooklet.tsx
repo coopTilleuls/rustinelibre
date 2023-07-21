@@ -32,8 +32,32 @@ const CreateMaintenanceBooklet = () => {
             alt=""
           />
         </Box>
+        <Box
+          zIndex={5}
+          sx={{
+            position: 'absolute',
+            left: '0',
+            top: '65%',
+            transform: 'translateX(-50%)',
+          }}>
+          <img alt="" src="/img/flower.svg" width="100px" />
+        </Box>
       </Box>
-      <Box flex={1} display="flex" flexDirection="column">
+      <Box
+        flex={1}
+        display="flex"
+        flexDirection="column"
+        py={15}
+        position="relative">
+        <Box
+          zIndex={5}
+          sx={{
+            position: 'absolute',
+            left: '80%',
+            top: '0',
+          }}>
+          <img alt="" src="/img/eclair.svg" width="60px" />
+        </Box>
         <Typography variant="h2" component="h2" color="primary.main" mb={2}>
           Mon carnet
           <br />
@@ -53,6 +77,15 @@ const CreateMaintenanceBooklet = () => {
               Je crée mon carnet
             </Button>
           </Link>
+          <Box
+            zIndex={5}
+            sx={{
+              position: 'absolute',
+              left: '70%',
+              bottom: '0',
+            }}>
+            <img alt="" src="/img/wheel.svg" width="100px" />
+          </Box>
         </Box>
       </Box>
     </Box>

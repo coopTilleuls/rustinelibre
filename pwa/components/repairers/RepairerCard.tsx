@@ -48,6 +48,9 @@ export const RepairerCard = ({
             '& .MuiButtonBase-root': {
               bgcolor: 'primary.main',
             },
+            '& .MuiTypography-h5': {
+              color: 'primary.main',
+            },
           },
         }}>
         <CardMedia
@@ -70,9 +73,9 @@ export const RepairerCard = ({
           <Box mb={3}>
             <Typography
               variant="h5"
-              color="primary.main"
+              color="secondary.main"
               component="div"
-              sx={{wordBreak: 'break-word'}}>
+              sx={{wordBreak: 'break-word', transition: 'color ease 0.3s'}}>
               {repairer.name}
             </Typography>
             {repairer.latitude && repairer.longitude && repairer.distance && (
