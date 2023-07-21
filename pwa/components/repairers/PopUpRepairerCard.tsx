@@ -2,7 +2,6 @@ import React, {PropsWithRef} from 'react';
 import {Box, Button, Typography} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 
-
 interface RepairerProps extends PropsWithRef<any> {
   repairer: Repairer;
   onClick?: () => void;
