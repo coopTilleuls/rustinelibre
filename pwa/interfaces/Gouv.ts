@@ -1,16 +1,16 @@
 export interface City {
-    geometry: Geometry;
-    properties: Properties;
+  geometry: Geometry;
+  properties: Properties;
 }
 
 export interface Properties {
-    id: string;
-    city: string;
-    postcode: string;
-    label: string;
-    name: string;
+  id: string;
+  city: string;
+  postcode: string;
+  label: string;
+  name: string;
 }
 
 export interface Geometry {
-    coordinates: number[];
+  coordinates: number[];
 }

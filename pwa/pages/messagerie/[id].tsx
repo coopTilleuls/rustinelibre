@@ -48,7 +48,10 @@ const Messagerie: NextPageWithLayout = () => {
             <Box sx={{display: 'flex'}}>
               <CustomerDiscussionList display={{xs: 'none', md: 'block'}} />
               <Box width={{xs: '100%', md: '70%'}}>
-                <CustomerMessagesContent discussion={discussion} loading={loading} />
+                <CustomerMessagesContent
+                  discussion={discussion}
+                  loading={loading}
+                />
               </Box>
             </Box>
           ) : (

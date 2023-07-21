@@ -17,7 +17,7 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 import {RepairerType} from '@interfaces/RepairerType';
 import useMediaQuery from '@hooks/useMediaQuery';
-import {useTheme} from "@mui/material/styles";
+import {useTheme} from '@mui/material/styles';
 
 const sortOptions: Record<string, string> = {
   availability: 'Disponibilité',

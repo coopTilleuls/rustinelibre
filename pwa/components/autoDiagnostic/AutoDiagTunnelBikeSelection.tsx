@@ -107,7 +107,9 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
       {!loading && bikes.length > 0 && (
         <Box sx={{width: '100%'}}>
           <FormControl fullWidth>
-            <FormLabel sx={{textAlign: 'center'}}><strong>Pour quel vélo souhaitez-vous prendre rdv ?</strong></FormLabel>
+            <FormLabel sx={{textAlign: 'center'}}>
+              <strong>Pour quel vélo souhaitez-vous prendre rdv ?</strong>
+            </FormLabel>
             <RadioGroup
               sx={{pl: 1, mt: 4}}
               name="select_my_bike"

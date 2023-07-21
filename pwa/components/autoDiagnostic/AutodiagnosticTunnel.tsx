@@ -8,8 +8,8 @@ import {useRouter} from 'next/router';
 import AutoDiagTunnelPrestation from '@components/autoDiagnostic/AutodiagTunnelPrestation';
 import AutoDiagTunnelPhoto from '@components/autoDiagnostic/AutoDiagTunnelPhoto';
 import AutoDiagTunnelChoice from '@components/autoDiagnostic/AutoDiagTunnelChoice';
-import AutoDiagTunnelBikeSelection from "@components/autoDiagnostic/AutoDiagTunnelBikeSelection";
-import {useTheme} from "@mui/material/styles";
+import AutoDiagTunnelBikeSelection from '@components/autoDiagnostic/AutoDiagTunnelBikeSelection';
+import {useTheme} from '@mui/material/styles';
 
 interface AutoDiagnosticTunnelProps {
   appointmentId: string;
@@ -71,7 +71,6 @@ export const AutoDiagnosticTunnel = ({
     fetchAppointment();
   }, [appointmentId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-
   return (
     <Box>
       {!loading && appointment && (
@@ -86,7 +85,9 @@ export const AutoDiagnosticTunnel = ({
                   flexDirection: 'column',
                   alignItems: 'center',
                 }}>
-                {tunnelStep === 'bike_selection' && <AutoDiagTunnelBikeSelection />}
+                {tunnelStep === 'bike_selection' && (
+                  <AutoDiagTunnelBikeSelection />
+                )}
                 {tunnelStep === 'choice' && <AutoDiagTunnelChoice />}
                 {tunnelStep === 'prestation' && <AutoDiagTunnelPrestation />}
                 {tunnelStep === 'photo' && <AutoDiagTunnelPhoto />}

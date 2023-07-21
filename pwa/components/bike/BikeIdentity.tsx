@@ -20,7 +20,7 @@ import BikeIdentityPhoto from '@components/bike/BikeIdentityPhoto';
 import {Bike} from '@interfaces/Bike';
 import {RequestBody} from '@interfaces/Resource';
 import {BikeType} from '@interfaces/BikeType';
-import { errorRegex } from '@utils/errorRegex';
+import {errorRegex} from '@utils/errorRegex';
 
 type BikeIdentityProps = {
   bike: Bike;

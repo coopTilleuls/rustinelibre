@@ -1,8 +1,11 @@
 export type Response = Record<string, string>;
 
-export type RequestHeaders = Record<string, string>
+export type RequestHeaders = Record<string, string>;
 
-export type RequestBody = Record<string, string | number | boolean | Array<unknown> | null | undefined>;
+export type RequestBody = Record<
+  string,
+  string | number | boolean | Array<unknown> | null | undefined
+>;
 
 export type RequestParams = Record<string, string | number | boolean>;
 

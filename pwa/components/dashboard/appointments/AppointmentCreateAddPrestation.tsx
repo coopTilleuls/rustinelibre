@@ -44,7 +44,9 @@ const AppointmentCreateAddPrestation = ({
       flexDirection="column"
       alignItems="center">
       <FormControl fullWidth sx={{mt: 2, mb: 1}}>
-        <InputLabel id="service-type-label">{isMobile ? 'Prestation' : 'Type de prestation'}</InputLabel>
+        <InputLabel id="service-type-label">
+          {isMobile ? 'Prestation' : 'Type de prestation'}
+        </InputLabel>
         <Select
           labelId="service-type-label"
           id="service-type"

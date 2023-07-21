@@ -27,10 +27,10 @@ import Link from 'next/link';
 import {isBoss, isEmployee, isItinerant} from '@helpers/rolesHelpers';
 import RouteIcon from '@mui/icons-material/Route';
 import Logo from '@components/common/Logo';
-import {useEffect, useState} from "react";
-import {Discussion} from "@interfaces/Discussion";
-import {ENTRYPOINT} from "@config/entrypoint";
-import {discussionResource} from "@resources/discussionResource";
+import {useEffect, useState} from 'react';
+import {Discussion} from '@interfaces/Discussion';
+import {ENTRYPOINT} from '@config/entrypoint';
+import {discussionResource} from '@resources/discussionResource';
 import Badge from '@mui/material/Badge';
 
 const drawerWidth = 240;
@@ -139,7 +139,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     }
 
     const countUnread = await discussionResource.countUnread({});
-    setUnreadMessages(countUnread.count)
+    setUnreadMessages(countUnread.count);
   };
 
   const fetchDiscussions = async () => {
@@ -150,7 +150,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     const response = await discussionResource.getAll(true, {
       repairer: user.repairer.id,
       itemsPerPage: 50,
-      'order[lastMessage]': 'DESC'
+      'order[lastMessage]': 'DESC',
     });
     setDiscussions(response['hydra:member']);
   };
@@ -158,7 +158,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
   useEffect(() => {
     if (user) {
       countUnread();
-      fetchDiscussions()
+      fetchDiscussions();
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -240,11 +240,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                 )}
                 <Badge badgeContent={unreadMessages} color="primary">
                   <DashboardSidebarListItem
-                  text="Messages"
-                  open={true}
-                  icon={<ForumIcon />}
-                  path="/sradmin/messagerie"
-                /></Badge>
+                    text="Messages"
+                    open={true}
+                    icon={<ForumIcon />}
+                    path="/sradmin/messagerie"
+                  />
+                </Badge>
                 <DashboardSidebarListItem
                   text="Clients"
                   open={true}

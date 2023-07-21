@@ -12,71 +12,71 @@ import {User} from '@interfaces/User';
 import {useRouter} from 'next/router';
 import {isAdmin, isBoss, isEmployee} from '@helpers/rolesHelpers';
 import {Paper, Typography} from '@mui/material';
-import {Discussion} from "@interfaces/Discussion";
-import {ENTRYPOINT} from "@config/entrypoint";
-import {discussionResource} from "@resources/discussionResource";
+import {Discussion} from '@interfaces/Discussion';
+import {ENTRYPOINT} from '@config/entrypoint';
+import {discussionResource} from '@resources/discussionResource';
 import Badge from '@mui/material/Badge';
-import {useTheme} from "@mui/material/styles";
+import {useTheme} from '@mui/material/styles';
 
 interface FooterProps {
   user?: User;
 }
 const Footer = ({user}: FooterProps): JSX.Element => {
-    const router = useRouter();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    const [discussions, setDiscussions] = useState<Discussion[]>([]);
-    const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [discussions, setDiscussions] = useState<Discussion[]>([]);
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
 
-    const subscribeMercureDiscussions = async (): Promise<void> => {
-        const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-        const hub = new URL(hubUrl);
-        discussions.map((discussion) => {
-            hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-        });
+  const subscribeMercureDiscussions = async (): Promise<void> => {
+    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+    const hub = new URL(hubUrl);
+    discussions.map((discussion) => {
+      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+    });
 
-        const eventSource = new EventSource(hub);
-        eventSource.onmessage = (event) => {
-            countUnread();
-        };
+    const eventSource = new EventSource(hub);
+    eventSource.onmessage = (event) => {
+      countUnread();
     };
+  };
 
-    const countUnread = async (): Promise<void> => {
-        if (!user) {
-            return;
-        }
+  const countUnread = async (): Promise<void> => {
+    if (!user) {
+      return;
+    }
 
-        const countUnread = await discussionResource.countUnread({});
-        setUnreadMessages(countUnread.count)
-    };
+    const countUnread = await discussionResource.countUnread({});
+    setUnreadMessages(countUnread.count);
+  };
 
-    const fetchDiscussions = async () => {
-        if (!user) {
-            return;
-        }
+  const fetchDiscussions = async () => {
+    if (!user) {
+      return;
+    }
 
-        const response = await discussionResource.getAll(true, {
-            customer: user.id,
-            itemsPerPage: 50,
-            'order[lastMessage]': 'DESC'
-        });
-        setDiscussions(response['hydra:member']);
-    };
+    const response = await discussionResource.getAll(true, {
+      customer: user.id,
+      itemsPerPage: 50,
+      'order[lastMessage]': 'DESC',
+    });
+    setDiscussions(response['hydra:member']);
+  };
 
-    useEffect(() => {
-        if (user) {
-            countUnread();
-            fetchDiscussions()
-        }
-    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (user) {
+      countUnread();
+      fetchDiscussions();
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-        if (discussions.length > 0) {
-            subscribeMercureDiscussions();
-        }
-    }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (discussions.length > 0) {
+      subscribeMercureDiscussions();
+    }
+  }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const links = useMemo(
+  const links = useMemo(
     () =>
       [
         {
@@ -143,13 +143,19 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             value={link}
             label={
               isMobile ? undefined : (
-                  <Typography variant="caption" fontWeight={700}>
-                    {label}
-                  </Typography>
+                <Typography variant="caption" fontWeight={700}>
+                  {label}
+                </Typography>
               )
             }
             sx={{color: 'secondary.main', fontWeight: 700, maxWidth: '130px'}}
-            icon={<Badge badgeContent={label === 'Messages' ? unreadMessages : 0} color="primary"><LinkIcon fontSize="large" /></Badge>}
+            icon={
+              <Badge
+                badgeContent={label === 'Messages' ? unreadMessages : 0}
+                color="primary">
+                <LinkIcon fontSize="large" />
+              </Badge>
+            }
           />
         ))}
       </BottomNavigation>

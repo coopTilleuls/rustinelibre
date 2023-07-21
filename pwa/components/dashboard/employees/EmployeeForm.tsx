@@ -12,14 +12,15 @@ import {useRouter} from 'next/router';
 import {repairerEmployeesResource} from '@resources/repairerEmployeesResource';
 import {RequestBody} from '@interfaces/Resource';
 import {UserFormContext} from '@contexts/UserFormContext';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
 
 interface EmployeeFormProps {
   repairerEmployee: RepairerEmployee | null;
 }
 
-export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element => {
-
+export const EmployeeForm = ({
+  repairerEmployee,
+}: EmployeeFormProps): JSX.Element => {
   const [enabled, setEnabled] = useState<boolean>(
     repairerEmployee ? repairerEmployee.enabled : true
   );
@@ -55,8 +56,9 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
     setPassword('');
   }, [repairerEmployee, setEmail, setFirstName, setLastName, setPassword]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     if (passwordError || !email || !firstName || !lastName) {
       return;
@@ -71,16 +73,16 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
     };
 
     if (password !== '') {
-       bodyRequest['plainPassword'] = password;
+      bodyRequest['plainPassword'] = password;
     }
 
     try {
       if (repairerEmployee) {
         bodyRequest['enabled'] = enabled;
         await repairerEmployeesResource.updateEmployeeAndUser(
-            repairerEmployee['id'],
-            bodyRequest
-          );
+          repairerEmployee['id'],
+          bodyRequest
+        );
       } else {
         await repairerEmployeesResource.post(bodyRequest);
       }
@@ -136,7 +138,6 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
     setEnabled(event.target.checked);
   };
 
-
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -147,7 +148,9 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
           alignItems: 'center',
         }}>
         <Typography component="h1" variant="h5">
-          {repairerEmployee ? 'Modifier ce réparateur' : "J'ajoute un réparateur"}
+          {repairerEmployee
+            ? 'Modifier ce réparateur'
+            : "J'ajoute un réparateur"}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
           <TextField
@@ -160,7 +163,7 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
             name="firstName"
             autoComplete="firstName"
             value={firstName}
-            inputProps={{ maxLength: 50 }}
+            inputProps={{maxLength: 50}}
             onChange={handleChangeFirstName}
           />
           <TextField
@@ -172,7 +175,7 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
             name="lastName"
             autoComplete="lastName"
             value={lastName}
-            inputProps={{ maxLength: 50 }}
+            inputProps={{maxLength: 50}}
             onChange={handleChangeLastName}
           />
           <TextField
@@ -187,7 +190,7 @@ export const EmployeeForm = ({repairerEmployee}: EmployeeFormProps): JSX.Element
             name="email"
             autoComplete="email"
             value={email}
-            inputProps={{ maxLength: 180 }}
+            inputProps={{maxLength: 180}}
             onChange={handleChangeEmail}
           />
           <TextField

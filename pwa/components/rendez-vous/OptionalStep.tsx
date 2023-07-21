@@ -1,7 +1,7 @@
 import React from 'react';
 import useMediaQuery from '@hooks/useMediaQuery';
 import {Typography, Button, Stack} from '@mui/material';
-import {useTheme} from "@mui/material/styles";
+import {useTheme} from '@mui/material/styles';
 
 interface OptionalStepProps {
   optionalPage?: string;

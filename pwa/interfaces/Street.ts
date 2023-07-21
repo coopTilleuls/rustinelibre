@@ -1,6 +1,6 @@
 export interface Street {
-    name: string;
-    city: string;
-    lat: number;
-    lon: number;
+  name: string;
+  city: string;
+  lat: number;
+  lon: number;
 }
