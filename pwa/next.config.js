@@ -13,6 +13,10 @@ const nextConfig = withPWA({
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
     ],
   },
   eslint: {
