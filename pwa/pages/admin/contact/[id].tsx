@@ -12,6 +12,8 @@ import {formatDate} from '@helpers/dateHelper';
 const ContactDetail: NextPageWithLayout = () => {
   const router = useRouter();
   const {id} = router.query;
+  const [updateContactUnread, setUpdateContactUnread] =
+    useState<boolean>(false);
   const [contact, setContact] = useState<Contact | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -26,6 +28,7 @@ const ContactDetail: NextPageWithLayout = () => {
         await contactResource.put(contactFetch['@id'], {
           alreadyRead: true,
         });
+        setUpdateContactUnread(true);
       }
     }
   };
@@ -39,7 +42,7 @@ const ContactDetail: NextPageWithLayout = () => {
       <Head>
         <title>Consulter message</title>
       </Head>
-      <AdminLayout />
+      <AdminLayout updateContactUnread={updateContactUnread} />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>
         {loading && <CircularProgress />}
 

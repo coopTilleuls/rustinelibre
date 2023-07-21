@@ -12,6 +12,11 @@ import {
   Typography,
   Button,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
@@ -19,10 +24,16 @@ import {BikeType} from '@interfaces/BikeType';
 import Link from 'next/link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {Repairer} from '@interfaces/Repairer';
+import {repairerResource} from '@resources/repairerResource';
 
 export const ParametersBikeTypes = (): JSX.Element => {
   const [loadingBikeTypes, setLoadingBikeTypes] = useState<boolean>(false);
+  const [selectedBikeToDelete, setSelectedBikeToDelete] =
+    useState<BikeType | null>(null);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [removePending, setRemovePending] = useState<boolean>(false);
 
   const fetchBikeTypes = async () => {
     setLoadingBikeTypes(true);
@@ -34,6 +45,28 @@ export const ParametersBikeTypes = (): JSX.Element => {
   useEffect(() => {
     fetchBikeTypes();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleDeleteClick = (bikeType: BikeType) => {
+    setDeleteDialogOpen(true);
+    setSelectedBikeToDelete(bikeType);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedBikeToDelete) {
+      return;
+    }
+
+    setRemovePending(true);
+    setDeleteDialogOpen(false);
+    try {
+      await bikeTypeResource.delete(selectedBikeToDelete['@id']);
+    } finally {
+      setRemovePending(false);
+      setSelectedBikeToDelete(null);
+    }
+
+    await fetchBikeTypes();
+  };
 
   return (
     <Box>
@@ -85,7 +118,9 @@ export const ParametersBikeTypes = (): JSX.Element => {
                         <EditIcon color="secondary" />
                       </IconButton>
                     </Link>
-                    <IconButton color="secondary">
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleDeleteClick(bikeType)}>
                       <DeleteForeverIcon />
                     </IconButton>
                   </TableCell>
@@ -94,6 +129,25 @@ export const ParametersBikeTypes = (): JSX.Element => {
             </TableBody>
           </Table>
         </TableContainer>
+      )}
+
+      {selectedBikeToDelete && (
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}>
+          <DialogTitle>Confirmation</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {`Êtes-vous sûr de vouloir supprimer ${selectedBikeToDelete.name}`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
+            <Button onClick={handleDeleteConfirm} color="secondary">
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </Box>
   );

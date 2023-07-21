@@ -101,9 +101,10 @@ const Drawer = styled(MuiDrawer, {
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
+  updateContactUnread?: boolean;
 }
 
-const AdminLayout = ({children}: DashboardLayoutProps) => {
+const AdminLayout = ({children, updateContactUnread}: DashboardLayoutProps) => {
   const theme = useTheme();
   const router = useRouter();
   const {user} = useAccount({
@@ -135,6 +136,12 @@ const AdminLayout = ({children}: DashboardLayoutProps) => {
       countContactUnread();
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (updateContactUnread) {
+      countContactUnread();
+    }
+  }, [updateContactUnread]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
