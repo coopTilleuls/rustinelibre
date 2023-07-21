@@ -1,5 +1,5 @@
 import React from 'react';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {Typography, Button, Stack} from '@mui/material';
 import {useTheme} from "@mui/material/styles";
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {Box, Typography, Button, Stack, Collapse, Divider, CircularProgress} from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';

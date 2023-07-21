@@ -1,9 +1,7 @@
-import React, {PropsWithRef, useContext} from 'react';
+import React, {PropsWithRef} from 'react';
 import {Box, Button, Typography} from '@mui/material';
-import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
-
 import {Repairer} from '@interfaces/Repairer';
-import useMediaQuery from '@hooks/useMediaQuery';
+
 
 interface RepairerProps extends PropsWithRef<any> {
   repairer: Repairer;

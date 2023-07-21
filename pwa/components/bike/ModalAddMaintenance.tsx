@@ -14,7 +14,7 @@ import {MediaObject} from '@interfaces/MediaObject';
 import {uploadFile, uploadImage} from '@helpers/uploadFile';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {RequestBody} from '@interfaces/Resource';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import {Bike} from '@interfaces/Bike';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
