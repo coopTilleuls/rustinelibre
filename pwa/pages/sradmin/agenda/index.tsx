@@ -12,16 +12,15 @@ const Agenda: NextPageWithLayout = () => {
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const {user} = useAccount({});
 
-    useEffect(() => {
-        if (user && user.repairer) {
-            setRepairer(user.repairer);
-            return;
-        }
-        if (user && user.repairerEmployee) {
-            setRepairer(user.repairerEmployee.repairer);
-        }
-
-    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (user && user.repairer) {
+      setRepairer(user.repairer);
+      return;
+    }
+    if (user && user.repairerEmployee) {
+      setRepairer(user.repairerEmployee.repairer);
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

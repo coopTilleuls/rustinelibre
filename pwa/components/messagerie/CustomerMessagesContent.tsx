@@ -13,7 +13,7 @@ import {
 import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
 import {DiscussionMessage} from '@interfaces/DiscussionMessage';
-import {discussionResource} from "@resources/discussionResource";
+import {discussionResource} from '@resources/discussionResource';
 
 type CustomerMessagesContentProps = {
   discussion: Discussion;
@@ -22,7 +22,7 @@ type CustomerMessagesContentProps = {
 
 const CustomerMessagesContent = ({
   discussion,
-  loading
+  loading,
 }: CustomerMessagesContentProps): JSX.Element => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const {user} = useAccount({});

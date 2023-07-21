@@ -45,8 +45,14 @@ const SrAdminMessagerie: NextPageWithLayout = () => {
         </Typography>
         {discussion && (
           <Box display="flex" gap={4}>
-            <RepairerDiscussionList discussionGiven={discussion} display={{xs: 'none', md: 'block'}} />
-            <RepairerMessagesContent discussion={discussion} loading={loading} />
+            <RepairerDiscussionList
+              discussionGiven={discussion}
+              display={{xs: 'none', md: 'block'}}
+            />
+            <RepairerMessagesContent
+              discussion={discussion}
+              loading={loading}
+            />
           </Box>
         )}
       </DashboardLayout>

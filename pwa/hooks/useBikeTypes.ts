@@ -1,21 +1,20 @@
 import {useEffect, useState} from 'react';
-import {bikeTypeResource} from "@resources/bikeTypeResource";
-import {BikeType} from "@interfaces/BikeType";
+import {bikeTypeResource} from '@resources/bikeTypeResource';
+import {BikeType} from '@interfaces/BikeType';
 
 function useBikeTypes(): BikeType[] {
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
 
-    const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
+  async function fetchBikes() {
+    const response = await bikeTypeResource.getAll(false);
+    setBikeTypes(response['hydra:member']);
+  }
 
-    async function fetchBikes() {
-        const response = await bikeTypeResource.getAll(false);
-        setBikeTypes(response['hydra:member']);
-    }
+  useEffect(() => {
+    fetchBikes();
+  }, []);
 
-    useEffect(() => {
-        fetchBikes();
-    }, []);
-
-    return bikeTypes;
+  return bikeTypes;
 }
 
 export default useBikeTypes;

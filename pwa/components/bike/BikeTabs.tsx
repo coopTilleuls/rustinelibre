@@ -56,7 +56,9 @@ const BikeTabs = ({bike, setBike, bikeTypes}: BikeTabsProps): JSX.Element => {
       </Tabs>
 
       <Box sx={{marginTop: 2}}>
-        {tabValue === 0 && <BikeIdentity bike={bike} setBike={setBike} bikeTypes={bikeTypes} />}
+        {tabValue === 0 && (
+          <BikeIdentity bike={bike} setBike={setBike} bikeTypes={bikeTypes} />
+        )}
         {tabValue === 1 && (
           <BikeMaintenance
             bike={bike}

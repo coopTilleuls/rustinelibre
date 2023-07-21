@@ -5,7 +5,7 @@ import {LeafletEvent, LeafletMouseEvent} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import {Box, Typography} from "@mui/material";
+import {Box, Typography} from '@mui/material';
 
 interface MapPositionProps {
   repairer: Repairer;
@@ -22,8 +22,10 @@ export const MapPositionUser = ({
   latitudeProps,
   longitudeProps,
 }: MapPositionProps): JSX.Element => {
-
-  const [userPosition, setUserPosition] = useState<string[]>([latitudeProps, longitudeProps]);
+  const [userPosition, setUserPosition] = useState<string[]>([
+    latitudeProps,
+    longitudeProps,
+  ]);
 
   const handleMarkerDragEnd = (event: LeafletEvent) => {
     setUserPosition([event.target._latlng.lat, event.target._latlng.lng]);
@@ -33,7 +35,6 @@ export const MapPositionUser = ({
     setLatitude(userPosition[0]);
     setLongitude(userPosition[1]);
   }, [userPosition, setLatitude, setLongitude]);
-
 
   const UpdateMarkerPositionOnMapClick = () => {
     useMapEvents({
@@ -68,8 +69,7 @@ export const MapPositionUser = ({
             position={[+userPosition[0], +userPosition[1]]}
             eventHandlers={{
               dragend: handleMarkerDragEnd,
-            }}
-          ></Marker>
+            }}></Marker>
         )}
       </MapContainer>
     </Box>

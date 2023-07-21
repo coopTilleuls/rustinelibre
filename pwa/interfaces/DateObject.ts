@@ -1,5 +1,5 @@
 export interface DateObject {
-    date: string;
-    timezone_type: number;
-    timezone: string;
+  date: string;
+  timezone_type: number;
+  timezone: string;
 }

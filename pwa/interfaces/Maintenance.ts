@@ -1,16 +1,16 @@
-import {MediaObject} from "@interfaces/MediaObject";
-import {User} from "@interfaces/User";
-import {Bike} from "@interfaces/Bike";
+import {MediaObject} from '@interfaces/MediaObject';
+import {User} from '@interfaces/User';
+import {Bike} from '@interfaces/Bike';
 
 export interface Maintenance {
-    '@id': string;
-    '@type': string;
-    id: string;
-    owner: User;
-    bike: Bike;
-    name: string;
-    description?: string;
-    repairDate?: string;
-    photo?: MediaObject;
-    invoice?: MediaObject;
+  '@id': string;
+  '@type': string;
+  id: string;
+  owner: User;
+  bike: Bike;
+  name: string;
+  description?: string;
+  repairDate?: string;
+  photo?: MediaObject;
+  invoice?: MediaObject;
 }

@@ -1,8 +1,5 @@
 import {AbstractResource} from '@resources/AbstractResource';
-import {
-  Collection,
-  RequestBody,
-} from 'interfaces/Resource';
+import {Collection, RequestBody} from 'interfaces/Resource';
 
 import {
   AuthenticationResponse,
@@ -37,7 +34,7 @@ class AuthenticationResource extends AbstractResource<AuthenticationResponse> {
       });
     };
 
-    return doFetch()
+    return doFetch();
   }
 }
 

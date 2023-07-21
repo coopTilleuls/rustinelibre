@@ -90,24 +90,6 @@ export const Notifications = (): JSX.Element => {
     });
   };
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    const permission = checkPermission();
-    if (!permission) {
-      return;
-    }
-
-    const firebaseApp = getFirebaseApp();
-    const messaging = getMessaging(firebaseApp);
-
-    updateFirebaseToken(user, firebaseApp, messaging)
-      .then(() => handleIncomingFcmMessages(messaging))
-      .catch((e) => console.error('firebase token error', e));
-  }, [user]);
-
   const handleIncomingFcmMessages = useCallback(
     (messaging: Messaging): void => {
       onMessage(messaging, (payload) => {
@@ -132,6 +114,24 @@ export const Notifications = (): JSX.Element => {
     },
     []
   );
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const permission = checkPermission();
+    if (!permission) {
+      return;
+    }
+
+    const firebaseApp = getFirebaseApp();
+    const messaging = getMessaging(firebaseApp);
+
+    updateFirebaseToken(user, firebaseApp, messaging)
+      .then(() => handleIncomingFcmMessages(messaging))
+      .catch((e) => console.error('firebase token error', e));
+  }, [user, handleIncomingFcmMessages]);
 
   return (
     <>

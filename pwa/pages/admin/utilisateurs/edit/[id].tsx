@@ -10,7 +10,7 @@ import AdminLayout from '@components/admin/AdminLayout';
 import {RequestBody} from '@interfaces/Resource';
 import {UserFormContext} from '@contexts/UserFormContext';
 import UserForm from '@components/form/UserForm';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
 
 const EditUser: NextPageWithLayout = () => {
   const router = useRouter();
@@ -58,7 +58,7 @@ const EditUser: NextPageWithLayout = () => {
         setSuccess(false);
       }, 3000);
     } catch (e: any) {
-      setErrorMessage(e.message?.replace(errorRegex, '$2'))
+      setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
 
     setPendingUpdate(false);

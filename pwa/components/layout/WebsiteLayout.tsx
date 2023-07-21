@@ -15,7 +15,6 @@ const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
     : router.query.next || '/';
   const isAdmin = next.includes('admin');
 
-
   return (
     <Box height="100vh" overflow="auto" id="websitelayout">
       {!isAdmin && <Navbar user={user ?? undefined} />}

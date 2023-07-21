@@ -7,7 +7,7 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import 'leaflet-defaulticon-compatibility';
 import {Alert, Button, CircularProgress, Typography} from '@mui/material';
 import {RequestBody} from '@interfaces/Resource';
-import {errorRegex} from "@utils/errorRegex";
+import {errorRegex} from '@utils/errorRegex';
 
 interface MapPositionProps {
   repairer: Repairer;

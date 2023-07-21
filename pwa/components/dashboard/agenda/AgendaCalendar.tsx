@@ -131,7 +131,7 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
     if (arg) {
       const dateFormat1 = /^\d{4}-\d{2}-\d{2}$/; // Format: YYYY-MM-DD
       const dateFormat2 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/; // Format: YYYY-MM-DDTHH:mm:ss
-      if (dateFormat1.test(arg.dateStr)){
+      if (dateFormat1.test(arg.dateStr)) {
         setSelectedDate(`${arg.dateStr}T00:00:00`);
         setOpenModalCreateAppointment(true);
       } else if (dateFormat2.test(arg.dateStr)) {

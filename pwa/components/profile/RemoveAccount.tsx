@@ -57,8 +57,7 @@ const RemoveAccount = (): JSX.Element => {
       width="100%"
       borderRadius={2}
       maxWidth="lg"
-      mx="auto"
-    >
+      mx="auto">
       <Typography fontSize={22} fontWeight={600}>
         Suppression de mon compte
       </Typography>
@@ -67,13 +66,11 @@ const RemoveAccount = (): JSX.Element => {
         display="flex"
         gap={{md: 4}}
         flexDirection={{xs: 'column', md: 'row'}}
-        justifyContent="flex-end"
-      >
+        justifyContent="flex-end">
         <Box
           display="flex"
           flexDirection="column"
-          width={{xs: '100%', md: '40%'}}
-        >
+          width={{xs: '100%', md: '40%'}}>
           <Box display="flex" flexDirection="column" alignItems="start">
             <Button
               onClick={() => setShowModal(true)}
@@ -83,8 +80,7 @@ const RemoveAccount = (): JSX.Element => {
                 mt: 3,
                 textTransform: 'capitalize',
                 width: {xs: '100%', md: 'auto'},
-              }}
-            >
+              }}>
               {!pendingRemove ? (
                 'Supprimer'
               ) : (
@@ -103,8 +99,7 @@ const RemoveAccount = (): JSX.Element => {
           open={showModal}
           onClose={() => setShowModal(false)}
           aria-labelledby="Suppression de mon compte"
-          aria-describedby="popup_remove_account"
-        >
+          aria-describedby="popup_remove_account">
           <Box
             position={'absolute'}
             top={'50%'}
@@ -116,8 +111,7 @@ const RemoveAccount = (): JSX.Element => {
             sx={{
               backgroundColor: 'background.paper',
               transform: 'translate(-50%, -50%)',
-            }}
-          >
+            }}>
             <Typography>
               Êtes-vous certain de vouloir supprimer votre compte ?
             </Typography>
@@ -130,8 +124,7 @@ const RemoveAccount = (): JSX.Element => {
                 mt: 3,
                 textTransform: 'capitalize',
                 width: {xs: '100%', md: 'auto'},
-              }}
-            >
+              }}>
               Annuler
             </Button>
 
@@ -144,8 +137,7 @@ const RemoveAccount = (): JSX.Element => {
                 ml: 3,
                 textTransform: 'capitalize',
                 width: {xs: '100%', md: 'auto'},
-              }}
-            >
+              }}>
               {!pendingRemove ? (
                 'Confirmer'
               ) : (
