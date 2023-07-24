@@ -114,7 +114,9 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
               }
 
               return (
-                <Box key={day} sx={{backgroundColor: 'primary.light'}}>
+                <Box
+                  key={day}
+                  sx={{backgroundColor: 'primary.light', cursor: 'pointer'}}>
                   <Box
                     display="flex"
                     alignItems="center"
