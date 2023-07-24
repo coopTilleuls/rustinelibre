@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -26,6 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[GetCollection]
 #[Put(security: "is_granted('ROLE_ADMIN')")]
 #[Post(security: "is_granted('ROLE_ADMIN')")]
+#[Delete(security: "is_granted('ROLE_ADMIN')")]
 class RepairerType
 {
     public const REPAIRER_TYPE_READ = 'repairer_type_read';
