@@ -25,7 +25,7 @@ readonly class UpdateOldFirstSlotAvailableService
 
         foreach ($repairers as $repairer) {
             $this->logger->info(sprintf('Update $firstSlotAvailable for repairer %d', $repairer->id));
-            $this->firstSlotAvailableCalculator->setFirstSlotAvailable($repairer, true);
+            $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $repairer, flush: true);
         }
     }
 }

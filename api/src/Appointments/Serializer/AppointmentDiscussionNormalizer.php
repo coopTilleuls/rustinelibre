@@ -27,7 +27,7 @@ final class AppointmentDiscussionNormalizer implements NormalizerInterface, Norm
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $discussion = $this->discussionManager->getOrCreateDiscussion($object);
+        $discussion = $this->discussionManager->getOrCreateDiscussion(appointment: $object);
         $object->discussion = $discussion;
 
         return $this->normalizer->normalize($object, $format, $context);
