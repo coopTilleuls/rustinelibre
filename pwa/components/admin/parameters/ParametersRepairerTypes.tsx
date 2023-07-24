@@ -12,6 +12,11 @@ import {
   Typography,
   Button,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import {RepairerType} from '@interfaces/RepairerType';
@@ -19,11 +24,44 @@ import Link from 'next/link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
+import {BikeType} from '@interfaces/BikeType';
+import {bikeTypeResource} from '@resources/bikeTypeResource';
 
 export const ParametersRepairerTypes = (): JSX.Element => {
   const [loadingRepairerTypes, setLoadingRepairerTypes] =
     useState<boolean>(false);
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
+
+  const [selectedRepairerTypeToDelete, setSelectedRepairerTypeToDelete] =
+    useState<RepairerType | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [removePending, setRemovePending] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetchRepairerTypes();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleDeleteClick = (repairerType: RepairerType) => {
+    setDeleteDialogOpen(true);
+    setSelectedRepairerTypeToDelete(repairerType);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedRepairerTypeToDelete) {
+      return;
+    }
+
+    setRemovePending(true);
+    setDeleteDialogOpen(false);
+    try {
+      await repairerTypeResource.delete(selectedRepairerTypeToDelete['@id']);
+    } finally {
+      setRemovePending(false);
+      setSelectedRepairerTypeToDelete(null);
+    }
+
+    await fetchRepairerTypes();
+  };
 
   const fetchRepairerTypes = async () => {
     setLoadingRepairerTypes(true);
@@ -86,7 +124,9 @@ export const ParametersRepairerTypes = (): JSX.Element => {
                         <EditIcon color="secondary" />
                       </IconButton>
                     </Link>
-                    <IconButton color="secondary">
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleDeleteClick(repairerType)}>
                       <DeleteForeverIcon />
                     </IconButton>
                   </TableCell>
@@ -95,6 +135,25 @@ export const ParametersRepairerTypes = (): JSX.Element => {
             </TableBody>
           </Table>
         </TableContainer>
+      )}
+
+      {selectedRepairerTypeToDelete && (
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}>
+          <DialogTitle>Confirmation</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {`Êtes-vous sûr de vouloir supprimer ${selectedRepairerTypeToDelete.name}`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
+            <Button onClick={handleDeleteConfirm} color="secondary">
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </Box>
   );
