@@ -115,7 +115,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     },
     [setCitiesList]
   );
-  console.log(citiesList, streetList);
+
   useEffect(() => {
     if (cityInput === '' || cityInput.length < 3) {
       setCitiesList([]);
