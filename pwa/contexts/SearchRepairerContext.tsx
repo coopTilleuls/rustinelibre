@@ -14,6 +14,7 @@ interface OrderByOption {
 
 interface SearchRepairerContext {
   repairers: Repairer[];
+  repairersPaginated: Repairer[];
   cityInput: string;
   showMap: boolean;
   selectedBike: BikeType | null;
@@ -26,6 +27,7 @@ interface SearchRepairerContext {
   filterBy: OrderByOption | null;
   totalItems: number;
   setRepairers: (repairers: Repairer[]) => void;
+  setRepairersPaginated: (repairers: Repairer[]) => void;
   setCityInput: (value: string) => void;
   setShowMap: (value: boolean) => void;
   setSelectedBike: (value: BikeType | null) => void;
@@ -41,6 +43,7 @@ interface SearchRepairerContext {
 
 const initialValue = {
   repairers: [],
+  repairersPaginated: [],
   cityInput: '',
   selectedRepairer: '',
   city: null,
@@ -53,6 +56,7 @@ const initialValue = {
   sortChosen: 'availability',
   totalItems: 0,
   setRepairers: () => [],
+  setRepairersPaginated: () => [],
   setCityInput: () => null,
   setShowMap: () => false,
   setSelectedBike: () => null,
@@ -78,6 +82,7 @@ export const SearchRepairerProvider = ({
   const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
   const [showMap, setShowMap] = useState<boolean>(false);
   const [repairers, setRepairers] = useState<Repairer[]>([]);
+  const [repairersPaginated, setRepairersPaginated] = useState<Repairer[]>([]);
   const [repairerTypeSelected, setRepairerTypeSelected] = useState<string[]>(
     []
   );
@@ -96,6 +101,7 @@ export const SearchRepairerProvider = ({
         selectedBike,
         showMap,
         repairers,
+        repairersPaginated,
         currentPage,
         repairerTypeSelected,
         orderBy,
@@ -103,6 +109,7 @@ export const SearchRepairerProvider = ({
         sortChosen,
         totalItems,
         setRepairers,
+        setRepairersPaginated,
         setCityInput,
         setShowMap,
         setSelectedBike,

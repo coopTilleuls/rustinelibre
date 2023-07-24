@@ -18,7 +18,7 @@ import {useTheme} from '@mui/material/styles';
 export const RepairersResults = (): JSX.Element => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const {city, showMap, setSelectedRepairer, repairers} = useContext(
+  const {city, showMap, setSelectedRepairer, repairersPaginated} = useContext(
     SearchRepairerContext
   );
 
@@ -52,7 +52,7 @@ export const RepairersResults = (): JSX.Element => {
             width: {xs: '100%', md: '50%'},
           }}>
           <Grid2 container spacing={4} sx={{py: 2}}>
-            {repairers.map((repairer) => {
+            {repairersPaginated.map((repairer) => {
               return (
                 <>
                   <Grid2
@@ -100,7 +100,7 @@ export const RepairersResults = (): JSX.Element => {
               borderRadius: 5,
             }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            {repairers.map((repairer) => {
+            {repairersPaginated.map((repairer) => {
               if (!repairer.latitude || !repairer.longitude) {
                 return;
               }

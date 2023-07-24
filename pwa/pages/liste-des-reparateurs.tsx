@@ -23,7 +23,6 @@ const RepairersList: NextPageWithLayout = ({
   const fetchRepairers = async (): Promise<void> => {
     setIsLoading(true);
     let params = {
-      pagination: 'false',
       sort: 'random',
       enabled: 'true',
     };
@@ -120,7 +119,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   }
 
   const response = await repairerResource.getAll(false, {
-    pagination: 'false',
     sort: 'random',
     enabled: 'true',
   });

@@ -79,6 +79,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setSelectedBike,
     repairers,
     setRepairers,
+    repairersPaginated,
+    setRepairersPaginated,
     currentPage,
     setCurrentPage,
     repairerTypeSelected,
@@ -126,9 +128,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     }
 
     let params: ParamsType = {
-      itemsPerPage: 20,
       'bikeTypesSupported.id': selectedBike.id,
-      page: `${currentPage ?? 1}`,
       enabled: 'true',
     };
 
@@ -177,6 +177,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
     const response = await repairerResource.getAll(false, params);
     setRepairers(response['hydra:member']);
+    setRepairersPaginated(
+      response['hydra:member'].slice((currentPage - 1) * 15, 15)
+    );
     setTotalItems(response['hydra:totalItems']);
     setPendingSearchCity(false);
     setAlreadyFetchApi(true);
@@ -188,6 +191,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     filterBy,
     selectedBike,
     setRepairers,
+    setRepairersPaginated,
     setTotalItems,
     repairerTypeSelected,
     repairerTypes,
@@ -236,6 +240,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   };
 
   const handlePageChange = (pageNumber: number): void => {
+    setRepairersPaginated(repairers.slice((pageNumber - 1) * 15, 15));
     setCurrentPage(pageNumber);
   };
 
@@ -420,7 +425,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
               {pendingSearchCity && <CircularProgress />}
             </Box>
 
-            {!pendingSearchCity && totalItems > 20 && (
+            {!pendingSearchCity && totalItems > 15 && (
               <Box sx={{marginLeft: '10%'}}>
                 <PaginationBlock onPageChange={handlePageChange} />
               </Box>
