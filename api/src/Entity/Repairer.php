@@ -45,7 +45,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[Get(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
-#[GetCollection(paginationEnabled: false, normalizationContext: ['groups' => [self::REPAIRER_COLLECTION_READ]])]
+#[GetCollection(normalizationContext: ['groups' => [self::REPAIRER_COLLECTION_READ]])]
 #[GetCollection(
     uriTemplate: '/repairer_get_slots_available/{id}',
     requirements: ['id' => '\d+'],

@@ -11,7 +11,7 @@ const PaginationBlock = ({onPageChange}: PaginationBlockProps): JSX.Element => {
   const {currentPage, setCurrentPage, totalItems} = useContext(
     SearchRepairerContext
   );
-  const totalPages = Math.ceil(totalItems / 15);
+  const totalPages = Math.ceil(totalItems / 20);
 
   const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);

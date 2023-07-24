@@ -46,11 +46,14 @@ export const RepairersList = (): JSX.Element => {
   const fetchRepairers = async () => {
     setLoadingList(true);
     let params = {
+      page: `${currentPage ?? 1}`,
+      itemsPerPage: 30,
       'order[id]': 'DESC',
     };
 
     if ('' !== searchTerm) {
       params = {...{name: searchTerm}, ...params};
+      params.page = '1';
     }
 
     const response = await repairerResource.getAll(true, params);

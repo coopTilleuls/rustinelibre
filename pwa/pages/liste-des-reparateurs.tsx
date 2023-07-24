@@ -23,9 +23,11 @@ const RepairersList: NextPageWithLayout = ({
   const fetchRepairers = async (): Promise<void> => {
     setIsLoading(true);
     let params = {
-      sort: 'random',
+      pagination: 'false',
       enabled: 'true',
+      sort: 'random'
     };
+
     const response = await repairerResource.getAll(false, params);
     setRepairers(response['hydra:member']);
     setIsLoading(false);
@@ -121,6 +123,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const response = await repairerResource.getAll(false, {
     sort: 'random',
     enabled: 'true',
+    pagination: 'false'
   });
 
   return {
