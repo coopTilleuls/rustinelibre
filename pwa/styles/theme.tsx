@@ -40,7 +40,7 @@ const theme = createTheme({
     lightprimary: {
       light: lighten('#fff7f0', 0.4),
       main: '#fff7f0',
-      dark: darken('#fff7f0', 0.2),
+      dark: '#fde6d1',
     },
     lightsecondary: {
       light: lighten('#f8f2fe', 0.2),

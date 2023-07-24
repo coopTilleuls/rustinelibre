@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useAccount} from '@contexts/AuthContext';
-import {ENTRYPOINT} from '@config/entrypoint';
-import {Box, CircularProgress, Typography} from '@mui/material';
+import {Box} from '@mui/material';
 import {Discussion} from '@interfaces/Discussion';
-import {formatDate} from '@helpers/dateHelper';
 import {discussionResource} from '@resources/discussionResource';
 import {isBoss, isEmployee} from '@helpers/rolesHelpers';
 import DiscussionListItem from '@components/messagerie/DiscussionListItem';
@@ -64,14 +61,15 @@ const RepairerDiscussionList = ({
   }, [discussion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Box width={{xs: '100%', md: '30%', lg: '20%'}} display={display}>
+    <Box width={{xs: '100%', md: '40%'}} maxWidth="350px" display={display}>
       {user && discussions.length > 0 && (
         <Box display="flex" flexDirection="column">
-          {discussions.map((discussion) => {
+          {discussions.map((discussionItem) => {
             return (
               <DiscussionListItem
-                key={discussion.id}
-                discussionGiven={discussion}
+                key={discussionItem.id}
+                discussionGiven={discussionItem}
+                current={discussion?.id === discussionItem.id}
                 isCustomer={!(isBoss(user) || isEmployee(user))}
               />
             );

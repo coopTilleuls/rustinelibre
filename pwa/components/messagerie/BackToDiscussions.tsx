@@ -1,5 +1,6 @@
 import React from 'react';
-import {Box, Typography, Link} from '@mui/material';
+import Link from 'next/link';
+import {Box, Button} from '@mui/material';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 
 type BackToDiscussionsProps = {
@@ -10,15 +11,18 @@ const BackToDiscussions = ({
   isRepairer,
 }: BackToDiscussionsProps): JSX.Element => {
   return (
-    <Box display={{xs: 'block', md: 'none'}} pb={1}>
-      <Link
-        href={isRepairer ? '/sradmin/messagerie' : '/messagerie'}
-        style={{textDecoration: 'none'}}>
-        <Typography display="flex" alignItems="center" color="grey.500" gap={1}>
-          <ArrowBackIosNewRoundedIcon /> Retour aux discussions
-        </Typography>
-      </Link>
-    </Box>
+    <Link
+      href={isRepairer ? '/sradmin/messagerie' : '/messagerie'}
+      legacyBehavior
+      passHref>
+      <Button
+        variant="outlined"
+        color="secondary"
+        size="small"
+        startIcon={<ArrowBackIosNewRoundedIcon />}>
+        Retour aux discussions
+      </Button>
+    </Link>
   );
 };
 
