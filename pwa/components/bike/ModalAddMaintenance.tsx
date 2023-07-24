@@ -25,6 +25,11 @@ import {Maintenance} from '@interfaces/Maintenance';
 import {useAccount} from '@contexts/AuthContext';
 import {useTheme} from '@mui/material/styles';
 import {errorRegex} from '@utils/errorRegex';
+import {frFR} from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import 'dayjs/locale/fr';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -63,6 +68,9 @@ const ModalAddMaintenance = ({
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const {user} = useAccount({});
+
+  dayjs.extend(timezone);
+  dayjs.extend(utc);
 
   useEffect(() => {
     if (maintenance) {
@@ -193,7 +201,13 @@ const ModalAddMaintenance = ({
           />
           {!maintenance && (
             <Box>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                localeText={
+                  frFR.components.MuiLocalizationProvider.defaultProps
+                    .localeText
+                }
+                adapterLocale="fr">
                 <DatePicker
                   format="DD-MM-YYYY"
                   label="Date de la réparation"
