@@ -4,7 +4,16 @@ import Head from 'next/head';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import Box from '@mui/material/Box';
 import {useRouter} from 'next/router';
-import {CircularProgress} from '@mui/material';
+import {
+  Alert,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+} from '@mui/material';
 import {bikeResource} from '@resources/bikeResource';
 import {Bike} from '@interfaces/Bike';
 import {Maintenance} from '@interfaces/Maintenance';
@@ -20,6 +29,7 @@ import TableContainer from '@mui/material/TableContainer';
 import ModalDetailMaintenance from '@components/bike/ModalDetailMaintenance';
 import ModalAddMaintenance from '@components/bike/ModalAddMaintenance';
 import Link from 'next/link';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const CustomerBikes: NextPageWithLayout = () => {
   const router = useRouter();
@@ -32,6 +42,36 @@ const CustomerBikes: NextPageWithLayout = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openModalAddMaintenance, setOpenModalAddMaintenance] =
     useState<boolean>(false);
+  const [selectedMaintenanceToDelete, setSelectedMaintenanceToDelete] =
+    useState<Maintenance | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [removePending, setRemovePending] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleDeleteClick = (maintenance: Maintenance) => {
+    setDeleteDialogOpen(true);
+    setSelectedMaintenanceToDelete(maintenance);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!bike || !selectedMaintenanceToDelete) {
+      return;
+    }
+
+    setRemovePending(true);
+    setDeleteDialogOpen(false);
+    setErrorMessage(null);
+
+    try {
+      await maintenanceResource.delete(selectedMaintenanceToDelete['@id']);
+    } catch (e) {
+      setErrorMessage('Suppression impossible');
+    }
+
+    setRemovePending(false);
+    setSelectedMaintenanceToDelete(null);
+    await fetchMaintenances(bike.id);
+  };
 
   const handleOpenModal = (maintenance: Maintenance): void => {
     setMaintenanceSelected(maintenance);
@@ -101,6 +141,15 @@ const CustomerBikes: NextPageWithLayout = () => {
             </Button>
           </h3>
         )}
+
+        {errorMessage && (
+          <Alert
+            sx={{marginTop: '10px', marginBottom: '10px'}}
+            severity="warning">
+            {errorMessage}
+          </Alert>
+        )}
+
         {!loading && bike && maintenances.length > 0 && (
           <TableContainer component={Paper}>
             <Table sx={{minWidth: 300}} aria-label="simple table">
@@ -119,6 +168,12 @@ const CustomerBikes: NextPageWithLayout = () => {
                         onClick={() => handleOpenModal(maintenance)}>
                         Détails
                       </Button>
+
+                      <IconButton
+                        color="secondary"
+                        onClick={() => handleDeleteClick(maintenance)}>
+                        <DeleteForeverIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -144,6 +199,25 @@ const CustomerBikes: NextPageWithLayout = () => {
           handleCloseModal={handleCloseModalAddMaintenance}
           maintenance={null}
         />
+      )}
+
+      {selectedMaintenanceToDelete && (
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}>
+          <DialogTitle>Confirmation</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {`Êtes-vous sûr de vouloir supprimer ${selectedMaintenanceToDelete.name}`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
+            <Button onClick={handleDeleteConfirm} color="secondary">
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </>
   );
