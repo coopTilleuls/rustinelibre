@@ -38,7 +38,7 @@ final class UserValidationCodeController
         }
 
         $currentUser->emailConfirmed = true;
-        $this->userRepository->save($currentUser, true);
+        $this->userRepository->save(entity: $currentUser, flush: true);
 
         return $currentUser;
     }

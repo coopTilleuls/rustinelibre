@@ -9,7 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class FirstSlotAvailableCalculator
 {
-    public function __construct(private readonly ComputeAvailableSlotsByRepairer $computeAvailableSlotsByRepairer,
+    public function __construct(
+        private readonly ComputeAvailableSlotsByRepairer $computeAvailableSlotsByRepairer,
         private EntityManagerInterface $entityManager)
     {
     }
@@ -20,7 +21,7 @@ final class FirstSlotAvailableCalculator
     public function setFirstSlotAvailable(Repairer $repairer, ?bool $flush = false, array $slotsAvailable = null): void
     {
         if (null === $slotsAvailable) {
-            $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($repairer);
+            $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots(repairer: $repairer);
         }
 
         if (!empty($slotsAvailable)) {
