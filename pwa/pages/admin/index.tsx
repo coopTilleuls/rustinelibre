@@ -1,13 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
 import {useAccount} from '@contexts/AuthContext';
 import AdminLayout from '@components/admin/AdminLayout';
+import {useRouter} from "next/router";
 
 const Dashboard = () => {
-  const {user} = useAccount({});
+    const router = useRouter();
+    useEffect(() => {
+        router.push('/admin/reparateurs')
+    }, [router]);
 
-  return (
+    return (
     <>
       <Head>
         <title>Admin</title>
