@@ -24,18 +24,16 @@ import Link from 'next/link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
-import {BikeType} from '@interfaces/BikeType';
-import {bikeTypeResource} from '@resources/bikeTypeResource';
 
 export const ParametersRepairerTypes = (): JSX.Element => {
   const [loadingRepairerTypes, setLoadingRepairerTypes] =
     useState<boolean>(false);
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
-
   const [selectedRepairerTypeToDelete, setSelectedRepairerTypeToDelete] =
     useState<RepairerType | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchRepairerTypes();
@@ -55,9 +53,12 @@ export const ParametersRepairerTypes = (): JSX.Element => {
     setDeleteDialogOpen(false);
     try {
       await repairerTypeResource.delete(selectedRepairerTypeToDelete['@id']);
-    } finally {
       setRemovePending(false);
       setSelectedRepairerTypeToDelete(null);
+    } catch (e: any) {
+      setErrorMessage(
+        `Suppression impossible, ce type de réparateur est utilisé.`
+      );
     }
 
     await fetchRepairerTypes();
@@ -154,6 +155,11 @@ export const ParametersRepairerTypes = (): JSX.Element => {
             </Button>
           </DialogActions>
         </Dialog>
+      )}
+      {errorMessage && (
+        <Typography color="error" textAlign="center" sx={{pt: 4}}>
+          {errorMessage}
+        </Typography>
       )}
     </Box>
   );
