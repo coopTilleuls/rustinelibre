@@ -72,7 +72,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->firstSlotAvailableCalculator->setFirstSlotAvailable($object->repairer, true);
+        $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $object->repairer, flush: true);
     }
 
     public function preWriteAppointment(ViewEvent $event): void
@@ -84,7 +84,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($object->repairer);
+        $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots(repairer: $object->repairer);
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
@@ -112,7 +112,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         }
 
         $object->status = 'validated';
-        $this->persistAppointment($object, $slotsAvailable);
+        $this->persistAppointment(appointment: $object, slotsAvailable: $slotsAvailable);
     }
 
     private function persistAppointment(Appointment $appointment, array $slotsAvailable): void
@@ -146,7 +146,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         // If neither status nor the slot change. Do nothing.
         if ($originalEntityData['status'] !== $object->status || $originalEntityData['slotTime'] !== $object->slotTime) {
             // Get all available slots
-            $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots($object->repairer);
+            $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots(repairer: $object->repairer);
 
             // The slot change, and the new slot is not available
             if ($originalEntityData['slotTime'] !== $object->slotTime && (!array_key_exists($object->slotTime->format('Y-m-d'), $slotsAvailable) || !in_array($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true))) {
@@ -164,7 +164,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
                 unset($slotsAvailable[$object->slotTime->format('Y-m-d')][array_search($object->slotTime->format('H:i'), $slotsAvailable[$object->slotTime->format('Y-m-d')], true)]);
             }
 
-            $this->firstSlotAvailableCalculator->setFirstSlotAvailable($object->repairer, slotsAvailable: $slotsAvailable);
+            $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $object->repairer, slotsAvailable: $slotsAvailable);
         }
     }
 
@@ -182,7 +182,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         if ($originalEntityData['durationSlot'] !== $object->durationSlot || $originalEntityData['numberOfSlots'] !== $object->numberOfSlots) {
             $this->entityManager->persist($object);
             $this->entityManager->flush();
-            $this->firstSlotAvailableCalculator->setFirstSlotAvailable($object);
+            $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $object);
         }
     }
 }

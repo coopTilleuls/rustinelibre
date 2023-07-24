@@ -7,15 +7,11 @@ namespace App\OpenApi;
 use ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\OpenApi\Model;
 use ApiPlatform\OpenApi\OpenApi;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OpenApiFactory implements OpenApiFactoryInterface
 {
-    private $decorated;
-
-    public function __construct(OpenApiFactoryInterface $decorated, private TranslatorInterface $translation)
+    public function __construct(private readonly OpenApiFactoryInterface $decorated)
     {
-        $this->decorated = $decorated;
     }
 
     public function __invoke(array $context = []): OpenApi
