@@ -50,7 +50,7 @@ import {City as GouvCity} from '@interfaces/Gouv';
 import {searchCity} from '@utils/apiCity';
 import {RepairerType} from '@interfaces/RepairerType';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
-import {Repairer} from "@interfaces/Repairer";
+import {Repairer} from '@interfaces/Repairer';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -116,7 +116,10 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const getItemsByPage = (allRepairers: Repairer[], currentPage: number): Repairer[] => {
+  const getItemsByPage = (
+    allRepairers: Repairer[],
+    currentPage: number
+  ): Repairer[] => {
     const itemsPerPage = 20;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -200,6 +203,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     filterBy,
     selectedBike,
     setRepairers,
+    setAllRepairers,
     setTotalItems,
     repairerTypeSelected,
     repairerTypes,
