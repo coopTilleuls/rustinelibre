@@ -33,7 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user or object.author == user")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.bike.owner == user or is_granted('CUSTOMER_READ', object.bike.owner)")]
 #[ApiFilter(SearchFilter::class, properties: ['bike' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'repairDate'], arguments: ['orderParameterName' => 'order'])]
 #[MaintenanceCanWrite]

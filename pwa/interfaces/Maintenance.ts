@@ -13,4 +13,5 @@ export interface Maintenance {
   repairDate?: string;
   photo?: MediaObject;
   invoice?: MediaObject;
+  author: User;
 }
