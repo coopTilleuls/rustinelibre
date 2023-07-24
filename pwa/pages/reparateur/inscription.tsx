@@ -430,11 +430,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                           : `${city.name} (${city.postcode})`
                       }
                       onChange={(event, value) => setCity(value as City)}
-                      renderInput={({
-                        InputLabelProps,
-                        InputProps,
-                        ...params
-                      }) => (
+                      renderInput={(params) => (
                         <TextField
                           label="Ville"
                           required
@@ -457,11 +453,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                             : `${streetObject.name} (${streetObject.city})`
                         }
                         onChange={(event, value) => setStreet(value as Street)}
-                        renderInput={({
-                          InputLabelProps,
-                          InputProps,
-                          ...params
-                        }) => (
+                        renderInput={(params) => (
                           <TextField
                             label="Rue"
                             required
