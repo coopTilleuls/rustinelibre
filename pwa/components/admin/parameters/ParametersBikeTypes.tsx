@@ -24,8 +24,6 @@ import {BikeType} from '@interfaces/BikeType';
 import Link from 'next/link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import {Repairer} from '@interfaces/Repairer';
-import {repairerResource} from '@resources/repairerResource';
 
 export const ParametersBikeTypes = (): JSX.Element => {
   const [loadingBikeTypes, setLoadingBikeTypes] = useState<boolean>(false);
@@ -34,6 +32,7 @@ export const ParametersBikeTypes = (): JSX.Element => {
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchBikeTypes = async () => {
     setLoadingBikeTypes(true);
@@ -60,9 +59,10 @@ export const ParametersBikeTypes = (): JSX.Element => {
     setDeleteDialogOpen(false);
     try {
       await bikeTypeResource.delete(selectedBikeToDelete['@id']);
-    } finally {
       setRemovePending(false);
       setSelectedBikeToDelete(null);
+    } catch (e: any) {
+      setErrorMessage(`Suppression impossible, ce type de vélo est utilisé.`);
     }
 
     await fetchBikeTypes();
@@ -148,6 +148,11 @@ export const ParametersBikeTypes = (): JSX.Element => {
             </Button>
           </DialogActions>
         </Dialog>
+      )}
+      {errorMessage && (
+        <Typography color="error" textAlign="center" sx={{pt: 4}}>
+          {errorMessage}
+        </Typography>
       )}
     </Box>
   );
