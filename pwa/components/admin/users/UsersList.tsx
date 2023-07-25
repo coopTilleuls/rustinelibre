@@ -11,6 +11,12 @@ import {
   TextField,
   Typography,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Pagination from '@mui/material/Pagination';
@@ -23,6 +29,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from 'next/link';
 import {formatDate} from '@helpers/dateHelper';
+import {RepairerType} from '@interfaces/RepairerType';
+import {repairerTypeResource} from '@resources/repairerTypeResource';
 
 export const UsersList = (): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -30,6 +38,36 @@ export const UsersList = (): JSX.Element => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedUserToDelete, setSelectedUserToDelete] = useState<User | null>(
+    null
+  );
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [removePending, setRemovePending] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleDeleteClick = (user: User) => {
+    setDeleteDialogOpen(true);
+    setSelectedUserToDelete(user);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedUserToDelete) {
+      return;
+    }
+
+    setRemovePending(true);
+    setDeleteDialogOpen(false);
+    setErrorMessage(null);
+
+    try {
+      await userResource.delete(selectedUserToDelete['@id']);
+      setRemovePending(false);
+      setSelectedUserToDelete(null);
+      await fetchUsers();
+    } catch (e: any) {
+      setErrorMessage(`Suppression impossible de cet utilisateur.`);
+    }
+  };
 
   const fetchUsers = async () => {
     setLoadingList(true);
@@ -144,9 +182,17 @@ export const UsersList = (): JSX.Element => {
                         <EditIcon color="secondary" />
                       </IconButton>
                     </Link>
-                    <IconButton color="secondary">
-                      <DeleteForeverIcon />
-                    </IconButton>
+                    {removePending &&
+                    selectedUserToDelete &&
+                    selectedUserToDelete.id === user.id ? (
+                      <CircularProgress />
+                    ) : (
+                      <IconButton
+                        color="secondary"
+                        onClick={() => handleDeleteClick(user)}>
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    )}
                   </>
                 </TableCell>
               </TableRow>
@@ -167,6 +213,30 @@ export const UsersList = (): JSX.Element => {
             size="large"
           />
         </Stack>
+      )}
+
+      {selectedUserToDelete && (
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}>
+          <DialogTitle>Confirmation</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {`Êtes-vous sûr de vouloir supprimer ${selectedUserToDelete.firstName} ${selectedUserToDelete.lastName}`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
+            <Button onClick={handleDeleteConfirm} color="secondary">
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+      {errorMessage && (
+        <Typography color="error" textAlign="center" sx={{pt: 4}}>
+          {errorMessage}
+        </Typography>
       )}
     </Box>
   );
