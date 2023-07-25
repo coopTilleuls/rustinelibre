@@ -39,11 +39,9 @@ final class CreateUserRepairerDto
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $name = null;
 
-    #[Assert\NotBlank(message: 'repairer.street.number.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $streetNumber = null;
 
-    #[Assert\NotBlank(message: 'repairer.street.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $street = null;
 
