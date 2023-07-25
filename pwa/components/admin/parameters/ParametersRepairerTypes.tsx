@@ -51,17 +51,17 @@ export const ParametersRepairerTypes = (): JSX.Element => {
 
     setRemovePending(true);
     setDeleteDialogOpen(false);
+    setErrorMessage(null);
     try {
       await repairerTypeResource.delete(selectedRepairerTypeToDelete['@id']);
       setRemovePending(false);
       setSelectedRepairerTypeToDelete(null);
+      await fetchRepairerTypes();
     } catch (e: any) {
       setErrorMessage(
         `Suppression impossible, ce type de réparateur est utilisé.`
       );
     }
-
-    await fetchRepairerTypes();
   };
 
   const fetchRepairerTypes = async () => {
