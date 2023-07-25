@@ -5,6 +5,7 @@ import {Box, useMediaQuery, useTheme} from '@mui/material';
 import {Discussion} from '@interfaces/Discussion';
 import DiscussionListItem from '@components/messagerie/DiscussionListItem';
 import {isBoss, isEmployee} from '@helpers/rolesHelpers';
+import NoMessageListItem from '@components/messagerie/NoMessageListItem';
 
 type CustomerDiscussionListProps = {
   discussion?: Discussion | null;
@@ -63,7 +64,9 @@ const CustomerDiscussionList = ({
             );
           })}
         </Box>
-      ) : null}
+      ) : (
+        <NoMessageListItem />
+      )}
     </>
   );
 };
