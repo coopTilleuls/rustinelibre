@@ -33,7 +33,7 @@ export const DashboardHomeContent = ({
     const nextAppointments = await fetchAppointments({
       itemsPerPage: '6',
       repairer: repairer['@id'],
-      'order[slotTime]': 'DESC',
+      'order[slotTime]': 'ASC',
       'slotTime[after]': dateObjectAsString(new Date()),
       status: 'validated',
     });
