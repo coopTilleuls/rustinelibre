@@ -1,52 +1,45 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import {
-  CircularProgress,
-  Link,
-  TextField,
-  Button,
-  Box,
-  Modal,
-  Typography,
-  InputLabel,
-} from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import {MediaObject} from '@interfaces/MediaObject';
-import {uploadFile, uploadImage} from '@helpers/uploadFile';
-import {mediaObjectResource} from '@resources/mediaObjectResource';
-import {RequestBody} from '@interfaces/Resource';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import {maintenanceResource} from '@resources/MaintenanceResource';
-import {Bike} from '@interfaces/Bike';
-import {DatePicker} from '@mui/x-date-pickers/DatePicker';
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import {Moment} from 'moment';
-import {Maintenance} from '@interfaces/Maintenance';
-import {useAccount} from '@contexts/AuthContext';
-import {useTheme} from '@mui/material/styles';
-import {errorRegex} from '@utils/errorRegex';
-import {frFR} from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import 'dayjs/locale/fr';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '80%',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import {Moment} from 'moment';
+import {mediaObjectResource} from '@resources/mediaObjectResource';
+import {maintenanceResource} from '@resources/MaintenanceResource';
+import {useAccount} from '@contexts/AuthContext';
+import {errorRegex} from '@utils/errorRegex';
+import {uploadFile} from '@helpers/uploadFile';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {
+  CircularProgress,
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Dialog,
+  IconButton,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+import {useTheme} from '@mui/material/styles';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {frFR} from '@mui/x-date-pickers';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import CloseIcon from '@mui/icons-material/Close';
+import {MediaObject} from '@interfaces/MediaObject';
+import {Bike} from '@interfaces/Bike';
+import {RequestBody} from '@interfaces/Resource';
+import {Maintenance} from '@interfaces/Maintenance';
 
 type ModalAddMaintenanceProps = {
   bike: Bike;
   openModal: boolean;
-  handleCloseModal: (refresh: boolean) => void;
+  handleCloseModal: () => void;
   maintenance: Maintenance | null;
 };
 
@@ -122,8 +115,7 @@ const ModalAddMaintenance = ({
         setInvoice(null);
         setSelectedDate(null);
       }
-
-      handleCloseModal(true);
+      handleCloseModal();
     } catch (e: any) {
       setErrorMessage(
         `Ajout de cette réparation impossible: ${e.message?.replace(
@@ -168,24 +160,47 @@ const ModalAddMaintenance = ({
     }
   };
 
+  const handleClose = () => {
+    setName(null);
+    setDescription(null);
+    setPhoto(null);
+    setInvoice(null);
+    setErrorMessage(null);
+    handleCloseModal();
+  };
+
+  console.log(name);
+
   return (
-    <Modal
+    <Dialog
+      maxWidth="sm"
+      fullWidth
+      fullScreen={isMobile}
       open={openModal}
-      onClose={() => handleCloseModal(false)}
-      aria-labelledby="Ajouter un vélo"
-      aria-describedby="popup_add_bike">
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
+      onClose={handleClose}
+      aria-labelledby="Ajouter une réparation"
+      aria-describedby="popup_add_maintenance">
+      <DialogTitle
+        sx={{
+          m: 0,
+          p: 2,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Typography id="modal-modal-title" variant="h3" color="primary">
           {maintenance ? 'Modifier une réparation' : 'Ajouter une réparation'}
         </Typography>
-        {photo && (
-          <img
-            width={isMobile ? '80%' : '200'}
-            src={photo.contentUrl}
-            alt="Photo de la réparation"
-          />
-        )}
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+        <IconButton aria-label="close" color="primary" onClick={handleClose}>
+          <CloseIcon fontSize="large" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Box
+          component="form"
+          id="add-maintenance-form"
+          onSubmit={handleSubmit}
+          noValidate>
           <TextField
             margin="normal"
             required
@@ -200,7 +215,7 @@ const ModalAddMaintenance = ({
             onChange={handleChangeName}
           />
           {!maintenance && (
-            <Box>
+            <Box mt={1}>
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
                 localeText={
@@ -234,87 +249,138 @@ const ModalAddMaintenance = ({
             inputProps={{maxLength: 3000}}
             onChange={handleChangeDescription}
           />
-          <Button variant="outlined" component="label" sx={{mt: 2, mb: 2}}>
-            {loadingPhoto ? (
-              <CircularProgress />
-            ) : photo ? (
-              'Changer de photo'
-            ) : (
-              'Ajouter une photo'
-            )}
-            <input
-              type="file"
-              hidden
-              onChange={(e) => handleFileChange(e, photo, 'photo')}
-            />
-          </Button>
-          <Button
-            variant="outlined"
-            component="label"
-            sx={{mt: 2, mb: 2, ml: 2}}>
-            {loadingInvoice ? (
-              <CircularProgress />
-            ) : invoice ? (
-              'Changer de facture'
-            ) : (
-              'Ajouter une facture'
-            )}
-            <input
-              type="file"
-              hidden
-              accept={'.pdf, .doc, .docx, .odt, .xls, .csv, .png, .jpg, .jpeg'}
-              onChange={(e) => handleFileChange(e, invoice, 'invoice')}
-            />
-          </Button>
-          {invoice && (
-            <Button
-              variant="outlined"
-              component="label"
-              sx={{mt: 2, mb: 2, ml: 2}}>
-              <DownloadIcon />
-              <Link
-                href={invoice.contentUrl}
-                target="_blank"
-                sx={{ml: 1, textDecoration: 'none'}}>
-                Télécharger la facture
-              </Link>
-            </Button>
-          )}
-          <Box sx={{float: 'right', mt: 5}}>
-            <Button
-              onClick={() => handleCloseModal(false)}
-              variant="outlined"
-              sx={{mt: 3, mb: 2}}>
-              Fermer
-            </Button>
-            {maintenance && user && (
-              <Button type="submit" variant="contained" sx={{mt: 3, mb: 2}}>
-                {!pendingAdd ? (
-                  'Modifier cette réparation'
-                ) : (
-                  <CircularProgress sx={{color: 'white'}} size={20} />
-                )}
+          <Box
+            mt={1}
+            display="flex"
+            flexDirection="column"
+            gap={isMobile ? 2 : 4}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent={photo ? 'space-between' : 'end'}
+              width={isMobile ? '100%' : '50%'}>
+              <Typography variant="h5">Photo de la réparation</Typography>
+              {photo && (
+                <Box
+                  mt={1}
+                  mb={2}
+                  width={isMobile ? '100%' : '200'}
+                  sx={{
+                    borderRadius: 6,
+                    boxShadow: 4,
+                    overflow: 'hidden',
+                    minHeight: 150,
+                  }}>
+                  <img
+                    width="100%"
+                    height="100%"
+                    src={photo.contentUrl}
+                    alt="Photo de la réparation"
+                    style={{objectFit: 'cover', display: 'block'}}
+                  />
+                </Box>
+              )}
+              <Button
+                size="small"
+                variant="outlined"
+                color="secondary"
+                component="label"
+                startIcon={
+                  loadingPhoto ? (
+                    <CircularProgress size={18} color="secondary" />
+                  ) : (
+                    <AddAPhotoIcon />
+                  )
+                }
+                sx={{
+                  mt: 1,
+                  width: 'fit-content',
+                }}>
+                {photo ? 'Changer de photo' : 'Ajouter une photo'}
+                <input
+                  type="file"
+                  hidden
+                  accept={'.png, .jpg, .jpeg'}
+                  onChange={(e) => handleFileChange(e, photo, 'photo')}
+                />
               </Button>
-            )}
-            {user && !maintenance && (
-              <Button type="submit" variant="contained" sx={{mt: 3, mb: 2}}>
-                {!pendingAdd ? (
-                  'Ajouter cette réparation'
-                ) : (
-                  <CircularProgress sx={{color: 'white'}} size={20} />
-                )}
+            </Box>
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent={invoice ? 'space-between' : 'end'}
+              width={isMobile ? '100%' : '50%'}>
+              <Typography variant="h5">Votre facture</Typography>
+              {invoice && (
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  mt={1}
+                  mb={2}
+                  width={isMobile ? '100%' : '200'}
+                  minHeight={150}
+                  bgcolor="lightsecondary.main"
+                  sx={{
+                    borderRadius: 6,
+                    boxShadow: 4,
+                    overflow: 'hidden',
+                  }}>
+                  <InsertDriveFileIcon sx={{fontSize: 60}} color="secondary" />
+                </Box>
+              )}
+              <Button
+                size="small"
+                variant="outlined"
+                color="secondary"
+                component="label"
+                startIcon={
+                  loadingInvoice ? (
+                    <CircularProgress size={18} color="secondary" />
+                  ) : (
+                    <NoteAddIcon />
+                  )
+                }
+                sx={{
+                  mt: 1,
+                  width: 'fit-content',
+                }}>
+                {invoice ? 'Changer de facture' : 'Ajouter une facture'}
+                <input
+                  type="file"
+                  hidden
+                  accept={
+                    '.pdf, .doc, .docx, .odt, .xls, .csv, .png, .jpg, .jpeg'
+                  }
+                  onChange={(e) => handleFileChange(e, invoice, 'invoice')}
+                />
               </Button>
-            )}
+            </Box>
           </Box>
-
+        </Box>
+      </DialogContent>
+      <DialogActions sx={{p: 2}}>
+        <Box display="flex" flexDirection="column" justifyContent="end">
+          <Button
+            type="submit"
+            form="add-maintenance-form"
+            variant="contained"
+            startIcon={
+              pendingAdd && <CircularProgress sx={{color: 'white'}} size={18} />
+            }
+            disabled={!name}>
+            {maintenance && user
+              ? `${isMobile ? 'Modifier' : 'Modifier cette réparation'}`
+              : `${isMobile ? 'Ajouter' : 'Ajouter cette réparation'}`}
+          </Button>
           {errorMessage && (
-            <Typography variant="body1" color="error">
+            <Typography variant="body1" color="error" textAlign="end" pt={2}>
               {errorMessage}
             </Typography>
           )}
         </Box>
-      </Box>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   );
 };
 
