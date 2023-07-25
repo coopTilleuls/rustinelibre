@@ -141,7 +141,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
     let params: ParamsType = {
       'bikeTypesSupported.id': selectedBike.id,
-      page: 1,
       pagination: 'false',
       enabled: 'true',
     };
