@@ -94,6 +94,7 @@ class Contact
 
     #[Assert\NotNull]
     #[ORM\Column]
+    #[Groups([self::READ])]
     public ?\DateTimeImmutable $createdAt;
 
     public function __construct()
