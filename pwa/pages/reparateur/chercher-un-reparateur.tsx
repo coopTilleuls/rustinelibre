@@ -50,6 +50,7 @@ import {City as GouvCity} from '@interfaces/Gouv';
 import {searchCity} from '@utils/apiCity';
 import {RepairerType} from '@interfaces/RepairerType';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
+import {Repairer} from '@interfaces/Repairer';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -78,7 +79,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     selectedBike,
     setSelectedBike,
     repairers,
+    allRepairers,
     setRepairers,
+    setAllRepairers,
     currentPage,
     setCurrentPage,
     repairerTypeSelected,
@@ -113,6 +116,17 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const getItemsByPage = (
+    allRepairers: Repairer[],
+    currentPage: number
+  ): Repairer[] => {
+    const itemsPerPage = 20;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    return allRepairers.slice(startIndex, endIndex);
+  };
+
   const fetchRepairers = useCallback(async (): Promise<void> => {
     if (!selectedBike || !city) {
       return;
@@ -126,9 +140,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     }
 
     let params: ParamsType = {
-      itemsPerPage: 20,
       'bikeTypesSupported.id': selectedBike.id,
-      page: `${currentPage ?? 1}`,
+      pagination: 'false',
       enabled: 'true',
     };
 
@@ -176,7 +189,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     params = {...{sort: 'random'}, ...params};
 
     const response = await repairerResource.getAll(false, params);
-    setRepairers(response['hydra:member']);
+    setAllRepairers(response['hydra:member']);
+    setRepairers(getItemsByPage(response['hydra:member'], currentPage));
     setTotalItems(response['hydra:totalItems']);
     setPendingSearchCity(false);
     setAlreadyFetchApi(true);
@@ -188,6 +202,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     filterBy,
     selectedBike,
     setRepairers,
+    setAllRepairers,
     setTotalItems,
     repairerTypeSelected,
     repairerTypes,
@@ -200,7 +215,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   }, [city, isMobile, selectedBike]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect((): void => {
-    fetchRepairers();
+    setRepairers(getItemsByPage(allRepairers, currentPage));
     scrollToTop();
   }, [currentPage, setCurrentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
