@@ -3,7 +3,7 @@ import {useRouter} from 'next/router';
 import Link from 'next/link';
 import {discussionResource} from '@resources/discussionResource';
 import {ENTRYPOINT} from '@config/entrypoint';
-import {Box, Paper, Typography} from '@mui/material';
+import {Avatar, Box, Typography} from '@mui/material';
 import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
 import Badge from '@mui/material/Badge';
@@ -11,11 +11,13 @@ import Badge from '@mui/material/Badge';
 type DiscussionListItemProps = {
   discussionGiven: Discussion;
   isCustomer: boolean;
+  current?: boolean;
 };
 
 const DiscussionListItem = ({
   discussionGiven,
   isCustomer,
+  current,
 }: DiscussionListItemProps): JSX.Element => {
   const router = useRouter();
   const [unreadCounter, setUnreadCounter] = useState<number>(0);
@@ -62,40 +64,58 @@ const DiscussionListItem = ({
         isCustomer
           ? `/messagerie/${discussion.id}`
           : `/sradmin/messagerie/${discussion.id}`
-      }
-      style={{textDecoration: 'none', cursor: 'pointer'}}>
-      <Paper
-        elevation={4}
+      }>
+      <Box
         sx={{
-          cursor: 'pointer',
+          cursor: current ? 'default' : 'pointer',
           width: '100%',
-          backgroundColor:
-            +router.query.id! === +discussion.id ? 'primary.main' : '',
+          borderRadius: 5,
           mb: 2,
+          transition: 'all ease 0.3s',
+          bgcolor: current ? 'lightprimary.dark' : 'grey.100',
+          '&:hover': {
+            filter: current ? 'none' : 'brightness(0.90)',
+          },
         }}>
         <Badge badgeContent={unreadCounter} color="primary">
-          <Box px={2} py={1}>
-            <Typography
-              color={+router.query.id! === +discussion.id ? 'white' : 'black'}>
-              {isCustomer
-                ? discussion.repairer.name
-                : `${discussion.customer.firstName} ${discussion.customer.lastName}`}
-            </Typography>
+          <Box px={2} py={2} display="flex" gap={2} alignItems="center">
+            {isCustomer && (
+              <Avatar
+                sx={{
+                  width: '48px',
+                  height: '48px',
+                  bgcolor: current ? 'primary.main' : 'grey.300',
+                }}
+              />
+            )}
+            <Box>
+              <Typography
+                variant="body2"
+                fontWeight={800}
+                gutterBottom
+                color={current ? 'primary.main' : 'text.secondary'}>
+                {isCustomer
+                  ? discussion.repairer.name
+                  : `${discussion.customer.firstName} ${discussion.customer.lastName}`}
+              </Typography>
 
-            <Typography
-              color={+router.query.id! === +discussion.id ? 'white' : 'grey'}
-              fontSize={12}
-              fontStyle="italic">
-              {discussion.lastMessage
-                ? `Dernier message : ${formatDate(
-                    discussion.lastMessage,
-                    true
-                  )}`
-                : 'Pas encore de message'}
-            </Typography>
+              <Typography
+                color="grey.500"
+                variant="caption"
+                fontStyle="italic"
+                component="div"
+                lineHeight="1.2">
+                {discussion.lastMessage
+                  ? `Dernier message : ${formatDate(
+                      discussion.lastMessage,
+                      true
+                    )}`
+                  : 'Pas encore de message'}
+              </Typography>
+            </Box>
           </Box>
         </Badge>
-      </Paper>
+      </Box>
     </Link>
   );
 };

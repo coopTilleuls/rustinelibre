@@ -36,11 +36,7 @@ const SrAdminMessagerie: NextPageWithLayout = () => {
       </Head>
       <DashboardLayout>
         <BackToDiscussions isRepairer />
-        <Typography
-          fontSize={{xs: 28, md: 30}}
-          fontWeight={600}
-          pb={1}
-          pl={{md: 2}}>
+        <Typography variant="h3" py={2}>
           Messages
         </Typography>
         {discussion && (

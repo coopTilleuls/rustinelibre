@@ -4,25 +4,27 @@ import {ENTRYPOINT} from '@config/entrypoint';
 import {discussionMessageResource} from '@resources/discussionMessageResource';
 import {
   Box,
-  Paper,
   TextField,
-  Button,
-  CircularProgress,
   Typography,
+  IconButton,
+  InputAdornment,
 } from '@mui/material';
 import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
 import {DiscussionMessage} from '@interfaces/DiscussionMessage';
 import {discussionResource} from '@resources/discussionResource';
+import {Send} from '@mui/icons-material';
 
 type CustomerMessagesContentProps = {
   discussion: Discussion;
   loading: Boolean;
+  setLoading: (loading: boolean) => void;
 };
 
 const CustomerMessagesContent = ({
   discussion,
   loading,
+  setLoading,
 }: CustomerMessagesContentProps): JSX.Element => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const {user} = useAccount({});
@@ -64,6 +66,8 @@ const CustomerMessagesContent = ({
   };
 
   const fetchMessages = async () => {
+    if (!user) return;
+    setLoading(true);
     const response = await discussionMessageResource.getAll(true, {
       discussion: discussion['@id'],
       page: currentPage,
@@ -79,6 +83,7 @@ const CustomerMessagesContent = ({
       });
       setMessages(messagesToDisplay);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -98,70 +103,110 @@ const CustomerMessagesContent = ({
   }, [currentPage, discussion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Box width="100%">
-      {loading && <CircularProgress />}
-      {!loading && user && (
+    <Box
+      flex={1}
+      display="flex"
+      flexDirection="column"
+      bgcolor="grey.100"
+      height={{xs: 'inherit', md: '100%'}}>
+      {user && (
         <>
           <Box
             sx={{
-              top: 100,
-              pr: 2,
-              pb: 5,
-              height: '50vh',
-              overflowY: 'scroll',
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
             }}
             ref={messagesContainerRef}>
-            {messages
-              .sort((a, b) => a.id - b.id)
-              .map(({sender, content, createdAt}, index) => (
-                <Box
-                  key={index}
-                  width="70%"
-                  px={2}
-                  py={1}
-                  mb={2}
-                  borderRadius={2}
-                  textAlign={sender.id === user.id ? 'right' : 'left'}
-                  color={sender.id === user.id ? 'white' : 'black'}
-                  sx={{
-                    float: sender.id === user.id ? 'right' : 'left',
-                    backgroundColor:
-                      sender.id === user.id ? 'primary.main' : 'grey.200',
-                    wordBreak: 'break-all',
-                  }}>
-                  <>
-                    <Typography>{content}</Typography>
-                    <Typography fontSize={11} fontStyle="italic" pt={1}>
-                      {formatDate(createdAt)}
-                    </Typography>
-                  </>
-                </Box>
-              ))}
+            {!loading && (
+              <Box
+                width="100%"
+                maxWidth={{xs: '100%', md: '800px'}}
+                px={{xs: 2, md: 4}}
+                py={2}
+                display="flex"
+                flexDirection="column"
+                gap={1}>
+                {messages.length === 0 ? (
+                  <Typography
+                    variant="body1"
+                    sx={{mt: 4}}
+                    color="text.secondary">{`Vous n'avez encore envoyé aucun message à ${
+                    discussion.customer.id === user.id
+                      ? `"${discussion.repairer.name}"`
+                      : `${discussion.customer.firstName} ${discussion.customer.lastName}`
+                  }`}</Typography>
+                ) : null}
+                {messages
+                  .sort((a, b) => a.id - b.id)
+                  .map(({sender, content, createdAt}, index) => {
+                    const isUser = sender.id === user.id;
+                    return (
+                      <Box
+                        key={index}
+                        px={2}
+                        py={0.75}
+                        borderRadius={2}
+                        textAlign={isUser ? 'right' : 'left'}
+                        color={isUser ? 'white' : 'black'}
+                        ml={isUser ? 'auto' : '0'}
+                        mr={!isUser ? 'auto' : '0'}
+                        sx={{
+                          maxWidth: {xs: '90%', md: '70%'},
+                          backgroundColor: isUser ? 'primary.main' : 'white',
+                        }}>
+                        <>
+                          <Typography variant="body1">{content}</Typography>
+                          <Typography
+                            variant="caption"
+                            fontStyle="italic"
+                            color={
+                              isUser ? 'rgba(255,255,255,0.7)' : 'grey.500'
+                            }
+                            pt={1}>
+                            {formatDate(createdAt)}
+                          </Typography>
+                        </>
+                      </Box>
+                    );
+                  })}
+              </Box>
+            )}
           </Box>
-          <Box width="100%" mt={2}>
-            <Paper
-              elevation={4}
-              sx={{
-                padding: '1rem',
-                right: 5,
-              }}>
+          <Box
+            sx={{
+              width: '100%',
+              borderTop: '1px solid',
+              borderColor: 'grey.300',
+              bgcolor: 'white',
+            }}>
+            <Box
+              width="100%"
+              maxWidth={{xs: '100%', md: '800px'}}
+              px={4}
+              py={2}
+              display="flex"
+              gap={2}>
               <TextField
                 label="Écrire un message"
                 fullWidth
                 multiline
-                rows={3}
+                rows={2}
                 value={messageToSend}
                 onChange={handleMessageChange}
                 onKeyDown={handleKeyDown}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSendMessage}>
+                        <Send />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{marginTop: '1rem', textTransform: 'capitalize'}}
-                onClick={handleSendMessage}>
-                Envoyer
-              </Button>
-            </Paper>
+            </Box>
           </Box>
         </>
       )}
