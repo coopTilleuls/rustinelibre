@@ -121,8 +121,7 @@ const Contact: NextPageWithLayout = () => {
     !!email &&
     !emailError &&
     !!message &&
-    !messageError &&
-    status === 'solved';
+    !messageError;
 
   return (
     <>
