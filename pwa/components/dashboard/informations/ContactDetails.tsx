@@ -39,8 +39,8 @@ export const ContactDetails = ({
 
   const [name, setName] = useState<string>('');
   const [mobilePhone, setMobilePhone] = useState<string>('');
-  const [streetNumber, setStreetNumber] = useState<string>('');
-  const [street, setStreet] = useState<string>('');
+  const [streetNumber, setStreetNumber] = useState<string | null>(null);
+  const [street, setStreet] = useState<string | null>(null);
   const [city, setCity] = useState<City | null>(null);
   const [citiesList, setCitiesList] = useState<City[]>([]);
 
@@ -175,7 +175,6 @@ export const ContactDetails = ({
         />
         <TextField
           margin="normal"
-          required
           fullWidth
           id="streetNumber"
           label="Numéro dans la rue"
@@ -187,7 +186,6 @@ export const ContactDetails = ({
         />
         <TextField
           margin="normal"
-          required
           fullWidth
           id="street"
           label="Rue"

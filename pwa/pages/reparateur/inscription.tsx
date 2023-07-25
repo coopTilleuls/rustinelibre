@@ -139,7 +139,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
       !email ||
       !password ||
       !repairerTypeSelected ||
-      !street ||
       !city ||
       selectedBikeTypes.length === 0
     ) {
@@ -157,15 +156,15 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         email: email,
         plainPassword: password,
         name: name,
-        street: street.name,
+        street: street?.name,
         streetNumber: streetNumber,
         city: city.name,
         postcode: city?.postcode,
         bikeTypesSupported: selectedBikeTypeIRIs,
         repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
         comment: comment,
-        latitude: street.lat,
-        longitude: street.lon,
+        latitude: street?.lat ?? city.lat,
+        longitude: street?.lon ?? city.lon,
       });
       setPendingRegistration(false);
       setSuccess(true);
@@ -456,7 +455,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                         renderInput={(params) => (
                           <TextField
                             label="Rue"
-                            required
                             {...params}
                             value={street}
                             onChange={(e) => handleChangeStreet(e)}
@@ -469,7 +467,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     <Grid item xs={12}>
                       <TextField
                         fullWidth
-                        required
                         id="streetNumber"
                         label="Numéro de la rue"
                         name="streetNumber"
@@ -550,8 +547,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       !firstName ||
                       !lastName ||
                       !city ||
-                      !street ||
-                      !streetNumber ||
                       !repairerTypeSelected ||
                       !name ||
                       !email ||
