@@ -463,7 +463,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       />
                     </Grid>
                   )}
-                  {street && (
+                  {city && (
                     <Grid item xs={12}>
                       <TextField
                         fullWidth
