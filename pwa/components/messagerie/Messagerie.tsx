@@ -117,19 +117,20 @@ const Messagerie = () => {
             </Box>
           </Box>
         </Box>
-        <Box
-          flex={1}
-          flexDirection="column"
-          height={{xs: '0', md: '100%'}}
-          display={{xs: id ? 'flex' : 'none', md: 'flex'}}>
-          {discussion ? (
-            <CustomerMessagesContent
-              discussion={discussion}
-              loading={loading}
-              setLoading={setLoading}
-            />
-          ) : null}
-        </Box>
+        {discussion && (
+          <Box
+            flex={1}
+            flexDirection="column"
+            height={{xs: '0', md: '100%'}}
+            display={{xs: id ? 'flex' : 'none', md: 'flex'}}>
+            {discussion ? (
+              <CustomerMessagesContent
+                discussion={discussion}
+                loading={loading}
+              />
+            ) : null}
+          </Box>
+        )}
       </Box>
     </Box>
   );
