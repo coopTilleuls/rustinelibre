@@ -7,7 +7,14 @@ import LegalNoticesFooter from './LegaNoticesFooter';
 import Box from '@mui/material/Box';
 import {useRouter} from 'next/router';
 
-const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
+interface WebsiteLayoutProps extends PropsWithChildren {
+  withLegalFooter?: boolean;
+}
+
+const WebsiteLayout = ({
+  children,
+  withLegalFooter = true,
+}: WebsiteLayoutProps): JSX.Element => {
   const {user} = useAccount({});
   const router = useRouter();
   const next = Array.isArray(router.query.next)
@@ -25,7 +32,7 @@ const WebsiteLayout = ({children}: PropsWithChildren): JSX.Element => {
         pt={{xs: '56px', sm: '64px', md: '80px'}}
         pb={{xs: '56px', md: '72px'}}>
         <Box flex={1}>{children}</Box>
-        {!isAdmin && <LegalNoticesFooter />}
+        {!isAdmin && withLegalFooter && <LegalNoticesFooter />}
       </Box>
       {!isAdmin && <Footer user={user ?? undefined} />}
     </Box>
