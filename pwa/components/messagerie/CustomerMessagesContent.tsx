@@ -18,13 +18,11 @@ import {Send} from '@mui/icons-material';
 type CustomerMessagesContentProps = {
   discussion: Discussion;
   loading: Boolean;
-  setLoading: (loading: boolean) => void;
 };
 
 const CustomerMessagesContent = ({
   discussion,
   loading,
-  setLoading,
 }: CustomerMessagesContentProps): JSX.Element => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const {user} = useAccount({});
@@ -67,7 +65,6 @@ const CustomerMessagesContent = ({
 
   const fetchMessages = async () => {
     if (!user) return;
-    setLoading(true);
     const response = await discussionMessageResource.getAll(true, {
       discussion: discussion['@id'],
       page: currentPage,
@@ -83,7 +80,6 @@ const CustomerMessagesContent = ({
       });
       setMessages(messagesToDisplay);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
