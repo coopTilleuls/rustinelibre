@@ -72,7 +72,7 @@ export const OpeningHours = ({
           <Editor content={openingHours} setContent={setOpeningHours} />
           <Button type="submit" variant="contained" sx={{my: 2}}>
             {!pendingRegistration ? (
-              'Enregistrer mes informations'
+              'Enregistrer les informations'
             ) : (
               <CircularProgress size={20} sx={{color: 'white'}} />
             )}
