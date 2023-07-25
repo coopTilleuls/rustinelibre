@@ -31,6 +31,7 @@ import {BikeType} from '@interfaces/BikeType';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {Search} from '@mui/icons-material';
 
 type BikeMaintenanceProps = {
   bike: Bike;
@@ -103,47 +104,40 @@ const BikeMaintenance = ({
       {loading && <CircularProgress />}
 
       {!loading && maintenances.length == 0 && (
-        <Paper elevation={4} sx={{my: 4, width: '100%'}}>
-          <Card>
-            <CardActionArea>
-              <CardContent>
-                <Typography gutterBottom variant="h5" textAlign="center">
-                  <BuildIcon color="primary" />
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  textAlign="center">
-                  Vous n&apos;avez pas de réparations enregistrées pour le
-                  moment.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Paper>
+        <Box py={3}>
+          <Typography gutterBottom variant="h5" textAlign="center">
+            <BuildIcon color="primary" />
+          </Typography>
+          <Typography variant="body2" color="text.secondary" textAlign="center">
+            Vous n&apos;avez pas de réparations enregistrées pour le moment.
+          </Typography>
+        </Box>
       )}
 
       {!loading && maintenances.length > 0 && (
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table sx={{minWidth: 300}} aria-label="simple table">
             <TableBody>
               {maintenances.map((maintenance) => (
                 <TableRow key={maintenance.id}>
+                  <TableCell align="left">
+                    <Typography variant="body2" fontWeight={700}>
+                      {maintenance.name}
+                    </Typography>
+                  </TableCell>
                   <TableCell component="th" scope="row">
                     {maintenance.repairDate
                       ? formatDate(maintenance.repairDate, false)
                       : ''}
                   </TableCell>
-                  <TableCell align="right">{maintenance.name}</TableCell>
-                  <TableCell align="right">
-                    <Button
-                      variant="outlined"
-                      onClick={() => clickMaintenanceDetail(maintenance)}>
-                      Détails
-                    </Button>
-
+                  <TableCell align="right" width="120px">
                     <IconButton
                       color="secondary"
+                      onClick={() => clickMaintenanceDetail(maintenance)}>
+                      <Search />
+                    </IconButton>
+                    <IconButton
+                      color="error"
                       onClick={() => handleDeleteClick(maintenance)}>
                       <DeleteForeverIcon />
                     </IconButton>
@@ -161,9 +155,11 @@ const BikeMaintenance = ({
         </Typography>
       )}
 
-      <Button sx={{my: 2}} onClick={handleOpenModal} variant="contained">
-        {' '}
-        <AddIcon />
+      <Button
+        sx={{my: 2, ml: 'auto', mr: 2, display: 'flex'}}
+        onClick={handleOpenModal}
+        variant="contained"
+        startIcon={<AddIcon />}>
         Ajouter une réparation
       </Button>
 

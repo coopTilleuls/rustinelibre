@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import router from 'next/router';
 import {
-  Box,
   Button,
   Typography,
-  Modal,
   CircularProgress,
   Dialog,
   DialogTitle,
