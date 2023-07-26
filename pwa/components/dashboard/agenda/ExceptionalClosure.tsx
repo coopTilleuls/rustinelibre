@@ -1,23 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {Repairer} from '@interfaces/Repairer';
-import OpeningHoursDetail from '@components/dashboard/agenda/OpeningHoursDetail';
+import {exceptionalClosureResource} from '@resources/exceptionalClosingResource';
+import ModalAddExceptionalClosure from '@components/dashboard/agenda/ModalAddExceptionalClosure';
 import {
+  Box,
   Button,
   Chip,
   CircularProgress,
+  Grid,
   Divider,
   Typography,
 } from '@mui/material';
-import Box from '@mui/material/Box';
-import {RepairerOpeningHours} from '@interfaces/RepairerOpeningHours';
-import {RepairerExceptionalClosure} from '@interfaces/RepairerExceptionalClosure';
-import {exceptionalClosureResource} from '@resources/exceptionalClosingResource';
-import Grid from '@mui/material/Grid';
 import AddIcon from '@mui/icons-material/Add';
-import {formatDate} from '@helpers/dateHelper';
-import ModalAddOpeningHours from '@components/dashboard/agenda/ModalAddOpeningHours';
-import ModalAddExceptionalClosure from '@components/dashboard/agenda/ModalAddExceptionalClosure';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {RepairerExceptionalClosure} from '@interfaces/RepairerExceptionalClosure';
+import {Repairer} from '@interfaces/Repairer';
+import {formatDate} from '@helpers/dateHelper';
 
 interface ExceptionalClosureProps {
   repairer: Repairer;
@@ -66,7 +63,6 @@ export const ExceptionalClosure = ({
       <Typography variant="h5">
         Programmation d&apos;une fermeture exceptionelle
       </Typography>
-
       <Box sx={{marginTop: '40px'}}>
         {loading && <CircularProgress />}
         {!loading &&
@@ -76,7 +72,6 @@ export const ExceptionalClosure = ({
                 <Grid container spacing={2} sx={{marginBottom: '20px'}}>
                   <Grid item xs={8}>
                     {loading && <CircularProgress />}
-
                     <Chip
                       label={`${formatDate(
                         exceptionalClosure.startDate,
@@ -93,19 +88,19 @@ export const ExceptionalClosure = ({
               </Box>
             );
           })}
-
         {!loading && exceptionalClosures.length === 0 && (
           <Box sx={{marginBottom: '30px'}}>
-            {`Aucune fermeture exceptionnelle programmée`}
+            Aucune fermeture exceptionnelle programmée
           </Box>
         )}
-
         <br />
-        <Button variant="outlined" onClick={handleOpenModal}>
+        <Button
+          variant="contained"
+          onClick={handleOpenModal}
+          startIcon={<AddIcon />}>
           Ajouter une plage horaire
         </Button>
       </Box>
-
       <ModalAddExceptionalClosure
         openModal={openModal}
         handleCloseModal={handleCloseModal}
