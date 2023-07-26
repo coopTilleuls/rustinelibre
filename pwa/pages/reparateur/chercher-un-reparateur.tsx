@@ -248,7 +248,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (typeof city !== 'object') {
+    if (typeof city !== 'object' || city === null) {
       setErrorMessage('Veuillez sélectionner votre ville dans la liste');
       setIsLoading(false);
       return;
@@ -411,7 +411,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                     alignItems="center"
                     sx={{mt: 0}}>
                     <Button
-                      disabled={!city}
                       type="submit"
                       variant="contained"
                       sx={{
