@@ -1,6 +1,8 @@
 import React, {PropsWithRef, useState} from 'react';
 import router from 'next/router';
 import Link from 'next/link';
+import {appointmentResource} from '@resources/appointmentResource';
+import ModalCancelAppointment from './ModalCancelAppointment';
 import {
   Stack,
   Card,
@@ -12,8 +14,7 @@ import {
 } from '@mui/material';
 import {formatDate} from 'helpers/dateHelper';
 import {Appointment} from '@interfaces/Appointment';
-import {appointmentResource} from '@resources/appointmentResource';
-import ModalCancelAppointment from './ModalCancelAppointment';
+import {errorRegex} from '@utils/errorRegex';
 
 interface AppointmentCardProps extends PropsWithRef<any> {
   appointment: Appointment;
@@ -27,13 +28,24 @@ export const AppointmentCard = ({
   fetchAppointments,
 }: AppointmentCardProps): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const cancelAppointment = async (appointment: Appointment) => {
+    setErrorMessage(null);
     setLoading(true);
-    await appointmentResource.updateAppointmentStatus(appointment.id, {
-      transition: 'cancellation',
-    });
+    try {
+      await appointmentResource.updateAppointmentStatus(appointment.id, {
+        transition: 'cancellation',
+      });
+    } catch (e: any) {
+      setErrorMessage(
+        `Suppression du rendez-vous impossible: ${e.message?.replace(
+          errorRegex,
+          '$2'
+        )}, veuillez réessayer`
+      );
+    }
     await fetchAppointments();
     setLoading(false);
   };
@@ -109,8 +121,10 @@ export const AppointmentCard = ({
                   Annuler le RDV
                 </Button>
                 <ModalCancelAppointment
+                  appointment={appointment}
                   openModal={openModal}
                   loading={loading}
+                  errorMessage={errorMessage}
                   handleCloseModal={() => setOpenModal(false)}
                   handleCancelAppointment={() => cancelAppointment(appointment)}
                 />
