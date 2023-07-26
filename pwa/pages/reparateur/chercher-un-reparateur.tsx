@@ -70,6 +70,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   const isMobile = useMediaQuery('(max-width: 640px)');
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     cityInput,
@@ -247,6 +248,11 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
+    if (typeof city !== 'object') {
+      setErrorMessage('Veuillez sélectionner votre ville dans la liste');
+      setIsLoading(false);
+      return;
+    }
     await fetchRepairers();
   };
 
@@ -293,6 +299,12 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     fetchRepairers();
   }, [repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (typeof city === 'object') {
+      setErrorMessage(null);
+    }
+  }, [city]);
+
   const scrollToTop = (): void => {
     if (listContainerRef.current) {
       const headerHeight = '80px';
@@ -322,7 +334,13 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
             paddingY="10px"
             zIndex="200">
             <Container>
-              <form onSubmit={handleSubmit}>
+              <form
+                onSubmit={handleSubmit}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleSubmit;
+                  }
+                }}>
                 <Box
                   mt={2}
                   mx="auto"
@@ -393,6 +411,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                     alignItems="center"
                     sx={{mt: 0}}>
                     <Button
+                      disabled={!city}
                       type="submit"
                       variant="contained"
                       sx={{
@@ -419,6 +438,11 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
             </Container>
           </Box>
           <Container sx={{pt: 0}}>
+            {errorMessage && (
+              <Typography color="error" textAlign="center" sx={{pt: 4}}>
+                {errorMessage}
+              </Typography>
+            )}
             <Box textAlign="center">
               {repairers.length === 0 && alreadyFetchApi && (
                 <Typography>
