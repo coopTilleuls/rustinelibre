@@ -115,7 +115,6 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
     setOpenModal(true);
   };
 
-  // @ts-ignore
   return (
     <Box bgcolor="lightprimary.main" position="relative" width="100%" mb={6}>
       <Container
