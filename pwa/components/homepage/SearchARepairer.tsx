@@ -44,6 +44,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const listContainerRef = useRef<HTMLDivElement>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
   const {
@@ -78,6 +79,12 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   );
 
   useEffect(() => {
+    if (typeof city === 'object') {
+      setErrorMessage(null);
+    }
+  }, [city]);
+
+  useEffect(() => {
     if (cityInput === '' || cityInput.length < 3) {
       setCitiesList([]);
       setCity(null);
@@ -95,6 +102,10 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (typeof city !== 'object') {
+      setErrorMessage('Veuillez sélectionner votre ville dans la liste');
+      return;
+    }
     router.push('/reparateur/chercher-un-reparateur');
   };
 
@@ -157,6 +168,11 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
           <Box display={{xs: 'none', md: 'block'}} width="100%">
             <Box
               onSubmit={handleSubmit}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleSubmit;
+                }
+              }}
               component="form"
               width="100%"
               display="flex"
@@ -240,6 +256,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                 </Select>
               </FormControl>
               <IconButton
+                disabled={!city}
                 size="large"
                 type="submit"
                 color="primary"
@@ -252,6 +269,11 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                 <SearchIcon sx={{color: 'white'}} />
               </IconButton>
             </Box>
+            {errorMessage && (
+              <Typography color="error" textAlign="center" sx={{pt: 4}}>
+                {errorMessage}
+              </Typography>
+            )}
           </Box>
           <Box display={{md: 'none'}}>
             <Button
