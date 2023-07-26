@@ -20,6 +20,7 @@ import {useRouter} from 'next/router';
 import {User} from '@interfaces/User';
 import UserForm from '@components/form/UserForm';
 import {errorRegex} from '@utils/errorRegex';
+import Alert from '@mui/material/Alert';
 
 const Registration: NextPageWithLayout = ({}) => {
   const [pendingRegistration, setPendingRegistration] =
@@ -32,6 +33,8 @@ const Registration: NextPageWithLayout = ({}) => {
   const [code, setCode] = useState<string>('');
   const {user} = useAccount({});
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
+  const [resendAlert, setResendAlert] = useState<boolean>(false);
+  const [resendPending, setResendPending] = useState<boolean>(false);
   const {login, setUser} = useAuth();
   const router = useRouter();
 
@@ -110,6 +113,19 @@ const Registration: NextPageWithLayout = ({}) => {
     }
 
     setPendingValidation(false);
+  };
+
+  const resendCode = async () => {
+    setResendPending(true);
+    const response = await userResource.resendValidationCode();
+    setResendPending(false);
+
+    if (response) {
+      setResendAlert(true);
+      setTimeout(() => {
+        setResendAlert(false);
+      }, 3000);
+    }
   };
 
   return (
@@ -200,12 +216,27 @@ const Registration: NextPageWithLayout = ({}) => {
                   onClick={handleValidCode}>
                   {pendingValidation ? <CircularProgress /> : 'Valider'}
                 </Button>
+                {!resendPending && (
+                  <Typography
+                    onClick={resendCode}
+                    variant="subtitle2"
+                    color="grey"
+                    sx={{marginTop: '20px', cursor: 'pointer'}}>
+                    {`Je n'ai pas reçu le code de validation, renvoyer.`}
+                  </Typography>
+                )}
                 {errorMessageValidation && (
                   <Typography variant="body1" color="error">
                     {errorMessageValidation}
                   </Typography>
                 )}
               </Box>
+
+              {resendAlert && (
+                <Alert sx={{marginTop: '20px'}} severity="info">
+                  Code de confirmation renvoyé
+                </Alert>
+              )}
             </Paper>
           )}
         </Container>

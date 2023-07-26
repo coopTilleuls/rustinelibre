@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
 use App\Controller\ForgotPasswordController;
+use App\Controller\ResendValidationCodeController;
 use App\Controller\ResetPasswordController;
 use App\Controller\UserValidationCodeController;
 use App\Repository\UserRepository;
@@ -54,6 +55,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Post(
     uriTemplate: '/reset-password',
     controller: ResetPasswordController::class
+)]
+#[Post(
+    uriTemplate: '/resend-valid-code',
+    controller: ResendValidationCodeController::class
 )]
 #[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[Patch(security: "is_granted('ROLE_ADMIN') or object == user")]
