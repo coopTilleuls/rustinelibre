@@ -102,7 +102,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (typeof city !== 'object') {
+    if (typeof city !== 'object' || city === null) {
       setErrorMessage('Veuillez sélectionner votre ville dans la liste');
       return;
     }
@@ -256,7 +256,6 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                 </Select>
               </FormControl>
               <IconButton
-                disabled={!city}
                 size="large"
                 type="submit"
                 color="primary"
