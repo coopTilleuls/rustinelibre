@@ -1,20 +1,27 @@
 import React, {useState} from 'react';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import {CircularProgress} from '@mui/material';
-import {RequestBody} from '@interfaces/Resource';
-import InputLabel from '@mui/material/InputLabel';
-import {SelectChangeEvent} from '@mui/material/Select';
+import dayjs from 'dayjs';
+import 'dayjs/locale/fr';
+import {exceptionalClosureResource} from '@resources/exceptionalClosingResource';
+import {
+  Box,
+  Typography,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  useTheme,
+} from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import 'dayjs/locale/fr';
-import {Moment} from 'moment';
-import {exceptionalClosureResource} from '@resources/exceptionalClosingResource';
-import {errorRegex} from '@utils/errorRegex';
+import CloseIcon from '@mui/icons-material/Close';
 import {frFR} from '@mui/x-date-pickers';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {errorRegex} from '@utils/errorRegex';
+import {RequestBody} from '@interfaces/Resource';
 
 const hoursArray: string[] = [];
 for (let i = 0; i <= 23; i++) {
@@ -24,18 +31,6 @@ for (let i = 0; i <= 23; i++) {
     hoursArray.push(`${hour}:${minute}`);
   }
 }
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '50%',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 type ModalAddExceptionalClosureProps = {
   openModal: boolean;
@@ -51,14 +46,15 @@ const ModalAddExceptionalClosure = ({
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const handleSubmit = async (): Promise<void> => {
     if (!startDate || !endDate) {
       return;
     }
-
     setErrorMessage(null);
     setPendingAdd(true);
-
     try {
       let bodyRequest: RequestBody = {
         startDate: startDate,
@@ -71,100 +67,110 @@ const ModalAddExceptionalClosure = ({
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
-
     setPendingAdd(false);
   };
 
-  const handleChangStartDate = (event: SelectChangeEvent) => {
-    setStartDate(event.target.value);
-  };
-
-  const handleChangeEndDate = (event: SelectChangeEvent) => {
-    setEndDate(event.target.value);
+  const handleClose = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setErrorMessage(null);
+    handleCloseModal(false);
   };
 
   return (
-    <Modal
+    <Dialog
+      maxWidth="sm"
+      fullWidth
       open={openModal}
-      onClose={() => handleCloseModal(false)}
-      aria-labelledby="Ajouter une plage horaire"
-      aria-describedby="popup_add_bike">
-      <Box sx={style}>
-        <Box sx={{mt: 1}}>
-          <Box sx={{display: 'flex'}}>
-            <Box>
-              <InputLabel id="demo-simple-select-label">
-                Début de la fermeture
-              </InputLabel>
-              <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                localeText={
-                  frFR.components.MuiLocalizationProvider.defaultProps
-                    .localeText
+      onClose={handleClose}
+      aria-labelledby="Ajouter une fermeture exceptionnelle"
+      aria-describedby="modal_add_exceptional_closure">
+      <DialogTitle
+        sx={{
+          m: 0,
+          p: 2,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Typography id="modal-modal-title" variant="h3" color="primary">
+          Ajouter une fermeture
+        </Typography>
+        <IconButton aria-label="close" color="primary" onClick={handleClose}>
+          <CloseIcon fontSize="large" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Box
+          display="flex"
+          sx={{flexDirection: isMobile ? 'column' : 'row'}}
+          gap={2}>
+          <Box width={isMobile ? '100%' : '50%'}>
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              localeText={
+                frFR.components.MuiLocalizationProvider.defaultProps.localeText
+              }
+              adapterLocale="fr">
+              <DatePicker
+                sx={{width: '100%'}}
+                format="DD-MM-YYYY"
+                label="Jour début"
+                value={startDate}
+                onChange={(newValue: string | dayjs.Dayjs | null) =>
+                  setStartDate(
+                    newValue && typeof newValue !== 'string'
+                      ? newValue.format('YYYY-MM-DD')
+                      : null
+                  )
                 }
-                adapterLocale="fr">
-                <DatePicker
-                  format="DD-MM-YYYY"
-                  label="Début de la fermeture"
-                  value={startDate}
-                  onChange={(newValue: string | Moment | null) =>
-                    setStartDate(
-                      newValue && typeof newValue !== 'string'
-                        ? newValue.format('YYYY-MM-DD')
-                        : null
-                    )
-                  }
-                />
-              </LocalizationProvider>
-            </Box>
-
-            <Box sx={{marginLeft: '90px'}}>
-              <InputLabel id="demo-simple-select-label">
-                Fin de la fermeture (incluse)
-              </InputLabel>
-              <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                localeText={
-                  frFR.components.MuiLocalizationProvider.defaultProps
-                    .localeText
-                }
-                adapterLocale="fr">
-                <DatePicker
-                  format="DD-MM-YYYY"
-                  label="Fin"
-                  value={endDate}
-                  onChange={(newValue: string | Moment | null) =>
-                    setEndDate(
-                      newValue && typeof newValue !== 'string'
-                        ? newValue.format('YYYY-MM-DD')
-                        : null
-                    )
-                  }
-                />
-              </LocalizationProvider>
-            </Box>
+              />
+            </LocalizationProvider>
           </Box>
-
+          <Box width={isMobile ? '100%' : '50%'}>
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              localeText={
+                frFR.components.MuiLocalizationProvider.defaultProps.localeText
+              }
+              adapterLocale="fr">
+              <DatePicker
+                sx={{width: '100%'}}
+                format="DD-MM-YYYY"
+                label="Jour fin (inclus)"
+                value={endDate}
+                onChange={(newValue: string | dayjs.Dayjs | null) =>
+                  setEndDate(
+                    newValue && typeof newValue !== 'string'
+                      ? newValue.format('YYYY-MM-DD')
+                      : null
+                  )
+                }
+              />
+            </LocalizationProvider>
+          </Box>
+        </Box>
+      </DialogContent>
+      <DialogActions sx={{p: 2}}>
+        <Box display="flex" flexDirection="column" alignItems="end">
           <Button
             type="submit"
-            fullWidth
-            variant="outlined"
-            sx={{mt: 3, mb: 2}}
-            onClick={handleSubmit}>
-            {!pendingAdd ? (
-              'Ajouter cette période'
-            ) : (
-              <CircularProgress size={20} />
-            )}
+            variant="contained"
+            onClick={handleSubmit}
+            sx={{width: 'fit-content'}}
+            startIcon={
+              pendingAdd && <CircularProgress size={18} sx={{color: 'white'}} />
+            }>
+            Ajouter cette période
           </Button>
           {errorMessage && (
-            <Typography variant="body1" color="error">
+            <Typography pt={1} variant="body1" color="error">
               {errorMessage}
             </Typography>
           )}
         </Box>
-      </Box>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   );
 };
 
