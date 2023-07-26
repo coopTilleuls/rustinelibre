@@ -33,7 +33,9 @@ const BikeIdentity = ({
   setBike,
   bikeTypes,
 }: BikeIdentityProps): JSX.Element => {
-  const [addDescription, setAddDescription] = useState<boolean>(false);
+  const [addDescription, setAddDescription] = useState<boolean>(
+    !!bike.description
+  );
   const [brand, setBrand] = useState<string>(bike.brand ? bike.brand : '');
   const [description, setDescription] = useState<string>(
     bike.description ? bike.description : ''
@@ -90,12 +92,13 @@ const BikeIdentity = ({
       if (brand) {
         bodyRequest['brand'] = brand;
       }
-      if (description) {
+      if (description !== bike.description) {
         bodyRequest['description'] = description;
       }
 
       bike = await bikeResource.put(bike['@id'], bodyRequest);
       setBike(bike);
+      setAddDescription(!!description);
     } catch (e: any) {
       setErrorMessage(
         `Mise à jour du vélo impossible:${e.message?.replace(errorRegex, '$2')}`
@@ -162,7 +165,7 @@ const BikeIdentity = ({
             inputProps={{maxLength: 255}}
             onChange={handleChangeBrand}
           />
-          {addDescription && (
+          {(description || addDescription) && (
             <TextField
               margin="normal"
               placeholder="Description de votre vélo"
