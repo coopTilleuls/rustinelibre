@@ -1,6 +1,10 @@
 import {User} from '@interfaces/User';
 import {Repairer} from '@interfaces/Repairer';
 
+export const isCyclist = (user: User): boolean => {
+  return !isBoss(user) && !isAdmin(user) && !isEmployee(user);
+};
+
 export const isBoss = (user: User): boolean => {
   return user.roles.includes('ROLE_BOSS');
 };

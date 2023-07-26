@@ -39,7 +39,7 @@ const SrAdminMessagerie: NextPageWithLayout = () => {
         <Typography variant="h3" py={2}>
           Messages
         </Typography>
-        {discussion && (
+        {discussion && !loading && (
           <Box display="flex" gap={4}>
             <RepairerDiscussionList
               discussionGiven={discussion}

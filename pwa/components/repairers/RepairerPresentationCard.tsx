@@ -6,6 +6,8 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import LocationCity from '@mui/icons-material/LocationCity';
 import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
+import {isCyclist} from '@helpers/rolesHelpers';
+import {useAccount} from '@contexts/AuthContext';
 
 const RepairerPresentationCard = ({
   repairer,
@@ -17,6 +19,8 @@ const RepairerPresentationCard = ({
   const repairerPicture = repairer.thumbnail
     ? repairer.thumbnail.contentUrl
     : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg';
+
+  const {user} = useAccount({});
 
   return (
     <Box
@@ -101,12 +105,14 @@ const RepairerPresentationCard = ({
               </Typography>
             </Box>
           )}
-          <Link
-            href={`/reparateur/${repairer.id}/creneaux`}
-            legacyBehavior
-            passHref>
-            <Button variant="contained">Je réserve</Button>
-          </Link>
+          {(!user || isCyclist(user)) && (
+            <Link
+              href={`/reparateur/${repairer.id}/creneaux`}
+              legacyBehavior
+              passHref>
+              <Button variant="contained">Je réserve</Button>
+            </Link>
+          )}
         </Box>
       </Box>
     </Box>
