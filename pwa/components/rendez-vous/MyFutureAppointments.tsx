@@ -23,7 +23,7 @@ const MyFutureAppointment = ({
     setLoading(true);
     const response = await appointmentResource.getAll(true, {
       customer: currentUser.id,
-      'order[slotTime]': 'DESC',
+      'order[slotTime]': 'ASC',
       'slotTime[after]': dateObjectAsString(new Date()),
       status: 'validated',
     });
