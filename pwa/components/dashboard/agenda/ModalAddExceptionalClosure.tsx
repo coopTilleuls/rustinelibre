@@ -23,15 +23,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import {errorRegex} from '@utils/errorRegex';
 import {RequestBody} from '@interfaces/Resource';
 
-const hoursArray: string[] = [];
-for (let i = 0; i <= 23; i++) {
-  for (let j = 0; j <= 1; j++) {
-    let hour: string = i.toString().padStart(2, '0');
-    let minute: string = (j * 30).toString().padStart(2, '0');
-    hoursArray.push(`${hour}:${minute}`);
-  }
-}
-
 type ModalAddExceptionalClosureProps = {
   openModal: boolean;
   handleCloseModal: (refresh: boolean | undefined) => void;
