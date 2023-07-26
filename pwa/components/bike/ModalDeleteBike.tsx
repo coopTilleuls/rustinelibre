@@ -52,8 +52,8 @@ const ModalDeleteBike = ({
       fullWidth
       open={openModal}
       onClose={handleCloseModal}
-      aria-labelledby="Ajouter un vélo"
-      aria-describedby="popup_add_bike">
+      aria-labelledby="Supprimer un vélo"
+      aria-describedby="popup_delete_bike">
       <DialogTitle
         sx={{
           m: 0,
