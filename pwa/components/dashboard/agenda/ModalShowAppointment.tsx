@@ -1,22 +1,22 @@
 import React, {useState} from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import {CircularProgress} from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import {Appointment} from '@interfaces/Appointment';
 import AppointmentContent from '@components/dashboard/appointments/AppointmentContent';
 import CloseIcon from '@mui/icons-material/Close';
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '70%',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import AppointmentActions from '../appointments/AppointmentActions';
 
 type ModalShowAppointmentProps = {
   appointment: Appointment;
@@ -29,36 +29,51 @@ const ModalShowAppointment = ({
   openModal,
   handleCloseModal,
 }: ModalShowAppointmentProps): JSX.Element => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
-    <Modal
+    <Dialog
+      maxWidth="sm"
+      fullWidth
+      fullScreen={isMobile}
       open={openModal}
       onClose={() => handleCloseModal(false)}
-      aria-labelledby="Show appointment"
+      aria-labelledby="Affichage d'un rendez-vous"
       aria-describedby="popup_show_appointment">
-      <Box sx={style}>
-        <CloseIcon
-          sx={{
-            position: 'absolute',
-            top: 10,
-            right: 10,
-            cursor: 'pointer',
-            fontSize: '2em',
-          }}
-          onClick={() => handleCloseModal(false)}
+      <DialogTitle
+        sx={{
+          m: 0,
+          p: 2,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Typography variant="h3" color="primary">
+          Rendez-vous
+        </Typography>
+        <IconButton
+          aria-label="close"
+          color="primary"
+          onClick={() => handleCloseModal(false)}>
+          <CloseIcon fontSize="large" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <AppointmentContent
+          appointmentProps={appointment}
+          handleCloseModal={handleCloseModal}
         />
-        <Box sx={{mt: 1}}>
-          {loading && <CircularProgress />}
-          {!loading && appointment && (
-            <AppointmentContent
-              appointmentProps={appointment}
-              handleCloseModal={handleCloseModal}
-            />
-          )}
-        </Box>
-      </Box>
-    </Modal>
+      </DialogContent>
+      {appointment.status !== 'cancel' && appointment.status !== 'refused' && (
+        <DialogActions sx={{p: 2}}>
+          <AppointmentActions
+            appointment={appointment}
+            handleCloseModal={handleCloseModal}
+          />
+        </DialogActions>
+      )}
+    </Dialog>
   );
 };
 

@@ -103,7 +103,7 @@ export const CustomerAppointmentsList = ({
             <TableRow>
               <TableCell align="left">Date</TableCell>
               <TableCell align="left">Prestation</TableCell>
-              <TableCell align="left">Accepté</TableCell>
+              <TableCell align="left">Status</TableCell>
               <TableCell align="left"></TableCell>
             </TableRow>
           </TableHead>
@@ -128,7 +128,7 @@ export const CustomerAppointmentsList = ({
                   <TableCell align="left" sx={{cursor: 'pointer'}}>
                     <RemoveRedEyeIcon
                       onClick={() => handleShow(appointment)}
-                      color="info"
+                      color="primary"
                     />
                   </TableCell>
                 </TableRow>
