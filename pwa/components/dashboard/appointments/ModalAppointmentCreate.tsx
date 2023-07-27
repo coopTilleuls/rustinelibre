@@ -284,6 +284,7 @@ const ModalAppointmentCreate = ({
     setAddress('');
     setLatitude('');
     setLongitude('');
+    setErrorMessage(null);
     handleCloseModal(false);
   };
 
