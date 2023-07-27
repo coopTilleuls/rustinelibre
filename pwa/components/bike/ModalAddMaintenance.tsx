@@ -313,22 +313,27 @@ const ModalAddMaintenance = ({
               width={isMobile ? '100%' : '50%'}>
               <Typography variant="h5">Votre facture</Typography>
               {invoice && (
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  mt={1}
-                  mb={2}
-                  width={isMobile ? '100%' : '200'}
-                  minHeight={150}
-                  bgcolor="lightsecondary.main"
-                  sx={{
-                    borderRadius: 6,
-                    boxShadow: 4,
-                    overflow: 'hidden',
-                  }}>
-                  <InsertDriveFileIcon sx={{fontSize: 60}} color="secondary" />
-                </Box>
+                <a href={invoice.contentUrl} target="_blank">
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    mt={1}
+                    mb={2}
+                    width={isMobile ? '100%' : '200'}
+                    minHeight={150}
+                    bgcolor="lightsecondary.main"
+                    sx={{
+                      borderRadius: 6,
+                      boxShadow: 4,
+                      overflow: 'hidden',
+                    }}>
+                    <InsertDriveFileIcon
+                      sx={{fontSize: 60}}
+                      color="secondary"
+                    />
+                  </Box>
+                </a>
               )}
               <Button
                 size="small"
