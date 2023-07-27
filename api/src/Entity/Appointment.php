@@ -47,9 +47,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         summary: 'Update appointment status',
         description: 'Request body should contains a transition propery which is one of the following transition : validated_by_repairer, validated_by_cyclist, refused, propose_another_slot, cancellation'),
     security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user",
+    validationContext: ['groups' => ['transition']],
 )]
-#[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Put(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
+#[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')", validationContext: ['groups' => ['default']])]
+#[Put(
+    security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user",
+    validationContext: ['groups' => ['default']],
+)]
 #[Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[ApiFilter(DateFilter::class, properties: ['slotTime'])]
 #[AppointmentState]
@@ -78,7 +82,7 @@ class Appointment
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    #[Assert\NotBlank(message: 'appointment.repairer.not_blank')]
+    #[Assert\NotBlank(message: 'appointment.repairer.not_blank', groups: ['default'])]
     public Repairer $repairer;
 
     #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
@@ -87,7 +91,7 @@ class Appointment
 
     #[ORM\Column]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
-    #[Assert\NotBlank(message: 'appointment.slotTime.not_blank'), Assert\GreaterThan('now', message: 'appointment.slotTime.greater_than')]
+    #[Assert\NotBlank(message: 'appointment.slotTime.not_blank', groups: ['default']), Assert\GreaterThan('now', message: 'appointment.slotTime.greater_than', groups: ['default'])]
     public ?\DateTimeImmutable $slotTime = null;
 
     #[ORM\Column(nullable: true)]
