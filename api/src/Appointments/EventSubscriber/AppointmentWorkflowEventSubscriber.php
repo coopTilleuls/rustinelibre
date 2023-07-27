@@ -92,8 +92,15 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition.slotTime', ['%transition%' => $event->getTransition()->getName()], domain: 'validators'));
         }
 
+        $newSlotTime = new \DateTimeImmutable($contentRequest['slotTime']);
+
+        // Check new slot time is not a past datetime
+        if ($newSlotTime < new \DateTimeImmutable()) {
+            throw new BadRequestHttpException($this->translator->trans('appointment.slotTime.greater_than', ['%transition%' => $event->getTransition()->getName()], domain: 'validators'));
+        }
+
         $appointment->status = Appointment::VALIDATED;
-        $appointment->slotTime = new \DateTimeImmutable($contentRequest['slotTime']);
+        $appointment->slotTime = $newSlotTime;
         $this->entityManager->flush();
 
         $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $appointment->repairer, flush: true);
@@ -129,7 +136,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         /** @var Appointment $appointment */
         $appointment = $event->getSubject();
 
-        // Update appointment
+        // Cancel appointment
         $appointment->status = Appointment::CANCEL;
         $this->entityManager->flush();
 
