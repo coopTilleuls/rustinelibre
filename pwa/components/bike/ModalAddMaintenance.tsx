@@ -34,7 +34,6 @@ import {MediaObject} from '@interfaces/MediaObject';
 import {Bike} from '@interfaces/Bike';
 import {RequestBody} from '@interfaces/Resource';
 import {Maintenance} from '@interfaces/Maintenance';
-import Link from 'next/link';
 
 type ModalAddMaintenanceProps = {
   bike: Bike;
