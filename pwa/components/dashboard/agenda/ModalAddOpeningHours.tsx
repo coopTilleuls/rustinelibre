@@ -1,36 +1,24 @@
 import React, {useState} from 'react';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import {CircularProgress} from '@mui/material';
-import {RequestBody} from '@interfaces/Resource';
 import {openingHoursResource} from '@resources/openingHours';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  MenuItem,
+  Typography,
+  InputLabel,
+  useTheme,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {RequestBody} from '@interfaces/Resource';
 import {errorRegex} from '@utils/errorRegex';
-
-const hoursArray: string[] = [];
-for (let i = 0; i <= 23; i++) {
-  for (let j = 0; j <= 1; j++) {
-    let hour: string = i.toString().padStart(2, '0');
-    let minute: string = (j * 30).toString().padStart(2, '0');
-    hoursArray.push(`${hour}:${minute}`);
-  }
-}
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '50%',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 type ModalAddOpeningHoursProps = {
   day: string;
@@ -48,14 +36,24 @@ const ModalAddOpeningHours = ({
   const [startTime, setStartTime] = useState<string>('09:00');
   const [endTime, setEndTime] = useState<string>('18:00');
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  let hoursArray: string[] = [];
+  for (let i = 0; i <= 23; i++) {
+    for (let j = 0; j <= 1; j++) {
+      let hour: string = i.toString().padStart(2, '0');
+      let minute: string = (j * 30).toString().padStart(2, '0');
+      hoursArray.push(`${hour}:${minute}`);
+    }
+  }
+
   const handleSubmit = async (): Promise<void> => {
     if (!startTime || !endTime) {
       return;
     }
-
     setErrorMessage(null);
     setPendingAdd(true);
-
     try {
       let bodyRequest: RequestBody = {
         startTime: startTime,
@@ -69,7 +67,6 @@ const ModalAddOpeningHours = ({
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
-
     setPendingAdd(false);
   };
 
@@ -81,76 +78,116 @@ const ModalAddOpeningHours = ({
     setEndTime(event.target.value);
   };
 
+  const handleClose = () => {
+    setStartTime('09:00');
+    setEndTime('18:00');
+    setErrorMessage(null);
+    handleCloseModal(false);
+  };
+
   return (
-    <Modal
+    <Dialog
+      maxWidth="sm"
+      fullWidth
       open={openModal}
-      onClose={() => handleCloseModal(false)}
-      aria-labelledby="Ajouter une plage horaire"
-      aria-describedby="popup_add_opening">
-      <Box sx={style}>
-        <Box sx={{mt: 1}}>
-          <Box sx={{display: 'flex', marginLeft: '20%'}}>
-            <Box>
-              <InputLabel id="demo-simple-select-label">
-                Horaire d&apos;ouverture
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={startTime}
-                label="Horaire d'ouverture"
-                onChange={handleChangeOpen}>
-                {hoursArray.map((hour) => {
-                  return (
-                    <MenuItem key={hour} value={hour}>
-                      {hour}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </Box>
-
-            <Box sx={{marginLeft: '90px'}}>
-              <InputLabel id="demo-simple-select-label">
-                Horaire de fermeture
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={endTime}
-                label="Horaire de fermeture"
-                onChange={handleChangeClose}>
-                {hoursArray.map((hour) => {
-                  return (
-                    <MenuItem key={hour} value={hour}>
-                      {hour}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </Box>
+      onClose={handleClose}
+      aria-labelledby="Ajouter les horaires d'ouverture"
+      aria-describedby="modal_add_opening_hours">
+      <DialogTitle
+        sx={{
+          m: 0,
+          p: 2,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Typography id="modal-modal-title" variant="h3" color="primary">
+          Ajouter une plage horaire
+        </Typography>
+        <IconButton aria-label="close" color="primary" onClick={handleClose}>
+          <CloseIcon fontSize="large" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Box
+          display="flex"
+          sx={{flexDirection: isMobile ? 'column' : 'row'}}
+          gap={2}>
+          <Box width={isMobile ? '100%' : '50%'}>
+            <InputLabel id="opening-hours-label">
+              Horaire d&apos;ouverture
+            </InputLabel>
+            <Select
+              sx={{width: '50%', mt: 1}}
+              labelId="opening-hours-label"
+              id="opening-hours"
+              value={startTime}
+              onChange={handleChangeOpen}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 200,
+                    overflowY: 'auto',
+                  },
+                },
+              }}>
+              {hoursArray.map((hour) => {
+                return (
+                  <MenuItem key={hour} value={hour}>
+                    {hour}
+                  </MenuItem>
+                );
+              })}
+            </Select>
           </Box>
-
+          <Box width={isMobile ? '100%' : '50%'}>
+            <InputLabel id="closing-hours-label">
+              Horaire de fermeture
+            </InputLabel>
+            <Select
+              sx={{width: '50%', mt: 1}}
+              labelId="closing-hours-label"
+              id="closing-hours"
+              value={endTime}
+              onChange={handleChangeClose}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 200,
+                    overflowY: 'auto',
+                  },
+                },
+              }}>
+              {hoursArray.map((hour) => {
+                return (
+                  <MenuItem key={hour} value={hour}>
+                    {hour}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </Box>
+        </Box>
+      </DialogContent>
+      <DialogActions sx={{p: 2}}>
+        <Box display="flex" flexDirection="column" alignItems="end">
           <Button
             type="submit"
-            fullWidth
-            variant="outlined"
-            sx={{mt: 3, mb: 2}}
-            onClick={handleSubmit}>
-            {!pendingAdd ? (
-              'Ajouter cette plage horaire'
-            ) : (
-              <CircularProgress size={20} />
-            )}
+            variant="contained"
+            onClick={handleSubmit}
+            startIcon={
+              pendingAdd && <CircularProgress size={18} sx={{color: 'white'}} />
+            }>
+            Ajouter cette plage horaire
           </Button>
           {errorMessage && (
-            <Typography variant="body1" color="error">
+            <Typography pt={1} variant="body1" color="error">
               {errorMessage}
             </Typography>
           )}
         </Box>
-      </Box>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   );
 };
 
