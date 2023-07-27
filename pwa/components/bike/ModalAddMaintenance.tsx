@@ -1,9 +1,8 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import dayjs from 'dayjs';
+import dayjs, {Dayjs} from 'dayjs';
 import 'dayjs/locale/fr';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import {Moment} from 'moment';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import {useAccount} from '@contexts/AuthContext';
@@ -39,7 +38,7 @@ import {Maintenance} from '@interfaces/Maintenance';
 type ModalAddMaintenanceProps = {
   bike: Bike;
   openModal: boolean;
-  handleCloseModal: () => void;
+  handleCloseModal: (refresh?: boolean) => void;
   maintenance: Maintenance | null;
 };
 
@@ -52,10 +51,14 @@ const ModalAddMaintenance = ({
   const [pendingAdd, setPendingAdd] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
-  const [description, setDescription] = useState<string | null>(null);
+  const [description, setDescription] = useState<string | null>(
+    maintenance?.description || null
+  );
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
   const [loadingInvoice, setLoadingInvoice] = useState<boolean>(false);
-  const [photo, setPhoto] = useState<MediaObject | null>(null);
+  const [photo, setPhoto] = useState<MediaObject | null>(
+    maintenance?.photo || null
+  );
   const [invoice, setInvoice] = useState<MediaObject | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -67,6 +70,7 @@ const ModalAddMaintenance = ({
 
   useEffect(() => {
     if (maintenance) {
+      setSelectedDate(maintenance.repairDate ?? null);
       setName(maintenance.name);
       setDescription(maintenance.description ?? null);
       setPhoto(maintenance.photo ?? null);
@@ -115,7 +119,7 @@ const ModalAddMaintenance = ({
         setInvoice(null);
         setSelectedDate(null);
       }
-      handleCloseModal();
+      handleCloseModal(true);
     } catch (e: any) {
       setErrorMessage(
         `Ajout de cette réparation impossible: ${e.message?.replace(
@@ -166,10 +170,9 @@ const ModalAddMaintenance = ({
     setPhoto(null);
     setInvoice(null);
     setErrorMessage(null);
+    setSelectedDate(null);
     handleCloseModal();
   };
-
-  console.log(name);
 
   return (
     <Dialog
@@ -189,7 +192,7 @@ const ModalAddMaintenance = ({
           alignItems: 'center',
         }}>
         <Typography id="modal-modal-title" variant="h3" color="primary">
-          {maintenance ? 'Modifier une réparation' : 'Ajouter une réparation'}
+          {maintenance ? 'Détails de la réparation' : 'Ajouter une réparation'}
         </Typography>
         <IconButton aria-label="close" color="primary" onClick={handleClose}>
           <CloseIcon fontSize="large" />
@@ -214,33 +217,31 @@ const ModalAddMaintenance = ({
             inputProps={{maxLength: 255}}
             onChange={handleChangeName}
           />
-          {!maintenance && (
-            <Box mt={1}>
-              <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                localeText={
-                  frFR.components.MuiLocalizationProvider.defaultProps
-                    .localeText
+          <Box mt={1}>
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              localeText={
+                frFR.components.MuiLocalizationProvider.defaultProps.localeText
+              }
+              adapterLocale="fr">
+              <DatePicker
+                format="DD-MM-YYYY"
+                label="Date de la réparation"
+                defaultValue={null}
+                value={selectedDate && dayjs(selectedDate)}
+                onChange={(newValue: string | Dayjs | null) =>
+                  setSelectedDate(
+                    newValue && typeof newValue !== 'string'
+                      ? newValue.format('YYYY-MM-DD')
+                      : null
+                  )
                 }
-                adapterLocale="fr">
-                <DatePicker
-                  format="DD-MM-YYYY"
-                  label="Date de la réparation"
-                  value={selectedDate}
-                  onChange={(newValue: string | Moment | null) =>
-                    setSelectedDate(
-                      newValue && typeof newValue !== 'string'
-                        ? newValue.format('YYYY-MM-DD')
-                        : null
-                    )
-                  }
-                />
-              </LocalizationProvider>
-            </Box>
-          )}
+              />
+            </LocalizationProvider>
+          </Box>
           <TextField
             margin="normal"
-            placeholder="Description de votre réparation"
+            label="Description de votre réparation"
             multiline
             fullWidth
             rows={3}
@@ -370,7 +371,7 @@ const ModalAddMaintenance = ({
             }
             disabled={!name}>
             {maintenance && user
-              ? `${isMobile ? 'Modifier' : 'Modifier cette réparation'}`
+              ? `${isMobile ? 'Enregistrer' : 'Enregistrer les modifications'}`
               : `${isMobile ? 'Ajouter' : 'Ajouter cette réparation'}`}
           </Button>
           {errorMessage && (

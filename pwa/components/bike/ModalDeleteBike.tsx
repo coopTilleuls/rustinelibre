@@ -1,7 +1,17 @@
 import React, {useState} from 'react';
 import router from 'next/router';
-import {Box, Button, Typography, Modal, CircularProgress} from '@mui/material';
+import {
+  Button,
+  Typography,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  IconButton,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
 import {bikeResource} from '@resources/bikeResource';
+import CloseIcon from '@mui/icons-material/Close';
 import {Bike} from '@interfaces/Bike';
 import {errorRegex} from '@utils/errorRegex';
 
@@ -37,45 +47,52 @@ const ModalDeleteBike = ({
   };
 
   return (
-    <Modal
+    <Dialog
+      maxWidth="sm"
+      fullWidth
       open={openModal}
       onClose={handleCloseModal}
-      aria-labelledby="Ajouter un vélo"
-      aria-describedby="popup_add_bike">
-      <Box
-        position={'absolute'}
-        top={'50%'}
-        left={'50%'}
-        width={{xs: '85%', md: '40%'}}
-        maxWidth={700}
-        p={4}
-        boxShadow={24}
+      aria-labelledby="Supprimer un vélo"
+      aria-describedby="popup_delete_bike">
+      <DialogTitle
         sx={{
-          backgroundColor: 'background.paper',
-          transform: 'translate(-50%, -50%)',
+          m: 0,
+          p: 1,
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
         }}>
-        <Typography
-          id="modal-modal-title"
-          textAlign="center"
-          fontSize={18}
-          fontWeight={600}>
+        <IconButton
+          aria-label="close"
+          color="primary"
+          onClick={handleCloseModal}>
+          <CloseIcon fontSize="large" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers sx={{pt: 0, pb: 4, borderTop: 'none'}}>
+        <Typography variant="h5" gutterBottom>
           Êtes-vous sûr(e) de vouloir supprimer ce vélo ?
         </Typography>
-        <Box display="flex" justifyContent="space-evenly" px={{md: 4}} pt={4}>
-          <Button variant="outlined" color="error" onClick={handleCloseModal}>
-            Annuler
-          </Button>
-          <Button variant="contained" onClick={handleDelete}>
-            {loading ? <CircularProgress sx={{color: 'white'}} /> : 'Valider'}
-          </Button>
-        </Box>
+        <Typography color="text.secondary">
+          {`Vous êtes sur le point de supprimer "${
+            bike?.name || 'votre vélo'
+          }".`}
+        </Typography>
+      </DialogContent>
+      <DialogActions sx={{p: 2}}>
+        <Button variant="outlined" color="secondary" onClick={handleCloseModal}>
+          Annuler
+        </Button>
+        <Button variant="contained" color="error" onClick={handleDelete}>
+          {loading ? <CircularProgress sx={{color: 'white'}} /> : 'Valider'}
+        </Button>
         {errorMessage && (
           <Typography color="error" textAlign="center" sx={{pt: 4}}>
             {errorMessage}
           </Typography>
         )}
-      </Box>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   );
 };
 
