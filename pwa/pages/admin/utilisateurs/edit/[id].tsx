@@ -11,6 +11,10 @@ import {RequestBody} from '@interfaces/Resource';
 import {UserFormContext} from '@contexts/UserFormContext';
 import UserForm from '@components/form/UserForm';
 import {errorRegex} from '@utils/errorRegex';
+import {isAdmin} from '@helpers/rolesHelpers';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 
 const EditUser: NextPageWithLayout = () => {
   const router = useRouter();
@@ -20,6 +24,7 @@ const EditUser: NextPageWithLayout = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [roleAdmin, setRoleAdmin] = useState<boolean>(false);
   const {firstName, lastName, passwordError, city, street} =
     useContext(UserFormContext);
 
@@ -29,6 +34,7 @@ const EditUser: NextPageWithLayout = () => {
         setLoading(true);
         const userFetch: User = await userResource.getById(id);
         setUser(userFetch);
+        setRoleAdmin(isAdmin(userFetch));
         setLoading(false);
       }
     }
@@ -52,6 +58,13 @@ const EditUser: NextPageWithLayout = () => {
         city: city,
         street: street,
       };
+
+      if (roleAdmin) {
+        bodyRequest.roles = ['ROLE_ADMIN'];
+      } else {
+        bodyRequest.roles = ['ROLE_USER'];
+      }
+
       await userResource.putById(user.id, bodyRequest);
       setSuccess(true);
       setTimeout(() => {
@@ -64,6 +77,10 @@ const EditUser: NextPageWithLayout = () => {
     setPendingUpdate(false);
   };
 
+  const handleChangeRole = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRoleAdmin(event.target.checked);
+  };
+
   return (
     <>
       <Head>
@@ -72,6 +89,19 @@ const EditUser: NextPageWithLayout = () => {
       <AdminLayout />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>
         {loading ? <CircularProgress /> : <UserForm user={user} />}
+
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={roleAdmin}
+                onChange={handleChangeRole}
+                inputProps={{'aria-label': 'controlled'}}
+              />
+            }
+            label="SUPER ADMIN (va remplacer tous les autres rôles)"
+          />
+        </FormGroup>
       </Box>
 
       <Box display="flex" flexDirection="column" alignItems="center">
