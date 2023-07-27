@@ -10,6 +10,7 @@ import {Collection} from '@interfaces/Resource';
 import {Maintenance} from '@interfaces/Maintenance';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import {useAccount} from '@contexts/AuthContext';
+import {AccountCircle, BuildCircle} from '@mui/icons-material';
 
 type BikeTabsProps = {
   bike: Bike;
@@ -46,16 +47,27 @@ const BikeTabs = ({bike, setBike, bikeTypes}: BikeTabsProps): JSX.Element => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Tabs
-        value={tabValue}
-        onChange={handleChangeTab}
-        aria-label="bike tabs"
-        sx={{width: '100%'}}>
-        <Tab label="Fiche d'identité" sx={{width: '50%'}} />
-        <Tab label="Réparations" sx={{width: '50%'}} />
-      </Tabs>
+      <Box sx={{borderBottom: 1, borderColor: 'divider', width: '100%'}}>
+        <Tabs
+          variant="fullWidth"
+          value={tabValue}
+          onChange={handleChangeTab}
+          aria-label="bike tabs"
+          sx={{width: '100%'}}>
+          <Tab
+            label="Fiche d'identité"
+            iconPosition="start"
+            icon={<AccountCircle />}
+          />
+          <Tab
+            icon={<BuildCircle />}
+            iconPosition="start"
+            label="Réparations"
+          />
+        </Tabs>
+      </Box>
 
-      <Box sx={{marginTop: 2}}>
+      <Box sx={{width: '100%'}}>
         {tabValue === 0 && (
           <BikeIdentity bike={bike} setBike={setBike} bikeTypes={bikeTypes} />
         )}

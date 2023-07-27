@@ -2,24 +2,22 @@ import React, {useState} from 'react';
 import {Bike} from '@interfaces/Bike';
 import Box from '@mui/material/Box';
 import {MediaObject} from '@interfaces/MediaObject';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import {CircularProgress} from '@mui/material';
-import CardActions from '@mui/material/CardActions';
+import {Alert, CircularProgress} from '@mui/material';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import {uploadImage} from '@helpers/uploadFile';
 import {bikeResource} from '@resources/bikeResource';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
-import {useAccount} from '@contexts/AuthContext';
 import {checkFileSize} from '@helpers/checkFileSize';
+import {Delete} from '@mui/icons-material';
 
 type BikeIdentityPhotoProps = {
   bike: Bike;
   photo: MediaObject | null;
   propertyName: string;
   title: string;
+  onUpdatePhoto?: (photo?: MediaObject) => void;
 };
 
 const BikeIdentityPhoto = ({
@@ -27,11 +25,11 @@ const BikeIdentityPhoto = ({
   photo,
   propertyName,
   title,
+  onUpdatePhoto,
 }: BikeIdentityPhotoProps): JSX.Element => {
   const [photoDisplay, setPhotoDisplay] = useState<MediaObject | null>(photo);
   const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const {user} = useAccount({redirectIfNotFound: '/velos/mes-velos'});
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -54,6 +52,7 @@ const BikeIdentityPhoto = ({
         // Display new photo
         setPhotoDisplay(mediaObjectResponse);
         setLoading(false);
+        onUpdatePhoto?.(mediaObjectResponse);
 
         // Update bike
         await bikeResource.put(bike['@id'], {
@@ -75,6 +74,7 @@ const BikeIdentityPhoto = ({
     const photoIri = photoDisplay['@id'];
     // Remove image displayed
     setPhotoDisplay(null);
+    onUpdatePhoto?.(undefined);
 
     // Update bike
     await bikeResource.put(bike['@id'], {
@@ -87,73 +87,91 @@ const BikeIdentityPhoto = ({
   return (
     <Box
       sx={{
-        marginTop: 4,
+        mt: 4,
+        pt: 4,
+        px: 4,
+        borderTop: '1px solid',
+        borderColor: 'divider',
+        '&:first-of-type': {
+          mt: 0,
+        },
       }}>
-      <Card sx={{minWidth: 275}}>
-        <CardContent>
-          {loading && <CircularProgress />}
-          {photoDisplay && !loading && (
-            <Box>
-              <Typography variant="h5" sx={{textAlign: 'center'}}>
-                {title}
-              </Typography>
+      <Typography variant="h5" component="span" sx={{mr: 1}}>
+        {title}
+      </Typography>
+      <Typography component="span" variant="caption" color="text.secondary">
+        (Max 5mo)
+      </Typography>
+      {imageTooHeavy && (
+        <Alert
+          severity="error"
+          sx={{mt: 1}}
+          onClose={() => setImageTooHeavy(false)}>
+          Votre photo dépasse la taille maximum autorisée (5mo)
+        </Alert>
+      )}
+      {photoDisplay && (
+        <Box>
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap={1}
+            my={2}
+            alignItems="flex-start">
+            <Box
+              sx={{
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: 6,
+                boxShadow: 4,
+              }}>
               <img
-                width="80%"
                 height="auto"
                 src={photoDisplay.contentUrl}
                 alt="Photo du vélo"
-                style={{marginLeft: '10%'}}
+                style={{
+                  display: 'block',
+                  maxWidth: '500px',
+                  width: '100%',
+                }}
               />
             </Box>
-          )}
-          {!photoDisplay && !loading && (
-            <Box>
-              <label htmlFor="fileUpload">
-                <Typography
-                  variant="h4"
-                  sx={{cursor: 'pointer', textAlign: 'center'}}>
-                  {title}
-                </Typography>
-                <Typography sx={{textAlign: 'center'}}>
-                  <AddAPhotoIcon
-                    sx={{
-                      fontSize: '3em',
-                      cursor: 'pointer',
-                      marginBottom: '20px',
-                    }}
-                  />
-                  <br />
-                  Ajouter une photo (taille maximum 5mo)
-                </Typography>
-
-                {imageTooHeavy && (
-                  <Typography sx={{textAlign: 'center', color: 'red'}}>
-                    Votre photo dépasse la taille maximum autorisée (5mo)
-                  </Typography>
-                )}
-              </label>
-              <input
-                id="fileUpload"
-                name="fileUpload"
-                type="file"
-                hidden
-                onChange={(e) => handleFileChange(e)}
-              />
-            </Box>
-          )}
-        </CardContent>
-        {photoDisplay && (
-          <CardActions>
-            <Button component="label" size="small">
-              Modifier
-              <input type="file" hidden onChange={(e) => handleFileChange(e)} />
-            </Button>
-            <Button size="small" onClick={handleRemoveImage}>
-              Supprimer
-            </Button>
-          </CardActions>
-        )}
-      </Card>
+          </Box>
+        </Box>
+      )}
+      <Box display="flex" gap={2} my={2} alignItems="center">
+        <Button
+          variant="outlined"
+          size="small"
+          color="secondary"
+          disabled={loading}
+          startIcon={
+            loading ? (
+              <CircularProgress size={18} color="secondary" />
+            ) : (
+              <AddAPhotoIcon />
+            )
+          }
+          component="label">
+          {photoDisplay ? 'Changer de photo' : 'Ajouter une photo'}
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={(e) => handleFileChange(e)}
+          />
+        </Button>
+        {photoDisplay ? (
+          <Button
+            size="small"
+            color="error"
+            variant="outlined"
+            onClick={handleRemoveImage}
+            startIcon={<Delete />}>
+            Supprimer
+          </Button>
+        ) : null}
+      </Box>
     </Box>
   );
 };

@@ -3,34 +3,21 @@ import {Bike} from '@interfaces/Bike';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import {
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-} from '@mui/material';
+import {CircularProgress, IconButton} from '@mui/material';
 import {Maintenance} from '@interfaces/Maintenance';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import ModalAddMaintenance from '@components/bike/ModalAddMaintenance';
 import {formatDate} from '@helpers/dateHelper';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import {CardActionArea} from '@mui/material';
 import BuildIcon from '@mui/icons-material/Build';
-import ModalDetailMaintenance from '@components/bike/ModalDetailMaintenance';
-import {BikeType} from '@interfaces/BikeType';
-import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {Search} from '@mui/icons-material';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 
 type BikeMaintenanceProps = {
   bike: Bike;
@@ -46,7 +33,6 @@ const BikeMaintenance = ({
   fetchMaintenance,
 }: BikeMaintenanceProps): JSX.Element => {
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [openModalDetail, setOpenModalDetail] = useState<boolean>(false);
   const [maintenanceSelected, setMaintenanceSelected] =
     useState<Maintenance | null>(null);
   const [selectedMaintenanceToDelete, setSelectedMaintenanceToDelete] =
@@ -81,71 +67,69 @@ const BikeMaintenance = ({
   };
 
   const handleOpenModal = (): void => setOpenModal(true);
-  const handleCloseModal = async (): Promise<void> => {
+  const handleCloseModal = async (refresh?: boolean): Promise<void> => {
     setOpenModal(false);
-    await fetchMaintenance();
-  };
-
-  const handleCloseModalDetail = async (refresh: boolean): Promise<void> => {
-    setOpenModalDetail(false);
+    setMaintenanceSelected(null);
     if (refresh) {
       await fetchMaintenance();
     }
   };
 
   const clickMaintenanceDetail = (maintenance: Maintenance) => {
-    setOpenModalDetail(true);
     setMaintenanceSelected(maintenance);
+    setOpenModal(true);
   };
 
   return (
     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-      {loading && <CircularProgress />}
+      {loading && (
+        <Box py={2}>
+          <CircularProgress />
+        </Box>
+      )}
 
       {!loading && maintenances.length == 0 && (
-        <Paper elevation={4} sx={{my: 4, width: '100%'}}>
-          <Card>
-            <CardActionArea>
-              <CardContent>
-                <Typography gutterBottom variant="h5" textAlign="center">
-                  <BuildIcon color="primary" />
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  textAlign="center">
-                  Vous n&apos;avez pas de réparations enregistrées pour le
-                  moment.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Paper>
+        <Box py={3}>
+          <Typography gutterBottom variant="h5" textAlign="center">
+            <BuildIcon color="primary" />
+          </Typography>
+          <Typography variant="body2" color="text.secondary" textAlign="center">
+            Vous n&apos;avez pas de réparations enregistrées pour le moment.
+          </Typography>
+        </Box>
       )}
 
       {!loading && maintenances.length > 0 && (
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table sx={{minWidth: 300}} aria-label="simple table">
             <TableBody>
               {maintenances.map((maintenance) => (
                 <TableRow key={maintenance.id}>
+                  <TableCell align="left">
+                    <Typography variant="body2" fontWeight={700}>
+                      {maintenance.name}
+                    </Typography>
+                  </TableCell>
                   <TableCell component="th" scope="row">
                     {maintenance.repairDate
                       ? formatDate(maintenance.repairDate, false)
                       : ''}
                   </TableCell>
-                  <TableCell align="right">{maintenance.name}</TableCell>
-                  <TableCell align="right">
-                    <Button
-                      variant="outlined"
-                      onClick={() => clickMaintenanceDetail(maintenance)}>
-                      Détails
-                    </Button>
-
+                  <TableCell align="right" width="120px">
                     <IconButton
                       color="secondary"
+                      onClick={() => clickMaintenanceDetail(maintenance)}>
+                      <Search />
+                    </IconButton>
+                    <IconButton
+                      color="error"
                       onClick={() => handleDeleteClick(maintenance)}>
-                      <DeleteForeverIcon />
+                      {selectedMaintenanceToDelete?.id === maintenance.id &&
+                      removePending ? (
+                        <CircularProgress size={18} />
+                      ) : (
+                        <DeleteForeverIcon />
+                      )}
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -161,9 +145,11 @@ const BikeMaintenance = ({
         </Typography>
       )}
 
-      <Button sx={{my: 2}} onClick={handleOpenModal} variant="contained">
-        {' '}
-        <AddIcon />
+      <Button
+        sx={{my: 2, ml: 'auto', mr: 2, display: 'flex'}}
+        onClick={handleOpenModal}
+        variant="contained"
+        startIcon={<AddIcon />}>
         Ajouter une réparation
       </Button>
 
@@ -171,32 +157,17 @@ const BikeMaintenance = ({
         bike={bike}
         openModal={openModal}
         handleCloseModal={handleCloseModal}
-        maintenance={null}
-      />
-
-      <ModalDetailMaintenance
         maintenance={maintenanceSelected}
-        openModal={openModalDetail}
-        handleCloseModal={handleCloseModalDetail}
       />
 
       {selectedMaintenanceToDelete && (
-        <Dialog
-          open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {`Êtes-vous sûr de vouloir supprimer ${selectedMaintenanceToDelete.name}`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <ConfirmationModal
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          open={deleteDialogOpen}>
+          {`Êtes-vous sûr de vouloir supprimer ${selectedMaintenanceToDelete.name}`}
+          &nbsp;?
+        </ConfirmationModal>
       )}
     </Box>
   );

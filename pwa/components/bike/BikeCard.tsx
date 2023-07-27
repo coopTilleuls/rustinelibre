@@ -61,6 +61,7 @@ const BikeCard = ({bike}: BikeCardProps): JSX.Element => {
               src={bike.picture?.contentUrl || '/img/placeholder-bike.jpg'}
               style={{objectFit: 'cover'}}
               fill
+              loading="eager"
               sizes="300px"
               alt=""
             />
