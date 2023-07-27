@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useRouter} from 'next/router';
 import {useAccount, useAuth} from '@contexts/AuthContext';
 import {userResource} from '@resources/userResource';
 import {
@@ -8,8 +9,13 @@ import {
   CircularProgress,
   Alert,
   Modal,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
 } from '@mui/material';
-import {useRouter} from 'next/router';
+import CloseIcon from '@mui/icons-material/Close';
 
 const RemoveAccount = (): JSX.Element => {
   const router = useRouter();
@@ -93,70 +99,67 @@ const RemoveAccount = (): JSX.Element => {
           sx={{backgroundColor: 'white', width: '40%', visibility: 'hidden'}}
         />
       </Box>
-
       {showModal && (
-        <Modal
+        <Dialog
+          maxWidth="sm"
+          fullWidth
           open={showModal}
           onClose={() => setShowModal(false)}
-          aria-labelledby="Suppression de mon compte"
-          aria-describedby="popup_remove_account">
-          <Box
-            position={'absolute'}
-            top={'50%'}
-            left={'50%'}
-            width={{xs: '85%', md: '40%'}}
-            maxWidth={700}
-            p={4}
-            boxShadow={24}
+          aria-labelledby="Suppression d'un compte"
+          aria-describedby="modal_delete_account">
+          <DialogTitle
             sx={{
-              backgroundColor: 'background.paper',
-              transform: 'translate(-50%, -50%)',
+              m: 0,
+              p: 1,
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
             }}>
-            <Typography>
+            <IconButton
+              aria-label="close"
+              color="primary"
+              onClick={() => setShowModal(false)}>
+              <CloseIcon fontSize="large" />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent dividers sx={{pt: 0, pb: 4, borderTop: 'none'}}>
+            <Typography variant="h5" gutterBottom>
               Êtes-vous certain de vouloir supprimer votre compte ?
             </Typography>
-
+            <Typography color="text.secondary">
+              Vous êtes sur le point de supprimer définitivement votre compte.
+            </Typography>
+          </DialogContent>
+          <DialogActions sx={{p: 2}}>
             <Button
-              onClick={() => setShowModal(false)}
-              type="submit"
-              variant="contained"
-              sx={{
-                mt: 3,
-                textTransform: 'capitalize',
-                width: {xs: '100%', md: 'auto'},
-              }}>
+              variant="outlined"
+              color="secondary"
+              onClick={() => setShowModal(false)}>
               Annuler
             </Button>
-
             <Button
-              onClick={() => handleRemove()}
-              type="submit"
               variant="contained"
-              sx={{
-                mt: 3,
-                ml: 3,
-                textTransform: 'capitalize',
-                width: {xs: '100%', md: 'auto'},
-              }}>
-              {!pendingRemove ? (
-                'Confirmer'
-              ) : (
-                <CircularProgress size={20} sx={{color: 'white'}} />
-              )}
+              color="error"
+              onClick={() => handleRemove()}
+              startIcon={
+                pendingRemove && (
+                  <CircularProgress size={18} sx={{color: 'white'}} />
+                )
+              }>
+              Confirmer
             </Button>
-          </Box>
-        </Modal>
-      )}
-
-      {errorMessage && (
-        <Alert sx={{width: '100%', mt: 4}} severity="error">
-          {errorMessage}
-        </Alert>
-      )}
-      {successMessage && (
-        <Alert sx={{width: '100%', mt: 4}} severity="success">
-          Votre compte a bien été supprimé.
-        </Alert>
+          </DialogActions>
+          {errorMessage && (
+            <Alert sx={{width: '100%'}} severity="error">
+              {errorMessage}
+            </Alert>
+          )}
+          {successMessage && (
+            <Alert sx={{width: '100%'}} severity="success">
+              Votre compte a bien été supprimé.
+            </Alert>
+          )}
+        </Dialog>
       )}
     </Box>
   );
