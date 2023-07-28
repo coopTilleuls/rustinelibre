@@ -38,7 +38,7 @@ const MyAppointments: NextPageWithLayout = () => {
               Connectez-vous pour accéder à la liste de vos rendez-vous
             </Typography>
             <Button variant="contained" onClick={handleLogin} sx={{mt: 4}}>
-              Me Connecter
+              Me onnecter
             </Button>
           </Paper>
         )}
