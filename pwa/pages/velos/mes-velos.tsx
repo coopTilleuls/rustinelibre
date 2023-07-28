@@ -110,7 +110,7 @@ const MyBikes: NextPageWithLayout = () => {
                 size="large"
                 onClick={handleLogin}
                 sx={{mt: 4}}>
-                Me Connecter
+                Me connecter
               </Button>
             </Paper>
           ) : (
