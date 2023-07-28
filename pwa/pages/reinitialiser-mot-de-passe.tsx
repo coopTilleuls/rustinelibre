@@ -91,7 +91,7 @@ const PasswordReset: NextPageWithLayout = () => {
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '80%'}}}>
-          <Paper elevation={4} sx={{maxWidth: '100%', p: 4, mt: 4, mx: 'auto'}}>
+          <Paper elevation={4} sx={{maxWidth: '100%', mt: 4, mx: 'auto'}}>
             {!success && (
               <Box
                 width="100%"
@@ -110,7 +110,7 @@ const PasswordReset: NextPageWithLayout = () => {
                   maxWidth="lg"
                   mx="auto">
                   <Typography fontSize={22} fontWeight={600}>
-                    Indiquer votre nouveau mot de passe
+                    Indiquez votre nouveau mot de passe
                   </Typography>
                   <Box
                     display="flex"
@@ -132,6 +132,7 @@ const PasswordReset: NextPageWithLayout = () => {
                       onChange={handleChangeNewPassword}
                       sx={{
                         backgroundColor: 'white',
+                        borderRadius: '20px',
                         width: {xs: '100%', md: '40%'},
                       }}
                     />
@@ -149,6 +150,7 @@ const PasswordReset: NextPageWithLayout = () => {
                       onChange={handleChangeCheckPassword}
                       sx={{
                         backgroundColor: 'white',
+                        borderRadius: '20px',
                         width: {xs: '100%', md: '40%'},
                       }}
                     />
