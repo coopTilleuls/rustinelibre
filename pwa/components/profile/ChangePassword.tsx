@@ -147,7 +147,7 @@ const UpdatePassword = (): JSX.Element => {
           flexDirection="column"
           width={{xs: '100%', md: '40%'}}>
           <TextField
-            sx={{backgroundColor: 'white', width: '100%'}}
+            sx={{backgroundColor: 'white', borderRadius: '20px', width: '100%'}}
             margin="normal"
             required
             fullWidth
@@ -204,7 +204,11 @@ const UpdatePassword = (): JSX.Element => {
               error={!!passwordErrorText}
               helperText={passwordErrorText}
               onChange={handleChangeNewPassword}
-              sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: '20px',
+                width: {xs: '100%', md: '40%'},
+              }}
             />
             <TextField
               margin="normal"
@@ -218,7 +222,11 @@ const UpdatePassword = (): JSX.Element => {
               error={!!checkPasswordErrorText}
               helperText={checkPasswordErrorText}
               onChange={handleChangeCheckPassword}
-              sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: '20px',
+                width: {xs: '100%', md: '40%'},
+              }}
             />
           </Box>
           <Box textAlign="right">

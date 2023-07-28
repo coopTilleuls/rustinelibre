@@ -23,7 +23,6 @@ const MyProfile: NextPageWithLayout = () => {
               <CircularProgress />
             </Box>
           )}
-
           {user && (
             <Box
               width="100%"
