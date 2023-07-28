@@ -125,7 +125,11 @@ export const MyAccountForm = ({
             autoComplete="firstName"
             autoFocus
             value={firstName}
-            sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: '20px',
+              width: {xs: '100%', md: '40%'},
+            }}
             inputProps={{maxLength: 50}}
             onChange={handleChangeFirstName}
           />
@@ -138,7 +142,11 @@ export const MyAccountForm = ({
             name="lastName"
             autoComplete="lastName"
             value={lastName}
-            sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: '20px',
+              width: {xs: '100%', md: '40%'},
+            }}
             inputProps={{maxLength: 50}}
             onChange={handleChangeLastName}
           />
@@ -156,7 +164,11 @@ export const MyAccountForm = ({
             name="street"
             autoComplete="street"
             value={street || user?.street}
-            sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: '20px',
+              width: {xs: '100%', md: '40%'},
+            }}
             inputProps={{maxLength: 250}}
             onChange={handleChangeStreet}
           />
@@ -168,7 +180,11 @@ export const MyAccountForm = ({
             name="city"
             autoComplete="city"
             value={city || user?.city}
-            sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: '20px',
+              width: {xs: '100%', md: '40%'},
+            }}
             inputProps={{maxLength: 100}}
             onChange={handleChangeCity}
           />
