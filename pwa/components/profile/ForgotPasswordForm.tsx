@@ -71,7 +71,11 @@ export const ForgotPasswordForm = (): JSX.Element => {
               name="email"
               autoComplete="email"
               value={email}
-              sx={{backgroundColor: 'white', width: {xs: '100%', md: '40%'}}}
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: '20px',
+                width: {xs: '100%', md: '40%'},
+              }}
               inputProps={{maxLength: 50}}
               onChange={handleChangeEmail}
             />
