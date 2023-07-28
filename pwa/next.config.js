@@ -31,6 +31,7 @@ const nextConfig = withPWA({
       'resources',
       'utils',
       'config',
+      'tests',
     ],
   },
 });

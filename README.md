@@ -55,6 +55,14 @@ php -d memory_limit=512M vendor/bin/phpunit
 vendor/bin/phpunit  <chemin/vers/votre/test>
 ```
 
+## Pour lancer l'intégralité des tests end-to-end
+
+```shell
+cd ./pwa
+npx playwright install
+npx playwright test
+```
+
 ## Pour obtenir un token JWT (JsonWebToken)
 
 Faites une request POST sur cette URL : https://localhost/auth avec ce contenu
