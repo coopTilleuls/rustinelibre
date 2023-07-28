@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import Head from 'next/head';
 import {
   Typography,
@@ -83,6 +83,12 @@ const PasswordReset: NextPageWithLayout = () => {
 
     setPendingSend(false);
   };
+
+  useEffect(() => {
+    if (!token || token === '') {
+      router.push('/');
+    }
+  }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
