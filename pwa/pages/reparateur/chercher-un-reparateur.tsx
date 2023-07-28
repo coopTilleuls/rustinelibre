@@ -332,9 +332,11 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
             width="100%"
             bgcolor="white"
             paddingY="10px"
-            zIndex="200">
+            zIndex="200"
+            boxShadow={3}>
             <Container>
-              <form
+              <Box
+                component="form"
                 onSubmit={handleSubmit}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') {
@@ -433,7 +435,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                     />
                   ) : null}
                 </Box>
-              </form>
+              </Box>
             </Container>
           </Box>
           <Container sx={{pt: 0}}>

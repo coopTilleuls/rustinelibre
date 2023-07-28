@@ -54,28 +54,23 @@ export const RepairersResults = (): JSX.Element => {
           <Grid2 container spacing={4} sx={{py: 2}}>
             {repairers.map((repairer) => {
               return (
-                <>
-                  <Grid2
-                    id={repairer.id}
-                    key={repairer.id}
-                    xs={12}
-                    pt="198px"
-                    mt="-198px">
-                    <RepairerCard
-                      withButton
-                      repairer={repairer}
-                      onClick={() =>
-                        router.push({
-                          pathname: `/reparateur/${repairer.id}-${repairer.slug}`,
-                          query: {searchRepairer: 1},
-                        })
-                      }
-                    />
-                  </Grid2>
-                  {isMobile && (
-                    <Divider sx={{width: '90%', mx: 'auto', mb: 1}} />
-                  )}
-                </>
+                <Grid2
+                  id={repairer.id}
+                  key={repairer.id}
+                  xs={12}
+                  pt="198px"
+                  mt="-198px">
+                  <RepairerCard
+                    withButton
+                    repairer={repairer}
+                    onClick={() =>
+                      router.push({
+                        pathname: `/reparateur/${repairer.id}-${repairer.slug}`,
+                        query: {searchRepairer: 1},
+                      })
+                    }
+                  />
+                </Grid2>
               );
             })}
           </Grid2>
