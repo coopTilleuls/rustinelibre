@@ -1,12 +1,12 @@
 {% extends 'mail/mail_layout.html.twig' %}
 
 {% block body_mail %}
-    <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 3em">
+    <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 2em">
         Votre demande de RDV du {{ oldTime }} a été modifiée.
     </div> <br /><br />
 
     <div>
-        Votre nouvel horaire : {{ appointement.slotTime|date('d/m/Y H-i')}} <br /><br />
+        Votre nouvel horaire : <strong>{{ appointment.slotTime|date('d/m/Y H:i')}} </strong><br /><br />
 
         Pour consulter vos RDV : <a href="{{ rdvUrl }}">Cliquez ici</a>
     </div>

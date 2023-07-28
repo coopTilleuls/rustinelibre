@@ -1,8 +1,8 @@
 {% extends 'mail/mail_layout.html.twig' %}
 
 {% block body_mail %}
-    <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 3em">
-        Votre demande de RDV du {{ appointement.slotTime|date('d/m/Y H-i')}} a été refusée.
+    <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 2em">
+        Votre demande de RDV du {{ appointment.slotTime|date('d/m/Y H:i')}} a été refusée.
     </div> <br />
 
     <div>

@@ -2,10 +2,14 @@
 
 {% block body_mail %}
     <p>
-        Votre code de validation La Rustine Libre
+        <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 2.5em">
+            Votre code de validation La Rustine Libre
+        </div>
 
         <br />
         <br />
-        {{ user.validationCode }}
+
+        <span style="font-size: 1.5em; margin-top: 20px; margin-left: 50px"><strong>{{ user.validationCode }}</strong></span>
     </p>
+
 {% endblock %}
