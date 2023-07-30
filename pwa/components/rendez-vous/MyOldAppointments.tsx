@@ -4,16 +4,18 @@ import {User} from '@interfaces/User';
 import {appointmentResource} from '@resources/appointmentResource';
 import {Appointment} from '@interfaces/Appointment';
 import {dateObjectAsString} from '@helpers/dateHelper';
-import {AppointmentCard} from '@components/rendez-vous/AppointmentCard';
-import Grid from '@mui/material/Grid';
+import {OldAppointmentCard} from './OldAppointmentCard';
 
 interface MyOldAppointmentsProps {
   currentUser: User;
-  future: boolean;
+  setLoading: (b: boolean) => void;
 }
 
-const MyOldAppointments = ({currentUser, future}: MyOldAppointmentsProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
+const MyOldAppointments = ({
+  currentUser,
+  setLoading,
+}: MyOldAppointmentsProps) => {
+  const [isEmpty, setEmpty] = useState<boolean | undefined>();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   const fetchAppointments = async () => {
@@ -25,6 +27,7 @@ const MyOldAppointments = ({currentUser, future}: MyOldAppointmentsProps) => {
     });
 
     setAppointments(response['hydra:member']);
+    setEmpty(!response['hydra:member']?.length);
     setLoading(false);
   };
 
@@ -32,39 +35,37 @@ const MyOldAppointments = ({currentUser, future}: MyOldAppointmentsProps) => {
     fetchAppointments();
   }, [currentUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
-    <Box>
-      <Typography variant="h4" sx={{mb: 2}}>
+  return isEmpty === false ? (
+    <Box width="100%" textAlign="center">
+      <Typography variant="h4" color="text.secondary" sx={{mb: 3}}>
         Rendez-vous passés
       </Typography>
-      <Box>
-        {!loading && appointments.length > 0 && (
-          <Grid container spacing={2}>
-            {!loading &&
-              appointments.map((appointment) => {
-                return (
-                  <Grid item xs={12} md={6} key={appointment.id}>
-                    <AppointmentCard
-                      appointment={appointment}
-                      future={future}
-                      fetchAppointments={fetchAppointments}
-                    />
-                  </Grid>
-                );
-              })}
-          </Grid>
-        )}
-
-        {!loading && appointments.length === 0 && (
-          <Box>
-            <Typography variant="body1">
-              Vous n&apos;avez pas de rendez vous passés
-            </Typography>
-          </Box>
-        )}
+      <Box
+        sx={{
+          display: {
+            xs: 'flex',
+            md: 'grid',
+          },
+          flexDirection: 'column',
+          width: '100%',
+          maxWidth: '1200px',
+          mx: 'auto',
+          gap: 2,
+          gridTemplateColumns: {
+            md: 'repeat(auto-fit,minmax(400px,1fr))',
+          },
+          placeContent: 'center',
+        }}>
+        {[...appointments, ...appointments].map((appointment) => (
+          <OldAppointmentCard
+            key={appointment.id}
+            appointment={appointment}
+            fetchAppointments={fetchAppointments}
+          />
+        ))}
       </Box>
     </Box>
-  );
+  ) : null;
 };
 
 export default MyOldAppointments;

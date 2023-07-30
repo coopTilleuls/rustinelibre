@@ -1,30 +1,28 @@
 import React, {PropsWithRef, useState} from 'react';
-import router from 'next/router';
 import Link from 'next/link';
 import {appointmentResource} from '@resources/appointmentResource';
 import {
-  Stack,
   Card,
   CardContent,
-  CardMedia,
   Typography,
   Box,
   Button,
+  Avatar,
+  IconButton,
 } from '@mui/material';
 import ConfirmationModal from '@components/common/ConfirmationModal';
-import {formatDate} from 'helpers/dateHelper';
+import {formatDate, getTimeFromDateAsString} from 'helpers/dateHelper';
 import {Appointment} from '@interfaces/Appointment';
 import {errorRegex} from '@utils/errorRegex';
+import {CalendarMonth, Message, Schedule} from '@mui/icons-material';
 
 interface AppointmentCardProps extends PropsWithRef<any> {
   appointment: Appointment;
-  future: boolean;
   fetchAppointments: () => void;
 }
 
 export const AppointmentCard = ({
   appointment,
-  future,
   fetchAppointments,
 }: AppointmentCardProps): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -52,120 +50,155 @@ export const AppointmentCard = ({
 
   return (
     <Card
+      elevation={1}
       sx={{
-        boxShadow: 0,
-        border: (theme) => `4px solid ${theme.palette.grey[300]}`,
         display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 6,
+        transition: 'all ease 0.5s',
+        justifyContent: 'flex-start',
+        width: '100%',
+        maxWidth: '600px',
+        mx: 'auto',
+        minHeight: '200px',
+        textAlign: 'left',
+        p: 0,
+        opacity: appointment.status === 'validated' ? 1 : 0.7,
       }}>
-      <CardMedia
-        component="img"
-        sx={{
-          width: {xs: 50, md: 100},
-          height: {xs: 50, md: 100},
-          p: 2,
-          borderRadius: '50%',
-        }}
-        image={
-          appointment.repairer.thumbnail
-            ? appointment.repairer.thumbnail.contentUrl
-            : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'
+      <Box
+        bgcolor={
+          appointment.status === 'validated' ? 'secondary.main' : 'grey.600'
         }
-        alt="Photo du réparateur"
-      />
+        display="flex"
+        flexDirection="column"
+        px={3}
+        py={2}>
+        <Typography
+          variant="caption"
+          fontWeight="bold"
+          color="white"
+          textTransform="uppercase"
+          sx={{opacity: 0.9}}>
+          {appointment.status === 'validated'
+            ? 'Rendez-vous confirmé'
+            : 'En attente de validation'}
+        </Typography>
+        <Box
+          display="flex"
+          flexDirection="row"
+          gap={2}
+          textAlign="center"
+          color="white">
+          <Box display="flex" gap={1}>
+            <CalendarMonth color="inherit" />
+            <Typography color="white" variant="body1">
+              {formatDate(appointment.slotTime, false)}
+            </Typography>
+          </Box>
+          <Box display="flex" gap={1}>
+            <Schedule color="inherit" />
+            <Typography color="white" variant="body1">
+              {getTimeFromDateAsString(appointment.slotTime)}
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
       <CardContent
         sx={{
-          pl: 0,
-          pr: 2,
-          py: 2,
+          p: 0,
           flexGrow: 1,
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <Stack spacing={{xs: 1, md: 2}}>
-          <div>
-            <Typography
-              fontSize={{xs: 16, md: 24}}
-              fontWeight={600}
-              sx={{wordBreak: 'break-word'}}>
-              {formatDate(appointment.slotTime)}
-            </Typography>
-          </div>
-          <div>
-            <Typography
-              color={'primary'}
-              fontSize={{xs: 12, md: 16, fontWeight: 700}}>
-              {appointment.repairer.name}
-            </Typography>
-            <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
-              {appointment.repairer.streetNumber} {appointment.repairer.street}
-            </Typography>
-            <Typography fontSize={{xs: 12, md: 16, fontWeight: 700}}>
-              {appointment.repairer.postcode} {appointment.repairer.city}
-            </Typography>
-            {appointment.autoDiagnostic && (
+        <Box display="flex" p={2} gap={3}>
+          <Avatar
+            sx={{width: 60, height: 60}}
+            src={
+              appointment.repairer?.thumbnail?.contentUrl ||
+              'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg'
+            }></Avatar>
+          <Box display="flex" flexDirection="column" flex={1}>
+            <Box
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center">
+              <Box display="flex" flex={1} flexDirection="column">
+                <Typography variant="h5">
+                  {appointment.repairer.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {appointment.repairer.streetNumber}{' '}
+                  {appointment.repairer.street}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {appointment.repairer.postcode} {appointment.repairer.city}
+                </Typography>
+              </Box>
+              <ConfirmationModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                onConfirm={() => cancelAppointment(appointment)}
+                loading={loading}
+                errorMessage={errorMessage}>
+                <Typography variant="h5" gutterBottom>
+                  Êtes-vous sûr(e) de vouloir annuler ce rendez-vous ?
+                </Typography>
+                <Typography color="text.secondary">
+                  {`Vous êtes sur le point d'annuler votre rendez-vous du ${formatDate(
+                    appointment?.slotTime
+                  )} avec le réparateur ${appointment.repairer.name}.`}
+                </Typography>
+              </ConfirmationModal>
+              {appointment.discussion && (
+                <Link
+                  href={`/messagerie/${appointment.discussion.id}`}
+                  legacyBehavior
+                  passHref>
+                  <IconButton
+                    size="small"
+                    color="secondary"
+                    sx={{
+                      border: '1px solid',
+                      borderColor: 'secondary.main',
+                      padding: 1,
+                    }}>
+                    <Message />
+                  </IconButton>
+                </Link>
+              )}
+            </Box>
+            <Box my={1}>
               <Typography
                 color="text.secondary"
-                fontSize={{xs: 12, md: 16, mt: 10}}>
-                {appointment.autoDiagnostic.prestation}
+                variant="body2"
+                fontWeight="bold"
+                component="span">
+                Prestation&nbsp;:&nbsp;
               </Typography>
-            )}
-          </div>
-          <Box sx={{display: 'inline-flex'}}>
-            {future && (
-              <Box>
-                <Button
-                  variant="outlined"
-                  color="warning"
-                  size="small"
-                  onClick={() => setOpenModal(true)}>
-                  Annuler le RDV
-                </Button>
-                <ConfirmationModal
-                  open={openModal}
-                  onClose={() => setOpenModal(false)}
-                  onConfirm={() => cancelAppointment(appointment)}
-                  loading={loading}
-                  errorMessage={errorMessage}>
-                  <Typography variant="h5" gutterBottom>
-                    Êtes-vous sûr(e) de vouloir annuler ce rendez-vous ?
-                  </Typography>
-                  <Typography color="text.secondary">
-                    {`Vous êtes sur le point d'annuler votre rendez-vous du ${formatDate(
-                      appointment?.slotTime
-                    )} avec le réparateur ${appointment.repairer.name}.`}
-                  </Typography>
-                </ConfirmationModal>
-                {appointment.discussion && (
-                  <Link href={`/messagerie/${appointment.discussion.id}`}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      sx={{marginLeft: '5px'}}>
-                      Envoyer un message
-                    </Button>
-                  </Link>
-                )}
-              </Box>
-            )}
-            {!future && (
-              <Box>
-                <Button
-                  onClick={() =>
-                    router.push({
-                      pathname: `/reparateur/${appointment.repairer.id}`,
-                      query: {appointment: 1},
-                    })
-                  }
-                  variant="outlined"
-                  size="small"
-                  sx={{marginLeft: '5px'}}>
-                  Reprendre RDV
-                </Button>
-              </Box>
-            )}
+              <Typography
+                color="text.secondary"
+                component="span"
+                variant="body2">
+                {appointment.autoDiagnostic
+                  ? appointment.autoDiagnostic.prestation
+                  : 'N.C.'}
+              </Typography>
+            </Box>
           </Box>
-        </Stack>
+        </Box>
       </CardContent>
+      <Box display="flex" width="100%" justifyContent="flex-end" gap={1} p={2}>
+        <>
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            onClick={() => setOpenModal(true)}>
+            Annuler le RDV
+          </Button>
+        </>
+      </Box>
     </Card>
   );
 };
