@@ -16,11 +16,11 @@ import {validatePassword} from '@utils/passwordValidator';
 import {userResource} from '@resources/userResource';
 import {errorRegex} from '@utils/errorRegex';
 import Link from 'next/link';
+import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 
-const PasswordReset: NextPageWithLayout = () => {
-  const router = useRouter();
-  const {token} = router.query;
-
+const PasswordReset: NextPageWithLayout = ({
+  token,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [success, setSuccess] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingSend, setPendingSend] = useState<boolean>(false);
@@ -83,12 +83,6 @@ const PasswordReset: NextPageWithLayout = () => {
 
     setPendingSend(false);
   };
-
-  useEffect(() => {
-    if (!token || token === '') {
-      router.push('/');
-    }
-  }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -212,3 +206,17 @@ const PasswordReset: NextPageWithLayout = () => {
 };
 
 export default PasswordReset;
+
+export const getServerSideProps: GetServerSideProps = async ({query}) => {
+  if (!query.token) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      token: query.token,
+    },
+  };
+};
