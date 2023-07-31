@@ -1,23 +1,26 @@
 import React, {useState} from 'react';
-import {Bike} from '@interfaces/Bike';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import {CircularProgress, IconButton} from '@mui/material';
-import {Maintenance} from '@interfaces/Maintenance';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import ModalAddMaintenance from '@components/bike/ModalAddMaintenance';
-import {formatDate} from '@helpers/dateHelper';
-import Typography from '@mui/material/Typography';
-import BuildIcon from '@mui/icons-material/Build';
 import {maintenanceResource} from '@resources/MaintenanceResource';
+import ConfirmationModal from '@components/common/ConfirmationModal';
+import ModalAddMaintenance from '@components/bike/ModalAddMaintenance';
+import {
+  Button,
+  Box,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from '@mui/material';
+import BuildIcon from '@mui/icons-material/Build';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {Search} from '@mui/icons-material';
-import ConfirmationModal from '@components/common/ConfirmationModal';
+import {formatDate} from '@helpers/dateHelper';
+import {Bike} from '@interfaces/Bike';
+import {Maintenance} from '@interfaces/Maintenance';
 
 type BikeMaintenanceProps = {
   bike: Bike;
@@ -50,20 +53,18 @@ const BikeMaintenance = ({
     if (!selectedMaintenanceToDelete) {
       return;
     }
-
-    setErrorMessage(null);
     setRemovePending(true);
     setDeleteDialogOpen(false);
-
     try {
       await maintenanceResource.delete(selectedMaintenanceToDelete['@id']);
+      setRemovePending(false);
+      setSelectedMaintenanceToDelete(null);
+      await fetchMaintenance();
     } catch (e) {
       setErrorMessage('Suppression impossible');
+      setRemovePending(false);
     }
-
     setRemovePending(false);
-    setSelectedMaintenanceToDelete(null);
-    await fetchMaintenance();
   };
 
   const handleOpenModal = (): void => setOpenModal(true);
@@ -87,7 +88,6 @@ const BikeMaintenance = ({
           <CircularProgress />
         </Box>
       )}
-
       {!loading && maintenances.length == 0 && (
         <Box py={3}>
           <Typography gutterBottom variant="h5" textAlign="center">
@@ -98,7 +98,6 @@ const BikeMaintenance = ({
           </Typography>
         </Box>
       )}
-
       {!loading && maintenances.length > 0 && (
         <TableContainer>
           <Table sx={{minWidth: 300}} aria-label="simple table">
@@ -138,13 +137,6 @@ const BikeMaintenance = ({
           </Table>
         </TableContainer>
       )}
-
-      {errorMessage && (
-        <Typography variant="body1" color="error">
-          {errorMessage}
-        </Typography>
-      )}
-
       <Button
         sx={{my: 2, ml: 'auto', mr: 2, display: 'flex'}}
         onClick={handleOpenModal}
@@ -152,21 +144,19 @@ const BikeMaintenance = ({
         startIcon={<AddIcon />}>
         Ajouter une réparation
       </Button>
-
       <ModalAddMaintenance
         bike={bike}
         openModal={openModal}
         handleCloseModal={handleCloseModal}
         maintenance={maintenanceSelected}
       />
-
       {selectedMaintenanceToDelete && (
         <ConfirmationModal
+          open={deleteDialogOpen}
           onClose={() => setDeleteDialogOpen(false)}
           onConfirm={handleDeleteConfirm}
-          open={deleteDialogOpen}>
-          {`Êtes-vous sûr de vouloir supprimer ${selectedMaintenanceToDelete.name}`}
-          &nbsp;?
+          errorMessage={errorMessage}>
+          {`Êtes-vous sûr de vouloir supprimer la réparation "${selectedMaintenanceToDelete.name}" ?`}
         </ConfirmationModal>
       )}
     </Box>

@@ -1,35 +1,30 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect} from 'react';
-import Head from 'next/head';
-import DashboardLayout from '@components/dashboard/DashboardLayout';
-import Box from '@mui/material/Box';
 import {useRouter} from 'next/router';
-import {
-  Alert,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-} from '@mui/material';
+import Head from 'next/head';
+import Link from 'next/link';
 import {bikeResource} from '@resources/bikeResource';
-import {Bike} from '@interfaces/Bike';
-import {Maintenance} from '@interfaces/Maintenance';
 import {maintenanceResource} from '@resources/MaintenanceResource';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import {formatDate} from '@helpers/dateHelper';
-import Button from '@mui/material/Button';
-import TableContainer from '@mui/material/TableContainer';
+import DashboardLayout from '@components/dashboard/DashboardLayout';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 import ModalDetailMaintenance from '@components/bike/ModalDetailMaintenance';
 import ModalAddMaintenance from '@components/bike/ModalAddMaintenance';
-import Link from 'next/link';
+import Box from '@mui/material/Box';
+import {
+  CircularProgress,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Button,
+} from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {Bike} from '@interfaces/Bike';
+import {Maintenance} from '@interfaces/Maintenance';
+import {formatDate} from '@helpers/dateHelper';
 
 const CustomerBikes: NextPageWithLayout = () => {
   const router = useRouter();
@@ -55,22 +50,19 @@ const CustomerBikes: NextPageWithLayout = () => {
 
   const handleDeleteConfirm = async () => {
     if (!bike || !selectedMaintenanceToDelete) {
+      setDeleteDialogOpen(false);
       return;
     }
-
     setRemovePending(true);
-    setDeleteDialogOpen(false);
-    setErrorMessage(null);
-
     try {
       await maintenanceResource.delete(selectedMaintenanceToDelete['@id']);
+      setSelectedMaintenanceToDelete(null);
+      await fetchMaintenances(bike.id);
     } catch (e) {
+      setRemovePending(false);
       setErrorMessage('Suppression impossible');
+      setTimeout(() => setErrorMessage(null), 3000);
     }
-
-    setRemovePending(false);
-    setSelectedMaintenanceToDelete(null);
-    await fetchMaintenances(bike.id);
   };
 
   const handleOpenModal = (maintenance: Maintenance): void => {
@@ -141,15 +133,6 @@ const CustomerBikes: NextPageWithLayout = () => {
             </Button>
           </h3>
         )}
-
-        {errorMessage && (
-          <Alert
-            sx={{marginTop: '10px', marginBottom: '10px'}}
-            severity="warning">
-            {errorMessage}
-          </Alert>
-        )}
-
         {!loading && bike && maintenances.length > 0 && (
           <TableContainer component={Paper}>
             <Table sx={{minWidth: 300}} aria-label="simple table">
@@ -168,7 +151,6 @@ const CustomerBikes: NextPageWithLayout = () => {
                         onClick={() => handleOpenModal(maintenance)}>
                         Détails
                       </Button>
-
                       <IconButton
                         color="secondary"
                         onClick={() => handleDeleteClick(maintenance)}>
@@ -182,16 +164,14 @@ const CustomerBikes: NextPageWithLayout = () => {
           </TableContainer>
         )}
         {!loading && maintenances.length === 0 && (
-          <Box sx={{mt: 10}}>Le carnet d&#39;entretien est vide</Box>
+          <Box sx={{mt: 10}}>Le carnet d&#39;entretien est vide.</Box>
         )}
       </Box>
-
       <ModalDetailMaintenance
         maintenance={maintenanceSelected}
         openModal={openModal}
         handleCloseModal={handleCloseModal}
       />
-
       {bike && (
         <ModalAddMaintenance
           bike={bike}
@@ -200,24 +180,15 @@ const CustomerBikes: NextPageWithLayout = () => {
           maintenance={null}
         />
       )}
-
       {selectedMaintenanceToDelete && (
-        <Dialog
+        <ConfirmationModal
           open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {`Êtes-vous sûr de vouloir supprimer ${selectedMaintenanceToDelete.name}`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          loading={removePending}
+          errorMessage={errorMessage}>
+          {`Êtes-vous sûr de vouloir supprimer "${selectedMaintenanceToDelete.name}" ?`}
+        </ConfirmationModal>
       )}
     </>
   );

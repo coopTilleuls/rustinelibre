@@ -1,5 +1,11 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
+import Link from 'next/link';
+import {userResource} from '@resources/userResource';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 import {
+  Box,
+  Pagination,
+  Stack,
   Paper,
   Table,
   TableHead,
@@ -11,26 +17,13 @@ import {
   TextField,
   Typography,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
+  InputAdornment,
 } from '@mui/material';
-import Box from '@mui/material/Box';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
-import {InputAdornment} from '@mui/material';
-import {userResource} from '@resources/userResource';
-import {User} from '@interfaces/User';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
-import Link from 'next/link';
+import {User} from '@interfaces/User';
 import {formatDate} from '@helpers/dateHelper';
-import {RepairerType} from '@interfaces/RepairerType';
-import {repairerTypeResource} from '@resources/repairerTypeResource';
 
 export const UsersList = (): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -54,18 +47,16 @@ export const UsersList = (): JSX.Element => {
     if (!selectedUserToDelete) {
       return;
     }
-
     setRemovePending(true);
     setDeleteDialogOpen(false);
     setErrorMessage(null);
-
     try {
       await userResource.delete(selectedUserToDelete['@id']);
       setRemovePending(false);
       setSelectedUserToDelete(null);
       await fetchUsers();
     } catch (e: any) {
-      setErrorMessage(`Suppression impossible de cet utilisateur.`);
+      setErrorMessage('Suppression impossible de cet utilisateur.');
     }
   };
 
@@ -110,7 +101,6 @@ export const UsersList = (): JSX.Element => {
     if (status) {
       return 'Activé';
     }
-
     return 'Mail non confirmé';
   };
 
@@ -136,7 +126,6 @@ export const UsersList = (): JSX.Element => {
           ),
         }}
       />
-
       <TableContainer elevation={4} component={Paper} sx={{marginTop: '10px'}}>
         <Table aria-label="employees">
           <TableHead
@@ -200,7 +189,6 @@ export const UsersList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-
       {totalPages > 1 && (
         <Stack spacing={2} sx={{marginTop: '20px'}}>
           <Pagination
@@ -214,29 +202,15 @@ export const UsersList = (): JSX.Element => {
           />
         </Stack>
       )}
-
       {selectedUserToDelete && (
-        <Dialog
+        <ConfirmationModal
           open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {`Êtes-vous sûr de vouloir supprimer ${selectedUserToDelete.firstName} ${selectedUserToDelete.lastName}`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      {errorMessage && (
-        <Typography color="error" textAlign="center" sx={{pt: 4}}>
-          {errorMessage}
-        </Typography>
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          loading={removePending}
+          errorMessage={
+            errorMessage
+          }>{`Êtes-vous sûr de vouloir supprimer l'utilisateur "${selectedUserToDelete.firstName} ${selectedUserToDelete.lastName}" ?`}</ConfirmationModal>
       )}
     </Box>
   );

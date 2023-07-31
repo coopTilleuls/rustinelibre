@@ -2,7 +2,6 @@ import React, {PropsWithRef, useState} from 'react';
 import router from 'next/router';
 import Link from 'next/link';
 import {appointmentResource} from '@resources/appointmentResource';
-import ModalCancelAppointment from './ModalCancelAppointment';
 import {
   Stack,
   Card,
@@ -12,6 +11,7 @@ import {
   Box,
   Button,
 } from '@mui/material';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 import {formatDate} from 'helpers/dateHelper';
 import {Appointment} from '@interfaces/Appointment';
 import {errorRegex} from '@utils/errorRegex';
@@ -32,12 +32,12 @@ export const AppointmentCard = ({
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const cancelAppointment = async (appointment: Appointment) => {
-    setErrorMessage(null);
     setLoading(true);
     try {
       await appointmentResource.updateAppointmentStatus(appointment.id, {
         transition: 'cancellation',
       });
+      await fetchAppointments();
     } catch (e: any) {
       setErrorMessage(
         `Suppression du rendez-vous impossible: ${e.message?.replace(
@@ -45,8 +45,8 @@ export const AppointmentCard = ({
           '$2'
         )}, veuillez réessayer`
       );
+      setTimeout(() => setErrorMessage(null), 3000);
     }
-    await fetchAppointments();
     setLoading(false);
   };
 
@@ -120,14 +120,21 @@ export const AppointmentCard = ({
                   onClick={() => setOpenModal(true)}>
                   Annuler le RDV
                 </Button>
-                <ModalCancelAppointment
-                  appointment={appointment}
-                  openModal={openModal}
+                <ConfirmationModal
+                  open={openModal}
+                  onClose={() => setOpenModal(false)}
+                  onConfirm={() => cancelAppointment(appointment)}
                   loading={loading}
-                  errorMessage={errorMessage}
-                  handleCloseModal={() => setOpenModal(false)}
-                  handleCancelAppointment={() => cancelAppointment(appointment)}
-                />
+                  errorMessage={errorMessage}>
+                  <Typography variant="h5" gutterBottom>
+                    Êtes-vous sûr(e) de vouloir annuler ce rendez-vous ?
+                  </Typography>
+                  <Typography color="text.secondary">
+                    {`Vous êtes sur le point d'annuler votre rendez-vous du ${formatDate(
+                      appointment?.slotTime
+                    )} avec le réparateur ${appointment.repairer.name}.`}
+                  </Typography>
+                </ConfirmationModal>
                 {appointment.discussion && (
                   <Link href={`/messagerie/${appointment.discussion.id}`}>
                     <Button

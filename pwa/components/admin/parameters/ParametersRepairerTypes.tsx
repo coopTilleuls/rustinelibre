@@ -1,4 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import Link from 'next/link';
+import {repairerTypeResource} from '@resources/repairerTypeResource';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 import {
   Paper,
   Table,
@@ -12,18 +15,11 @@ import {
   Typography,
   Button,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import {RepairerType} from '@interfaces/RepairerType';
-import Link from 'next/link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import {repairerTypeResource} from '@resources/repairerTypeResource';
+import {RepairerType} from '@interfaces/RepairerType';
 
 export const ParametersRepairerTypes = (): JSX.Element => {
   const [loadingRepairerTypes, setLoadingRepairerTypes] =
@@ -48,10 +44,7 @@ export const ParametersRepairerTypes = (): JSX.Element => {
     if (!selectedRepairerTypeToDelete) {
       return;
     }
-
     setRemovePending(true);
-    setDeleteDialogOpen(false);
-    setErrorMessage(null);
     try {
       await repairerTypeResource.delete(selectedRepairerTypeToDelete['@id']);
       setRemovePending(false);
@@ -59,9 +52,13 @@ export const ParametersRepairerTypes = (): JSX.Element => {
       await fetchRepairerTypes();
     } catch (e: any) {
       setErrorMessage(
-        `Suppression impossible, ce type de réparateur est utilisé.`
+        'Suppression impossible, ce type de réparateur est utilisé.'
       );
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
+    setRemovePending(false);
   };
 
   const fetchRepairerTypes = async () => {
@@ -137,29 +134,15 @@ export const ParametersRepairerTypes = (): JSX.Element => {
           </Table>
         </TableContainer>
       )}
-
       {selectedRepairerTypeToDelete && (
-        <Dialog
+        <ConfirmationModal
           open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {`Êtes-vous sûr de vouloir supprimer ${selectedRepairerTypeToDelete.name}`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      {errorMessage && (
-        <Typography color="error" textAlign="center" sx={{pt: 4}}>
-          {errorMessage}
-        </Typography>
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          loading={removePending}
+          errorMessage={
+            errorMessage
+          }>{`Êtes-vous sûr de vouloir supprimer le type "${selectedRepairerTypeToDelete.name}" ?`}</ConfirmationModal>
       )}
     </Box>
   );
