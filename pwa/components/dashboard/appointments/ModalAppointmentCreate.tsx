@@ -1,5 +1,16 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
+import router from 'next/router';
+import dynamic from 'next/dynamic';
+import dayjs, {Dayjs} from 'dayjs';
+import 'dayjs/locale/fr';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import {customerResource} from '@resources/customerResource';
+import {appointmentResource} from '@resources/appointmentResource';
+import {autoDiagnosticResource} from '@resources/autoDiagResource';
+import {useAccount} from '@contexts/AuthContext';
 import {
+  Box,
   TextField,
   Autocomplete,
   Button,
@@ -11,38 +22,29 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
+  useMediaQuery,
 } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import {useTheme} from '@mui/material/styles';
-import {customerResource} from '@resources/customerResource';
-import Box from '@mui/material/Box';
-import {Customer} from '@interfaces/Customer';
-import {User} from '@interfaces/User';
-import {appointmentResource} from '@resources/appointmentResource';
-import {useAccount} from '@contexts/AuthContext';
-import {RequestBody} from '@interfaces/Resource';
-import {Repairer} from '@interfaces/Repairer';
-import AppointmentCreateAddPhoto from '@components/dashboard/appointments/AppointmentCreateAddPhoto';
-import AppointmentCreateAddPrestation from '@components/dashboard/appointments/AppointmentCreateAddPrestation';
-import AppointmentCreateAddBikeType from '@components/dashboard/appointments/AppointmentCreateAddBikeType';
-import {BikeType} from '@interfaces/BikeType';
-import {MediaObject} from '@interfaces/MediaObject';
-import {autoDiagnosticResource} from '@resources/autoDiagResource';
-import {Appointment} from '@interfaces/Appointment';
-import AppointmentCreateAddComment from './AppointmentCreateAddComment';
-import router from 'next/router';
-import CloseIcon from '@mui/icons-material/Close';
-import {errorRegex} from '@utils/errorRegex';
 import {DatePicker, frFR, TimePicker} from '@mui/x-date-pickers';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs, {Dayjs} from 'dayjs';
-import 'dayjs/locale/fr';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+import AppointmentCreateAddPhoto from '@components/dashboard/appointments/AppointmentCreateAddPhoto';
+import AppointmentCreateAddPrestation from '@components/dashboard/appointments/AppointmentCreateAddPrestation';
+import AppointmentCreateAddBikeType from '@components/dashboard/appointments/AppointmentCreateAddBikeType';
+import AppointmentCreateAddComment from './AppointmentCreateAddComment';
+import {useTheme} from '@mui/material/styles';
 import {padNumber} from '@helpers/dateHelper';
 import {isItinerant} from '@helpers/rolesHelpers';
-import dynamic from 'next/dynamic';
+import {RequestBody} from '@interfaces/Resource';
+import {Customer} from '@interfaces/Customer';
+import {User} from '@interfaces/User';
+import {Repairer} from '@interfaces/Repairer';
+import {BikeType} from '@interfaces/BikeType';
+import {MediaObject} from '@interfaces/MediaObject';
+import {Appointment} from '@interfaces/Appointment';
+import CloseIcon from '@mui/icons-material/Close';
+import {errorRegex} from '@utils/errorRegex';
+
 const PinMap = dynamic(() => import('@components/rendez-vous/PinMap'), {
   ssr: false,
 });
@@ -80,7 +82,9 @@ const ModalAppointmentCreate = ({
   );
   const [comment, setComment] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [details, setDetails] = useState<boolean>(true);
+  const [loadingWithoutDetails, setLoadingWithoutDetails] =
+    useState<boolean>(false);
+  const [details, setDetails] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pickedDate, setPickedDate] = React.useState<Dayjs | null>(null);
   const [pickedTime, setPickedTime] = React.useState<Dayjs | null>(null);
@@ -89,7 +93,7 @@ const ModalAppointmentCreate = ({
   const [address, setAddress] = useState<string>('');
   const isItinerantRepairer = user && isItinerant(user);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   dayjs.extend(timezone);
   dayjs.extend(utc);
@@ -136,55 +140,51 @@ const ModalAppointmentCreate = ({
     setSelectedCustomer(customer);
   };
 
-  const slotDate = new Date(slotSelected!).toLocaleString('fr-FR', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  });
-
-  const handleCreateAppointment = async (selectedCustomer: Customer) => {
-    setLoading(true);
-    if (!user || !repairer || !selectedCustomer || !slotSelected) {
-      return;
-    }
-
+  const createAppointment = async (selectedCustomer: Customer) => {
     const requestBody: RequestBody = {
       repairer: repairer['@id'],
       slotTime: slotSelected,
       customer: selectedCustomer['@id'],
     };
-
     if (isItinerantRepairer && address && latitude && longitude) {
       requestBody['address'] = address;
       requestBody['latitude'] = latitude.toString();
       requestBody['longitude'] = longitude.toString();
     }
+    const appointment = await appointmentResource.post(requestBody);
+    setNewAppointment(appointment);
+    setLoading(false);
+  };
 
+  const handleCreateAppointment = async (selectedCustomer: Customer) => {
+    setLoading(true);
     try {
-      setErrorMessage(null);
-      const appointment = await appointmentResource.post(requestBody);
-      setNewAppointment(appointment);
-      if (!details) {
-        handleSuccess();
-      }
+      await createAppointment(selectedCustomer);
+      setDetails(true);
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
     setLoading(false);
   };
 
+  const handleCreateAppointmentWithoutDetails = async (
+    selectedCustomer: Customer
+  ) => {
+    setLoadingWithoutDetails(true);
+    try {
+      await createAppointment(selectedCustomer);
+      handleSuccess();
+    } catch (e: any) {
+      setErrorMessage(e.message?.replace(errorRegex, '$2'));
+    }
+    setLoadingWithoutDetails(false);
+  };
+
   const handleAddInformations = async () => {
     setLoading(true);
-    setDetails(true);
-    if (!newAppointment) {
-      return;
-    }
-
     if (prestation || photo) {
       const requestBody: RequestBody = {
-        appointment: newAppointment['@id'],
+        appointment: newAppointment!['@id'],
       };
       if (prestation) {
         requestBody['prestation'] = prestation;
@@ -192,7 +192,6 @@ const ModalAppointmentCreate = ({
       if (photo) {
         requestBody['photo'] = photo['@id'];
       }
-
       try {
         await autoDiagnosticResource.post(requestBody);
       } catch (e: any) {
@@ -201,34 +200,26 @@ const ModalAppointmentCreate = ({
         return;
       }
     }
-
     if (selectedBikeType || comment) {
       const putRequest: RequestBody = {};
-
       if (selectedBikeType) {
         putRequest['bikeType'] = selectedBikeType['@id'];
       }
       if (comment) {
         putRequest['comment'] = comment;
       }
-
       try {
-        await appointmentResource.put(newAppointment['@id'], putRequest);
+        await appointmentResource.put(newAppointment!['@id'], putRequest);
       } catch (e: any) {
         setErrorMessage(e.message?.replace(errorRegex, '$2'));
         setLoading(false);
         return;
       }
     }
-    setLoading(false);
     if (!errorMessage) {
       handleSuccess();
     }
-  };
-
-  const handleCreateWithoutDetails = async (selectedCustomer: Customer) => {
-    await setDetails(false);
-    handleCreateAppointment(selectedCustomer);
+    setLoading(false);
   };
 
   const handleDatePicker = (newValue: dayjs.Dayjs | null) => {
@@ -261,6 +252,7 @@ const ModalAppointmentCreate = ({
       setPickedTime(null);
     }
   };
+
   const cancelPinMap = () => {
     return;
   };
@@ -269,7 +261,7 @@ const ModalAppointmentCreate = ({
     return;
   };
 
-  const handleResetStates = () => {
+  const handleClose = () => {
     setSelectedCustomer(null);
     setCustomers([]);
     setCustomerInput('');
@@ -285,6 +277,9 @@ const ModalAppointmentCreate = ({
     setLatitude('');
     setLongitude('');
     setErrorMessage(null);
+    setLoading(false);
+    setDetails(false);
+    setSuccess(false);
     handleCloseModal(false);
   };
 
@@ -292,160 +287,116 @@ const ModalAppointmentCreate = ({
     setSuccess(true);
     router.push(`/sradmin/agenda?selectedDate=${slotSelected}`);
     setTimeout(async () => {
-      handleCloseModal(true);
-      setSelectedCustomer(null);
-      setCustomerInput('');
-      setSuccess(false);
-    }, 2000);
+      handleClose();
+    }, 3000);
   };
 
   return (
     <Dialog
       open={openModal}
-      onClose={handleResetStates}
-      fullScreen={fullScreen}
+      onClose={handleClose}
+      fullScreen={isMobile}
       fullWidth={true}
-      maxWidth={'md'}
+      maxWidth="sm"
+      aria-labelledby="Créer un rendez-vous"
       aria-describedby="popup_appointment_create">
-      <DialogTitle id="service-type-label">Création de rendez-vous</DialogTitle>
-      <DialogContent
+      <DialogTitle
         sx={{
-          overflowY: 'scroll',
-          backgroundColor: 'background.paper',
+          m: 0,
+          p: 2,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}>
-        <CloseIcon
-          sx={{
-            position: 'absolute',
-            top: 10,
-            right: 10,
-            cursor: 'pointer',
-            fontSize: '2em',
-          }}
-          onClick={handleResetStates}
-        />
-        {slotSelected && pickedTime && pickedDate && (
-          <Typography
-            align="justify"
-            sx={{display: {xs: 'none', md: 'block'}, my: 2}}>
-            {`Rendez-vous le ${slotDate} `}
-          </Typography>
-        )}
-        {!newAppointment && (
-          <>
-            {!address && (
-              <Box>
-                <LocalizationProvider
-                  localeText={
-                    frFR.components.MuiLocalizationProvider.defaultProps
-                      .localeText
-                  }
-                  adapterLocale="fr"
-                  dateAdapter={AdapterDayjs}>
-                  {selectedDate && (
-                    <InputLabel id="service-type-label" sx={{my: 2}}>
-                      Modifier le créneau
-                    </InputLabel>
-                  )}
-                  {!selectedDate && (
-                    <InputLabel id="service-type-label" sx={{my: 2}}>
-                      Choisir un créneau
-                    </InputLabel>
-                  )}
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-evenly',
-                      gap: 2,
-                    }}>
-                    <DatePicker
-                      defaultValue={dayjs(selectedDate)}
-                      format="DD/MM/YYYY"
-                      onChange={(newValue) => handleDatePicker(newValue)}
-                    />
-                    <TimePicker
-                      defaultValue={dayjs.tz(selectedDate, 'Europe/Paris')}
-                      format="HH:mm"
-                      onChange={(newValue) => handleTimePicker(newValue)}
-                      ampm={false}
-                    />
-                  </Box>
-                </LocalizationProvider>
-                <Autocomplete
-                  sx={{mt: 2, mb: 1}}
-                  freeSolo
-                  value={customerInput}
-                  options={customers}
-                  getOptionLabel={(customer) =>
-                    typeof customer === 'string'
-                      ? customer
-                      : `${customer.firstName} ${customer.lastName} (${customer.email})`
-                  }
-                  onChange={(event, value) =>
-                    handleSelectCustomer(value as User)
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      label="Client"
-                      required
-                      {...params}
-                      value={customerInput}
-                      onChange={(e) => handleCustomerChange(e)}
-                    />
-                  )}
+        <Typography variant="h3" color="primary">
+          Création de rendez-vous
+        </Typography>
+        <IconButton aria-label="close" color="primary" onClick={handleClose}>
+          <CloseIcon fontSize="large" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        {!address && (
+          <Box>
+            <LocalizationProvider
+              localeText={
+                frFR.components.MuiLocalizationProvider.defaultProps.localeText
+              }
+              adapterLocale="fr"
+              dateAdapter={AdapterDayjs}>
+              <InputLabel sx={{mb: 1}}>
+                {selectedDate ? 'Modifier le créneau' : 'Choisir votre créneau'}
+              </InputLabel>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 2,
+                }}>
+                <DatePicker
+                  label="Jour *"
+                  value={pickedDate}
+                  disablePast
+                  sx={{width: '50%'}}
+                  defaultValue={dayjs(selectedDate)}
+                  format="DD-MM-YYYY"
+                  onChange={(newValue) => handleDatePicker(newValue)}
+                />
+                <TimePicker
+                  label="Heure *"
+                  value={pickedTime}
+                  sx={{width: '50%'}}
+                  defaultValue={dayjs.tz(selectedDate, 'Europe/Paris')}
+                  format="HH:mm"
+                  onChange={(newValue) => handleTimePicker(newValue)}
                 />
               </Box>
-            )}
-            {selectedCustomer && pickedDate && pickedTime && (
-              <>
-                {isItinerantRepairer && (
-                  <PinMap
-                    repairer={repairer}
-                    latitude={latitude}
-                    longitude={longitude}
-                    cancelPinMap={cancelPinMap}
-                    confirmPinMap={confirmPinMap}
-                    setLatitude={setLatitude}
-                    setLongitude={setLongitude}
-                    address={address}
-                    setAddress={setAddress}
-                  />
-                )}
-                <DialogActions
-                  sx={{
-                    display: {md: 'flex'},
-                    flexDirection: {xs: 'column', md: 'row'},
-                    justifyContent: {xs: 'center', md: 'space-around'},
-                    gap: {md: 4},
-                  }}>
-                  <Button
-                    onClick={() => handleCreateAppointment(selectedCustomer)}
-                    disabled={isItinerantRepairer! && !address}
-                    variant="contained"
-                    sx={{mt: 2, mb: {sm: 1, md: 2}, width: {xs: '100%'}}}>
-                    {loading && <CircularProgress sx={{color: 'white'}} />}
-                    {!loading && <Box>Créer et Compléter le rendez vous</Box>}
-                  </Button>
-                  <Button
-                    onClick={() => handleCreateWithoutDetails(selectedCustomer)}
-                    disabled={isItinerantRepairer! && !address}
-                    variant="outlined"
-                    sx={{mt: 2, mb: {sm: 1, md: 2}, width: {xs: '100%'}}}>
-                    {loading && <CircularProgress sx={{color: 'outlined'}} />}
-                    {!loading && <Box>Créer sans ajouter de détails</Box>}
-                  </Button>
-                </DialogActions>
-              </>
+            </LocalizationProvider>
+            <Autocomplete
+              sx={{mt: 2, mb: 1}}
+              freeSolo
+              value={customerInput}
+              options={customers}
+              getOptionLabel={(customer) =>
+                typeof customer === 'string'
+                  ? customer
+                  : `${customer.firstName} ${customer.lastName} (${customer.email})`
+              }
+              onChange={(event, value) => handleSelectCustomer(value as User)}
+              renderInput={(params) => (
+                <TextField
+                  label="Client"
+                  required
+                  {...params}
+                  value={customerInput}
+                  onChange={(e) => handleCustomerChange(e)}
+                />
+              )}
+            />
+          </Box>
+        )}
+        {selectedCustomer && pickedDate && pickedTime && (
+          <>
+            {isItinerantRepairer && (
+              <PinMap
+                repairer={repairer}
+                latitude={latitude}
+                longitude={longitude}
+                cancelPinMap={cancelPinMap}
+                confirmPinMap={confirmPinMap}
+                setLatitude={setLatitude}
+                setLongitude={setLongitude}
+                address={address}
+                setAddress={setAddress}
+              />
             )}
           </>
         )}
-        {newAppointment && details && (
-          <Box>
-            <Typography
-              align="justify"
-              sx={{display: {xs: 'none', md: 'block'}, mt: 2}}>
-              {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
-            </Typography>
-            <Box sx={{display: 'flex'}}>
+        {details && (
+          <>
+            <Box
+              display="flex"
+              flexDirection={isMobile ? 'column' : 'row'}
+              gap={isMobile ? 0 : 2}>
               <AppointmentCreateAddPrestation
                 prestation={prestation}
                 setPrestation={setPrestation}
@@ -460,37 +411,72 @@ const ModalAppointmentCreate = ({
               comment={comment}
               setComment={setComment}
             />
-            <DialogActions>
+          </>
+        )}
+      </DialogContent>
+      {selectedCustomer && (
+        <>
+          <DialogActions>
+            {details ? (
               <Button
                 onClick={handleAddInformations}
                 variant="contained"
-                sx={{my: 2}}>
-                {!loading && <Box>Ajouter les éléments au rendez vous</Box>}
-                {loading && <CircularProgress sx={{color: 'white'}} />}
+                startIcon={
+                  loading && (
+                    <CircularProgress size={18} sx={{color: 'white'}} />
+                  )
+                }>
+                Valider rendez-vous
               </Button>
-            </DialogActions>
-          </Box>
-        )}
-        {success && (
-          <Box>
-            {!details && newAppointment && (
-              <Typography
-                align="justify"
-                sx={{display: {xs: 'none', md: 'block'}, mt: 2}}>
-                {`Avec ${newAppointment.customer.firstName} ${newAppointment.customer.lastName} `}
-              </Typography>
+            ) : (
+              <Box
+                display="flex"
+                flexDirection={isMobile ? 'column' : 'row'}
+                p={2}
+                gap={isMobile ? 0 : 2}>
+                <Button
+                  onClick={() =>
+                    handleCreateAppointmentWithoutDetails(selectedCustomer)
+                  }
+                  disabled={isItinerantRepairer! && !address}
+                  size="medium"
+                  variant="outlined"
+                  startIcon={
+                    loadingWithoutDetails && (
+                      <CircularProgress size={18} sx={{color: 'primary'}} />
+                    )
+                  }>
+                  Créer sans détails
+                </Button>
+                <Button
+                  onClick={() => handleCreateAppointment(selectedCustomer)}
+                  disabled={isItinerantRepairer! && !address}
+                  size="medium"
+                  variant="contained"
+                  startIcon={
+                    loading && (
+                      <CircularProgress size={18} sx={{color: 'white'}} />
+                    )
+                  }>
+                  Créer avec détails
+                </Button>
+              </Box>
             )}
-            <Alert sx={{width: '100%'}} severity="success">
-              Rendez-vous créé avec succès
-            </Alert>
+          </DialogActions>
+          <Box>
+            {errorMessage && (
+              <Alert severity="error" sx={{p: 2}}>
+                {errorMessage}
+              </Alert>
+            )}
+            {success && (
+              <Alert severity="success" sx={{p: 2}}>
+                Rendez-vous créé avec succès
+              </Alert>
+            )}
           </Box>
-        )}
-        {errorMessage && (
-          <Typography color="error" textAlign="center" sx={{pt: 4}}>
-            {errorMessage}
-          </Typography>
-        )}
-      </DialogContent>
+        </>
+      )}
     </Dialog>
   );
 };
