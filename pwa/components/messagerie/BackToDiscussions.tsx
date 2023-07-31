@@ -1,20 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import {Box, Button} from '@mui/material';
+import {Button} from '@mui/material';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 
-type BackToDiscussionsProps = {
-  isRepairer?: boolean;
-};
-
-const BackToDiscussions = ({
-  isRepairer,
-}: BackToDiscussionsProps): JSX.Element => {
+const BackToDiscussions = (): JSX.Element => {
   return (
-    <Link
-      href={isRepairer ? '/sradmin/messagerie' : '/messagerie'}
-      legacyBehavior
-      passHref>
+    <Link href={'/messagerie'} legacyBehavior passHref>
       <Button
         variant="outlined"
         color="secondary"
