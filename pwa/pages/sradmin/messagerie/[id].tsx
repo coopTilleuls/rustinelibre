@@ -7,7 +7,6 @@ import {Box, Typography} from '@mui/material';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import RepairerMessagesContent from '@components/messagerie/RepairerMessagesContent';
 import RepairerDiscussionList from '@components/messagerie/RepairerDiscussionList';
-import BackToDiscussions from '@components/messagerie/BackToDiscussions';
 import {Discussion} from '@interfaces/Discussion';
 
 const SrAdminMessagerie: NextPageWithLayout = () => {
@@ -35,7 +34,6 @@ const SrAdminMessagerie: NextPageWithLayout = () => {
         <title>Messagerie Réparateur</title>
       </Head>
       <DashboardLayout>
-        <BackToDiscussions isRepairer />
         <Typography variant="h3" py={2}>
           Messages
         </Typography>
