@@ -11,6 +11,7 @@ import {
   Box,
   Typography,
   IconButton,
+  Link,
 } from '@mui/material';
 import {Appointment} from '@interfaces/Appointment';
 import {appointmentResource} from '@resources/appointmentResource';
@@ -161,6 +162,17 @@ export const DashboardWaitingAppointments = ({
                     </TableCell>
                   </TableRow>
                 ))}
+                <TableRow
+                  key="see_more_waiting_appointment"
+                  sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    colSpan={3}
+                    sx={{textAlign: 'center'}}>
+                    <Link href="/sradmin/agenda">Voir tout</Link>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>

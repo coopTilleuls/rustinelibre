@@ -12,6 +12,7 @@ import {
   Typography,
   Button,
   IconButton,
+  Link,
 } from '@mui/material';
 import {Appointment} from '@interfaces/Appointment';
 import {
@@ -151,6 +152,17 @@ const DashboardNextAppointments = ({
                     </TableCell>
                   </TableRow>
                 ))}
+                <TableRow
+                  key="see_more_next_appointment"
+                  sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    colSpan={3}
+                    sx={{textAlign: 'center'}}>
+                    <Link href="/sradmin/agenda">Voir tout</Link>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
