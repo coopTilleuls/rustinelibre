@@ -84,7 +84,7 @@ const Messagerie = () => {
               display="flex"
               flexDirection="column"
               alignItems="flex-start">
-              {id ? <gBackToDiscussions /> : null}
+              {id ? <BackToDiscussions /> : null}
               <Typography
                 variant="h2"
                 color="primary.main"
