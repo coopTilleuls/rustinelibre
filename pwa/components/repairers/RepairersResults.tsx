@@ -12,7 +12,6 @@ import Grid2 from '@mui/material/Unstable_Grid2';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import {Divider} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 
 export const RepairersResults = (): JSX.Element => {
