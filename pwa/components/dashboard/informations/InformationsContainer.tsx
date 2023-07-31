@@ -55,12 +55,8 @@ const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
   };
 
   const fetchRepairer = async () => {
-    if (user && user.repairer) {
-      const response: Repairer = await repairerResource.get(
-        user.repairer['@id']
-      );
-      setRepairer(response);
-    }
+    const response: Repairer = await repairerResource.get(repairer['@id']);
+    setRepairer(response);
   };
 
   return (
