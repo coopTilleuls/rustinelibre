@@ -59,8 +59,11 @@ vendor/bin/phpunit  <chemin/vers/votre/test>
 
 ```shell
 cd ./pwa
-npx playwright install
-npx playwright test
+pnpm playwright install
+pnpm playwright test
+
+# Pour avoir une interface graphique
+pnpm playwright test --ui
 ```
 
 ## Pour obtenir un token JWT (JsonWebToken)

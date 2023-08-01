@@ -7,7 +7,9 @@ test('authentication success', async ({page}) => {
   await page.getByLabel('Mot de passe *').fill('Test1passwordOk!');
   await page.getByRole('button', {name: 'Se connecter'}).click();
 
-  await expect(page, 'La page doit être redirigée vers /sradmin').toHaveURL('/sradmin');
+  await expect(page, 'La page doit être redirigée vers /sradmin').toHaveURL(
+    '/sradmin'
+  );
 });
 
 test('authentication failed', async ({page}) => {
