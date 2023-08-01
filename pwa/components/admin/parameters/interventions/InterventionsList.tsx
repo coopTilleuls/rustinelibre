@@ -1,5 +1,11 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
+import Link from 'next/link';
+import {interventionResource} from '@resources/interventionResource';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 import {
+  Box,
+  Pagination,
+  Stack,
   Paper,
   Table,
   TableHead,
@@ -9,34 +15,24 @@ import {
   TableContainer,
   CircularProgress,
   Typography,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Button,
-  Dialog,
   IconButton,
 } from '@mui/material';
-import Box from '@mui/material/Box';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
-import Link from 'next/link';
-import {Intervention} from '@interfaces/Intervention';
-import {interventionResource} from '@resources/interventionResource';
 import AddIcon from '@mui/icons-material/Add';
+import {Intervention} from '@interfaces/Intervention';
 
 export const InterventionsList = (): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
   const [interventions, setInterventions] = useState<Intervention[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchTerm, setSearchTerm] = useState<string>('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
   const [selectedInterventionToDelete, setSelectedInterventionToDelete] =
     useState<Intervention | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchInterventions = async () => {
     setLoadingList(true);
@@ -70,52 +66,30 @@ export const InterventionsList = (): JSX.Element => {
     if (!selectedInterventionToDelete) {
       return;
     }
-
     setRemovePending(true);
     setDeleteDialogOpen(false);
     try {
       await interventionResource.delete(selectedInterventionToDelete['@id']);
-    } finally {
       setRemovePending(false);
       setSelectedInterventionToDelete(null);
+      await fetchInterventions();
+    } catch (e: any) {
+      setErrorMessage(
+        'Suppression impossible, ce type dintervention est utilisé.'
+      );
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
-
-    await fetchInterventions();
+    setRemovePending(false);
   };
 
   const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
-  const handleSearchTermChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter') {
-      fetchInterventions();
-    }
-  };
-
   return (
     <Box>
-      {/*<TextField*/}
-      {/*    label="Chercher..."*/}
-      {/*    value={searchTerm}*/}
-      {/*    onChange={handleSearchTermChange}*/}
-      {/*    onKeyPress={handleKeyPress}*/}
-      {/*    inputProps={{ maxLength: 180 }}*/}
-      {/*    InputProps={{*/}
-      {/*        endAdornment: (*/}
-      {/*            <InputAdornment position="end">*/}
-      {/*                <SearchIcon />*/}
-      {/*            </InputAdornment>*/}
-      {/*        ),*/}
-      {/*    }}*/}
-      {/*/>*/}
-
       <Typography variant="h5" mb={4}>
         Prestations proposées
         <Link href="/admin/parametres/interventions/ajouter">
@@ -178,7 +152,6 @@ export const InterventionsList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-
       {totalPages > 1 && (
         <Stack spacing={2} sx={{marginTop: '20px'}}>
           <Pagination
@@ -192,24 +165,15 @@ export const InterventionsList = (): JSX.Element => {
           />
         </Stack>
       )}
-
       {selectedInterventionToDelete && (
-        <Dialog
+        <ConfirmationModal
           open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {`Êtes-vous sûr de vouloir supprimer ${selectedInterventionToDelete.description}`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          loading={removePending}
+          errorMessage={
+            errorMessage
+          }>{`Êtes-vous sûr de vouloir supprimer la prestation "${selectedInterventionToDelete.description}" ?`}</ConfirmationModal>
       )}
     </Box>
   );

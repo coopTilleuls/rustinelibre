@@ -1,17 +1,8 @@
 import React, {useState} from 'react';
 import Link from 'next/link';
 import {repairerEmployeesResource} from '@resources/repairerEmployeesResource';
-import {
-  CircularProgress,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  IconButton,
-} from '@mui/material';
-
+import ConfirmationModal from '@components/common/ConfirmationModal';
+import {CircularProgress, IconButton} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForeverSharp';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
@@ -28,20 +19,14 @@ export const EmployeesListActions = ({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
 
-  const handleDeleteClick = () => {
-    setDeleteDialogOpen(true);
-  };
-
   const handleDeleteConfirm = async () => {
     setRemovePending(true);
-    setDeleteDialogOpen(false);
     try {
       await repairerEmployeesResource.delete(employee['@id']);
-    } finally {
-      setRemovePending(false);
-    }
-
-    await fetchEmployees();
+      setDeleteDialogOpen(false);
+      await fetchEmployees();
+    } catch (e) {}
+    setRemovePending(false);
   };
 
   return (
@@ -58,28 +43,19 @@ export const EmployeesListActions = ({
               <EditIcon color="secondary" />
             </IconButton>
           </Link>
-          <IconButton onClick={() => handleDeleteClick()} color="secondary">
+          <IconButton
+            onClick={() => setDeleteDialogOpen(true)}
+            color="secondary">
             <DeleteForeverIcon />
           </IconButton>
         </>
       )}
-      <Dialog
+      <ConfirmationModal
         open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle>Confirmation</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Êtes-vous sûr de vouloir supprimer{' '}
-            {employee.employee.firstName + ' ' + employee.employee.lastName} ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-          <Button onClick={handleDeleteConfirm} color="secondary">
-            Supprimer
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={handleDeleteConfirm}>
+        {`Êtes-vous sûr de vouloir supprimer l'employé(e) "${employee.employee.firstName} ${employee.employee.lastName}" ?`}
+      </ConfirmationModal>
     </>
   );
 };
