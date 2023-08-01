@@ -74,16 +74,6 @@ class SitemapController
     private function getStaticUrls(): array
     {
         return [
-            '/admin/contact',
-            '/admin/parametres',
-            '/admin/parametres/interventions/ajouter',
-            '/admin/parametres/type-de-reparateur/ajouter',
-            '/admin/parametres/type-de-velo/ajouter',
-            '/admin/reparateurs',
-            '/admin/utilisateurs',
-            '/admin/modifier-mot-de-passe',
-            '/admin/profil',
-
             '/carnet/creer-mon-carnet',
 
             '/messagerie',
@@ -96,15 +86,6 @@ class SitemapController
             '/reparateur/chercher-un-reparateur',
             '/reparateur/inscription',
             '/reparateur/rejoindre-le-collectif',
-
-            '/sradmin/agenda',
-            '/sradmin/agenda/parametres',
-            '/sradmin/clients',
-            '/sradmin/employes',
-            '/sradmin/employes/ajouter',
-            '/sradmin',
-            '/sradmin/informations',
-            '/sradmin/messagerie',
 
             '/velos/mes-velos',
 
