@@ -1,23 +1,28 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect} from 'react';
-import Head from 'next/head';
-import Box from '@mui/material/Box';
 import {NextRouter, useRouter} from 'next/router';
-import {Button, Divider, Paper} from '@mui/material';
-import {bikeResource} from '@resources/bikeResource';
-import {Bike} from '@interfaces/Bike';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
-import Typography from '@mui/material/Typography';
-import Link from 'next/link';
-import BikeTabs from '@components/bike/BikeTabs';
-import Container from '@mui/material/Container';
-import {bikeTypeResource} from '@resources/bikeTypeResource';
-import {BikeType} from '@interfaces/BikeType';
-import ModalDeleteBike from '@components/bike/ModalDeleteBike';
-import {useAccount} from '@contexts/AuthContext';
-import FullLoading from '@components/common/FullLoading';
+import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
+import {bikeResource} from '@resources/bikeResource';
+import {bikeTypeResource} from '@resources/bikeTypeResource';
+import {useAccount} from '@contexts/AuthContext';
+import WebsiteLayout from '@components/layout/WebsiteLayout';
+import FullLoading from '@components/common/FullLoading';
+import BikeTabs from '@components/bike/BikeTabs';
+import ConfirmationModal from '@components/common/ConfirmationModal';
+import {
+  Container,
+  Box,
+  Button,
+  Divider,
+  Paper,
+  Typography,
+} from '@mui/material';
 import {Delete} from '@mui/icons-material';
+import {errorRegex} from '@utils/errorRegex';
+import {Bike} from '@interfaces/Bike';
+import {BikeType} from '@interfaces/BikeType';
 
 const EditBike: NextPageWithLayout = ({}) => {
   const router: NextRouter = useRouter();
@@ -29,25 +34,44 @@ const EditBike: NextPageWithLayout = ({}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  async function fetchBikeTypes() {
+  const fetchBikeTypes = async () => {
     const responseBikeTypes = await bikeTypeResource.getAll(false);
     setBikeTypes(responseBikeTypes['hydra:member']);
-  }
+  };
+
+  const handleDelete = async () => {
+    setErrorMessage(null);
+    setLoading(true);
+    try {
+      await bikeResource.delete(bike!['@id']);
+    } catch (e: any) {
+      setErrorMessage(
+        `Suppression du vélo impossible: ${e.message?.replace(
+          errorRegex,
+          '$2'
+        )}, veuillez réessayer`
+      );
+      setTimeout(() => setErrorMessage(null), 3000);
+    }
+    router.push('/velos/mes-velos');
+    setLoading(false);
+  };
 
   useEffect(() => {
     fetchBikeTypes();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    async function fetchBike() {
+    const fetchBike = async () => {
       if (typeof id === 'string' && id.length > 0) {
         setLoading(true);
         const bikeFetch: Bike = await bikeResource.getById(id);
         setBike(bikeFetch);
         setLoading(false);
       }
-    }
+    };
     if (id && user) {
       fetchBike();
     }
@@ -149,11 +173,15 @@ const EditBike: NextPageWithLayout = ({}) => {
             </Box>
           </Container>
         )}
-        <ModalDeleteBike
-          openModal={openModal}
-          handleCloseModal={handleCloseModal}
-          bike={bike!}
-        />
+        {bike && (
+          <ConfirmationModal
+            open={openModal}
+            onClose={handleCloseModal}
+            onConfirm={handleDelete}
+            errorMessage={errorMessage}>
+            {`Êtes-vous sûr de vouloir supprimer le vélo "${bike.name}" ?`}
+          </ConfirmationModal>
+        )}
       </WebsiteLayout>
     </>
   );

@@ -1,4 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import Link from 'next/link';
+import {bikeTypeResource} from '@resources/bikeTypeResource';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 import {
   Paper,
   Table,
@@ -12,18 +15,11 @@ import {
   Typography,
   Button,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import {bikeTypeResource} from '@resources/bikeTypeResource';
-import {BikeType} from '@interfaces/BikeType';
-import Link from 'next/link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {BikeType} from '@interfaces/BikeType';
 
 export const ParametersBikeTypes = (): JSX.Element => {
   const [loadingBikeTypes, setLoadingBikeTypes] = useState<boolean>(false);
@@ -54,18 +50,18 @@ export const ParametersBikeTypes = (): JSX.Element => {
     if (!selectedBikeToDelete) {
       return;
     }
-
     setRemovePending(true);
-    setDeleteDialogOpen(false);
     try {
       await bikeTypeResource.delete(selectedBikeToDelete['@id']);
-      setRemovePending(false);
       setSelectedBikeToDelete(null);
+      await fetchBikeTypes();
     } catch (e: any) {
-      setErrorMessage(`Suppression impossible, ce type de vélo est utilisé.`);
+      setErrorMessage('Suppression impossible, ce type de vélo est utilisé.');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
-
-    await fetchBikeTypes();
+    setRemovePending(false);
   };
 
   return (
@@ -130,29 +126,15 @@ export const ParametersBikeTypes = (): JSX.Element => {
           </Table>
         </TableContainer>
       )}
-
       {selectedBikeToDelete && (
-        <Dialog
+        <ConfirmationModal
           open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {`Êtes-vous sûr de vouloir supprimer ${selectedBikeToDelete.name}`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      {errorMessage && (
-        <Typography color="error" textAlign="center" sx={{pt: 4}}>
-          {errorMessage}
-        </Typography>
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          loading={removePending}
+          errorMessage={
+            errorMessage
+          }>{`Êtes-vous sûr de vouloir supprimer le type "${selectedBikeToDelete.name}" ?`}</ConfirmationModal>
       )}
     </Box>
   );

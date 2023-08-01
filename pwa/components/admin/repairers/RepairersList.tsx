@@ -1,5 +1,11 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
+import Link from 'next/link';
+import {repairerResource} from '@resources/repairerResource';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 import {
+  Box,
+  Pagination,
+  Stack,
   Paper,
   Table,
   TableHead,
@@ -10,27 +16,16 @@ import {
   CircularProgress,
   TextField,
   Typography,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  Dialog,
   IconButton,
+  InputAdornment,
+  Switch,
 } from '@mui/material';
-import Box from '@mui/material/Box';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
-import {InputAdornment} from '@mui/material';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import {Repairer} from '@interfaces/Repairer';
-import {repairerResource} from '@resources/repairerResource';
 import EditIcon from '@mui/icons-material/Edit';
-import Link from 'next/link';
 import CircleIcon from '@mui/icons-material/Circle';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {formatDate} from '@helpers/dateHelper';
-import Switch from '@mui/material/Switch';
+import {Repairer} from '@interfaces/Repairer';
 
 export const RepairersList = (): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -79,17 +74,17 @@ export const RepairersList = (): JSX.Element => {
     if (!selectedRepairerToDelete) {
       return;
     }
-
     setRemovePending(true);
     setDeleteDialogOpen(false);
     try {
       await repairerResource.delete(selectedRepairerToDelete['@id']);
-    } finally {
       setRemovePending(false);
       setSelectedRepairerToDelete(null);
+      await fetchRepairers();
+    } catch (e: any) {
+      setRemovePending(false);
     }
-
-    await fetchRepairers();
+    setRemovePending(false);
   };
 
   const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
@@ -113,14 +108,12 @@ export const RepairersList = (): JSX.Element => {
     await repairerResource.put(repairer['@id'], {
       enabled: isChecked,
     });
-
     const updatedRepairerList = repairers.map((r: Repairer) => {
       if (r.id === repairer.id) {
         return {...r, enabled: isChecked};
       }
       return r;
     });
-
     setRepairers(updatedRepairerList);
   };
 
@@ -140,7 +133,6 @@ export const RepairersList = (): JSX.Element => {
           ),
         }}
       />
-
       <TableContainer elevation={4} component={Paper} sx={{marginTop: '10px'}}>
         <Table aria-label="employees">
           <TableHead
@@ -187,7 +179,6 @@ export const RepairersList = (): JSX.Element => {
                       <CircleIcon sx={{fontSize: '0.8em'}} /> Actif
                     </span>
                   )}
-
                   {!repairer.enabled && (
                     <span
                       style={{
@@ -231,7 +222,6 @@ export const RepairersList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-
       {totalPages > 1 && (
         <Stack spacing={2} sx={{marginTop: '20px'}}>
           <Pagination
@@ -245,24 +235,14 @@ export const RepairersList = (): JSX.Element => {
           />
         </Stack>
       )}
-
       {selectedRepairerToDelete && (
-        <Dialog
+        <ConfirmationModal
           open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}>
-          <DialogTitle>Confirmation</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {`Êtes-vous sûr de vouloir supprimer ${selectedRepairerToDelete.name}`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
-            <Button onClick={handleDeleteConfirm} color="secondary">
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          loading={
+            removePending
+          }>{`Êtes-vous sûr de vouloir supprimer le réparateur "${selectedRepairerToDelete.name}" ?`}</ConfirmationModal>
       )}
     </Box>
   );
