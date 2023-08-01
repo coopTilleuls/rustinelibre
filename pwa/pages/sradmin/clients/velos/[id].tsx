@@ -6,12 +6,16 @@ import Link from 'next/link';
 import {bikeResource} from '@resources/bikeResource';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
-import ConfirmationModal from '@components/common/ConfirmationModal';
-import ModalDetailMaintenance from '@components/bike/ModalDetailMaintenance';
 import ModalAddMaintenance from '@components/bike/ModalAddMaintenance';
-import Box from '@mui/material/Box';
 import {
+  Box,
+  Alert,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   Paper,
   Table,
@@ -50,30 +54,24 @@ const CustomerBikes: NextPageWithLayout = () => {
 
   const handleDeleteConfirm = async () => {
     if (!bike || !selectedMaintenanceToDelete) {
-      setDeleteDialogOpen(false);
       return;
     }
     setRemovePending(true);
+    setDeleteDialogOpen(false);
+    setErrorMessage(null);
     try {
       await maintenanceResource.delete(selectedMaintenanceToDelete['@id']);
-      setSelectedMaintenanceToDelete(null);
-      await fetchMaintenances(bike.id);
     } catch (e) {
-      setRemovePending(false);
       setErrorMessage('Suppression impossible');
-      setTimeout(() => setErrorMessage(null), 3000);
     }
+    setRemovePending(false);
+    setSelectedMaintenanceToDelete(null);
+    await fetchMaintenances(bike.id);
   };
 
   const handleOpenModal = (maintenance: Maintenance): void => {
     setMaintenanceSelected(maintenance);
-    setOpenModal(true);
-  };
-  const handleCloseModal = async (refresh: boolean = false): Promise<void> => {
-    setOpenModal(false);
-    if (refresh && bike) {
-      await fetchMaintenances(bike.id);
-    }
+    setOpenModalAddMaintenance(true);
   };
 
   const handleCloseModalAddMaintenance = async (): Promise<void> => {
@@ -103,7 +101,6 @@ const CustomerBikes: NextPageWithLayout = () => {
         await fetchMaintenances(bikeFetch.id);
       }
     };
-
     if (id) {
       fetchBike();
     }
@@ -133,6 +130,15 @@ const CustomerBikes: NextPageWithLayout = () => {
             </Button>
           </h3>
         )}
+
+        {errorMessage && (
+          <Alert
+            sx={{marginTop: '10px', marginBottom: '10px'}}
+            severity="warning">
+            {errorMessage}
+          </Alert>
+        )}
+
         {!loading && bike && maintenances.length > 0 && (
           <TableContainer component={Paper}>
             <Table sx={{minWidth: 300}} aria-label="simple table">
@@ -151,6 +157,7 @@ const CustomerBikes: NextPageWithLayout = () => {
                         onClick={() => handleOpenModal(maintenance)}>
                         Détails
                       </Button>
+
                       <IconButton
                         color="secondary"
                         onClick={() => handleDeleteClick(maintenance)}>
@@ -164,31 +171,34 @@ const CustomerBikes: NextPageWithLayout = () => {
           </TableContainer>
         )}
         {!loading && maintenances.length === 0 && (
-          <Box sx={{mt: 10}}>Le carnet d&#39;entretien est vide.</Box>
+          <Box sx={{mt: 10}}>Le carnet d&#39;entretien est vide</Box>
         )}
       </Box>
-      <ModalDetailMaintenance
-        maintenance={maintenanceSelected}
-        openModal={openModal}
-        handleCloseModal={handleCloseModal}
-      />
       {bike && (
         <ModalAddMaintenance
           bike={bike}
           openModal={openModalAddMaintenance}
           handleCloseModal={handleCloseModalAddMaintenance}
-          maintenance={null}
+          maintenance={maintenanceSelected}
         />
       )}
       {selectedMaintenanceToDelete && (
-        <ConfirmationModal
+        <Dialog
           open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}
-          onConfirm={handleDeleteConfirm}
-          loading={removePending}
-          errorMessage={errorMessage}>
-          {`Êtes-vous sûr de vouloir supprimer "${selectedMaintenanceToDelete.name}" ?`}
-        </ConfirmationModal>
+          onClose={() => setDeleteDialogOpen(false)}>
+          <DialogTitle>Confirmation</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {`Êtes-vous sûr de vouloir supprimer ${selectedMaintenanceToDelete.name}`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteDialogOpen(false)}>Annuler</Button>
+            <Button onClick={handleDeleteConfirm} color="secondary">
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </>
   );
