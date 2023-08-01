@@ -6,6 +6,7 @@ import {CircularProgress, IconButton} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForeverSharp';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
+import {userResource} from '@resources/userResource';
 
 interface EmployeesListActionsProps {
   employee: RepairerEmployee;
@@ -22,9 +23,11 @@ export const EmployeesListActions = ({
   const handleDeleteConfirm = async () => {
     setRemovePending(true);
     try {
+      const userIri = employee.employee['@id'];
       await repairerEmployeesResource.delete(employee['@id']);
       setDeleteDialogOpen(false);
       await fetchEmployees();
+      await userResource.delete(userIri);
     } catch (e) {}
     setRemovePending(false);
   };
