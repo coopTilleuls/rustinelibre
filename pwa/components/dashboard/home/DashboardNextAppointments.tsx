@@ -24,6 +24,7 @@ import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointm
 import AddIcon from '@mui/icons-material/Add';
 import {Repairer} from '@interfaces/Repairer';
 import ModalAppointmentCreate from '@components/dashboard/appointments/ModalAppointmentCreate';
+import {getAutodiagBikeName} from '@helpers/appointmentStatus';
 
 interface DashboardNextAppointmentsProps {
   repairer: Repairer;
@@ -62,25 +63,6 @@ const DashboardNextAppointments = ({
     if (refresh) {
       await fetchNextAppointments();
     }
-  };
-  const getAppointmentName = (appointment: Appointment): string => {
-    if (appointment.autoDiagnostic) {
-      return appointment.autoDiagnostic.prestation;
-    }
-
-    return `${appointment.customer.firstName} ${appointment.customer.lastName}`;
-  };
-
-  const getBike = (appointment: Appointment): string | undefined => {
-    if (appointment.bike) {
-      return appointment.bike.name;
-    }
-
-    if (appointment.bikeType) {
-      return appointment.bikeType.name;
-    }
-
-    return '';
   };
 
   const handleShowAppointment = (appointment: Appointment) => {
@@ -126,12 +108,13 @@ const DashboardNextAppointments = ({
                     key={appointment.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                     <TableCell component="th" scope="row">
-                      {getAppointmentName(appointment)}
+                      {appointment.customer.firstName}{' '}
+                      {appointment.customer.lastName}
                       <br />
                       <Typography
                         variant="body1"
                         sx={{fontSize: '0.9em', color: 'grey'}}>
-                        {getBike(appointment)}
+                        {getAutodiagBikeName(appointment)}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">

@@ -1,3 +1,5 @@
+import {Appointment} from '@interfaces/Appointment';
+
 export const getAppointmentStatus = (status: string): string => {
   switch (status) {
     case 'validated':
@@ -9,4 +11,22 @@ export const getAppointmentStatus = (status: string): string => {
     default:
       return 'En attente';
   }
+};
+
+export const getAutodiagBikeName = (
+  appointment: Appointment
+): string | undefined => {
+  if (appointment.autoDiagnostic) {
+    return appointment.autoDiagnostic.prestation;
+  }
+
+  if (appointment.bike) {
+    return appointment.bike.name;
+  }
+
+  if (appointment.bikeType) {
+    return appointment.bikeType.name;
+  }
+
+  return '';
 };
