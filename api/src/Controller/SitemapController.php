@@ -75,12 +75,6 @@ class SitemapController
     {
         return [
             '/carnet/creer-mon-carnet',
-
-            '/messagerie',
-
-            '/profil/modifier-mot-de-passe',
-            '/profil/mon-profil',
-
             '/rendez-vous/mes-rendez-vous',
 
             '/reparateur/chercher-un-reparateur',
@@ -91,11 +85,14 @@ class SitemapController
 
             '/',
             '/faq',
+            '/404',
             '/inscription',
             '/liste-des-reparateurs',
             '/login',
+            '/contact',
             '/mentions-legales',
             '/notre-collectif',
+            '/notre-charte',
         ];
     }
 }
