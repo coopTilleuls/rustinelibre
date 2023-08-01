@@ -30,6 +30,7 @@ export const AppointmentCard = ({
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const cancelAppointment = async (appointment: Appointment) => {
+    setOpenModal(false);
     setLoading(true);
     try {
       await appointmentResource.updateAppointmentStatus(appointment.id, {
