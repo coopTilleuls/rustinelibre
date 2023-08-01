@@ -23,6 +23,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
 import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import {Repairer} from '@interfaces/Repairer';
+import {getAutodiagBikeName} from '@helpers/appointmentStatus';
 
 interface DashboardWaitingAppointmentsProps {
   repairer: Repairer;
@@ -70,18 +71,6 @@ export const DashboardWaitingAppointments = ({
     return `${appointment.customer.firstName} ${appointment.customer.lastName}`;
   };
 
-  const getBike = (appointment: Appointment): string | undefined => {
-    if (appointment.bike) {
-      return appointment.bike.name;
-    }
-
-    if (appointment.bikeType) {
-      return appointment.bikeType.name;
-    }
-
-    return '';
-  };
-
   const handleShowAppointment = (appointment: Appointment) => {
     setOpenModal(true);
     setAppointmentSelected(appointment);
@@ -124,12 +113,13 @@ export const DashboardWaitingAppointments = ({
                     key={appointment.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                     <TableCell component="th" scope="row">
-                      {getAppointmentName(appointment)}
+                      {appointment.customer.firstName}{' '}
+                      {appointment.customer.lastName}
                       <br />
                       <Typography
                         variant="body1"
                         sx={{fontSize: '0.9em', color: 'grey'}}>
-                        {getBike(appointment)}
+                        {getAutodiagBikeName(appointment)}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
