@@ -76,6 +76,9 @@ const Footer = ({user}: FooterProps): JSX.Element => {
     }
   }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const isNotACustomer =
+    user && (isAdmin(user) || isBoss(user) || isEmployee(user));
+
   const links = useMemo(
     () =>
       [
@@ -89,19 +92,22 @@ const Footer = ({user}: FooterProps): JSX.Element => {
           label: 'Rendez-vous',
           link: '/rendez-vous/mes-rendez-vous',
           Icon: CalendarMonthIcon,
-          visible: user && !isBoss(user) && !isEmployee(user) && !isAdmin(user),
+          visible: true,
+          disabled: !user || isNotACustomer,
         },
         {
           label: 'Mes vélos',
           link: '/velos/mes-velos',
           Icon: DirectionsBikeIcon,
           visible: true,
+          disabled: !user || isNotACustomer,
         },
         {
           label: 'Messages',
           link: '/messagerie',
           Icon: ChatBubbleIcon,
-          visible: user && !isBoss(user) && !isEmployee(user) && !isAdmin(user),
+          visible: true,
+          disabled: !user || isNotACustomer,
         },
         {
           label: 'Compte',
@@ -116,7 +122,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
           visible: !user,
         },
       ].filter((link) => !!link.visible),
-    [user]
+    [user, isNotACustomer]
   );
 
   return (
@@ -135,8 +141,9 @@ const Footer = ({user}: FooterProps): JSX.Element => {
         showLabels
         value={router.pathname}
         sx={{height: {xs: '56px', md: '72px'}}}>
-        {links.map(({label, Icon: LinkIcon, link}) => (
+        {links.map(({label, Icon: LinkIcon, link, disabled}) => (
           <BottomNavigationAction
+            disabled={disabled}
             key={label}
             component={NextLinkComposed}
             to={link}
@@ -149,6 +156,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
               )
             }
             sx={{
+              opacity: disabled ? 0.5 : 1,
               color: 'secondary.main',
               '&:hover': {
                 color: 'primary.main',
@@ -159,12 +167,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             icon={
               <Badge
                 badgeContent={label === 'Messages' ? unreadMessages : 0}
-                sx={{
-                  color: 'primary',
-                  '&:hover': {
-                    color: 'primary.main',
-                  },
-                }}>
+                color="primary">
                 <LinkIcon fontSize="large" />
               </Badge>
             }
