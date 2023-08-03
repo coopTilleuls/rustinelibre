@@ -1,4 +1,4 @@
-import React, {useContext, useRef} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import router from 'next/router';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {
@@ -76,18 +76,31 @@ const ModalSearchRepairer = ({
         </Box>
         {!selectedBike && (
           <Box px={4}>
+            <InputLabel sx={{pb: 1}}>Pour quel type de vélo ?*</InputLabel>
             <FormControl variant="standard" sx={{width: '100%'}}>
-              <InputLabel id="sort-results-label">
-                Pour quel type de vélo
-              </InputLabel>
               <Select
-                label="Pour quel type de vélo"
+                variant="filled"
+                sx={{
+                  borderRadius: '10px',
+                  '& .MuiFilledInput-input': {py: 2, color: 'grey.500'},
+                }}
+                label="Pour quel type de vélo ?"
                 labelId="sort-results-label"
                 id="sort-results"
                 displayEmpty
-                value={selectedBike ? selectedBike['name'] : ''}
+                value={
+                  selectedBike
+                    ? selectedBike['name']
+                    : 'Sélectionnez un type de vélo'
+                }
                 onChange={handleBikeChange}
                 disableUnderline>
+                <MenuItem
+                  sx={{display: 'none'}}
+                  value="Sélectionnez un type de vélo"
+                  disabled>
+                  Sélectionnez un type de vélo
+                </MenuItem>
                 {bikeTypes.map((bike) => (
                   <MenuItem key={bike.id} value={bike.name}>
                     {bike.name}
@@ -99,6 +112,7 @@ const ModalSearchRepairer = ({
         )}
         {selectedBike && !city && (
           <Box px={4}>
+            <InputLabel sx={{pb: 1}}>Dans quelle ville ?*</InputLabel>
             <Autocomplete
               filterOptions={(options, state) => options}
               sx={{width: '100%'}}
@@ -115,9 +129,10 @@ const ModalSearchRepairer = ({
               onInputChange={(event, value) => setCityInput(value)}
               renderInput={(params) => (
                 <TextField
-                  variant="standard"
+                  placeholder="Ex: Lille"
+                  sx={{'& .MuiFilledInput-root': {borderRadius: '10px', py: 1}}}
+                  variant="filled"
                   required
-                  label="Dans quelle ville ?"
                   {...params}
                   InputProps={{
                     ...params.InputProps,
