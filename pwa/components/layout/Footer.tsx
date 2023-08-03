@@ -159,12 +159,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             icon={
               <Badge
                 badgeContent={label === 'Messages' ? unreadMessages : 0}
-                sx={{
-                  color: 'primary',
-                  '&:hover': {
-                    color: 'primary.main',
-                  },
-                }}>
+                color="primary">
                 <LinkIcon fontSize="large" />
               </Badge>
             }
