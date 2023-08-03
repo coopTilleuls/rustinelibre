@@ -86,19 +86,17 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
   };
 
   return (
-    <Box
-      width={isMobile ? '100%' : '60%'}
-      display="flex"
-      flexDirection="column"
-      alignItems="start">
-      <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
-        {loading && <CircularProgress />}
-        {!loading &&
-          openingHours.length === 0 &&
-          "Votre réparateur n'a pas actuellement de créneau disponible. Veuillez prendre contact avec lui directement par téléphone."}
-        {!loading && openingHours.length > 0 && 'Choisissez votre créneau :'}
+    <Box width="100%" display="flex" flexDirection="column" alignItems="start">
+      <Typography variant="h5" mb={2}>
+        {loading ? (
+          <CircularProgress />
+        ) : openingHours.length !== 0 ? (
+          'Choisissez votre créneau'
+        ) : (
+          "Votre réparateur n'a pas actuellement de créneau disponible. Veuillez prendre contact avec lui directement par téléphone."
+        )}
       </Typography>
-      <Stack spacing={4} width={'100%'}>
+      <Stack spacing={2} width={'100%'}>
         {openingHours &&
           Object.entries(openingHours)
             .slice(0, displayCount)
@@ -116,7 +114,12 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
               return (
                 <Box
                   key={day}
-                  sx={{backgroundColor: 'primary.light', cursor: 'pointer'}}>
+                  sx={{
+                    backgroundColor: 'white',
+                    cursor: 'pointer',
+                    boxShadow: 1,
+                    borderRadius: 5,
+                  }}>
                   <Box
                     display="flex"
                     alignItems="center"
@@ -128,10 +131,11 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
                     }}
                     onClick={() => toggleExpand(index)}>
                     <Typography
-                      fontSize={{xs: 16, md: 20}}
-                      fontWeight={600}
-                      color="white"
-                      textTransform="capitalize">
+                      variant="h6"
+                      textTransform="capitalize"
+                      color={
+                        openIndex === index ? 'primary.main' : 'text.secondary'
+                      }>
                       {date}
                     </Typography>
                     <ExpandMoreIcon
@@ -144,32 +148,31 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
                   </Box>
                   <Collapse in={openIndex === index}>
                     <Divider />
-                    <Box sx={{p: 2}}>
-                      <Grid2
-                        px={{md: 8}}
-                        py={{xs: 1, md: 2}}
-                        container
-                        spacing={{xs: 1, md: 6}}
-                        direction="row"
-                        justifyContent="start"
-                        alignItems="center">
+                    <Box py={3} px={2}>
+                      <Box
+                        display="flex"
+                        flexWrap="wrap"
+                        flexDirection="row"
+                        gap={2}>
                         {hours.map((hour) => (
-                          <Grid2 key={hour} xs={4} textAlign="center">
-                            <Button
-                              onClick={() => handleSelectSlot(day, hour)}
-                              variant="contained"
-                              sx={{
-                                color: 'primary.main',
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                  backgroundColor: 'grey.300',
-                                },
-                              }}>
-                              {hour}
-                            </Button>
-                          </Grid2>
+                          <Button
+                            key={hour}
+                            onClick={() => handleSelectSlot(day, hour)}
+                            variant="contained"
+                            sx={{
+                              color: 'text.secondary',
+                              backgroundColor: 'white',
+                              border: '1px solid',
+                              borderColor: 'grey.300',
+                              '&:hover': {
+                                backgroundColor: 'primary.light',
+                                color: 'white'
+                              },
+                            }}>
+                            {hour}
+                          </Button>
                         ))}
-                      </Grid2>
+                      </Box>
                     </Box>
                   </Collapse>
                 </Box>
@@ -179,6 +182,7 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
         {openingHours && displayCount < Object.entries(openingHours).length && (
           <Button
             variant="outlined"
+            size="large"
             onClick={() => setDisplayCount(displayCount + 7)}>
             Voir plus de disponibilités
           </Button>

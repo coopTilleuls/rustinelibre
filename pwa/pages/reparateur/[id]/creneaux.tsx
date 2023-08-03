@@ -10,22 +10,28 @@ import {appointmentResource} from '@resources/appointmentResource';
 import {useAccount} from '@contexts/AuthContext';
 import {
   Container,
-  CircularProgress,
   Box,
-  Typography,
   Paper,
   Stack,
   Button,
+  Typography,
+  Dialog,
 } from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import SlotsStep from '@components/rendez-vous/SlotsStep';
-import OptionalStep from '@components/rendez-vous/OptionalStep';
 import RecapStep from '@components/rendez-vous/RecapStep';
 const PinMap = dynamic(() => import('@components/rendez-vous/PinMap'), {
   ssr: false,
 });
 import {Repairer} from '@interfaces/Repairer';
-import {isBoss, isCyclist, isEmployee} from '@helpers/rolesHelpers';
+import {isCyclist} from '@helpers/rolesHelpers';
+import FullLoading from '@components/common/FullLoading';
+import ConfirmAppointmentModal from '@components/rendez-vous/modals/ConfirmAppointmentModal';
+import RecapAppointmentModal from '@components/rendez-vous/modals/RecapAppointmentModal';
+import ConnectModal from '@components/rendez-vous/modals/ConnectModal';
+import NotCyclistModal from '@components/rendez-vous/modals/NotCyclistModal';
+import PinMapModal from '@components/rendez-vous/modals/PinMapModal';
+import RepairerPresentationCard from '@components/repairers/RepairerPresentationCard';
 
 const RepairerSlots: NextPageWithLayout = () => {
   const router = useRouter();
@@ -53,6 +59,7 @@ const RepairerSlots: NextPageWithLayout = () => {
   useEffect(() => {
     fetchRepairer();
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+  
 
   const handleSelectSlot = (day: string, time: string): void => {
     setSlotSelected(day + 'T' + time + ':00.000Z');
@@ -98,15 +105,6 @@ const RepairerSlots: NextPageWithLayout = () => {
       router.push(`/rendez-vous/${newAppointment.id}/auto-diagnostic`);
     }
   };
-
-  const handleLogin = (): void => {
-    router.push('/login?next=' + encodeURIComponent(router.asPath));
-  };
-
-  const handleRegistration = (): void => {
-    router.push('/inscription?next=' + encodeURIComponent(router.asPath));
-  };
-
   useEffect(() => {
     document.getElementById('websitelayout')!.scrollTop = 0;
   }, [tunnelStep]);
@@ -117,126 +115,103 @@ const RepairerSlots: NextPageWithLayout = () => {
         <title>Demande de rendez-vous {repairer?.name}</title>
       </Head>
       <WebsiteLayout>
-        <main>
-          <Box
-            sx={{
-              bgcolor: 'background.paper',
-              mt: {md: 8},
-              mb: 10,
-            }}>
-            {loading && <CircularProgress sx={{marginLeft: '30%'}} />}
-
-            {!loading && repairer && (
-              <Box>
-                <Container maxWidth="md" sx={{padding: {xs: 0}}}>
-                  <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
-                    {tunnelStep == 'slots' && (
-                      <Link
-                        href={`/reparateur/${repairer.id}-${repairer.slug}`}>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          size="small">
-                          Retour
-                        </Button>
-                      </Link>
-                    )}
-                    {user && !isCyclist(user) && (
-                      <Typography variant="body1" sx={{textAlign: 'center'}}>
-                        Merci de vous connecter avec un compte utilisateur pour
-                        prendre un rendez-vous. <br />
-                        Sinon vous pouvez créer des RDV depuis votre back-office
-                        à <Link href={`/sradmin`}>cette adresse</Link>
-                      </Typography>
-                    )}
-                    {tunnelStep == 'optionalPage' && (
-                      <Button
-                        variant="outlined"
-                        onClick={() => setTunnelStep('slots')}>
-                        Consulter les créneaux
-                      </Button>
-                    )}
-                    {tunnelStep == 'confirm' && (
-                      <Button
-                        variant="outlined"
-                        onClick={() => setTunnelStep('optionalPage')}>
-                        Précédent
-                      </Button>
-                    )}
-                    <Stack
-                      spacing={5}
-                      marginBottom={4}
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                      }}>
-                      {!user && (
-                        <Stack
-                          spacing={4}
-                          display="flex"
-                          flexDirection="column"
-                          alignItems="center">
-                          <Typography component="p" align="center" sx={{mt: 4}}>
-                            Connectez-vous ou inscrivez-vous pour envoyer la
-                            demande au réparateur.
-                          </Typography>
-                          <Button
-                            onClick={handleLogin}
-                            variant="contained"
-                            sx={{width: 150}}>
-                            Se connecter
-                          </Button>
-                          <Button
-                            onClick={handleRegistration}
-                            variant="outlined"
-                            sx={{width: 150}}>
-                            S&apos;inscrire
-                          </Button>
-                        </Stack>
-                      )}
-                      {user &&
-                        repairer &&
-                        tunnelStep == 'slots' &&
-                        isCyclist(user) && (
-                          <SlotsStep
-                            handleSelectSlot={handleSelectSlot}
-                            repairer={repairer}
-                          />
-                        )}
-                      {user && repairer && tunnelStep == 'pinMap' && (
-                        <PinMap
-                          cancelPinMap={cancelPinMap}
-                          confirmPinMap={confirmPinMap}
-                          repairer={repairer}
-                          latitude={latitude}
-                          longitude={longitude}
-                          setLatitude={setLatitude}
-                          setLongitude={setLongitude}
-                          address={address}
-                          setAddress={setAddress}
-                        />
-                      )}
-                      {user && tunnelStep == 'optionalPage' && (
-                        <OptionalStep
-                          optionalPage={repairer.optionalPage}
-                          confirmAppointmentRequest={confirmAppointmentRequest}
-                        />
-                      )}
-                      {user && tunnelStep == 'confirm' && (
-                        <RecapStep
-                          repairer={repairer}
-                          slotSelected={slotSelected!}
-                          handleConfirmAppointment={handleConfirmAppointment}
-                        />
-                      )}
-                    </Stack>
-                  </Paper>
-                </Container>
-              </Box>
-            )}
+        {loading && <FullLoading />}
+        {!loading && repairer && (
+          <Box pt={4} pb={8} sx={{overflowX: 'clip'}}>
+            <Box
+              bgcolor="lightprimary.light"
+              height="100%"
+              width="100%"
+              position="absolute"
+              top="0"
+              left="0"
+              zIndex="-1"
+            />
+            <Container
+              sx={{
+                display: 'flex',
+                flexDirection: {xs: 'column', md: 'row-reverse'},
+                alignItems: 'flex-start',
+                gap: 8,
+                maxWidth: '1000px!important',
+              }}>
+              <RepairerPresentationCard
+                repairer={repairer}
+                sx={{
+                  position: 'sticky',
+                  width: '300px',
+                  top: '112px',
+                  display: {xs: 'none', md: 'flex'},
+                }}
+                noAction
+                withName
+              />
+              <Stack spacing={4} flex={1} pt={2} width="100%">
+                <Link href={`/reparateur/${repairer?.id}-${repairer?.slug}`}>
+                  <Button variant="outlined" color="secondary" size="small">
+                    Retour
+                  </Button>
+                </Link>
+                <Typography component="h1" variant="h1" color="primary.main">
+                  Demande de rendez-vous
+                </Typography>
+                {user && repairer && isCyclist(user) && (
+                  <SlotsStep
+                    handleSelectSlot={handleSelectSlot}
+                    repairer={repairer}
+                  />
+                )}
+              </Stack>
+            </Container>
           </Box>
-        </main>
+        )}
+        {repairer && (
+          <ConfirmAppointmentModal
+            open={!!(user && tunnelStep == 'optionalPage')}
+            onClose={() => setTunnelStep('slots')}
+            confirmAppointmentRequest={confirmAppointmentRequest}
+            optionalPage={repairer.optionalPage}
+          />
+        )}
+        {repairer && (
+          <>
+            <RecapAppointmentModal
+              open={!!(user && tunnelStep == 'confirm')}
+              onClose={() => setTunnelStep('slots')}
+              confirmAppointment={handleConfirmAppointment}
+              repairer={repairer}
+              slotSelected={slotSelected!}
+            />
+            <ConnectModal
+              open={!user}
+              onClose={() =>
+                router.push(`/reparateur/${repairer.id}-${repairer.slug}`)
+              }
+            />
+            <NotCyclistModal
+              open={!!(user && !isCyclist(user))}
+              onClose={() =>
+                router.push(`/reparateur/${repairer.id}-${repairer.slug}`)
+              }
+            />
+            <PinMapModal
+              open={!!(user && repairer && tunnelStep == 'pinMap')}
+              onClose={() => setTunnelStep('slots')}
+              onConfirm={confirmPinMap}>
+              <PinMap
+                cancelPinMap={cancelPinMap}
+                confirmPinMap={confirmPinMap}
+                repairer={repairer}
+                latitude={latitude}
+                longitude={longitude}
+                setLatitude={setLatitude}
+                setLongitude={setLongitude}
+                address={address}
+                setAddress={setAddress}
+              />
+            </PinMapModal>
+          </>
+        )}
       </WebsiteLayout>
     </div>
   );
