@@ -148,11 +148,23 @@ const Footer = ({user}: FooterProps): JSX.Element => {
                 </Typography>
               )
             }
-            sx={{color: 'secondary.main', fontWeight: 700, maxWidth: '130px'}}
+            sx={{
+              color: 'secondary.main',
+              '&:hover': {
+                color: 'primary.main',
+              },
+              fontWeight: 700,
+              maxWidth: '130px',
+            }}
             icon={
               <Badge
                 badgeContent={label === 'Messages' ? unreadMessages : 0}
-                color="primary">
+                sx={{
+                  color: 'primary',
+                  '&:hover': {
+                    color: 'primary.main',
+                  },
+                }}>
                 <LinkIcon fontSize="large" />
               </Badge>
             }
