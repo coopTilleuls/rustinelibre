@@ -31,7 +31,7 @@ const nextConfig = withPWA({
       'resources',
       'utils',
       'config',
-      'tests',
+      '__e2e__',
     ],
   },
 });
