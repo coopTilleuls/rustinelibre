@@ -1,18 +1,25 @@
 import React, {useState} from 'react';
 import {appointmentResource} from '@resources/appointmentResource';
-import {CircularProgress, Button} from '@mui/material';
+import {CircularProgress, Button, useMediaQuery} from '@mui/material';
 import {isPast} from '@helpers/dateHelper';
 import {Appointment} from '@interfaces/Appointment';
+import theme from 'styles/theme';
 
 type AppointmentActionsProps = {
   appointment: Appointment;
-  handleCloseModal: (refresh: boolean | undefined) => void;
+  closeModal: () => void;
+  proposeOtherSlot: boolean;
+  handleClickProposeOtherSlot: () => void;
 };
 
 const AppointmentActions = ({
   appointment,
-  handleCloseModal,
+  closeModal,
+  proposeOtherSlot,
+  handleClickProposeOtherSlot,
 }: AppointmentActionsProps): JSX.Element => {
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const [pendingAccept, setPendingAccept] = useState<boolean>(false);
   const [pendingRefuse, setPendingRefuse] = useState<boolean>(false);
   const [pendingCancel, setPendingCancel] = useState<boolean>(false);
@@ -22,8 +29,8 @@ const AppointmentActions = ({
     await appointmentResource.updateAppointmentStatus(appointmentId, {
       transition: 'validated_by_repairer',
     });
-    handleCloseModal(true);
     setPendingAccept(false);
+    closeModal();
   };
 
   const handleClickRefuseAppointment = async (appointmentId: string) => {
@@ -31,8 +38,8 @@ const AppointmentActions = ({
     await appointmentResource.updateAppointmentStatus(appointmentId, {
       transition: 'refused',
     });
-    handleCloseModal(true);
     setPendingRefuse(false);
+    closeModal();
   };
 
   const cancelAppointment = async () => {
@@ -44,9 +51,8 @@ const AppointmentActions = ({
       transition: 'cancellation',
     });
     setPendingCancel(false);
-    handleCloseModal(true);
+    closeModal();
   };
-
   return (
     <>
       {appointment.status === 'pending_repairer' && (
@@ -75,19 +81,29 @@ const AppointmentActions = ({
         </>
       )}
       {appointment.status === 'validated' && (
-        <Button
-          size="medium"
-          color="error"
-          disabled={isPast(appointment.slotTime)}
-          variant="contained"
-          onClick={cancelAppointment}
-          startIcon={
-            pendingCancel && (
-              <CircularProgress size={18} sx={{color: 'white'}} />
-            )
-          }>
-          Annuler le rendez-vous
-        </Button>
+        <>
+          <Button
+            size="medium"
+            disabled={isPast(appointment.slotTime) || proposeOtherSlot}
+            color="secondary"
+            variant="outlined"
+            onClick={handleClickProposeOtherSlot}>
+            {isMobile ? 'Modifier RDV' : 'Modifier le rendez-vous'}
+          </Button>
+          <Button
+            size="medium"
+            color="error"
+            disabled={isPast(appointment.slotTime)}
+            variant="contained"
+            onClick={cancelAppointment}
+            startIcon={
+              pendingCancel && (
+                <CircularProgress size={18} sx={{color: 'white'}} />
+              )
+            }>
+            {isMobile ? 'Annuler RDV' : 'Annuler le rendez-vous'}
+          </Button>
+        </>
       )}
     </>
   );
