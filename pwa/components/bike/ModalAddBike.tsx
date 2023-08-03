@@ -176,7 +176,7 @@ const ModalAddBike = ({
           />
           {!bikeTypeSelectedProps && (
             <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
-              <InputLabel id="bike-type-label">Type de velo</InputLabel>
+              <InputLabel id="bike-type-label">Type de vélo</InputLabel>
               <Select
                 required
                 id="bike-type"
