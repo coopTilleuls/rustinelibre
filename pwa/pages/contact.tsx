@@ -6,16 +6,14 @@ import {Turnstile} from '@marsidev/react-turnstile';
 import {
   Container,
   Typography,
-  Paper,
-  Avatar,
   Box,
   Button,
   TextField,
   Alert,
   CircularProgress,
+  Grid,
 } from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import {errorRegex} from '@utils/errorRegex';
 
 const cfTurnstileAPIKey = process.env
@@ -37,14 +35,13 @@ const Contact: NextPageWithLayout = () => {
   const [messageError, setMessageError] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-
-  const [isValid, setIsValid] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [status, setStatus] = useState<Status | null>(null);
 
   const handleSubmit = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       await contactResource.post({
         firstName,
         lastName,
@@ -52,23 +49,23 @@ const Contact: NextPageWithLayout = () => {
         content: message,
       });
       setLoading(false);
-      setIsValid(true);
-      setTimeout(() => {
-        setLastName('');
-        setFirstName('');
-        setEmail('');
-        setMessage('');
-        setIsValid(false);
-      }, 3000);
+      setSuccess('Votre message a bien été envoyé.');
     } catch (e: any) {
       setError(e.message?.replace(errorRegex, '$2'));
       setLoading(false);
     }
+    setTimeout(() => {
+      setLastName('');
+      setFirstName('');
+      setEmail('');
+      setMessage('');
+      setSuccess(null);
+      setError(null);
+    }, 3000);
   };
 
   const handleChangeLastName = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    setIsValid(false);
     setLastName(value);
     if (value.length < 2) {
       setLastNameError('Le nom doit comporter au moins 2 caractères.');
@@ -79,9 +76,7 @@ const Contact: NextPageWithLayout = () => {
 
   const handleChangeFirstName = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    setIsValid(false);
     setFirstName(value);
-
     if (value.length < 2) {
       setFirstNameError('Le prénom doit comporter au moins 2 caractères.');
     } else {
@@ -91,7 +86,6 @@ const Contact: NextPageWithLayout = () => {
 
   const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    setIsValid(false);
     setEmail(value);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!value.match(emailRegex)) {
@@ -103,9 +97,7 @@ const Contact: NextPageWithLayout = () => {
 
   const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    setIsValid(false);
     setMessage(value);
-
     if (value.length < 10) {
       setMessageError('Le message doit comporter au moins 10 caractères.');
     } else {
@@ -121,7 +113,8 @@ const Contact: NextPageWithLayout = () => {
     !!email &&
     !emailError &&
     !!message &&
-    !messageError;
+    !messageError &&
+    status === 'solved';
 
   return (
     <>
@@ -129,77 +122,143 @@ const Contact: NextPageWithLayout = () => {
         <title>Nous contacter</title>
       </Head>
       <WebsiteLayout>
-        <Container sx={{width: {xs: '100%', md: '50%'}}}>
-          <Paper elevation={4} sx={{maxWidth: 400, p: 4, my: 4, mx: 'auto'}}>
+        <Box
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
+        <Container>
+          <Box
+            py={4}
+            display="flex"
+            flexDirection={{xs: 'column', md: 'row'}}
+            gap={4}
+            position="relative"
+            alignItems="flex-start">
             <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-              <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
-                <ContactSupportIcon />
-              </Avatar>
-              <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
+              justifyContent="center"
+              display="flex"
+              flexDirection="column"
+              alignItems={{xs: 'center', md: 'flex-start'}}
+              textAlign={{xs: 'center', md: 'left'}}
+              width={{xs: '100%', md: '45%'}}
+              mx="auto"
+              maxWidth={{xs: '600px', md: '100%'}}>
+              <Typography variant="h1" sx={{mb: 4}} color="primary">
                 Nous contacter
               </Typography>
-              <Box component="form" noValidate sx={{mt: 1}}>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Nom"
-                  name="lastName"
-                  autoComplete="lastName"
-                  value={lastName}
-                  error={!!lastName && !!lastNameError}
-                  helperText={!!lastName && lastNameError}
-                  onChange={handleChangeLastName}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="Prénom"
-                  name="firstName"
-                  autoComplete="firstName"
-                  value={firstName}
-                  error={!!firstName && !!firstNameError}
-                  helperText={!!firstName && firstNameError}
-                  onChange={handleChangeFirstName}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Adresse email"
-                  name="email"
-                  autoComplete="email"
-                  value={email}
-                  error={!!email && !!emailError}
-                  helperText={!!email && emailError}
-                  inputProps={{maxLength: 180}}
-                  onChange={handleChangeEmail}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="message"
-                  label="Message"
-                  name="message"
-                  multiline
-                  rows={5}
-                  value={message}
-                  error={!!message && !!messageError}
-                  helperText={!!message && messageError}
-                  onChange={handleChangeMessage}
-                />
-                <Box mt={2} display="flex" justifyContent="center" width="100%">
+              <Typography variant="body1">
+                Lorem ipsum ? <br />
+                Et harum quidem rerum facilis est et expedita distinctio ?
+                <br />
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua ?
+                <br />
+              </Typography>
+              <Typography my={2} variant="h4" color="secondary">
+                Contactes-nous !
+              </Typography>
+              <Box
+                sx={{
+                  transform: {
+                    xs: 'translateX(-30%)',
+                    md: 'translateX(-50%) translateY(20%)',
+                    lg: 'translateX(-125%) translateY(20%)',
+                  },
+                  position: {
+                    xs: 'absolute',
+                    md: 'static',
+                  },
+                  left: '0',
+                  bottom: '10%',
+                }}>
+                <img alt="" src="/img/flower.svg" width="110px" />
+              </Box>
+            </Box>
+            <Box
+              component="form"
+              noValidate
+              sx={{
+                mt: 1,
+                bgcolor: 'white',
+                px: {xs: 3, md: 5},
+                py: {xs: 4, md: 5},
+                boxShadow: 2,
+                width: {xs: '90%', md: '55%'},
+                borderRadius: 6,
+                mx: 'auto',
+                maxWidth: '700px',
+                position: 'relative',
+              }}>
+              <Grid container spacing={2} direction="column">
+                <Grid container item xs={12} spacing={2} direction="row">
+                  <Grid item xs={12} sm={6} md={12} lg={6}>
+                    <TextField
+                      fullWidth
+                      required
+                      id="firstName"
+                      label="Prénom"
+                      name="firstName"
+                      autoComplete="firstName"
+                      autoFocus
+                      value={firstName}
+                      error={!!firstName && !!firstNameError}
+                      helperText={!!firstName && firstNameError}
+                      inputProps={{maxLength: 50}}
+                      onChange={handleChangeFirstName}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={12} lg={6}>
+                    <TextField
+                      fullWidth
+                      required
+                      id="lastName"
+                      label="Nom"
+                      name="lastName"
+                      autoComplete="lastName"
+                      value={lastName}
+                      error={!!lastName && !!lastNameError}
+                      helperText={!!lastName && lastNameError}
+                      inputProps={{maxLength: 50}}
+                      onChange={handleChangeLastName}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Adresse email"
+                    name="email"
+                    autoComplete="email"
+                    value={email}
+                    error={!!email && !!emailError}
+                    helperText={!!email && emailError}
+                    inputProps={{maxLength: 180}}
+                    onChange={handleChangeEmail}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="message"
+                    label="Message"
+                    name="message"
+                    multiline
+                    rows={5}
+                    value={message}
+                    error={!!message && !!messageError}
+                    helperText={!!message && messageError}
+                    onChange={handleChangeMessage}
+                  />
+                </Grid>
+                <Grid item xs={12} mx={'auto'}>
                   <Turnstile
                     id="widget-1"
                     siteKey={cfTurnstileAPIKey}
@@ -212,28 +271,34 @@ const Contact: NextPageWithLayout = () => {
                     onExpire={() => setStatus('expired')}
                     onSuccess={() => setStatus('solved')}
                   />
-                </Box>
+                </Grid>
+              </Grid>
+              <Box display="flex" flexDirection="column" alignItems="center">
                 <Button
-                  onClick={handleSubmit}
-                  sx={{mt: 3}}
-                  fullWidth
                   disabled={!validForm}
-                  variant="contained">
-                  {!loading ? 'Valider' : <CircularProgress />}
+                  onClick={handleSubmit}
+                  variant="contained"
+                  size="large"
+                  sx={{mt: 2, mx: 'auto'}}>
+                  {!loading ? (
+                    'Envoyer mon message'
+                  ) : (
+                    <CircularProgress size={20} sx={{color: 'white'}} />
+                  )}
                 </Button>
-                {error && (
-                  <Alert severity="error" sx={{mt: 3}}>
-                    {error}
-                  </Alert>
-                )}
-                {isValid && (
-                  <Alert severity="success" sx={{mt: 3}}>
-                    Message envoyé avec succès !
-                  </Alert>
-                )}
               </Box>
+              {success && (
+                <Alert color="success" sx={{mt: 2}}>
+                  {success}
+                </Alert>
+              )}
+              {error && (
+                <Alert color="error" sx={{mt: 2}}>
+                  {error}
+                </Alert>
+              )}
             </Box>
-          </Paper>
+          </Box>
         </Container>
       </WebsiteLayout>
     </>
