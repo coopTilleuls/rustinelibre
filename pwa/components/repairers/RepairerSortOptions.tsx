@@ -52,35 +52,59 @@ const RepairerSortOptions = ({
       maxWidth="800px"
       mx="auto"
       pt={{xs: 2, md: 5}}>
-      <FormControl sx={{flex: 1}} size="small">
-        <InputLabel id="sort-results-label">Trier</InputLabel>
-        <Select
-          label="trier"
-          labelId="sort-results-label"
-          id="sort-results"
-          onChange={handleSelectSortOption}
-          value={sortChosen}>
-          <MenuItem disabled value="">
-            <em>Trier</em>
-          </MenuItem>
-          {Object.entries(sortOptions).map(([key, option]) => (
-            <MenuItem key={key} value={key}>
-              {option}
+      {isMobile ? (
+        <FormControl sx={{width: {xs: '30%', md: '20%'}}} size="small">
+          <InputLabel
+            shrink={false}
+            id="sort-results-label"
+            sx={{color: 'secondary'}}>
+            Trier
+          </InputLabel>
+          <Select
+            labelId="sort-results-label"
+            id="sort-results"
+            displayEmpty
+            onChange={handleSelectSortOption}
+            renderValue={() => ''}>
+            {Object.entries(sortOptions).map(([key, option]) => (
+              <MenuItem key={key} value={key}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ) : (
+        <FormControl sx={{flex: 1}} size="small">
+          <InputLabel id="sort-results-label">Trier</InputLabel>
+          <Select
+            label="trier"
+            labelId="sort-results-label"
+            id="sort-results"
+            onChange={handleSelectSortOption}
+            value={sortChosen}>
+            <MenuItem disabled value="">
+              <em>Trier</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+            {Object.entries(sortOptions).map(([key, option]) => (
+              <MenuItem key={key} value={key}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
       {isMobile ? (
         <FormControl sx={{flex: 1, ml: {md: 2}}} size="small">
-          <InputLabel id="filter-results-label">Filtrer</InputLabel>
+          <InputLabel shrink={false} id="filter-results-label">
+            Filtrer
+          </InputLabel>
           <Select
             labelId="filter-results-label"
             id="filter-results"
             multiple
-            label="Filtrer"
             displayEmpty
             value={repairerTypeSelected}
-            renderValue={(selected) => selected.join(', ')}
+            renderValue={() => ''}
             onChange={handleChangeRepairerType}>
             {repairerTypes.map((repairerType) => (
               <MenuItem key={repairerType.id} value={repairerType.name}>
