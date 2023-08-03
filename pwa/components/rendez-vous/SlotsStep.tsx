@@ -1,19 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import {
-  Box,
-  Typography,
-  Button,
-  Stack,
-  Collapse,
-  Divider,
-  CircularProgress,
-} from '@mui/material';
-import Grid2 from '@mui/material/Unstable_Grid2';
+import React, {useState} from 'react';
+import {Box, Typography, Button, Stack, Collapse, Divider} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {openingHoursResource} from '@resources/openingHours';
-import {Repairer} from '@interfaces/Repairer';
-import {useTheme} from '@mui/material/styles';
 
 interface OpeningsObjectType {
   [key: string]: string[];
@@ -21,61 +8,12 @@ interface OpeningsObjectType {
 
 interface SlotsStepProps {
   handleSelectSlot: (day: string, time: string) => void;
-  repairer: Repairer;
+  openingHours: OpeningsObjectType | [];
 }
 
-const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
+const SlotsStep = ({handleSelectSlot, openingHours}: SlotsStepProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [loading, setLoading] = useState<boolean>(true);
-  const [openingHours, setOpeningHours] = useState<OpeningsObjectType | []>([]);
   const [displayCount, setDisplayCount] = useState<number>(7);
-
-  const fetchOpeningHours = async () => {
-    setLoading(true);
-    const openingHoursFetch =
-      await openingHoursResource.getRepairerSlotsAvailable(repairer.id);
-    setOpeningHours(filterDates(openingHoursFetch));
-    setLoading(false);
-  };
-
-  const filterDates = (
-    data: Record<string, string[]>
-  ): Record<string, string[]> => {
-    // Get current date as a string
-    const currentDate = new Date();
-    const currentDateStr = currentDate.toISOString().split('T')[0];
-
-    // If current date is in our data
-    if (currentDateStr in data) {
-      const [year, month, day] = currentDateStr.split('-');
-      const currentHours = data[currentDateStr];
-      const filteredHours = currentHours.filter((hour) => {
-        const [hours, minutes] = hour.split(':');
-        const date = new Date(
-          parseInt(year),
-          parseInt(month) - 1,
-          parseInt(day),
-          parseInt(hours),
-          parseInt(minutes)
-        );
-        return date >= currentDate;
-      });
-
-      if (filteredHours.length === 0) {
-        delete data[currentDateStr];
-      } else {
-        data[currentDateStr] = filteredHours;
-      }
-    }
-
-    return data;
-  };
-
-  useEffect(() => {
-    fetchOpeningHours();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleExpand = (index: number) => {
     if (openIndex === index) {
@@ -88,13 +26,9 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
   return (
     <Box width="100%" display="flex" flexDirection="column" alignItems="start">
       <Typography variant="h5" mb={2}>
-        {loading ? (
-          <CircularProgress />
-        ) : openingHours.length !== 0 ? (
-          'Choisissez votre créneau'
-        ) : (
-          "Votre réparateur n'a pas actuellement de créneau disponible. Veuillez prendre contact avec lui directement par téléphone."
-        )}
+        {Object.entries(openingHours).length
+          ? 'Choisissez votre créneau'
+          : "Votre réparateur n'a pas actuellement de créneau disponible. Veuillez prendre contact avec lui directement par téléphone."}
       </Typography>
       <Stack spacing={2} width={'100%'}>
         {openingHours &&
@@ -166,7 +100,7 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
                               borderColor: 'grey.300',
                               '&:hover': {
                                 backgroundColor: 'primary.light',
-                                color: 'white'
+                                color: 'white',
                               },
                             }}>
                             {hour}
@@ -179,7 +113,7 @@ const SlotsStep = ({handleSelectSlot, repairer}: SlotsStepProps) => {
               );
             })}
 
-        {openingHours && displayCount < Object.entries(openingHours).length && (
+        {displayCount < Object.entries(openingHours).length && (
           <Button
             variant="outlined"
             size="large"

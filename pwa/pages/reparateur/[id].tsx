@@ -21,15 +21,12 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
   const router = useRouter();
 
   const {id} = router.query;
-  const [loading, setLoading] = useState<boolean>(false);
   const [repairer, setRepairer] = useState<Repairer | null>(repairerProps);
 
   // If no repairerProps loaded
   const fetchRepairer = async () => {
     if (id) {
-      setLoading(true);
       const repairer = await repairerResource.getById(id.toString());
-      setLoading(false);
       setRepairer(repairer);
     }
   };

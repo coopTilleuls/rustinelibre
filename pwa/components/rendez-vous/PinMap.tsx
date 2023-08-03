@@ -184,7 +184,7 @@ const PinMap = ({
         )}
 
       {!isABossOrAnEmployee && (
-        <Box display="flex" justifyContent="flex-end" mt={4}>
+        <Box display="flex" justifyContent="flex-end" pt={4}>
           <Button
             disabled={
               !longitude ||
@@ -194,6 +194,7 @@ const PinMap = ({
               !streetNumber
             }
             variant="contained"
+            size="large"
             onClick={confirmPinMap}>
             Suivant
           </Button>
