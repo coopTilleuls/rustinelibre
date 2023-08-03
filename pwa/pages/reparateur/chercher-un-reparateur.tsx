@@ -444,13 +444,16 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                 {errorMessage}
               </Typography>
             )}
-            <Box textAlign="center">
-              {repairers.length === 0 && alreadyFetchApi && (
+            {repairers.length === 0 && alreadyFetchApi && (
+              <Box textAlign="center" pt={8}>
                 <Typography>
-                  Pas de réparateurs disponibles dans votre ville.
+                  Nous n&apos;avons pas trouvé de réparateurs dans cette ville.
                 </Typography>
-              )}
-            </Box>
+                <Typography>
+                  Veuillez svp recommencer votre recherche.
+                </Typography>
+              </Box>
+            )}
             <Box width="100%">
               {repairers.length ? (
                 <>{!isLoading && <RepairersResults />}</>
