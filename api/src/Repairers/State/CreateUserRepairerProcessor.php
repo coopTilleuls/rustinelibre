@@ -7,6 +7,7 @@ namespace App\Repairers\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use ApiPlatform\Validator\ValidatorInterface;
+use App\Emails\NewRepairerEmail;
 use App\Entity\Repairer;
 use App\Entity\User;
 use App\Repairers\Dto\CreateUserRepairerDto;
@@ -16,7 +17,8 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly ValidatorInterface $validator,
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly NewRepairerEmail $newRepairerEmail
     ) {
     }
 
@@ -60,6 +62,9 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
         // Persist and flush
         $this->entityManager->persist($repairer);
         $this->entityManager->flush();
+
+        // Send Email
+        $this->newRepairerEmail->sendNewContactEmail($repairer);
 
         return $repairer;
     }
