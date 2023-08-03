@@ -23,6 +23,8 @@ const MapPosition = dynamic(
 );
 import {RequestBody} from '@interfaces/Resource';
 import {Repairer} from '@interfaces/Repairer';
+import {isAdmin} from '@helpers/rolesHelpers';
+import Comment from '@components/dashboard/informations/Comment';
 
 interface InformationsContainerProps {
   editRepairer?: Repairer;
@@ -68,6 +70,7 @@ const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
         <Tab label="Horaires" />
         <Tab label="Informations complémentaires" />
         <Tab label="Position sur la carte" />
+        {user && isAdmin(user) && <Tab label="Commentaire" />}
       </Tabs>
       <Box mt={3}>
         {loading ? (
@@ -109,6 +112,7 @@ const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
                 updateRepairer={updateRepairer}
               />
             )}
+            {tabValue === 6 && repairer && <Comment repairer={repairer} />}
           </>
         )}
       </Box>
