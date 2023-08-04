@@ -201,7 +201,10 @@ Il existe 3 parcours sur le site :
 - Le parcours d'un administrateur du site, qui accède à l'URL /admin, sur laquelle il peut accepter les demandes des réparateurs, consulter les messages reçus...
 
 La gestion du carnet d'entretien d'un vélo peut se faire via l'URL /mes-velos du parcours cycliste, il y est possible
-d'y ajouter des photos ou des factures au format pdf, .doc, .docx.
+d'y ajouter des photos ou des factures à différents formats :
+- photos : .png, .jpg, .jpeg
+- factures : .pdf, .doc, .docx, .odt, .xls, .csv, .png, .jpg, .jpeg
+
 Les réparateurs peuvent également accéder à ce carnet et ajouter des interventions dont ils sont à l'origine.
 
 ## Rôles
