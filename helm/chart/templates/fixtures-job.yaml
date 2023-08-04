@@ -35,7 +35,7 @@ spec:
             echo "fixtures job"
           ']
           env:
-            - name: API_ENTRYPOINT_HOST
+            - name: WEB_APP_URL
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "bikelib.fullname" . }}
