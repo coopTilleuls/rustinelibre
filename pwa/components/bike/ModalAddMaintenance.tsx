@@ -7,7 +7,7 @@ import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import {useAccount} from '@contexts/AuthContext';
 import {errorRegex} from '@utils/errorRegex';
-import {uploadFile} from '@helpers/uploadFile';
+import {uploadFile, uploadImage} from '@helpers/uploadFile';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   CircularProgress,
@@ -56,6 +56,8 @@ const ModalAddMaintenance = ({
   );
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
   const [loadingInvoice, setLoadingInvoice] = useState<boolean>(false);
+  const [newPhoto, setNewPhoto] = useState<MediaObject | null>(null);
+  const [newInvoice, setNewInvoice] = useState<MediaObject | null>(null);
   const [photo, setPhoto] = useState<MediaObject | null>(
     maintenance?.photo || null
   );
@@ -117,6 +119,8 @@ const ModalAddMaintenance = ({
         setDescription('');
         setPhoto(null);
         setInvoice(null);
+        setNewPhoto(null);
+        setNewInvoice(null);
         setSelectedDate(null);
       }
       handleCloseModal(true);
@@ -143,32 +147,55 @@ const ModalAddMaintenance = ({
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
-    mediaObject: MediaObject | null,
     type: string
   ): Promise<void> => {
-    if (mediaObject) {
-      await mediaObjectResource.delete(mediaObject['@id']);
-    }
-
     if (event.target.files) {
       const isPhoto = type === 'photo';
       isPhoto ? setLoadingPhoto(true) : setLoadingInvoice(true);
-      const response = await uploadFile(event.target.files[0]);
-      const mediaObjectResponse = (await response?.json()) as MediaObject;
-      if (mediaObjectResponse) {
-        isPhoto
-          ? setPhoto(mediaObjectResponse)
-          : setInvoice(mediaObjectResponse);
-        isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
+
+      // on enregistre la nouvelle photo/facture
+      const response = isPhoto
+        ? await uploadImage(event.target.files[0])
+        : await uploadFile(event.target.files[0]);
+      const mediaObject = (await response?.json()) as MediaObject;
+      isPhoto ? setNewPhoto(mediaObject) : setNewInvoice(mediaObject);
+
+      // si elle existe, on supprime l'ancienne photo/facture
+      if (maintenance && isPhoto && photo) {
+        await mediaObjectResource.delete(photo['@id']);
+      } else if (maintenance && !isPhoto && invoice) {
+        await mediaObjectResource.delete(invoice['@id']);
       }
+      isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
+
+      // dans le cas d'une modification, on met à jour la maintenance avec la nouvelle photo/facture
+      if (maintenance && mediaObject) {
+        const bodyRequest: RequestBody = {};
+        isPhoto
+          ? (bodyRequest['photo'] = mediaObject['@id'])
+          : (bodyRequest['invoice'] = mediaObject['@id']);
+        maintenance = await maintenanceResource.put(
+          maintenance['@id'],
+          bodyRequest
+        );
+      }
+      isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
     }
   };
 
-  const handleClose = () => {
+  const handleClose = async () => {
+    if (!maintenance && newPhoto) {
+      await mediaObjectResource.delete(newPhoto['@id']);
+    }
+    if (!maintenance && newInvoice) {
+      await mediaObjectResource.delete(newInvoice['@id']);
+    }
     setName(null);
     setDescription(null);
     setPhoto(null);
     setInvoice(null);
+    setNewPhoto(null);
+    setNewInvoice(null);
     setErrorMessage(null);
     setSelectedDate(null);
     handleCloseModal();
@@ -261,7 +288,7 @@ const ModalAddMaintenance = ({
               justifyContent={photo ? 'space-between' : 'end'}
               width={isMobile ? '100%' : '50%'}>
               <Typography variant="h5">Photo de la réparation</Typography>
-              {photo && (
+              {(newPhoto || photo) && (
                 <Box
                   mt={1}
                   mb={2}
@@ -275,7 +302,7 @@ const ModalAddMaintenance = ({
                   <img
                     width="100%"
                     height="100%"
-                    src={photo.contentUrl}
+                    src={newPhoto ? newPhoto.contentUrl : photo?.contentUrl}
                     alt="Photo de la réparation"
                     style={{objectFit: 'cover', display: 'block'}}
                   />
@@ -297,12 +324,12 @@ const ModalAddMaintenance = ({
                   mt: 1,
                   width: 'fit-content',
                 }}>
-                {photo ? 'Changer de photo' : 'Ajouter une photo'}
+                {newPhoto || photo ? 'Changer de photo' : 'Ajouter une photo'}
                 <input
                   type="file"
                   hidden
                   accept={'.png, .jpg, .jpeg'}
-                  onChange={(e) => handleFileChange(e, photo, 'photo')}
+                  onChange={(e) => handleFileChange(e, 'photo')}
                 />
               </Button>
             </Box>
@@ -312,12 +339,17 @@ const ModalAddMaintenance = ({
               justifyContent={invoice ? 'space-between' : 'end'}
               width={isMobile ? '100%' : '50%'}>
               <Typography variant="h5">Votre facture</Typography>
-              {invoice && (
-                <a href={invoice.contentUrl} target="_blank">
+              {(newInvoice || invoice) && (
+                <a
+                  href={
+                    newInvoice ? newInvoice.contentUrl : invoice?.contentUrl
+                  }
+                  target="_blank">
                   <Box
                     display="flex"
                     justifyContent="center"
                     alignItems="center"
+                    flexDirection="column"
                     mt={1}
                     mb={2}
                     width={isMobile ? '100%' : '200'}
@@ -332,6 +364,9 @@ const ModalAddMaintenance = ({
                       sx={{fontSize: 60}}
                       color="secondary"
                     />
+                    <Typography color="secondary" align="center">
+                      {newInvoice ? newInvoice.filePath : invoice?.filePath}
+                    </Typography>
                   </Box>
                 </a>
               )}
@@ -351,14 +386,16 @@ const ModalAddMaintenance = ({
                   mt: 1,
                   width: 'fit-content',
                 }}>
-                {invoice ? 'Changer de facture' : 'Ajouter une facture'}
+                {newInvoice || invoice
+                  ? 'Changer de facture'
+                  : 'Ajouter une facture'}
                 <input
                   type="file"
                   hidden
                   accept={
                     '.pdf, .doc, .docx, .odt, .xls, .csv, .png, .jpg, .jpeg'
                   }
-                  onChange={(e) => handleFileChange(e, invoice, 'invoice')}
+                  onChange={(e) => handleFileChange(e, 'invoice')}
                 />
               </Button>
             </Box>
