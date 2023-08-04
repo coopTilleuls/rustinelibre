@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import theme from 'styles/theme';
 import {DAYS_TO_ADD_FOR_NEW_PROPOSAL} from '@constants/A2HS';
-import {Box, Button, Typography} from '@mui/material';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import GetAppIcon from '@mui/icons-material/GetApp';
+import LetterR from '@components/common/LetterR';
+import {Box, IconButton, Typography, useMediaQuery} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import DownloadIcon from '@mui/icons-material/Download';
 
 interface UserChoice {
   outcome: 'accepted' | 'dismissed';
@@ -23,6 +25,8 @@ export const A2HS = (): JSX.Element => {
   const [deferredPrompt, setDeferredPrompt] = useState<
     BeforeInstallPromptEvent | undefined
   >();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleInstallationBanner = (e: Event): void => {
     e.preventDefault();
@@ -67,56 +71,34 @@ export const A2HS = (): JSX.Element => {
 
   return (
     <>
-      {display && (
+      {display && isMobile && (
         <Box
+          px={2}
+          py={1}
           display="flex"
-          zIndex="tooltip"
+          justifyContent="space-between"
+          alignItems="center"
           width="100%"
+          zIndex="tooltip"
           position="fixed"
+          boxShadow={4}
           sx={{backgroundColor: 'white'}}
-          boxShadow={1}
-          gap={1}>
-          <Box
-            width="100%"
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center">
-            <Box
-              width="100%"
-              p={1}
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between">
-              <Typography
-                fontSize={14}
-                fontWeight={600}
-                color="primary"
-                sx={{pl: 2}}>
-                Rustine Libre - WebApp
-              </Typography>
-              <Button onClick={handleClose}>
-                <CloseRoundedIcon color="primary" />
-              </Button>
-            </Box>
-            <Box
-              display="flex"
-              justifyContent="center"
-              textAlign="center"
-              width="100%"
-              p={2}
-              gap={2}
-              sx={{
-                backgroundColor: 'primary.light',
-                cursor: 'pointer',
-              }}
-              onClick={promptUserInstallation}>
-              <Typography fontSize={14} fontWeight={600}>
-                Ajouter à l&apos;écran d&apos;accueil
-              </Typography>
-              <GetAppIcon />
-            </Box>
+          onClick={promptUserInstallation}>
+          <Box width="50px">
+            <LetterR color="secondary" />
           </Box>
+          <Box display="flex" flexDirection="column">
+            <Typography color="secondary">Installer la WebApp</Typography>
+            <IconButton aria-label="download" color="secondary">
+              <DownloadIcon fontSize="medium" />
+            </IconButton>
+          </Box>
+          <IconButton
+            aria-label="close"
+            color="secondary"
+            onClick={handleClose}>
+            <CloseIcon fontSize="medium" />
+          </IconButton>
         </Box>
       )}
     </>

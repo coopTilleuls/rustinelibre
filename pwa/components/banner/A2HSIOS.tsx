@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {DAYS_TO_ADD_FOR_NEW_PROPOSAL} from '@constants/A2HS';
-import {Box, Typography} from '@mui/material';
+import theme from 'styles/theme';
+import LetterR from '@components/common/LetterR';
+import {Box, IconButton, Typography, useMediaQuery} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 interface IosNavigator extends Navigator {
   standalone: boolean;
@@ -14,6 +16,8 @@ interface IosNavigator extends Navigator {
  */
 export const A2HSIOS = (): JSX.Element => {
   const [display, setDisplay] = useState(false);
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleInstallationBanner = () => {
     const isMobile = window.matchMedia(
@@ -54,47 +58,44 @@ export const A2HSIOS = (): JSX.Element => {
 
   return (
     <>
-      {display && (
+      {display && isMobile && (
         <Box
-          gap={2}
-          p={1}
+          px={2}
+          py={1}
           display="flex"
-          alignItems="start"
-          zIndex="tooltip"
+          justifyContent="space-between"
+          alignItems="center"
           width="100%"
+          zIndex="tooltip"
           position="fixed"
-          sx={{backgroundColor: 'white'}}
-          boxShadow={1}>
-          <CloseRoundedIcon
-            onClick={handleClose}
-            color="primary"
-            sx={{
-              '& :hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
-          <Box width="100%" display="flex" flexDirection="column" gap={1}>
-            <Typography
-              fontSize={14}
-              fontWeight={600}
-              display="flex"
-              alignItems="center"
-              color="primary">
-              Rustine Libre
-            </Typography>
-            <Typography fontSize={10} display="flex" alignItems="center">
-              Pour installer la WebApp, appuyez sur
-              <IosShareIcon sx={{mx: 1}} color="primary" />
-            </Typography>
-            <Typography fontSize={10} display="flex" alignItems="center">
-              et sélectionnez &quot;Sur l&apos;écran d&apos;accueil&quot;
-              <AddBoxOutlinedIcon
-                sx={{mx: 1, textAlign: 'center'}}
-                color="primary"
-              />
-            </Typography>
+          boxShadow={4}
+          sx={{backgroundColor: 'white'}}>
+          <Box width="50px">
+            <LetterR color="secondary" />
           </Box>
+          <Box display="flex" flexDirection="column" px={1} gap={1}>
+            <Typography color="secondary" fontSize={12}>
+              Pour installer la WebApp:
+            </Typography>
+            <Box display="flex" alignItems="center">
+              <Typography color="secondary" fontSize={12}>
+                Cliquez sur
+              </Typography>
+              <IosShareIcon sx={{mx: 1}} color="secondary" />
+            </Box>
+            <Box display="flex" alignItems="center">
+              <Typography color="secondary" fontSize={12}>
+                Puis sur
+              </Typography>
+              <AddBoxOutlinedIcon sx={{mx: 1}} color="secondary" />
+            </Box>
+          </Box>
+          <IconButton
+            aria-label="close"
+            color="secondary"
+            onClick={handleClose}>
+            <CloseIcon fontSize="medium" />
+          </IconButton>
         </Box>
       )}
     </>
