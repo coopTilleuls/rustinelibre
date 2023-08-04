@@ -51,7 +51,7 @@ const RepairerSortOptions = ({
       width="100%"
       maxWidth="800px"
       mx="auto"
-      pt={{xs: 2, md: 5}}>
+      pt={{xs: 2}}>
       {isMobile ? (
         <FormControl sx={{width: {xs: '30%', md: '20%'}}} size="small">
           <InputLabel

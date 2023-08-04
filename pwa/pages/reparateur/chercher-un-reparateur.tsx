@@ -322,6 +322,15 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       </Head>
       <WebsiteLayout>
         <Box
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
+        <Box
           height={{xs: 'calc(100vh - 55px)', md: 'calc(100vh - 70px)'}}
           display="flex"
           flexDirection="column"
@@ -333,7 +342,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
             bgcolor="white"
             paddingY="10px"
             zIndex="200"
-            boxShadow={3}>
+            boxShadow={1}>
             <Container>
               <Box
                 component="form"
