@@ -190,7 +190,7 @@ spec:
                 php bin/console app:repairer:update-first-slot-available;
               ']
               env:
-                - name: API_ENTRYPOINT_HOST
+                - name: WEB_APP_URL
                   valueFrom:
                     configMapKeyRef:
                       name: {{ include "bikelib.fullname" . }}
