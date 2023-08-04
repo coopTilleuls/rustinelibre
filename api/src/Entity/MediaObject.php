@@ -118,6 +118,7 @@ class MediaObject
     public ?File $file = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, Appointment::APPOINTMENT_READ, AutoDiagnostic::READ, Appointment::APPOINTMENT_READ, User::USER_READ])]
     public ?string $filePath = null;
 
     #[Assert\Choice(choices: ['private', 'public'], message: 'mediaObject.visibility.not_valid')]
