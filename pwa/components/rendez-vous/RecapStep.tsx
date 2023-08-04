@@ -1,5 +1,13 @@
 import React from 'react';
-import {Box, Typography, Button, Stack, Card, Avatar} from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Stack,
+  Card,
+  Avatar,
+  CircularProgress,
+} from '@mui/material';
 import {Repairer} from '@interfaces/Repairer';
 import {isRepairerItinerant} from '@helpers/rolesHelpers';
 import {getTimeFromDateAsString} from 'helpers/dateHelper';
@@ -9,11 +17,13 @@ interface RecapStepProps {
   repairer: Repairer;
   slotSelected: string;
   handleConfirmAppointment: () => void;
+  isLoading?: boolean;
 }
 
 const RecapStep = ({
   repairer,
   slotSelected,
+  isLoading,
   handleConfirmAppointment,
 }: RecapStepProps) => {
   const date: string = new Date(slotSelected).toLocaleString('fr-FR', {
@@ -87,8 +97,13 @@ const RecapStep = ({
         <Button
           onClick={handleConfirmAppointment}
           variant="contained"
+          disabled={isLoading}
           size="large">
-          Confirmer le rendez-vous
+          {isLoading ? (
+            <CircularProgress color="inherit" size={24} />
+          ) : (
+            <span> Confirmer le rendez-vous</span>
+          )}
         </Button>
       </Box>
     </Box>

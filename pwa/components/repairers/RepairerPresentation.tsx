@@ -37,7 +37,7 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
   }
 
   return (
-    <Box pt={4} pb={8} sx={{overflowX: 'clip'}}>
+    <Box pb={8} sx={{overflowX: 'clip'}}>
       <Box
         bgcolor="lightprimary.light"
         height="100%"
@@ -58,9 +58,10 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
         <RepairerPresentationCard
           repairer={repairer}
           sx={{
+            marginTop: 8,
             position: 'sticky',
             width: '300px',
-            top: '112px',
+            top: '144px',
             display: {xs: 'none', md: 'flex'},
           }}
         />

@@ -33,6 +33,8 @@ const RepairerSlots: NextPageWithLayout = () => {
   >();
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingHours, setLoadingHours] = useState<boolean>(false);
+  const [loadingAppointmentCreate, setLoadingAppointmentCreate] =
+    useState<boolean>(false);
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const [latitude, setLatitude] = useState<string>('');
   const [longitude, setLongitude] = useState<string>('');
@@ -136,6 +138,7 @@ const RepairerSlots: NextPageWithLayout = () => {
     if (!repairer || !user || !slotSelected) {
       return;
     }
+    setLoadingAppointmentCreate(true);
 
     const newAppointment = await appointmentResource.post({
       repairer: repairer['@id'],
@@ -147,8 +150,9 @@ const RepairerSlots: NextPageWithLayout = () => {
 
     if (newAppointment) {
       router.push(`/rendez-vous/${newAppointment.id}/auto-diagnostic`);
-    }
+    } else setLoadingAppointmentCreate(false);
   };
+
   useEffect(() => {
     document.getElementById('websitelayout')!.scrollTop = 0;
   }, [tunnelStep]);
@@ -220,7 +224,11 @@ const RepairerSlots: NextPageWithLayout = () => {
                   : {flex: 1, alignItems: 'flex-start'}
               }>
               {tunnelStep == 'slots' && (
-                <Link href={`/reparateur/${repairer?.id}-${repairer?.slug}`}>
+                <Link
+                  href={{
+                    pathname: `/reparateur/${repairer?.id}-${repairer?.slug}`,
+                    query: router.query,
+                  }}>
                   <Button variant="outlined" color="secondary" size="small">
                     Retour
                   </Button>
@@ -304,6 +312,7 @@ const RepairerSlots: NextPageWithLayout = () => {
                 <RecapStep
                   repairer={repairer}
                   slotSelected={slotSelected!}
+                  isLoading={loadingAppointmentCreate}
                   handleConfirmAppointment={handleConfirmAppointment}
                 />
               )}

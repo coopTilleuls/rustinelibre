@@ -8,6 +8,7 @@ import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
 import {isCyclist} from '@helpers/rolesHelpers';
 import {useAccount} from '@contexts/AuthContext';
+import {useRouter} from 'next/router';
 
 const RepairerPresentationCard = ({
   repairer,
@@ -25,6 +26,7 @@ const RepairerPresentationCard = ({
     : 'https://cdn.cleanrider.com/uploads/2021/04/prime-reparation-velo_140920-3.jpg';
 
   const {user} = useAccount({});
+  const router = useRouter();
 
   return (
     <Box
@@ -43,7 +45,7 @@ const RepairerPresentationCard = ({
       }}>
       <Box
         sx={{
-          aspectRatio: '4/3',
+          aspectRatio: '5/3',
           width: '100%',
           overflow: 'hidden',
           maxHeight: {xs: '130px', sm: 'none'},
@@ -117,7 +119,10 @@ const RepairerPresentationCard = ({
             )}
             {(!user || isCyclist(user)) && (
               <Link
-                href={`/reparateur/${repairer.id}/creneaux`}
+                href={{
+                  pathname: `/reparateur/${repairer.id}/creneaux`,
+                  query: router.query,
+                }}
                 legacyBehavior
                 passHref>
                 <Button variant="contained">Je réserve</Button>

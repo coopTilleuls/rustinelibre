@@ -8,26 +8,24 @@ export const AutoDiagTunnelChoice = (): JSX.Element => {
 
   return (
     <Stack
-      spacing={4}
+      spacing={2}
       display="flex"
       flexDirection="column"
       alignItems="center">
-      <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
-        Souhaites-tu transmettre un autodiagnostic au réparateur ?
+      <Typography variant="h5" component="label">
+        Souhaites-tu transmettre un autodiagnostic au réparateur&nbsp;?
       </Typography>
       {appointment && (
         <Box
           width={{xs: '60%', md: '40%'}}
+          mt={6}
           display="flex"
           justifyContent="space-between">
           <Link href={`/rendez-vous/recapitulatif/${appointment.id}`}>
-            <Button variant="outlined" sx={{marginTop: '30px'}}>
-              Non
-            </Button>
+            <Button variant="outlined">Non</Button>
           </Link>
           <Button
             variant="contained"
-            sx={{marginTop: '30px'}}
             onClick={() => setTunnelStep('prestation')}>
             Oui
           </Button>
