@@ -1,4 +1,4 @@
-# Bikelib
+# Rustine libre
 
 Plateforme de mise en relation avec des réparateurs de vélos
 
@@ -46,7 +46,7 @@ bin/console d:d:d --env=test --force
 bin/console d:d:c --env=test
 bin/console d:m:m --env=test
 bin/console h:f:l --env=test
-php -d memory_limit=512M vendor/bin/phpunit
+php -d memory_limit=1024M vendor/bin/phpunit
 ```
 
 ## Pour lancer un test seul
@@ -184,3 +184,35 @@ Pour générer les credentials firebase, lancez la commande suivante
 ```
 php bin/console app:firebase:credentials
 ```
+
+
+## Usage du site
+
+Une fois les containers lancés, le projet est disponible à l'adresse suivante :
+
+```
+https://localhost
+```
+
+Il existe 3 parcours sur le site : 
+
+- Le parcours du cycliste "traditionnel" disponible à la racine du site
+- Le parcours d'un réparateur de vélo, qui accède à l'URL /sradmin sur laquelle il peut gérer ses clients, rendez-vous, horaires..
+- Le parcours d'un administrateur du site, qui accède à l'URL /admin, sur laquelle il peut accepter les demandes des réparateurs, consulter les messages reçus...
+
+La gestion du carnet d'entretien d'un vélo peut se faire via l'URL /mes-velos du parcours cycliste, il y est possible
+d'y ajouter des photos ou des factures à différents formats :
+- photos : .png, .jpg, .jpeg
+- factures : .pdf, .doc, .docx, .odt, .xls, .csv, .png, .jpg, .jpeg
+
+Les réparateurs peuvent également accéder à ce carnet et ajouter des interventions dont ils sont à l'origine.
+
+## Rôles
+
+Les utilisateurs du site sont répartis dans 4 rôles différents : 
+
+- <b>ROLE_USER</b>, il s'agit des utilisateurs de la plateforme
+- <b>ROLE_BOSS</b>, il s'agit des propriétaires des solutions de réparation
+- <b>ROLE_EMPLOYEE</b>, il s'agit des employés des solutions de réparation
+- <b>ROLE_ADMIN</b>, il s'agit des administrateurs de la plateforme
+
