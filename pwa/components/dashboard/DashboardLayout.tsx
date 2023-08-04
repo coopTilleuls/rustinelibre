@@ -32,6 +32,7 @@ import {Discussion} from '@interfaces/Discussion';
 import {ENTRYPOINT} from '@config/entrypoint';
 import {discussionResource} from '@resources/discussionResource';
 import Badge from '@mui/material/Badge';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const drawerWidth = 240;
 
@@ -279,6 +280,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                     path="/sradmin/informations"
                   />
                 )}
+                <DashboardSidebarListItem
+                  text="Mon compte"
+                  open={true}
+                  icon={<AccountCircleIcon />}
+                  path="/sradmin/mon-compte"
+                />
                 <DashboardSidebarListItem
                   text="Retourner sur le site"
                   open={true}
