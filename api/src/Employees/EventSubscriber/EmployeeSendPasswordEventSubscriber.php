@@ -22,7 +22,7 @@ final class EmployeeSendPasswordEventSubscriber
         $entity = $args->getObject();
 
         if (!$entity instanceof RepairerEmployee) {
-            return
+            return;
         }
 
         $userEmployee = $entity->employee;
