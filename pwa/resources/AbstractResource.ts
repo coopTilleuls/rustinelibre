@@ -171,7 +171,7 @@ export abstract class AbstractResource<T> {
     return await this.getResult(doFetch);
   }
 
-  async delete(iri: string, headers?: RequestHeaders): Promise<boolean> {
+  async delete(iri: string, headers?: RequestHeaders) {
     const response = await fetch(this.getUrl(iri), {
       headers: {
         ...this.getDefaultHeaders(),
@@ -180,17 +180,14 @@ export abstract class AbstractResource<T> {
       method: 'DELETE',
     });
 
-    const result = await response.json();
-
     // handle response's error
-    if (!response.ok) {
+    if (response && !response.ok) {
+      const result = await response.json();
       throw new Error((result as ResponseError)['hydra:description']);
     }
-
-    return response.ok;
   }
 
-  async deleteById(id: string, headers?: RequestHeaders): Promise<boolean> {
+  async deleteById(id: string, headers?: RequestHeaders) {
     const response = await fetch(`${this.getUrl()}/${id}`, {
       headers: {
         ...this.getDefaultHeaders(),
@@ -199,14 +196,11 @@ export abstract class AbstractResource<T> {
       method: 'DELETE',
     });
 
-    const result = await response.json();
-
     // handle response's error
     if (!response.ok) {
+      const result = await response.json();
       throw new Error((result as ResponseError)['hydra:description']);
     }
-
-    return response.ok;
   }
 
   protected getDefaultHeaders(

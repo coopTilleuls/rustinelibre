@@ -124,7 +124,10 @@ const CustomerBikes: NextPageWithLayout = () => {
             </Link>
             <Button
               variant="outlined"
-              onClick={() => setOpenModalAddMaintenance(true)}
+              onClick={() => {
+                setMaintenanceSelected(null);
+                setOpenModalAddMaintenance(true);
+              }}
               sx={{float: 'right'}}>
               Ajouter une entrée au carnet d&#39;entretien
             </Button>
