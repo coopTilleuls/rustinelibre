@@ -15,6 +15,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @template-implements ProcessorInterface<int>
+ */
 final class CreateUserEmployeeProcessor implements ProcessorInterface
 {
     public function __construct(
