@@ -33,6 +33,7 @@ import {MediaObject} from '@interfaces/MediaObject';
 import {Bike} from '@interfaces/Bike';
 import {RequestBody} from '@interfaces/Resource';
 import {Maintenance} from '@interfaces/Maintenance';
+import {checkFileSize} from '@helpers/checkFileSize';
 
 type ModalAddMaintenanceProps = {
   bike: Bike;
@@ -148,15 +149,25 @@ const ModalAddMaintenance = ({
     event: React.ChangeEvent<HTMLInputElement>,
     type: string
   ): Promise<void> => {
+    setErrorMessage(null);
     if (event.target.files) {
       const isPhoto = type === 'photo';
+      const file = event.target.files[0];
+
+      if (!checkFileSize(file)) {
+        setErrorMessage(
+          'Votre photo dépasse la taille maximum autorisée (5mo)'
+        );
+        return;
+      }
+
       isPhoto ? setLoadingPhoto(true) : setLoadingInvoice(true);
 
       try {
         // on enregistre la nouvelle photo/facture
         const mediaObject = isPhoto
-          ? await mediaObjectResource.uploadImage(event.target.files[0])
-          : await mediaObjectResource.uploadFile(event.target.files[0]);
+          ? await mediaObjectResource.uploadImage(file)
+          : await mediaObjectResource.uploadFile(file);
         isPhoto ? setNewPhoto(mediaObject) : setNewInvoice(mediaObject);
 
         // si elle existe, on supprime l'ancienne photo/facture
