@@ -156,7 +156,7 @@ const BikeIdentityPhoto = ({
           {photoDisplay ? 'Changer de photo' : 'Ajouter une photo'}
           <input
             type="file"
-            accept="image/*"
+            accept={'.png, .jpg, .jpeg'}
             hidden
             onChange={(e) => handleFileChange(e)}
           />

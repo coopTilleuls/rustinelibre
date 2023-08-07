@@ -118,6 +118,7 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
           name="fileUpload"
           type="file"
           hidden
+          accept={'.png, .jpg, .jpeg'}
           onChange={(e) => handleFileChange(e)}
         />
       </Box>

@@ -102,6 +102,7 @@ const AppointmentCreateAddPhoto = ({
           id="fileUpload"
           name="fileUpload"
           type="file"
+          accept={'.png, .jpg, .jpeg'}
           hidden
           onChange={(e) => handleFileChange(e)}
         />

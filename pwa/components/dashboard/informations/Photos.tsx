@@ -83,6 +83,7 @@ export const Photos = ({
             Changer de photo de profil
             <input
               type="file"
+              accept={'.png, .jpg, .jpeg'}
               hidden
               onChange={(e) => handleFileChange(e, 'thumbnail')}
             />
@@ -115,6 +116,7 @@ export const Photos = ({
           <>
             Changer de photo de description
             <input
+              accept={'.png, .jpg, .jpeg'}
               type="file"
               hidden
               onChange={(e) => handleFileChange(e, 'description')}
