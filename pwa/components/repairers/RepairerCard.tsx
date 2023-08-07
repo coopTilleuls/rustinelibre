@@ -71,6 +71,9 @@ export const RepairerCard = ({
         />
         <CardContent sx={{flex: 1}}>
           <Box mb={3}>
+            <Typography variant="caption" textTransform="uppercase">
+              {repairer.repairerType.name}
+            </Typography>
             <Typography
               variant="h5"
               color="secondary.main"

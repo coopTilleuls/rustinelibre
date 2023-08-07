@@ -12,11 +12,12 @@ import {
   RadioGroup,
   FormControl,
   FormControlLabel,
-  FormLabel,
+  Typography,
 } from '@mui/material';
 import ModalAddBike from '@components/bike/ModalAddBike';
 import useBikeTypes from '@hooks/useBikeTypes';
 import {Bike} from '@interfaces/Bike';
+import FullLoading from '@components/common/FullLoading';
 
 export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
   const {appointment, setTunnelStep} = useContext(AutodiagContext);
@@ -96,22 +97,29 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
 
   return (
     <Stack
-      width={{xs: '100%', sm: '65%', md: '50%'}}
-      py={2}
+      width="100%"
       mx="auto"
       spacing={4}
       display="flex"
       flexDirection="column"
       alignItems={'center'}>
-      {loading && <CircularProgress />}
+      {loading && <FullLoading />}
       {!loading && bikes.length > 0 && (
-        <Box sx={{width: '100%'}}>
+        <Box sx={{width: '100%', textAlign: 'center'}}>
+          <Typography variant="h5" component="label" textAlign="center">
+            <strong>Pour quel vélo souhaitez-vous prendre rdv&nbsp;?</strong>
+          </Typography>
           <FormControl fullWidth>
-            <FormLabel sx={{textAlign: 'center'}}>
-              <strong>Pour quel vélo souhaitez-vous prendre rdv ?</strong>
-            </FormLabel>
             <RadioGroup
-              sx={{pl: 1, mt: 4}}
+              sx={{
+                mt: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                width: '100%',
+                maxWidth: '300px',
+                mx: 'auto',
+              }}
               name="select_my_bike"
               value={bikeSelected}
               onChange={handleChangeBike}>
@@ -123,10 +131,8 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
                     control={<Radio />}
                     label={bike.name}
                     sx={{
-                      mb: 1,
-                      mr: 0,
-                      border: (theme) => `2px solid ${theme.palette.grey[300]}`,
-                      borderRadius: 1,
+                      borderRadius: 5,
+                      border: (theme) => `1px solid ${theme.palette.grey[300]}`,
                     }}
                   />
                 );
@@ -137,10 +143,8 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
                 control={<Radio />}
                 label="Pour un autre vélo"
                 sx={{
-                  mb: 1,
-                  mr: 0,
-                  border: (theme) => `2px solid ${theme.palette.grey[300]}`,
-                  borderRadius: 1,
+                  borderRadius: 5,
+                  border: (theme) => `1px solid ${theme.palette.grey[300]}`,
                 }}
               />
             </RadioGroup>
@@ -153,17 +157,31 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
             variant="contained"
             onClick={handleClickNext}
             sx={{textTransform: 'capitalize'}}>
-            {pendingUpdateBike ? <CircularProgress /> : 'Suivant'}
+            {pendingUpdateBike ? (
+              <CircularProgress size={18} color="inherit" />
+            ) : (
+              'Suivant'
+            )}
           </Button>
         </Box>
       )}
       {(bikeSelected === 'other_bike' || (!loading && bikes.length === 0)) && (
         <>
-          <Box sx={{width: '100%'}}>
+          <Box sx={{width: '100%', textAlign: 'center'}}>
+            <Typography variant="h5" component="label">
+              Précisez le type de vélo
+            </Typography>
             <FormControl fullWidth>
-              <FormLabel>Précisez le type de vélo</FormLabel>
               <RadioGroup
-                sx={{width: '100%', pl: 1}}
+                sx={{
+                  mt: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
+                  width: '100%',
+                  maxWidth: '300px',
+                  mx: 'auto',
+                }}
                 name="select_my_bike_type"
                 value={bikeTypeSelected}
                 onChange={handleChangeBikeType}>
@@ -175,11 +193,9 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
                       control={<Radio />}
                       label={bikeType.name}
                       sx={{
-                        mb: 1,
-                        mr: 0,
+                        borderRadius: 5,
                         border: (theme) =>
-                          `2px solid ${theme.palette.grey[300]}`,
-                        borderRadius: 1,
+                          `1px solid ${theme.palette.grey[300]}`,
                       }}
                     />
                   );
@@ -188,31 +204,23 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
             </FormControl>
           </Box>
           <Box mt={3} width="100%">
-            <FormLabel>Souhaitez-vous enregistrer ce vélo ?</FormLabel>
-            <Box display="flex" justifyContent="center" pl={1}>
-              <FormControlLabel
-                onClick={() => setOpenModal(true)}
-                control={<Radio />}
-                label="Oui"
-                sx={{
-                  width: '50%',
-                  mb: 1,
-                  border: (theme) => `2px solid ${theme.palette.grey[300]}`,
-                  borderRadius: 1,
-                }}
-              />
-              <FormControlLabel
+            <Typography variant="h5" component="label">
+              Souhaitez-vous enregistrer ce vélo ?
+            </Typography>
+            <Box
+              width={{xs: '60%', md: '40%'}}
+              mt={3}
+              display="flex"
+              mx="auto"
+              justifyContent="space-between">
+              <Button variant="contained" onClick={() => setOpenModal(true)}>
+                Oui
+              </Button>
+              <Button
                 onClick={handleClickContinueNoRegister}
-                control={<Radio />}
-                label="Non"
-                sx={{
-                  width: '50%',
-                  mb: 1,
-                  mr: 0,
-                  border: (theme) => `2px solid ${theme.palette.grey[300]}`,
-                  borderRadius: 1,
-                }}
-              />
+                variant="outlined">
+                Non
+              </Button>
             </Box>
           </Box>
         </>

@@ -74,26 +74,25 @@ export const AutoDiagnosticTunnel = ({
   return (
     <Box>
       {!loading && appointment && (
-        <Box>
-          <Container maxWidth="md" sx={{padding: {xs: 0}}}>
-            <Paper elevation={isMobile ? 0 : 4} sx={{p: 3}}>
-              <Stack
-                spacing={5}
-                marginBottom={4}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
-                {tunnelStep === 'bike_selection' && (
-                  <AutoDiagTunnelBikeSelection />
-                )}
-                {tunnelStep === 'choice' && <AutoDiagTunnelChoice />}
-                {tunnelStep === 'prestation' && <AutoDiagTunnelPrestation />}
-                {tunnelStep === 'photo' && <AutoDiagTunnelPhoto />}
-              </Stack>
-            </Paper>
-          </Container>
+        <Box textAlign="center">
+          <Paper
+            elevation={isMobile ? 0 : 1}
+            sx={{p: 3, borderRadius: 6, maxWidth: '600px', mx: 'auto'}}>
+            <Stack
+              spacing={5}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
+              {tunnelStep === 'bike_selection' && (
+                <AutoDiagTunnelBikeSelection />
+              )}
+              {tunnelStep === 'choice' && <AutoDiagTunnelChoice />}
+              {tunnelStep === 'prestation' && <AutoDiagTunnelPrestation />}
+              {tunnelStep === 'photo' && <AutoDiagTunnelPhoto />}
+            </Stack>
+          </Paper>
         </Box>
       )}
     </Box>
