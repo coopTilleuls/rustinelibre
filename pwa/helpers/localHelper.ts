@@ -1,7 +1,7 @@
 import {jwtDecode} from '@helpers/JWTDecoder';
 
-const AUTH_TOKEN = 'bikelib_token';
-const AUTH_REFRESH_TOKEN = 'bikelib_refresh_token';
+const AUTH_TOKEN = 'rustinelibre_token';
+const AUTH_REFRESH_TOKEN = 'rustinelibre_refresh_token';
 
 export const setToken = (token: string): void => {
   localStorage?.setItem(AUTH_TOKEN, token);
