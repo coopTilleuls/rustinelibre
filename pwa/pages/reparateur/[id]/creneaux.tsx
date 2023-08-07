@@ -294,7 +294,7 @@ const RepairerSlots: NextPageWithLayout = () => {
                 />
               )}
               {user && repairer && tunnelStep == 'pinMap' && (
-                <Box position="relative" zIndex={1}>
+                <Box width="100%" position="relative" zIndex={1}>
                   <PinMap
                     cancelPinMap={cancelPinMap}
                     confirmPinMap={confirmPinMap}

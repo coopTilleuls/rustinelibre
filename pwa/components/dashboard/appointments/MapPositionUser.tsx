@@ -53,8 +53,8 @@ export const MapPositionUser = ({
 
   return (
     <Box>
-      <Typography variant="h6" sx={{textAlign: 'center', mb: 1}}>
-        {`Merci d'indiquer à quel niveau de la rue vous vous situerez`}
+      <Typography pb={2} textAlign="center">
+        Merci d&apos;indiquer à quel niveau de la rue vous vous situerez
       </Typography>
       <MapContainer
         center={[Number(latitudeProps), Number(longitudeProps)]}

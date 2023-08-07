@@ -103,12 +103,12 @@ const PinMap = ({
   return (
     <Box width="100%">
       {!isABossOrAnEmployee && (
-        <Typography variant="h5" pb={2} textAlign="center">
-          Placez le repère sur le lieu où vous souhaitez l&apos;intervention du
-          réparateur.
+        <Typography pb={2} textAlign="center">
+          Indiquez au réparateur le lieu du rendez-vous
         </Typography>
       )}
       <Autocomplete
+        fullWidth
         sx={{mt: 2, mb: 1}}
         freeSolo
         value={cityInput}
@@ -158,7 +158,7 @@ const PinMap = ({
           required
           fullWidth
           id="address"
-          label="Indiquez votre numéro de rue et les informations nécessaires afin de permettre au réparateur de trouver votre adresse"
+          label="Autres informations nécessaires (N° de rue, adresse secondaire...)"
           name="address"
           autoComplete="address"
           value={streetNumber}
