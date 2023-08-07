@@ -177,7 +177,8 @@ const Registration: NextPageWithLayout = ({}) => {
                 </Box>
                 <Typography variant="body1" color="grey">
                   En vous inscrivant, vous acceptez les conditions d’utilisation
-                  de l’application Rustine libre et sa politique de confidentialité
+                  de l’application Rustine libre et sa politique de
+                  confidentialité
                 </Typography>
               </Box>
             </Paper>
