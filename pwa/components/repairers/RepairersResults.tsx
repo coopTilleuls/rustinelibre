@@ -64,7 +64,7 @@ export const RepairersResults = (): JSX.Element => {
                     onClick={() =>
                       router.push({
                         pathname: `/reparateur/${repairer.id}-${repairer.slug}`,
-                        query: {searchRepairer: 1},
+                        query: {recherche: 1},
                       })
                     }
                   />
@@ -116,7 +116,7 @@ export const RepairersResults = (): JSX.Element => {
                         onClick={() =>
                           router.push({
                             pathname: `/reparateur/${repairer.id}`,
-                            query: {searchRepairer: 1},
+                            query: {recherche: 1},
                           })
                         }
                       />

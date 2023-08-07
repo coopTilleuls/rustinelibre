@@ -59,7 +59,7 @@ export const OldAppointmentCard = ({
           onClick={() =>
             router.push({
               pathname: `/reparateur/${appointment.repairer.id}`,
-              query: {appointment: 1},
+              query: {rendezvous: 1},
             })
           }
           variant="outlined"
