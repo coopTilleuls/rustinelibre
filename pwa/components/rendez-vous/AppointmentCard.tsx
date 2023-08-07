@@ -18,12 +18,14 @@ import {CalendarMonth, Message, Schedule} from '@mui/icons-material';
 
 interface AppointmentCardProps extends PropsWithRef<any> {
   appointment: Appointment;
-  fetchAppointments: () => void;
+  fetchAppointments?: () => void;
+  noAction?: boolean;
 }
 
 export const AppointmentCard = ({
   appointment,
   fetchAppointments,
+  noActions,
 }: AppointmentCardProps): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -36,7 +38,7 @@ export const AppointmentCard = ({
       await appointmentResource.updateAppointmentStatus(appointment.id, {
         transition: 'cancellation',
       });
-      await fetchAppointments();
+      if (fetchAppointments) await fetchAppointments();
     } catch (e: any) {
       setErrorMessage(
         `Suppression du rendez-vous impossible: ${e.message?.replace(
@@ -64,11 +66,13 @@ export const AppointmentCard = ({
         minHeight: '200px',
         textAlign: 'left',
         p: 0,
-        opacity: appointment.status === 'validated' ? 1 : 0.7,
+        opacity: appointment.status === 'validated' || noActions ? 1 : 0.7,
       }}>
       <Box
         bgcolor={
-          appointment.status === 'validated' ? 'secondary.main' : 'grey.600'
+          appointment.status === 'validated' || noActions
+            ? 'secondary.main'
+            : 'grey.600'
         }
         display="flex"
         flexDirection="column"
@@ -151,7 +155,7 @@ export const AppointmentCard = ({
                   )} avec le réparateur ${appointment.repairer.name}.`}
                 </Typography>
               </ConfirmationModal>
-              {appointment.discussion && (
+              {!noActions && appointment.discussion && (
                 <Link
                   href={`/messagerie/${appointment.discussion.id}`}
                   legacyBehavior
@@ -189,17 +193,24 @@ export const AppointmentCard = ({
           </Box>
         </Box>
       </CardContent>
-      <Box display="flex" width="100%" justifyContent="flex-end" gap={1} p={2}>
-        <>
-          <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={() => setOpenModal(true)}>
-            Annuler le RDV
-          </Button>
-        </>
-      </Box>
+      {!noActions ? (
+        <Box
+          display="flex"
+          width="100%"
+          justifyContent="flex-end"
+          gap={1}
+          p={2}>
+          <>
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              onClick={() => setOpenModal(true)}>
+              Annuler le RDV
+            </Button>
+          </>
+        </Box>
+      ) : null}
     </Card>
   );
 };

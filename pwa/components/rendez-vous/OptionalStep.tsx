@@ -22,7 +22,7 @@ const OptionalStep = ({
       display="flex"
       flexDirection="column"
       alignItems="center">
-      <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
+      <Typography variant="h5" sx={{my: 2}}>
         À lire avant de prendre rendez-vous.
       </Typography>
       {optionalPage && (
@@ -33,11 +33,13 @@ const OptionalStep = ({
           dangerouslySetInnerHTML={{__html: optionalPage}}
         />
       )}
-      <Typography fontSize={{xs: 16, md: 18, textAlign: 'center'}}>
-        <Button variant="contained" onClick={confirmAppointmentRequest}>
-          Suivant
-        </Button>
-      </Typography>
+      <Button
+        variant="contained"
+        onClick={confirmAppointmentRequest}
+        sx={{mt: 2}}
+        size="large">
+        Suivant
+      </Button>
     </Stack>
   );
 };

@@ -4,17 +4,11 @@ import Head from 'next/head';
 import {useRouter} from 'next/router';
 import Link from 'next/link';
 import {appointmentResource} from '@resources/appointmentResource';
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Typography,
-  Container,
-  Stack,
-} from '@mui/material';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import {Box, Button, Typography, Container, Stack} from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {Appointment} from '@interfaces/Appointment';
+import FullLoading from '@components/common/FullLoading';
+import {AppointmentCard} from '@components/rendez-vous/AppointmentCard';
 
 const AppointmentSummary: NextPageWithLayout = () => {
   const router = useRouter();
@@ -41,92 +35,44 @@ const AppointmentSummary: NextPageWithLayout = () => {
     fetchAppointment();
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const slotDate = new Date(appointment?.slotTime!).toLocaleString('fr-FR', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
-
-  const slotTime = appointment?.slotTime
-    .split('T')[1]
-    .substring(0, 5)
-    .replace(':', 'h');
-
   return (
     <>
       <Head>
         <title>Récapitulatif</title>
       </Head>
       <WebsiteLayout>
+        <Box
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
         <main>
-          <Container
-            sx={{
-              bgcolor: 'background.paper',
-              mt: {md: 8},
-              mb: 10,
-            }}>
-            {loading && <CircularProgress />}
+          <Container sx={{py: 8}}>
+            {loading && <FullLoading />}
             {!loading && appointment && (
               <Stack
                 spacing={4}
                 display="flex"
                 flexDirection="column"
                 alignItems="center">
-                <Typography
-                  component="h2"
-                  fontSize={18}
-                  fontWeight={600}
-                  my={{xs: 2}}>
+                <Typography component="h1" variant="h1" color="primary">
                   Votre demande de rendez-vous
                 </Typography>
-                <Typography component="h4" my={{xs: 2}}>
+                <Typography variant="body1">
                   Votre demande a bien été envoyée. Le réparateur vous
                   recontactera sous 72 heures maximum.
                 </Typography>
-                <Box p={3} sx={{border: '3px solid grey', borderRadius: 1}}>
-                  <Box display="flex" justifyContent="center">
-                    <EventAvailableIcon
-                      sx={{fontSize: '8em'}}
-                      color="primary"
-                    />
-                    <Stack
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="start"
-                      p={1}>
-                      <Typography
-                        align="center"
-                        textTransform="capitalize"
-                        fontSize={18}
-                        fontWeight={600}>
-                        {slotDate}
-                      </Typography>
-                      <Typography align="center">{slotTime}</Typography>
-                      <Box display="flex" alignItems="center">
-                        <Typography align="center">Chez</Typography>
-                        <Typography
-                          color="primary"
-                          fontWeight={600}
-                          sx={{ml: 1}}>
-                          {appointment.repairer.name}
-                        </Typography>
-                      </Box>
-                    </Stack>
-                  </Box>
-                  {appointment.autoDiagnostic && (
-                    <Box pl={2}>
-                      <Typography align="left">
-                        Type de vélo : Type de vélo
-                      </Typography>
-                      <Typography align="left">
-                        Prestation : {appointment.autoDiagnostic.prestation}
-                      </Typography>
-                    </Box>
-                  )}
+                <Box my={4} width="100%" maxWidth="400px">
+                  <AppointmentCard appointment={appointment} noActions />
                 </Box>
-                <Link href="/">
-                  <Button variant="contained">Retour à l&apos;accueil</Button>
+                <Link href="/" legacyBehavior passHref>
+                  <Button variant="outlined" color="secondary">
+                    Retour à l&apos;accueil
+                  </Button>
                 </Link>
               </Stack>
             )}

@@ -103,7 +103,7 @@ const PinMap = ({
   return (
     <Box width="100%">
       {!isABossOrAnEmployee && (
-        <Typography pb={2} textAlign="center">
+        <Typography variant="h5" pb={2} textAlign="center">
           Placez le repère sur le lieu où vous souhaitez l&apos;intervention du
           réparateur.
         </Typography>
@@ -172,20 +172,19 @@ const PinMap = ({
         streetNumber &&
         latitudeCalculate &&
         longitudeCalculate && (
-          <MapPositionUser
-            repairer={repairer}
-            setLatitude={setLatitude}
-            setLongitude={setLongitude}
-            latitudeProps={latitudeCalculate}
-            longitudeProps={longitudeCalculate}
-          />
+          <Box mt={2}>
+            <MapPositionUser
+              repairer={repairer}
+              setLatitude={setLatitude}
+              setLongitude={setLongitude}
+              latitudeProps={latitudeCalculate}
+              longitudeProps={longitudeCalculate}
+            />
+          </Box>
         )}
 
       {!isABossOrAnEmployee && (
-        <Box display="flex" justifyContent="space-between" px={2} pt={2}>
-          <Button variant="outlined" onClick={cancelPinMap}>
-            Retour
-          </Button>
+        <Box display="flex" justifyContent="flex-end" pt={4}>
           <Button
             disabled={
               !longitude ||
@@ -195,6 +194,7 @@ const PinMap = ({
               !streetNumber
             }
             variant="contained"
+            size="large"
             onClick={confirmPinMap}>
             Suivant
           </Button>

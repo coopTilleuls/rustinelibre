@@ -74,11 +74,15 @@ export const AutoDiagTunnelPrestation = (): JSX.Element => {
       spacing={4}
       display="flex"
       flexDirection="column"
-      alignItems="center">
-      <Typography component="h2" fontSize={18} fontWeight={600} my={{xs: 2}}>
-        De quelle prestation as tu besoin ?
+      alignItems="center"
+      width="100%">
+      <Typography variant="h5" component="p">
+        De quelle prestation as tu besoin&nbsp;?
       </Typography>
-      <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
+      <FormControl
+        fullWidth
+        required
+        sx={{maxWidth: '400px', mx: 'auto', mt: 2, mb: 1, textAlign: 'left'}}>
         <InputLabel id="service-type-label">Type de prestation</InputLabel>
         <Select
           required
@@ -98,10 +102,7 @@ export const AutoDiagTunnelPrestation = (): JSX.Element => {
           })}
         </Select>
       </FormControl>
-      <Box
-        width={{xs: '60%', md: '100%'}}
-        display="flex"
-        justifyContent="space-between">
+      <Box width="100%" display="flex" justifyContent="space-between" mt={4}>
         <Button variant="outlined" onClick={handleClickBack}>
           Retour
         </Button>
