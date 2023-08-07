@@ -223,6 +223,23 @@ export abstract class AbstractResource<T> {
     return defaultHeaders;
   }
 
+  protected getDefaultFormDataHeaders(
+    withAuth: boolean = true
+  ): Record<string, string> {
+    const defaultHeaders: Record<string, string> = {
+      Accept: 'application/ld+json',
+    };
+
+    if (withAuth) {
+      const currentToken = getToken();
+      if (!!currentToken) {
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
+      }
+    }
+
+    return defaultHeaders;
+  }
+
   protected getDefaultHeadersPatch(
     withAuth: boolean = true
   ): Record<string, string> {

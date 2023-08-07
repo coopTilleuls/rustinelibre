@@ -7,7 +7,6 @@ import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import {useAccount} from '@contexts/AuthContext';
 import {errorRegex} from '@utils/errorRegex';
-import {uploadFile, uploadImage} from '@helpers/uploadFile';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   CircularProgress,
@@ -153,33 +152,42 @@ const ModalAddMaintenance = ({
       const isPhoto = type === 'photo';
       isPhoto ? setLoadingPhoto(true) : setLoadingInvoice(true);
 
-      // on enregistre la nouvelle photo/facture
-      const response = isPhoto
-        ? await uploadImage(event.target.files[0])
-        : await uploadFile(event.target.files[0]);
-      const mediaObject = (await response?.json()) as MediaObject;
-      isPhoto ? setNewPhoto(mediaObject) : setNewInvoice(mediaObject);
+      try {
+        // on enregistre la nouvelle photo/facture
+        const mediaObject = isPhoto
+          ? await mediaObjectResource.uploadImage(event.target.files[0])
+          : await mediaObjectResource.uploadFile(event.target.files[0]);
+        isPhoto ? setNewPhoto(mediaObject) : setNewInvoice(mediaObject);
 
-      // si elle existe, on supprime l'ancienne photo/facture
-      if (maintenance && isPhoto && photo) {
-        await mediaObjectResource.delete(photo['@id']);
-      } else if (maintenance && !isPhoto && invoice) {
-        await mediaObjectResource.delete(invoice['@id']);
-      }
-      isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
+        // si elle existe, on supprime l'ancienne photo/facture
+        if (maintenance && isPhoto && photo) {
+          await mediaObjectResource.delete(photo['@id']);
+        } else if (maintenance && !isPhoto && invoice) {
+          await mediaObjectResource.delete(invoice['@id']);
+        }
+        isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
 
-      // dans le cas d'une modification, on met à jour la maintenance avec la nouvelle photo/facture
-      if (maintenance && mediaObject) {
-        const bodyRequest: RequestBody = {};
-        isPhoto
-          ? (bodyRequest['photo'] = mediaObject['@id'])
-          : (bodyRequest['invoice'] = mediaObject['@id']);
-        maintenance = await maintenanceResource.put(
-          maintenance['@id'],
-          bodyRequest
+        // dans le cas d'une modification, on met à jour la maintenance avec la nouvelle photo/facture
+        if (maintenance && mediaObject) {
+          const bodyRequest: RequestBody = {};
+          isPhoto
+            ? (bodyRequest['photo'] = mediaObject['@id'])
+            : (bodyRequest['invoice'] = mediaObject['@id']);
+          maintenance = await maintenanceResource.put(
+            maintenance['@id'],
+            bodyRequest
+          );
+        }
+        isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
+      } catch (e: any) {
+        isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
+        setErrorMessage(
+          `Envoi de ${
+            isPhoto ? "l'image" : 'la facture'
+          } impossible : ${e.message?.replace(errorRegex, '$2')}`
         );
+        setTimeout(() => setErrorMessage(null), 3000);
       }
-      isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
     }
   };
 
