@@ -57,7 +57,7 @@ const FavoriteRepairers = ({user}: FavoriteRepairersProps) => {
                     onClick={() =>
                       router.push({
                         pathname: `/reparateur/${repairer.id}`,
-                        query: {favorite: 1},
+                        query: {favoris: 1},
                       })
                     }
                   />
