@@ -5,14 +5,13 @@ import {autoDiagnosticResource} from '@resources/autoDiagResource';
 import {AutodiagContext} from '@contexts/AutodiagContext';
 import {Button, CircularProgress, Typography, Stack, Box} from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {uploadImage} from '@helpers/uploadFile';
-import {MediaObject} from '@interfaces/MediaObject';
+import {errorRegex} from '@utils/errorRegex';
 import {checkFileSize} from '@helpers/checkFileSize';
 
 export const AutoDiagTunnelPhoto = (): JSX.Element => {
   const router = useRouter();
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
-  const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     appointment,
@@ -49,10 +48,12 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       return;
     }
     if (event.target.files) {
-      setImageTooHeavy(false);
+      setErrorMessage(null);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
-        setImageTooHeavy(true);
+        setErrorMessage(
+          'Votre photo dépasse la taille maximum autorisée (5mo)'
+        );
         return;
       }
 
@@ -60,16 +61,25 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       if (photo) {
         await mediaObjectResource.delete(photo['@id']);
       }
-      // Upload new picture
-      const response = await uploadImage(file);
-      const mediaObjectResponse = (await response?.json()) as MediaObject;
-      if (mediaObjectResponse) {
-        // Display new photo
-        setPhoto(mediaObjectResponse);
-        // Update autodiag
-        await autoDiagnosticResource.put(autoDiagnostic['@id'], {
-          photo: mediaObjectResponse['@id'],
-        });
+      try {
+        // Upload new picture
+        const mediaObjectResponse = await mediaObjectResource.uploadImage(file);
+        if (mediaObjectResponse) {
+          // Display new photo
+          setPhoto(mediaObjectResponse);
+          // Update autodiag
+          await autoDiagnosticResource.put(autoDiagnostic['@id'], {
+            photo: mediaObjectResponse['@id'],
+          });
+        }
+      } catch (e: any) {
+        setErrorMessage(
+          `Envoi de l'image impossible : ${e.message?.replace(
+            errorRegex,
+            '$2'
+          )}`
+        );
+        setTimeout(() => setErrorMessage(null), 3000);
       }
       setLoadingPhoto(false);
     }
@@ -85,9 +95,9 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       <Typography variant="h5" component="label">
         Ajouter une photo
       </Typography>
-      {imageTooHeavy && (
+      {errorMessage && (
         <Typography sx={{textAlign: 'center', color: 'red'}}>
-          Votre photo dépasse la taille maximum autorisée (5mo)
+          {errorMessage}
         </Typography>
       )}
       <Box>
@@ -136,6 +146,7 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
           name="fileUpload"
           type="file"
           hidden
+          accept={'.png, .jpg, .jpeg'}
           onChange={(e) => handleFileChange(e)}
         />
       </Box>

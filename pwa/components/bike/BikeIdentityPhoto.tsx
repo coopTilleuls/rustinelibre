@@ -6,11 +6,11 @@ import {Alert, CircularProgress} from '@mui/material';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {uploadImage} from '@helpers/uploadFile';
 import {bikeResource} from '@resources/bikeResource';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {checkFileSize} from '@helpers/checkFileSize';
 import {Delete} from '@mui/icons-material';
+import {errorRegex} from '@utils/errorRegex';
 
 type BikeIdentityPhotoProps = {
   bike: Bike;
@@ -28,41 +28,52 @@ const BikeIdentityPhoto = ({
   onUpdatePhoto,
 }: BikeIdentityPhotoProps): JSX.Element => {
   const [photoDisplay, setPhotoDisplay] = useState<MediaObject | null>(photo);
-  const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     if (event.target.files) {
-      setImageTooHeavy(false);
+      setErrorMessage(null);
       const file = event.target.files[0];
 
       if (!checkFileSize(file)) {
-        setImageTooHeavy(true);
+        setErrorMessage(
+          'Votre photo dépasse la taille maximum autorisée (5mo)'
+        );
         return;
       }
 
       setLoading(true);
 
-      // Upload new picture
-      const response = await uploadImage(file);
-      const mediaObjectResponse = (await response?.json()) as MediaObject;
-      if (mediaObjectResponse) {
-        // Display new photo
-        setPhotoDisplay(mediaObjectResponse);
-        setLoading(false);
-        onUpdatePhoto?.(mediaObjectResponse);
+      try {
+        // Upload new picture
+        const mediaObjectResponse = await mediaObjectResource.uploadImage(file);
+        if (mediaObjectResponse) {
+          // Display new photo
+          setPhotoDisplay(mediaObjectResponse);
+          setLoading(false);
+          onUpdatePhoto?.(mediaObjectResponse);
 
-        // Update bike
-        await bikeResource.put(bike['@id'], {
-          [propertyName]: mediaObjectResponse['@id'],
-        });
+          // Update bike
+          await bikeResource.put(bike['@id'], {
+            [propertyName]: mediaObjectResponse['@id'],
+          });
 
-        // Remove old picture
-        if (photo) {
-          await mediaObjectResource.delete(photo['@id']);
+          // Remove old picture
+          if (photo) {
+            await mediaObjectResource.delete(photo['@id']);
+          }
         }
+      } catch (e: any) {
+        setErrorMessage(
+          `Envoi de l'image impossible : ${e.message?.replace(
+            errorRegex,
+            '$2'
+          )}`
+        );
+        setTimeout(() => setErrorMessage(null), 3000);
       }
     }
   };
@@ -102,12 +113,12 @@ const BikeIdentityPhoto = ({
       <Typography component="span" variant="caption" color="text.secondary">
         (Max 5mo)
       </Typography>
-      {imageTooHeavy && (
+      {errorMessage && (
         <Alert
           severity="error"
           sx={{mt: 1}}
-          onClose={() => setImageTooHeavy(false)}>
-          Votre photo dépasse la taille maximum autorisée (5mo)
+          onClose={() => setErrorMessage(null)}>
+          {errorMessage}
         </Alert>
       )}
       {photoDisplay && (
@@ -156,7 +167,7 @@ const BikeIdentityPhoto = ({
           {photoDisplay ? 'Changer de photo' : 'Ajouter une photo'}
           <input
             type="file"
-            accept="image/*"
+            accept={'.png, .jpg, .jpeg'}
             hidden
             onChange={(e) => handleFileChange(e)}
           />

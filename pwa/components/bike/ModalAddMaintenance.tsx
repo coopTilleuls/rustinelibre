@@ -7,7 +7,6 @@ import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {maintenanceResource} from '@resources/MaintenanceResource';
 import {useAccount} from '@contexts/AuthContext';
 import {errorRegex} from '@utils/errorRegex';
-import {uploadFile, uploadImage} from '@helpers/uploadFile';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   CircularProgress,
@@ -34,6 +33,7 @@ import {MediaObject} from '@interfaces/MediaObject';
 import {Bike} from '@interfaces/Bike';
 import {RequestBody} from '@interfaces/Resource';
 import {Maintenance} from '@interfaces/Maintenance';
+import {checkFileSize} from '@helpers/checkFileSize';
 
 type ModalAddMaintenanceProps = {
   bike: Bike;
@@ -149,37 +149,66 @@ const ModalAddMaintenance = ({
     event: React.ChangeEvent<HTMLInputElement>,
     type: string
   ): Promise<void> => {
+    setErrorMessage(null);
     if (event.target.files) {
       const isPhoto = type === 'photo';
+      const file = event.target.files[0];
+
+      if (!checkFileSize(file)) {
+        setErrorMessage(
+          'Votre photo dépasse la taille maximum autorisée (5mo)'
+        );
+        return;
+      }
+
       isPhoto ? setLoadingPhoto(true) : setLoadingInvoice(true);
 
-      // on enregistre la nouvelle photo/facture
-      const response = isPhoto
-        ? await uploadImage(event.target.files[0])
-        : await uploadFile(event.target.files[0]);
-      const mediaObject = (await response?.json()) as MediaObject;
-      isPhoto ? setNewPhoto(mediaObject) : setNewInvoice(mediaObject);
+      try {
+        // on enregistre la nouvelle photo/facture
+        const mediaObject = isPhoto
+          ? await mediaObjectResource.uploadImage(file)
+          : await mediaObjectResource.uploadFile(file);
+        isPhoto ? setNewPhoto(mediaObject) : setNewInvoice(mediaObject);
 
-      // si elle existe, on supprime l'ancienne photo/facture
-      if (maintenance && isPhoto && photo) {
-        await mediaObjectResource.delete(photo['@id']);
-      } else if (maintenance && !isPhoto && invoice) {
-        await mediaObjectResource.delete(invoice['@id']);
-      }
-      isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
+        try {
+          // si elle existe, on supprime l'ancienne photo/facture
+          if (maintenance && isPhoto && photo) {
+            await mediaObjectResource.delete(photo['@id']);
+          } else if (maintenance && !isPhoto && invoice) {
+            await mediaObjectResource.delete(invoice['@id']);
+          }
+          isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
+        } catch (e: any) {
+          if (e.message.includes('Access Denied')) {
+            setErrorMessage(
+              `L'ancienne ${
+                isPhoto ? 'photo' : 'facture'
+              } a été ajoutée par une autre personne. Seule cette personne ou un administrateur peut la changer. Si elle ne vous semble pas bonne, vous pouvez supprimer et recréer la réparation.`
+            );
+          }
+        }
 
-      // dans le cas d'une modification, on met à jour la maintenance avec la nouvelle photo/facture
-      if (maintenance && mediaObject) {
-        const bodyRequest: RequestBody = {};
-        isPhoto
-          ? (bodyRequest['photo'] = mediaObject['@id'])
-          : (bodyRequest['invoice'] = mediaObject['@id']);
-        maintenance = await maintenanceResource.put(
-          maintenance['@id'],
-          bodyRequest
+        // dans le cas d'une modification, on met à jour la maintenance avec la nouvelle photo/facture
+        if (maintenance && mediaObject) {
+          const bodyRequest: RequestBody = {};
+          isPhoto
+            ? (bodyRequest['photo'] = mediaObject['@id'])
+            : (bodyRequest['invoice'] = mediaObject['@id']);
+          maintenance = await maintenanceResource.put(
+            maintenance['@id'],
+            bodyRequest
+          );
+        }
+        isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
+      } catch (e: any) {
+        isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
+        setErrorMessage(
+          `Envoi de ${
+            isPhoto ? "l'image" : 'la facture'
+          } impossible : ${e.message?.replace(errorRegex, '$2')}`
         );
+        setTimeout(() => setErrorMessage(null), 3000);
       }
-      isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
     }
   };
 
