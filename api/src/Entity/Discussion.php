@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
     mercure: true,
-    paginationClientEnabled: true,
+    paginationClievntEnabled: true,
     paginationClientItemsPerPage: true,
 )]
 #[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
