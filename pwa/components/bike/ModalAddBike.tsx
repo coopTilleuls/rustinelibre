@@ -19,7 +19,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {BikeType} from '@interfaces/BikeType';
 import {MediaObject} from '@interfaces/MediaObject';
-import {uploadImage} from '@helpers/uploadFile';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {bikeResource} from '@resources/bikeResource';
 import {RequestBody} from '@interfaces/Resource';
@@ -49,7 +48,6 @@ const ModalAddBike = ({
   const [photo, setPhoto] = useState<MediaObject | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
 
   const handleBikeChange = (event: SelectChangeEvent): void => {
     const selectedBikeType = bikeTypes.find(
@@ -69,7 +67,6 @@ const ModalAddBike = ({
     setErrorMessage(null);
     setPendingAdd(true);
 
-    let newBike;
     try {
       let bodyRequest: RequestBody = {
         name: name,
@@ -108,19 +105,30 @@ const ModalAddBike = ({
     }
 
     if (event.target.files) {
-      setImageTooHeavy(false);
+      setErrorMessage(null);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
-        setImageTooHeavy(true);
+        setErrorMessage(
+          'Votre photo dépasse la taille maximum autorisée (5mo)'
+        );
         return;
       }
 
       setLoadingPhoto(true);
-      const response = await uploadImage(file);
-      const mediaObjectResponse = (await response?.json()) as MediaObject;
-      if (mediaObjectResponse) {
-        setPhoto(mediaObjectResponse);
-        setLoadingPhoto(false);
+      try {
+        const mediaObjectResponse = await mediaObjectResource.uploadImage(file);
+        if (mediaObjectResponse) {
+          setPhoto(mediaObjectResponse);
+          setLoadingPhoto(false);
+        }
+      } catch (e: any) {
+        setErrorMessage(
+          `Envoi de l'image impossible : ${e.message?.replace(
+            errorRegex,
+            '$2'
+          )}`
+        );
+        setTimeout(() => setErrorMessage(null), 3000);
       }
     }
   };
@@ -239,25 +247,24 @@ const ModalAddBike = ({
               {photo ? 'Changer de photo' : 'Ajouter une photo'}
               <input
                 type="file"
-                accept="image/*"
+                accept={'.png, .jpg, .jpeg'}
                 hidden
                 onChange={(e) => handleFileChange(e)}
               />
             </Button>
-            {imageTooHeavy && (
-              <Typography
-                textAlign="center"
-                color="error"
-                variant="body2"
-                gutterBottom>
-                Votre photo dépasse la taille maximum autorisée (5mo)
-              </Typography>
-            )}
           </Box>
         </Box>
       </DialogContent>
       <DialogActions sx={{p: 2}}>
+        {errorMessage && (
+          <Typography variant="body1" color="error">
+            {errorMessage}
+          </Typography>
+        )}
         <Button
+          sx={{
+            whiteSpace: 'nowrap',
+          }}
           type="submit"
           form="add-bike-form"
           variant="contained"
@@ -268,11 +275,6 @@ const ModalAddBike = ({
             <CircularProgress size={20} sx={{color: 'white'}} />
           )}
         </Button>
-        {errorMessage && (
-          <Typography variant="body1" color="error">
-            {errorMessage}
-          </Typography>
-        )}
       </DialogActions>
     </Dialog>
   );

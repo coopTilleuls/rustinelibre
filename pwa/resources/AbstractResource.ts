@@ -180,9 +180,11 @@ export abstract class AbstractResource<T> {
       method: 'DELETE',
     });
 
+    const result = await response.json();
+
     // handle response's error
     if (!response.ok) {
-      throw new Error('Not Found');
+      throw new Error((result as ResponseError)['hydra:description']);
     }
 
     return response.ok;
@@ -197,9 +199,11 @@ export abstract class AbstractResource<T> {
       method: 'DELETE',
     });
 
+    const result = await response.json();
+
     // handle response's error
     if (!response.ok) {
-      throw new Error('Not Found');
+      throw new Error((result as ResponseError)['hydra:description']);
     }
 
     return response.ok;
@@ -211,6 +215,23 @@ export abstract class AbstractResource<T> {
     const defaultHeaders: Record<string, string> = {
       Accept: 'application/ld+json',
       'Content-Type': 'application/ld+json',
+    };
+
+    if (withAuth) {
+      const currentToken = getToken();
+      if (!!currentToken) {
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
+      }
+    }
+
+    return defaultHeaders;
+  }
+
+  protected getDefaultFormDataHeaders(
+    withAuth: boolean = true
+  ): Record<string, string> {
+    const defaultHeaders: Record<string, string> = {
+      Accept: 'application/ld+json',
     };
 
     if (withAuth) {
