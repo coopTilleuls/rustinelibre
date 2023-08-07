@@ -13,6 +13,9 @@ use App\Entity\User;
 use App\Repairers\Dto\CreateUserRepairerDto;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @template-implements ProcessorInterface<Repairer>
+ */
 final class CreateUserRepairerProcessor implements ProcessorInterface
 {
     public function __construct(

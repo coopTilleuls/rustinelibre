@@ -40,7 +40,11 @@ class DeleteTest extends AbstractTestCase
     {
         /** @var RepairerOpeningHours $roh */
         $roh = $this->repairerOpeningHoursRepository->findOneBy([]);
-        $this->createClientAuthAsBoss()->request('DELETE', sprintf('/repairer_opening_hours/%d', $roh->id));
+
+        $this->createClientWithCredentials([
+            'email' => 'boss2@test.com',
+            'password' => 'Test1passwordOk!'
+        ])->request('DELETE', sprintf('/repairer_opening_hours/%d', $roh->id));
 
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }

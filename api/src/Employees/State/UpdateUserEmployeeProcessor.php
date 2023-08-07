@@ -16,6 +16,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @template-implements ProcessorInterface<int>
+ */
 final class UpdateUserEmployeeProcessor implements ProcessorInterface
 {
     public function __construct(

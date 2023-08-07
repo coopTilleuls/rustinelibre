@@ -16,6 +16,9 @@ use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @template-implements ProcessorInterface<int>
+ */
 final readonly class CreateInterventionWithCurrentRepairerProcessor implements ProcessorInterface
 {
     public function __construct(
