@@ -170,13 +170,23 @@ const ModalAddMaintenance = ({
           : await mediaObjectResource.uploadFile(file);
         isPhoto ? setNewPhoto(mediaObject) : setNewInvoice(mediaObject);
 
-        // si elle existe, on supprime l'ancienne photo/facture
-        if (maintenance && isPhoto && photo) {
-          await mediaObjectResource.delete(photo['@id']);
-        } else if (maintenance && !isPhoto && invoice) {
-          await mediaObjectResource.delete(invoice['@id']);
+        try {
+          // si elle existe, on supprime l'ancienne photo/facture
+          if (maintenance && isPhoto && photo) {
+            await mediaObjectResource.delete(photo['@id']);
+          } else if (maintenance && !isPhoto && invoice) {
+            await mediaObjectResource.delete(invoice['@id']);
+          }
+          isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
+        } catch (e: any) {
+          if (e.message.includes('Access Denied')) {
+            setErrorMessage(
+              `L'ancienne ${
+                isPhoto ? 'photo' : 'facture'
+              } a été ajoutée par une autre personne. Seule cette personne ou un administrateur peut la changer. Si elle ne vous semble pas bonne, vous pouvez supprimer et recréer la réparation.`
+            );
+          }
         }
-        isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
 
         // dans le cas d'une modification, on met à jour la maintenance avec la nouvelle photo/facture
         if (maintenance && mediaObject) {

@@ -180,9 +180,11 @@ export abstract class AbstractResource<T> {
       method: 'DELETE',
     });
 
+    const result = await response.json();
+
     // handle response's error
     if (!response.ok) {
-      throw new Error('Not Found');
+      throw new Error((result as ResponseError)['hydra:description']);
     }
 
     return response.ok;
@@ -197,9 +199,11 @@ export abstract class AbstractResource<T> {
       method: 'DELETE',
     });
 
+    const result = await response.json();
+
     // handle response's error
     if (!response.ok) {
-      throw new Error('Not Found');
+      throw new Error((result as ResponseError)['hydra:description']);
     }
 
     return response.ok;
