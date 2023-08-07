@@ -322,18 +322,23 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       </Head>
       <WebsiteLayout>
         <Box
-          height={{xs: 'calc(100vh - 55px)', md: 'calc(100vh - 70px)'}}
-          display="flex"
-          flexDirection="column"
-          overflow="auto">
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
+        <Box display="flex" flexDirection="column">
           <Box
-            position="sticky"
-            top={0}
+            position="fixed"
+            top={{xs: '56px', sm: '64px', md: '80px'}}
             width="100%"
             bgcolor="white"
             paddingY="10px"
             zIndex="200"
-            boxShadow={3}>
+            boxShadow={1}>
             <Container>
               <Box
                 component="form"
@@ -346,7 +351,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                 <Box
                   mt={2}
                   mx="auto"
-                  width={{xs: '100%', md: '50%'}}
+                  width={{xs: '100%', md: '600px'}}
                   display="flex"
                   flexDirection={{xs: 'column', md: 'row'}}
                   justifyContent="space-between"
@@ -454,7 +459,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                 </Typography>
               </Box>
             )}
-            <Box width="100%">
+            <Box width="100%" pt={{xs: '222px', md: '170px'}}>
               {repairers.length ? (
                 <>{!isLoading && <RepairersResults />}</>
               ) : null}

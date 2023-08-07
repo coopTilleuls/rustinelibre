@@ -50,15 +50,14 @@ export const RepairersResults = (): JSX.Element => {
             pr: {md: 2},
             width: {xs: '100%', md: '50%'},
           }}>
-          <Grid2 container spacing={4} sx={{py: 2}}>
+          <Box display="grid" gap={{xs: 2, md: 4}}>
             {repairers.map((repairer) => {
               return (
-                <Grid2
-                  id={repairer.id}
+                <Box
                   key={repairer.id}
-                  xs={12}
-                  pt="198px"
-                  mt="-198px">
+                  id={repairer.id}
+                  display="flex"
+                  sx={{pt: '268px', mt: '-268px'}}>
                   <RepairerCard
                     withButton
                     repairer={repairer}
@@ -69,10 +68,10 @@ export const RepairersResults = (): JSX.Element => {
                       })
                     }
                   />
-                </Grid2>
+                </Box>
               );
             })}
-          </Grid2>
+          </Box>
         </Box>
       )}
       {(showMap || !isMobile) && (
@@ -80,9 +79,9 @@ export const RepairersResults = (): JSX.Element => {
           sx={{
             display: {xs: 'block', md: 'block'},
             width: {xs: '100%', md: '50%'},
-            height: 'calc(100vh - 335px)',
+            height: 'calc(100vh - 350px)',
             position: 'sticky',
-            top: '198px',
+            top: '264px',
           }}>
           <MapContainer
             center={mapCenter}
