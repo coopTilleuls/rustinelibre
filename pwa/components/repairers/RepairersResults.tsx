@@ -13,6 +13,7 @@ import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
+import L from 'leaflet';
 
 export const RepairersResults = (): JSX.Element => {
   const theme = useTheme();
@@ -97,8 +98,17 @@ export const RepairersResults = (): JSX.Element => {
               if (!repairer.latitude || !repairer.longitude) {
                 return;
               }
+
+              const customIcon = new L.Icon({
+                iconUrl: '/img/pin.svg',
+                iconSize: [50, 50],
+                iconAnchor: [25, 50],
+                popupAnchor: [0, -50],
+              });
+
               return (
                 <Marker
+                  icon={customIcon}
                   key={repairer.id}
                   position={[
                     Number(repairer.latitude),
