@@ -24,13 +24,13 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
 
   let linkHref;
 
-  if (query.favorite) {
+  if (query.favoris) {
     linkHref = '/';
-  } else if (query.appointment) {
+  } else if (query.rendezvous) {
     linkHref = '/rendez-vous/mes-rendez-vous';
-  } else if (query.repairerList) {
+  } else if (query.liste) {
     linkHref = '/liste-des-reparateurs';
-  } else if (query.searchRepairer) {
+  } else if (query.recherche) {
     linkHref = '/reparateur/chercher-un-reparateur';
   } else {
     linkHref = '/';

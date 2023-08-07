@@ -95,7 +95,7 @@ const RepairersList: NextPageWithLayout = ({
                       onClick={() =>
                         router.push({
                           pathname: `/reparateur/${repairer.id}-${repairer.slug}`,
-                          query: {repairerList: 1},
+                          query: {liste: 1},
                         })
                       }
                     />
