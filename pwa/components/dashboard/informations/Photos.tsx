@@ -9,9 +9,9 @@ import {
   CircularProgress,
 } from '@mui/material';
 import {checkFileSize} from '@helpers/checkFileSize';
-import {MediaObject} from '@interfaces/MediaObject';
 import {Repairer} from '@interfaces/Repairer';
-import {uploadImage} from '@helpers/uploadFile';
+import {mediaObjectResource} from '@resources/mediaObjectResource';
+import {errorRegex} from '@utils/errorRegex';
 
 interface DashboardInfosPhotosProps {
   repairer: Repairer | null;
@@ -24,7 +24,12 @@ export const Photos = ({
 }: DashboardInfosPhotosProps): JSX.Element => {
   const [thumbnailLoading, setThumbnailLoading] = useState<boolean>(false);
   const [descriptionLoading, setDescriptionLoading] = useState<boolean>(false);
-  const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
+  const [errorMessageThumbnail, setErrorMessageThumbnail] = useState<
+    string | null
+  >(null);
+  const [errorMessageDescription, setErrorMessageDescription] = useState<
+    string | null
+  >(null);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -33,29 +38,58 @@ export const Photos = ({
     if (event.target.files && repairer) {
       if ('thumbnail' === pictureType) setThumbnailLoading(true);
       if ('description' === pictureType) setDescriptionLoading(true);
-      setImageTooHeavy(false);
+      setErrorMessageThumbnail(null);
+      setErrorMessageDescription(null);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
-        setImageTooHeavy(true);
+        const errorMessage =
+          'Votre photo dépasse la taille maximum autorisée (5mo)';
+        if ('thumbnail' === pictureType) {
+          setErrorMessageThumbnail(errorMessage);
+        }
+        if ('description' === pictureType) {
+          setErrorMessageDescription(errorMessage);
+        }
+        setThumbnailLoading(false);
+        setDescriptionLoading(false);
         return;
       }
 
-      const response = await uploadImage(file, 'public');
-      const mediaObjectResponse = (await response?.json()) as MediaObject;
-      if (mediaObjectResponse) {
-        if (pictureType === 'thumbnail') {
-          await repairerResource.put(repairer['@id'], {
-            thumbnail: mediaObjectResponse['@id'],
-          });
-        } else if (pictureType === 'description') {
-          await repairerResource.put(repairer['@id'], {
-            descriptionPicture: mediaObjectResponse['@id'],
-          });
+      try {
+        const mediaObjectResponse = await mediaObjectResource.uploadImage(
+          file,
+          'public'
+        );
+        if (mediaObjectResponse) {
+          if (pictureType === 'thumbnail') {
+            await repairerResource.put(repairer['@id'], {
+              thumbnail: mediaObjectResponse['@id'],
+            });
+          } else if (pictureType === 'description') {
+            await repairerResource.put(repairer['@id'], {
+              descriptionPicture: mediaObjectResponse['@id'],
+            });
+          }
+          fetchRepairer();
         }
-        fetchRepairer();
-        setThumbnailLoading(false);
-        setDescriptionLoading(false);
+      } catch (e: any) {
+        const errorMessage = `Envoi de l'image impossible : ${e.message?.replace(
+          errorRegex,
+          '$2'
+        )}`;
+        if ('thumbnail' === pictureType) {
+          setErrorMessageThumbnail(errorMessage);
+        }
+        if ('description' === pictureType) {
+          setErrorMessageDescription(errorMessage);
+        }
+        setTimeout(() => {
+          setErrorMessageThumbnail(null);
+          setErrorMessageDescription(null);
+        }, 3000);
       }
+      setThumbnailLoading(false);
+      setDescriptionLoading(false);
     }
   };
 
@@ -74,6 +108,9 @@ export const Photos = ({
           )}
         </Grid>
       </Grid>
+      {errorMessageThumbnail && (
+        <Typography color="red">{errorMessageThumbnail}</Typography>
+      )}
       <Button variant="contained" component="label" sx={{my: 2}}>
         {thumbnailLoading && (
           <CircularProgress sx={{color: 'white'}} size={20} />
@@ -90,11 +127,6 @@ export const Photos = ({
           </>
         )}
       </Button>
-      {imageTooHeavy && (
-        <Typography textAlign="center" color="red">
-          Votre photo dépasse la taille maximum autorisée (5mo)
-        </Typography>
-      )}
       <InputLabel sx={{mt: 4}}>Photo de description</InputLabel>
       <Grid container spacing={2} sx={{marginTop: '10'}}>
         <Grid item>
@@ -108,6 +140,9 @@ export const Photos = ({
           )}
         </Grid>
       </Grid>
+      {errorMessageDescription && (
+        <Typography color="red">{errorMessageDescription}</Typography>
+      )}
       <Button variant="contained" component="label" sx={{my: 2}}>
         {descriptionLoading && (
           <CircularProgress sx={{color: 'white'}} size={20} />
@@ -124,11 +159,6 @@ export const Photos = ({
           </>
         )}
       </Button>
-      {imageTooHeavy && (
-        <Typography textAlign="center" color="red">
-          Votre photo dépasse la taille maximale autorisée (5mo)
-        </Typography>
-      )}
     </Box>
   );
 };
