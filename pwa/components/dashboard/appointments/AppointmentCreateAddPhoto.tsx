@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {CircularProgress, Typography, Box, useMediaQuery} from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {uploadImage} from '@helpers/uploadFile';
 import {checkFileSize} from '@helpers/checkFileSize';
 import {MediaObject} from '@interfaces/MediaObject';
 import theme from 'styles/theme';
+import {errorRegex} from '@utils/errorRegex';
 
 interface AppointmentCreateAddPhotoProps {
   photo: MediaObject | null;
@@ -17,27 +17,38 @@ const AppointmentCreateAddPhoto = ({
   setPhoto,
 }: AppointmentCreateAddPhotoProps): JSX.Element => {
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
-  const [imageTooHeavy, setImageTooHeavy] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     if (event.target.files && event.target.files.length > 0) {
-      setImageTooHeavy(false);
+      setErrorMessage(null);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
-        setImageTooHeavy(true);
+        setErrorMessage(
+          'Votre photo dépasse la taille maximum autorisée (5mo)'
+        );
         return;
       }
       setLoadingPhoto(true);
       if (photo) {
         await mediaObjectResource.delete(photo['@id']);
       }
-      const response = await uploadImage(file);
-      const mediaObjectResponse = (await response?.json()) as MediaObject;
-      if (mediaObjectResponse) {
-        setPhoto(mediaObjectResponse);
+      try {
+        const mediaObjectResponse = await mediaObjectResource.uploadImage(file);
+        if (mediaObjectResponse) {
+          setPhoto(mediaObjectResponse);
+        }
+      } catch (e: any) {
+        setErrorMessage(
+          `Envoi de l'image impossible : ${e.message?.replace(
+            errorRegex,
+            '$2'
+          )}`
+        );
+        setTimeout(() => setErrorMessage(null), 3000);
       }
       setLoadingPhoto(false);
     }
@@ -45,9 +56,9 @@ const AppointmentCreateAddPhoto = ({
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      {imageTooHeavy && (
+      {errorMessage && (
         <Typography sx={{textAlign: 'center', color: 'red'}}>
-          Votre photo dépasse la taille maximum autorisée (5mo)
+          {errorMessage}
         </Typography>
       )}
       <Box width="100%" boxShadow={2} borderRadius={6} my={1}>
