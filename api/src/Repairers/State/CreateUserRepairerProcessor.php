@@ -67,7 +67,8 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
         $this->entityManager->flush();
 
         // Send Email
-        $this->newRepairerEmail->sendNewContactEmail($repairer);
+        $this->newRepairerEmail->sendAdminNewRepairerEmail($repairer);
+        $this->newRepairerEmail->sendRepairerEmail($repairer);
 
         return $repairer;
     }
