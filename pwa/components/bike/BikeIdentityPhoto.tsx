@@ -34,7 +34,7 @@ const BikeIdentityPhoto = ({
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
-    if (event.target.files) {
+    if (event.target.files && event.target.files[0]) {
       setErrorMessage(null);
       const file = event.target.files[0];
 
@@ -82,10 +82,6 @@ const BikeIdentityPhoto = ({
     setPhotoDisplay(null);
     onUpdatePhoto?.(undefined);
 
-    // Update bike
-    await bikeResource.put(bike['@id'], {
-      propertyName: null,
-    });
     // Delete media object
     await mediaObjectResource.delete(photoIri);
   };
