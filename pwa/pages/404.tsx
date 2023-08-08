@@ -3,7 +3,6 @@ import React from 'react';
 import Head from 'next/head';
 import {
   Button,
-  Container,
   Link,
   Typography,
   Stack,
@@ -11,7 +10,6 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
-import Shape from '@components/common/Shape';
 import theme from 'styles/theme';
 
 const Error404: NextPageWithLayout = () => {
@@ -23,7 +21,6 @@ const Error404: NextPageWithLayout = () => {
         <title>404</title>
       </Head>
       <WebsiteLayout>
-        {/* <Container sx={{width: '100%', bgcolor: 'lightprimary.main'}}> */}
         <Stack
           sx={{
             width: '100%',
@@ -36,19 +33,11 @@ const Error404: NextPageWithLayout = () => {
           flexDirection="column"
           alignItems="center"
           textAlign="center">
-          <Box
-            display="flex"
-            alignItems="center"
-            gap={isMobile ? 4 : 8}
-            flexDirection={isMobile ? 'column' : 'row'}>
-            <Typography color="primary" variant="h2" component="h2">
-              Désolé !
+          <Box display="flex" alignItems="center" gap={4} flexDirection="row">
+            <Typography color="primary" variant="h1" component="h1">
+              Désolé
             </Typography>
-            <img
-              alt=""
-              src="/img/eclair.svg"
-              width={isMobile ? '40px' : '60px'}
-            />
+            <img alt="" src="/img/eclair.svg" width="40px" />
           </Box>
           <Typography>
             Nous ne trouvons pas la page que vous demandez.
@@ -57,7 +46,6 @@ const Error404: NextPageWithLayout = () => {
             <Button variant="contained">Retourner sur l&apos;accueil</Button>
           </Link>
         </Stack>
-        {/* </Container> */}
       </WebsiteLayout>
     </>
   );
