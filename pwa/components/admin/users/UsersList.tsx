@@ -52,9 +52,9 @@ export const UsersList = (): JSX.Element => {
     setErrorMessage(null);
     try {
       await userResource.delete(selectedUserToDelete['@id']);
+      await fetchUsers();
       setRemovePending(false);
       setSelectedUserToDelete(null);
-      await fetchUsers();
     } catch (e: any) {
       setErrorMessage('Suppression impossible de cet utilisateur.');
     }
