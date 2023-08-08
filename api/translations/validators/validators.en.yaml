@@ -131,6 +131,7 @@ repairer.duration.slot: The duration slot should be one of 30 / 60 / 180 (min).
 400_badRequest.availability.filter: The "availability" filter accepts only "ASC" or "DESC" as value.
 400_badRequest.proximity.filter: The parameters provided in the proximity filter have the wrong format, it should be ?proximity=50.43321,3.03943.
 400_badRequest.user.search.filter: Wrong format provided for user search, should be a string as ?userSearch=raphael.
+400_badRequest.repairer.search.filter: Wrong format provided for repairer search, should be a string as ?repairerSearch=raphael.
 400_badRequest.around.filter: Wrong format provided for the around filter, should be ?around[cityName]=latitude,longitude.
 400_badRequest.validation.code: You should provide a code to validate it.
 400_badRequest.appointment.transition: You should provide a transition name.
