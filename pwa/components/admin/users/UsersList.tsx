@@ -51,10 +51,13 @@ export const UsersList = (): JSX.Element => {
     setDeleteDialogOpen(false);
     setErrorMessage(null);
     try {
+      console.log('here');
       await userResource.delete(selectedUserToDelete['@id']);
       setRemovePending(false);
       setSelectedUserToDelete(null);
       await fetchUsers();
+
+      console.log('fetch')
     } catch (e: any) {
       setErrorMessage('Suppression impossible de cet utilisateur.');
     }
