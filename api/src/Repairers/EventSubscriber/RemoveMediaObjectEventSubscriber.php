@@ -39,11 +39,21 @@ readonly class RemoveMediaObjectEventSubscriber implements EventSubscriberInterf
 
         $originalEntity = $this->entityManager->getUnitOfWork()->getOriginalEntityData($object);
 
-        if (array_key_exists('thumbnail_id', $originalEntity) && $object->thumbnail && $originalEntity['thumbnail_id'] !== $object->thumbnail->id) {
+        if (array_key_exists('thumbnail_id', $originalEntity)
+            && $originalEntity['thumbnail_id']
+            && $object->thumbnail
+            && $object->thumbnail->id
+            && $originalEntity['thumbnail_id'] !== $object->thumbnail->id
+        ) {
             $this->mediaObjectRepository->remove($this->mediaObjectRepository->find($originalEntity['thumbnail_id']));
         }
 
-        if (array_key_exists('description_picture_id', $originalEntity) && $object->descriptionPicture && $originalEntity['description_picture_id'] !== $object->descriptionPicture->id) {
+        if (array_key_exists('description_picture_id', $originalEntity)
+            && $originalEntity['description_picture_id']
+            && $object->descriptionPicture
+            && $object->descriptionPicture->id
+            && $originalEntity['description_picture_id'] !== $object->descriptionPicture->id
+        ) {
             $this->mediaObjectRepository->remove($this->mediaObjectRepository->find($originalEntity['description_picture_id']));
         }
     }
