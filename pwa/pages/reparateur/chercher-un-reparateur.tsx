@@ -450,7 +450,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
               </Typography>
             )}
             {repairers.length === 0 && alreadyFetchApi && (
-              <Box textAlign="center" pt={8}>
+              <Box textAlign="center" pt={isMobile ? 25 : 20}>
                 <Typography>
                   Nous n&apos;avons pas trouvé de réparateurs dans cette ville.
                 </Typography>
