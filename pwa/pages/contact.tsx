@@ -160,7 +160,7 @@ const Contact: NextPageWithLayout = () => {
                 <br />
               </Typography>
               <Typography my={2} variant="h4" color="secondary">
-                Contactes-nous !
+                Lorem ipsum !
               </Typography>
               <Box
                 sx={{
