@@ -68,7 +68,9 @@ readonly class NewRepairerEmail
             ->from($this->mailerSender)
             ->to($repairer->owner->email)
             ->subject("Votre demande d'inscription a été validée")
-            ->html($this->twig->render('mail/new_repairer_validated.html.twig'));
+            ->html($this->twig->render('mail/new_repairer_validated.html.twig', [
+                'srAdminUrl' => sprintf('%s/sradmin', $this->webAppUrl),
+            ]));
 
         try {
             $this->mailer->send($email);
