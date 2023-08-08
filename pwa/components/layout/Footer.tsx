@@ -166,7 +166,9 @@ const Footer = ({user}: FooterProps): JSX.Element => {
             }}
             icon={
               <Badge
-                badgeContent={(label === 'Messages' && !isNotACustomer) ? unreadMessages : 0}
+                badgeContent={
+                  label === 'Messages' && !isNotACustomer ? unreadMessages : 0
+                }
                 color="primary">
                 <LinkIcon fontSize="large" />
               </Badge>
