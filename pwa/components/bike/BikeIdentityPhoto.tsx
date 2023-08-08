@@ -60,11 +60,6 @@ const BikeIdentityPhoto = ({
           await bikeResource.put(bike['@id'], {
             [propertyName]: mediaObjectResponse['@id'],
           });
-
-          // Remove old picture
-          if (photo) {
-            await mediaObjectResource.delete(photo['@id']);
-          }
         }
       } catch (e: any) {
         setErrorMessage(
