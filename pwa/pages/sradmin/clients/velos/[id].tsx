@@ -38,13 +38,11 @@ const CustomerBikes: NextPageWithLayout = () => {
   const [maintenanceSelected, setMaintenanceSelected] =
     useState<Maintenance | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const [openModalAddMaintenance, setOpenModalAddMaintenance] =
     useState<boolean>(false);
   const [selectedMaintenanceToDelete, setSelectedMaintenanceToDelete] =
     useState<Maintenance | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
-  const [removePending, setRemovePending] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleDeleteClick = (maintenance: Maintenance) => {
@@ -56,7 +54,6 @@ const CustomerBikes: NextPageWithLayout = () => {
     if (!bike || !selectedMaintenanceToDelete) {
       return;
     }
-    setRemovePending(true);
     setDeleteDialogOpen(false);
     setErrorMessage(null);
     try {
@@ -64,7 +61,6 @@ const CustomerBikes: NextPageWithLayout = () => {
     } catch (e) {
       setErrorMessage('Suppression impossible');
     }
-    setRemovePending(false);
     setSelectedMaintenanceToDelete(null);
     await fetchMaintenances(bike.id);
   };
@@ -75,6 +71,7 @@ const CustomerBikes: NextPageWithLayout = () => {
   };
 
   const handleCloseModalAddMaintenance = async (): Promise<void> => {
+    setMaintenanceSelected(null);
     setOpenModalAddMaintenance(false);
     if (bike) {
       await fetchMaintenances(bike.id);
