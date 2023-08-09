@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import {useAccount} from '@contexts/AuthContext';
 import {Typography} from '@mui/material';
-import MyAccountForm from '@components/profile/MyAccountForm';
+import MyAccountForm from '@components/profile/MyInformations';
 import ChangePassword from '@components/profile/ChangePassword';
 import RemoveAccount from '@components/profile/RemoveAccount';
 
