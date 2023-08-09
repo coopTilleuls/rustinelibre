@@ -36,7 +36,7 @@ final class RepairerSearchFilter extends AbstractFilter
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder->innerJoin(sprintf('%s.owner', $rootAlias), 'u');
-        $queryBuilder->andWhere(sprintf('LOWER(%s.name) LIKE :searchTerms OR LOWER(u.email) LIKE :searchTerms', $rootAlias));
+        $queryBuilder->andWhere(sprintf('LOWER(%s.name) LIKE :searchTerms OR LOWER(u.email) LIKE :searchTerms OR LOWER(u.lastName) LIKE :searchTerms OR LOWER(u.firstName) LIKE :searchTerms', $rootAlias));
         $queryBuilder->setParameter('searchTerms', '%'.strtolower($value).'%');
     }
 
