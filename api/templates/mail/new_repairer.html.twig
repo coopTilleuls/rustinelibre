@@ -6,28 +6,9 @@
     </div> <br />
 
     <div>
-        Un nouveau réparateur a demandé à s'inscrire :
-        <ul>
-            <li>
-                {{ repairer.name }}
-            </li>
-            <li>
-                {{ repairer.streetNumber }} {{ repairer.street }}, {{ repairer.city }}
-            </li>
-            <li>
-                {{ repairer.repairerType.name }}
-            </li>
-            {% if repairer.comment %}
-                <li>
-                    {{ repairer.comment }}
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-
-    <div style="margin-top:20px">
         <p>
-            Pour consulter sa demande d'inscription et la valider : <a href="{{ repairerAdminUrl }}">cliquez ici</a>
+            Votre demande d'inscription a bien été enregistrée.
+            Elle est désormais en attente de validation et sera rapidement traitée.
         </p>
     </div>
 {% endblock %}
