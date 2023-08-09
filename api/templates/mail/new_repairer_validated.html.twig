@@ -1,0 +1,15 @@
+{% extends 'mail/mail_layout.html.twig' %}
+
+{% block body_mail %}
+    <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 3em">
+        Demande d'inscription validée !
+    </div> <br />
+
+    <div>
+        <p>
+            Votre demande d'inscription a bien été validée par l'administrateur de la plateforme. <br /><br />
+            Vous pouvez vous connecter avec les identifiants choisis lors de l'inscription sur <a href="{{ srAdminUrl }}">rustine-libre.org</a>
+            et continuer à renseigner les données de votre espace réparateur.
+        </p>
+    </div>
+{% endblock %}

@@ -14,15 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-final class RepairerEventSubscriber implements EventSubscriberInterface
+final readonly class RepairerEventSubscriber implements EventSubscriberInterface
 {
-    private Security $security;
-    private ValidatorInterface $validator;
-
-    public function __construct(Security $security, ValidatorInterface $validator)
+    public function __construct(private Security $security, private ValidatorInterface $validator)
     {
-        $this->security = $security;
-        $this->validator = $validator;
     }
 
     public static function getSubscribedEvents(): array
