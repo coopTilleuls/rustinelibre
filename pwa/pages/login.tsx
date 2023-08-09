@@ -22,6 +22,8 @@ const Login: NextPageWithLayout = ({}) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [pendingLogin, setPendingLogin] = useState<boolean>(false);
+  const [repairerWaitingValidation, setRepairerWaitingValidation] =
+    useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {user} = useAccount({});
   const {login} = useAuth();
@@ -31,7 +33,9 @@ const Login: NextPageWithLayout = ({}) => {
     : router.query.next || '/';
 
   useEffect(() => {
+    // Si l'utilisateur est connecté et son mail validé.
     if (user && user.emailConfirmed) {
+      // Si c'est un compte réparateur on le redirige vers son back office
       if (isBoss(user) || isEmployee(user)) {
         router.push('/sradmin');
       } else if (isAdmin(user)) {
@@ -39,8 +43,14 @@ const Login: NextPageWithLayout = ({}) => {
       } else {
         router.push(next);
       }
+      // Si le compte n'a pas encore validé son email
     } else if (user && !user.emailConfirmed) {
-      router.push(`/inscription`);
+      // Si c'est un compte réparateur, on lui affiche un message indiquant que son compte est en attente
+      if (isBoss(user) || isEmployee(user)) {
+        setRepairerWaitingValidation(true);
+      } else {
+        router.push(`/inscription`);
+      }
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -76,79 +86,100 @@ const Login: NextPageWithLayout = ({}) => {
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '50%'}}}>
-          <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-              <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography variant="h2" component="h1" color="primary">
-                Se connecter
-              </Typography>
+          {!repairerWaitingValidation && (
+            <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
               <Box
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{mt: 1}}>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  type={'email'}
-                  id="email"
-                  label="Adresse email"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  value={email}
-                  inputProps={{maxLength: 180}}
-                  onChange={handleChangeEmail}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Mot de passe"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={handleChangePassword}
-                />
-                <Box display="flex" flexDirection="column" alignItems="center">
-                  <Button type="submit" variant="contained" sx={{my: 2}}>
-                    {!pendingLogin ? (
-                      'Se connecter'
-                    ) : (
-                      <CircularProgress size={20} sx={{color: 'white'}} />
-                    )}
-                  </Button>
-                  {errorMessage && (
-                    <Typography variant="body1" color="error">
-                      {errorMessage}
-                    </Typography>
-                  )}
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography variant="h2" component="h1" color="primary">
+                  Se connecter
+                </Typography>
+                <Box
+                  component="form"
+                  onSubmit={handleSubmit}
+                  noValidate
+                  sx={{mt: 1}}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    type={'email'}
+                    id="email"
+                    label="Adresse email"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    value={email}
+                    inputProps={{maxLength: 180}}
+                    onChange={handleChangeEmail}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Mot de passe"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={handleChangePassword}
+                  />
                   <Box
                     display="flex"
-                    justifyContent="space-between"
-                    width="100%">
-                    <Link href="/mot-de-passe-oublie" variant="body2">
-                      Mot de passe oublié ?
-                    </Link>
-                    <Link href="/inscription" variant="body2">
-                      S’inscrire
-                    </Link>
+                    flexDirection="column"
+                    alignItems="center">
+                    <Button type="submit" variant="contained" sx={{my: 2}}>
+                      {!pendingLogin ? (
+                        'Se connecter'
+                      ) : (
+                        <CircularProgress size={20} sx={{color: 'white'}} />
+                      )}
+                    </Button>
+                    {errorMessage && (
+                      <Typography variant="body1" color="error">
+                        {errorMessage}
+                      </Typography>
+                    )}
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      width="100%">
+                      <Link href="/mot-de-passe-oublie" variant="body2">
+                        Mot de passe oublié ?
+                      </Link>
+                      <Link href="/inscription" variant="body2">
+                        S’inscrire
+                      </Link>
+                    </Box>
                   </Box>
                 </Box>
               </Box>
-            </Box>
-          </Paper>
+            </Paper>
+          )}
+          {repairerWaitingValidation && (
+            <Paper
+              elevation={4}
+              sx={{
+                maxWidth: 400,
+                p: 4,
+                mt: 4,
+                mb: {xs: 10, md: 12},
+                mx: 'auto',
+              }}>
+              <Box>
+                Votre demande d&apos;inscription est encore en attente de
+                validation.
+              </Box>
+            </Paper>
+          )}
         </Container>
       </WebsiteLayout>
     </>
