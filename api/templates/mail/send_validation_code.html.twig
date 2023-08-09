@@ -1,15 +1,14 @@
 {% extends 'mail/mail_layout.html.twig' %}
 
 {% block body_mail %}
-    <p>
-        <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 2.5em">
-            Votre code de validation La Rustine Libre
+    <div>
+        <div id="title" style="height: 100px; font-size: 2.5em; font-weight: 700; background-color: #ee721e; text-align: center">
+            Rustine Libre
         </div>
-
-        <br />
-        <br />
-
-        <span style="font-size: 1.5em; margin-top: 20px; margin-left: 50px"><strong>{{ user.validationCode }}</strong></span>
-    </p>
+        <p style="font-size: 16px; margin-top: 20px; margin-left: 40px">Saisissez ce code de sécurité pour confirmer votre inscription</p>
+        <p style="font-size: 16px; margin-top: 20px; margin-left: 40px">
+            Code de validation: <strong> {{ user.validationCode }}</strong>
+        </p>
+    </div>
 
 {% endblock %}
