@@ -158,8 +158,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
   useEffect(() => {
     if (user) {
-      countUnread();
-      fetchDiscussions();
+      if (!user.repairer || !user.repairer.enabled) {
+        router.push('/');
+      } else {
+        countUnread();
+        fetchDiscussions();
+      }
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 

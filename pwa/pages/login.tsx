@@ -22,6 +22,7 @@ const Login: NextPageWithLayout = ({}) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [pendingLogin, setPendingLogin] = useState<boolean>(false);
+  const [repairerWaitingValidation, setRepairerWaitingValidation] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {user} = useAccount({});
   const {login} = useAuth();
@@ -40,7 +41,11 @@ const Login: NextPageWithLayout = ({}) => {
         router.push(next);
       }
     } else if (user && !user.emailConfirmed) {
-      router.push(`/inscription`);
+      if (isBoss(user) || isEmployee(user)) {
+        setRepairerWaitingValidation(true);
+      } else {
+        router.push(`/inscription`);
+      }
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -76,7 +81,7 @@ const Login: NextPageWithLayout = ({}) => {
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '50%'}}}>
-          <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
+          {!repairerWaitingValidation && <Paper elevation={4} sx={{maxWidth: 400, p: 4, mt: 4, mx: 'auto'}}>
             <Box
               sx={{
                 width: '100%',
@@ -148,7 +153,22 @@ const Login: NextPageWithLayout = ({}) => {
                 </Box>
               </Box>
             </Box>
-          </Paper>
+          </Paper>}
+          {repairerWaitingValidation && (
+              <Paper
+                  elevation={4}
+                  sx={{
+                    maxWidth: 400,
+                    p: 4,
+                    mt: 4,
+                    mb: {xs: 10, md: 12},
+                    mx: 'auto',
+                  }}>
+                <Box>
+                  Votre demande d&apos;inscription est encore en attente de validation. Elle sera rapidement traitée.
+                </Box>
+              </Paper>
+          )}
         </Container>
       </WebsiteLayout>
     </>

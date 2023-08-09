@@ -194,7 +194,7 @@ class Repairer
     public ?string $optionalPage = null;
 
     #[ORM\Column]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
     #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
     #[ApiFilter(BooleanFilter::class)]
     public ?bool $enabled = false;
