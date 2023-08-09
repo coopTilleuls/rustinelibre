@@ -38,6 +38,7 @@ final readonly class RepairerEnabledEventSubscriber implements EventSubscriberIn
         $originalEntity = $this->entityManager->getUnitOfWork()->getOriginalEntityData($object);
 
         if (array_key_exists('enabled', $originalEntity) && false === $originalEntity['enabled'] && true === $object->enabled) {
+            $object->owner->emailConfirmed = true;
             $this->newRepairerEmail->sendRepairerValidationEmail($object);
         }
     }
