@@ -47,7 +47,7 @@ export const RepairersList = (): JSX.Element => {
     };
 
     if ('' !== searchTerm) {
-      params = {...{name: searchTerm}, ...params};
+      params = {...{repairerSearch: searchTerm}, ...params};
       params.page = '1';
     }
 
