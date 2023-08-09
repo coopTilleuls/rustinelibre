@@ -23,6 +23,7 @@ use App\Repairers\Filter\AroundFilter;
 use App\Repairers\Filter\FirstSlotAvailableFilter;
 use App\Repairers\Filter\ProximityFilter;
 use App\Repairers\Filter\RandomFilter;
+use App\Repairers\Filter\RepairerSearchFilter;
 use App\Repairers\State\CreateUserRepairerProcessor;
 use App\Repairers\Validator\RepairerSlots;
 use App\Repository\RepairerRepository;
@@ -84,6 +85,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 ])]
 #[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)] // Should always be last filter of the list
+#[ApiFilter(RepairerSearchFilter::class)]
 #[UniqueEntity('owner')]
 #[RepairerSlots]
 class Repairer

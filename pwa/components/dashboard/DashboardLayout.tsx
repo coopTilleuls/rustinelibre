@@ -158,8 +158,8 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
   useEffect(() => {
     if (user) {
-      if (!user.repairer || !user.repairer.enabled) {
-        router.push('/');
+      if (!user.emailConfirmed) {
+        router.push('/login');
       } else {
         countUnread();
         fetchDiscussions();
