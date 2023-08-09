@@ -60,7 +60,7 @@ class RepairerEmployee
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE, User::USER_READ])]
     public ?Repairer $repairer = null;
 
-    #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist'])]
+    #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
     public ?User $employee = null;

@@ -43,7 +43,7 @@ class DeleteTest extends AbstractTestCase
 
         $this->createClientWithCredentials([
             'email' => 'boss2@test.com',
-            'password' => 'Test1passwordOk!'
+            'password' => 'Test1passwordOk!',
         ])->request('DELETE', sprintf('/repairer_opening_hours/%d', $roh->id));
 
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
