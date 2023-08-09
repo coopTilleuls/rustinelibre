@@ -158,8 +158,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
   useEffect(() => {
     if (user) {
-      countUnread();
-      fetchDiscussions();
+      if (!user.emailConfirmed) {
+        router.push('/login');
+      } else {
+        countUnread();
+        fetchDiscussions();
+      }
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 

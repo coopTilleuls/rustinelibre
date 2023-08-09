@@ -21,6 +21,7 @@ import {User} from '@interfaces/User';
 import UserForm from '@components/form/UserForm';
 import {errorRegex} from '@utils/errorRegex';
 import Alert from '@mui/material/Alert';
+import {isBoss} from '@helpers/rolesHelpers';
 
 const Registration: NextPageWithLayout = ({}) => {
   const [pendingRegistration, setPendingRegistration] =
@@ -46,7 +47,14 @@ const Registration: NextPageWithLayout = ({}) => {
 
       router.push(next);
     } else if (user && !user.emailConfirmed) {
-      setInscriptionSuccess(true);
+      // Si l'utilisateur est un réparateur, mais que son compte n'a pas encore été validé, on le redirige vers la page de
+      // login qui lui affiche un message d'attente de validation
+      if (isBoss(user)) {
+        router.push('/login');
+      } else {
+        // Si l'utilisateur est déjà inscrit mais que son mail n'a pas été validé par le code à 4 chiffres, on affiche l'input du code
+        setInscriptionSuccess(true);
+      }
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
