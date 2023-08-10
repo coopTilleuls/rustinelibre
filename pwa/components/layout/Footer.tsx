@@ -43,6 +43,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
 
   const countUnread = async (): Promise<void> => {
     if (!user) {
+      setUnreadMessages(0);
       return;
     }
 
