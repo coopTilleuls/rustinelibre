@@ -47,7 +47,7 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
     if (!autoDiagnostic) {
       return;
     }
-    if (event.target.files) {
+    if (event.target.files && event.target.files[0]) {
       setErrorMessage(null);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
@@ -58,9 +58,6 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       }
 
       setLoadingPhoto(true);
-      if (photo) {
-        await mediaObjectResource.delete(photo['@id']);
-      }
       try {
         // Upload new picture
         const mediaObjectResponse = await mediaObjectResource.uploadImage(file);

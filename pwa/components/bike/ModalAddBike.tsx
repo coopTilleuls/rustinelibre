@@ -100,11 +100,7 @@ const ModalAddBike = ({
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
-    if (photo) {
-      await mediaObjectResource.delete(photo['@id']);
-    }
-
-    if (event.target.files) {
+    if (event.target.files && event.target.files[0]) {
       setErrorMessage(null);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
@@ -118,6 +114,9 @@ const ModalAddBike = ({
       try {
         const mediaObjectResponse = await mediaObjectResource.uploadImage(file);
         if (mediaObjectResponse) {
+          if (photo) {
+            await mediaObjectResource.delete(photo['@id']);
+          }
           setPhoto(mediaObjectResponse);
           setLoadingPhoto(false);
         }

@@ -23,7 +23,7 @@ const AppointmentCreateAddPhoto = ({
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
-    if (event.target.files && event.target.files.length > 0) {
+    if (event.target.files && event.target.files[0]) {
       setErrorMessage(null);
       const file = event.target.files[0];
       if (!checkFileSize(file)) {
@@ -33,11 +33,11 @@ const AppointmentCreateAddPhoto = ({
         return;
       }
       setLoadingPhoto(true);
-      if (photo) {
-        await mediaObjectResource.delete(photo['@id']);
-      }
       try {
         const mediaObjectResponse = await mediaObjectResource.uploadImage(file);
+        if (photo) {
+          await mediaObjectResource.delete(photo['@id']);
+        }
         if (mediaObjectResponse) {
           setPhoto(mediaObjectResponse);
         }

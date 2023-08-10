@@ -68,12 +68,10 @@ const BikeMaintenance = ({
   };
 
   const handleOpenModal = (): void => setOpenModal(true);
-  const handleCloseModal = async (refresh?: boolean): Promise<void> => {
+  const handleCloseModal = async (): Promise<void> => {
     setOpenModal(false);
     setMaintenanceSelected(null);
-    if (refresh) {
-      await fetchMaintenance();
-    }
+    await fetchMaintenance();
   };
 
   const clickMaintenanceDetail = (maintenance: Maintenance) => {

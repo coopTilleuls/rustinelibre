@@ -35,7 +35,7 @@ export const Photos = ({
     event: React.ChangeEvent<HTMLInputElement>,
     pictureType: string
   ) => {
-    if (event.target.files && repairer) {
+    if (event.target.files && event.target.files[0] && repairer) {
       if ('thumbnail' === pictureType) setThumbnailLoading(true);
       if ('description' === pictureType) setDescriptionLoading(true);
       setErrorMessageThumbnail(null);
