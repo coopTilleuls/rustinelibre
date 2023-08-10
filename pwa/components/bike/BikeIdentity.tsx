@@ -204,12 +204,16 @@ const BikeIdentity = ({
           photo={bike.wheelPicture ? bike.wheelPicture : null}
           propertyName="wheelPicture"
           title="Photo roue"
+          onUpdatePhoto={(photo) => setBike({...bike, wheelPicture: photo})}
         />
         <BikeIdentityPhoto
           bike={bike}
           photo={bike.transmissionPicture ? bike.transmissionPicture : null}
           propertyName="transmissionPicture"
           title="Photo transmission"
+          onUpdatePhoto={(photo) =>
+            setBike({...bike, transmissionPicture: photo})
+          }
         />
       </Box>
     </>

@@ -150,7 +150,7 @@ const ModalAddMaintenance = ({
     type: string
   ): Promise<void> => {
     setErrorMessage(null);
-    if (event.target.files) {
+    if (event.target.files && event.target.files[0]) {
       const isPhoto = type === 'photo';
       const file = event.target.files[0];
 
@@ -170,24 +170,6 @@ const ModalAddMaintenance = ({
           : await mediaObjectResource.uploadFile(file);
         isPhoto ? setNewPhoto(mediaObject) : setNewInvoice(mediaObject);
 
-        try {
-          // si elle existe, on supprime l'ancienne photo/facture
-          if (maintenance && isPhoto && photo) {
-            await mediaObjectResource.delete(photo['@id']);
-          } else if (maintenance && !isPhoto && invoice) {
-            await mediaObjectResource.delete(invoice['@id']);
-          }
-          isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
-        } catch (e: any) {
-          if (e.message.includes('Access Denied')) {
-            setErrorMessage(
-              `L'ancienne ${
-                isPhoto ? 'photo' : 'facture'
-              } a été ajoutée par une autre personne. Seule cette personne ou un administrateur peut la changer. Si elle ne vous semble pas bonne, vous pouvez supprimer et recréer la réparation.`
-            );
-          }
-        }
-
         // dans le cas d'une modification, on met à jour la maintenance avec la nouvelle photo/facture
         if (maintenance && mediaObject) {
           const bodyRequest: RequestBody = {};
@@ -198,6 +180,7 @@ const ModalAddMaintenance = ({
             maintenance['@id'],
             bodyRequest
           );
+          isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
         }
         isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
       } catch (e: any) {
