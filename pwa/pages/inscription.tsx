@@ -154,8 +154,12 @@ const Registration: NextPageWithLayout = ({}) => {
                 <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
                   <PersonIcon />
                 </Avatar>
-                <Typography fontSize={{xs: 28, md: 30}} fontWeight={600}>
-                  Je crée mon compte
+                <Typography
+                  textAlign="center"
+                  variant="h2"
+                  component="h1"
+                  color="primary">
+                  Créer mon compte
                 </Typography>
                 <Box
                   display="flex"
