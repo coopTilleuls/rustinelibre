@@ -3,7 +3,7 @@ import {useRouter} from 'next/router';
 import {useAccount, useAuth} from '@contexts/AuthContext';
 import {userResource} from '@resources/userResource';
 import ConfirmationModal from '@components/common/ConfirmationModal';
-import {Box, Typography, Button, CircularProgress} from '@mui/material';
+import {Box, Typography, Button} from '@mui/material';
 
 const RemoveAccount = (): JSX.Element => {
   const router = useRouter();
@@ -41,43 +41,33 @@ const RemoveAccount = (): JSX.Element => {
 
   return (
     <Box
-      mt={8}
-      p={4}
-      sx={{backgroundColor: 'grey.200'}}
-      width="100%"
-      borderRadius={2}
-      maxWidth="lg"
-      mx="auto">
-      <Typography fontSize={22} fontWeight={600}>
-        Suppression de mon compte
+      sx={{
+        mt: 1,
+        bgcolor: 'white',
+        px: {xs: 3, md: 5},
+        py: {xs: 4, md: 5},
+        boxShadow: 2,
+        width: {xs: '90%', md: '55%'},
+        borderRadius: 6,
+        mx: 'auto',
+        maxWidth: '700px',
+        position: 'relative',
+      }}>
+      <Typography textAlign="center" pb={2} variant="h4" color="secondary">
+        Supprimer de mon compte
       </Typography>
-      <Box
-        width="100%"
-        display="flex"
-        gap={{md: 4}}
-        flexDirection={{xs: 'column', md: 'row'}}
-        justifyContent="flex-end">
-        <Box
-          display="flex"
-          flexDirection="column"
-          width={{xs: '100%', md: '40%'}}>
-          <Box display="flex" flexDirection="column" alignItems="start">
-            <Button
-              onClick={() => setShowModal(true)}
-              type="submit"
-              variant="contained"
-              sx={{
-                mt: 3,
-                textTransform: 'capitalize',
-                width: {xs: '100%', md: 'auto'},
-              }}>
-              Supprimer
-            </Button>
-          </Box>
-        </Box>
-        <Box
-          sx={{backgroundColor: 'white', width: '40%', visibility: 'hidden'}}
-        />
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <Button
+          size="large"
+          onClick={() => setShowModal(true)}
+          type="submit"
+          variant="contained"
+          sx={{
+            mt: 3,
+            textTransform: 'capitalize',
+          }}>
+          Supprimer
+        </Button>
       </Box>
       {showModal && (
         <ConfirmationModal
