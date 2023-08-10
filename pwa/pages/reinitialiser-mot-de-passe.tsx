@@ -1,6 +1,10 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
+import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
+import {userResource} from '@resources/userResource';
+import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {
   Typography,
   Box,
@@ -8,15 +12,11 @@ import {
   Container,
   TextField,
   Button,
-  Paper,
+  Grid,
+  Alert,
 } from '@mui/material';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
-import {useRouter} from 'next/router';
 import {validatePassword} from '@utils/passwordValidator';
-import {userResource} from '@resources/userResource';
 import {errorRegex} from '@utils/errorRegex';
-import Link from 'next/link';
-import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 
 const PasswordReset: NextPageWithLayout = ({
   token,
@@ -79,6 +79,9 @@ const PasswordReset: NextPageWithLayout = ({
       setSuccess(true);
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
 
     setPendingSend(false);
@@ -90,115 +93,160 @@ const PasswordReset: NextPageWithLayout = ({
         <title>Réinitialiser mon mot de passe</title>
       </Head>
       <WebsiteLayout>
-        <Container sx={{width: {xs: '100%', md: '80%'}}}>
-          <Paper elevation={4} sx={{maxWidth: '100%', mt: 4, mx: 'auto'}}>
+        <Box
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
+        <Container>
+          <Typography
+            textAlign="center"
+            variant="h1"
+            sx={{mt: 4}}
+            color="primary">
+            Réinitialiser mon mot de passe
+          </Typography>
+          <Box
+            py={4}
+            display="flex"
+            flexDirection="column"
+            gap={4}
+            position="relative"
+            alignItems="flex-start">
             {!success && (
               <Box
-                width="100%"
-                display="flex"
-                gap={{md: 4}}
-                flexDirection={{xs: 'column', md: 'row'}}
-                justifyContent="flex-end"
-                component="form"
                 onSubmit={handleSubmit}
-                noValidate>
-                <Box
-                  p={4}
-                  sx={{backgroundColor: 'grey.200'}}
-                  width="100%"
-                  borderRadius={2}
-                  maxWidth="lg"
-                  mx="auto">
-                  <Typography fontSize={22} fontWeight={600}>
+                component="form"
+                noValidate
+                sx={{
+                  mt: 1,
+                  bgcolor: 'white',
+                  px: {xs: 3, md: 5},
+                  py: {xs: 4, md: 5},
+                  boxShadow: 2,
+                  width: {xs: '90%', md: '55%'},
+                  borderRadius: 6,
+                  mx: 'auto',
+                  maxWidth: '700px',
+                  position: 'relative',
+                }}>
+                <Grid container direction="column">
+                  <Typography
+                    textAlign="center"
+                    pb={2}
+                    variant="h4"
+                    color="secondary">
                     Indiquez votre nouveau mot de passe
                   </Typography>
-                  <Box
-                    display="flex"
-                    flexDirection={{xs: 'column', md: 'row'}}
-                    justifyContent="flex-start"
-                    gap={{md: 4}}>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="newPassword"
-                      label="Nouveau mot de passe"
-                      type="password"
-                      id="newPassword"
-                      autoFocus
-                      value={newPassword}
-                      error={!!passwordErrorText}
-                      helperText={passwordErrorText}
-                      onChange={handleChangeNewPassword}
-                      sx={{
-                        backgroundColor: 'white',
-                        borderRadius: '20px',
-                        width: {xs: '100%', md: '40%'},
-                      }}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="checkPassword"
-                      label="Confirmer le mot de passe"
-                      type="password"
-                      id="checkPassword"
-                      value={checkPassword}
-                      error={!!checkPasswordErrorText}
-                      helperText={checkPasswordErrorText}
-                      onChange={handleChangeCheckPassword}
-                      sx={{
-                        backgroundColor: 'white',
-                        borderRadius: '20px',
-                        width: {xs: '100%', md: '40%'},
-                      }}
-                    />
-                  </Box>
-                  <Box textAlign="left">
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      sx={{
-                        mt: 3,
-                        textTransform: 'capitalize',
-                        width: {xs: '100%', md: 'auto'},
-                      }}>
-                      {!pendingSend ? (
-                        'Envoyer'
-                      ) : (
-                        <CircularProgress size={20} sx={{color: 'white'}} />
-                      )}
-                    </Button>
-                  </Box>
-                  {errorMessage && (
-                    <Typography variant="body1" color="error">
-                      {errorMessage}
-                    </Typography>
-                  )}
+                  <Grid
+                    container
+                    item
+                    xs={12}
+                    spacing={{xs: 0, md: 2}}
+                    direction="row">
+                    <Grid item xs={12} sm={6} md={12} lg={6}>
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="newPassword"
+                        label="Nouveau mot de passe"
+                        type="password"
+                        id="newPassword"
+                        autoFocus
+                        value={newPassword}
+                        error={!!passwordErrorText}
+                        helperText={passwordErrorText}
+                        onChange={handleChangeNewPassword}
+                        sx={{
+                          backgroundColor: 'white',
+                          borderRadius: 6,
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={12} lg={6}>
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="checkPassword"
+                        label="Confirmer le mot de passe"
+                        type="password"
+                        id="checkPassword"
+                        value={checkPassword}
+                        error={!!checkPasswordErrorText}
+                        helperText={checkPasswordErrorText}
+                        onChange={handleChangeCheckPassword}
+                        sx={{
+                          backgroundColor: 'white',
+                          borderRadius: 6,
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Box textAlign="center">
+                  <Button
+                    size="large"
+                    disabled={pendingSend}
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      mt: 3,
+                      textTransform: 'capitalize',
+                    }}>
+                    {!pendingSend ? (
+                      'Envoyer'
+                    ) : (
+                      <CircularProgress size={20} sx={{color: 'white'}} />
+                    )}
+                  </Button>
                 </Box>
+                {errorMessage && (
+                  <Alert severity="error" sx={{mt: 4}}>
+                    {errorMessage}
+                  </Alert>
+                )}
+                {success && (
+                  <Alert severity="success" sx={{mt: 4}}>
+                    Mot de passe mis à jour.
+                  </Alert>
+                )}
               </Box>
             )}
-            {success && (
-              <Paper
-                elevation={4}
-                sx={{
-                  maxWidth: 400,
-                  p: 4,
-                  mt: 4,
-                  mb: {xs: 10, md: 12},
-                  mx: 'auto',
-                  textAlign: 'center',
-                }}>
-                <Box>
-                  Mot de passe mis à jour.
-                  <Link href="/login" style={{textAlign: 'center'}}>
-                    <Button variant="outlined">Se connecter</Button>
-                  </Link>
-                </Box>
-              </Paper>
-            )}
-          </Paper>
+          </Box>
+          {success && (
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              gap={4}
+              sx={{
+                mt: 1,
+                bgcolor: 'white',
+                px: {xs: 3, md: 5},
+                py: {xs: 4, md: 5},
+                boxShadow: 2,
+                width: {xs: '90%', md: '55%'},
+                borderRadius: 6,
+                mx: 'auto',
+                maxWidth: '700px',
+                position: 'relative',
+              }}>
+              <Typography textAlign="center" variant="h4" color="secondary">
+                Mot de passe mis à jour.
+              </Typography>
+              <Link href="/login" style={{textAlign: 'center'}}>
+                <Button size="large" variant="contained">
+                  Se connecter
+                </Button>
+              </Link>
+            </Box>
+          )}
         </Container>
       </WebsiteLayout>
     </>
