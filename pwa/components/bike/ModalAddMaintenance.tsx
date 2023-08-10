@@ -115,13 +115,6 @@ const ModalAddMaintenance = ({
         );
       } else {
         maintenance = await maintenanceResource.post(bodyRequest);
-        setName('');
-        setDescription('');
-        setPhoto(null);
-        setInvoice(null);
-        setNewPhoto(null);
-        setNewInvoice(null);
-        setSelectedDate(null);
       }
       handleCloseModal(true);
     } catch (e: any) {
@@ -132,6 +125,13 @@ const ModalAddMaintenance = ({
         )}`
       );
     }
+    setName('');
+    setDescription('');
+    setPhoto(null);
+    setInvoice(null);
+    setNewPhoto(null);
+    setNewInvoice(null);
+    setSelectedDate(null);
     setPendingAdd(false);
   };
 
