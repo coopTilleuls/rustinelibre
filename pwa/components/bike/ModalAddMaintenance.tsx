@@ -180,9 +180,14 @@ const ModalAddMaintenance = ({
             maintenance['@id'],
             bodyRequest
           );
-          isPhoto ? setPhoto(mediaObject) : setInvoice(mediaObject);
         }
-        isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
+        if (isPhoto) {
+          setPhoto(mediaObject);
+          setLoadingPhoto(false);
+        } else {
+          setInvoice(mediaObject);
+          setLoadingInvoice(false);
+        }
       } catch (e: any) {
         isPhoto ? setLoadingPhoto(false) : setLoadingInvoice(false);
         setErrorMessage(
