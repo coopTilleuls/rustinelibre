@@ -216,3 +216,18 @@ Les utilisateurs du site sont répartis dans 4 rôles différents :
 - <b>ROLE_EMPLOYEE</b>, il s'agit des employés des solutions de réparation
 - <b>ROLE_ADMIN</b>, il s'agit des administrateurs de la plateforme
 
+
+## Mise à jour des créneaux disponibles et des rendez-vous
+
+Une tâche CRON doit être joué toutes les 30min pour mettre à jour le prermier créneau disponible de chaque réparateur (lorsqu'il n'est pas déjà actualisé*)
+
+```
+php bin/console app:repairer:update-first-slot-available
+```
+
+Une autre commande (facultative) permet de mettre à jour le status des rendez vous lorsque ces derniers n'ont pas obtenu de réponse depuis 72 heures ou que leur date est dépassée. Elle peut également être jouée quotidiennement :
+
+
+```
+php bin/console app:appointments:cancel-old
+```
