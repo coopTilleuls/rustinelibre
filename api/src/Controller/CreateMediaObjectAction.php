@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -22,7 +23,7 @@ final class CreateMediaObjectAction extends AbstractController
         private readonly Security $security,
         private readonly TranslatorInterface $translator,
         private readonly MediaObjectManager $mediaObjectManager,
-        private readonly SluggerInterface $slugger
+        private readonly SluggerInterface $slugger,
     ) {
     }
 
@@ -45,13 +46,15 @@ final class CreateMediaObjectAction extends AbstractController
 
     public function addFilePath(MediaObject $mediaObject): MediaObject
     {
+        $slugger = new AsciiSlugger();
+
         if (!$mediaObject->file instanceof UploadedFile) {
             $randomString = bin2hex(random_bytes(16));
-            $mediaObject->filePath = sprintf('%d-%s.%s', time(), $randomString, $mediaObject->file->guessExtension());
+            $mediaObject->filePath = $slugger->slug(sprintf('%d-%s.%s', time(), $randomString, $mediaObject->file->guessExtension()))->toString();
         } else {
             $parts = explode('.', $mediaObject->file->getClientOriginalName());
             $slugName = (string) $this->slugger->slug(strtolower($parts[0]));
-            $mediaObject->filePath = sprintf('%d-%s.%s', time(), $slugName, $mediaObject->file->getClientOriginalExtension());
+            $mediaObject->filePath = $slugger->slug(sprintf('%d-%s.%s', time(), $slugName, $mediaObject->file->getClientOriginalExtension()))->toString();
         }
 
         return $mediaObject;

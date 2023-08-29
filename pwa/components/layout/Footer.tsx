@@ -47,8 +47,8 @@ const Footer = ({user}: FooterProps): JSX.Element => {
       return;
     }
 
-    const countUnread = await discussionResource.countUnread({});
-    setUnreadMessages(countUnread.count);
+    const unreadMessagesCount = await discussionResource.countUnread({});
+    setUnreadMessages(unreadMessagesCount.count);
   };
 
   const fetchDiscussions = async () => {
@@ -65,8 +65,9 @@ const Footer = ({user}: FooterProps): JSX.Element => {
   };
 
   useEffect(() => {
+    countUnread();
+
     if (user) {
-      countUnread();
       fetchDiscussions();
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
