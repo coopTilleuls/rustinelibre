@@ -29,7 +29,7 @@ appointment.slotTime.not_blank: Un créneau doit être sélectionné pour prendr
 appointment.slotTime.greater_than: Le créneau sélectionné doit être postérieur à {{ compared_value }}.
 
 #Appointment state
-appointment.state.status: Cet état n'est pas un status valide.
+appointment.state.status: Cet état n'est pas un statut valide.
 
 # AutoDiagnostic assert validation messages
 autoDiagnostic.appointment.owner: Ce rendez-vous concerne un autre utilisateur.
@@ -128,7 +128,7 @@ repairer.duration.slot: La durée des créneaux doit être de 30, 60 ou 180 (min
 400_badRequest.repairer.create.intervention: Il doit y avoir une solution de réparation pour créer une prestation.
 400_badRequest.slot.not.available: Ce créneau n'est pas disponible.
 400_badRequest.availability.filter: Le filtre des créneaux disponibles ("availability filter")n'accepte que les valeurs "ASC" ou "DESC".
-400_badRequest.proximity.filter: Les paramètres donnés dans ke filtre de proximité ("proximity filter") n'ont pas le bon format, cela devrait être ?proximity=50.43321,3.03943.
+400_badRequest.proximity.filter: Les paramètres donnés dans le filtre de proximité ("proximity filter") n'ont pas le bon format, cela devrait être ?proximity=50.43321,3.03943.
 400_badRequest.user.search.filter: Le format donné pour la recherche d'utilisateur est incorrect, il doit être sous la forme ?userSearch=raphael.
 400_badRequest.repairer.search.filter: Le format donné pour la recherche de réparateur est incorrect, il doit être sous la forme ?repairerSearch=raphael.
 400_badRequest.around.filter: Le format donné pour le filtre de la recherche aux alentours est incorrect, il doit être sous la forme ?around[cityName]=latitude,longitude.
