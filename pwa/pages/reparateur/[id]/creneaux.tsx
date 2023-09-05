@@ -225,6 +225,8 @@ const RepairerSlots: NextPageWithLayout = () => {
               }>
               {tunnelStep == 'slots' && (
                 <Link
+                  legacyBehavior
+                  passHref
                   href={{
                     pathname: `/reparateur/${repairer?.id}-${repairer?.slug}`,
                     query: router.query,

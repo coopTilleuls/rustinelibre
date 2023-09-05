@@ -116,7 +116,12 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   };
 
   return (
-    <Box bgcolor="lightprimary.main" position="relative" width="100%" mb={6}>
+    <Box
+      bgcolor="lightprimary.main"
+      position="relative"
+      width="100%"
+      mb={6}
+      overflow="hidden">
       <Container
         sx={{
           display: 'flex',

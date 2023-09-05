@@ -586,7 +586,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                 Votre demande d&apos;inscription a bien été enregistrée. Elle
                 est désormais en attente de validation et sera rapidement
                 traitée.
-                <Link href="/">
+                <Link href="/" legacyBehavior passHref>
                   <Button variant="outlined" sx={{marginTop: '30px'}}>
                     Retour à l&apos;accueil
                   </Button>

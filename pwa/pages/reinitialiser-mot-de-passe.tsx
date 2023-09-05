@@ -240,7 +240,11 @@ const PasswordReset: NextPageWithLayout = ({
               <Typography textAlign="center" variant="h4" color="secondary">
                 Mot de passe mis à jour.
               </Typography>
-              <Link href="/login" style={{textAlign: 'center'}}>
+              <Link
+                legacyBehavior
+                passHref
+                href="/login"
+                style={{textAlign: 'center'}}>
                 <Button size="large" variant="contained">
                   Se connecter
                 </Button>
