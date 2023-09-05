@@ -54,7 +54,7 @@ const RemoveAccount = (): JSX.Element => {
         position: 'relative',
       }}>
       <Typography textAlign="center" pb={2} variant="h4" color="secondary">
-        Supprimer de mon compte
+        Supprimer mon compte
       </Typography>
       <Box display="flex" flexDirection="column" alignItems="center">
         <Button

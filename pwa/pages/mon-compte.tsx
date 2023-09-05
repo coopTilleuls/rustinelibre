@@ -43,7 +43,6 @@ const MyProfile: NextPageWithLayout = () => {
             color="primary">
             Mon compte
           </Typography>
-
           {user && (
             <Box
               py={4}
