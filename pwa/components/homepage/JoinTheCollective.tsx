@@ -60,6 +60,7 @@ const JoinTheCollective = () => {
           </Button>
         </Link>
         <Box
+          display={{xs: 'none', md: 'block'}}
           zIndex={5}
           sx={{
             position: 'absolute',
