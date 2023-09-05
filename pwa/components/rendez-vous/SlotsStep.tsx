@@ -13,7 +13,7 @@ interface SlotsStepProps {
 
 const SlotsStep = ({handleSelectSlot, openingHours}: SlotsStepProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [displayCount, setDisplayCount] = useState<number>(7);
+  const [displayCount, setDisplayCount] = useState<number>(6);
 
   const toggleExpand = (index: number) => {
     if (openIndex === index) {
@@ -117,7 +117,7 @@ const SlotsStep = ({handleSelectSlot, openingHours}: SlotsStepProps) => {
           <Button
             variant="outlined"
             size="large"
-            onClick={() => setDisplayCount(displayCount + 7)}>
+            onClick={() => setDisplayCount(displayCount + 6)}>
             Voir plus de disponibilités
           </Button>
         )}

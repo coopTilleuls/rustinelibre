@@ -109,7 +109,10 @@ const AdminProfile: NextPageWithLayout = () => {
                         <CircularProgress size={20} sx={{color: 'white'}} />
                       )}
                     </Button>
-                    <Link href={'/admin/modifier-mot-de-passe'}>
+                    <Link
+                      href={'/admin/modifier-mot-de-passe'}
+                      legacyBehavior
+                      passHref>
                       <Button variant="contained">
                         {!pendingUpdate ? (
                           'Changer mon mot de passe'

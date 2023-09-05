@@ -67,7 +67,7 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
         />
         <Stack spacing={4} flex={1} pt={2}>
           <Box>
-            <Link href={linkHref}>
+            <Link legacyBehavior passHref href={linkHref}>
               <Button variant="outlined" color="secondary" size="small">
                 Retour
               </Button>

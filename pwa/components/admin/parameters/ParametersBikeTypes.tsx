@@ -68,7 +68,10 @@ export const ParametersBikeTypes = (): JSX.Element => {
     <Box>
       <Typography variant="h5">
         Types de vélo
-        <Link href="/admin/parametres/type-de-velo/ajouter">
+        <Link
+          legacyBehavior
+          passHref
+          href="/admin/parametres/type-de-velo/ajouter">
           <Button
             color="secondary"
             variant="contained"

@@ -76,7 +76,10 @@ export const ParametersRepairerTypes = (): JSX.Element => {
     <Box>
       <Typography variant="h5">
         Types de réparateurs
-        <Link href="/admin/parametres/type-de-reparateur/ajouter">
+        <Link
+          legacyBehavior
+          passHref
+          href="/admin/parametres/type-de-reparateur/ajouter">
           <Button
             variant="contained"
             color="secondary"

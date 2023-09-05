@@ -112,7 +112,10 @@ export const CustomerBikesList = ({
                   </Button>
                 </TableCell>
                 <TableCell align="left" sx={{cursor: 'pointer'}}>
-                  <Link href={`/sradmin/clients/velos/${bike.id}`}>
+                  <Link
+                    legacyBehavior
+                    passHref
+                    href={`/sradmin/clients/velos/${bike.id}`}>
                     <Button
                       variant="outlined"
                       startIcon={<FormatListBulletedIcon />}>
