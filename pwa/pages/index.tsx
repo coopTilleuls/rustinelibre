@@ -50,7 +50,7 @@ const Home = () => {
             width="100%"
             display="flex"
             flexDirection="column">
-            <Grid container spacing={4} width="100%">
+            <Grid container spacing={4} width="100%" sx={{mx: 'auto'}}>
               {args.map((arg) => (
                 <Grid xs={12} md={4} key={arg.title}>
                   <Box
