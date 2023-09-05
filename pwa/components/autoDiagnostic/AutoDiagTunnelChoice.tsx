@@ -21,7 +21,10 @@ export const AutoDiagTunnelChoice = (): JSX.Element => {
           mt={6}
           display="flex"
           justifyContent="space-between">
-          <Link href={`/rendez-vous/recapitulatif/${appointment.id}`}>
+          <Link
+            legacyBehavior
+            passHref
+            href={`/rendez-vous/recapitulatif/${appointment.id}`}>
             <Button variant="outlined">Non</Button>
           </Link>
           <Button

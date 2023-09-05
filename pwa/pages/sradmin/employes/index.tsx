@@ -29,7 +29,7 @@ const Employees = () => {
               my: 2,
             }}>
             <Typography variant="h5">Liste des employés</Typography>
-            <Link href={'/sradmin/employes/ajouter'}>
+            <Link href="/sradmin/employes/ajouter" legacyBehavior passHref>
               <Button variant="contained" size="small" startIcon={<AddIcon />}>
                 Ajouter un employé
               </Button>

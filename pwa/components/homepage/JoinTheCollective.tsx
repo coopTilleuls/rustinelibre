@@ -54,7 +54,7 @@ const JoinTheCollective = () => {
           Vous êtes réparateur ou réparatrice de vélos sur la métropole
           lilloise, Rustine libre vous file un vrai coup de pouce.
         </Typography>
-        <Link href="/reparateur/inscription">
+        <Link legacyBehavior passHref href="/reparateur/inscription">
           <Button variant="contained" size="large">
             Je rejoins le collectif
           </Button>

@@ -72,7 +72,7 @@ const CreateMaintenanceBooklet = () => {
             dernière réparation, son huile de chaîne préférée, ses rendez-vous,
             vous avez tout son suivi en poche&nbsp;!
           </Typography>
-          <Link href="/velos/mes-velos">
+          <Link legacyBehavior passHref href="/velos/mes-velos">
             <Button variant="contained" size="large">
               Je crée mon carnet
             </Button>

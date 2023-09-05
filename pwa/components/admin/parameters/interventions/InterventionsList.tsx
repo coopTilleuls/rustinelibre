@@ -92,7 +92,10 @@ export const InterventionsList = (): JSX.Element => {
     <Box>
       <Typography variant="h5" mb={4}>
         Prestations proposées
-        <Link href="/admin/parametres/interventions/ajouter">
+        <Link
+          legacyBehavior
+          passHref
+          href="/admin/parametres/interventions/ajouter">
           <Button
             variant="contained"
             color="secondary"

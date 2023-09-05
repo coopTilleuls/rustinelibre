@@ -120,7 +120,7 @@ const Faq = () => {
                   </Accordion>
                 ))}
               </Box>
-              <Link href="/faq">
+              <Link legacyBehavior passHref href="/faq">
                 <Button variant="contained" color="secondary" size="large">
                   D&apos;autres questions ?
                 </Button>
