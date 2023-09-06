@@ -59,6 +59,8 @@ const DiscussionListItem = ({
 
   return (
     <Link
+      legacyBehavior
+      passHref
       key={discussion.id}
       href={
         isCustomer
