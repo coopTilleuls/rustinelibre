@@ -20,7 +20,7 @@ final readonly class NewMessageNotification
             title: 'Nouveau message',
             body: $this->buildMessage($message),
             params: [
-                'route' => ($message->sender->isBoss() || $message->sender->isEmployee()) ? '/sradmin/messagerie' : '/messagerie',
+                'route' => (!$message->sender->isBoss() && !$message->sender->isEmployee()) ? '/sradmin/messagerie' : '/messagerie',
             ]
         );
 

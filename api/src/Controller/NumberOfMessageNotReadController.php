@@ -21,9 +21,9 @@ readonly class NumberOfMessageNotReadController
 
     public function __invoke(): JsonResponse
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->security->getUser();
-        $notRead = $this->discussionMessageRepository->getNumberOfMessageNotRead(user: $user);
+        $notRead = $user ? $this->discussionMessageRepository->getNumberOfMessageNotRead(user: $user) : 0;
 
         return new JsonResponse(['count' => $notRead]);
     }
