@@ -19,7 +19,9 @@ messaging.onBackgroundMessage((payload) => {
         vibrate: [200, 100, 200]
     };
 
-    self.registration.showNotification(title, options);
+    if (options.data.url) {
+        self.registration.showNotification(title, options);
+    }
 });
 
 self.addEventListener('notificationclick', function (event) {
