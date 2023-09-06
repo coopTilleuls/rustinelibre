@@ -5,6 +5,7 @@ import {legalNoticesFooter} from '@data/legal-notices-footer';
 import Image from 'next/image';
 import Logo from '@components/common/Logo';
 import rustineViolet from '@public/img/rustine-violet.svg';
+import fundersLogos from '@public/img/funders-logos.png';
 
 const LegalNoticesFooter = (): JSX.Element => {
   return (
@@ -61,6 +62,13 @@ const LegalNoticesFooter = (): JSX.Element => {
             </Fragment>
           );
         })}
+      </Box>
+      <Box width="100%" pt={4} maxWidth={{xs: 600, md: 700}} mx="auto">
+        <img
+          alt="Logo des financeurs du projet Rustine Libre"
+          src="/img/funders-logos.png"
+          style={{width: '100%'}}
+        />
       </Box>
     </Container>
   );
