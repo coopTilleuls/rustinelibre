@@ -26,11 +26,9 @@ final readonly class FirebaseNotifier
 
         $message = CloudMessage::fromArray([
             'token' => $notification->recipient->firebaseToken,
-            'notification' => [
+            'data' => [
                 'title' => $notification->title,
                 'body' => $notification->body,
-            ],
-            'data' => [
                 'image' => sprintf('%s/%s', $this->webAppUrl, $notification->image),
                 'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
                 'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',

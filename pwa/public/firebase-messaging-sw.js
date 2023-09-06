@@ -7,14 +7,14 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
 
-    const { title, body } = payload.notification;
+    const { title, body, image, icon, route } = payload.notification;
     const options = {
         title,
         body,
-        icon: payload.data.icon || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
-        image: payload.data.image || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
+        icon: icon || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
+        image: image || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
         data: {
-            url: payload.data.route ?? '/'
+            url: route ?? '/'
         },
         vibrate: [200, 100, 200]
     };
