@@ -7,7 +7,7 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
 
-    const { title, body, image, icon, route } = payload.notification;
+    const { title, body, image, icon, route } = payload.data;
     const options = {
         title,
         body,
