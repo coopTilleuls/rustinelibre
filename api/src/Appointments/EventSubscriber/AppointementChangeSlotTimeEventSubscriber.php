@@ -40,7 +40,12 @@ readonly class AppointementChangeSlotTimeEventSubscriber implements EventSubscri
         }
 
         $originalEntity = $this->entityManager->getUnitOfWork()->getOriginalEntityData($object);
-        if (!array_key_exists('slotTime', $originalEntity) || $originalEntity['slotTime'] === $object->slotTime) {
+        if (!array_key_exists('slotTime', $originalEntity) || !$originalEntity['slotTime'] instanceof \DateTimeInterface) {
+            return;
+        }
+
+        // Slot time does not change
+        if ($originalEntity['slotTime']->getTimestamp() === $object->slotTime->getTimestamp()) {
             return;
         }
 

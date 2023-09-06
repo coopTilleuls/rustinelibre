@@ -1,4 +1,4 @@
-# Rustine libre
+# Bikelib
 
 Plateforme de mise en relation avec des réparateurs de vélos
 

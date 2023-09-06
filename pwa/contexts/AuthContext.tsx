@@ -18,6 +18,7 @@ import {
   setRefreshToken,
   setToken,
 } from '../helpers';
+import {removeFirebaseToken} from '@helpers/firebaseHelper';
 
 type AuthenticationValues = {
   email: string;
@@ -136,6 +137,9 @@ const useProviderAuth = () => {
   };
 
   const logout = async () => {
+    if (user) {
+      removeFirebaseToken(user);
+    }
     removeToken();
     removeRefreshToken();
     setUser(null);
