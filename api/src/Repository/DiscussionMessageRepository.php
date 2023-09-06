@@ -74,7 +74,7 @@ class DiscussionMessageRepository extends ServiceEntityRepository
             ->andWhere($user->repairer ? 'd.repairer = :repairer' : 'd.customer = :customer')
             ->setParameter('user', $user)
             ->setParameter('alreadyRead', false)
-            ->setParameter($user->repairer ? 'repairer' : 'customer', $user)
+            ->setParameter($user->repairer ? 'repairer' : 'customer', $user->repairer ?: $user)
             ->getQuery()
             ->getSingleScalarResult();
     }

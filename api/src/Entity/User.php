@@ -192,6 +192,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->bikes = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->repairer
+            ? $this->repairer->name
+            : ($this->repairerEmployee && $this->repairerEmployee->repairer ? $this->repairerEmployee->repairer->name : sprintf('%s %s', $this->firstName, $this->lastName));
+    }
+
     /**
      * A visual identifier that represents this user.
      *
