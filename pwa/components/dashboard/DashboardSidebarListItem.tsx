@@ -7,7 +7,9 @@ import {
   ListItem,
   Typography,
   Link,
+  useMediaQuery,
 } from '@mui/material';
+import theme from 'styles/theme';
 
 interface DashboardSidebarListItemProps {
   text: string;
@@ -23,6 +25,7 @@ const DashboardSidebarListItem = ({
   path,
 }: DashboardSidebarListItemProps): JSX.Element => {
   const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleMenuClick = () => {
     router.push(path);
@@ -46,17 +49,20 @@ const DashboardSidebarListItem = ({
             }}>
             {icon}
           </ListItemIcon>
-          <ListItemText
-            disableTypography
-            primary={
-              <Typography
-                sx={{
-                  color: path === router.pathname ? 'primary.main' : 'grey.600',
-                }}>
-                {text}
-              </Typography>
-            }
-          />
+          {!isMobile && (
+            <ListItemText
+              disableTypography
+              primary={
+                <Typography
+                  sx={{
+                    color:
+                      path === router.pathname ? 'primary.main' : 'grey.600',
+                  }}>
+                  {text}
+                </Typography>
+              }
+            />
+          )}
         </ListItemButton>
       </ListItem>
     </Link>
