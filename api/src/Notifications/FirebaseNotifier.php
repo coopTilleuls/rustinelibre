@@ -43,13 +43,6 @@ final readonly class FirebaseNotifier
         $androidConfig = AndroidConfig::fromArray([
             'ttl' => '7200s',
             'priority' => 'normal',
-            // 'notification' => [
-            //     'title' => $notification->title,
-            //     'body' => $notification->body,
-            //     'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-            //     'color' => $notification->color,
-            //     'sound' => 'default',
-            // ],
             'data' => [
                 'title' => $notification->title,
                 'body' => $notification->body,
