@@ -71,14 +71,16 @@ const RepairerPresentationCard = ({
             {repairer.name}
           </Typography>
         )}
-        <Typography
-          variant="body2"
-          mb={1}
-          color="text.secondary"
-          sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-          <FmdGoodIcon color="primary" /> {repairer.streetNumber}{' '}
-          {repairer.street}
-        </Typography>
+        {repairer.street && repairer.streetNumber && (
+          <Typography
+            variant="body2"
+            mb={1}
+            color="text.secondary"
+            sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+            <FmdGoodIcon color="primary" /> {repairer.streetNumber}{' '}
+            {repairer.street}
+          </Typography>
+        )}
         <Typography
           variant="body2"
           mb={1}
