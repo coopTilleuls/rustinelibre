@@ -8,7 +8,6 @@ use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\WebPushConfig;
 use Psr\Log\LoggerInterface;
 
 final readonly class FirebaseNotifier
@@ -25,60 +24,49 @@ final readonly class FirebaseNotifier
             return;
         }
 
-        $config = WebPushConfig::fromArray([
+        $message = CloudMessage::fromArray([
+            'token' => $notification->recipient->firebaseToken,
+            'notification' => [
+                'title' => $notification->title,
+                'body' => $notification->body,
+            ],
             'data' => [
                 'title' => $notification->title,
                 'body' => $notification->body,
                 'image' => sprintf('%s/%s', $this->webAppUrl, $notification->image),
+                'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
                 'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
+            ],
+            'webpush' => [
+                'headers' => [
+                    'Urgency' => 'high',
+                ],
             ],
         ]);
 
-        $message = CloudMessage::new()->withWebPushConfig($config);
+        $androidConfig = AndroidConfig::fromArray([
+            'ttl' => '7200s',
+            'priority' => 'normal',
+            // 'notification' => [
+            //     'title' => $notification->title,
+            //     'body' => $notification->body,
+            //     'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
+            //     'color' => $notification->color,
+            //     'sound' => 'default',
+            // ],
+            'data' => [
+                'badge' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
+                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
+                'title' => $notification->title,
+                'body' => $notification->body,
+                'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
+                'color' => $notification->color,
+                'sound' => 'default',
+            ],
+        ]);
 
-        // $message = CloudMessage::fromArray([
-        //     'token' => $notification->recipient->firebaseToken,
-        //     'notification' => [
-        //         'title' => $notification->title,
-        //         'body' => $notification->body,
-        //     ],
-        //     'data' => [
-        //         'title' => $notification->title,
-        //         'body' => $notification->body,
-        //         'image' => sprintf('%s/%s', $this->webAppUrl, $notification->image),
-        //         'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-        //         'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
-        //     ],
-        //     'webpush' => [
-        //         'headers' => [
-        //             'Urgency' => 'high',
-        //         ],
-        //     ],
-        // ]);
-        //
-        // $androidConfig = AndroidConfig::fromArray([
-        //     'ttl' => '7200s',
-        //     'priority' => 'normal',
-        //     'notification' => [
-        //         'title' => $notification->title,
-        //         'body' => $notification->body,
-        //         'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-        //         'color' => $notification->color,
-        //         'sound' => 'default',
-        //     ],
-        //     'data' => [
-        //         'badge' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-        //         'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
-        //         'title' => $notification->title,
-        //         'body' => $notification->body,
-        //         'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-        //         'color' => $notification->color,
-        //         'sound' => 'default',
-        //     ],
-        // ]);
-        //
-        // $message = $message->withAndroidConfig($androidConfig);
-        //
+        $message = $message->withAndroidConfig($androidConfig);
+
         // $config = ApnsConfig::fromArray([
         //     'headers' => [
         //         'apns-priority' => '10',
@@ -94,7 +82,7 @@ final readonly class FirebaseNotifier
         //         ],
         //     ],
         // ]);
-        //
+
         // $message = $message->withApnsConfig($config);
 
         try {
