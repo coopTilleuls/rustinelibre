@@ -93,16 +93,10 @@ export const Notifications = (): JSX.Element => {
   const handleIncomingFcmMessages = useCallback(
     (messaging: Messaging): void => {
       onMessage(messaging, (payload) => {
-        const {title, body, icon, image} = payload.notification ?? {};
+        const {title, body} = payload.data ?? {};
         setNotification({
           title: title,
           body: body,
-          icon: payload.data
-            ? payload.data.icon
-            : 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
-          image: payload.data
-            ? payload.data.image
-            : 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
         });
         setOpen(true);
         setUrlRedirect(payload.data ? payload.data.route : null);
