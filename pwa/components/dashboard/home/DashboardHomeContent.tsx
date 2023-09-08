@@ -65,11 +65,15 @@ export const DashboardHomeContent = ({
   };
 
   const subscribeMercureAppointments = async (): Promise<void> => {
+    console.log('sub');
+
     const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
     const hub = new URL(hubUrl);
     hub.searchParams.append('topic', `${ENTRYPOINT}/appointments`);
     const eventSource = new EventSource(hub);
     eventSource.onmessage = (event) => {
+
+      console.log('here');
       fetchWaitingAppointments();
     };
   };

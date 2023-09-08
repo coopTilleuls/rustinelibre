@@ -29,7 +29,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
-    mercure: true,
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
     extraProperties: [
@@ -50,7 +49,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user",
     validationContext: ['groups' => ['transition']],
 )]
-#[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')", validationContext: ['groups' => ['default']])]
+#[Post(
+    security: "is_granted('IS_AUTHENTICATED_FULLY')",
+    validationContext: ['groups' => ['default']],
+    mercure: true
+)]
 #[Put(
     security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user",
     validationContext: ['groups' => ['default']],
