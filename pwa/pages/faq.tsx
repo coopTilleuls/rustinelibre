@@ -7,7 +7,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import {questions} from '@data/faq-questions';
 
 const Faq: NextPageWithLayout = () => {
   return (
@@ -16,72 +16,43 @@ const Faq: NextPageWithLayout = () => {
         <title>FAQ</title>
       </Head>
       <WebsiteLayout>
-        <Container sx={{width: {xs: '100%', md: '70%'}}}>
-          <Paper elevation={4} sx={{maxWidth: 800, p: 4, mt: 4, mx: 'auto'}}>
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-              <Avatar sx={{m: 1, backgroundColor: 'primary.main'}}>
-                <QuestionMarkIcon />
-              </Avatar>
-              <Typography
-                fontSize={{xs: 28, md: 30}}
-                fontWeight={600}
-                sx={{textAlign: 'center'}}>
-                Les questions les plus posées
-              </Typography>
+        <Box
+          bgcolor="lightprimary.light"
+          height="100%"
+          width="100%"
+          position="absolute"
+          top="0"
+          left="0"
+          zIndex="-1"
+        />
+        <Container>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            py={4}
+            gap={8}>
+            <Typography variant="h1" color="primary">
+              Les questions les plus posées
+            </Typography>
+            <Box>
+              {questions.map(({id, question, answer}) => {
+                return (
+                  <Accordion key={id}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls={`panel-${id}-content`}
+                      id={`panel-${id}-header`}>
+                      <Typography>{question}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography>{answer}</Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                );
+              })}
             </Box>
-
-            <Accordion sx={{mt: 5}}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header">
-                <Typography>Qui sommes nous ?</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2a-content"
-                id="panel2a-header">
-                <Typography>Nous rejoindre</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2a-content"
-                id="panel2a-header">
-                <Typography>Réparer son vélo</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </Paper>
+          </Box>
         </Container>
       </WebsiteLayout>
     </>
