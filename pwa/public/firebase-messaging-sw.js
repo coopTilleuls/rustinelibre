@@ -11,10 +11,8 @@ messaging.onBackgroundMessage((payload) => {
     const options = {
         title: title,
         body: payload.data.body,
-        image: payload.data.image,
-        icon: payload.data.image,
-        // icon: payload.data.icon || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
-        // image: payload.data.image || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
+        image: payload.data.image || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
+        icon: payload.data.image || 'https://cdn-icons-png.flaticon.com/512/565/565422.png',
         data: {
             url: payload.data.route ?? '/'
         },
