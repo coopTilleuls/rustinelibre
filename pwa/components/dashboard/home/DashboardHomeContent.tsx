@@ -11,8 +11,6 @@ import DashboardHomeEmployees from '@components/dashboard/home/DashboardHomeEmpl
 import {User} from '@interfaces/User';
 import {Repairer} from '@interfaces/Repairer';
 import {isBoss} from '@helpers/rolesHelpers';
-import {Messaging, onMessage} from "firebase/messaging";
-import {getFirebaseApp, getMessaging} from "@config/firebase";
 
 interface DashboardHomeContentProps {
   repairer: Repairer;
@@ -64,22 +62,6 @@ export const DashboardHomeContent = ({
     const response = await appointmentResource.getAll(true, params);
     return response['hydra:member'];
   };
-
-  const handleIncomingFcmMessages = useCallback(
-      (messaging: Messaging): void => {
-        onMessage(messaging, (payload) => {
-          console.log('Nouveau RDV');
-          fetchWaitingAppointments();
-        });
-      },
-      []
-  );
-
-  useEffect(() => {
-    const firebaseApp = getFirebaseApp();
-    const messaging = getMessaging(firebaseApp);
-    handleIncomingFcmMessages(messaging);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>
