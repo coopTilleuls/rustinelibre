@@ -31,8 +31,6 @@ final readonly class FirebaseNotifier
                 'body' => $notification->body,
             ],
             'data' => [
-                'title' => $notification->title,
-                'body' => $notification->body,
                 'image' => sprintf('%s/%s', $this->webAppUrl, $notification->image),
                 'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
                 'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
@@ -47,43 +45,38 @@ final readonly class FirebaseNotifier
         $androidConfig = AndroidConfig::fromArray([
             'ttl' => '7200s',
             'priority' => 'normal',
-            // 'notification' => [
-            //     'title' => $notification->title,
-            //     'body' => $notification->body,
-            //     'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-            //     'color' => $notification->color,
-            //     'sound' => 'default',
-            // ],
-            'data' => [
-                'badge' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
-                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
+            'notification' => [
                 'title' => $notification->title,
                 'body' => $notification->body,
                 'icon' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
                 'color' => $notification->color,
                 'sound' => 'default',
             ],
+            'data' => [
+                'badge' => sprintf('%s/%s', $this->webAppUrl, $notification->icon),
+                'route' => array_key_exists('route', $notification->params) ? $notification->params['route'] : '/',
+            ],
         ]);
 
         $message = $message->withAndroidConfig($androidConfig);
 
-        // $config = ApnsConfig::fromArray([
-        //     'headers' => [
-        //         'apns-priority' => '10',
-        //     ],
-        //     'payload' => [
-        //         'aps' => [
-        //             'alert' => [
-        //                 'title' => $notification->title,
-        //                 'body' => $notification->body,
-        //             ],
-        //             'badge' => 42,
-        //             'sound' => 'default',
-        //         ],
-        //     ],
-        // ]);
+        $config = ApnsConfig::fromArray([
+            'headers' => [
+                'apns-priority' => '10',
+            ],
+            'payload' => [
+                'aps' => [
+                    'alert' => [
+                        'title' => $notification->title,
+                        'body' => $notification->body,
+                    ],
+                    'badge' => 42,
+                    'sound' => 'default',
+                ],
+            ],
+        ]);
 
-        // $message = $message->withApnsConfig($config);
+        $message = $message->withApnsConfig($config);
 
         try {
             $this->messaging->send($message);
