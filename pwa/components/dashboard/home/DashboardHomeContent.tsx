@@ -11,7 +11,7 @@ import DashboardHomeEmployees from '@components/dashboard/home/DashboardHomeEmpl
 import {User} from '@interfaces/User';
 import {Repairer} from '@interfaces/Repairer';
 import {isBoss} from '@helpers/rolesHelpers';
-import {ENTRYPOINT} from "@config/entrypoint";
+import {ENTRYPOINT} from '@config/entrypoint';
 
 interface DashboardHomeContentProps {
   repairer: Repairer;
