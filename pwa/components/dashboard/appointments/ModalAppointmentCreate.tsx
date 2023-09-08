@@ -280,10 +280,11 @@ const ModalAppointmentCreate = ({
     setLoading(false);
     setDetails(false);
     setSuccess(false);
-    handleCloseModal(false);
+    handleCloseModal(true);
   };
 
   const handleSuccess = () => {
+    setErrorMessage(null);
     setSuccess(true);
     router.push(`/sradmin/agenda?selectedDate=${slotSelected}`);
     setTimeout(async () => {
