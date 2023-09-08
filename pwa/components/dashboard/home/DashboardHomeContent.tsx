@@ -68,6 +68,7 @@ export const DashboardHomeContent = ({
   const handleIncomingFcmMessages = useCallback(
       (messaging: Messaging): void => {
         onMessage(messaging, (payload) => {
+          console.log('Nouveau RDV');
           fetchWaitingAppointments();
         });
       },
@@ -78,8 +79,7 @@ export const DashboardHomeContent = ({
     const firebaseApp = getFirebaseApp();
     const messaging = getMessaging(firebaseApp);
     handleIncomingFcmMessages(messaging);
-
-  }, [handleIncomingFcmMessages]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>
