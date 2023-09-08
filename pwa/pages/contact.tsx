@@ -12,9 +12,11 @@ import {
   Alert,
   CircularProgress,
   Grid,
+  useMediaQuery,
 } from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {errorRegex} from '@utils/errorRegex';
+import theme from 'styles/theme';
 
 const cfTurnstileAPIKey = process.env
   .NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY as string;
@@ -38,6 +40,8 @@ const Contact: NextPageWithLayout = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [status, setStatus] = useState<Status | null>(null);
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleSubmit = async () => {
     try {
@@ -228,37 +232,39 @@ const Contact: NextPageWithLayout = () => {
                     />
                   </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Adresse email"
-                    name="email"
-                    autoComplete="email"
-                    value={email}
-                    error={!!email && !!emailError}
-                    helperText={!!email && emailError}
-                    inputProps={{maxLength: 180}}
-                    onChange={handleChangeEmail}
-                  />
+                <Grid container item xs={12} spacing={2} direction="column">
+                  <Grid item xs={12} sm={6} md={12} lg={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="Adresse email"
+                      name="email"
+                      autoComplete="email"
+                      value={email}
+                      error={!!email && !!emailError}
+                      helperText={!!email && emailError}
+                      inputProps={{maxLength: 180}}
+                      onChange={handleChangeEmail}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={12} lg={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="message"
+                      label="Message"
+                      name="message"
+                      multiline
+                      rows={5}
+                      value={message}
+                      error={!!message && !!messageError}
+                      helperText={!!message && messageError}
+                      onChange={handleChangeMessage}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="message"
-                    label="Message"
-                    name="message"
-                    multiline
-                    rows={5}
-                    value={message}
-                    error={!!message && !!messageError}
-                    helperText={!!message && messageError}
-                    onChange={handleChangeMessage}
-                  />
-                </Grid>
-                <Grid item xs={12} mx={'auto'}>
+                <Grid item xs={12} sm={6} md={12} lg={6} mx="auto" mb={1}>
                   <Turnstile
                     id="widget-1"
                     siteKey={cfTurnstileAPIKey}
@@ -266,6 +272,7 @@ const Contact: NextPageWithLayout = () => {
                       action: 'submit-form',
                       theme: 'light',
                       language: 'fr',
+                      size: isMobile ? 'compact' : 'normal',
                     }}
                     onError={() => setStatus('error')}
                     onExpire={() => setStatus('expired')}
