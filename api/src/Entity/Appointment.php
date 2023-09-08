@@ -29,6 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
+    mercure: true,
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
     extraProperties: [
