@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Box} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import DashboardNextAppointments from '@components/dashboard/home/DashboardNextAppointments';
@@ -11,7 +11,8 @@ import DashboardHomeEmployees from '@components/dashboard/home/DashboardHomeEmpl
 import {User} from '@interfaces/User';
 import {Repairer} from '@interfaces/Repairer';
 import {isBoss} from '@helpers/rolesHelpers';
-import {ENTRYPOINT} from '@config/entrypoint';
+import {Messaging, onMessage} from "firebase/messaging";
+import {getFirebaseApp, getMessaging} from "@config/firebase";
 
 interface DashboardHomeContentProps {
   repairer: Repairer;
@@ -64,23 +65,21 @@ export const DashboardHomeContent = ({
     return response['hydra:member'];
   };
 
-  const subscribeMercureAppointments = async (): Promise<void> => {
-    console.log('sub');
-
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
-    hub.searchParams.append('topic', `${ENTRYPOINT}/appointments`);
-    const eventSource = new EventSource(hub);
-    eventSource.onmessage = (event) => {
-
-      console.log('here');
-      fetchWaitingAppointments();
-    };
-  };
+  const handleIncomingFcmMessages = useCallback(
+      (messaging: Messaging): void => {
+        onMessage(messaging, (payload) => {
+          fetchWaitingAppointments();
+        });
+      },
+      []
+  );
 
   useEffect(() => {
-    subscribeMercureAppointments();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const firebaseApp = getFirebaseApp();
+    const messaging = getMessaging(firebaseApp);
+    handleIncomingFcmMessages(messaging);
+
+  }, [handleIncomingFcmMessages]);
 
   return (
     <Box>

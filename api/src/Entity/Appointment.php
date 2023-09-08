@@ -51,8 +51,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Post(
     security: "is_granted('IS_AUTHENTICATED_FULLY')",
-    validationContext: ['groups' => ['default']],
-    mercure: true
+    validationContext: ['groups' => ['default']]
 )]
 #[Put(
     security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user",
