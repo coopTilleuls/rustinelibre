@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import DashboardNextAppointments from '@components/dashboard/home/DashboardNextAppointments';
@@ -11,6 +11,7 @@ import DashboardHomeEmployees from '@components/dashboard/home/DashboardHomeEmpl
 import {User} from '@interfaces/User';
 import {Repairer} from '@interfaces/Repairer';
 import {isBoss} from '@helpers/rolesHelpers';
+import {ENTRYPOINT} from "@config/entrypoint";
 
 interface DashboardHomeContentProps {
   repairer: Repairer;
@@ -62,6 +63,20 @@ export const DashboardHomeContent = ({
     const response = await appointmentResource.getAll(true, params);
     return response['hydra:member'];
   };
+
+  const subscribeMercureAppointments = async (): Promise<void> => {
+    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+    const hub = new URL(hubUrl);
+    hub.searchParams.append('topic', `${ENTRYPOINT}/appointments`);
+    const eventSource = new EventSource(hub);
+    eventSource.onmessage = (event) => {
+      fetchWaitingAppointments();
+    };
+  };
+
+  useEffect(() => {
+    subscribeMercureAppointments();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>
