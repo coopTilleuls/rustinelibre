@@ -81,17 +81,19 @@ export const RepairerCard = ({
               sx={{wordBreak: 'break-word', transition: 'color ease 0.3s'}}>
               {repairer.name}
             </Typography>
-            {repairer.latitude && repairer.longitude && repairer.distance && (
-              <Typography
-                variant="caption"
-                mb={2}
-                fontWeight={600}
-                color="primary"
-                display="flex"
-                alignItems="center">
-                <FmdGoodIcon fontSize="small" /> {repairer.distance} m
-              </Typography>
-            )}
+            {repairer.latitude &&
+              repairer.longitude &&
+              repairer.distance !== null && (
+                <Typography
+                  variant="caption"
+                  mb={2}
+                  fontWeight={600}
+                  color="primary"
+                  display="flex"
+                  alignItems="center">
+                  <FmdGoodIcon fontSize="small" /> {repairer.distance} m
+                </Typography>
+              )}
             <div>
               <Typography color="text.secondary" variant="body2">
                 {repairer.streetNumber} {repairer.street}
