@@ -1,13 +1,12 @@
+import {ENTRYPOINT} from '@config/entrypoint';
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import {discussionResource} from '@resources/discussionResource';
-import {ENTRYPOINT} from '@config/entrypoint';
-import {Avatar, Box, Typography} from '@mui/material';
+import {Avatar, Box, CardMedia, Typography, Badge} from '@mui/material';
 import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
-import Badge from '@mui/material/Badge';
 
 type DiscussionListItemProps = {
   discussionGiven: Discussion;
@@ -85,13 +84,20 @@ const DiscussionListItem = ({
             {isCustomer && (
               <>
                 {discussion.repairer.thumbnail ? (
-                  <Image
-                    width={48}
-                    height={48}
-                    alt=""
-                    src={discussion.repairer.thumbnail.contentUrl}
-                    style={{borderRadius: '50%'}}
-                  />
+                  <CardMedia
+                    component="div"
+                    sx={{
+                      width: 48,
+                      height: 48,
+                      position: 'relative',
+                    }}>
+                    <Image
+                      fill
+                      alt=""
+                      src={discussion.repairer.thumbnail.contentUrl}
+                      style={{borderRadius: '50%', objectFit: 'cover'}}
+                    />
+                  </CardMedia>
                 ) : (
                   <Avatar
                     sx={{
