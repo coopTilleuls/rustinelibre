@@ -1,7 +1,7 @@
 # Préliminaire
 
 Pour pouvoir déployer l'application, vous devez à minima vous munir de :
-- @TODO: expliquer Firebase et pourquoi il le faut
+- des clés pour Firebase, voir le [README général](https://github.com/coopTilleuls/bikelib#notifications) à ce sujet.
 - d'un bucket S3, de type Google Cloud Storage (avec compatibilité S3), Amazon S3 ou MinIO (open-source) pour le stockage des médias.
 - d'un fournisseur de mails, de type Mailgun ou Brevo pour l'envoi des mails.
 
@@ -15,6 +15,8 @@ Deux solutions sont proposées pour le déploiement de l'application :
 
 Vous devez disposer sur votre machine de [Docker desktop](https://docs.docker.com/desktop) ou [Docker server](https://docs.docker.com/engine/install/#server) (à privilégier sous GNU/Linux).
 
+Vous devez aussi disposer d'un cluster Kubernetes où déployer la release helm. Il est pré-supposé que vous êtes déjà positionné·e sur le cluster et le namespace où vous souhaitez déployer l'application.
+
 La première étape consiste à cloner le dépôt Git :
 ```sh
 git clone https://github.com/coopTilleuls/bikelib.git
@@ -25,6 +27,8 @@ Puis à vous positionner sur le dernier tag (release) au moyen de la commande su
 export LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
 git switch -d $LATEST_TAG
 ```
+
+### Build des images
 
 Ensuite, créer un fichier `.env` qui contiendra les variables de build pour la PWA :
 ```conf
@@ -46,6 +50,8 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml build
 
 Ne pas se soucier des messages quant au fait que des variables sont manquantes. Elles ne sont pas nécessaires au build des images.
 
+### Push des images 
+
 Maintenant que les images sont build, il est nécessaire de les tagguer et de les envoyer sur un registre Docker/OCI de votre choix.
 
 Par exemple pour Docker Hub :
@@ -59,6 +65,76 @@ docker push hub.docker.com/monutilisateur/monnamespace/bikelib-caddy:${LATEST_TA
 # bikelib-pwa (PWA)
 docker tag bikelib-pwa hub.docker.com/monutilisateur/monnamespace/bikelib-pwa:${LATEST_TAG}
 docker push hub.docker.com/monutilisateur/monnamespace/bikelib-pwa:${LATEST_TAG}
+```
+
+### Déploiement
+
+```sh
+export APP_URL=bikelib.mondomaine.com # À modifier
+export STORAGE_BUCKET=A_MODIFIER # À modifier
+export STORAGE_ENDPOINT=A_MODIFIER # À modifier
+export STORAGE_REGION=A_MODIFIER # À modifier
+export STORAGE_KEY=A_MODIFIER # À modifier
+export STORAGE_SECRET=A_MODIFIER # À modifier
+export FIREBASE_PROJECT_ID=A_MODIFIER # À modifier
+export FIREBASE_PRIVATE_KEY_ID=A_MODIFIER # À modifier
+export FIREBASE_PRIVATE_KEY=A_MODIFIER # À modifier
+export FIREBASE_CLIENT_EMAIL=A_MODIFIER # À modifier
+export FIREBASE_CLIENT_ID=A_MODIFIER # À modifier
+export FIREBASE_AUTH_URI=A_MODIFIER # À modifier
+export FIREBASE_TOKEN_URI=A_MODIFIER # À modifier
+export FIREBASE_AUTH_PROVIDER=A_MODIFIER # À modifier
+export FIREBASE_CLIENT_CERT_URL=A_MODIFIER # À modifier
+export FIREBASE_UNIVERSE_DOMAIN=A_MODIFIER # À modifier
+export MAILER_DNS=A_MODIFIER # À modifier
+export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
+export APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
+export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+export APP_JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$APP_JWT_SECRET_KEY") -passin file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -pubout)
+export TRUSTED_HOSTS="^127.0.0.1|localhost|${APP_URL}|bikelib$"
+export MERCURE_JWT_PUBLIC_KEY=$(openssl genpkey -pass file:<(echo "$APP_JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+export MERCURE_EXTRA_DIRECTIVES=$(cat <<EOF
+cors_origins http://localhost:8080 http://localhost:8081 https://localhost http://localhost https://${APP_URL}
+EOF
+)
+helm upgrade --install bikelib ./helm/chart \
+--atomic \
+--debug \
+--set=php.image=hub.docker.com/monutilisateur/monnamespace/bikelib-php:${LATEST_TAG} \
+--set=caddy.image=hub.docker.com/monutilisateur/monnamespace/bikelib-caddy:${LATEST_TAG} \
+--set=pwa.image=hub.docker.com/monutilisateur/monnamespace/bikelib-pwa:${LATEST_TAG} \
+--set=ingress.hosts[0].host=${APP_URL} \
+--set=ingress.tls[0].secretName=bikelib-tls \
+--set=ingress.tls[0].hosts[0]=${APP_URL} \
+--set=php.corsAllowOrigin="https?://.*?\.${APP_URL}$" \
+--set=mailer.dsn='${MAILER_DSN}' \
+--set=php.corsAllowOrigin="https?://${APP_URL}$" \
+--set=php.trustedHosts="${TRUSTED_HOSTS//./\\\\.}" \
+--set=php.jwt.secretKey="${APP_JWT_SECRET_KEY}" \
+--set=php.jwt.publicKey="${APP_JWT_PUBLIC_KEY}" \
+--set=php.jwt.passphrase=${APP_APP_JWT_PUBLIC_KEY} \
+--set=php.host=${APP_URL} \
+--set=mercure.publicUrl=https://${APP_URL}/.well-known/mercure \
+--set=mercure.jwtSecret="${MERCURE_JWT_PUBLIC_KEY}" \
+--set=mercure.extraDirectives="${MERCURE_EXTRA_DIRECTIVES}" \
+--set=php.storage.bucket="${STORAGE_BUCKET}" \
+--set=php.storage.endpoint="${STORAGE_ENDPOINT}" \
+--set=php.storage.region="${STORAGE_REGION}" \
+--set=php.storage.usePathStyleEndpoint=true \
+--set=php.storage.key="${STORAGE_KEY}" \
+--set=php.storage.secret="${STORAGE_SECRET}" \
+--set=php.firebase.projectID="${FIREBASE_PROJECT_ID}" \
+--set=php.firebase.privateKeyID="${FIREBASE_PRIVATE_KEY_ID}" \
+--set=php.firebase.privateKey="${FIREBASE_PRIVATE_KEY}" \
+--set=php.firebase.clientEmail="${FIREBASE_CLIENT_EMAIL}" \
+--set=php.firebase.clientID="${FIREBASE_CLIENT_ID}" \
+--set=php.firebase.authUri="${FIREBASE_AUTH_URI}" \
+--set=php.firebase.tokenUri="${FIREBASE_TOKEN_URI}" \
+--set=php.firebase.authProvider="${FIREBASE_AUTH_PROVIDER}" \
+--set=php.firebase.clientCertUrl="${FIREBASE_CLIENT_CERT_URL}" \
+--set=php.firebase.universeDomain="${FIREBASE_UNIVERSE_DOMAIN}" \
+--values ./helm/chart/values.yml \
+--values ./helm/chart/values-prod.yml
 ```
 
 ## Sur une machine virtuelle en utilisant Docker
@@ -80,10 +156,10 @@ git switch -d $(git describe --tags `git rev-list --tags --max-count=1`)
 Vous allez devoir définir quelques variables qui seront ensuite utilisées pour générer le fichier de variables d'environnement
 ```sh
 export APP_URL=bikelib.mondomaine.com # À modifier
-export APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
+export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
 export APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
-export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
-export APP_JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$APP_JWT_SECRET_KEY") -passin file:<(echo "$APP_JWT_PUBLIC_KEY") -pubout)
+export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
+export APP_JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$APP_JWT_SECRET_KEY") -passin file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -pubout)
 export MERCURE_JWT_PUBLIC_KEY=$(openssl genpkey -pass file:<(echo "$APP_JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
 export MERCURE_EXTRA_DIRECTIVES=$(cat <<EOF
 cors_origins http://localhost:8080 http://localhost:8081 https://localhost http://localhost https://${APP_URL}
