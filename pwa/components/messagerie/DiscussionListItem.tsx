@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 import {discussionResource} from '@resources/discussionResource';
 import {ENTRYPOINT} from '@config/entrypoint';
 import {Avatar, Box, Typography} from '@mui/material';
@@ -82,13 +83,25 @@ const DiscussionListItem = ({
         <Badge badgeContent={unreadCounter} color="primary">
           <Box px={2} py={2} display="flex" gap={2} alignItems="center">
             {isCustomer && (
-              <Avatar
-                sx={{
-                  width: '48px',
-                  height: '48px',
-                  bgcolor: current ? 'primary.main' : 'grey.300',
-                }}
-              />
+              <>
+                {discussion.repairer.thumbnail ? (
+                  <Image
+                    width={48}
+                    height={48}
+                    alt=""
+                    src={discussion.repairer.thumbnail.contentUrl}
+                    style={{borderRadius: '50%'}}
+                  />
+                ) : (
+                  <Avatar
+                    sx={{
+                      width: '48px',
+                      height: '48px',
+                      bgcolor: current ? 'primary.main' : 'grey.300',
+                    }}
+                  />
+                )}
+              </>
             )}
             <Box>
               <Typography
@@ -100,7 +113,6 @@ const DiscussionListItem = ({
                   ? discussion.repairer.name
                   : `${discussion.customer.firstName} ${discussion.customer.lastName}`}
               </Typography>
-
               <Typography
                 color="grey.500"
                 variant="caption"

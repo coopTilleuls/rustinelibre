@@ -13,8 +13,7 @@ import theme from '../styles/theme';
 import {A2HS} from '@components/banner/A2HS';
 import {A2HSIOS} from '@components/banner/A2HSIOS';
 import dynamic from 'next/dynamic';
-import {useState} from "react";
-import {NotificationPayload} from "firebase/messaging";
+
 const Notifications = dynamic(
   () => import('@components/notifications/Notifications'),
   {
@@ -30,7 +29,6 @@ function MyApp({
   Component,
   pageProps,
 }: AppProps<{dehydratedState: DehydratedState}>) {
-
   return (
     <AuthProvider>
       <SearchRepairerProvider>
