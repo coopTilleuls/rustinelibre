@@ -71,6 +71,7 @@ docker push hub.docker.com/monutilisateur/monnamespace/bikelib-pwa:${LATEST_TAG}
 
 ```sh
 export APP_URL=bikelib.mondomaine.com # À modifier
+export REGISTRY_URL=hub.docker.com/monutilisateur/monnamespace
 export STORAGE_BUCKET=A_MODIFIER # À modifier
 export STORAGE_ENDPOINT=A_MODIFIER # À modifier
 export STORAGE_REGION=A_MODIFIER # À modifier
@@ -86,7 +87,8 @@ export FIREBASE_TOKEN_URI=A_MODIFIER # À modifier
 export FIREBASE_AUTH_PROVIDER=A_MODIFIER # À modifier
 export FIREBASE_CLIENT_CERT_URL=A_MODIFIER # À modifier
 export FIREBASE_UNIVERSE_DOMAIN=A_MODIFIER # À modifier
-export MAILER_DNS=A_MODIFIER # À modifier
+export MAILER_SENDER=bikelib@${APP_URL} # À modifier
+export MAILER_DSN=mailgun+api://DOMAIN_API_KEY:DOMAIN@default?region=eu # À modifier
 export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
 export APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
 export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
@@ -100,9 +102,12 @@ EOF
 helm upgrade --install bikelib ./helm/chart \
 --atomic \
 --debug \
---set=php.image=hub.docker.com/monutilisateur/monnamespace/bikelib-php:${LATEST_TAG} \
---set=caddy.image=hub.docker.com/monutilisateur/monnamespace/bikelib-caddy:${LATEST_TAG} \
---set=pwa.image=hub.docker.com/monutilisateur/monnamespace/bikelib-pwa:${LATEST_TAG} \
+--set=php.image.repository="${REGISTRY_URL}/bikelib-php" \
+--set=php.image.tag="${LATEST_TAG}" \
+--set=caddy.image.repository="${REGISTRY_URL}/bikelib-caddy" \
+--set=caddy.image.tag="${LATEST_TAG}" \
+--set=pwa.image.repository="${REGISTRY_URL}/bikelib-pwa" \
+--set=pwa.image.tag="${LATEST_TAG}" \
 --set=ingress.hosts[0].host=${APP_URL} \
 --set=ingress.tls[0].secretName=bikelib-tls \
 --set=ingress.tls[0].hosts[0]=${APP_URL} \
