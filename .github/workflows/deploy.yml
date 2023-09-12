@@ -110,6 +110,7 @@ jobs:
               URL=${RELEASE_NAME}.nonprod.${{ secrets.domain }}
           fi
           export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
+          export APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
           export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
           export APP_JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$APP_JWT_SECRET_KEY") -passin file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -pubout)
           export TRUSTED_HOSTS="^127.0.0.1|localhost|${URL}|${RELEASE_NAME}-bikelib$"
