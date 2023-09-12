@@ -1,9 +1,16 @@
 import React, {useState} from 'react';
 import {appointmentResource} from '@resources/appointmentResource';
-import {CircularProgress, Button, useMediaQuery} from '@mui/material';
-import {isPast} from '@helpers/dateHelper';
+import {
+  CircularProgress,
+  Button,
+  useMediaQuery,
+  Typography,
+  Box,
+} from '@mui/material';
+import {formatDate, isPast} from '@helpers/dateHelper';
 import {Appointment} from '@interfaces/Appointment';
 import theme from 'styles/theme';
+import ConfirmationModal from '@components/common/ConfirmationModal';
 
 type AppointmentActionsProps = {
   appointment: Appointment;
@@ -23,6 +30,7 @@ const AppointmentActions = ({
   const [pendingAccept, setPendingAccept] = useState<boolean>(false);
   const [pendingRefuse, setPendingRefuse] = useState<boolean>(false);
   const [pendingCancel, setPendingCancel] = useState<boolean>(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
 
   const handleClickAcceptAppointment = async (appointmentId: string) => {
     setPendingAccept(true);
@@ -95,7 +103,7 @@ const AppointmentActions = ({
             color="error"
             disabled={isPast(appointment.slotTime)}
             variant="contained"
-            onClick={cancelAppointment}
+            onClick={() => setCancelDialogOpen(true)}
             startIcon={
               pendingCancel && (
                 <CircularProgress size={18} sx={{color: 'white'}} />
@@ -103,6 +111,24 @@ const AppointmentActions = ({
             }>
             {isMobile ? 'Annuler RDV' : 'Annuler le rendez-vous'}
           </Button>
+          <ConfirmationModal
+            open={cancelDialogOpen}
+            onClose={() => setCancelDialogOpen(false)}
+            onConfirm={cancelAppointment}
+            loading={pendingCancel}>
+            <Box>
+              <Typography>
+                Êtes-vous sûr de vouloir annuler ce rendez-vous ?
+              </Typography>
+              <Typography pt={4}>
+                Client : {appointment.customer.firstName}{' '}
+                {appointment.customer.lastName}
+              </Typography>
+              <Typography pb={2}>
+                Date : {formatDate(appointment.slotTime)}
+              </Typography>
+            </Box>
+          </ConfirmationModal>
         </>
       )}
     </>
