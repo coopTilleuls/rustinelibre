@@ -1,15 +1,9 @@
 {% extends 'mail/mail_layout.html.twig' %}
 
 {% block body_mail %}
-    <div id="title" style="height: 100px; background-color: #ff9458; text-align: center; font-size: 3em">
-        Demande d'inscription validée !
-    </div> <br />
-
-    <div>
-        <p>
-            Votre demande d'inscription a bien été validée par l'administrateur de la plateforme. <br /><br />
-            Vous pouvez vous connecter avec votre identifiant {{ repairer.owner.email }} et le mot de passe choisi lors de l'inscription sur <a href="{{ srAdminUrl }}">rustine-libre.org/sradmin</a>
-            et continuer à renseigner les données de votre espace réparateur.
-        </p>
-    </div>
+<div style="padding:20px; text-align: center">
+  <h1 style="font-weight:700; font-size:28px; margin-bottom:30px">Demande d'inscription validée !</h1>
+  <p style="margin-bottom:14px; font-size:14px;">Votre demande d'inscription a bien été validée par l'administrateur de la plateforme.</p>
+  <p style="margin-bottom:14px; font-size:14px;">Vous pouvez vous connecter avec votre identifiant {{ repairer.owner.email }} et le mot de passe choisi lors de l'inscription sur <a href="{{ srAdminUrl }}">rustine-libre.org/sradmin</a> et continuer à renseigner les données de votre espace réparateur.</p>
+</div>
 {% endblock %}
