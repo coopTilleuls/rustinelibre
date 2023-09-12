@@ -8,6 +8,10 @@ Plateforme de mise en relation avec des réparateurs de vélos
 - [Gestionnaire de tâches](https://github.com/orgs/coopTilleuls/projects/28/views/2?filterQuery=)
 - [Prototype](https://www.figma.com/file/91BAjXJqYT4Ecj12xECtlz/Untitled?node-id=336-484)
 
+## Déploiement en production
+- [via Kubernetes](./DEPLOY.md)
+- [via Docker](./DEPLOY.md)
+
 ## URL du projet en local
 
 - [Documentation de l'API (Swagger)](https://localhost/docs)
