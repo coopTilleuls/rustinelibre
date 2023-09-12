@@ -30,6 +30,8 @@ readonly class NewAppointmentEmail
                 ->html($this->twig->render('mail/new_appointment.html.twig', [
                     'appointment' => $appointment,
                     'appointmentUrl' => sprintf('%s/sradmin?appointment=%s', $this->webAppUrl, $appointment->id),
+                    'firstName' => $appointment->customer->firstName,
+                    'lastName' => $appointment->customer->lastName,
                 ]));
 
             $this->mailer->send($email);
