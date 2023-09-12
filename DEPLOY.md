@@ -71,7 +71,7 @@ docker push hub.docker.com/monutilisateur/monnamespace/bikelib-pwa:${LATEST_TAG}
 
 ```sh
 export APP_URL=bikelib.mondomaine.com # À modifier
-export REGISTRY_URL=hub.docker.com/monutilisateur/monnamespace
+export REGISTRY_URL=hub.docker.com/monutilisateur/monnamespace # À modifier
 export STORAGE_BUCKET=A_MODIFIER # À modifier
 export STORAGE_ENDPOINT=A_MODIFIER # À modifier
 export STORAGE_REGION=A_MODIFIER # À modifier
@@ -130,7 +130,7 @@ helm upgrade --install bikelib ./helm/chart \
 --set=php.storage.secret="${STORAGE_SECRET}" \
 --set=php.firebase.projectID="${FIREBASE_PROJECT_ID}" \
 --set=php.firebase.privateKeyID="${FIREBASE_PRIVATE_KEY_ID}" \
---set=php.firebase.privateKey="${FIREBASE_PRIVATE_KEY}" \
+--set=php.firebase.privateKey="$(echo $FIREBASE_PRIVATE_KEY | base64)" \
 --set=php.firebase.clientEmail="${FIREBASE_CLIENT_EMAIL}" \
 --set=php.firebase.clientID="${FIREBASE_CLIENT_ID}" \
 --set=php.firebase.authUri="${FIREBASE_AUTH_URI}" \
