@@ -51,6 +51,7 @@ import {searchCity} from '@utils/apiCity';
 import {RepairerType} from '@interfaces/RepairerType';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {Repairer} from '@interfaces/Repairer';
+import ConfirmationReloadDialog from '@components/common/ConfirmationReloadDialog';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -321,6 +322,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
         <title>Chercher un réparateur</title>
       </Head>
       <WebsiteLayout>
+        <ConfirmationReloadDialog />
         <Box
           bgcolor="lightprimary.light"
           height="100%"
