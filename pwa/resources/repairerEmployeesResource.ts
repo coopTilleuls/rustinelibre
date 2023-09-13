@@ -25,6 +25,27 @@ class RepairerEmployeesResource extends AbstractResource<RepairerEmployee> {
 
     return await this.getResult(doFetch);
   }
+
+  async setRepairerAdmin(
+    id: string,
+    body: RequestBody = {},
+    headers?: RequestHeaders
+  ): Promise<any> {
+    const url = this.getUrl(`/repairer_change_boss/${id}`);
+
+    const doFetch = async () => {
+      return await fetch(url, {
+        headers: {
+          ...this.getDefaultHeaders(),
+          ...headers,
+        },
+        method: 'PUT',
+        body: JSON.stringify(body),
+      });
+    };
+
+    return await this.getResult(doFetch);
+  }
 }
 
 export const repairerEmployeesResource = new RepairerEmployeesResource();
