@@ -37,7 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Put(
     uriTemplate: '/employee_and_user/{id}',
-    security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN') or object.repairer == user.repairer)",
+    security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer == user.repairer)",
     input: CreateUserEmployeeDto::class,
     processor: UpdateUserEmployeeProcessor::class
 )]
