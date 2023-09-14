@@ -41,7 +41,7 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): RepairerEmployee
     {
         if (!array_key_exists('id', $uriVariables)) {
-            throw new BadRequestHttpException('test1');
+            throw new BadRequestHttpException('You should provide a repairer ID');
         }
 
         /** @var Repairer|null $repairer */
@@ -51,41 +51,49 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
         }
 
         $currentBoss = $repairer->owner;
+        // If current user is not the repairer's boss or an admin, avoid the proces.
         if ($currentBoss !== $this->security->getUser() && !$this->security->isGranted(User::ROLE_ADMIN)) {
             throw new AccessDeniedException('You are not the owner');
         }
 
-        if (!$currentBoss == $repairer->owner) {
-            throw new BadRequestHttpException('testboss');
-        }
         $newBoss = $data->newBoss;
-
+        // Check an employee exist with this user and this repairer
         $employeeExist = $this->repairerEmployeeRepository->findOneBy(['repairer' => $repairer, 'employee' => $newBoss]);
         if (!$employeeExist) {
-            throw new BadRequestHttpException('testEmployee');
+            throw new BadRequestHttpException('The user you provide is not an employee of this repairer');
         }
 
-        $repairer->owner = $newBoss;
-        $this->validator->validate($repairer);
-        $this->entityManager->flush();
-
-        $newBoss->roles = [User::ROLE_BOSS];
-
-        $currentBoss->roles = [User::ROLE_EMPLOYEE];
-        $repairerEmployee = $this->createNewEmployeeForOldBoss($currentBoss, $repairer);
+        // Remove the old employee
         $this->entityManager->remove($employeeExist);
         $this->entityManager->flush();
 
-        return $repairerEmployee;
+        // Create the new employee
+        $newRepairerEmployee = $this->createNewEmployeeForOldBoss($repairer);
+
+        // Update old boss
+        $currentBoss->roles = [User::ROLE_EMPLOYEE];
+        $currentBoss->repairer = null;
+        $currentBoss->repairerEmployee = $newRepairerEmployee;
+
+        // Set the new roles
+        $newBoss->roles = [User::ROLE_BOSS];
+        $repairer->owner = $newBoss;
+        $this->validator->validate($repairer);
+        $newBoss->repairerEmployee = null;
+
+        $this->entityManager->flush();
+
+        return $newRepairerEmployee;
     }
 
-    private function createNewEmployeeForOldBoss(User $employee, Repairer $repairer): RepairerEmployee
+    private function createNewEmployeeForOldBoss(Repairer $repairer): RepairerEmployee
     {
         $repairerEmployee = new RepairerEmployee();
         $repairerEmployee->repairer = $repairer;
-        $repairerEmployee->employee = $employee;
+        $repairerEmployee->employee = $repairer->owner;
         $this->validator->validate($repairerEmployee);
         $this->entityManager->persist($repairerEmployee);
+        $this->entityManager->flush($repairerEmployee);
 
         return $repairerEmployee;
     }

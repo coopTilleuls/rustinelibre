@@ -30,6 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
+#[Post]
 #[Post(
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
     input: CreateUserEmployeeDto::class,
@@ -60,7 +61,7 @@ class RepairerEmployee
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE, User::USER_READ])]
     public ?Repairer $repairer = null;
 
-    #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
     public ?User $employee = null;
