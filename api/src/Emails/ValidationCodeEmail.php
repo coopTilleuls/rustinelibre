@@ -24,7 +24,7 @@ readonly class ValidationCodeEmail
         $email = (new Email())
             ->from($this->mailerSender)
             ->to($user->email)
-            ->subject('Votre code de confirmation La Rustine Libre')
+            ->subject('Votre code de confirmation Rustine Libre')
             ->html($this->twig->render('mail/send_validation_code.html.twig', [
                 'user' => $user,
             ]));
