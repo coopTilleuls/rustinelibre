@@ -24,7 +24,7 @@ readonly class NewContactEmail
         $email = (new Email())
             ->from($this->mailerSender)
             ->to($this->mailerSender)
-            ->subject('Nouveau message reçu sur La Rustine Libre')
+            ->subject('Nouveau message reçu sur Rustine Libre')
             ->html($this->twig->render('mail/contact.html.twig', [
                 'contact' => $contact,
             ]));
