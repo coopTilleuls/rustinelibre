@@ -15,6 +15,7 @@ use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -49,8 +50,10 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
             throw new NotFoundHttpException($this->translator->trans('404_notFound.repairer.employee', domain: 'validators'));
         }
 
-        /** @var User $currentBoss */
-        $currentBoss = $this->security->getUser();
+        $currentBoss = $repairer->owner;
+        if ($currentBoss !== $this->security->getUser() && !$this->security->isGranted(User::ROLE_ADMIN)) {
+            throw new AccessDeniedException('You are not the owner');
+        }
 
         if (!$currentBoss == $repairer->owner) {
             throw new BadRequestHttpException('testboss');
@@ -64,13 +67,13 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
 
         $repairer->owner = $newBoss;
         $this->validator->validate($repairer);
+        $this->entityManager->flush();
 
         $newBoss->roles = [User::ROLE_BOSS];
-        $this->entityManager->remove($employeeExist);
 
         $currentBoss->roles = [User::ROLE_EMPLOYEE];
         $repairerEmployee = $this->createNewEmployeeForOldBoss($currentBoss, $repairer);
-
+        $this->entityManager->remove($employeeExist);
         $this->entityManager->flush();
 
         return $repairerEmployee;
