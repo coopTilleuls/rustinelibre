@@ -1,4 +1,6 @@
 import React, {PropsWithRef, useContext} from 'react';
+import {useRouter} from 'next/router';
+import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {
   Box,
   Button,
@@ -9,7 +11,6 @@ import {
   ButtonBase,
 } from '@mui/material';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
-import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {formatDate} from 'helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
 
@@ -23,6 +24,7 @@ export const RepairerCard = ({
   onClick,
 }: RepairerProps): JSX.Element => {
   const {selectedRepairer} = useContext(SearchRepairerContext);
+  const router = useRouter();
 
   return (
     <ButtonBase
@@ -83,7 +85,8 @@ export const RepairerCard = ({
             </Typography>
             {repairer.latitude &&
               repairer.longitude &&
-              repairer.distance !== null && (
+              repairer.distance !== null &&
+              router.pathname !== '/liste-des-reparateurs' && (
                 <Typography
                   variant="caption"
                   mb={2}
