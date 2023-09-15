@@ -19,12 +19,14 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
 use App\Controller\BuildRepairerSlotsAvailableAction;
 use App\Repairers\Dto\CreateUserRepairerDto;
+use App\Repairers\Dto\UpdateRepairerBossDto;
 use App\Repairers\Filter\AroundFilter;
 use App\Repairers\Filter\FirstSlotAvailableFilter;
 use App\Repairers\Filter\ProximityFilter;
 use App\Repairers\Filter\RandomFilter;
 use App\Repairers\Filter\RepairerSearchFilter;
 use App\Repairers\State\CreateUserRepairerProcessor;
+use App\Repairers\State\UpdateRepairerBossProcessor;
 use App\Repairers\Validator\RepairerSlots;
 use App\Repository\RepairerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -65,6 +67,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
     input: CreateUserRepairerDto::class,
     processor: CreateUserRepairerProcessor::class
+)]
+#[Put(
+    uriTemplate: '/repairer_change_boss/{id}',
+    denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
+    security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)",
+    input: UpdateRepairerBossDto::class,
+    processor: UpdateRepairerBossProcessor::class
 )]
 #[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]

@@ -33,8 +33,8 @@ class RepairerIntervention
     public int $price;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'repairerInterventions')]
-    #[Groups([Intervention::READ])]
     #[ORM\JoinColumn]
+    #[Groups([Intervention::READ])]
     public Repairer $repairer;
 
     #[Assert\NotNull(message: 'repairerIntervention.intervention')]

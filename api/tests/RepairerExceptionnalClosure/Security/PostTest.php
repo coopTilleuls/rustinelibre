@@ -37,7 +37,7 @@ class PostTest extends AbstractTestCase
     public function testBossCanCreate(): void
     {
         $repairer = $this->repairerRepository->findOneBy([]);
-        $this->createClientAuthAsBoss()->request('POST', '/repairer_exceptional_closures',
+        $this->createClientWithUser($repairer->owner)->request('POST', '/repairer_exceptional_closures',
             [
                 'json' => [
                     'repairer' => sprintf('/repairers/%d', $repairer->id),

@@ -17,7 +17,7 @@ const EditEmployee: NextPageWithLayout = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    async function fetchEmployee() {
+    const fetchEmployee = async () => {
       if (typeof id === 'string' && id.length > 0) {
         setLoading(true);
         const employeeFetch: RepairerEmployee =
@@ -25,7 +25,7 @@ const EditEmployee: NextPageWithLayout = () => {
         setRepairerEmployee(employeeFetch);
         setLoading(false);
       }
-    }
+    };
     if (id) {
       fetchEmployee();
     }
