@@ -21,8 +21,8 @@ const Home = () => {
 
   const args = [
     {
-      title: 'Pédalez 100% local',
-      text: 'Prenez rendez-vous sur la métropole lilloise ou ailleurs',
+      title: 'Réparez 100% local',
+      text: 'Prenez rendez-vous sur la métropole lilloise et dans les Hauts-de-France',
       img: <Image src={Arg1} width={100} height={100} alt="" />,
     },
     {

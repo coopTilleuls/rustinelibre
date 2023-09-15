@@ -16,18 +16,18 @@ import Image from 'next/image';
 
 const args = [
   {
-    title: 'Un câlin à la planête',
-    text: "Vous aimez promouvoir l'idée de réparer plutôt que jeter\u00A0?\nVous êtes Rustine Libre.",
+    title: 'Du soin et de la qualité',
+    text: "Je répare, j'améliore, je sécurise: je cherche le meilleur pour mon client.\u00A0\nJe suis Rustine Libre!",
     img: bikeRepairer,
   },
   {
     title: 'Pignon\nsur rue',
-    text: 'Vous vous facilitez la prise de rendez-vous\u00A0?\nVous êtes Rustine Libre.',
+    text: 'Je veux un outil facile pour gérer mes rendez-vous.\u00A0\nJe suis Rustine Libre!',
     img: bikeMan,
   },
   {
     title: 'Libre comme une chambre à air',
-    text: 'Vos horaires, vos conditions, vos tarifs, votre style?\nVous êtes Rustine Libre.',
+    text: 'Mes horaires, mes conditions, mes tarifs, la coopération avec mes pairs.\u00A0\nJe suis Rustine Libre!',
     img: bikeWoman,
   },
 ];
@@ -48,11 +48,10 @@ const JoinTheCollective = () => {
           variant="h2"
           component="h2"
           marginBottom={4}>
-          Tu es réparateur&nbsp;? Rejoins-nous&nbsp;!
+          Tu es réparateur.ice&nbsp;? Rejoins-nous&nbsp;!
         </Typography>
         <Typography variant="body1" marginBottom={3} maxWidth="sm">
-          Vous êtes réparateur ou réparatrice de vélos sur la métropole
-          lilloise, Rustine libre vous file un vrai coup de pouce.
+          Un collectif de professionnels gère démocratiquement la plateforme.
         </Typography>
         <Link legacyBehavior passHref href="/reparateur/inscription">
           <Button variant="contained" size="large">
