@@ -4,15 +4,25 @@ declare(strict_types=1);
 
 namespace App\Tests\RepairerIntervention;
 
+use App\Repository\RepairerRepository;
 use App\Tests\Intervention\InterventionAbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateRepairerInterventionTest extends InterventionAbstractTestCase
 {
+    private RepairerRepository $repairerRepository;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->repairerRepository = self::getContainer()->get(RepairerRepository::class);
+    }
+
     public function testBossCanLinkRepairerToAdminIntervention(): void
     {
+        $repairer = $this->repairerRepository->findOneBy([]);
         $id = $this->getAdminIntervention()->id;
-        $client = $this->createClientAuthAsBoss();
+        $client = $this->createClientWithUser($repairer->owner);
         $response = $client->request('POST', '/repairer_interventions', [
             'json' => [
                 'intervention' => sprintf('/interventions/%s', $id),
