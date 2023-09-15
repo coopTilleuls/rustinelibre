@@ -70,7 +70,7 @@ class UpdateBossTest extends AbstractTestCase
 
         // Check if repairerEmployee has been removed
         $repairerEmployeeNotFound = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['employee' => $currentEmployeeId]);
-        $this->assertSame(null, $repairerEmployeeNotFound);
+        $this->assertNull($repairerEmployeeNotFound);
     }
 
     public function testUpdateAsAdmin(): void
@@ -96,6 +96,6 @@ class UpdateBossTest extends AbstractTestCase
 
         // Check if repairerEmployee has been removed
         $repairerEmployeeNotFound = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['employee' => $currentEmployeeId]);
-        $this->assertSame(null, $repairerEmployeeNotFound);
+        $this->assertNull($repairerEmployeeNotFound);
     }
 }
