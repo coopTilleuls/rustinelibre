@@ -50,14 +50,9 @@ const JoinTheCollective = () => {
           marginBottom={4}>
           Tu es réparateur.ice&nbsp;? Rejoins-nous&nbsp;!
         </Typography>
-        <Typography variant="body1" marginBottom={3} maxWidth="sm">
+        <Typography variant="body1" maxWidth="sm">
           Un collectif de professionnels gère démocratiquement la plateforme.
         </Typography>
-        <Link legacyBehavior passHref href="/reparateur/inscription">
-          <Button variant="contained" size="large">
-            Je rejoins le collectif
-          </Button>
-        </Link>
         <Box
           display={{xs: 'none', md: 'block'}}
           zIndex={5}
@@ -113,6 +108,11 @@ const JoinTheCollective = () => {
             </Grid2>
           );
         })}
+        <Link legacyBehavior passHref href="/reparateur/inscription">
+          <Button variant="contained" size="large" sx={{mx: 'auto', mt: 4}}>
+            Je rejoins le collectif
+          </Button>
+        </Link>
       </Grid2>
     </Box>
   );
