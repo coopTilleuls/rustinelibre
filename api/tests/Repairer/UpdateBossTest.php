@@ -51,19 +51,26 @@ class UpdateBossTest extends AbstractTestCase
     {
         $currentBossId = $this->repairerEmployees[0]->repairer->owner->id;
         $currentEmployeeId = $this->repairerEmployees[0]->employee->id;
+        $currentFirstRepairerEmployee = $this->repairerEmployees[0];
 
         $response = $this->createClientWithUser($this->repairerEmployees[0]->repairer->owner)->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'newBoss' => sprintf('/users/%d', $this->repairerEmployees[0]->employee->id),
+                'newBoss' => sprintf('/users/%d', $currentEmployeeId),
             ],
         ])->toArray();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         // Check if boss became employee
         $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));
+        $this->assertSame($response['employee']['roles'][0], "ROLE_EMPLOYEE");
         $newRepairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['id' => $response['id']]);
         // Check if employee became boss
         $this->assertSame($newRepairerEmployee->repairer->owner->id, $currentEmployeeId);
+        $this->assertSame($newRepairerEmployee->repairer->owner->roles, ['ROLE_BOSS']);
+
+        // Check if repairerEmployee has been removed
+        $repairerEmployeeNotFound = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['employee' => $currentEmployeeId]);
+        $this->assertSame(null, $repairerEmployeeNotFound);
     }
 
     public function testUpdateAsAdmin(): void
@@ -73,15 +80,22 @@ class UpdateBossTest extends AbstractTestCase
         $response = $this->createClientAuthAsAdmin()->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'newBoss' => sprintf('/users/%d', $this->repairerEmployees[0]->employee->id),
+                'newBoss' => sprintf('/users/%d', $currentEmployeeId),
             ],
         ])->toArray();
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         // Check if boss became employee
         $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));
+        $this->assertSame($response['employee']['roles'][0], "ROLE_EMPLOYEE");
         $newRepairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['id' => $response['id']]);
+
         // Check if employee became boss
         $this->assertSame($newRepairerEmployee->repairer->owner->id, $currentEmployeeId);
+        $this->assertSame($newRepairerEmployee->repairer->owner->roles, ['ROLE_BOSS']);
+
+        // Check if repairerEmployee has been removed
+        $repairerEmployeeNotFound = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['employee' => $currentEmployeeId]);
+        $this->assertSame(null, $repairerEmployeeNotFound);
     }
 }

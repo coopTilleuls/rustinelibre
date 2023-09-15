@@ -63,12 +63,11 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The user you provide is not an employee of this repairer');
         }
 
-        // Remove the old employee
-        $this->entityManager->remove($employeeExist);
-        $this->entityManager->flush();
-
         // Create the new employee
         $newRepairerEmployee = $this->createNewEmployeeForOldBoss($repairer);
+
+        // Remove the old employee
+        $this->entityManager->remove($employeeExist);
 
         // Update old boss
         $currentBoss->roles = [User::ROLE_EMPLOYEE];
@@ -93,7 +92,6 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
         $repairerEmployee->employee = $repairer->owner;
         $this->validator->validate($repairerEmployee);
         $this->entityManager->persist($repairerEmployee);
-        $this->entityManager->flush($repairerEmployee);
 
         return $repairerEmployee;
     }
