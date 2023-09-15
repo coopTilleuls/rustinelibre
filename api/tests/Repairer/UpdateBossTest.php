@@ -62,7 +62,7 @@ class UpdateBossTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         // Check if boss became employee
         $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));
-        $this->assertSame($response['employee']['roles'][0], "ROLE_EMPLOYEE");
+        $this->assertSame($response['employee']['roles'][0], 'ROLE_EMPLOYEE');
         $newRepairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['id' => $response['id']]);
         // Check if employee became boss
         $this->assertSame($newRepairerEmployee->repairer->owner->id, $currentEmployeeId);
@@ -87,7 +87,7 @@ class UpdateBossTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         // Check if boss became employee
         $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));
-        $this->assertSame($response['employee']['roles'][0], "ROLE_EMPLOYEE");
+        $this->assertSame($response['employee']['roles'][0], 'ROLE_EMPLOYEE');
         $newRepairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['id' => $response['id']]);
 
         // Check if employee became boss
