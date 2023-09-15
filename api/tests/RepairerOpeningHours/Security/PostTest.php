@@ -37,7 +37,7 @@ class PostTest extends AbstractTestCase
     public function testBossCanCreateRepairerOpeningHours(): void
     {
         $repairer = $this->getRepairer();
-        $this->createClientAuthAsBoss()->request('POST', '/repairer_opening_hours', [
+        $this->createClientWithUser($repairer->owner)->request('POST', '/repairer_opening_hours', [
             'json' => [
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
                 'day' => 'monday',

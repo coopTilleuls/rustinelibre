@@ -27,32 +27,61 @@ class UpdateBossTest extends AbstractTestCase
 
     public function testUpdateAsUser(): void
     {
-        $this->createClientAuthAsUser()->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id));
+        $this->createClientAuthAsUser()->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'newBoss' => sprintf('/users/%d', $this->repairerEmployees[0]->employee->id),
+            ],
+        ]);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testUpdateAsBadBoss(): void
     {
-        $this->createClientWithUser($this->repairerEmployees[3]->repairer->owner)->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id));
+        $this->createClientWithUser($this->repairerEmployees[3]->repairer->owner)->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'newBoss' => sprintf('/users/%d', $this->repairerEmployees[0]->employee->id),
+            ],
+        ]);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testUpdateAsGoodBoss(): void
     {
-     $currentBossId = $this->repairerEmployees[0]->repairer->owner->id;
+        $currentBossId = $this->repairerEmployees[0]->repairer->owner->id;
         $currentEmployeeId = $this->repairerEmployees[0]->employee->id;
 
         $response = $this->createClientWithUser($this->repairerEmployees[0]->repairer->owner)->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'newBoss' => sprintf('/users/%d', $this->repairerEmployees[0]->employee->id)
+                'newBoss' => sprintf('/users/%d', $this->repairerEmployees[0]->employee->id),
             ],
         ])->toArray();
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        //Check if employee became boss
-        $this->assertSame($response['employee']['repairer']['owner'], sprintf('/users/%d', $currentEmployeeId));
-        //Check if boss became employee
+        // Check if boss became employee
         $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));
-        die;
+        $newRepairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['id' => $response['id']]);
+        // Check if employee became boss
+        $this->assertSame($newRepairerEmployee->repairer->owner->id, $currentEmployeeId);
+    }
+
+    public function testUpdateAsAdmin(): void
+    {
+        $currentBossId = $this->repairerEmployees[0]->repairer->owner->id;
+        $currentEmployeeId = $this->repairerEmployees[0]->employee->id;
+        $response = $this->createClientAuthAsAdmin()->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'newBoss' => sprintf('/users/%d', $this->repairerEmployees[0]->employee->id),
+            ],
+        ])->toArray();
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        // Check if boss became employee
+        $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));
+        $newRepairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['id' => $response['id']]);
+        // Check if employee became boss
+        $this->assertSame($newRepairerEmployee->repairer->owner->id, $currentEmployeeId);
     }
 }

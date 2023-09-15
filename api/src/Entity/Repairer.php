@@ -69,8 +69,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     processor: CreateUserRepairerProcessor::class
 )]
 #[Put(
-    denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
     uriTemplate: '/repairer_change_boss/{id}',
+    denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
     security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)",
     input: UpdateRepairerBossDto::class,
     processor: UpdateRepairerBossProcessor::class
