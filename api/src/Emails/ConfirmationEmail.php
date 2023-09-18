@@ -14,7 +14,6 @@ use Twig\Environment;
 readonly class ConfirmationEmail
 {
     public function __construct(private MailerInterface $mailer,
-        private string $mailerSender,
         private string $webAppUrl,
         private LoggerInterface $logger,
         private DiscussionManager $discussionManager,
@@ -26,7 +25,6 @@ readonly class ConfirmationEmail
     {
         try {
             $email = (new Email())
-                ->from($this->mailerSender)
                 ->to($appointment->customer->email)
                 ->subject('Confirmation de votre rendez-vous')
                 ->html($this->twig->render('mail/appointment_accepted.html.twig', [
