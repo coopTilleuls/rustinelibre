@@ -17,17 +17,17 @@ import Image from 'next/image';
 const args = [
   {
     title: 'Du soin et de la qualité',
-    text: "Je répare, j'améliore, je sécurise: je cherche le meilleur pour mon client.\u00A0\nJe suis Rustine Libre!",
+    text: "Je répare, j'améliore, je sécurise : je cherche le meilleur pour mon client.\u00A0\nJe suis Rustine Libre !",
     img: bikeRepairer,
   },
   {
     title: 'Pignon\nsur rue',
-    text: 'Je veux un outil facile pour gérer mes rendez-vous.\u00A0\nJe suis Rustine Libre!',
+    text: 'Je veux un outil facile pour gérer mes rendez-vous.\u00A0\nJe suis Rustine Libre !',
     img: bikeMan,
   },
   {
     title: 'Libre comme une chambre à air',
-    text: 'Mes horaires, mes conditions, mes tarifs, la coopération avec mes pairs.\u00A0\nJe suis Rustine Libre!',
+    text: 'Mes horaires, mes conditions, mes tarifs, la coopération avec mes pairs.\u00A0\nJe suis Rustine Libre !',
     img: bikeWoman,
   },
 ];
