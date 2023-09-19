@@ -80,7 +80,8 @@ const RepairersList: NextPageWithLayout = ({
               container
               spacing={4}
               justifyContent="flex-start"
-              maxWidth="1200px">
+              maxWidth="1200px"
+              width="100%">
               {repairers.map((repairer) => {
                 return (
                   <Grid2
@@ -88,8 +89,7 @@ const RepairersList: NextPageWithLayout = ({
                     key={repairer.id}
                     xs={12}
                     md={6}
-                    width="100%"
-                    mx="auto">
+                    width="100%">
                     <RepairerCard
                       repairer={repairer}
                       onClick={() =>
