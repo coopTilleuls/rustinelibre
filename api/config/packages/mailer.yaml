@@ -2,7 +2,7 @@ framework:
     mailer:
         dsn: '%env(MAILER_DSN)%'
         envelope:
-            sender: '%env(MAILER_SENDER)%'
+            sender: 'Rustine Libre <%env(MAILER_SENDER)%>'
         headers:
             From: 'Rustine Libre <%env(MAILER_SENDER)%>'
 
