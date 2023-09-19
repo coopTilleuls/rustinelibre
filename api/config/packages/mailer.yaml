@@ -4,7 +4,7 @@ framework:
         envelope:
             sender: '%env(MAILER_SENDER)%'
         headers:
-            From: '%env(MAILER_SENDER)%'
+            From: 'Rustine Libre <%env(MAILER_SENDER)%>'
 
 when@test:
     framework:
