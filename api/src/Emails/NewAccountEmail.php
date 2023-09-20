@@ -14,7 +14,6 @@ use Twig\Environment;
 readonly class NewAccountEmail
 {
     public function __construct(private MailerInterface $mailer,
-        private string $mailerSender,
         private string $webAppUrl,
         private LoggerInterface $logger,
         private Environment $twig)
@@ -24,7 +23,6 @@ readonly class NewAccountEmail
     public function sendConfirmationEmail(User $userEmployee, Repairer $repairer): void
     {
         $email = (new Email())
-            ->from($this->mailerSender)
             ->to($userEmployee->email)
             ->subject('Votre compte sur Rustine Libre vient d\'être créé')
             ->html($this->twig->render('mail/employee_send_password.html.twig', [

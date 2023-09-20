@@ -1,6 +1,8 @@
 framework:
     mailer:
         dsn: '%env(MAILER_DSN)%'
+        headers:
+            From: 'Rustine Libre <%env(MAILER_SENDER)%>'
 
 when@test:
     framework:
