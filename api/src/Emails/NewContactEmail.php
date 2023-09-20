@@ -22,7 +22,6 @@ readonly class NewContactEmail
     public function sendNewContactEmail(Contact $contact): void
     {
         $email = (new Email())
-            ->from($this->mailerSender)
             ->to($this->mailerSender)
             ->subject('Nouveau message reçu sur Rustine Libre')
             ->html($this->twig->render('mail/contact.html.twig', [

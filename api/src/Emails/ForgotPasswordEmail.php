@@ -13,7 +13,6 @@ use Twig\Environment;
 readonly class ForgotPasswordEmail
 {
     public function __construct(private MailerInterface $mailer,
-        private string $mailerSender,
         private string $webAppUrl,
         private LoggerInterface $logger,
         private Environment $twig)
@@ -24,7 +23,6 @@ readonly class ForgotPasswordEmail
     {
         try {
             $email = (new Email())
-                ->from($this->mailerSender)
                 ->to($user->email)
                 ->subject('Mot de passe oublié')
                 ->html($this->twig->render('mail/forgot_password.html.twig', [

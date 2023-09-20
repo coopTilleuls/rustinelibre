@@ -13,7 +13,6 @@ use Twig\Environment;
 readonly class ValidationCodeEmail
 {
     public function __construct(private MailerInterface $mailer,
-        private string $mailerSender,
         private LoggerInterface $logger,
         private Environment $twig)
     {
@@ -22,7 +21,6 @@ readonly class ValidationCodeEmail
     public function sendValidationCodeEmail(User $user): void
     {
         $email = (new Email())
-            ->from($this->mailerSender)
             ->to($user->email)
             ->subject('Votre code de confirmation Rustine Libre')
             ->html($this->twig->render('mail/send_validation_code.html.twig', [

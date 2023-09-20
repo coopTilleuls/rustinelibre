@@ -13,7 +13,6 @@ use Twig\Environment;
 readonly class AppointmentChangeTimeEmail
 {
     public function __construct(private MailerInterface $mailer,
-        private string $mailerSender,
         private string $webAppUrl,
         private LoggerInterface $logger,
         private Environment $twig)
@@ -24,7 +23,6 @@ readonly class AppointmentChangeTimeEmail
     {
         try {
             $email = (new Email())
-                ->from($this->mailerSender)
                 ->to($appointment->customer->email)
                 ->subject('Votre RDV a été modifié')
                 ->html($this->twig->render('mail/appointment_change_time.html.twig', [

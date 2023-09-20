@@ -13,7 +13,6 @@ use Twig\Environment;
 readonly class NewAppointmentEmail
 {
     public function __construct(private MailerInterface $mailer,
-        private string $mailerSender,
         private string $webAppUrl,
         private LoggerInterface $logger,
         private Environment $twig)
@@ -24,7 +23,6 @@ readonly class NewAppointmentEmail
     {
         try {
             $email = (new Email())
-                ->from($this->mailerSender)
                 ->to($appointment->repairer->owner->email)
                 ->subject('Nouvelle demande de RDV')
                 ->html($this->twig->render('mail/new_appointment.html.twig', [
