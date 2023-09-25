@@ -137,7 +137,7 @@ class Appointment
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+        $this->createdAt = new \DateTimeImmutable('now');
     }
 
     public function getStatus(): ?string
