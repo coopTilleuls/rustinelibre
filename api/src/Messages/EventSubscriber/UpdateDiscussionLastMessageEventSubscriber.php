@@ -35,7 +35,7 @@ readonly class UpdateDiscussionLastMessageEventSubscriber implements EventSubscr
         }
 
         $discussion = $object->discussion;
-        $discussion->lastMessage = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+        $discussion->lastMessage = new \DateTimeImmutable('now');
         $this->discussionRepository->save($discussion, true);
     }
 }
