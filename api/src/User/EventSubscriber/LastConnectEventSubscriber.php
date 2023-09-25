@@ -23,7 +23,7 @@ final class LastConnectEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $user->lastConnect = new \DateTimeImmutable('', new \DateTimeZone('Europe/Paris'));
+        $user->lastConnect = new \DateTimeImmutable();
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

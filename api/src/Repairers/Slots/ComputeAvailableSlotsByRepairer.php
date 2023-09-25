@@ -114,7 +114,7 @@ final class ComputeAvailableSlotsByRepairer
         //  Build slots by day
         $data = [];
         foreach ($next60days as $day) {
-            $dateByDay = new \DateTime($day, timezone: new \DateTimeZone('Europe/Paris'));
+            $dateByDay = new \DateTime($day);
             $openingHoursForDay = $openingHours->forDate($dateByDay);
 
             /** @var TimeRange $timeRange */
@@ -129,7 +129,7 @@ final class ComputeAvailableSlotsByRepairer
 
                 // Add slots until the time range stop
                 while ($slot < $endTimeRange) {
-                    if ((new \DateTime(timezone: new \DateTimeZone('Europe/Paris'))) < $slot) {
+                    if (new \DateTime() < $slot) {
                         $data[$day][] = $slot->format('H:i');
                     }
                     $slot->modify(sprintf('+%s minutes', $repairer->durationSlot ?? '60'));
@@ -142,8 +142,8 @@ final class ComputeAvailableSlotsByRepairer
 
     private function get60nextDates(): array
     {
-        $startDate = new \DateTime(timezone: new \DateTimeZone('Europe/Paris'));
-        $endDate = new \DateTime(timezone: new \DateTimeZone('Europe/Paris'));
+        $startDate = new \DateTime();
+        $endDate = new \DateTime();
         $endDate->add(new \DateInterval('P60D'));
 
         $dates = [];
