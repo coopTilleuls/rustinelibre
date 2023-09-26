@@ -27,6 +27,7 @@ final class FirstSlotAvailableCalculator
         if (!empty($slotsAvailable)) {
             $day = key($slotsAvailable);
             $time = reset($slotsAvailable[$day]);
+
             $newFirstSlotAvailable = new \DateTime(sprintf('%s %s', $day, $time));
         }
 

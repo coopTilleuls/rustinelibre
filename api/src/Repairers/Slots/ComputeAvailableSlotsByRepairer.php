@@ -109,7 +109,7 @@ final class ComputeAvailableSlotsByRepairer
             $openingHoursData[$dayOfWeek] = $openingHoursFromDay;
         }
 
-        $openingHours = OpeningHours::create(OpeningHours::mergeOverlappingRanges($openingHoursData), new \DateTimeZone('Europe/Paris'));
+        $openingHours = OpeningHours::create(OpeningHours::mergeOverlappingRanges($openingHoursData), 'Europe/Paris', 'Europe/Paris');
 
         //  Build slots by day
         $data = [];
