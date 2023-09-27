@@ -15,12 +15,13 @@ RUN apk upgrade libcurl curl openssl openssl-dev libressl
 COPY --from=mlocati/php-extension-installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
 # persistent / runtime deps
-RUN apk add --no-cache \
+RUN apk upgrade && apk add --no-cache \
 		acl \
 		fcgi \
 		file \
 		gettext \
 		git \
+		curl \
 	;
 
 RUN set -eux; \
