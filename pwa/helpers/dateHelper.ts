@@ -6,7 +6,7 @@ export const formatDate = (
     return '';
   }
 
-  let date = new Date(dateString);
+  const date = getDateObjectFromString(dateString);
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
@@ -22,7 +22,7 @@ export const formatDate = (
 
 export const isPast = (targetDate: string): boolean => {
   const currentDate = new Date();
-  const parsedTargetDate = new Date(targetDate);
+  const parsedTargetDate = getDateObjectFromString(targetDate);
 
   if (isNaN(parsedTargetDate.getTime())) {
     return false;
@@ -56,7 +56,7 @@ export const getTimeFromObjectAsString = (date: Date): string => {
 };
 
 export const getDateFromDateAsString = (slotTime: string): string => {
-  const dateObj = new Date(slotTime);
+  const dateObj = getDateObjectFromString(slotTime);
 
   if (isNaN(dateObj.getTime())) {
     return '';
@@ -69,11 +69,12 @@ export const getDateFromDateAsString = (slotTime: string): string => {
 };
 
 export const getTimeFromDateAsString = (slotTime: string): string => {
-  const dateObj = new Date(slotTime);
+  const dateObj = getDateObjectFromString(slotTime);
 
   if (isNaN(dateObj.getTime())) {
     return '';
   }
+
   const hours = padNumber(dateObj.getHours());
   const minutes = padNumber(dateObj.getMinutes());
 
@@ -82,4 +83,9 @@ export const getTimeFromDateAsString = (slotTime: string): string => {
 
 export const padNumber = (number: number): string => {
   return number.toString().padStart(2, '0');
+};
+
+const getDateObjectFromString = (dateStr: string): Date => {
+  const dateWithoutZ = dateStr.replace(/Z$/, '');
+  return new Date(dateWithoutZ);
 };
