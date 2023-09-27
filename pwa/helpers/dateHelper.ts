@@ -6,7 +6,7 @@ export const formatDate = (
     return '';
   }
 
-  let date = getDateTimeZoned(dateString);
+  let date = new Date(dateString);
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
@@ -56,7 +56,7 @@ export const getTimeFromObjectAsString = (date: Date): string => {
 };
 
 export const getDateFromDateAsString = (slotTime: string): string => {
-  const dateObj = getDateTimeZoned(slotTime);
+  const dateObj = new Date(slotTime);
 
   if (isNaN(dateObj.getTime())) {
     return '';
@@ -69,7 +69,7 @@ export const getDateFromDateAsString = (slotTime: string): string => {
 };
 
 export const getTimeFromDateAsString = (slotTime: string): string => {
-  const dateObj = getDateTimeZoned(slotTime);
+  const dateObj = new Date(slotTime);
 
   if (isNaN(dateObj.getTime())) {
     return '';
@@ -82,12 +82,4 @@ export const getTimeFromDateAsString = (slotTime: string): string => {
 
 export const padNumber = (number: number): string => {
   return number.toString().padStart(2, '0');
-};
-
-export const getDateTimeZoned = (dateString: string | null = null): Date => {
-  let date = new Date(dateString ? dateString : '');
-  const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-  date = new Date(date.getTime() + userTimezoneOffset);
-
-  return date;
 };
