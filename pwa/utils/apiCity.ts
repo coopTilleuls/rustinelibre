@@ -1,5 +1,5 @@
 import {Street} from '@interfaces/Street';
-import {City as Gouv} from '@interfaces/Gouv';
+import {CityAddress, City as Gouv} from '@interfaces/Gouv';
 import {City} from '@interfaces/City';
 
 export const searchCity = async (
@@ -23,15 +23,24 @@ const nominatimCities = async (search: string) => {
 
 const gouvCities = async (search: string) => {
   search = encodeURIComponent(search);
+
   try {
-    const response = await fetch(
-      `https://api-adresse.data.gouv.fr/search/?q=${search}&type=municipality&limit=9`
+    const response1 = await fetch(
+      `https://geo.api.gouv.fr/communes?nom=${search}&fields=code,nom,centre,departement,codesPostaux`
     );
-    return await response.json().then((data) => {
-      return data['features'];
-    });
+
+    const response2 = await fetch(
+      `https://geo.api.gouv.fr/communes_associees_deleguees?nom=${search}&fields=code,nom,centre,departement`
+    );
+
+    const data1 = await response1.json();
+    const data2 = await response2.json();
+
+    const mergedData = [...data1, ...data2];
+
+    return mergedData;
   } catch (e) {
-    return [];
+    return console.error(e);
   }
 };
 
@@ -48,7 +57,7 @@ export const searchStreet = async (search: string, city: City | null) => {
     });
 
     const data: Street[] = [];
-    apiFeatures.map((feature: Gouv) => {
+    apiFeatures.map((feature: CityAddress) => {
       return data.push({
         name: feature.properties.name,
         city: feature.properties.city + ' ' + feature.properties.postcode,

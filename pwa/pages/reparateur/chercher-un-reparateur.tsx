@@ -399,7 +399,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                       getOptionLabel={(city) =>
                         typeof city === 'string'
                           ? city
-                          : `${city.name}  (${city.postcode})`
+                          : `${city.name} (${city.postcode})`
                       }
                       onChange={(event, value) => setCity(value as City)}
                       onInputChange={(event, value) => {
