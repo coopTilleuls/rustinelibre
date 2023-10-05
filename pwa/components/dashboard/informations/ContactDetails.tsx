@@ -58,7 +58,7 @@ export const ContactDetails = ({
           lat: 0,
           lon: 0,
           name: repairer.city,
-          postcode: repairer.postcode,
+          postcode: repairer.postcode.slice(0, 2),
         } as City);
       }
     }
@@ -201,7 +201,7 @@ export const ContactDetails = ({
           value={city}
           options={citiesList}
           getOptionLabel={(city) =>
-            typeof city === 'string' ? city : `${city.name}  (${city.postcode})`
+            typeof city === 'string' ? city : `${city.name} (${city.postcode})`
           }
           onChange={(event, value) => handleCitySelect(event, value)}
           onInputChange={(event, value) => {

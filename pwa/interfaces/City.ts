@@ -24,25 +24,20 @@ export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]): City[] => {
 
   citiesResponse.forEach((city: Gouv) => {
     const args = [
-      city.properties.city,
-      city.properties.postcode,
-      city.geometry.coordinates[1],
-      city.geometry.coordinates[0],
+      city.nom,
+      city.code,
+      city.centre.coordinates[1],
+      city.centre.coordinates[0],
     ];
 
     if (!args.some((arg) => arg === undefined)) {
       cities.push({
-        id: city.properties.id,
-        name: city.properties.city,
-        postcode: city.properties.postcode,
-        formatted_name:
-          city.properties.city +
-          ', ' +
-          city.properties.postcode +
-          ', ' +
-          'France',
-        lat: city.geometry.coordinates[1],
-        lon: city.geometry.coordinates[0],
+        id: city.code,
+        name: city.nom,
+        postcode: city.departement.code,
+        formatted_name: city.nom + ', ' + city.code + ', ' + 'France',
+        lat: city.centre.coordinates[1],
+        lon: city.centre.coordinates[0],
       });
     }
   });
