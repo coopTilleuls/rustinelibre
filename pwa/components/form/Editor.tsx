@@ -9,7 +9,7 @@ interface EditorProps {
 }
 
 const Editor = ({content, setContent}: EditorProps): JSX.Element => {
-  let [loaded, setLoaded] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     setLoaded(true);
@@ -20,12 +20,13 @@ const Editor = ({content, setContent}: EditorProps): JSX.Element => {
       <Box sx={{mt: 2, mb: 1}}>
         <CKEditor
           editor={ClassicEditor}
-          data={content ? content : 'Description...'}
+          data={content}
           onChange={(event, editor) => {
             const data: string = editor.getData();
             setContent(data);
           }}
           config={{
+            placeholder: 'Description...',
             toolbar: [
               'heading',
               '|',

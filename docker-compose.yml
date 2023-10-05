@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   php:
@@ -13,7 +13,7 @@ services:
     healthcheck:
       interval: 10s
       timeout: 3s
-      retries: 3
+      retries: 10
       start_period: 30s
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-14}
@@ -61,7 +61,7 @@ services:
         published: ${HTTP3_PORT:-443}
         protocol: udp
 
-###> doctrine/doctrine-bundle ###
+  ###> doctrine/doctrine-bundle ###
   database:
     image: postgis/postgis:14-3.3-alpine
     command: postgres -c 'max_connections=1000'
@@ -82,7 +82,7 @@ volumes:
   php_socket:
   caddy_data:
   caddy_config:
-###> doctrine/doctrine-bundle ###
+  ###> doctrine/doctrine-bundle ###
   db_data:
 ###< doctrine/doctrine-bundle ###
 ###> symfony/mercure-bundle ###
