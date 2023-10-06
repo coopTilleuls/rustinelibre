@@ -150,7 +150,6 @@ export const EmployeeForm = ({
       '/'
     );
     const currentBossId = splittedId[splittedId.length - 1];
-    console.log(currentBossId);
     setPendingChangeAdmin(true);
     setEnabledNewAdmin(!enabledNewAdmin);
     await repairerEmployeesResource.setRepairerAdmin(currentBossId, {
@@ -160,8 +159,6 @@ export const EmployeeForm = ({
     setAdminDialogOpen(false);
     logout();
   };
-
-  console.log(repairerEmployee);
 
   return (
     <Container component="main" maxWidth="xs">

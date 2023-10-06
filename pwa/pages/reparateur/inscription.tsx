@@ -29,6 +29,8 @@ import {
   Grid,
 } from '@mui/material';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
+import PasswordInput from '@components/form/input/PasswordInput';
+import LetterR from '@components/common/LetterR';
 import {BikeType} from '@interfaces/BikeType';
 import {
   City,
@@ -39,7 +41,6 @@ import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {RepairerType} from '@interfaces/RepairerType';
 import {Street} from '@interfaces/Street';
-import LetterR from '@components/common/LetterR';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -58,8 +59,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   const [emailError, setEmailError] = useState<boolean>(false);
   const [emailHelperText, setEmailHelperText] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [passwordError, setPasswordError] = useState<boolean>(false);
-  const [passwordHelperText, setPasswordHelperText] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [city, setCity] = useState<City | null>(null);
   const [street, setStreet] = useState<Street | null>(null);
@@ -221,19 +220,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     }
   };
 
-  const handleChangePassword = (event: ChangeEvent<HTMLInputElement>): void => {
-    setPassword(event.target.value);
-    if (!validatePassword(event.target.value)) {
-      setPasswordError(true);
-      setPasswordHelperText(
-        'Votre mot de passe doit contenir 12 caractères, une majuscule, un caractères et des chiffres.'
-      );
-    } else {
-      setPasswordError(false);
-      setPasswordHelperText('');
-    }
-  };
-
   const handleChangeRepairerType = (event: SelectChangeEvent): void => {
     const selectedRepairerType = repairerTypes.find(
       (rt) => rt.name === event.target.value
@@ -390,19 +376,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      required
-                      error={passwordError}
-                      helperText={passwordHelperText}
-                      name="password"
-                      label="Mot de passe"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                      value={password}
-                      onChange={handleChangePassword}
-                    />
+                    <PasswordInput />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
