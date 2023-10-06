@@ -1,10 +1,9 @@
 import React, {ChangeEvent, useContext, useEffect} from 'react';
-import {validateEmail} from '@utils/emailValidator';
-import {validatePassword} from '@utils/passwordValidator';
-import TextField from '@mui/material/TextField';
 import {UserFormContext} from '@contexts/UserFormContext';
+import {Box, TextField} from '@mui/material';
+import {validateEmail} from '@utils/emailValidator';
 import {User} from '@interfaces/User';
-import Box from '@mui/material/Box';
+import PasswordInput from './input/PasswordInput';
 
 interface UserFormProps {
   user: User | null;
@@ -22,16 +21,11 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
     setCity,
     street,
     setStreet,
-    password,
-    passwordError,
-    setPasswordError,
     setPassword,
     emailError,
     setEmailError,
     emailHelperText,
     setEmailHelperText,
-    passwordInfo,
-    setPasswordInfo,
   } = useContext(UserFormContext);
 
   useEffect(() => {
@@ -82,19 +76,6 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
     }
   };
 
-  const handleChangePassword = (event: ChangeEvent<HTMLInputElement>): void => {
-    setPassword(event.target.value);
-    if (!validatePassword(event.target.value)) {
-      setPasswordError(true);
-      setPasswordInfo(
-        'Votre mot de passe doit contenir 12 caractères, une majuscule, un caractère spécial et des chiffres.'
-      );
-    } else {
-      setPasswordError(false);
-      setPasswordInfo('');
-    }
-  };
-
   return (
     <Box>
       <TextField
@@ -141,22 +122,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
           onChange={handleChangeEmail}
         />
       )}
-      {!user && (
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          error={passwordError}
-          helperText={passwordInfo}
-          name="password"
-          label="Mot de passe"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={handleChangePassword}
-        />
-      )}
+      {!user && <PasswordInput />}
       <TextField
         margin="normal"
         fullWidth
