@@ -1,9 +1,13 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useContext, ChangeEvent, useEffect} from 'react';
 import Head from 'next/head';
+import {useRouter} from 'next/router';
+import Link from 'next/link';
 import {userResource} from '@resources/userResource';
 import {useAccount, useAuth} from '@contexts/AuthContext';
 import {UserFormContext} from '@contexts/UserFormContext';
+import WebsiteLayout from '@components/layout/WebsiteLayout';
+import UserForm from '@components/form/UserForm';
 import {
   Container,
   Box,
@@ -13,14 +17,11 @@ import {
   CircularProgress,
   Paper,
   TextField,
+  Alert,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
-import {useRouter} from 'next/router';
 import {User} from '@interfaces/User';
-import UserForm from '@components/form/UserForm';
 import {errorRegex} from '@utils/errorRegex';
-import Alert from '@mui/material/Alert';
 import {isBoss} from '@helpers/rolesHelpers';
 
 const Registration: NextPageWithLayout = ({}) => {
@@ -181,6 +182,20 @@ const Registration: NextPageWithLayout = ({}) => {
                       <CircularProgress size={20} sx={{color: 'white'}} />
                     )}
                   </Button>
+                  <Link href="/login" legacyBehavior passHref>
+                    <Typography
+                      fontSize={14}
+                      color="primary"
+                      sx={{
+                        '&:hover': {
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                        },
+                      }}
+                      pb={2}>
+                      J&apos;ai déjà un compte
+                    </Typography>
+                  </Link>
                   {errorMessage && (
                     <Typography variant="body1" color="error">
                       {errorMessage}
