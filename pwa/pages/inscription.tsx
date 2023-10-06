@@ -228,7 +228,6 @@ const Registration: NextPageWithLayout = ({}) => {
                 <br />
                 <TextField
                   label="Code de validation"
-                  type="number"
                   value={code}
                   onChange={handleChangeCode}
                   onKeyDown={handleKeyDown}
