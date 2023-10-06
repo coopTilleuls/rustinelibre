@@ -76,7 +76,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [repairerTypes, setRepairerTypes] =
     useState<RepairerType[]>(repairerTypesFetched);
-
   const [success, setSuccess] = useState<boolean>(false);
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
@@ -429,6 +428,11 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                           : `${city.name} (${city.postcode})`
                       }
                       onChange={(event, value) => setCity(value as City)}
+                      onBlur={() => {
+                        if (!city) {
+                          setCityInput('');
+                        }
+                      }}
                       renderInput={(params) => (
                         <TextField
                           label="Ville"
