@@ -74,7 +74,7 @@ const PinMap = ({
   );
 
   useEffect(() => {
-    if (cityInput === '' || cityInput.length < 3) {
+    if (cityInput === '' || cityInput.length < 2) {
       setCitiesList([]);
     } else fetchCitiesResult(cityInput);
   }, [setCitiesList, fetchCitiesResult, cityInput]);
@@ -133,7 +133,11 @@ const PinMap = ({
           sx={{mt: 2, mb: 1}}
           freeSolo
           value={street}
-          options={streetList}
+          options={streetList.filter(
+            (address) =>
+              address.postcode.slice(0, 2) === city.postcode &&
+              address.city === city.name
+          )}
           getOptionLabel={(streetObject) =>
             typeof streetObject === 'string'
               ? streetObject
