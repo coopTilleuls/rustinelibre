@@ -174,6 +174,7 @@ export const ContactDetails = ({
           onChange={handleChangeMobilePhone}
         />
         <TextField
+          required
           margin="normal"
           fullWidth
           id="streetNumber"
@@ -185,6 +186,7 @@ export const ContactDetails = ({
           onChange={handleChangeStreetNumber}
         />
         <TextField
+          required
           margin="normal"
           fullWidth
           id="street"

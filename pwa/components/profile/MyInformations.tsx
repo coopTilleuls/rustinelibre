@@ -15,10 +15,12 @@ import {errorRegex} from '@utils/errorRegex';
 
 interface MyAccountFormProps {
   userLogged: User;
+  isBossOrEmployee?: boolean | null;
 }
 
 export const MyInformations = ({
   userLogged,
+  isBossOrEmployee,
 }: MyAccountFormProps): JSX.Element => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -26,9 +28,17 @@ export const MyInformations = ({
   const [pendingUpdate, setPendingUpdate] = useState<boolean>(false);
   const [user, setUser] = useState<User>(userLogged);
   const [firstName, setFirstName] = useState<string>('');
+  const [firstNameError, setFirstNameError] = useState<boolean>(false);
+  const [firstNameHelperText, setFirstNameHelperText] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
+  const [lastNameError, setLastNameError] = useState<boolean>(false);
+  const [lastNameHelperText, setLastNameHelperText] = useState<string>('');
   const [city, setCity] = useState<string>('');
+  const [cityError, setCityError] = useState<boolean>(false);
+  const [cityHelperText, setCityHelperText] = useState<string>('');
   const [street, setStreet] = useState<string>('');
+  const [streetError, setStreetError] = useState<boolean>(false);
+  const [streetHelperText, setStreetHelperText] = useState<string>('');
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -64,18 +74,46 @@ export const MyInformations = ({
     event: ChangeEvent<HTMLInputElement>
   ): void => {
     setFirstName(event.target.value);
+    if (event.target.value === '') {
+      setFirstNameError(true);
+      setFirstNameHelperText('Champ obligatoire');
+    } else {
+      setFirstNameError(false);
+      setFirstNameHelperText('');
+    }
   };
 
   const handleChangeLastName = (event: ChangeEvent<HTMLInputElement>): void => {
     setLastName(event.target.value);
+    if (event.target.value === '') {
+      setLastNameError(true);
+      setLastNameHelperText('Champ obligatoire');
+    } else {
+      setLastNameError(false);
+      setLastNameHelperText('');
+    }
   };
 
   const handleChangeStreet = (event: ChangeEvent<HTMLInputElement>): void => {
     setStreet(event.target.value);
+    if (event.target.value === '') {
+      setStreetError(true);
+      setStreetHelperText('Champ obligatoire');
+    } else {
+      setStreetError(false);
+      setStreetHelperText('');
+    }
   };
 
   const handleChangeCity = (event: ChangeEvent<HTMLInputElement>): void => {
     setCity(event.target.value);
+    if (event.target.value === '') {
+      setCityError(true);
+      setCityHelperText('Champ obligatoire');
+    } else {
+      setCityError(false);
+      setCityHelperText('');
+    }
   };
 
   const fetchMe = async () => {
@@ -92,6 +130,10 @@ export const MyInformations = ({
       fetchMe();
     }
   }, [userLogged]); // eslint-disable-line
+
+  const validForm =
+    (!isBossOrEmployee && firstName && lastName) ||
+    (isBossOrEmployee && firstName && lastName && street && city);
 
   return (
     <Box
@@ -126,12 +168,19 @@ export const MyInformations = ({
               autoComplete="firstName"
               autoFocus
               value={firstName}
+              error={firstNameError}
+              helperText={firstNameHelperText}
               sx={{
                 backgroundColor: 'white',
                 borderRadius: 6,
               }}
               inputProps={{maxLength: 50}}
               onChange={handleChangeFirstName}
+              onBlur={() => {
+                setFirstName(user.firstName!);
+                setFirstNameError(false);
+                setFirstNameHelperText('');
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={12} lg={6}>
@@ -144,55 +193,123 @@ export const MyInformations = ({
               name="lastName"
               autoComplete="lastName"
               value={lastName}
+              error={lastNameError}
+              helperText={lastNameHelperText}
               sx={{
                 backgroundColor: 'white',
                 borderRadius: 6,
               }}
               inputProps={{maxLength: 50}}
               onChange={handleChangeLastName}
+              onBlur={() => {
+                setLastName(user.lastName!);
+                setLastNameError(false);
+                setLastNameHelperText('');
+              }}
             />
           </Grid>
         </Grid>
-        <Grid container item xs={12} spacing={{xs: 0, md: 2}} direction="row">
-          <Grid item xs={12} sm={6} md={12} lg={6}>
-            <TextField
-              margin="normal"
-              fullWidth
-              id="address"
-              label="Numéro et rue"
-              name="street"
-              autoComplete="street"
-              value={street || user?.street}
-              sx={{
-                backgroundColor: 'white',
-                borderRadius: 6,
-              }}
-              inputProps={{maxLength: 250}}
-              onChange={handleChangeStreet}
-            />
+        {isBossOrEmployee ? (
+          <Grid container item xs={12} spacing={{xs: 0, md: 2}} direction="row">
+            <Grid item xs={12} sm={6} md={12} lg={6}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="address"
+                label="Numéro et rue"
+                name="street"
+                autoComplete="street"
+                value={street}
+                error={streetError}
+                helperText={streetHelperText}
+                sx={{
+                  backgroundColor: 'white',
+                  borderRadius: 6,
+                }}
+                inputProps={{maxLength: 250}}
+                onChange={handleChangeStreet}
+                onBlur={() => {
+                  setStreet(user.street!);
+                  setStreetError(false);
+                  setStreetHelperText('');
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={12} lg={6}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="city"
+                label="Ville"
+                name="city"
+                autoComplete="city"
+                value={city}
+                error={cityError}
+                helperText={cityHelperText}
+                sx={{
+                  backgroundColor: 'white',
+                  borderRadius: 6,
+                }}
+                inputProps={{maxLength: 100}}
+                onChange={handleChangeCity}
+                onBlur={() => {
+                  setCity(user.city!);
+                  setCityError(false);
+                  setCityHelperText('');
+                }}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} md={12} lg={6}>
-            <TextField
-              margin="normal"
-              fullWidth
-              id="city"
-              label="Ville"
-              name="city"
-              autoComplete="city"
-              value={city || user?.city}
-              sx={{
-                backgroundColor: 'white',
-                borderRadius: 6,
-              }}
-              inputProps={{maxLength: 100}}
-              onChange={handleChangeCity}
-            />
+        ) : (
+          <Grid container item xs={12} spacing={{xs: 0, md: 2}} direction="row">
+            <Grid item xs={12} sm={6} md={12} lg={6}>
+              <TextField
+                margin="normal"
+                fullWidth
+                id="address"
+                label="Numéro et rue"
+                name="street"
+                autoComplete="street"
+                value={street || ''}
+                sx={{
+                  backgroundColor: 'white',
+                  borderRadius: 6,
+                }}
+                inputProps={{maxLength: 250}}
+                onChange={handleChangeStreet}
+                onBlur={() => {
+                  setStreet(user.street!);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={12} lg={6}>
+              <TextField
+                margin="normal"
+                fullWidth
+                id="city"
+                label="Ville"
+                name="city"
+                autoComplete="city"
+                value={city || ''}
+                sx={{
+                  backgroundColor: 'white',
+                  borderRadius: 6,
+                }}
+                inputProps={{maxLength: 100}}
+                onChange={handleChangeCity}
+                onBlur={() => {
+                  setCity(user.street!);
+                }}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </Grid>
       <Box display="flex" flexDirection="column" alignItems="center">
         <Button
-          disabled={pendingUpdate}
+          disabled={pendingUpdate || !validForm}
           type="submit"
           variant="contained"
           size="large"

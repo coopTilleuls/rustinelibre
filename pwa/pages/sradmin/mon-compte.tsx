@@ -7,9 +7,11 @@ import {Typography} from '@mui/material';
 import MyAccountForm from '@components/profile/MyInformations';
 import ChangePassword from '@components/profile/ChangePassword';
 import RemoveAccount from '@components/profile/RemoveAccount';
+import {isBoss, isEmployee} from '@helpers/rolesHelpers';
 
 const MyAccount = () => {
   const {user} = useAccount({});
+  const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
 
   return (
     <>
@@ -23,15 +25,15 @@ const MyAccount = () => {
               width="100%"
               display="flex"
               flexDirection="column"
-              alignItems="center">
-              <Typography
-                pt={4}
-                pb={6}
-                fontSize={{xs: 28, md: 30}}
-                fontWeight={600}>
+              alignItems="center"
+              gap={4}>
+              <Typography pt={4} fontSize={{xs: 28, md: 30}} fontWeight={600}>
                 Mon Compte
               </Typography>
-              <MyAccountForm userLogged={user} />
+              <MyAccountForm
+                userLogged={user}
+                isBossOrEmployee={isBossOrEmployee}
+              />
               <ChangePassword />
               <RemoveAccount />
             </Box>

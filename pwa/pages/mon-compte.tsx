@@ -1,16 +1,7 @@
 import {NextPageWithLayout} from 'pages/_app';
 import React from 'react';
 import Head from 'next/head';
-import {
-  Typography,
-  Box,
-  CircularProgress,
-  Container,
-  Alert,
-  Button,
-  Grid,
-  TextField,
-} from '@mui/material';
+import {Typography, Box, Container} from '@mui/material';
 import {useAccount} from '@contexts/AuthContext';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import MyInformations from '@components/profile/MyInformations';
@@ -18,7 +9,7 @@ import RemoveAccount from '@components/profile/RemoveAccount';
 import ChangePassword from '@components/profile/ChangePassword';
 
 const MyProfile: NextPageWithLayout = () => {
-  const {user, isLoadingFetchUser} = useAccount({redirectIfNotFound: '/login'});
+  const {user} = useAccount({redirectIfNotFound: '/login'});
 
   return (
     <>
