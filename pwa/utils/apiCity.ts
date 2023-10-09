@@ -60,7 +60,8 @@ export const searchStreet = async (search: string, city: City | null) => {
     apiFeatures.map((feature: CityAddress) => {
       return data.push({
         name: feature.properties.name,
-        city: feature.properties.city + ' ' + feature.properties.postcode,
+        city: feature.properties.city,
+        postcode: feature.properties.postcode,
         lat: feature.geometry.coordinates[1],
         lon: feature.geometry.coordinates[0],
       });

@@ -137,7 +137,9 @@ const PinMap = ({
           getOptionLabel={(streetObject) =>
             typeof streetObject === 'string'
               ? streetObject
-              : `${streetObject.name} (${streetObject.city})`
+              : `${streetObject.name} (${
+                  streetObject.city
+                } - ${streetObject.postcode.slice(0, 2)})`
           }
           onChange={(event, value) => setStreetSelected(value as Street)}
           renderInput={(params) => (
