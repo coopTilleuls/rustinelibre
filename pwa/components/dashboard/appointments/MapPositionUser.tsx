@@ -56,22 +56,24 @@ export const MapPositionUser = ({
       <Typography pb={2} textAlign="center">
         Merci d&apos;indiquer à quel niveau de la rue vous vous situerez
       </Typography>
-      <MapContainer
-        center={[Number(latitudeProps), Number(longitudeProps)]}
-        zoom={15}
-        scrollWheelZoom={false}
-        style={{height: '500px', width: '100%'}}>
-        <UpdateMarkerPositionOnMapClick />
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {userPosition[0] && userPosition[1] && (
-          <Marker
-            draggable={true}
-            position={[+userPosition[0], +userPosition[1]]}
-            eventHandlers={{
-              dragend: handleMarkerDragEnd,
-            }}></Marker>
-        )}
-      </MapContainer>
+      <Box width={'100%'} height={{xs: '250px', sm: '350px', md: '500px'}}>
+        <MapContainer
+          center={[Number(latitudeProps), Number(longitudeProps)]}
+          zoom={15}
+          scrollWheelZoom={false}
+          style={{height: '100%', width: '100%'}}>
+          <UpdateMarkerPositionOnMapClick />
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          {userPosition[0] && userPosition[1] && (
+            <Marker
+              draggable={true}
+              position={[+userPosition[0], +userPosition[1]]}
+              eventHandlers={{
+                dragend: handleMarkerDragEnd,
+              }}></Marker>
+          )}
+        </MapContainer>
+      </Box>
     </Box>
   );
 };

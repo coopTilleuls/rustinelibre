@@ -3,4 +3,5 @@ export interface Street {
   city: string;
   lat: number;
   lon: number;
+  postcode: string;
 }
