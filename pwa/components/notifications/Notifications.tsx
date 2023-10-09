@@ -59,13 +59,17 @@ export const Notifications = (): JSX.Element => {
     const firebaseConfigEncoded = encodeURIComponent(
       JSON.stringify(firebaseConfig)
     );
-    navigator.serviceWorker
-      .register(
-        `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`
-      )
-      .catch((error) => {
-        console.error(error);
-      });
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register(
+          `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`
+        )
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.warn('Service Worker is not supported in this browser');
+    }
   }, []);
 
   const updateFirebaseToken = async (
