@@ -300,7 +300,7 @@ export const MyInformations = ({
                 inputProps={{maxLength: 100}}
                 onChange={handleChangeCity}
                 onBlur={() => {
-                  setCity(user.street!);
+                  setCity(user.city!);
                 }}
               />
             </Grid>
