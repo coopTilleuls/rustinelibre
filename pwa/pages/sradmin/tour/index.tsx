@@ -8,6 +8,8 @@ import {CircularProgress, IconButton, Typography} from '@mui/material';
 import {dateObjectAsString} from '@helpers/dateHelper';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import {appointmentResource} from '@resources/appointmentResource';
 import {Appointment} from '@interfaces/Appointment';
 import Grid from '@mui/material/Grid';
@@ -35,13 +37,13 @@ const Tour = () => {
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handlePreviousDate = () => {
-    let newDate = new Date(date.getTime() - 24 * 60 * 60 * 1000);
+  const handlePreviousDate = (numberOfDays: number) => {
+    let newDate = new Date(date.getTime() - 24 * 60 * 60 * 1000 * numberOfDays);
     setDate(newDate);
   };
 
-  const handleNextDate = () => {
-    let newDate = new Date(date.getTime() + 24 * 60 * 60 * 1000);
+  const handleNextDate = (numberOfDays: number) => {
+    let newDate = new Date(date.getTime() + 24 * 60 * 60 * 1000 * numberOfDays);
     setDate(newDate);
   };
 
@@ -85,14 +87,20 @@ const Tour = () => {
               alignItems: 'center',
               gap: 4,
             }}>
-            <IconButton onClick={handlePreviousDate}>
+            <IconButton onClick={() => handlePreviousDate(7)}>
+              <KeyboardDoubleArrowLeftIcon fontSize={'large'} />
+            </IconButton>
+            <IconButton onClick={() => handlePreviousDate(1)}>
               <ArrowBackIosIcon />
             </IconButton>
             <Typography variant="h4" sx={{textAlign: 'center'}}>
               {currentDate}
             </Typography>
-            <IconButton onClick={handleNextDate}>
+            <IconButton onClick={() => handleNextDate(1)}>
               <ArrowForwardIosIcon />
+            </IconButton>
+            <IconButton onClick={() => handleNextDate(7)}>
+              <KeyboardDoubleArrowRightIcon fontSize={'large'} />
             </IconButton>
           </Box>
 
