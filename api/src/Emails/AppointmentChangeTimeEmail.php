@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Emails;
 
 use App\Entity\Appointment;
+use App\Entity\Repairer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -19,7 +20,7 @@ readonly class AppointmentChangeTimeEmail
     {
     }
 
-    public function sendChangeTimeEmail(Appointment $appointment, string $oldTime): void
+    public function sendChangeTimeEmail(Appointment $appointment, Repairer $repairer): void
     {
         try {
             $email = (new Email())
@@ -27,7 +28,6 @@ readonly class AppointmentChangeTimeEmail
                 ->subject('Votre RDV a été modifié')
                 ->html($this->twig->render('mail/appointment_change_time.html.twig', [
                     'appointment' => $appointment,
-                    'oldTime' => $oldTime,
                     'rdvUrl' => sprintf('%s/rendez-vous/mes-rendez-vous', $this->webAppUrl),
                 ]));
 
