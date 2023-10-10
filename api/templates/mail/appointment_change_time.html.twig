@@ -2,8 +2,8 @@
 
 {% block body_mail %}
 <div style="padding:20px; text-align:center">
-  <h1 style="font-weight:700; font-size:28px; margin-bottom:30px">Votre demande de RDV du {{ oldTime }} a été modifiée</h1>
-  <p style="margin-bottom:14px; font-size:14px;">Votre nouvel horaire : <strong>{{ appointment.slotTime|date('d/m/Y H:i')}}</p>
+  <h1 style="font-weight:700; font-size:26px; margin-bottom:30px">Votre demande de RDV avec "{{ appointment.repairer.name}}" a été modifiée</h1>
+  <p style="margin-bottom:14px; font-size:22px;">Votre nouvel horaire : <strong>{{ appointment.slotTime|date('d/m/Y H:i')}}</p>
   <p style="margin-bottom:14px; font-size:14px;">Pour consulter vos RDV : <a href="{{ rdvUrl }}">Cliquez ici</a></p>
 </div>
 {% endblock %}
