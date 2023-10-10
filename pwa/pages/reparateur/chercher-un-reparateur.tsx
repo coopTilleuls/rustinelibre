@@ -433,14 +433,12 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                   </Box>
                 </Box>
                 <Box width="100%">
-                  {repairers.length ? (
-                    <RepairerSortOptions
-                      isMobile={isMobile}
-                      handleChangeRepairerType={handleChangeRepairerType}
-                      handleSelectSortOption={handleSelectSortOption}
-                      repairerTypes={repairerTypes}
-                    />
-                  ) : null}
+                  <RepairerSortOptions
+                    isMobile={isMobile}
+                    handleChangeRepairerType={handleChangeRepairerType}
+                    handleSelectSortOption={handleSelectSortOption}
+                    repairerTypes={repairerTypes}
+                  />
                 </Box>
               </Box>
             </Container>
@@ -451,20 +449,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                 {errorMessage}
               </Typography>
             )}
-            {repairers.length === 0 && alreadyFetchApi && (
-              <Box textAlign="center" pt={isMobile ? 25 : 20}>
-                <Typography>
-                  Nous n&apos;avons pas trouvé de réparateurs dans cette ville.
-                </Typography>
-                <Typography>
-                  Veuillez svp recommencer votre recherche.
-                </Typography>
-              </Box>
-            )}
             <Box width="100%" pt={{xs: '222px', md: '170px'}}>
-              {repairers.length ? (
-                <>{!isLoading && <RepairersResults />}</>
-              ) : null}
+              <>{!isLoading && alreadyFetchApi && <RepairersResults />}</>
             </Box>
             <Box textAlign="center" pt={2}>
               {pendingSearchCity && <CircularProgress />}
