@@ -136,7 +136,7 @@ jobs:
             --set=php.jwt.secretKey="${APP_JWT_SECRET_KEY}" \
             --set=php.jwt.publicKey="${APP_JWT_PUBLIC_KEY}" \
             --set=php.jwt.passphrase=${APP_APP_JWT_PUBLIC_KEY} \
-            --set=php.host=${URL} \
+            --set=php.host=https://${URL} \
             --set=mercure.publicUrl=https://${URL}/.well-known/mercure \
             --set=mercure.jwtSecret="${MERCURE_JWT_PUBLIC_KEY}" \
             --set=mercure.extraDirectives="${MERCURE_EXTRA_DIRECTIVES}" \
