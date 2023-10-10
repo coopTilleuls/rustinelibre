@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Notifications;
 
 use App\Entity\Appointment;
+use App\Entity\Repairer;
 
 final readonly class AppointmentChangeTimeNotification
 {
@@ -12,12 +13,12 @@ final readonly class AppointmentChangeTimeNotification
     {
     }
 
-    public function sendAppointmentChangeTimeNotification(Appointment $appointment, string $oldTime): void
+    public function sendAppointmentChangeTimeNotification(Appointment $appointment, Repairer $repairer): void
     {
         $notification = new Notification(
             recipient: $appointment->customer,
             title: 'Votre RDV a été modifié',
-            body: sprintf('Votre RDV du %s a été modifié', $oldTime),
+            body: sprintf('Votre RDV avec %s a été modifié', $repairer->name),
             params: [
                 'route' => '/rendez-vous/mes-rendez-vous',
             ]

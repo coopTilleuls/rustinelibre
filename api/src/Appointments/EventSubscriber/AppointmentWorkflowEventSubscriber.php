@@ -96,7 +96,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition.slotTime', ['%transition%' => $event->getTransition()->getName()], domain: 'validators'));
         }
 
-        $oldSlotTime = $appointment->slotTime;
+        $repairer = $appointment->repairer;
         $newSlotTime = new \DateTimeImmutable($contentRequest['slotTime']);
 
         // Check new slot time is not a past datetime
@@ -104,16 +104,12 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             throw new BadRequestHttpException($this->translator->trans('appointment.slotTime.greater_than', ['%transition%' => $event->getTransition()->getName()], domain: 'validators'));
         }
 
-        if ($newSlotTime === $oldSlotTime) {
-            throw new BadRequestHttpException($this->translator->trans('appointment.slotTime.identical', domain: 'validators'));
-        }
-
         $appointment->status = Appointment::VALIDATED;
         $appointment->slotTime = $newSlotTime;
         $this->entityManager->flush();
         $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $appointment->repairer, flush: true);
-        $this->appointmentChangeTimeEmail->sendChangeTimeEmail(appointment: $appointment, oldTime: $oldSlotTime->format('d/m/Y H:i'));
-        $this->appointmentChangeTimeNotification->sendAppointmentChangeTimeNotification(appointment: $appointment, oldTime: $oldSlotTime->format('d/m/Y H:i'));
+        $this->appointmentChangeTimeEmail->sendChangeTimeEmail(appointment: $appointment, repairer: $repairer);
+        $this->appointmentChangeTimeNotification->sendAppointmentChangeTimeNotification(appointment: $appointment, repairer: $repairer);
     }
 
     public function onRefused(Event $event): void
