@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Appointments\EventSubscriber;
 
+use App\Emails\AppointmentChangeTimeEmail;
 use App\Emails\AppointmentRefusedEmail;
 use App\Emails\ConfirmationEmail;
 use App\Entity\Appointment;
 use App\Entity\User;
+use App\Notifications\AppointmentChangeTimeNotification;
 use App\Notifications\AppointmentConfirmNotification;
 use App\Notifications\AppointmentRefusedNotification;
 use App\Repairers\Slots\FirstSlotAvailableCalculator;
@@ -24,6 +26,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
 {
     public function __construct(
         private ConfirmationEmail $confirmationEmail,
+        private AppointmentChangeTimeEmail $appointmentChangeTimeEmail,
+        private AppointmentChangeTimeNotification $appointmentChangeTimeNotification,
         private AppointmentConfirmNotification $appointmentConfirmNotification,
         private EntityManagerInterface $entityManager,
         private FirstSlotAvailableCalculator $firstSlotAvailableCalculator,
@@ -92,6 +96,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             throw new BadRequestHttpException($this->translator->trans('400_badRequest.appointment.transition.slotTime', ['%transition%' => $event->getTransition()->getName()], domain: 'validators'));
         }
 
+        $oldSlotTime = $appointment->slotTime;
         $newSlotTime = new \DateTimeImmutable($contentRequest['slotTime']);
 
         // Check new slot time is not a past datetime
@@ -99,12 +104,16 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             throw new BadRequestHttpException($this->translator->trans('appointment.slotTime.greater_than', ['%transition%' => $event->getTransition()->getName()], domain: 'validators'));
         }
 
+        if ($newSlotTime === $oldSlotTime) {
+            throw new BadRequestHttpException($this->translator->trans('appointment.slotTime.identical', domain: 'validators'));
+        }
+
         $appointment->status = Appointment::VALIDATED;
         $appointment->slotTime = $newSlotTime;
         $this->entityManager->flush();
-
         $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $appointment->repairer, flush: true);
-        $this->confirmationEmail->sendConfirmationEmail(appointment: $appointment);
+        $this->appointmentChangeTimeEmail->sendChangeTimeEmail(appointment: $appointment, oldTime: $oldSlotTime->format('d/m/Y H:i'));
+        $this->appointmentChangeTimeNotification->sendAppointmentChangeTimeNotification(appointment: $appointment, oldTime: $oldSlotTime->format('d/m/Y H:i'));
     }
 
     public function onRefused(Event $event): void
