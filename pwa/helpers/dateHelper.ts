@@ -20,6 +20,19 @@ export const formatDate = (
   return `${day}/${month}/${year}`;
 };
 
+export const formatDateInSelect = (dateString: string | undefined): string => {
+  if (typeof dateString === 'undefined') {
+    return '';
+  }
+
+  const date = getDateObjectFromString(dateString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}-${month}-${year}`;
+};
+
 export const isPast = (targetDate: string): boolean => {
   const currentDate = new Date();
   const parsedTargetDate = getDateObjectFromString(targetDate);
