@@ -18,6 +18,8 @@ import {
   Paper,
   TextField,
   Alert,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import {User} from '@interfaces/User';
@@ -37,6 +39,8 @@ const Registration: NextPageWithLayout = ({}) => {
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false);
   const [resendAlert, setResendAlert] = useState<boolean>(false);
   const [resendPending, setResendPending] = useState<boolean>(false);
+  const [checked, setChecked] = useState<boolean>(false);
+
   const {login, setUser} = useAuth();
   const router = useRouter();
 
@@ -63,7 +67,7 @@ const Registration: NextPageWithLayout = ({}) => {
     useContext(UserFormContext);
 
   const invalidForm =
-    !email || !password || passwordError || !firstName || !lastName;
+    !email || !password || passwordError || !firstName || !lastName || !checked;
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -171,6 +175,32 @@ const Registration: NextPageWithLayout = ({}) => {
                   noValidate
                   sx={{mt: 1}}>
                   <UserForm user={null} />
+                  <FormControlLabel
+                    sx={{
+                      py: 1,
+                      fontSize: 14,
+                    }}
+                    control={
+                      <Checkbox
+                        checked={checked}
+                        onClick={() => setChecked(!checked)}
+                      />
+                    }
+                    label={
+                      <Typography fontSize={14}>
+                        En vous inscrivant, vous acceptez les{' '}
+                        <Link
+                          style={{textDecoration: 'none'}}
+                          href="/cgu"
+                          target="_blank">
+                          <Typography fontSize={14}>
+                            conditions d’utilisation
+                          </Typography>
+                        </Link>{' '}
+                        Rustine Libre et sa politique de confidentialité
+                      </Typography>
+                    }
+                  />
                   <Button
                     type="submit"
                     variant="contained"
@@ -191,8 +221,7 @@ const Registration: NextPageWithLayout = ({}) => {
                           cursor: 'pointer',
                           textDecoration: 'underline',
                         },
-                      }}
-                      pb={2}>
+                      }}>
                       J&apos;ai déjà un compte
                     </Typography>
                   </Link>
@@ -202,11 +231,6 @@ const Registration: NextPageWithLayout = ({}) => {
                     </Typography>
                   )}
                 </Box>
-                <Typography variant="body1" color="grey">
-                  En vous inscrivant, vous acceptez les conditions d’utilisation
-                  de l’application Rustine libre et sa politique de
-                  confidentialité
-                </Typography>
               </Box>
             </Paper>
           )}

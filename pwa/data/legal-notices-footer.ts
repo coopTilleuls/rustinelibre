@@ -6,17 +6,14 @@ export const legalNoticesFooter = [
   {
     name: 'FAQ',
     link: '/faq',
-    disabled: false,
   },
   {
     name: 'CGU',
-    link: '/',
-    disabled: true,
+    link: '/cgu',
   },
   {
     name: 'Mentions légales',
     link: '/mentions-legales',
-    disabled: false,
   },
   {
     name: 'Protection des données',
