@@ -63,7 +63,15 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const buildCalendarEvents = async (start: string, end: string) => {
+    const statusValues = ['validated', 'pending_repairer'];
+    const params = new URLSearchParams();
+    statusValues.forEach((status) => {
+      params.append('status', status);
+    });
+    const statusQueryParams = params.toString();
+
     const appointmentsFetch = await appointmentResource.getAll(true, {
+      statusQueryParams,
       'slotTime[after]': start,
       'slotTime[before]': end,
     });
@@ -76,26 +84,6 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
         : 'Nom inconnu';
       const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
 
-      let color;
-      switch (appointment.status) {
-        case 'validated':
-          color = 'green';
-          break;
-        case 'pending_repairer':
-          color = 'grey';
-          break;
-        case 'pending_cyclist':
-          color = 'orange';
-          break;
-        case 'cancel':
-          color = 'red';
-          break;
-        case 'refused':
-          color = 'red';
-          break;
-        default:
-          color = 'grey';
-      }
       return {
         title: `${
           appointment.status === 'pending_repairer' ? '⌛' : ''
@@ -103,7 +91,7 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
         start: slotTime,
         end: getEndAppointment(slotTime, repairer.durationSlot ?? 60),
         id: appointment['@id'],
-        color: color,
+        color: appointment.status === 'validated' ? 'green' : 'grey',
         display: 'block',
       };
     });
