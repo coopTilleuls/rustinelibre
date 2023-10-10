@@ -104,9 +104,8 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
             throw new BadRequestHttpException($this->translator->trans('appointment.slotTime.greater_than', ['%transition%' => $event->getTransition()->getName()], domain: 'validators'));
         }
 
-        if($newSlotTime === $oldSlotTime) {
+        if ($newSlotTime === $oldSlotTime) {
             throw new BadRequestHttpException($this->translator->trans('appointment.slotTime.identical', domain: 'validators'));
-
         }
 
         $appointment->status = Appointment::VALIDATED;
