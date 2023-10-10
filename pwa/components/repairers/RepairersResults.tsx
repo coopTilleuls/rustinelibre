@@ -14,6 +14,7 @@ import {Repairer} from '@interfaces/Repairer';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
 import L from 'leaflet';
+import {Typography} from '@mui/material';
 
 export const RepairersResults = (): JSX.Element => {
   const theme = useTheme();
@@ -51,28 +52,37 @@ export const RepairersResults = (): JSX.Element => {
             pr: {md: 2},
             width: {xs: '100%', md: '50%'},
           }}>
-          <Box display="grid" gap={{xs: 2, md: 4}}>
-            {repairers.map((repairer) => {
-              return (
-                <Box
-                  key={repairer.id}
-                  id={repairer.id}
-                  display="flex"
-                  sx={{pt: '268px', mt: '-268px'}}>
-                  <RepairerCard
-                    withButton
-                    repairer={repairer}
-                    onClick={() =>
-                      router.push({
-                        pathname: `/reparateur/${repairer.id}-${repairer.slug}`,
-                        query: {recherche: 1},
-                      })
-                    }
-                  />
-                </Box>
-              );
-            })}
-          </Box>
+          {repairers.length === 0 ? (
+            <Box textAlign="center">
+              <Typography>
+                Nous n&apos;avons pas trouvé de réparateurs dans cette ville.
+              </Typography>
+              <Typography>Veuillez svp recommencer votre recherche.</Typography>
+            </Box>
+          ) : (
+            <Box display="grid" gap={{xs: 2, md: 4}}>
+              {repairers.map((repairer) => {
+                return (
+                  <Box
+                    key={repairer.id}
+                    id={repairer.id}
+                    display="flex"
+                    sx={{pt: '268px', mt: '-268px'}}>
+                    <RepairerCard
+                      withButton
+                      repairer={repairer}
+                      onClick={() =>
+                        router.push({
+                          pathname: `/reparateur/${repairer.id}-${repairer.slug}`,
+                          query: {recherche: 1},
+                        })
+                      }
+                    />
+                  </Box>
+                );
+              })}
+            </Box>
+          )}
         </Box>
       )}
       {(showMap || !isMobile) && (
