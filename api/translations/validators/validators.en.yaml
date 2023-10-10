@@ -25,6 +25,7 @@ appointment.repairer.not_blank: Appointment should have a repairer.
 #SlotTime
 appointment.slotTime.not_blank: Appointment should have a selected slotTime.
 appointment.slotTime.greater_than: Appointment's slotTime should be greater than {{ compared_value }}.
+appointment.slotTime.identical: New Appointment is equal to the old one.
 
 #Appointment State
 appointment.state.status: This state is not a valid status.

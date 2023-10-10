@@ -27,6 +27,7 @@ appointment.repairer.not_blank: Un réparateur doit être renseigné pour prendr
 #SlotTime
 appointment.slotTime.not_blank: Un créneau doit être sélectionné pour prendre rendez-vous.
 appointment.slotTime.greater_than: Le créneau sélectionné doit être postérieur à {{ compared_value }}.
+appointment.slotTime.identical: Le nouveau créneau est identique au précédent.
 
 #Appointment state
 appointment.state.status: Cet état n'est pas un statut valide.
