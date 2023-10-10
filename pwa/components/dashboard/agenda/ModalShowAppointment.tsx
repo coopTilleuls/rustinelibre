@@ -31,7 +31,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Appointment} from '@interfaces/Appointment';
-import {formatDate} from '@helpers/dateHelper';
+import {formatDate, formatDateInSelect} from '@helpers/dateHelper';
 import {getAppointmentStatus} from '@helpers/appointmentStatus';
 
 type ModalShowAppointmentProps = {
@@ -83,7 +83,7 @@ const ModalShowAppointment = ({
       });
     }
   };
-
+  console.log(dates);
   const handleDateChange = (event: SelectChangeEvent) => {
     const newDateSelected = event.target.value as string;
     setSelectedDate(newDateSelected);
@@ -310,7 +310,7 @@ const ModalShowAppointment = ({
                     onChange={handleDateChange}>
                     {dates.map((date) => (
                       <MenuItem key={date} value={date}>
-                        {date}
+                        {formatDateInSelect(date)}
                       </MenuItem>
                     ))}
                   </Select>
