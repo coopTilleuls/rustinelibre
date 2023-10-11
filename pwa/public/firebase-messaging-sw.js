@@ -6,9 +6,9 @@ const firebaseConfig = JSON.parse(new URL(location).searchParams.get('firebaseCo
 console.log(firebaseConfig);
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
+console.log(messaging);
 
 messaging.onBackgroundMessage((payload) => {
-
     console.log(
         '[firebase-messaging-sw.js] Received background message ',
         payload
