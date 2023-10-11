@@ -121,7 +121,9 @@ export const Notifications = (): JSX.Element => {
         JSON.stringify(firebaseConfig)
     );
 
-    const register = await navigator.serviceWorker
+    console.log(firebaseConfigEncoded);
+
+    navigator.serviceWorker
         .register(
             `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
             { scope: './' }
