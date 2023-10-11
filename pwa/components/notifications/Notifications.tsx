@@ -29,6 +29,7 @@ export const Notifications = (): JSX.Element => {
     NotificationPayload | undefined
   >(undefined);
   const [open, setOpen] = useState<boolean>(false);
+  const [serviceWorkerStatus, setServiceWorkerStatus] = useState<boolean>(false);
 
   const checkPermission = async () => {
     if (!Object.hasOwn(window, 'Notification')) {
@@ -54,23 +55,6 @@ export const Notifications = (): JSX.Element => {
   ) => {
     setOpen(false);
   };
-
-  useEffect(() => {
-    const firebaseConfigEncoded = encodeURIComponent(
-      JSON.stringify(firebaseConfig)
-    );
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register(
-          `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`
-        )
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      console.warn('Service Worker is not supported in this browser');
-    }
-  }, []);
 
   const updateFirebaseToken = async (
     user: User,
@@ -118,6 +102,10 @@ export const Notifications = (): JSX.Element => {
       return;
     }
 
+    if (!serviceWorkerStatus) {
+      return;
+    }
+
     const permission = checkPermission();
     if (!permission) {
       return;
@@ -129,7 +117,28 @@ export const Notifications = (): JSX.Element => {
     updateFirebaseToken(user, firebaseApp, messaging)
       .then(() => handleIncomingFcmMessages(messaging))
       .catch((e) => console.error('firebase token error', e));
-  }, [user, handleIncomingFcmMessages]);
+  }, [user, serviceWorkerStatus, handleIncomingFcmMessages]);
+
+
+  useEffect(() => {
+    const firebaseConfigEncoded = encodeURIComponent(
+        JSON.stringify(firebaseConfig)
+    );
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+          .register(
+              `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`
+          )
+          .then(() => {
+            setServiceWorkerStatus(true);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    } else {
+      console.warn('Service Worker is not supported in this browser');
+    }
+  }, []);
 
   return (
     <>
