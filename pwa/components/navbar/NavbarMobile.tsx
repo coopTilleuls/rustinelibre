@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {Page} from '@interfaces/Page';
 import {User} from '@interfaces/User';
 import Logo from '@components/common/Logo';
+import {isBoss, isEmployee} from '@helpers/rolesHelpers';
 
 interface MobileNavbarProps {
   pages: Page[];
@@ -35,6 +36,8 @@ const MobileNavbar = ({
   anchorElNav,
   logOut,
 }: MobileNavbarProps): JSX.Element => {
+  const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
+
   return (
     <Container
       sx={{
@@ -95,7 +98,7 @@ const MobileNavbar = ({
               </MenuItem>
             </Link>
           ))}
-          {boss && user && (
+          {isBossOrEmployee && (
             <Link
               href="/sradmin"
               style={{textDecoration: 'none', color: 'currentcolor'}}>
