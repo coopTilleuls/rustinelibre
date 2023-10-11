@@ -22,6 +22,7 @@ RUN apk upgrade && apk add --no-cache \
 		gettext \
 		git \
 		curl \
+		nghttp2 \
 	;
 
 RUN set -eux; \
