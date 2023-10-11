@@ -1,10 +1,10 @@
 importScripts('/sw.js');
 importScripts("https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js");
+import firebase from "firebase/compat/app";
+import "firebase/compat/messaging";
 
-const firebaseConfig = JSON.parse(new URL(location).searchParams.get('firebaseConfig'));
-console.log(firebaseConfig);
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(JSON.parse(new URL(location).searchParams.get('firebaseConfig')));
 const messaging = firebase.messaging();
 console.log(messaging);
 
