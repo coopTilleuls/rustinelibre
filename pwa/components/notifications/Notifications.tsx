@@ -134,6 +134,22 @@ export const Notifications = (): JSX.Element => {
           } else if (reg.active) {
             console.log('Service worker active');
           }
+
+          reg.addEventListener('updatefound', () => {
+            const installingWorker = reg.installing;
+
+            if (installingWorker === null) {
+              console.log('Installing worker is null');
+              return;
+            }
+            installingWorker.addEventListener('statechange', () => {
+              console.log(installingWorker.state);
+              if (installingWorker.state === 'activated') {
+                setServiceWorkerStatus(true);
+              }
+            })
+          })
+
         })
         .catch((error) => {
           console.log('Service worker not registered : '+error)
@@ -141,7 +157,6 @@ export const Notifications = (): JSX.Element => {
 
     await navigator.serviceWorker.ready;
 
-    console.log(register);
     console.log('Service worker ready')
     setServiceWorkerStatus(true);
   }
