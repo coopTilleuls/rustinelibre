@@ -7,6 +7,10 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
 
+    console.log(
+        '[firebase-messaging-sw.js] Received background message ',
+        payload
+    );
     const title = payload.data.title;
     const options = {
         title: title,

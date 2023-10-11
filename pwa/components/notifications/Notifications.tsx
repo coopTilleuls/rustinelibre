@@ -116,21 +116,40 @@ export const Notifications = (): JSX.Element => {
   }, [user, serviceWorkerStatus, handleIncomingFcmMessages]);
 
 
-  useEffect(() => {
+  const registerServiceWorker = async() => {
     const firebaseConfigEncoded = encodeURIComponent(
         JSON.stringify(firebaseConfig)
     );
+
+    const register = await navigator.serviceWorker
+        .register(
+            `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`
+        )
+        .then((reg) => {
+          console.log('Service worker registered')
+          if (reg.installing) {
+            console.log('Service worker installing');
+          } else if (reg.waiting) {
+            console.log('Service worker installed & waiting');
+          } else if (reg.active) {
+            console.log('Service worker active');
+          }
+        })
+        .catch((error) => {
+          console.log('Service worker not registered : '+error)
+        });
+
+    await navigator.serviceWorker.ready;
+
+    console.log(register);
+    console.log('Service worker ready')
+    setServiceWorkerStatus(true);
+  }
+
+  useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-          .register(
-              `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`
-          )
-          .then(() => {
-            setServiceWorkerStatus(true);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      console.log('Service worker available on this browser');
+      registerServiceWorker();
     } else {
       console.warn('Service Worker is not supported in this browser');
     }
