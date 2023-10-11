@@ -98,11 +98,7 @@ export const Notifications = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (!user || !('serviceWorker' in navigator)) {
-      return;
-    }
-
-    if (!serviceWorkerStatus) {
+    if (!user || !('serviceWorker' in navigator) || !serviceWorkerStatus) {
       return;
     }
 
