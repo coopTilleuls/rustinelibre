@@ -123,42 +123,30 @@ export const Notifications = (): JSX.Element => {
 
     const register = await navigator.serviceWorker
         .register(
-            `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`
+            `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
+            { scope: './' }
         )
-        .then((reg) => {
+        .then((registration) => {
           console.log('Service worker registered')
-          if (reg.installing) {
+          if (registration.installing) {
             console.log('Service worker installing');
-          } else if (reg.waiting) {
+          } else if (registration.waiting) {
             console.log('Service worker installed & waiting');
-          } else if (reg.active) {
+          } else if (registration.active) {
             console.log('Service worker active');
           }
-
-          reg.addEventListener('updatefound', () => {
-            const installingWorker = reg.installing;
-
-            if (installingWorker === null) {
-              console.log('Installing worker is null');
-              return;
-            }
-            installingWorker.addEventListener('statechange', () => {
-              console.log(installingWorker.state);
-              if (installingWorker.state === 'activated') {
-                setServiceWorkerStatus(true);
-              }
-            })
-          })
-
         })
         .catch((error) => {
           console.log('Service worker not registered : '+error)
         });
 
-    await navigator.serviceWorker.ready;
+    navigator.serviceWorker.ready.then(registration => {
+      console.log('Service worker ready');
+      setServiceWorkerStatus(true);
+    })
 
-    console.log('Service worker ready')
-    setServiceWorkerStatus(true);
+    await navigator.serviceWorker.ready;
+    console.log('Service worker ready 2')
   }
 
   useEffect(() => {

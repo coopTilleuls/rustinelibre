@@ -2,7 +2,9 @@ importScripts('/sw.js');
 importScripts("https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js");
 
-firebase.initializeApp(JSON.parse(new URL(location).searchParams.get('firebaseConfig')));
+const firebaseConfig = JSON.parse(new URL(location).searchParams.get('firebaseConfig'));
+console.log(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
