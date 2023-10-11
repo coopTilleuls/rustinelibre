@@ -137,9 +137,6 @@ const useProviderAuth = () => {
   };
 
   const logout = async () => {
-    if (user) {
-      removeFirebaseToken(user);
-    }
     removeToken();
     removeRefreshToken();
     setUser(null);
