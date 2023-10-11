@@ -114,7 +114,7 @@ export const Notifications = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !('serviceWorker' in navigator)) {
       return;
     }
 
