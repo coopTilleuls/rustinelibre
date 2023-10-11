@@ -120,7 +120,7 @@ export const Notifications = (): JSX.Element => {
     const firebaseConfigEncoded = encodeURIComponent(
         JSON.stringify(firebaseConfig)
     );
-    
+
     navigator.serviceWorker
         .register(
             `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
