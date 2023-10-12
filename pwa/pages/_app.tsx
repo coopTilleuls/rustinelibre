@@ -14,13 +14,6 @@ import {A2HS} from '@components/banner/A2HS';
 import {A2HSIOS} from '@components/banner/A2HSIOS';
 import dynamic from 'next/dynamic';
 
-const Notifications = dynamic(
-  () => import('@components/notifications/Notifications'),
-  {
-    ssr: false,
-  }
-);
-
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -185,7 +178,6 @@ function MyApp({
               <CssBaseline>
                 <A2HS></A2HS>
                 <A2HSIOS></A2HSIOS>
-                <Notifications></Notifications>
                 <Layout dehydratedState={pageProps.dehydratedState}>
                   <Component {...pageProps} />
                 </Layout>

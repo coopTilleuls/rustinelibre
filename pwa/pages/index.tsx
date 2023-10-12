@@ -1,4 +1,3 @@
-import React from 'react';
 import Head from 'next/head';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {useAccount} from '@contexts/AuthContext';
@@ -15,6 +14,11 @@ import Arg3 from '@public/img/arg3.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import Faq from '@components/homepage/Faq';
+
+import React, {useEffect} from 'react';
+import {getMessaging, onMessage} from 'firebase/messaging';
+import firebaseApp from '@config/firebase';
+import useFcmToken from '@hooks/useFcmToken';
 
 const Home = () => {
   const {user} = useAccount({redirectIfMailNotConfirm: '/'});
@@ -36,6 +40,25 @@ const Home = () => {
       img: <Image src={Arg3} width={100} height={100} alt="" />,
     },
   ];
+
+  const {fcmToken, notificationPermissionStatus} = useFcmToken();
+  // Use the token as needed
+  fcmToken && console.log('FCM token:', fcmToken);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      const messaging = getMessaging(firebaseApp);
+      const unsubscribe = onMessage(messaging, (payload) => {
+        console.log('Foreground push notification received:', payload);
+        // Handle the received push notification while the app is in the foreground
+        // You can display a notification or update the UI based on the payload
+      });
+      return () => {
+        unsubscribe(); // Unsubscribe from the onMessage event
+      };
+    }
+  }, []);
 
   return (
     <>
