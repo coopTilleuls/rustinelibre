@@ -29,7 +29,8 @@ export const Notifications = (): JSX.Element => {
     NotificationPayload | undefined
   >(undefined);
   const [open, setOpen] = useState<boolean>(false);
-  const [serviceWorkerStatus, setServiceWorkerStatus] = useState<boolean>(false);
+  const [serviceWorkerStatus, setServiceWorkerStatus] =
+    useState<boolean>(false);
 
   const checkPermission = async () => {
     if (!Object.hasOwn(window, 'Notification')) {
@@ -115,39 +116,45 @@ export const Notifications = (): JSX.Element => {
       .catch((e) => console.error('firebase token error', e));
   }, [user, serviceWorkerStatus, handleIncomingFcmMessages]);
 
-
-  const registerServiceWorker = async() => {
+  const registerServiceWorker = async () => {
     const firebaseConfigEncoded = encodeURIComponent(
-        JSON.stringify(firebaseConfig)
+      JSON.stringify(firebaseConfig)
     );
 
-    navigator.serviceWorker
-        .register(
-            `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
-            { scope: './' }
-        )
-        .then((registration) => {
-          console.log('Service worker registered')
-          if (registration.installing) {
-            console.log('Service worker installing');
-          } else if (registration.waiting) {
-            console.log('Service worker installed & waiting');
-          } else if (registration.active) {
-            console.log('Service worker active');
-          }
-        })
-        .catch((error) => {
-          console.log('Service worker not registered : '+error)
-        });
+    try {
+      const registration = await navigator.serviceWorker.register(
+        `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
+        {scope: './'}
+      );
 
-    navigator.serviceWorker.ready.then(registration => {
+      registration.addEventListener('updatefound', () => {
+        const installingWorker = registration.installing;
+        if (installingWorker) {
+          installingWorker.addEventListener('statechange', () => {
+            if (installingWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                // A new service worker is ready to take over, so skip waiting and activate it.
+                installingWorker.postMessage({action: 'skipWaiting'});
+              }
+            }
+          });
+        }
+      });
+
+      console.log('Service worker registered');
+      console.log('Service worker is installing...');
+    } catch (error) {
+      console.log('Service worker not registered: ' + error);
+    }
+
+    navigator.serviceWorker.ready.then((registration) => {
       console.log('Service worker ready');
       setServiceWorkerStatus(true);
-    })
+    });
 
     await navigator.serviceWorker.ready;
-    console.log('Service worker ready 2')
-  }
+    console.log('Service worker ready 2');
+  };
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
