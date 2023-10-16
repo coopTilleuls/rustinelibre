@@ -121,31 +121,24 @@ export const Notifications = (): JSX.Element => {
       JSON.stringify(firebaseConfig)
     );
 
-    try {
-      const registration = await navigator.serviceWorker.register(
+    navigator.serviceWorker
+      .register(
         `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
         {scope: './'}
-      );
-
-      registration.addEventListener('updatefound', () => {
-        const installingWorker = registration.installing;
-        if (installingWorker) {
-          installingWorker.addEventListener('statechange', () => {
-            if (installingWorker.state === 'installed') {
-              if (navigator.serviceWorker.controller) {
-                // A new service worker is ready to take over, so skip waiting and activate it.
-                installingWorker.postMessage({action: 'skipWaiting'});
-              }
-            }
-          });
+      )
+      .then((registration) => {
+        console.log('Service worker registered');
+        if (registration.installing) {
+          console.log('Service worker installing');
+        } else if (registration.waiting) {
+          console.log('Service worker installed & waiting');
+        } else if (registration.active) {
+          console.log('Service worker active');
         }
+      })
+      .catch((error) => {
+        console.log('Service worker not registered : ' + error);
       });
-
-      console.log('Service worker registered');
-      console.log('Service worker is installing...');
-    } catch (error) {
-      console.log('Service worker not registered: ' + error);
-    }
 
     navigator.serviceWorker.ready.then((registration) => {
       console.log('Service worker ready');
