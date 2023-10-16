@@ -183,12 +183,6 @@ Et ajouter dans le .env.local de votre PWA
 NEXT_PUBLIC_ENTRYPOINT=https://<votre ip ngrok>.ngrok-free.app
 ```
 
-Pour générer les credentials firebase, lancez la commande suivante
-
-```
-php bin/console app:firebase:credentials
-```
-
 
 ## Usage du site
 
