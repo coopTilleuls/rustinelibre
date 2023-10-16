@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Notifications;
 
 use App\Entity\DiscussionMessage;
+use App\Entity\RepairerEmployee;
 use App\Entity\User;
 
 final readonly class NewMessageNotification
@@ -15,16 +16,21 @@ final readonly class NewMessageNotification
 
     public function sendNewMessageNotification(DiscussionMessage $message): void
     {
-        $notification = new Notification(
-            recipient: $this->getRecipient($message),
-            title: 'Nouveau message',
-            body: $this->buildMessage($message),
-            params: [
-                'route' => (!$message->sender->isBoss() && !$message->sender->isEmployee()) ? '/sradmin/messagerie' : '/messagerie',
-            ]
-        );
+        /** @var User[] $recipients */
+        $recipients = $this->getRecipients($message);
 
-        $this->firebaseNotifier->sendNotification(notification: $notification);
+        foreach ($recipients as $recipient) {
+            $notification = new Notification(
+                recipient: $recipient,
+                title: 'Nouveau message',
+                body: $this->buildMessage($message),
+                params: [
+                    'route' => (!$message->sender->isBoss() && !$message->sender->isEmployee()) ? '/sradmin/messagerie' : '/messagerie',
+                ]
+            );
+
+            $this->firebaseNotifier->sendNotification(notification: $notification);
+        }
     }
 
     private function buildMessage(DiscussionMessage $message): string
@@ -32,12 +38,21 @@ final readonly class NewMessageNotification
         return sprintf('Nouveau message de %s : %s...', $message->sender->__toString(), substr($message->content, 0, 10));
     }
 
-    private function getRecipient(DiscussionMessage $message): User
+    private function getRecipients(DiscussionMessage $message): array
     {
+        // If the notification is to be sent to the repairer and workshop staff
         if ($message->sender === $message->discussion->customer) {
-            return $message->discussion->repairer->owner;
+            $recipients = [$message->discussion->repairer->owner];
+
+            /** @var RepairerEmployee $repairerEmployee */
+            foreach ($message->discussion->repairer->repairerEmployees as $repairerEmployee) {
+                $recipients[] = $repairerEmployee->employee;
+            }
+
+            return $recipients;
         }
 
-        return $message->discussion->customer;
+        // If the notification is to be sent to the customer
+        return [$message->discussion->customer];
     }
 }
