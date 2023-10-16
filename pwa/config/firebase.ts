@@ -23,6 +23,7 @@ export function getMessaging(firebaseApp: FirebaseApp): Messaging {
 }
 
 export async function getFCMToken(messaging: Messaging): Promise<string> {
+
   const config = encodeURIComponent(JSON.stringify(firebaseConfig));
   const sw = await navigator.serviceWorker.register(
     `/firebase-messaging-sw.js?firebaseConfig=${config}`
