@@ -31,6 +31,7 @@ export const Notifications = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const [serviceWorkerStatus, setServiceWorkerStatus] =
     useState<boolean>(false);
+  const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | undefined>(undefined);
 
   const checkPermission = async () => {
     if (!Object.hasOwn(window, 'Notification')) {
@@ -57,6 +58,13 @@ export const Notifications = (): JSX.Element => {
     setOpen(false);
   };
 
+  const callServiceWorkerToBecameActive = useCallback(() => {
+    if (swRegistration && swRegistration.waiting) {
+      swRegistration.waiting.postMessage('SKIP_WAITING');
+    }
+  }, [swRegistration]);
+
+
   const updateFirebaseToken = async (
     user: User,
     firebaseApp: FirebaseApp,
@@ -66,8 +74,6 @@ export const Notifications = (): JSX.Element => {
     const firebaseToken = await getFCMToken(messaging).catch((e) =>
       console.error('An error occurred while retrieving firebase token. ', e)
     );
-
-    console.log(firebaseToken);
 
     if (!firebaseToken) {
       throw new Error('No firebase token.');
@@ -133,15 +139,38 @@ export const Notifications = (): JSX.Element => {
         `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
         {scope: './'}
       )
-      .then((registration) => {
+      .then((registration: ServiceWorkerRegistration) => {
         console.log('Service worker registered');
+        setSwRegistration(registration);
+
         if (registration.installing) {
           console.log('Service worker installing');
         } else if (registration.waiting) {
-          console.log('Service worker installed & waiting');
+          console.log('Service worker waiting');
+          callServiceWorkerToBecameActive();
         } else if (registration.active) {
           console.log('Service worker active');
+          setServiceWorkerStatus(true);
         }
+
+        registration.addEventListener('updatefound', () => {
+          if (registration.installing) {
+            registration.installing.addEventListener('statechange', () => {
+              if (registration.waiting && navigator.serviceWorker.controller) {
+                callServiceWorkerToBecameActive();
+              }
+            });
+          }
+        });
+
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            window.location.reload();
+            refreshing = true;
+          }
+        });
+
       })
       .catch((error) => {
         console.log('Service worker not registered : ' + error);
