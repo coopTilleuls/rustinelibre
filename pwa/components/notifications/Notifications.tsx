@@ -163,13 +163,13 @@ export const Notifications = (): JSX.Element => {
           }
         });
 
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          if (!refreshing) {
-            window.location.reload();
-            refreshing = true;
-          }
-        });
+        // let refreshing = false;
+        // navigator.serviceWorker.addEventListener('controllerchange', () => {
+        //   if (!refreshing) {
+        //     window.location.reload();
+        //     refreshing = true;
+        //   }
+        // });
 
       })
       .catch((error) => {
