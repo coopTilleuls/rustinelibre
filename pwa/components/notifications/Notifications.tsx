@@ -62,6 +62,11 @@ export const Notifications = (): JSX.Element => {
     if (swRegistration && swRegistration.waiting) {
       swRegistration.waiting.postMessage('SKIP_WAITING');
     }
+
+    if (swRegistration && swRegistration.installing) {
+      swRegistration.installing.postMessage('SKIP_WAITING');
+    }
+
   }, [swRegistration]);
 
   const updateFirebaseToken = async (
@@ -142,6 +147,11 @@ export const Notifications = (): JSX.Element => {
       .then((registration: ServiceWorkerRegistration) => {
         console.log('Service worker registered');
         setSwRegistration(registration);
+
+        if (registration.installing) {
+          console.log('Service worker installing');
+          callServiceWorkerToBecameActive();
+        }
 
         if (registration.waiting) {
           console.log('Service worker waiting');
