@@ -42,7 +42,7 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('error', function(event) {
-  console.warn('Error in service worker');
+  console.warn('Error in service worker registration');
   console.log(event);
 });
 
