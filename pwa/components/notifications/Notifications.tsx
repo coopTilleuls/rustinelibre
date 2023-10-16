@@ -161,7 +161,7 @@ export const Notifications = (): JSX.Element => {
               }
             });
           }
-        });g
+        });
       })
       .catch((error) => {
         console.log('Service worker not registered : ' + error);
