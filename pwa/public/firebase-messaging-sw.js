@@ -41,6 +41,11 @@ self.addEventListener('message', (event) => {
   }
 });
 
+self.addEventListener('error', function(event) {
+  console.warn('Error in service worker');
+  console.log(event);
+});
+
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
   const url = event.notification.data.url;
