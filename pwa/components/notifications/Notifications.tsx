@@ -31,10 +31,12 @@ export const Notifications = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const [serviceWorkerStatus, setServiceWorkerStatus] =
     useState<boolean>(false);
-  const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | undefined>(undefined);
+  const [swRegistration, setSwRegistration] = useState<
+    ServiceWorkerRegistration | undefined
+  >(undefined);
 
   const checkPermission = async () => {
-    console.log('check permissions')
+    console.log('check permissions');
     if (!Object.hasOwn(window, 'Notification')) {
       return false;
     }
@@ -70,7 +72,6 @@ export const Notifications = (): JSX.Element => {
     firebaseApp: FirebaseApp,
     messaging: Messaging
   ) => {
-
     const firebaseToken = await getFCMToken(messaging).catch((e) =>
       console.error('An error occurred while retrieving firebase token. ', e)
     );
@@ -117,9 +118,9 @@ export const Notifications = (): JSX.Element => {
     const messaging = getMessaging(firebaseApp);
 
     updateFirebaseToken(user, firebaseApp, messaging)
-        .then(() => handleIncomingFcmMessages(messaging))
-        .catch((e) => console.error('firebase token error', e));
-  }
+      .then(() => handleIncomingFcmMessages(messaging))
+      .catch((e) => console.error('firebase token error', e));
+  };
 
   useEffect(() => {
     if (!user || !('serviceWorker' in navigator) || !serviceWorkerStatus) {
@@ -128,7 +129,6 @@ export const Notifications = (): JSX.Element => {
 
     updateNotificationToken(user);
   }, [user, serviceWorkerStatus, handleIncomingFcmMessages]);
-
 
   const registerServiceWorker = async () => {
     const firebaseConfigEncoded = encodeURIComponent(
@@ -167,7 +167,6 @@ export const Notifications = (): JSX.Element => {
         console.log('Service worker not registered : ' + error);
       });
   };
-
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
