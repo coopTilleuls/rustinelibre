@@ -83,7 +83,6 @@ const ModalShowAppointment = ({
       });
     }
   };
-  console.log(dates);
   const handleDateChange = (event: SelectChangeEvent) => {
     const newDateSelected = event.target.value as string;
     setSelectedDate(newDateSelected);
