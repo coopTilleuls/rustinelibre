@@ -88,7 +88,7 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
         start: slotTime,
         end: getEndAppointment(slotTime, repairer.durationSlot ?? 60),
         id: appointment['@id'],
-        color: appointment.status === 'validated' ? 'green' : 'grey',
+        color: appointment.status === 'validated' ? 'green' : 'red',
         display: 'block',
       };
     });
