@@ -108,21 +108,21 @@ export const Notifications = (): JSX.Element => {
     []
   );
 
-  const updateNotificationToken = async (user: User) => {
-    const permission = await checkPermission();
-    if (!permission) {
-      return;
-    }
-
-    const firebaseApp = getFirebaseApp();
-    const messaging = getMessaging(firebaseApp);
-
-    updateFirebaseToken(user, firebaseApp, messaging)
-      .then(() => handleIncomingFcmMessages(messaging))
-      .catch((e) => console.error('firebase token error', e));
-  };
-
   useEffect(() => {
+    const updateNotificationToken = async (user: User) => {
+      const permission = await checkPermission();
+      if (!permission) {
+        return;
+      }
+
+      const firebaseApp = getFirebaseApp();
+      const messaging = getMessaging(firebaseApp);
+
+      updateFirebaseToken(user, firebaseApp, messaging)
+        .then(() => handleIncomingFcmMessages(messaging))
+        .catch((e) => console.error('firebase token error', e));
+    };
+
     if (!user || !('serviceWorker' in navigator) || !serviceWorkerStatus) {
       return;
     }
@@ -130,52 +130,55 @@ export const Notifications = (): JSX.Element => {
     updateNotificationToken(user);
   }, [user, serviceWorkerStatus, handleIncomingFcmMessages]);
 
-  const registerServiceWorker = async () => {
-    const firebaseConfigEncoded = encodeURIComponent(
-      JSON.stringify(firebaseConfig)
-    );
-
-    navigator.serviceWorker
-      .register(
-        `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
-        {scope: './'}
-      )
-      .then((registration: ServiceWorkerRegistration) => {
-        console.log('Service worker registered');
-        setSwRegistration(registration);
-        if (registration.waiting) {
-          console.log('Service worker waiting');
-          callServiceWorkerToBecameActive();
-        }
-
-        if (registration.active) {
-          console.log('Service worker active');
-          setServiceWorkerStatus(true);
-        }
-
-        registration.addEventListener('updatefound', () => {
-          if (registration.installing) {
-            registration.installing.addEventListener('statechange', () => {
-              if (registration.waiting && navigator.serviceWorker.controller) {
-                callServiceWorkerToBecameActive();
-              }
-            });
-          }
-        });
-      })
-      .catch((error) => {
-        console.log('Service worker not registered : ' + error);
-      });
-  };
-
   useEffect(() => {
+    const registerServiceWorker = async () => {
+      const firebaseConfigEncoded = encodeURIComponent(
+        JSON.stringify(firebaseConfig)
+      );
+
+      navigator.serviceWorker
+        .register(
+          `/firebase-messaging-sw.js?firebaseConfig=${firebaseConfigEncoded}`,
+          {scope: './'}
+        )
+        .then((registration: ServiceWorkerRegistration) => {
+          console.log('Service worker registered');
+          setSwRegistration(registration);
+          if (registration.waiting) {
+            console.log('Service worker waiting');
+            callServiceWorkerToBecameActive();
+          }
+
+          if (registration.active) {
+            console.log('Service worker active');
+            setServiceWorkerStatus(true);
+          }
+
+          registration.addEventListener('updatefound', () => {
+            if (registration.installing) {
+              registration.installing.addEventListener('statechange', () => {
+                if (
+                  registration.waiting &&
+                  navigator.serviceWorker.controller
+                ) {
+                  callServiceWorkerToBecameActive();
+                }
+              });
+            }
+          });
+        })
+        .catch((error) => {
+          console.log('Service worker not registered : ' + error);
+        });
+    };
+
     if ('serviceWorker' in navigator) {
       console.log('Service worker available on this browser');
       registerServiceWorker();
     } else {
       console.warn('Service Worker is not supported in this browser');
     }
-  }, []);
+  }, [callServiceWorkerToBecameActive]);
 
   return (
     <>
