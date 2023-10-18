@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Notifications;
 
 use App\Entity\Appointment;
+use App\Entity\RepairerEmployee;
 
 final readonly class NewAppointmentNotification
 {
@@ -14,6 +15,7 @@ final readonly class NewAppointmentNotification
 
     public function sendNewAppointmentNotification(Appointment $appointment): void
     {
+        // Send notification to repairer
         $notification = new Notification(
             recipient: $appointment->repairer->owner,
             title: 'Nouvelle demande de RDV',
@@ -24,5 +26,13 @@ final readonly class NewAppointmentNotification
         );
 
         $this->firebaseNotifier->sendNotification(notification: $notification);
+
+        // Send notification to all employees
+        /** @var RepairerEmployee $repairerEmployee */
+        foreach ($appointment->repairer->repairerEmployees as $repairerEmployee) {
+            $notification->recipient = $repairerEmployee->employee;
+
+            $this->firebaseNotifier->sendNotification(notification: $notification);
+        }
     }
 }
