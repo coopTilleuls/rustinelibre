@@ -63,19 +63,16 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const buildCalendarEvents = async (start: string, end: string) => {
-    const statusValues = ['validated', 'pending_repairer'];
-    const params = new URLSearchParams();
-    statusValues.forEach((status) => {
-      params.append('status', status);
-    });
-    const statusQueryParams = params.toString();
-
     const appointmentsFetch = await appointmentResource.getAll(true, {
-      statusQueryParams,
       'slotTime[after]': start,
       'slotTime[before]': end,
     });
-    const appointments = appointmentsFetch['hydra:member'];
+    const allAppointments = appointmentsFetch['hydra:member'];
+
+    const statusValues = ['validated', 'pending_repairer'];
+    const appointments = allAppointments.filter((appointment) =>
+      statusValues.includes(appointment.status)
+    );
 
     const appointmentsEvents = appointments.map((appointment) => {
       const {customer, autoDiagnostic, slotTime} = appointment;
@@ -87,7 +84,7 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
       return {
         title: `${
           appointment.status === 'pending_repairer' ? '⌛' : ''
-        }️ ${title} ${prestation}`,
+        } ${title} ${prestation}`,
         start: slotTime,
         end: getEndAppointment(slotTime, repairer.durationSlot ?? 60),
         id: appointment['@id'],
