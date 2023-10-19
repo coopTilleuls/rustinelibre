@@ -109,8 +109,6 @@ define(['./workbox-3576cac3'], function (workbox) {
   workbox.clientsClaim();
   workbox.skipWaiting();
 
-  // ...
-
   // Stratégies de mise en cache avec Workbox
   workbox.registerRoute(
     '/',
