@@ -103,7 +103,7 @@ if (!self.define) {
 }
 
 // Import de Workbox
-define(['./workbox-3576cac3'], function (workbox) {
+define(['/public/workbox-3576cac3'], function (workbox) {
   'use strict';
 
   workbox.clientsClaim();
