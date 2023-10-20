@@ -13,6 +13,7 @@ import {
   Button,
   IconButton,
   Link,
+  useMediaQuery,
 } from '@mui/material';
 import {Appointment} from '@interfaces/Appointment';
 import {
@@ -22,9 +23,11 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
 import AddIcon from '@mui/icons-material/Add';
+import LogoutIcon from '@mui/icons-material/Logout';
 import {Repairer} from '@interfaces/Repairer';
 import ModalAppointmentCreate from '@components/dashboard/appointments/ModalAppointmentCreate';
 import {getAutodiagBikeName} from '@helpers/appointmentStatus';
+import theme from 'styles/theme';
 
 interface DashboardNextAppointmentsProps {
   repairer: Repairer;
@@ -44,6 +47,8 @@ const DashboardNextAppointments = ({
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openModalCreateAppointment, setOpenModalCreateAppointment] =
     useState<boolean>(false);
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleCloseModal = async (refresh = true): Promise<void> => {
     setOpenModal(false);
@@ -73,7 +78,7 @@ const DashboardNextAppointments = ({
   return (
     <Box>
       <Typography variant="h5">
-        Prochains rendez-vous
+        Prochains {isMobile ? 'RDV' : 'rendez-vous'}
         <Button
           variant="contained"
           color="secondary"
@@ -81,7 +86,7 @@ const DashboardNextAppointments = ({
           size="small"
           onClick={() => setOpenModalCreateAppointment(true)}
           startIcon={<AddIcon />}>
-          Créer un rendez-vous
+          {isMobile ? 'Créer' : 'Créer un rendez-vous'}
         </Button>
       </Typography>
       {loadingListNext && <CircularProgress sx={{ml: 10, mt: 10}} />}
@@ -97,7 +102,7 @@ const DashboardNextAppointments = ({
                   },
                 }}>
                 <TableRow>
-                  <TableCell align="left">Type</TableCell>
+                  <TableCell align="left">Nom</TableCell>
                   <TableCell align="right">Date</TableCell>
                   <TableCell align="center">Action</TableCell>
                 </TableRow>
