@@ -156,7 +156,6 @@ const AdminLayout = ({children, updateContactUnread}: DashboardLayoutProps) => {
                   </Typography>
                 </ListItem>
               </List>
-
               <Button
                 onClick={clickLogOut}
                 sx={{
