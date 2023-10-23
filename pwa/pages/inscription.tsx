@@ -190,12 +190,10 @@ const Registration: NextPageWithLayout = ({}) => {
                       <Typography fontSize={14}>
                         En vous inscrivant, vous acceptez les{' '}
                         <Link
-                          style={{textDecoration: 'none'}}
+                          style={{textDecoration: 'none', fontSize: 14}}
                           href="/cgu"
                           target="_blank">
-                          <Typography fontSize={14}>
-                            conditions d’utilisation
-                          </Typography>
+                          conditions d’utilisation
                         </Link>{' '}
                         Rustine Libre et sa politique de confidentialité
                       </Typography>
