@@ -4,7 +4,7 @@ version: "3.4"
 services:
   php:
     build:
-      target: app_php_dev
+      target: php_dev
     volumes:
       - ./api:/srv/app
       - ./api/docker/php/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro

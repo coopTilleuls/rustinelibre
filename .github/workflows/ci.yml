@@ -23,21 +23,21 @@ jobs:
         with:
           context: 'api'
           file: 'api/Dockerfile'
-          target: 'app_php_dev'
-          cache-from: type=gha,scope=app_php_dev
-          cache-to: type=gha,mode=max,scope=app_php_dev
+          target: 'php_dev'
+          cache-from: type=gha,scope=php_dev
+          cache-to: type=gha,mode=max,scope=php_dev
           push: false
           load: true
-      - name: pre-build api/app_caddy
+      - name: pre-build api/caddy_prod
         uses: docker/build-push-action@v4
         with:
           context: 'api'
           file: 'api/Dockerfile'
-          target: 'app_caddy'
+          target: 'caddy_prod'
           cache-from: |
-            type=gha,scope=app_php_dev
-            type=gha,scope=app_caddy
-          cache-to: type=gha,mode=max,scope=app_caddy
+            type=gha,scope=php_dev
+            type=gha,scope=caddy_prod
+          cache-to: type=gha,mode=max,scope=caddy_prod
           push: false
           load: true
           tags: caddy
