@@ -11,7 +11,7 @@ Deux solutions sont proposées pour le déploiement de l'application :
 1. Premièrement un déploiement sur un cluster Kubernetes en utilisant le chart helm fourni
 2. Deuxièmement un déploiement sur une machine virtuelle (type VPS) en utilisant Docker
 
-## Sur Kubernetes en utilisant le chart helm
+# Sur Kubernetes en utilisant le chart helm
 
 Vous devez disposer sur votre machine de [Docker desktop](https://docs.docker.com/desktop) ou [Docker server](https://docs.docker.com/engine/install/#server) (à privilégier sous GNU/Linux).
 
