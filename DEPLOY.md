@@ -1,12 +1,12 @@
-# Préliminaire
+# Déploiement
+
+## Préliminaire
 
 Pour pouvoir déployer l'application, vous devez à minima vous munir de :
 - des clés pour Firebase, voir le [README général](https://github.com/coopTilleuls/bikelib#notifications) à ce sujet.
 - d'un bucket S3, de type Google Cloud Storage (avec compatibilité S3), Amazon S3 ou MinIO (open-source) pour le stockage des médias.
 - d'un fournisseur de mails, de type Mailgun ou Brevo pour l'envoi des mails.
-
-# Déploiement
-
+- 
 Deux solutions sont proposées pour le déploiement de l'application :
 1. Premièrement un déploiement sur un cluster Kubernetes en utilisant le chart helm fourni
 2. Deuxièmement un déploiement sur une machine virtuelle (type VPS) en utilisant Docker
