@@ -42,7 +42,8 @@ export const A2HS = (): JSX.Element => {
     });
   };
 
-  const handleClose = (): void => {
+  const handleClose = (event: React.MouseEvent): void => {
+    event.stopPropagation();
     const date = new Date();
     localStorage.setItem(
       'rustine_libre_pwa_banner_future_proposal',
@@ -96,7 +97,7 @@ export const A2HS = (): JSX.Element => {
           <IconButton
             aria-label="close"
             color="secondary"
-            onClick={handleClose}>
+            onClick={(event) => handleClose(event)}>
             <CloseIcon fontSize="medium" />
           </IconButton>
         </Box>
