@@ -102,7 +102,7 @@ export const DashboardWaitingAppointments = ({
                   },
                 }}>
                 <TableRow>
-                  <TableCell align="left">Type</TableCell>
+                  <TableCell align="left">Nom</TableCell>
                   <TableCell align="right">Date</TableCell>
                   <TableCell align="center">Actions</TableCell>
                 </TableRow>
