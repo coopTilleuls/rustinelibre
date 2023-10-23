@@ -67,7 +67,7 @@ export const DashboardHomeContent = ({
     <Box>
       {repairer && (
         <Grid container spacing={3}>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <DashboardNextAppointments
               repairer={repairer}
               appointmentsNext={appointmentsNext}
@@ -75,7 +75,7 @@ export const DashboardHomeContent = ({
               loadingListNext={loadingListNext}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <DashboardWaitingAppointments
               repairer={repairer}
               appointmentsWaiting={appointmentsWaiting}
