@@ -177,7 +177,6 @@ export const MyInformations = ({
               inputProps={{maxLength: 50}}
               onChange={handleChangeFirstName}
               onBlur={() => {
-                setFirstName(user.firstName!);
                 setFirstNameError(false);
                 setFirstNameHelperText('');
               }}
@@ -202,7 +201,6 @@ export const MyInformations = ({
               inputProps={{maxLength: 50}}
               onChange={handleChangeLastName}
               onBlur={() => {
-                setLastName(user.lastName!);
                 setLastNameError(false);
                 setLastNameHelperText('');
               }}
@@ -230,7 +228,6 @@ export const MyInformations = ({
                 inputProps={{maxLength: 250}}
                 onChange={handleChangeStreet}
                 onBlur={() => {
-                  setStreet(user.street!);
                   setStreetError(false);
                   setStreetHelperText('');
                 }}
@@ -255,7 +252,6 @@ export const MyInformations = ({
                 inputProps={{maxLength: 100}}
                 onChange={handleChangeCity}
                 onBlur={() => {
-                  setCity(user.city!);
                   setCityError(false);
                   setCityHelperText('');
                 }}
@@ -279,9 +275,6 @@ export const MyInformations = ({
                 }}
                 inputProps={{maxLength: 250}}
                 onChange={handleChangeStreet}
-                onBlur={() => {
-                  setStreet(user.street!);
-                }}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={12} lg={6}>
@@ -299,9 +292,6 @@ export const MyInformations = ({
                 }}
                 inputProps={{maxLength: 100}}
                 onChange={handleChangeCity}
-                onBlur={() => {
-                  setCity(user.city!);
-                }}
               />
             </Grid>
           </Grid>
