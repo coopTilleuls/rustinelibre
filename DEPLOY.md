@@ -1,4 +1,4 @@
-# Déploiement
+# Déploiement
 
 ## Préliminaire
 
@@ -11,7 +11,7 @@ Deux solutions sont proposées pour le déploiement de l'application :
 1. Premièrement un déploiement sur un cluster Kubernetes en utilisant le chart helm fourni
 2. Deuxièmement un déploiement sur une machine virtuelle (type VPS) en utilisant Docker
 
-## Sur Kubernetes en utilisant le chart helm
+## Sur kubernetes en utilisant le chart helm
 
 Vous devez disposer sur votre machine de [Docker desktop](https://docs.docker.com/desktop) ou [Docker server](https://docs.docker.com/engine/install/#server) (à privilégier sous GNU/Linux).
 
@@ -28,7 +28,7 @@ export LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
 git switch -d $LATEST_TAG
 ```
 
-### Build des images
+### Build des images
 
 Ensuite, créer un fichier `.env` qui contiendra les variables de build pour la PWA :
 ```conf
@@ -50,7 +50,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml build
 
 Ne pas se soucier des messages quant au fait que des variables sont manquantes. Elles ne sont pas nécessaires au build des images.
 
-### Push des images 
+### Push des images
 
 Maintenant que les images sont build, il est nécessaire de les tagguer et de les envoyer sur un registre Docker/OCI de votre choix.
 
@@ -156,7 +156,7 @@ Puis à vous positionner sur le dernier tag (release) au moyen de la commande su
 git switch -d $(git describe --tags `git rev-list --tags --max-count=1`)
 ```
 
-### Création du fichier de variables
+### Création des fichies variables
 
 Vous allez devoir définir quelques variables qui seront ensuite utilisées pour générer le fichier de variables d'environnement
 ```sh
@@ -228,8 +228,7 @@ POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 EOF
 ```
 
-### Build des images
-
+### Build des images 
 À partir de là, lancer le build des images :
 ```sh
 docker compose -f docker-compose.yml -f docker-compose.prod.yml build
