@@ -10,7 +10,7 @@ Plateforme de mise en relation avec des réparateurs de vélos
 
 ## Déploiement en production
 - [via Kubernetes](./DEPLOY.md)
-- [via Docker](./DEPLOY.md)
+- [via Docker](./DEPLOY.md#sur-une-machine-virtuelle-en-utilisant-docker)
 
 ## URL du projet en local
 
