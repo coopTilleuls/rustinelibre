@@ -1,6 +1,12 @@
 import {NextPageWithLayout} from 'pages/_app';
 import {ENTRYPOINT} from '@config/entrypoint';
-import React, {useState, ChangeEvent, useEffect, useCallback} from 'react';
+import React, {
+  useState,
+  ChangeEvent,
+  useEffect,
+  useCallback,
+  useContext,
+} from 'react';
 import {GetStaticProps} from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -41,6 +47,7 @@ import {City as NominatimCity} from '@interfaces/Nominatim';
 import {City as GouvCity} from '@interfaces/Gouv';
 import {RepairerType} from '@interfaces/RepairerType';
 import {Street} from '@interfaces/Street';
+import {UserFormContext} from '@contexts/UserFormContext';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -53,12 +60,12 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   bikeTypesFetched = [],
   repairerTypesFetched = [],
 }) => {
+  const {password} = useContext(UserFormContext);
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<boolean>(false);
   const [emailHelperText, setEmailHelperText] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [city, setCity] = useState<City | null>(null);
   const [street, setStreet] = useState<Street | null>(null);
