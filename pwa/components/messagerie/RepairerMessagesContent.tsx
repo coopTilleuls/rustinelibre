@@ -14,7 +14,6 @@ import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
 import {DiscussionMessage} from '@interfaces/DiscussionMessage';
 import {discussionResource} from '@resources/discussionResource';
-import {useRouter} from 'next/router';
 
 type MessagesContentProps = {
   discussion: Discussion;
@@ -25,7 +24,6 @@ const RepairerMessagesContent = ({
   discussion,
   loading,
 }: MessagesContentProps): JSX.Element => {
-  const router = useRouter();
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const {user} = useAccount({});
   const [messages, setMessages] = useState<DiscussionMessage[]>([]);
@@ -44,9 +42,6 @@ const RepairerMessagesContent = ({
     eventSource.onmessage = (event) => {
       fetchMessages();
     };
-    router.events.on('routeChangeStart', () => {
-      eventSource.close();
-    });
   };
 
   const handleSendMessage = async (): Promise<void> => {
