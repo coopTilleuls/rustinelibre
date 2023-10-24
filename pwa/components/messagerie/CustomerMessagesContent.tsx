@@ -14,6 +14,7 @@ import {Discussion} from '@interfaces/Discussion';
 import {DiscussionMessage} from '@interfaces/DiscussionMessage';
 import {discussionResource} from '@resources/discussionResource';
 import {Send} from '@mui/icons-material';
+import router, {useRouter} from 'next/router';
 
 type CustomerMessagesContentProps = {
   discussion: Discussion;
@@ -24,6 +25,7 @@ const CustomerMessagesContent = ({
   discussion,
   loading,
 }: CustomerMessagesContentProps): JSX.Element => {
+  const router = useRouter();
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const {user} = useAccount({});
   const [messages, setMessages] = useState<DiscussionMessage[]>([]);
@@ -42,6 +44,9 @@ const CustomerMessagesContent = ({
     eventSource.onmessage = (event) => {
       fetchMessages();
     };
+    router.events.on('routeChangeStart', () => {
+      eventSource.close();
+    });
   };
 
   const handleSendMessage = async (): Promise<void> => {
