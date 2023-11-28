@@ -91,8 +91,8 @@ jobs:
               # Tags are deployed in prod
               CONTEXT=prod
               IMAGE_TAG=${{ github.ref_name }}
-              RELEASE_NAME=demo             
-              URL=demo.${{ secrets.domain }};
+              RELEASE_NAME=prod
+              URL=${{ secrets.domain }};
               STORAGE_NAME=${PROD_STORAGE_BUCKET}
               STORAGE_KEY=${{ secrets.prod-storage-key }}
               STORAGE_SECRET=${{ secrets.prod-storage-secret }}
@@ -107,7 +107,7 @@ jobs:
               else
                   RELEASE_NAME=${{ github.ref_name }}
               fi
-              URL=${RELEASE_NAME}.nonprod.${{ secrets.domain }}
+              URL=preprod.${{ secrets.domain }}
           fi
           export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
           export APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
