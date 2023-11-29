@@ -165,6 +165,8 @@ jobs:
             --set=php.firebase.clientCertUrl="${{ secrets.fb-client-cert-url }}" \
             --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
             --set=postgres.url="${DATABASE_URL}" \
+            --set=ingress.hosts[1].path=/ \
+            --set=ingress.hosts[1].pathType=Prefix \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-prod.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
