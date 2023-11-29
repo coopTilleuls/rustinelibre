@@ -136,7 +136,6 @@ jobs:
             --set=ingress.hosts[1].host=www.${URL} \
             --set=ingress.tls[0].secretName=${RELEASE_NAME}-tls \
             --set=ingress.tls[0].hosts[0]=${URL} \
-            --set=ingress.tls[0].hosts[1]=www.${URL} \
             --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
             --set=mailer.dsn='${{ secrets.mailer-dsn }}' \
             --set=php.corsAllowOrigin="https?://${URL}$" \
@@ -165,8 +164,6 @@ jobs:
             --set=php.firebase.clientCertUrl="${{ secrets.fb-client-cert-url }}" \
             --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
             --set=postgres.url="${DATABASE_URL}" \
-            --set=ingress.hosts[1].path=/ \
-            --set=ingress.hosts[1].pathType=Prefix \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-prod.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
