@@ -8,21 +8,21 @@ cd $(dirname $0)/../../
 docker compose -f docker-compose.yml build
 
 # tag image with sha to force rollingUpdate
-php_sha=$(docker inspect bikelib-php --format='{{.Id}}' | cut -d: -f2)
-caddy_sha=$(docker inspect bikelib-caddy --format='{{.Id}}' | cut -d: -f2)
-pwa_sha=$(docker inspect bikelib-pwa --format='{{.Id}}' | cut -d: -f2)
-docker tag bikelib-php bikelib-php:$php_sha
-docker tag bikelib-caddy bikelib-caddy:$caddy_sha
-docker tag bikelib-pwa bikelib-pwa:$pwa_sha
+php_sha=$(docker inspect rustinelibre-php --format='{{.Id}}' | cut -d: -f2)
+caddy_sha=$(docker inspect rustinelibre-caddy --format='{{.Id}}' | cut -d: -f2)
+pwa_sha=$(docker inspect rustinelibre-pwa --format='{{.Id}}' | cut -d: -f2)
+docker tag rustinelibre-php rustinelibre-php:$php_sha
+docker tag rustinelibre-caddy rustinelibre-caddy:$caddy_sha
+docker tag rustinelibre-pwa rustinelibre-pwa:$pwa_sha
 
 # push images to minikube
-#minikube image load bikelib-php:$php_sha
-#minikube image load bikelib-caddy:$caddy_sha
-for image in bikelib-php:$php_sha bikelib-caddy:$caddy_sha bikelib-pwa:$pwa_sha; do
+#minikube image load rustinelibre-php:$php_sha
+#minikube image load rustinelibre-caddy:$caddy_sha
+for image in rustinelibre-php:$php_sha rustinelibre-caddy:$caddy_sha rustinelibre-pwa:$pwa_sha; do
   minikube image ls | grep $image || minikube image load $image
 done
 
-URL=bikelib.chart-example.local
+URL=rustinelibre.chart-example.local
 RELEASE_NAME=test
 APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
 APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
@@ -32,12 +32,12 @@ MERCURE_EXTRA_DIRECTIVES=$(cat <<EOF
 cors_origins http://localhost:8080 http://localhost:8081 https://localhost http://localhost https://${URL}
 EOF
 )
-TRUSTED_HOSTS="^127.0.0.1|localhost|${URL}|${RELEASE_NAME}-bikelib$"
+TRUSTED_HOSTS="^127.0.0.1|localhost|${URL}|${RELEASE_NAME}-rustinelibre$"
 
 # install or update deployment on minikube
 helm upgrade --install ${RELEASE_NAME} ./helm/chart \
   --kube-context minikube \
-  --namespace bikelib --create-namespace \
+  --namespace rustinelibre --create-namespace \
   --atomic \
   --wait \
   --debug \
@@ -62,8 +62,8 @@ helm upgrade --install ${RELEASE_NAME} ./helm/chart \
   -f ./helm/chart/values-minikube.yml
 
 MINIKUBE_IP=$(minikube ip)
-if ! grep -E "^$MINIKUBE_IP\s+(.+\s+)?bikelib.chart-example.local" /etc/hosts; then
-	echo Execute \"echo $MINIKUBE_IP bikelib.chart-example.local \| sudo tee -a /etc/hosts\"
+if ! grep -E "^$MINIKUBE_IP\s+(.+\s+)?rustinelibre.chart-example.local" /etc/hosts; then
+	echo Execute \"echo $MINIKUBE_IP rustinelibre.chart-example.local \| sudo tee -a /etc/hosts\"
 	exit=1
 fi
 if ! grep -E "^$MINIKUBE_IP\s+(.+\s+)?maildev.chart-example.local" /etc/hosts; then
@@ -75,5 +75,5 @@ if [ -n "$exit" ]; then
     exit 1
 fi
 
-open http://bikelib.chart-example.local
+open http://rustinelibre.chart-example.local
 open http://maildev.chart-example.local

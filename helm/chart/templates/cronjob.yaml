@@ -2,9 +2,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "bikelib.fullname" . }}-cronjob
+  name: {{ include "rustinelibre.fullname" . }}-cronjob
   labels:
-    {{- include "bikelib.labels" . | nindent 4 }}
+    {{- include "rustinelibre.labels" . | nindent 4 }}
 spec:
   schedule: '*/30 * * * *'
   jobTemplate:
@@ -12,7 +12,7 @@ spec:
       annotations:
         rollme: {{ randAlphaNum 5 | quote }}
       labels:
-        {{- include "bikelib.selectorLabels" . | nindent 8 }}
+        {{- include "rustinelibre.selectorLabels" . | nindent 8 }}
     spec:
       template:
         spec:
@@ -20,7 +20,7 @@ spec:
           imagePullSecrets:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          serviceAccountName: {{ include "bikelib.serviceAccountName" . }}
+          serviceAccountName: {{ include "rustinelibre.serviceAccountName" . }}
           securityContext:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
           restartPolicy: Never
@@ -38,127 +38,127 @@ spec:
                 - name: API_ENTRYPOINT_HOST
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-host
                 - name: JWT_PASSPHRASE
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-jwt-passphrase
                 - name: JWT_PUBLIC_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-jwt-public-key
                 - name: JWT_SECRET_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-jwt-secret-key
                 - name: TRUSTED_HOSTS
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-trusted-hosts
                 - name: TRUSTED_PROXIES
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-trusted-proxies
                 - name: APP_ENV
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-app-env
                 - name: APP_DEBUG
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-app-debug
                 - name: APP_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-app-secret
                 - name: CORS_ALLOW_ORIGIN
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-cors-allow-origin
                 - name: DATABASE_URL
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: database-url
                 - name: MAILER_DSN
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: mailer-dsn
                 - name: MERCURE_URL
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: mercure-url
                 - name: MERCURE_PUBLIC_URL
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: mercure-public-url
                 - name: MERCURE_JWT_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: mercure-jwt-secret
                 - name: FIREBASE_PROJECT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-project-id
                 - name: FIREBASE_PRIVATE_KEY_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-private-key-id
                 - name: FIREBASE_PRIVATE_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-private-key
                 - name: FIREBASE_CLIENT_EMAIL
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-client-email
                 - name: FIREBASE_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-client-id
                 - name: FIREBASE_AUTH_URI
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-auth-uri
                 - name: FIREBASE_TOKEN_URI
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-token-uri
                 - name: FIREBASE_AUTH_PROVIDER
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-auth-provider
                 - name: FIREBASE_CLIENT_CERT_URL
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-client-cert-url
                 - name: FIREBASE_UNIVERSE_DOMAIN
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-universe-domain
               lifecycle:
                 preStop:
@@ -194,157 +194,157 @@ spec:
                 - name: WEB_APP_URL
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-host
                 - name: JWT_PASSPHRASE
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-jwt-passphrase
                 - name: JWT_PUBLIC_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-jwt-public-key
                 - name: JWT_SECRET_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-jwt-secret-key
                 - name: TRUSTED_HOSTS
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-trusted-hosts
                 - name: TRUSTED_PROXIES
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-trusted-proxies
                 - name: APP_ENV
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-app-env
                 - name: APP_DEBUG
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-app-debug
                 - name: APP_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-app-secret
                 - name: CORS_ALLOW_ORIGIN
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-cors-allow-origin
                 - name: DATABASE_URL
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: database-url
                 - name: MAILER_DSN
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: mailer-dsn
                 - name: MERCURE_URL
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: mercure-url
                 - name: MERCURE_PUBLIC_URL
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: mercure-public-url
                 - name: MERCURE_JWT_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: mercure-jwt-secret
                 - name: STORAGE_BUCKET
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-storage-bucket
                 - name: STORAGE_ENDPOINT
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-storage-endpoint
                 - name: STORAGE_REGION
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-storage-region
                 - name: STORAGE_USE_PATH_STYLE_ENDPOINT
                   valueFrom:
                     configMapKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-storage-use-path-style-endpoint
                 - name: STORAGE_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-storage-key
                 - name: STORAGE_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: php-storage-secret
                 - name: FIREBASE_PROJECT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-project-id
                 - name: FIREBASE_PRIVATE_KEY_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-private-key-id
                 - name: FIREBASE_PRIVATE_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-private-key
                 - name: FIREBASE_CLIENT_EMAIL
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-client-email
                 - name: FIREBASE_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-client-id
                 - name: FIREBASE_AUTH_URI
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-auth-uri
                 - name: FIREBASE_TOKEN_URI
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-token-uri
                 - name: FIREBASE_AUTH_PROVIDER
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-auth-provider
                 - name: FIREBASE_CLIENT_CERT_URL
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-client-cert-url
                 - name: FIREBASE_UNIVERSE_DOMAIN
                   valueFrom:
                     secretKeyRef:
-                      name: {{ include "bikelib.fullname" . }}
+                      name: {{ include "rustinelibre.fullname" . }}
                       key: firebase-universe-domain
               lifecycle:
                 preStop:
