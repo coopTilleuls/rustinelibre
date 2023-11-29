@@ -16,7 +16,7 @@ jobs:
     - name: Build/Push
       uses: coopTilleuls/action-docker-build-push@v10
       with:
-        IMAGE_NAME: bikelib-php
+        IMAGE_NAME: rustinelibre-php
         BUILD_CONTEXT: api
         BUILD_TARGET: app_php
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
@@ -31,7 +31,7 @@ jobs:
     - name: Build/Push
       uses: coopTilleuls/action-docker-build-push@v10
       with:
-        IMAGE_NAME: bikelib-caddy
+        IMAGE_NAME: rustinelibre-caddy
         BUILD_CONTEXT: api
         BUILD_TARGET: app_caddy
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
@@ -89,7 +89,7 @@ jobs:
     #   uses: coopTilleuls/action-docker-build-push@v10
     #   with:
     #     # BUILD_ARGS: NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
-    #     IMAGE_NAME: bikelib-pwa
+    #     IMAGE_NAME: rustinelibre-pwa
     #     BUILD_CONTEXT: pwa
     #     BUILD_TARGET: prod
     #     REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
