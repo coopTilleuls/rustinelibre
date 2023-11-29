@@ -133,7 +133,6 @@ jobs:
             --set=caddy.image.tag=${IMAGE_TAG} \
             --set=pwa.image.tag=${IMAGE_TAG} \
             --set=ingress.hosts[0].host=${URL} \
-            --set=ingress.hosts[1].host=www.${URL} \
             --set=ingress.tls[0].secretName=${RELEASE_NAME}-tls \
             --set=ingress.tls[0].hosts[0]=${URL} \
             --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
