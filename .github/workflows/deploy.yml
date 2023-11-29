@@ -125,7 +125,7 @@ jobs:
           cors_origins http://localhost:8080 http://localhost:8081 https://localhost http://localhost https://${URL}
           EOF
           )
-          
+
           helm upgrade --install $RELEASE_NAME ./helm/chart \
             --atomic \
             --debug \
@@ -134,8 +134,12 @@ jobs:
             --set=caddy.image.tag=${IMAGE_TAG} \
             --set=pwa.image.tag=${IMAGE_TAG} \
             --set=ingress.hosts[0].host=${URL} \
+            --set=ingress.hosts[1].host=www.${URL} \
+            --set=ingress.hosts[1].paths[0].path=/ \
+            --set=ingress.hosts[1].paths[0].pathType=Prefix \
             --set=ingress.tls[0].secretName=${RELEASE_NAME}-tls \
             --set=ingress.tls[0].hosts[0]=${URL} \
+            --set=ingress.tls[0].hosts[1]=www.${URL} \
             --set=php.corsAllowOrigin="https?://.*?\.${URL}$" \
             --set=mailer.dsn='${{ secrets.mailer-dsn }}' \
             --set=php.corsAllowOrigin="https?://${URL}$" \
