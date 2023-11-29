@@ -57,7 +57,6 @@ spec:
               servicePort: {{ $svcPort }}
               {{- end }}
           {{- end }}
-    {{- end }}
     - host: {{ .host | quote }}
       http:
         paths:
