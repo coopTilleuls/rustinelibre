@@ -162,7 +162,7 @@ jobs:
             --set=php.firebase.authProvider="${{ secrets.fb-auth-provider }}" \
             --set=php.firebase.clientCertUrl="${{ secrets.fb-client-cert-url }}" \
             --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
-            --set=postgres.url="${DATABASE_URL}" \
+            --set=postgresql.url="${DATABASE_URL}" \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-prod.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
