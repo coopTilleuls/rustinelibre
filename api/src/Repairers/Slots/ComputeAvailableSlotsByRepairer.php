@@ -132,7 +132,7 @@ final class ComputeAvailableSlotsByRepairer
                     if (new \DateTime() < $slot) {
                         $data[$day][] = $slot->format('H:i');
                     }
-                    $slot->modify(sprintf('+%s minutes', $repairer->durationSlot ?? '60'));
+                    $slot->modify(sprintf('+%d minutes', $repairer->getDurationSlot() ?? 60));
                 }
             }
         }

@@ -248,6 +248,11 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
     public ?int $durationSlot = 60;
 
+    public function getDurationSlot(): ?int
+    {
+        return $this->durationSlot;
+    }
+
     #[ORM\Column(nullable: true)]
     #[Assert\Type('integer')]
     #[Assert\Range(
