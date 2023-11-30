@@ -62,3 +62,5 @@ jobs:
       fb-auth-provider: ${{ secrets.FIREBASE_AUTH_PROVIDER }}
       fb-client-cert-url: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
       fb-universe-domain: ${{ secrets.FIREBASE_UNIVERSE_DOMAIN }}
+      nonprod-database-url: ${{ secrets.NONPROD_DATABASE_URL }}
+      prod-database-url: ${{ secrets.PROD_DATABASE_URL }}

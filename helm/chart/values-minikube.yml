@@ -7,15 +7,15 @@ maildev:
 
 php:
   image:
-    repository: bikelib-php
+    repository: rustinelibre-php
     tag: latest
 
 caddy:
   image:
-    repository: bikelib-caddy
+    repository: rustinelibre-caddy
     tag: latest
 
 pwa:
   image:
-    repository: bikelib-pwa
+    repository: rustinelibre-pwa
     tag: latest
