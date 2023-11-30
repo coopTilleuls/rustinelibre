@@ -9,7 +9,7 @@ ENV APP_ENV=prod
 WORKDIR /srv/app
 
 # needed for security update until base image is updated
-RUN apk upgrade libcurl curl openssl openssl-dev libressl
+RUN apk upgrade libcurl curl openssl openssl-dev libressl libcrypto3 libssl3
 
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer --link /usr/bin/install-php-extensions /usr/local/bin/
@@ -23,6 +23,8 @@ RUN apk upgrade && apk add --no-cache \
 		git \
 		curl \
 		nghttp2 \
+		libssl3 \
+		libcrypto3 \
 	;
 
 RUN set -eux; \
@@ -109,7 +111,7 @@ RUN xcaddy build v2.7.5 \
 FROM caddy:2-alpine AS app_caddy
 
 # needed for security update until base image is updated
-RUN apk upgrade libcurl curl openssl openssl-dev libressl libcrypto1.1 libssl1.1
+RUN apk upgrade libcurl curl openssl openssl-dev libressl libcrypto1.1 libssl1.1 libcrypto3 libssl3
 
 WORKDIR /srv/app
 
