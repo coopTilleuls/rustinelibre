@@ -119,7 +119,7 @@ jobs:
           export APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
           export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
           export APP_JWT_PUBLIC_KEY=$(openssl pkey -in <(echo "$APP_JWT_SECRET_KEY") -passin file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -pubout)
-          export TRUSTED_HOSTS="^127.0.0.1|localhost|${URL}|${RELEASE_NAME}-bikelib$"
+          export TRUSTED_HOSTS="^127.0.0.1|localhost|${URL}|${RELEASE_NAME}-rustinelibre$"
           export MERCURE_JWT_PUBLIC_KEY=$(openssl genpkey -pass file:<(echo "$APP_JWT_PASSPHRASE") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
           export MERCURE_EXTRA_DIRECTIVES=$(cat <<EOF
           cors_origins http://localhost:8080 http://localhost:8081 https://localhost http://localhost https://${URL}
