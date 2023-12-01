@@ -40,7 +40,7 @@ docker-compose exec php sh  # "Entrer" dans le container PHP
 ```shell
 bin/console d:d:c           # Créer la BDD
 bin/console d:m:m           # Lance les migrations
-bin/console h:f:l -e dev    # Injecte les fixtures
+bin/console h:f:l -e dev    # Crée le compte Admin : api/fixtures/admin.yaml
 ```
 
 ## Pour exécuter l'intégralité des tests de l'API

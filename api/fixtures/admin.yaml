@@ -1,0 +1,10 @@
+App\Entity\User:
+  genialo_admin:
+    roles: ["ROLE_ADMIN"]
+    email: "clement@les-tilleuls.coop"
+    firstName: 'Clement'
+    lastName: 'Tilleuls'
+    plainPassword: "Test1passwordOk!"
+    emailConfirmed: true
+    street: <address()>
+    city: <city()>
