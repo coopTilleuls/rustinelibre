@@ -169,7 +169,7 @@ jobs:
             --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
             --set=postgresql.url="${DATABASE_URL}" \
             --values ./helm/chart/values.yml \
-            --values ./helm/chart/values-prod.yml \
+            --values ./helm/chart/values-${CONTEXT}.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
           echo "URL=$URL" >> $GITHUB_OUTPUT
 
