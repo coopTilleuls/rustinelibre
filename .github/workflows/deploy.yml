@@ -110,10 +110,11 @@ jobs:
               DATABASE_URL=${{ secrets.nonprod-database-url}}
               if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
                   RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+                  URL=${RELEASE_NAME}.preprod.${{ secrets.domain }}
               else
+                  URL=preprod.${{ secrets.domain }}
                   RELEASE_NAME=${{ github.ref_name }}
               fi
-              URL=${RELEASE_NAME}.preprod.${{ secrets.domain }}
           fi
           export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
           export APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
