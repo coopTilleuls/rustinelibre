@@ -1,4 +1,5 @@
 ingress:
+  className: nginx
   annotations:
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth
