@@ -275,8 +275,38 @@ class AssertUserTest extends AbstractTestCase
         self::assertSame(1, $result);
         $result = preg_match($pattern, 'Goodpassword2.');
         self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2»');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2\'');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2(');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2)');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2-');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2<');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2>');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2[');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2]');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2^');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2`');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2{');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2|');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2}');
+        self::assertSame(1, $result);
+        $result = preg_match($pattern, 'Goodpassword2~');
+        self::assertSame(1, $result);
         // Test with multiple characters
-        $result = preg_match($pattern, 'Multiple/;.Password223');
+        $result = preg_match($pattern, 'zj8Ub$MH^X=g_eG');
         self::assertSame(1, $result);
     }
 

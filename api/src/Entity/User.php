@@ -96,7 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const USER_READ = 'user_read';
     public const CUSTOMER_READ = 'customer_read';
     public const USER_WRITE = 'user_write';
-    public const PASSWORD_REGEX = '/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*#?.+=;\\\:\/,_"&»\'()-<>[]^`{|}~])[A-Za-z\d@$!%*#?.+=;,\\\:\/_"&»\'()-<>[]^`{|}~]{12,}$/i';
+    public const PASSWORD_REGEX = '/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*#?.+=;\\\:\/,_"&»\'()<>\[\]^`{|}~-])[A-Za-z\d@$!%*#?.+=;,\\\:\/_"&»\'()<>\[\]^`{|}~-]{12,}$/i';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
