@@ -118,7 +118,7 @@ export abstract class AbstractResource<T> {
 
       const currentToken = getToken();
       if (!!currentToken) {
-        defaultHeaders['Appli-Authorization'] = `Bearer ${currentToken}`;
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
       }
 
       return await fetch(this.getUrl(id), {
@@ -214,7 +214,7 @@ export abstract class AbstractResource<T> {
     if (withAuth) {
       const currentToken = getToken();
       if (!!currentToken) {
-        defaultHeaders['Appli-Authorization'] = `Bearer ${currentToken}`;
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
       }
     }
 
@@ -231,7 +231,7 @@ export abstract class AbstractResource<T> {
     if (withAuth) {
       const currentToken = getToken();
       if (!!currentToken) {
-        defaultHeaders['Appli-Authorization'] = `Bearer ${currentToken}`;
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
       }
     }
 
@@ -249,7 +249,7 @@ export abstract class AbstractResource<T> {
     if (withAuth) {
       const currentToken = getToken();
       if (!!currentToken) {
-        defaultHeaders['Appli-Authorization'] = `Bearer ${currentToken}`;
+        defaultHeaders['Authorization'] = `Bearer ${currentToken}`;
       }
     }
 
