@@ -27,7 +27,7 @@ abstract class AbstractTestCase extends ApiTestCase
 
         $json = $response->toArray();
 
-        $client = static::createClient([], ['headers' => ['appli-authorization' => 'Bearer '.$json['token']]]);
+        $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
 
         return $client;
     }
@@ -44,7 +44,7 @@ abstract class AbstractTestCase extends ApiTestCase
 
         $json = $response->toArray();
 
-        $client = static::createClient([], ['headers' => ['appli-authorization' => 'Bearer '.$json['token']]]);
+        $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
 
         return $client;
     }
