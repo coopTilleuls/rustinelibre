@@ -177,6 +177,17 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+  splitIngress:
+    enabled: false
+    # annotations: 
+    #   cert-manager.io/cluster-issuer: letsencrypt-production
+    # hosts:
+    #   - host: toset
+    #     paths:
+    #       - path: /me
+    #         pathType: Prefix
+    #       - path: /admin
+    #         pathType: Prefix
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
