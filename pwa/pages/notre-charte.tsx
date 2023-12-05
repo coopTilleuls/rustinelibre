@@ -18,10 +18,10 @@ const OurCharter: NextPageWithLayout = () => {
             gap={2}
             sx={{mx: 'auto', mt: 8}}>
             <Typography
-              component="h1"
+              variant="h1"
               textAlign="center"
-              fontSize={{xs: 28, md: 30}}
-              fontWeight={600}>
+              color="primary.main"
+              pb={2}>
               Charte de Rustine Libre
             </Typography>
 
