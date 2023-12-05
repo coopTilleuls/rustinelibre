@@ -54,11 +54,16 @@ route {
     # Disable Topics tracking if not enabled explicitly: https://github.com/jkarlin/topics
     header ?Permissions-Policy "browsing-topics=()"
 
+    basicauth @pwa {
+        tilleuls  $2y$13$bXkpXwXySgbQgjGdeTt9ce9Lo8ssk/umVijKMH2Py8wfjSHgmAPNO  
+    }
+
     # Comment the following line if you don't want Next.js to catch requests for HTML documents.
     # In this case, they will be handled by the PHP app.
     reverse_proxy @pwa http://{$PWA_UPSTREAM} {
         trusted_proxies private_ranges
     }
+
     php_fastcgi unix//var/run/php/php-fpm.sock {
         trusted_proxies private_ranges
     }
