@@ -27,33 +27,17 @@ const OurCollective: NextPageWithLayout = () => {
               Qui sommes-nous ?
             </Typography>
             <Typography>
-              Le projet « Rustine libre » est né d’échanges entre l’Apes
-              (Acteurs Pour une Economie Solidaire) et certains de ses
-              adhérents, Les Boîtes à Vélo et la Bici.
-            </Typography>
-            <Typography>
-              Début 2022, l’arrivée sur la Région d’un nouveau protagoniste
-              national de la réparation de vélo inquiétait fortement les acteurs
-              locaux. Sa communication écrasante tendait à les rendre invisibles
-              et sa politique de recrutement, se targuant de former des
-              réparateurs en 3 jours, mettait en péril la qulalité des emplois.
-              Les réparateurs locaux ont craint de voir leur métier « s’uberiser
-              ».
-            </Typography>
-            <Typography>
-              L’Apes travaillait alors (dans le cadre d’un projet européen :
-              PlateformCoop) sur le moyen de proposer aux acteurs de l’économie
-              solidaire locaux une alternative aux grandes plateformes
-              numériques au code fermé : le développement de plateformes
-              coopératives et solidaires, sous licence libre, modifiable par la
-              communauté de leurs utilisateurs et qui ne captent pas les données
-              des utilisateurs pour les revendre.
-            </Typography>
-            <Typography>
-              L’Apes a rapidement constitué un groupe de travail d’une vingtaine
-              de réparateurs (individuels ou associations) qui ont confirmé le
-              besoin d’une application qui leur soit dédiée. Le cahier des
-              charges de l’application a alors été défini. Il implique de :
+              Nous sommes des réparateurs et réparatrices portant des valeurs.
+              Que nous travaillions dans une association, une coopérative ou
+              sous un statut d'artisan·e indépendant·e, nos pratiques sont
+              celles de l'économie sociale et solidaire, que nous mettons en
+              valeur dans{' '}
+              <NextLink href="/notre-charte" legacyBehavior passHref>
+                <Link sx={{fontWeight: 800}} underline="none">
+                  notre charte
+                </Link>
+              </NextLink>{' '}
+              :
             </Typography>
             <List
               sx={{
@@ -64,50 +48,73 @@ const OurCollective: NextPageWithLayout = () => {
                 sx={{
                   display: 'list-item',
                 }}>
-                répondre aux besoins immédiats des cyclistes : une panne quand
-                on est loin de chez soi, par exemple. Le choix s’est donc porté
-                sur une application téléchargeable sur téléphone
+                Votre satisfaction est notre priorité: Nous vous conseillons
+                dans votre intérêt. Nous sommes transparent·es et prenons le
+                temps de vous exposer les options possibles, pour que vous
+                choisissiez ce qui vous convient le mieux.
               </ListItem>
               <ListItem
                 sx={{
                   display: 'list-item',
                 }}>
-                permettre la prise de rendez-vous en ligne sur des créneaux
-                alimentés par les réparateurs
+                Fiabilité : nous aimons le travail bien fait. Si nous ne sommes
+                pas compétent·es pour effectuer une réparation ou s'il y a un
+                problème, nous vous le dirons. Nous sommes aussi à votre
+                disposition pour vous conseiller sur l'entretien de votre vélo
+                afin qu'il vous serve le plus longtemps possible.
               </ListItem>
               <ListItem
                 sx={{
                   display: 'list-item',
                 }}>
-                accompagner un auto-diagnostic de la panne par les cyclistes,
-                afin que le réparateur s’assure qu’il a la compétence et puisse
-                réorienter sur un autre réparateur si nécessaire
+                Écologie : lorsque cela est possible et avec votre accord, nous
+                vous proposerons de réparer plutôt que de remplacer, d'utiliser
+                des pièces d'occasion plutôt que neuves...
               </ListItem>
               <ListItem
                 sx={{
                   display: 'list-item',
                 }}>
-                génèrer un carnet d’entretien du vélo
+                Développer le territoire plutôt que l'uberiser : nous payons nos
+                impôts en France, favorisons l'activité locale, nos activités
+                étant par nature non délocalisables, défendons les emplois de
+                qualité. Aucun excédent ne sert à rémunérer des actionnaires :
+                ils visent à garantir une juste rémunération et la pérennité de
+                l'activité.
               </ListItem>
               <ListItem
                 sx={{
                   display: 'list-item',
                 }}>
-                permettre des échanges directs entre cycliste et réparateur par
-                un « chat » en ligne. L’application est complétée par des fiches
-                qui présentent les compétences, le projet sociétal (le cas
-                échéant), les coordonnées et les horaires de chaque réparateur.
+                Entraide plutôt que compétition : au delà de notre présence sur
+                la plateforme, nous formons une communauté de mécanicien·nes qui
+                souhaite s'échanger formations, conseils et pièces. Nous
+                cherchons aussi à accompagner les personnes voulant se lancer
+                dans cette activité.
+              </ListItem>
+              <ListItem
+                sx={{
+                  display: 'list-item',
+                }}>
+                Vers un monde plus cyclable: notre diversité et notre
+                coopération va permettre de répondre aux attentes de chaque
+                cycliste du territoire, des cyclistes que nous voulons de plus
+                en plus nombreux.
+              </ListItem>
+              <ListItem
+                sx={{
+                  display: 'list-item',
+                }}>
+                Démocratie : Rustine Libre est un Commun, un logiciel sous
+                licence libre. Sa gestion et son développement sont décidés
+                collectivement.
               </ListItem>
             </List>
             <Typography>
-              Une charte (
-              <NextLink href="/notre-charte" legacyBehavior passHref>
-                <Link sx={{fontWeight: 800}} underline="none">
-                  lien ici
-                </Link>
-              </NextLink>
-              ) liste les engagements professionnels, coopératifs et sociétaux
-              des réparareurs de Rustine libre.
+              Le projet Rustine Libre est né en Hauts-de-France,. grâce à des
+              fonds européens et à l'implication de passionné.es du vélo, qui
+              cherchaient à faciliter le lien entre les cyclistes et les acteurs
+              et actrices locaux de la réparation.
             </Typography>
           </Box>
         </Container>
