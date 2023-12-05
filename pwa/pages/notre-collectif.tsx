@@ -28,8 +28,10 @@ const OurCollective: NextPageWithLayout = () => {
             </Typography>
             <Typography>
               Nous sommes des réparateurs et réparatrices portant des valeurs.
-              Que nous travaillions dans une association, une coopérative ou
-              sous un statut d'artisan·e indépendant·e, nos pratiques sont
+              Que nous travaillions dans une association, une coopérative ou{' '}
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
+              sous un statut d'artisan·e indépendant·e, nos pratiques sont{' '}
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               celles de l'économie sociale et solidaire, que nous mettons en
               valeur dans{' '}
               <NextLink href="/notre-charte" legacyBehavior passHref>
@@ -57,29 +59,37 @@ const OurCollective: NextPageWithLayout = () => {
                 sx={{
                   display: 'list-item',
                 }}>
-                Fiabilité : nous aimons le travail bien fait. Si nous ne sommes
+                Fiabilité : nous aimons le travail bien fait. Si nous ne sommes{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 pas compétent·es pour effectuer une réparation ou s'il y a un
-                problème, nous vous le dirons. Nous sommes aussi à votre
-                disposition pour vous conseiller sur l'entretien de votre vélo
+                problème, nous vous le dirons. Nous sommes aussi à votre{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                disposition pour vous conseiller sur l'entretien de votre vélo{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 afin qu'il vous serve le plus longtemps possible.
               </ListItem>
               <ListItem
                 sx={{
                   display: 'list-item',
                 }}>
-                Écologie : lorsque cela est possible et avec votre accord, nous
-                vous proposerons de réparer plutôt que de remplacer, d'utiliser
+                Écologie : lorsque cela est possible et avec votre accord, nous{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                vous proposerons de réparer plutôt que de remplacer, d'utiliser{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 des pièces d'occasion plutôt que neuves...
               </ListItem>
               <ListItem
                 sx={{
                   display: 'list-item',
                 }}>
-                Développer le territoire plutôt que l'uberiser : nous payons nos
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                Développer le territoire plutôt que l'uberiser : nous payons nos{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 impôts en France, favorisons l'activité locale, nos activités
                 étant par nature non délocalisables, défendons les emplois de
                 qualité. Aucun excédent ne sert à rémunérer des actionnaires :
-                ils visent à garantir une juste rémunération et la pérennité de
+                ils visent à garantir une juste rémunération et la pérennité de{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 l'activité.
               </ListItem>
               <ListItem
@@ -87,7 +97,8 @@ const OurCollective: NextPageWithLayout = () => {
                   display: 'list-item',
                 }}>
                 Entraide plutôt que compétition : au delà de notre présence sur
-                la plateforme, nous formons une communauté de mécanicien·nes qui
+                la plateforme, nous formons une communauté de mécanicien·nes qui{' '}
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 souhaite s'échanger formations, conseils et pièces. Nous
                 cherchons aussi à accompagner les personnes voulant se lancer
                 dans cette activité.
@@ -111,7 +122,8 @@ const OurCollective: NextPageWithLayout = () => {
               </ListItem>
             </List>
             <Typography>
-              Le projet Rustine Libre est né en Hauts-de-France,. grâce à des
+              Le projet Rustine Libre est né en Hauts-de-France,. grâce à des{' '}
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               fonds européens et à l'implication de passionné.es du vélo, qui
               cherchaient à faciliter le lien entre les cyclistes et les acteurs
               et actrices locaux de la réparation.
