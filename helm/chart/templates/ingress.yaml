@@ -79,7 +79,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-split
   labels:
     {{- include "rustinelibre.labels" . | nindent 4 }}
   {{- with .Values.ingress.splitIngress.annotations }}
