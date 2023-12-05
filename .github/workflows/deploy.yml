@@ -135,6 +135,7 @@ jobs:
             --set=caddy.image.tag=${IMAGE_TAG} \
             --set=pwa.image.tag=${IMAGE_TAG} \
             --set=ingress.hosts[0].host=${URL} \
+            --set=ingress.splitIngress.hosts[0].host=${URL} \
             --set=ingress.hosts[1].host=www.${URL} \
             --set=ingress.hosts[1].paths[0].path=/ \
             --set=ingress.hosts[1].paths[0].pathType=Prefix \
