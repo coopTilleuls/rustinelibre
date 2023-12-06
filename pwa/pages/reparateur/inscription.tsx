@@ -281,11 +281,17 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                   Devenir réparateur
                 </Typography>
                 <Typography variant="body1">
-                  Tu es réparateur ? <br />
+                  Tu es un.e professionnel.le du vélo, dans une association ou
+                  un atelier indépendant ?
+                  <br />
                   Tu as envie de rejoindre un collectif de pairs sur ton
-                  territoire ? <br />
+                  territoire ?<br />
                   Tu cherches un outil numérique qui te référence et qui te
-                  permet de gérer tes rendez-vous avec tes usagers ?<br />
+                  permet de gérer tes rendez-vous avec tes usagers ?
+                  <br />
+                  Tu peux remplir ce formulaire et ton collectif local reviendra
+                  vers toi rapidement!
+                  <br />
                 </Typography>
                 <Typography my={2} variant="h4" color="secondary">
                   Inscris-toi !
