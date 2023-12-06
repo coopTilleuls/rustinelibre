@@ -2,7 +2,7 @@ export const serviceAvailability = [
   {
     id: 1,
     content:
-      'L’annulation, l’acceptation ou la modification d’un Rendez-vous doit être validée par les deux parties, suivie d’une notification de la Plateforme.',
+      'La Plateforme est disponible en quelque endroit que ce soit, dès lors que les conditions techniques minimales sont atteintes, et notamment en termes d’accès au réseau de téléphonie mobile, réseau internet et de compatibilité technique du matériel utilisé.',
   },
   {
     id: 2,

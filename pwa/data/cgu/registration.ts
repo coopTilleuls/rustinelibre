@@ -2,22 +2,22 @@ export const mandatoryInformations = [
   {
     id: 1,
     content:
-      'Les informations obligatoires pour la création d’un compte Cycliste est le nom, le prénom, l’adresse e-mail et un mot de passe.',
+      'La seule information obligatoire pour la création d’un compte Cycliste est l’adresse e-mail.',
   },
   {
     id: 2,
     content:
-      'Sur la page "Mon Compte", les Cyclistes peuvent renseigner leur adresse personnelle et modifier leur mot de passe.',
+      'Dans Mon Compte les Cyclistes peuvent renseigner leur adresse personnelle et modifier leur mot de passe.',
   },
   {
     id: 3,
     content:
-      'A noter que lors de la prise de rendez-vous avec un Réparateur itinérant, un lieu de rendez-vous devra être communiqué à ce dernier pour réaliser la réparation. Ce lieu n’est pas obligatoirement le domicile du Cycliste.',
+      'A noter que lors de la prise de Rendez-vous avec un Réparateur itinérant, un lieu de Rendez-vous devra être communiqué à ce dernier pour réaliser la réparation. Ce lieu n’est pas obligatoirement le domicile du Cycliste.',
   },
   {
     id: 4,
     content:
-      'Lors d’un rendez-vous avec un Atelier de réparation ou de la participation à un atelier d’Auto-réparation, d’autres informations pourront être demandées au Cycliste, notamment un numéro de téléphone.',
+      'Lors d’un Rendez-vous avec un Atelier de réparation ou de la participation à un atelier d’Auto-réparation, d’autres informations pourront être demandées au Cycliste, notamment un numéro de téléphone.',
   },
 ];
 

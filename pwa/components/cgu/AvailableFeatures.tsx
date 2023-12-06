@@ -12,6 +12,23 @@ const AvailableFeatures = (): JSX.Element => {
       <Typography variant="h3" color="primary">
         6 - Fonctionnalités accessibles aux Utilisateurs
       </Typography>
+      <Box display={'flex'} flexDirection={'column'} gap={1}>
+        <Typography>
+          Les Fonctionnalités fournies par la Plateforme aux Utilisateurs sont
+          gratuites.
+        </Typography>
+        <Typography>
+          L’Administration ne vend aucun service aux Cyclistes.
+        </Typography>
+        <Typography>
+          Par contre, les Réparateurs peuvent vendre un service suite à la prise
+          de Rendez-vous sur la Plateforme. A noter qu’aucun paiement n’aura
+          lieu sur la Plateforme. Il se fait lors du Rendez- vous avec le
+          Réparateur, en accord avec ses propres conditions générales de ventes.
+          Toutefois, le Réparateur s’engage à resoecter les tarifs indiqués sur
+          sa Boutique.
+        </Typography>
+      </Box>
       <Box display="flex" flexDirection="column" gap={1}>
         <Typography variant="h5" color="secondary">
           6.1 - Accès à la prise de rendez-vous

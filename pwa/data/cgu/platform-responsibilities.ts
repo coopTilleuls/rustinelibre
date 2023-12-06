@@ -111,7 +111,7 @@ export const forceMajeure = [
   {
     id: 6,
     content:
-      ' Les liens hypertextes établis en direction d’autres sites ou applications à partir de la Plateforme ne sauraient, en aucun cas, engager la responsabilité du Collectif',
+      ' Les liens hypertextes établis en direction d’autres sites ou applications à partir de la Plateforme ne sauraient, en aucun cas, engager la responsabilité de Le Collectif',
   },
   {
     id: 7,
