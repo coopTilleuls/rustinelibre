@@ -180,6 +180,19 @@ function MyApp({
                 rel="apple-touch-startup-image"
                 href="pwa_icons/apple-splash-1136-640.jpg"
                 media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link>
+              <script>
+                var _paq = window._paq = window._paq || [];
+                {/* eslint-disable */}
+                /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+                _paq.push(['trackPageView']);
+                _paq.push(['enableLinkTracking']);
+                var u="https://stats.cliss21.com/";
+                _paq.push(['setTrackerUrl', u+'piwik.php']);
+                _paq.push(['setSiteId', '21']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+                {/* eslint-enable */}
+              </script>
             </Head>
             <ThemeProvider theme={theme}>
               <CssBaseline>
