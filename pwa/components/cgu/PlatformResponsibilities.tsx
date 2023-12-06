@@ -20,9 +20,12 @@ const PlatformResponsibilities = (): JSX.Element => {
       </Box>
       <Box display="flex" flexDirection="column" gap={2}>
         <Typography variant="h5" color="secondary">
-          9.1 - La Plateforme est en principe accessible 24 heures sur 24 et 7
-          jours sur 7, cependant, la plateforme décline toute responsabilité,
-          dans les cas suivants, sans que cette liste soit limitative :
+          9.1 - Accès à la Plateforme
+        </Typography>
+        <Typography>
+          La Plateforme est en principe accessible 24 heures sur 24 et 7 jours
+          sur 7, cependant, la plateforme décline toute responsabilité, dans les
+          cas suivants, sans que cette liste soit limitative :
         </Typography>
         <Box>
           {declineResponsibility.map(({id, content}) => {
