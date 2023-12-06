@@ -18,7 +18,7 @@ const GeneralOperation = (): JSX.Element => {
         <Typography variant="h5" color="secondary">
           3.1 - La Plateforme offre aux internautes un ensemble de
           fonctionnalités (ci-après désignées par “les Fonctionnalités”), leur
-          permettant de :
+          permettant notamment de :
         </Typography>
         <Typography>
           - créer et gérer des entités virtuelles, soit en tant que Cyclistes

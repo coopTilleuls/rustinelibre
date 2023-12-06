@@ -1,5 +1,6 @@
 import React from 'react';
-import {Typography, Box} from '@mui/material';
+import {Typography, Box, Link} from '@mui/material';
+import NextLink from 'next/link';
 
 const PlatformOperator = (): JSX.Element => {
   return (
@@ -9,14 +10,9 @@ const PlatformOperator = (): JSX.Element => {
       </Typography>
       <Box display="flex" flexDirection="column" gap={1}>
         <Typography variant="h5" color="secondary">
-          2.1 - La Plateforme est opérée par :
+          2.1 - La Plateforme est opérée par l’association ANIS Catalyst qui en
+          est le représentant légal.
         </Typography>
-        <Box>
-          <Typography>- l’association des réparateurs</Typography>
-          <Typography>
-            - ANIS Catalyst en attendant la création de l’association
-          </Typography>
-        </Box>
         <Typography>
           Cette association est appelée Administration dans les présentes CGU.
         </Typography>
@@ -25,7 +21,11 @@ const PlatformOperator = (): JSX.Element => {
         <Typography variant="h5" color="secondary">
           2.2 - L’Administration peut être contactée à l’adresse suivante :
         </Typography>
-        <Typography>contact@rustinelibre.fr</Typography>
+        <NextLink href="email:contact@rustinelibre.fr" legacyBehavior passHref>
+          <Link sx={{fontWeight: 800}} underline="none">
+            contact@rustinelibre.fr
+          </Link>
+        </NextLink>
       </Box>
     </Box>
   );

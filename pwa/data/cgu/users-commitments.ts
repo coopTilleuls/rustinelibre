@@ -11,12 +11,12 @@ export const generalCommitments = [
   {
     id: 3,
     content:
-      'L’Administration de la Plateforme a accès aux échanges via chat et aux informations relatives aux rendez-vous pris par ses utilisateurs.',
+      'L’Administration de la Plateforme a accès aux échanges via chat et aux informations relatives aux Rendez-vous pris par ses utilisateurs.',
   },
   {
     id: 4,
     content:
-      'Cyclistes et Réparateurs pourront être amenés à entrer dans une relation commerciale lors de la réalisation de leur rendez-vous, qui les engage chacun selon la législation en vigueur.',
+      'Cyclistes et Réparateurs pourront être amenés à entrer dans une relation commerciale lors de la réalisation de leur Rendez-vous, qui les engage chacun selon la législation en vigueur.',
   },
 ];
 
@@ -28,7 +28,7 @@ export const cyclistCommitments = [
   },
   {
     id: 2,
-    content: 'Ils s’engagent à honorer les rendez-vous pris.',
+    content: 'Ils s’engagent à honorer les Rendez-vous pris.',
   },
 ];
 
@@ -41,16 +41,11 @@ export const repairerCommitments = [
   {
     id: 2,
     content:
-      'Il s’engage à honorer les rendez-vous pris et à respecter la Charte d’engagement signée lors de la création de son compte utilisateur.',
+      'Il s’engage à honorer les Rendez-vous pris et à respecter la Charte d’engagement signée lors de la création de son compte utilisateur.',
   },
   {
     id: 3,
     content:
       'Le Réparateur s’engage à respecter les tarifs affichés dans sa boutique et le cas échéant à expliquer de manière transparente au Cycliste les écarts de prix.',
-  },
-  {
-    id: 4,
-    content:
-      'La Plateforme est disponible en quelque endroit que ce soit, dès lors que les conditions techniques minimales sont atteintes, et notamment en termes d’accès au réseau de téléphonie mobile, réseau internet et de compatibilité technique du matériel utilisé.',
   },
 ];
