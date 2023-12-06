@@ -12,12 +12,12 @@ export const mandatoryInformations = [
   {
     id: 3,
     content:
-      'A noter que lors de la prise de  Rendez- vous avec un Réparateur itinérant, un lieu de Rendez- vous devra être communiqué à ce dernier pour réaliser la réparation. Ce lieu n’est pas obligatoirement le domicile du Cycliste.',
+      'A noter que lors de la prise de Rendez-vous avec un Réparateur itinérant, un lieu de Rendez-vous devra être communiqué à ce dernier pour réaliser la réparation. Ce lieu n’est pas obligatoirement le domicile du Cycliste.',
   },
   {
     id: 4,
     content:
-      'Lors d’un Rendez- vous avec un Atelier de réparation ou de la participation à un atelier d’Auto-réparation, d’autres informations pourront être demandées au Cycliste, notamment un numéro de téléphone.',
+      'Lors d’un Rendez-vous avec un Atelier de réparation ou de la participation à un atelier d’Auto-réparation, d’autres informations pourront être demandées au Cycliste, notamment un numéro de téléphone.',
   },
 ];
 

@@ -29,7 +29,7 @@ export const cyclistsCan = [
   },
   {
     id: 7,
-    content: 'consulter la liste de ses  Rendez-vous  passés et à venir',
+    content: 'consulter la liste de ses Rendez-vous passés et à venir',
   },
   {
     id: 8,
@@ -60,7 +60,7 @@ export const repairersCan = [
   {
     id: 5,
     content:
-      'consulter un agenda reprenant tous les Rendez-vous  passés, en cours de confirmation, confirmés ou annulés sur la Plateforme',
+      'consulter un agenda reprenant tous les Rendez-vous passés, en cours de confirmation, confirmés ou annulés sur la Plateforme',
   },
   {
     id: 6,
