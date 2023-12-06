@@ -50,16 +50,33 @@ const OurCollective: NextPageWithLayout = () => {
                 sx={{
                   display: 'list-item',
                 }}>
-                Votre satisfaction est notre priorité: Nous vous conseillons
-                dans votre intérêt. Nous sommes transparent·es et prenons le
-                temps de vous exposer les options possibles, pour que vous
-                choisissiez ce qui vous convient le mieux.
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    display: 'inline',
+                    fontWeight: 600,
+                  }}>
+                  {' '}
+                  Votre satisfaction est notre priorité :{' '}
+                </Typography>
+                Nous vous conseillons dans votre intérêt. Nous sommes
+                transparent·es et prenons le temps de vous exposer les options
+                possibles, pour que vous choisissiez ce qui vous convient le
+                mieux.
               </ListItem>
               <ListItem
                 sx={{
                   display: 'list-item',
                 }}>
-                Fiabilité : nous aimons le travail bien fait. Si nous ne sommes{' '}
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    display: 'inline',
+                    fontWeight: 600,
+                  }}>
+                  Fiabilité :{' '}
+                </Typography>
+                nous aimons le travail bien fait. Si nous ne sommes{' '}
                 {/* eslint-disable-next-line react/no-unescaped-entities */}
                 pas compétent·es pour effectuer une réparation ou s'il y a un
                 problème, nous vous le dirons. Nous sommes aussi à votre{' '}
@@ -72,7 +89,15 @@ const OurCollective: NextPageWithLayout = () => {
                 sx={{
                   display: 'list-item',
                 }}>
-                Écologie : lorsque cela est possible et avec votre accord, nous{' '}
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    display: 'inline',
+                    fontWeight: 600,
+                  }}>
+                  Écologie :{' '}
+                </Typography>
+                lorsque cela est possible et avec votre accord, nous{' '}
                 {/* eslint-disable-next-line react/no-unescaped-entities */}
                 vous proposerons de réparer plutôt que de remplacer, d'utiliser{' '}
                 {/* eslint-disable-next-line react/no-unescaped-entities */}
@@ -82,8 +107,16 @@ const OurCollective: NextPageWithLayout = () => {
                 sx={{
                   display: 'list-item',
                 }}>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
-                Développer le territoire plutôt que l'uberiser : nous payons nos{' '}
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    display: 'inline',
+                    fontWeight: 600,
+                  }}>
+                  {/* eslint-disable-next-line react/no-unescaped-entities */}
+                  Développer le territoire plutôt que l'uberiser :{' '}
+                </Typography>
+                nous payons nos{' '}
                 {/* eslint-disable-next-line react/no-unescaped-entities */}
                 impôts en France, favorisons l'activité locale, nos activités
                 étant par nature non délocalisables, défendons les emplois de
@@ -96,8 +129,16 @@ const OurCollective: NextPageWithLayout = () => {
                 sx={{
                   display: 'list-item',
                 }}>
-                Entraide plutôt que compétition : au delà de notre présence sur
-                la plateforme, nous formons une communauté de mécanicien·nes qui{' '}
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    display: 'inline',
+                    fontWeight: 600,
+                  }}>
+                  Entraide plutôt que compétition :{' '}
+                </Typography>
+                au delà de notre présence sur la plateforme, nous formons une
+                communauté de mécanicien·nes qui{' '}
                 {/* eslint-disable-next-line react/no-unescaped-entities */}
                 souhaite s'échanger formations, conseils et pièces. Nous
                 cherchons aussi à accompagner les personnes voulant se lancer
@@ -107,22 +148,36 @@ const OurCollective: NextPageWithLayout = () => {
                 sx={{
                   display: 'list-item',
                 }}>
-                Vers un monde plus cyclable: notre diversité et notre
-                coopération va permettre de répondre aux attentes de chaque
-                cycliste du territoire, des cyclistes que nous voulons de plus
-                en plus nombreux.
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    display: 'inline',
+                    fontWeight: 600,
+                  }}>
+                  Vers un monde plus cyclable :{' '}
+                </Typography>
+                notre diversité et notre coopération va permettre de répondre
+                aux attentes de chaque cycliste du territoire, des cyclistes que
+                nous voulons de plus en plus nombreux.
               </ListItem>
               <ListItem
                 sx={{
                   display: 'list-item',
                 }}>
-                Démocratie : Rustine Libre est un Commun, un logiciel sous
-                licence libre. Sa gestion et son développement sont décidés
-                collectivement.
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    display: 'inline',
+                    fontWeight: 600,
+                  }}>
+                  Démocratie :{' '}
+                </Typography>
+                Rustine Libre est un Commun, un logiciel sous licence libre. Sa
+                gestion et son développement sont décidés collectivement.
               </ListItem>
             </List>
             <Typography>
-              Le projet Rustine Libre est né en Hauts-de-France,. grâce à des{' '}
+              Le projet Rustine Libre est né en Hauts-de-France, grâce à des{' '}
               {/* eslint-disable-next-line react/no-unescaped-entities */}
               fonds européens et à l'implication de passionné.es du vélo, qui
               cherchaient à faciliter le lien entre les cyclistes et les acteurs
