@@ -6,7 +6,7 @@ export const cyclistsCan = [
   {
     id: 2,
     content:
-      'prendre rendez-vous avec des Réparateurs après avoir renseigné le type de vélo qu’ils souhaitent faire réparer et leur localisation (ville)',
+      'prendre Rendez-vous avec des Réparateurs après avoir renseigné le type de vélo qu’ils souhaitent faire réparer et leur localisation (ville)',
   },
   {
     id: 3,
@@ -16,7 +16,7 @@ export const cyclistsCan = [
   {
     id: 4,
     content:
-      'entamer une discussion via chat avec un Réparateur auprès duquel il a sollicité un rendez-vous ',
+      'entamer une discussion via chat avec un Réparateur auprès duquel il a sollicité un Rendez-vous ',
   },
   {
     id: 5,
@@ -29,7 +29,7 @@ export const cyclistsCan = [
   },
   {
     id: 7,
-    content: 'consulter la liste de ses rendez-vous passés et à venir',
+    content: 'consulter la liste de ses  Rendez-vous  passés et à venir',
   },
   {
     id: 8,
@@ -46,7 +46,7 @@ export const repairersCan = [
   {
     id: 2,
     content:
-      'annuler ou modifier un rendez-vous, qu’il soit en attente de confirmation ou confirmé',
+      'annuler ou modifier un Rendez-vous, qu’il soit en attente de confirmation ou confirmé',
   },
   {
     id: 3,
@@ -60,12 +60,12 @@ export const repairersCan = [
   {
     id: 5,
     content:
-      'consulter un agenda reprenant tous les rendez-vous  passés, en cours de confirmation ou confirmés sur la Plateforme',
+      'consulter un agenda reprenant tous les Rendez-vous  passés, en cours de confirmation, confirmés ou annulés sur la Plateforme',
   },
   {
     id: 6,
     content:
-      'ajouter manuellement des rendez-vous avec des Cyclistes utilisateurs de la Plateforme',
+      'ajouter manuellement des Rendez-vous avec des Cyclistes utilisateurs de la Plateforme',
   },
   {
     id: 7,
@@ -78,7 +78,7 @@ export const administrationLevels = [
   {
     id: 1,
     content:
-      'le Gérant de l’Entité de réparation, qui gère l’identité juridique de réparation de vélo présente sur la plateforme (ci-après appelée Solution de Réparation)',
+      'le Gérant de l’Entité de réparation, qui gère l’identité juridique de réparation de vélo présente sur la plateforme (ci-après appelée Solution de Réparation).',
   },
   {
     id: 2,
@@ -98,7 +98,7 @@ export const managerCan = [
   },
   {
     id: 3,
-    content: 'générer des créneaux de rendez-vous pour les Cyclistes',
+    content: 'générer des créneaux de Rendez-vous pour les Cyclistes',
   },
   {
     id: 4,
@@ -121,16 +121,16 @@ export const repairerCriteria = [
   {
     id: 1,
     content:
-      '- Les Réparateurs de la ville renseignée lors de la recherche apparaissent tous sur la carte, et sont organisés en liste de façon aléatoire. Ils peuvent ensuite être filtrés, notamment, par proximité, première disponibilité, type de Réparateurs (Atelier de réparation, Auto-réparation ou Réparateur itinérant)',
+      '- Les Réparateurs de la ville renseignée lors de la recherche apparaissent tous sur la carte, et sont organisés en liste de façon aléatoire. Ils peuvent ensuite être filtrés, notamment, par proximité, première disponibilité, type de Réparateurs (Atelier de réparation, Auto-réparation ou Réparateur itinérant).',
   },
   {
     id: 2,
     content:
-      '- Les Réparateurs sont listés sur une page dédiée. Leur ordre d’apparition est généré de façon aléatoire, et chaque consultation de cette page fera apparaître un classement différent',
+      '- Les Réparateurs sont listés sur une page dédiée. Leur ordre d’apparition est généré de façon aléatoire, et chaque consultation de cette page fera apparaître un classement différent.',
   },
   {
     id: 3,
     content:
-      'La Plateforme ne met en œuvre aucun algorithme pour mettre en avant certains Réparateurs particuliers et s’efforce de mettre en place des critères de recherche les plus objectifs possible.',
+      'La Plateforme ne met en œuvre aucun algorithme pour mettre en avant certains Réparateurs particuliers et s’efforce de mettre en place des critères de recherche les plus objectifs possibles.',
   },
 ];
