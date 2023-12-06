@@ -43,10 +43,10 @@ const Faq: NextPageWithLayout = () => {
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls={`panel-${id}-content`}
                       id={`panel-${id}-header`}>
-                      <Typography>{question}</Typography>
+                      <Typography fontWeight={600}>{question}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Typography>{answer}</Typography>
+                      {typeof answer === 'function' ? answer() : answer}
                     </AccordionDetails>
                   </Accordion>
                 );
