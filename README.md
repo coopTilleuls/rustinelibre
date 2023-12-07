@@ -35,6 +35,10 @@ docker-compose up -d    # Lance les containers
 docker-compose exec php sh  # "Entrer" dans le container PHP
 ```
 
+Temporairement, le site est protégé par un mot de passe : 
+Login : Libre
+Password : Rustine
+
 ## Pour générer la base de données
 
 ```shell
