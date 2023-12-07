@@ -55,7 +55,7 @@ route {
     header ?Permissions-Policy "browsing-topics=()"
 
     basicauth @pwa {
-        tilleuls  $2y$13$bXkpXwXySgbQgjGdeTt9ce9Lo8ssk/umVijKMH2Py8wfjSHgmAPNO  
+        Libre $2y$10$EBG.8bd0i8qqNDrw22hOf.qdFDKgFCnu0WYRWhPxgGzhldACy2t7u
     }
 
     # Comment the following line if you don't want Next.js to catch requests for HTML documents.
