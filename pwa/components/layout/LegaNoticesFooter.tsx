@@ -5,7 +5,6 @@ import {legalNoticesFooter} from '@data/legal-notices-footer';
 import Image from 'next/image';
 import Logo from '@components/common/Logo';
 import rustineViolet from '@public/img/rustine-violet.svg';
-import fundersLogos from '@public/img/funders-logos.png';
 
 const LegalNoticesFooter = (): JSX.Element => {
   return (
@@ -37,18 +36,18 @@ const LegalNoticesFooter = (): JSX.Element => {
           justifyContent: 'center',
           pt: 3,
         }}>
-        {legalNoticesFooter.map(({name, link, disabled}, index) => {
+        {legalNoticesFooter.map(({name, link}, index) => {
           const isLastItem = index === legalNoticesFooter.length - 1;
           return (
             <Fragment key={name}>
-              <NextLink href={disabled ? '' : link} legacyBehavior passHref>
+              <NextLink href={link} legacyBehavior passHref>
                 <Link
                   variant="caption"
                   color="grey.600"
                   underline="none"
                   style={{
-                    cursor: disabled ? 'default' : 'pointer',
-                    pointerEvents: disabled ? 'none' : 'auto',
+                    cursor: 'pointer',
+                    pointerEvents: 'auto',
                     fontSize: 'caption.fontsize',
                   }}>
                   {name}
