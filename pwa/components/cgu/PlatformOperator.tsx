@@ -21,7 +21,7 @@ const PlatformOperator = (): JSX.Element => {
         <Typography variant="h5" color="secondary">
           2.2 - L’Administration peut être contactée à l’adresse suivante :
         </Typography>
-        <NextLink href="email:contact@rustinelibre.fr" legacyBehavior passHref>
+        <NextLink href="mailto:contact@rustinelibre.fr" legacyBehavior passHref>
           <Link sx={{fontWeight: 800}} underline="none">
             contact@rustinelibre.fr
           </Link>
