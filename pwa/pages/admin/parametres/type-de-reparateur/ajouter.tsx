@@ -10,7 +10,7 @@ const AddBikeType: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Ajouter un type de vélo</title>
+        <title>Ajouter un type de vélo | Rustine Libre</title>
       </Head>
       <AdminLayout />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>

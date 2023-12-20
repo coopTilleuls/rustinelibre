@@ -9,7 +9,7 @@ const Customers = () => {
   return (
     <>
       <Head>
-        <title>Clients</title>
+        <title>Clients | Rustine Libre</title>
       </Head>
       <DashboardLayout>
         <Box component="main">

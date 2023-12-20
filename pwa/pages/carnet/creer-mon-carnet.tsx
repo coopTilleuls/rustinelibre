@@ -7,7 +7,7 @@ const CreateMaintenanceBook: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Mon carnet d’entretien</title>
+        <title>Mon carnet d’entretien | Rustine Libre</title>
       </Head>
       <WebsiteLayout />
     </>

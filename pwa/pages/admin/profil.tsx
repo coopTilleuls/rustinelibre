@@ -60,7 +60,7 @@ const AdminProfile: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Mon profil</title>
+        <title>Mon profil | Rustine Libre</title>
       </Head>
       <AdminLayout>
         <Container sx={{width: {xs: '100%', md: '50%'}}}>

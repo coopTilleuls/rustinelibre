@@ -23,7 +23,7 @@ const Dashboard = () => {
   return (
     <>
       <Head>
-        <title>Dashboard</title>
+        <title>Dashboard | Rustine Libre</title>
       </Head>
       <DashboardLayout>
         <Box component="main">

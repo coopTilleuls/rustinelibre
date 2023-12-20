@@ -9,7 +9,7 @@ const AddEmployee: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Ajouter un employé</title>
+        <title>Ajouter un employé | Rustine Libre</title>
       </Head>
       <DashboardLayout />
       <Box

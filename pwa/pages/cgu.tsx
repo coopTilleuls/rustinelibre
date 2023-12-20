@@ -9,7 +9,7 @@ const Cgu: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>CGU</title>
+        <title>CGU | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

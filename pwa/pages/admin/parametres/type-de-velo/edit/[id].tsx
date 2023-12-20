@@ -31,7 +31,7 @@ const EditBikeType: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Éditer un type de vélo</title>
+        <title>Éditer un type de vélo | Rustine Libre</title>
       </Head>
       <AdminLayout />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>

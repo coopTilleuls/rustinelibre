@@ -32,7 +32,7 @@ const EditRepairerType: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Éditer un type de réparateur</title>
+        <title>Éditer un type de réparateur | Rustine Libre</title>
       </Head>
       <AdminLayout />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>

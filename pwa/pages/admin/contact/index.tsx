@@ -45,7 +45,7 @@ const Contact = (): JSX.Element => {
   return (
     <>
       <Head>
-        <title>Messages reçus</title>
+        <title>Messages reçus | Rustine Libre</title>
       </Head>
       <AdminLayout>
         <Box component="main">

@@ -106,7 +106,7 @@ const CustomerBikes: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Carnet d&#39;entretien</title>
+        <title>Carnet d&#39;entretien | Rustine Libre</title>
       </Head>
       <DashboardLayout />
       <Box

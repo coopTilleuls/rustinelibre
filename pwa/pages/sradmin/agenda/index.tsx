@@ -25,7 +25,7 @@ const Agenda: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Agenda</title>
+        <title>Agenda | Rustine Libre</title>
       </Head>
       <DashboardLayout>
         <Box component="main" maxWidth="1200">

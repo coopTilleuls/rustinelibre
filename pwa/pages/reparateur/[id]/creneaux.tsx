@@ -160,7 +160,7 @@ const RepairerSlots: NextPageWithLayout = () => {
   return (
     <div style={{width: '100vw', overflowX: 'hidden'}}>
       <Head>
-        <title>Demande de rendez-vous {repairer?.name}</title>
+        <title>Demande de rendez-vous {repairer?.name} | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         {(loading || loadingHours) && <FullLoading />}

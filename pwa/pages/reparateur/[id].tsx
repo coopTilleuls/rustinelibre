@@ -38,7 +38,7 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
   return (
     <div style={{width: '100vw', overflowX: 'hidden'}}>
       <Head>
-        <title>Réparateur {repairer?.name}</title>
+        <title>Réparateur {repairer?.name} | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box
