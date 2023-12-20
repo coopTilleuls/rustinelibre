@@ -8,7 +8,7 @@ const Repairers = () => {
   return (
     <>
       <Head>
-        <title>Solution de réparation</title>
+        <title>Solution de réparation | Rustine Libre</title>
       </Head>
       <AdminLayout>
         <Box component="main">

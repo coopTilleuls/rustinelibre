@@ -9,7 +9,7 @@ const OurCollective: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Qui sommes-nous ?</title>
+        <title>Qui sommes-nous ? | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '70%'}}}>

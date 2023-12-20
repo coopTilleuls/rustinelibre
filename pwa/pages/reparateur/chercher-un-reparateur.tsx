@@ -319,7 +319,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   return (
     <>
       <Head>
-        <title>Chercher un réparateur</title>
+        <title>Chercher un réparateur | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <ConfirmationReloadDialog />

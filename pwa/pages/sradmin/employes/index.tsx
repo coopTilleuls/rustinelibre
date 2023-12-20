@@ -16,7 +16,7 @@ const Employees = () => {
   return (
     <>
       <Head>
-        <title>Employés</title>
+        <title>Employés | Rustine Libre</title>
       </Head>
       <DashboardLayout>
         <Box component="main">

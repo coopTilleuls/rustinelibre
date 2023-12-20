@@ -13,7 +13,7 @@ const Faq: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>FAQ</title>
+        <title>FAQ | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

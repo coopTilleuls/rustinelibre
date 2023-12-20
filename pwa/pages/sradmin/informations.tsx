@@ -13,7 +13,7 @@ const RepairerInformations: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Informations</title>
+        <title>Informations | Rustine Libre</title>
       </Head>
       <DashboardLayout>{user && <InformationsContainer />}</DashboardLayout>
     </>

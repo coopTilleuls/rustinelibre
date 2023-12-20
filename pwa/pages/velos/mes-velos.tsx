@@ -69,7 +69,7 @@ const MyBikes: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Mes vélos</title>
+        <title>Mes vélos | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

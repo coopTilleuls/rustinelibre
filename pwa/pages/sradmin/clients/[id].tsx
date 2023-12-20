@@ -33,7 +33,7 @@ const CustomerShow: NextPageWithLayout = () => {
     <>
       <Head>
         <title>
-          Client {customer?.firstName} {customer?.lastName}
+          Client {customer?.firstName} {customer?.lastName} | Rustine Libre
         </title>
       </Head>
       <DashboardLayout />
