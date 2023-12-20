@@ -8,7 +8,7 @@ const OurCharter: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Charte de Rustine Libre</title>
+        <title>Charte de Rustine Libre | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '70%'}}}>

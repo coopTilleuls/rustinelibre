@@ -40,7 +40,7 @@ const ContactDetail: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Consulter message</title>
+        <title>Consulter message | Rustine Libre</title>
       </Head>
       <AdminLayout updateContactUnread={updateContactUnread} />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>

@@ -23,7 +23,7 @@ const LegalNotice: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Mentions légales</title>
+        <title>Mentions légales | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

@@ -144,7 +144,7 @@ const Registration: NextPageWithLayout = ({}) => {
   return (
     <>
       <Head>
-        <title>Inscription</title>
+        <title>Inscription | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '50%'}}}>

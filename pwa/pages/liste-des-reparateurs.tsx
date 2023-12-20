@@ -42,7 +42,7 @@ const RepairersList: NextPageWithLayout = ({
   return (
     <>
       <Head>
-        <title>Liste des réparateurs</title>
+        <title>Liste des réparateurs | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

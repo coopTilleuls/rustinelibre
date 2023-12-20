@@ -8,7 +8,7 @@ const AdminParameters = () => {
   return (
     <>
       <Head>
-        <title>Paramètres</title>
+        <title>Paramètres | Rustine Libre</title>
       </Head>
       <AdminLayout>
         <Box component="main">

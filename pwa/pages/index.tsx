@@ -40,7 +40,7 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>La rustine libre</title>
+        <title> Réparation vélos Lille métropole | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <SearchARepairer />

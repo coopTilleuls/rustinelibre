@@ -19,7 +19,7 @@ const Error404: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>404</title>
+        <title>404 | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box
