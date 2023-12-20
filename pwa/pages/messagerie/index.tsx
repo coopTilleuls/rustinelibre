@@ -8,7 +8,7 @@ const Messages: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Messages</title>
+        <title>Messages | Rustine Libre</title>
       </Head>
       <WebsiteLayout withLegalFooter={false}>
         <Messagerie />

@@ -34,7 +34,7 @@ const EditEmployee: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Éditer un réparateur</title>
+        <title>Éditer un réparateur | Rustine Libre</title>
       </Head>
       <DashboardLayout />
       <Box

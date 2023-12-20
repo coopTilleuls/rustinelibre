@@ -246,7 +246,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   return (
     <>
       <Head>
-        <title>Devenir réparateur</title>
+        <title>Devenir réparateur | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

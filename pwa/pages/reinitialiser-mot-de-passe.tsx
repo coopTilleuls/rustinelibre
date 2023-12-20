@@ -90,7 +90,7 @@ const PasswordReset: NextPageWithLayout = ({
   return (
     <>
       <Head>
-        <title>Réinitialiser mon mot de passe</title>
+        <title>Réinitialiser mon mot de passe | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

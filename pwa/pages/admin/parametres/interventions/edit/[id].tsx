@@ -31,7 +31,7 @@ const EditIntervention: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Éditer une intervention</title>
+        <title>Éditer une intervention | Rustine Libre</title>
       </Head>
       <AdminLayout />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>

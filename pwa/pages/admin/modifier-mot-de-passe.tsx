@@ -7,7 +7,7 @@ const AdminChangePassword = (): JSX.Element => {
   return (
     <>
       <Head>
-        <title>Modifier mot de passe</title>
+        <title>Modifier mot de passe | Rustine Libre</title>
       </Head>
       <AdminLayout>
         <ChangePassword />
