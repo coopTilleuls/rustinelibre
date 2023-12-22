@@ -16,15 +16,12 @@ export interface Geometry {
 }
 
 export interface City {
-  code: string;
-  nom: string;
-  centre: {
-    type: string;
-    coordinates: number[];
-  };
-  codePostaux?: string[];
-  departement: {
-    code: string;
-    nom: string;
-  };
+  codeDepartment: string;
+  inseeCode: string;
+  codeRegion: string;
+  departmentName: string;
+  name: string;
+  latitude: string;
+  longitude: string;
+  zipCode: string;
 }
