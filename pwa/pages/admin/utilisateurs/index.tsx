@@ -8,7 +8,7 @@ const Users = () => {
   return (
     <>
       <Head>
-        <title>Utilisateurs</title>
+        <title>Utilisateurs | Rustine Libre</title>
       </Head>
       <AdminLayout>
         <Box component="main">

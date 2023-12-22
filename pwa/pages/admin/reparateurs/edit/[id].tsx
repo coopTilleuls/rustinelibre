@@ -31,7 +31,7 @@ const EditRepairer: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Éditer un utilisateur</title>
+        <title>Éditer un utilisateur | Rustine Libre</title>
       </Head>
       <AdminLayout />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>

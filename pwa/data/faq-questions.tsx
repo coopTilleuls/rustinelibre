@@ -1,6 +1,7 @@
-import {Box, ListItem, Typography} from '@mui/material';
+import {Box, Link, ListItem, Typography} from '@mui/material';
 import React from 'react';
 import List from '@mui/material/List';
+import NextLink from 'next/link';
 
 export const questions = [
   {
@@ -13,7 +14,7 @@ export const questions = [
           réparation près de chez vous !
         </Typography>
         <Typography>
-          Cela vous sera demandé au moment de la prise de rendez-vous, mais pas
+          Cela vous sera demandé au moment de la prise de rendez-vous, mais pas{' '}
           {/* eslint-disable-next-line react/no-unescaped-entities */}
           d'inquiétude, c'est très simple.
         </Typography>
@@ -26,7 +27,7 @@ export const questions = [
     answer: () => (
       <Box>
         <Typography>
-          Parce que Rustine Libre est pratique, elle regroupe des mécanicien·nes
+          Parce que Rustine Libre est pratique, elle regroupe des mécanicien·nes{' '}
           {/* eslint-disable-next-line react/no-unescaped-entities */}
           portant des valeurs et c\'est une plateforme éthique :
         </Typography>
@@ -42,10 +43,10 @@ export const questions = [
             }}>
             <Typography>
               pratique : où que vous soyez, vous trouverez facilement le ou la
-              réparatrice proche et disponible. De plus un système de tchat et
+              réparatrice proche et disponible. De plus un système de tchat et{' '}
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              d'auto-diagnostic (facultatif) permet de s'assurer que la
-              réparation
+              d'auto&#x2011;diagnostic (facultatif) permet de s'assurer que la
+              réparation{' '}
               {/* eslint-disable-next-line react/no-unescaped-entities */}
               pourra être effectuée. Enfin un carnet d'entretien du vélo compile
               toutes les réparations effectuées dessus.
@@ -60,7 +61,21 @@ export const questions = [
               des mécanicien·nes engagé·es : étant membres de l'économie sociale
               et solidaire, ou artisan·es indépendant·es, les mécanicien·nes
               tendent à être le plus vertueux possible dans leurs pratiques
-              (voir qui sommes-nous et notre charte).
+              (voir
+              <NextLink href="/notre-collectif" legacyBehavior passHref>
+                <Link sx={{fontWeight: 800}} underline="none">
+                  {' '}
+                  qui sommes-nous
+                </Link>
+              </NextLink>{' '}
+              et
+              <NextLink href="/notre-charte" legacyBehavior passHref>
+                <Link sx={{fontWeight: 800}} underline="none">
+                  {' '}
+                  notre charte
+                </Link>
+              </NextLink>
+              ).
             </Typography>
           </ListItem>
           <ListItem
@@ -85,7 +100,7 @@ export const questions = [
         <Typography>L'utilisation de l'application est gratuite.</Typography>
         <Typography>
           Aucune transaction ne se fait sur la plateforme, et le paiement des
-          réparation se fait selon les modalité de chaque mécanicien·ne
+          réparations se fait selon les modalités de chaque mécanicien·ne
           référencée.
         </Typography>
       </Box>
@@ -114,8 +129,17 @@ export const questions = [
       <Box>
         <Typography>
           {/* eslint-disable-next-line react/no-unescaped-entities */}
-          L'adresse contact@rustinelibre.fr est à votre écoute pour toute
-          difficulté avec notre plateforme.
+          L'adresse{' '}
+          <NextLink
+            href="mailto:contact@rustinelibre.fr"
+            legacyBehavior
+            passHref>
+            <Link sx={{fontWeight: 800}} underline="none">
+              {' '}
+              contact@rustinelibre.fr{' '}
+            </Link>
+          </NextLink>{' '}
+          est à votre écoute pour toute difficulté avec notre plateforme.
         </Typography>
       </Box>
     ),
@@ -126,7 +150,7 @@ export const questions = [
     answer: () => (
       <Box>
         <Typography>
-          Pour rejoindre les réparateur·ices de Rustine Libre, vous pouvez
+          Pour rejoindre les réparateur·ices de Rustine Libre, vous pouvez{' '}
           {/* eslint-disable-next-line react/no-unescaped-entities */}
           remplir le formulaire "Devenir réparateur".
         </Typography>
@@ -143,8 +167,7 @@ export const questions = [
     answer: () => (
       <Box>
         <Typography>
-          La suppression de votre compte supprimera immédiatement vos
-          données.
+          La suppression de votre compte supprimera immédiatement vos données.
         </Typography>
       </Box>
     ),

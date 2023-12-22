@@ -8,7 +8,7 @@ const DashboardMessages = () => {
   return (
     <>
       <Head>
-        <title>Messagerie Réparateur</title>
+        <title>Messagerie Réparateur | Rustine Libre</title>
       </Head>
       <DashboardLayout>
         <Typography variant="h3" py={2} pl={2}>

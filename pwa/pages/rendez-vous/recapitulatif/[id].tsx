@@ -38,7 +38,7 @@ const AppointmentSummary: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Récapitulatif</title>
+        <title>Récapitulatif | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

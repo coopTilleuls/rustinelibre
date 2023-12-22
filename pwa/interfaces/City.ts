@@ -26,8 +26,8 @@ export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]): City[] => {
     const args = [
       city.nom,
       city.code,
-      city.centre.coordinates[1],
-      city.centre.coordinates[0],
+      city.centre?.coordinates[1],
+      city.centre?.coordinates[0],
     ];
 
     if (!args.some((arg) => arg === undefined)) {

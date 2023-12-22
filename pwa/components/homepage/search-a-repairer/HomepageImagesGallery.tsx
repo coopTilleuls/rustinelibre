@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
 import {Box} from '@mui/material';
-import bikeRepairer from '@public/img/bike-repairer.jpg';
-import bikeMan from '@public/img/bike-man.jpg';
-import bikeWoman from '@public/img/bike-woman.jpg';
+import repairers from '@public/img/repairers.jpg';
+import autoRepairers from '@public/img/auto-repairers.jpg';
+import repairerSalute from '@public/img/repairer-salute.jpg';
 
 const HomepageImagesGallery = () => {
   return (
@@ -17,7 +17,7 @@ const HomepageImagesGallery = () => {
               width: '100%',
               height: '100%',
             }}
-            src={bikeRepairer}
+            src={repairers}
             alt=""
           />
         </Box>
@@ -29,7 +29,7 @@ const HomepageImagesGallery = () => {
               width: '100%',
               height: '100%',
             }}
-            src={bikeMan}
+            src={autoRepairers}
             alt=""
           />
         </Box>
@@ -43,7 +43,7 @@ const HomepageImagesGallery = () => {
               width: '100%',
               height: '100%',
             }}
-            src={bikeWoman}
+            src={repairerSalute}
             alt=""
           />
         </Box>

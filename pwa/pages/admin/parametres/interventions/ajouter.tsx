@@ -10,7 +10,7 @@ const AddIntervention: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Ajouter une intervention</title>
+        <title>Ajouter une intervention | Rustine Libre</title>
       </Head>
       <AdminLayout />
       <Box component="main" sx={{marginLeft: '20%', marginRight: '5%'}}>
