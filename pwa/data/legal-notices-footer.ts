@@ -17,7 +17,6 @@ export const legalNoticesFooter = [
   },
   {
     name: 'Protection des données',
-    link: '/',
-    disabled: true,
+    link: '/politique-de-confidentialite',
   },
 ];

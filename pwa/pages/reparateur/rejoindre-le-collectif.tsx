@@ -7,7 +7,7 @@ const JoinGroup: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Rejoindre le collectif</title>
+        <title>Rejoindre le collectif | Rustine Libre</title>
       </Head>
       <WebsiteLayout />
     </>

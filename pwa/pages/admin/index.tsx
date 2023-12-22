@@ -14,7 +14,7 @@ const Dashboard = () => {
   return (
     <>
       <Head>
-        <title>Admin</title>
+        <title>Admin | Rustine Libre</title>
       </Head>
       <AdminLayout>
         <Box component="main"></Box>

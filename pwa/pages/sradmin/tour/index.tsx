@@ -75,7 +75,7 @@ const Tour = () => {
   return (
     <>
       <Head>
-        <title>Dashboard</title>
+        <title>Tableau de bord | Rustine Libre</title>
       </Head>
       <DashboardLayout>
         <Box component="main">

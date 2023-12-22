@@ -26,7 +26,7 @@ const AgendaParameters: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Paramètres agenda</title>
+        <title>Paramètres agenda | Rustine Libre</title>
       </Head>
       <DashboardLayout>
         <Box component="main" maxWidth="1200">

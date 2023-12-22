@@ -9,26 +9,26 @@ import {
   CardContent,
 } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
-import bikeRepairer from '@public/img/bike-repairer.jpg';
-import bikeMan from '@public/img/bike-man.jpg';
-import bikeWoman from '@public/img/bike-woman.jpg';
+import repairers from '@public/img/repairers.jpg';
+import autoRepairers from '@public/img/auto-repairers.jpg';
+import repairerSalute from '@public/img/repairer-salute.jpg';
 import Image from 'next/image';
 
 const args = [
   {
     title: 'Du soin et de la qualité',
     text: "Je répare, j'améliore, je sécurise : je cherche le meilleur pour mon client.\u00A0\nJe suis Rustine Libre !",
-    img: bikeRepairer,
+    img: repairers,
   },
   {
     title: 'Pignon\nsur rue',
     text: 'Je veux un outil facile pour gérer mes rendez-vous.\u00A0\nJe suis Rustine Libre !',
-    img: bikeMan,
+    img: autoRepairers,
   },
   {
     title: 'Libre comme une chambre à air',
     text: 'Mes horaires, mes conditions, mes tarifs, la coopération avec mes pairs.\u00A0\nJe suis Rustine Libre !',
-    img: bikeWoman,
+    img: repairerSalute,
   },
 ];
 
@@ -75,7 +75,7 @@ const JoinTheCollective = () => {
           return (
             <Grid2 xs={12} md={4} key={arg.title}>
               <Card sx={{height: '100%', borderRadius: 8}} elevation={1}>
-                <CardMedia sx={{height: 160}}>
+                <CardMedia sx={{height: 200}}>
                   <div
                     style={{
                       position: 'relative',

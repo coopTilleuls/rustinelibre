@@ -82,7 +82,7 @@ const Login: NextPageWithLayout = ({}) => {
   return (
     <>
       <Head>
-        <title>Se connecter</title>
+        <title>Se connecter | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Container sx={{width: {xs: '100%', md: '50%'}}}>

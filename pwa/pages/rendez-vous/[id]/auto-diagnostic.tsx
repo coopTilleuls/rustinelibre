@@ -23,7 +23,7 @@ const AutoDiagnostic: NextPageWithLayout = () => {
     <AutodiagProvider>
       <div style={{width: '100vw', overflowX: 'hidden'}}>
         <Head>
-          <title>Auto diagnostic</title>
+          <title>Auto diagnostic | Rustine Libre</title>
         </Head>
         <WebsiteLayout>
           <Box

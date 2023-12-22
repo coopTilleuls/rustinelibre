@@ -26,7 +26,7 @@ const MyAppointments: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Mes rendez-vous</title>
+        <title>Mes rendez-vous | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

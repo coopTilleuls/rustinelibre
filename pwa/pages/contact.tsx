@@ -123,7 +123,7 @@ const Contact: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Nous contacter</title>
+        <title>Nous contacter | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

@@ -14,7 +14,7 @@ const MyProfile: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Mon compte</title>
+        <title>Mon compte | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box

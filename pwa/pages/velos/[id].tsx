@@ -84,7 +84,7 @@ const EditBike: NextPageWithLayout = ({}) => {
   return (
     <>
       <Head>
-        <title>{bike?.name}</title>
+        <title>{bike?.name} | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
         <Box
