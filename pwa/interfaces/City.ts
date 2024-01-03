@@ -3,11 +3,12 @@ import {City as Nominatim} from './Nominatim';
 
 export interface City {
   id: string | number;
+  cityCode?: string;
   name: string;
   postcode?: string;
   formatted_name: string;
-  lat: number;
-  lon: number;
+  lat: string | number;
+  lon: string | number;
 }
 
 export const createCities = (
@@ -23,21 +24,17 @@ export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]): City[] => {
   let cities: City[] = [];
 
   citiesResponse.forEach((city: Gouv) => {
-    const args = [
-      city.nom,
-      city.code,
-      city.centre?.coordinates[1],
-      city.centre?.coordinates[0],
-    ];
+    const args = [city.name, city.zipCode, city.longitude, city.latitude];
 
     if (!args.some((arg) => arg === undefined)) {
       cities.push({
-        id: city.code,
-        name: city.nom,
-        postcode: city.departement.code,
-        formatted_name: city.nom + ', ' + city.code + ', ' + 'France',
-        lat: city.centre.coordinates[1],
-        lon: city.centre.coordinates[0],
+        id: city.zipCode,
+        cityCode: city.inseeCode,
+        name: city.name,
+        postcode: city.zipCode,
+        formatted_name: city.name + ', ' + city.zipCode + ', ' + 'France',
+        lat: city.latitude,
+        lon: city.longitude,
       });
     }
   });
