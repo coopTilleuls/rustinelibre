@@ -56,7 +56,7 @@ export const OpeningHoursDetail = ({
           <Grid item xs={2}>
             {dayOfWeek.fr}
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={12} md={8}>
             {loading && <CircularProgress />}
             {!loading && openingHours.length > 0 && (
               <Box>
