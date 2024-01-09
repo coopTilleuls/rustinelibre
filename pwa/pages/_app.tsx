@@ -13,6 +13,7 @@ import theme from '../styles/theme';
 import {A2HS} from '@components/banner/A2HS';
 import {A2HSIOS} from '@components/banner/A2HSIOS';
 import dynamic from 'next/dynamic';
+import '../styles/calendar.css';
 
 const Notifications = dynamic(
   () => import('@components/notifications/Notifications'),
