@@ -8,6 +8,7 @@ import {createCitiesWithGouvAPI, City} from '@interfaces/City';
 import {Street} from '@interfaces/Street';
 import {isBoss, isEmployee} from '@helpers/rolesHelpers';
 import {useAccount} from '@contexts/AuthContext';
+import {capitalizeFirstLetter} from '@helpers/capitalizeFirstLetter';
 
 interface PinMapProps {
   repairer: Repairer;
@@ -114,7 +115,9 @@ const PinMap = ({
         value={cityInput}
         options={citiesList}
         getOptionLabel={(city) =>
-          typeof city === 'string' ? city : `${city.name} (${city.postcode})`
+          typeof city === 'string'
+            ? city
+            : capitalizeFirstLetter(city.name, city.postcode)
         }
         onChange={(event, value) => setCity(value as City)}
         renderInput={(params) => (
