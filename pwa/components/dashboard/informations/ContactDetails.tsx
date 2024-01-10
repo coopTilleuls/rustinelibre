@@ -206,9 +206,7 @@ export const ContactDetails = ({
           getOptionLabel={(city) =>
             typeof city === 'string'
               ? city
-              : capitalizeFirstLetter(`${city.name}`) +
-                ' ' +
-                `(${city.postcode})`
+              : capitalizeFirstLetter(city.name, city.postcode)
           }
           onChange={(event, value) => handleCitySelect(event, value)}
           onInputChange={(event, value) => {
