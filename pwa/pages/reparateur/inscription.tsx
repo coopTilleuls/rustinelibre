@@ -414,7 +414,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                         typeof city === 'string'
                           ? city
                           : capitalizeFirstLetter(city.name, city.postcode)
-
                       }
                       onChange={(event, value) => setCity(value as City)}
                       onBlur={() => {
