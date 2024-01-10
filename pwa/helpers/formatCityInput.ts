@@ -1,4 +1,4 @@
-export const capitalizeFirstLetter = (
+export const formatCityInput = (
   city: string,
   postCode: string | undefined
 ) => {

@@ -16,7 +16,7 @@ import {
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import {BikeType} from '@interfaces/BikeType';
 import {City} from '@interfaces/City';
-import {capitalizeFirstLetter} from '@helpers/capitalizeFirstLetter';
+import {formatCityInput} from '@helpers/formatCityInput';
 
 type ModalSearchRepairerProps = {
   openModal: boolean;
@@ -124,7 +124,7 @@ const ModalSearchRepairer = ({
               getOptionLabel={(city) =>
                 typeof city === 'string'
                   ? city
-                  : capitalizeFirstLetter(city.name, city.postcode)
+                  : formatCityInput(city.name, city.postcode)
               }
               onChange={(event, value) => handleSelectedCity(value as City)}
               onInputChange={(event, value) => setCityInput(value)}
