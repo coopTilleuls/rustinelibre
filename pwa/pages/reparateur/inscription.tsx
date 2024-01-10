@@ -48,6 +48,7 @@ import {City as GouvCity} from '@interfaces/Gouv';
 import {RepairerType} from '@interfaces/RepairerType';
 import {Street} from '@interfaces/Street';
 import {UserFormContext} from '@contexts/UserFormContext';
+import {capitalizeFirstLetter} from '@helpers/capitalizeFirstLetter';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -412,7 +413,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       getOptionLabel={(city) =>
                         typeof city === 'string'
                           ? city
-                          : `${city.name} (${city.postcode})`
+                          : capitalizeFirstLetter(city.name, city.postcode)
                       }
                       onChange={(event, value) => setCity(value as City)}
                       onBlur={() => {

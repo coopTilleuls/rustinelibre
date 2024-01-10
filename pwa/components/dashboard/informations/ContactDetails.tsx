@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import {RequestBody} from '@interfaces/Resource';
 import {errorRegex} from '@utils/errorRegex';
+import {capitalizeFirstLetter} from '@helpers/capitalizeFirstLetter';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -203,7 +204,9 @@ export const ContactDetails = ({
           value={city}
           options={citiesList}
           getOptionLabel={(city) =>
-            typeof city === 'string' ? city : `${city.name} (${city.postcode})`
+            typeof city === 'string'
+              ? city
+              : capitalizeFirstLetter(city.name, city.postcode)
           }
           onChange={(event, value) => handleCitySelect(event, value)}
           onInputChange={(event, value) => {
