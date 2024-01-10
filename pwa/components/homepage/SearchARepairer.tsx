@@ -197,9 +197,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                 getOptionLabel={(city) =>
                   typeof city === 'string'
                     ? city
-                    : capitalizeFirstLetter(`${city.name}`) +
-                      ' ' +
-                      `(${city.postcode})`
+                    : capitalizeFirstLetter(city.name, city.postcode)
                 }
                 onChange={(event, value) => setCity(value as City)}
                 onInputChange={(event, value) => setCityInput(value)}
