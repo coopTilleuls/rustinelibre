@@ -8,6 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/core": "^3.0",
+        "aws/aws-sdk-php": "^3.288.1",
         "doctrine/dbal": "^3.6",
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",

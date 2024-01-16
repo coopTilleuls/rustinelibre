@@ -1,10 +1,11 @@
 import React from 'react';
-import {Box, Typography} from '@mui/material';
+import {Box, Typography, useMediaQuery} from '@mui/material';
 import EmployeesList from '@components/dashboard/employees/EmployeesList';
 import {User} from '@interfaces/User';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
+import theme from 'styles/theme';
 
 interface DashboardHomeEmployeesProps {
   currentBoss: User;
@@ -13,6 +14,8 @@ interface DashboardHomeEmployeesProps {
 export const DashboardHomeEmployees = ({
   currentBoss,
 }: DashboardHomeEmployeesProps): JSX.Element => {
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Typography variant="h5">
@@ -24,7 +27,7 @@ export const DashboardHomeEmployees = ({
             sx={{float: 'right'}}
             size="small"
             startIcon={<AddIcon />}>
-            Ajouter un employé
+            {isMobile ? 'Ajouter' : 'Ajouter un employé'}
           </Button>
         </Link>
       </Typography>
