@@ -298,7 +298,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                 />
               </List>
             </Drawer>
-            <Box sx={{flexGrow: 1}} p={3}>
+            <Box sx={{flexGrow: 1, width: '80%'}} p={3}>
               {children}
             </Box>
           </Box>

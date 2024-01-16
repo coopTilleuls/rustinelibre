@@ -37,6 +37,7 @@ import {
 } from '@mui/material';
 import ModalSearchRepairer from './ModalSearchRepairer';
 import LetterR from '@components/common/LetterR';
+import {formatCityInput} from '@helpers/formatCityInput';
 
 const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
@@ -196,7 +197,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                 getOptionLabel={(city) =>
                   typeof city === 'string'
                     ? city
-                    : `${city.name} (${city.postcode})`
+                    : formatCityInput(city.name, city.postcode)
                 }
                 onChange={(event, value) => setCity(value as City)}
                 onInputChange={(event, value) => setCityInput(value)}

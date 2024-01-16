@@ -25,31 +25,26 @@ const gouvCities = async (search: string) => {
   search = encodeURIComponent(search);
 
   try {
-    const response1 = await fetch(
-      `https://geo.api.gouv.fr/communes?nom=${search}&fields=code,nom,centre,departement,codesPostaux`
+    const response = await fetch(
+      `https://boondmanagerapp-20a6481aece0.herokuapp.com/api/cities?name=${search}`
     );
 
-    const response2 = await fetch(
-      `https://geo.api.gouv.fr/communes_associees_deleguees?nom=${search}&fields=code,nom,centre,departement`
-    );
+    const data = await response.json();
 
-    const data1 = await response1.json();
-    const data2 = await response2.json();
-
-    const mergedData = [...data1, ...data2];
-
-    return mergedData;
+    return data['hydra:member'];
   } catch (e) {
     return console.error(e);
   }
 };
 
 export const searchStreet = async (search: string, city: City | null) => {
-  search = encodeURIComponent(search);
+  if (city) {
+    search = encodeURIComponent(`${search} ${city.name}`);
+  }
   try {
     const response = await fetch(
       `https://api-adresse.data.gouv.fr/search/?q=${search}&type=street&limit=15${
-        city && '&lat=' + city.lat + '&lon=' + city.lon
+        city && '&citycode=' + city.cityCode
       }`
     );
     const apiFeatures = await response.json().then((data) => {

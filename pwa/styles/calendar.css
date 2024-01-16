@@ -1,0 +1,17 @@
+@media screen and (max-width:767px) {
+    .fc-toolbar.fc-header-toolbar {
+        display: flex;
+        flex-direction: column;
+    }
+    .fc-toolbar.fc-header-toolbar div{
+        padding: 3px;
+    }
+    .fc-col-header-cell-cushion {
+        font-size: 75%;
+    }
+}
+
+.fc-timegrid-axis-cushion {
+    font-size: 90%;
+}
+

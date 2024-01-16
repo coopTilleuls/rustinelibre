@@ -12,6 +12,7 @@ import {
   Typography,
   IconButton,
   Link,
+  useMediaQuery,
 } from '@mui/material';
 import {Appointment} from '@interfaces/Appointment';
 import {appointmentResource} from '@resources/appointmentResource';
@@ -24,6 +25,7 @@ import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointm
 import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import {Repairer} from '@interfaces/Repairer';
 import {getAutodiagBikeName} from '@helpers/appointmentStatus';
+import theme from 'styles/theme';
 
 interface DashboardWaitingAppointmentsProps {
   repairer: Repairer;
@@ -46,6 +48,8 @@ export const DashboardWaitingAppointments = ({
   const [updateAppointmentId, setUpdateAppointmentId] = useState<string | null>(
     null
   );
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleCloseModal = (refresh = true): void => {
     setOpenModal(false);
@@ -167,7 +171,11 @@ export const DashboardWaitingAppointments = ({
             </Table>
           </TableContainer>
         ) : (
-          <Typography variant="body2" sx={{py: 3}} color="text.secondary">
+          <Typography
+            variant="body2"
+            sx={{py: 3}}
+            color="text.secondary"
+            width={isMobile ? '70%' : '100%'}>
             Vous n&apos;avez aucun rendez-vous en attente
           </Typography>
         ))}

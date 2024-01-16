@@ -25,6 +25,9 @@ import {RequestBody} from '@interfaces/Resource';
 import {Repairer} from '@interfaces/Repairer';
 import {isAdmin} from '@helpers/rolesHelpers';
 import Comment from '@components/dashboard/informations/Comment';
+import {useTheme} from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {tabsClasses} from '@mui/material/Tabs';
 
 interface InformationsContainerProps {
   editRepairer?: Repairer;
@@ -32,7 +35,8 @@ interface InformationsContainerProps {
 
 const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
   const {user} = useAccount({redirectIfMailNotConfirm: '/login'});
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [repairer, setRepairer] = useState<Repairer>(
     editRepairer || user?.repairer!
   );
@@ -62,8 +66,18 @@ const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
   };
 
   return (
-    <Container component="main" sx={{ml: 0}}>
-      <Tabs value={tabValue} onChange={handleChangeTab}>
+    <Container component="main" sx={{ml: 0, width: '100%'}}>
+      <Tabs
+        value={tabValue}
+        onChange={handleChangeTab}
+        variant="scrollable"
+        scrollButtons={isMobile}
+        allowScrollButtonsMobile
+        sx={{
+          [`& .${tabsClasses.scrollButtons}`]: {
+            '&.Mui-disabled': {opacity: 0.3},
+          },
+        }}>
         <Tab label="Coordonnées" />
         <Tab label="Description" />
         <Tab label="Photos" />
@@ -72,7 +86,7 @@ const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
         <Tab label="Position sur la carte" />
         {user && isAdmin(user) && <Tab label="Commentaire" />}
       </Tabs>
-      <Box mt={3}>
+      <Box mt={3} width={'100%'}>
         {loading ? (
           <CircularProgress />
         ) : !repairer ? (

@@ -15,12 +15,16 @@ import {getEndAppointment} from '@helpers/endAppointmentHelper';
 import router from 'next/router';
 import {DatesSetArg} from '@fullcalendar/core';
 import {Box} from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {useTheme} from '@mui/material/styles';
 
 interface AgendaCalendarProps {
   repairer: Repairer;
 }
 
 const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [calendarEvents, setCalendarEvents] = useState<
     {title: string; id: string}[]
@@ -132,6 +136,7 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
         <FullCalendar
           timeZone="Europe/Paris"
           ref={calendarRef}
+          height={isMobile ? 650 : undefined}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
           initialDate={initialDate}
@@ -148,11 +153,19 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
               </Box>
             );
           }}
-          headerToolbar={{
-            left: 'prev,next',
-            center: 'title',
-            right: 'timeGridDay,dayGridWeek,dayGridMonth',
-          }}
+          headerToolbar={
+            isMobile
+              ? {
+                  center: 'prev,next',
+                  left: 'title',
+                  right: 'timeGridDay,dayGridWeek,dayGridMonth',
+                }
+              : {
+                  left: 'prev,next',
+                  center: 'title',
+                  right: 'timeGridDay,dayGridWeek,dayGridMonth',
+                }
+          }
           events={calendarEvents}
           eventMouseEnter={(info) => {
             info.el.style.cursor = 'pointer';
