@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "rustinelibre.labels" . | nindent 4 }}
 data:
+  mailer-sender: {{ .Values.mailer.sender | quote }}
   php-host: {{ .Values.php.host | quote }}
   php-app-env: {{ .Values.php.appEnv | quote }}
   php-app-debug: {{ .Values.php.appDebug | quote }}
