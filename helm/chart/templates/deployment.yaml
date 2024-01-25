@@ -89,6 +89,11 @@ spec:
           image: "{{ .Values.php.image.repository }}:{{ .Values.php.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.php.image.pullPolicy }}
           env:
+            - name: MAILER_SENDER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: mailer-sender
             - name: WEB_APP_URL
               valueFrom:
                 configMapKeyRef:
