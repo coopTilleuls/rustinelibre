@@ -17,21 +17,21 @@ import LetterR from '@components/common/LetterR';
 const questions = [
   {
     id: 1,
-    title: 'Quel doit être le niveau de détails techniques de la réservation ?',
+    title: 'Dois-je me créer un compte pour utiliser Rustine Libre ?',
     answer:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.',
+      "Pas besoin de créer un compte pour faire une recherche de solution de réparation près de chez vous ! Cela vous sera demandé au moment de la prise de rendez-vous, mais pas d'inquiétude, c'est très simple.",
   },
   {
     id: 2,
-    title: 'Comment être bien sûr que ma réservation a été prise en compte ?',
+    title: "Pourquoi utiliser l'application Rustine Libre ?",
     answer:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.',
+      "Parce que Rustine Libre est pratique, elle regroupe des mécanicien·nes portant des valeurs et c'est une plateforme éthique.",
   },
   {
     id: 3,
-    title: 'Comment être bien sûr que ma réservation a été prise en compte ?',
+    title: "Est-ce que l’utilisation de l'application est payante ?",
     answer:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.',
+      "L'utilisation de l'application est gratuite. Aucune transaction ne se fait sur la plateforme, et le paiement des réparations se fait selon les modalités de chaque mécanicien·ne référencée.",
   },
 ];
 
