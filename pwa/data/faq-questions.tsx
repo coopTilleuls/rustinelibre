@@ -29,7 +29,7 @@ export const questions = [
         <Typography>
           Parce que Rustine Libre est pratique, elle regroupe des mécanicien·nes{' '}
           {/* eslint-disable-next-line react/no-unescaped-entities */}
-          portant des valeurs et c\'est une plateforme éthique :
+          portant des valeurs et c'est une plateforme éthique :
         </Typography>
         <List
           sx={{

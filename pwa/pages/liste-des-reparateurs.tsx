@@ -70,9 +70,7 @@ const RepairersList: NextPageWithLayout = ({
             Liste des réparateurs
           </Typography>
           <Typography variant="body1" mb={5} textAlign="center" maxWidth="md">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec est
-            magna, finibus in suscipit sit amet, tempor non leo. Aliquam
-            placerat lacinia maximus.
+            Retrouvez ici les ateliers de réparation qui font Rustine Libre
           </Typography>
           {isLoading && <FullLoading />}
           {!isLoading && (
