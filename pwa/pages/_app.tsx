@@ -14,6 +14,7 @@ import {A2HS} from '@components/banner/A2HS';
 import {A2HSIOS} from '@components/banner/A2HSIOS';
 import dynamic from 'next/dynamic';
 import '../styles/calendar.css';
+import Script from 'next/script';
 
 const Notifications = dynamic(
   () => import('@components/notifications/Notifications'),
@@ -30,6 +31,7 @@ function MyApp({
   Component,
   pageProps,
 }: AppProps<{dehydratedState: DehydratedState}>) {
+  const date = new Date();
   return (
     <AuthProvider>
       <SearchRepairerProvider>
@@ -57,6 +59,15 @@ function MyApp({
               <meta name="msapplication-TileColor" content="#2B5797" />
               <meta name="msapplication-tap-highlight" content="no" />
               <meta name="theme-color" content="#000000" />
+              <meta property="og:type" content="product" />
+              <meta property="og:title" content="Rustine Libre" />
+              <meta
+                property="og:description"
+                content="Leader de la réparation à domicile, cyclofix est disponible à Lille"
+              />
+              <meta property="og:url" content="https://rustinelibre.fr" />
+              <meta property="og:image" content="img/og-image.jpg" />
+              <meta property="og:site_name" content="Rustine Libre" />
               <link rel="manifest" href="/manifest.json"></link>
               <link
                 rel="apple-touch-icon"
@@ -181,20 +192,11 @@ function MyApp({
                 rel="apple-touch-startup-image"
                 href="pwa_icons/apple-splash-1136-640.jpg"
                 media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link>
-              <script>
-                var _paq = window._paq = window._paq || [];
-                {/* eslint-disable */}
-                /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-                _paq.push(['trackPageView']);
-                _paq.push(['enableLinkTracking']);
-                var u="https://stats.cliss21.com/";
-                _paq.push(['setTrackerUrl', u+'piwik.php']);
-                _paq.push(['setSiteId', '21']);
-                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-                g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-                {/* eslint-enable */}
-              </script>
             </Head>
+            <Script
+              async={true}
+              src="https://www.googletagmanager.com/gtag/js?id=G-B0R3W3Z827"
+            />
             <ThemeProvider theme={theme}>
               <CssBaseline>
                 <A2HS></A2HS>
