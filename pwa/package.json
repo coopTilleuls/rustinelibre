@@ -28,6 +28,7 @@
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.15",
     "@mui/x-date-pickers": "^6.2.1",
+    "@next/third-parties": "^14.1.0",
     "@types/leaflet": "^1.9.3",
     "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
