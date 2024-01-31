@@ -3,7 +3,7 @@ import type {AppProps} from 'next/app';
 import type {DehydratedState} from 'react-query';
 import Head from 'next/head';
 import {NextPage} from 'next';
-import type {ReactElement, ReactNode} from 'react';
+import {ReactElement, ReactNode, Suspense} from 'react';
 import {AuthProvider} from '@contexts/AuthContext';
 import {SearchRepairerProvider} from '@contexts/SearchRepairerContext';
 import {UserFormProvider} from '@contexts/UserFormContext';
@@ -15,6 +15,7 @@ import {A2HSIOS} from '@components/banner/A2HSIOS';
 import dynamic from 'next/dynamic';
 import '../styles/calendar.css';
 import Script from 'next/script';
+import Analytics from '@components/layout/Analytics';
 
 const Notifications = dynamic(
   () => import('@components/notifications/Notifications'),
@@ -193,10 +194,9 @@ function MyApp({
                 href="pwa_icons/apple-splash-1136-640.jpg"
                 media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"></link>
             </Head>
-            <Script
-              async={true}
-              src="https://www.googletagmanager.com/gtag/js?id=G-B0R3W3Z827"
-            />
+            <Suspense>
+              <Analytics />
+            </Suspense>
             <ThemeProvider theme={theme}>
               <CssBaseline>
                 <A2HS></A2HS>
