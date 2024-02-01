@@ -114,7 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Groups([self::USER_READ])]
-    public array $roles = ['ROLE_USER'];
+    private array $roles = ['ROLE_USER'];
 
     #[Assert\Type('boolean')]
     #[ORM\Column(type: 'boolean', nullable: false)]
@@ -214,11 +214,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $this->addRole('ROLE_USER');
 
-        return array_unique($roles);
+        return array_unique($this->roles);
+    }
+
+    public function addRole(string $role): self
+    {
+        if (!in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeRole(string $role): self
+    {
+        if (in_array($role, $this->roles)) {
+            $this->roles = array_filter($this->roles, function ($roleToCompare) use ($role) {
+                return $role !== $roleToCompare;
+            });
+        }
+
+        return $this;
     }
 
     public function eraseCredentials()
@@ -228,7 +247,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAdmin(): bool
     {
-        if (in_array(self::ROLE_ADMIN, $this->roles)) {
+        if (in_array(self::ROLE_ADMIN, $this->getRoles())) {
             return true;
         }
 
@@ -237,7 +256,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isBoss(): bool
     {
-        if (in_array(self::ROLE_BOSS, $this->roles)) {
+        if (in_array(self::ROLE_BOSS, $this->getRoles())) {
             return true;
         }
 
@@ -246,7 +265,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isEmployee(): bool
     {
-        if (in_array(self::ROLE_EMPLOYEE, $this->roles)) {
+        if (in_array(self::ROLE_EMPLOYEE, $this->getRoles())) {
             return true;
         }
 
