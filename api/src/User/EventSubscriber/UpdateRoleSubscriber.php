@@ -46,11 +46,11 @@ final readonly class UpdateRoleSubscriber implements EventSubscriberInterface
         }
 
         if (in_array('ROLE_ADMIN', $contentRequest['roles'])) {
-            $user->roles[] = 'ROLE_ADMIN';
+            $user->addRole('ROLE_ADMIN');
         }
 
         if (in_array('ROLE_USER', $contentRequest['roles'])) {
-            $user->roles = ['ROLE_USER'];
+            $user->addRole('ROLE_USER');
         }
     }
 }

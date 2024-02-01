@@ -6,15 +6,21 @@ export const isCyclist = (user: User): boolean => {
 };
 
 export const isBoss = (user: User): boolean => {
-  return user.roles.includes('ROLE_BOSS');
+  return Array.isArray(user.roles)
+    ? user.roles.includes('ROLE_BOSS')
+    : Object.values(user.roles).includes('ROLE_BOSS');
 };
 
 export const isEmployee = (user: User): boolean => {
-  return user.roles.includes('ROLE_EMPLOYEE');
+  return Array.isArray(user.roles)
+    ? user.roles.includes('ROLE_EMPLOYEE')
+    : Object.values(user.roles).includes('ROLE_EMPLOYEE');
 };
 
 export const isAdmin = (user: User): boolean => {
-  return user.roles.includes('ROLE_ADMIN');
+  return Array.isArray(user.roles)
+    ? user.roles.includes('ROLE_ADMIN')
+    : Object.values(user.roles).includes('ROLE_ADMIN');
 };
 
 export const isItinerant = (user: User): boolean => {
