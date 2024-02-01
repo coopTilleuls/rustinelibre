@@ -62,11 +62,11 @@ class UpdateBossTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         // Check if boss became employee
         $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));
-        $this->assertSame($response['employee']['roles'][0], 'ROLE_EMPLOYEE');
+        $this->assertContains('ROLE_EMPLOYEE', $response['employee']['roles']);
         $newRepairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['id' => $response['id']]);
         // Check if employee became boss
         $this->assertSame($newRepairerEmployee->repairer->owner->id, $currentEmployeeId);
-        $this->assertSame($newRepairerEmployee->repairer->owner->roles, ['ROLE_BOSS']);
+        $this->assertContains('ROLE_BOSS', $newRepairerEmployee->repairer->owner->getRoles());
 
         // Check if repairerEmployee has been removed
         $repairerEmployeeNotFound = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['employee' => $currentEmployeeId]);
@@ -87,12 +87,12 @@ class UpdateBossTest extends AbstractTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         // Check if boss became employee
         $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));
-        $this->assertSame($response['employee']['roles'][0], 'ROLE_EMPLOYEE');
+        $this->assertContains('ROLE_EMPLOYEE', $response['employee']['roles']);
         $newRepairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['id' => $response['id']]);
 
         // Check if employee became boss
         $this->assertSame($newRepairerEmployee->repairer->owner->id, $currentEmployeeId);
-        $this->assertSame($newRepairerEmployee->repairer->owner->roles, ['ROLE_BOSS']);
+        $this->assertContains('ROLE_BOSS', $newRepairerEmployee->repairer->owner->getRoles());
 
         // Check if repairerEmployee has been removed
         $repairerEmployeeNotFound = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['employee' => $currentEmployeeId]);

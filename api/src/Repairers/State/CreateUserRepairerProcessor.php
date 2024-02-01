@@ -35,7 +35,7 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
         $user->lastName = $data->lastName;
         $user->plainPassword = $data->plainPassword;
         $user->email = $data->email;
-        $user->roles = [User::ROLE_BOSS];
+        $user->addRole(User::ROLE_BOSS);
         // Validate the new entity
         $this->validator->validate($user);
 
