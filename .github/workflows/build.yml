@@ -51,7 +51,7 @@ jobs:
     - name: Define Env
       run: |       
         set -o pipefail
-        if [[ "${{ github.ref }}" == 'refs/heads/prod' ]]; then
+        if [[ "${{ github.ref }}" == *"tag"* ]]; then
             echo "SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
         else
             echo "SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
