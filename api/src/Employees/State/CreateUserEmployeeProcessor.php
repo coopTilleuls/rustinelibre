@@ -39,7 +39,7 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         $user->plainPassword = $data->plainPassword ?: $this->generateRandomTempPassword();
         $user->email = $data->email;
         $user->emailConfirmed = true;
-        $user->addRole(User::ROLE_EMPLOYEE);
+        $user->roles = [User::ROLE_EMPLOYEE];
         // Validate the new entity
         $this->validator->validate($user);
 

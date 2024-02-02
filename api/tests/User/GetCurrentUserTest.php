@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\User;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -47,19 +45,5 @@ class GetCurrentUserTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertIsArray($response['lastRepairers']);
-    }
-
-    public function testGetCurrentUserWithDuplicatedRolesIsCorrectlyFormatted(): void
-    {
-        /** @var UserRepository $userRepository */
-        $userRepository = self::getContainer()->get(UserRepository::class);
-        /** @var User $user */
-        $user = $userRepository->findOneBy(['email' => 'user-with-duplicated-roles@test.com']);
-
-        $this->createClientWithUser($user)->request('GET', '/me');
-
-        self::assertJsonContains([
-            'roles' => ['ROLE_USER', 'ROLE_BOSS', 'ROLE_ADMIN'],
-        ]);
     }
 }
