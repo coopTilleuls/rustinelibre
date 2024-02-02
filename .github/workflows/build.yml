@@ -31,7 +31,7 @@ jobs:
     - name: Build/Push Preprod
       uses: coopTilleuls/action-docker-build-push@v10
       with:
-        IMAGE_NAME: rustinelibre-caddy-preprod
+        IMAGE_NAME: rustinelibre-caddypreprod
         BUILD_CONTEXT: api
         BUILD_TARGET: app_caddy_preprod
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}

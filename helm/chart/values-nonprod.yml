@@ -22,4 +22,4 @@ php:
 
 caddy:
   image:
-    repository: "ghcr.io/cooptilleuls/rustinelibre-caddy-nonprod"
+    repository: "ghcr.io/cooptilleuls/rustinelibre-caddynonprod"
