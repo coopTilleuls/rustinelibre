@@ -22,7 +22,7 @@ jobs:
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
 
-  build-push-caddy:
+  build-push-caddypreprod:
     # Same Dockerfile as php, with a build target which is after
     needs: [build-push-php]
     runs-on: ubuntu-latest
@@ -36,6 +36,13 @@ jobs:
         BUILD_TARGET: app_caddypreprod
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+
+  build-push-caddy:
+    # Same Dockerfile as php, with a build target which is after
+    needs: [build-push-php]
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Build/Push Prod
       uses: coopTilleuls/action-docker-build-push@v10
       with:
