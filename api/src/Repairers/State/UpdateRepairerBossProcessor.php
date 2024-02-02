@@ -70,12 +70,12 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
         $this->entityManager->remove($employeeExist);
 
         // Update old boss
-        $currentBoss->addRole(User::ROLE_EMPLOYEE);
+        $currentBoss->roles = [User::ROLE_EMPLOYEE];
         $currentBoss->repairer = null;
         $currentBoss->repairerEmployee = $newRepairerEmployee;
 
         // Set the new roles
-        $newBoss->addRole(User::ROLE_BOSS);
+        $newBoss->roles = [User::ROLE_BOSS];
         $repairer->owner = $newBoss;
         $this->validator->validate($repairer);
         $newBoss->repairerEmployee = null;
