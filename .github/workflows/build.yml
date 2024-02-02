@@ -28,7 +28,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Build/Push
+    - name: Build/Push Preprod
+      uses: coopTilleuls/action-docker-build-push@v10
+      with:
+        IMAGE_NAME: rustinelibre-caddy-preprod
+        BUILD_CONTEXT: api
+        BUILD_TARGET: app_caddy_preprod
+        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+    - name: Build/Push Prod
       uses: coopTilleuls/action-docker-build-push@v10
       with:
         IMAGE_NAME: rustinelibre-caddy
