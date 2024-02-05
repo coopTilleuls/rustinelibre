@@ -156,15 +156,12 @@ const Contact: NextPageWithLayout = () => {
                 Nous contacter
               </Typography>
               <Typography variant="body1">
-                Lorem ipsum ? <br />
-                Et harum quidem rerum facilis est et expedita distinctio ?
-                <br />
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua ?
+                Une question ? Un problème ? <br />
+                Envie de s&apos;impliquer et de contribuer à Rustine Libre ?
                 <br />
               </Typography>
               <Typography my={2} variant="h4" color="secondary">
-                Lorem ipsum !
+                Écrivez-nous !
               </Typography>
               <Box
                 sx={{

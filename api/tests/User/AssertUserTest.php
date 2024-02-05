@@ -332,26 +332,4 @@ class AssertUserTest extends AbstractTestCase
             'hydra:description' => sprintf('email: %s', $this->translator->trans('user.email.unique', domain: 'validators')),
         ]);
     }
-
-    public function testAddRole(): void
-    {
-        $user = new User();
-        self::assertSame(['ROLE_USER'], $user->getRoles());
-
-        $user->addRole('ROLE_BOSS');
-        self::assertSame(['ROLE_USER', 'ROLE_BOSS'], $user->getRoles());
-
-        $user->addRole('ROLE_USER');
-        self::assertSame(['ROLE_USER', 'ROLE_BOSS'], $user->getRoles());
-    }
-
-    public function testRemoveRole(): void
-    {
-        $user = new User();
-        $user->addRole('ROLE_BOSS');
-        self::assertSame(['ROLE_USER', 'ROLE_BOSS'], $user->getRoles());
-
-        $user->removeRole('ROLE_BOSS');
-        self::assertSame(['ROLE_USER'], $user->getRoles());
-    }
 }

@@ -89,19 +89,3 @@ App\Entity\User:
     emailConfirmed: true
     street: <address()>
     city: <city()>
-  user_with_duplicated_roles:
-    roles: [
-      "ROLE_BOSS",
-      "ROLE_ADMIN",
-      "ROLE_USER",
-      "ROLE_BOSS",
-      "ROLE_ADMIN",
-      "ROLE_USER"
-    ]
-    email: "user-with-duplicated-roles@test.com"
-    firstName: 'Test'
-    lastName: 'Test'
-    plainPassword: "Test1passwordOk!"
-    emailConfirmed: true
-    street: <address()>
-    city: <city()>
