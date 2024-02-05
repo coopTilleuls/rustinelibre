@@ -24,7 +24,7 @@ jobs:
 
   build-push-caddypreprod:
     # If it has no release tag, it's preprod
-    if: ! ${{ github.ref_type == 'tag' }}
+    if: ${{ ! github.ref_type == 'tag' }}
     # Same Dockerfile as php, with a build target which is after
     needs: [build-push-php]
     runs-on: ubuntu-latest
