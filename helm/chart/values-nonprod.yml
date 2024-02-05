@@ -19,7 +19,3 @@ php:
   medias:
     persistence:
       storageClass: "standard"
-
-caddy:
-  image:
-    repository: "ghcr.io/cooptilleuls/rustinelibre-caddypreprod"

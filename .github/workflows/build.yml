@@ -23,6 +23,8 @@ jobs:
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
 
   build-push-caddypreprod:
+    # If it has no release tag, it's preprod
+    if: ! contains(github.ref, 'refs/tags/')
     # Same Dockerfile as php, with a build target which is after
     needs: [build-push-php]
     runs-on: ubuntu-latest
@@ -31,13 +33,15 @@ jobs:
     - name: Build/Push Preprod
       uses: coopTilleuls/action-docker-build-push@v10
       with:
-        IMAGE_NAME: rustinelibre-caddypreprod
+        IMAGE_NAME: rustinelibre-caddy
         BUILD_CONTEXT: api
         BUILD_TARGET: app_caddypreprod
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
 
   build-push-caddy:
+    # If it has a release tag, it's prod
+    if: contains(github.ref, 'refs/tags/')
     # Same Dockerfile as php, with a build target which is after
     needs: [build-push-php]
     runs-on: ubuntu-latest
