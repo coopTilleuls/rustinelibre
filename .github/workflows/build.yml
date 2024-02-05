@@ -22,13 +22,32 @@ jobs:
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
 
-  build-push-caddy:
+  build-push-caddypreprod:
+    # If it has no release tag, it's preprod
+    if: ${{ github.ref_type != 'tag' }}
     # Same Dockerfile as php, with a build target which is after
     needs: [build-push-php]
     runs-on: ubuntu-latest
 
     steps:
-    - name: Build/Push
+    - name: Build/Push Preprod
+      uses: coopTilleuls/action-docker-build-push@v10
+      with:
+        IMAGE_NAME: rustinelibre-caddy
+        BUILD_CONTEXT: api
+        BUILD_TARGET: app_caddypreprod
+        REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
+        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+
+  build-push-caddy:
+    # If it has a release tag, it's prod
+    if: ${{ github.ref_type == 'tag' }}
+    # Same Dockerfile as php, with a build target which is after
+    needs: [build-push-php]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build/Push Prod
       uses: coopTilleuls/action-docker-build-push@v10
       with:
         IMAGE_NAME: rustinelibre-caddy
