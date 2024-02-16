@@ -407,6 +407,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                   </Grid>
                   <Grid item xs={12}>
                     <Autocomplete
+                      filterOptions={(options) => options}
                       freeSolo
                       value={cityInput}
                       options={citiesList}
@@ -416,11 +417,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                           : formatCityInput(city.name, city.postcode)
                       }
                       onChange={(event, value) => setCity(value as City)}
-                      onBlur={() => {
-                        if (!city) {
-                          setCityInput('');
-                        }
-                      }}
                       renderInput={(params) => (
                         <TextField
                           label="Ville"
