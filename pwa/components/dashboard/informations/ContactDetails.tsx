@@ -200,6 +200,7 @@ export const ContactDetails = ({
         />
         <Autocomplete
           sx={{mt: 2, mb: 1, p: 0}}
+          filterOptions={(options) => options}
           freeSolo
           value={city}
           options={citiesList}

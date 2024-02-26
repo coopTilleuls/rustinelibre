@@ -393,6 +393,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                   />
                   <Box width={{xs: '100%', md: '50%'}} ref={listContainerRef}>
                     <Autocomplete
+                      filterOptions={(options) => options}
                       freeSolo
                       value={city}
                       options={citiesList}
