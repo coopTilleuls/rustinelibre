@@ -24,15 +24,21 @@ export const createCitiesWithGouvAPI = (citiesResponse: Gouv[]): City[] => {
   let cities: City[] = [];
 
   citiesResponse.forEach((city: Gouv) => {
-    const args = [city.name, city.zipCode, city.longitude, city.latitude];
+    const args = [
+      city.nom_commune_complet,
+      city.code_postal,
+      city.longitude,
+      city.latitude,
+    ];
 
     if (!args.some((arg) => arg === undefined)) {
       cities.push({
-        id: city.zipCode,
-        cityCode: city.inseeCode,
-        name: city.name,
-        postcode: city.zipCode,
-        formatted_name: city.name + ', ' + city.zipCode + ', ' + 'France',
+        id: city.id,
+        cityCode: city.code_commune_INSEE,
+        name: city.nom_commune_complet,
+        postcode: city.code_postal,
+        formatted_name:
+          city.nom_commune_complet + ', ' + city.code_postal + ', ' + 'France',
         lat: city.latitude,
         lon: city.longitude,
       });

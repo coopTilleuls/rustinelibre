@@ -16,12 +16,33 @@ export interface Geometry {
 }
 
 export interface City {
-  codeDepartment: string;
-  inseeCode: string;
-  codeRegion: string;
-  departmentName: string;
-  name: string;
-  latitude: string;
-  longitude: string;
-  zipCode: string;
+  '@id': string;
+  id: string;
+  code_commune_INSEE: string;
+  nom_commune_postal: string;
+  code_postal: string;
+  libelle_acheminement: string;
+  ligne_5: string;
+  latitude: number;
+  longitude: number;
+  code_commune: string;
+  article: string;
+  nom_commune: string;
+  nom_commune_complet: string;
+  department: Departement | null;
+}
+
+export interface Departement {
+  '@id': string;
+  id: string;
+  code_departement: string;
+  nom_departement: string;
+  region: Region | null;
+}
+
+export interface Region {
+  '@id': string;
+  id: string;
+  code_region: string;
+  nom_region: string;
 }

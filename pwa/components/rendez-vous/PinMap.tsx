@@ -110,6 +110,7 @@ const PinMap = ({
       )}
       <Autocomplete
         fullWidth
+        filterOptions={(options) => options}
         sx={{mt: 2, mb: 1}}
         freeSolo
         value={cityInput}
