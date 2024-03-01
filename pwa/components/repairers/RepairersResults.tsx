@@ -96,7 +96,7 @@ export const RepairersResults = (): JSX.Element => {
           }}>
           <MapContainer
             center={mapCenter}
-            zoom={13}
+            zoom={12}
             scrollWheelZoom={false}
             style={{
               zIndex: 1,
