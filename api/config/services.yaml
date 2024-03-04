@@ -40,9 +40,9 @@ services:
         arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]
         autoconfigure: false
 
-    App\Tests\Resources\Services\Faker\DateTimeImmutableProvider: ~
+    App\Resources\Services\Faker\DateTimeImmutableProvider: ~
 
-    App\Tests\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
+    App\Resources\Services\Faker\AutoDiagnosticPrestationProvider: ~
 
     Aws\S3\S3Client:
         arguments:
