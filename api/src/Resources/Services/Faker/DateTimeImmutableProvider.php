@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Resources\Services\Faker;
+namespace App\Resources\Services\Faker;
 
 use Faker\Generator;
 use Faker\Provider\Base;
