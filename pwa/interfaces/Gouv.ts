@@ -29,6 +29,7 @@ export interface City {
   article: string;
   nom_commune: string;
   nom_commune_complet: string;
+  nom_commune_complet_formatte: string;
   department: Departement | null;
 }
 
