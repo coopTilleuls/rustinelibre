@@ -13,7 +13,7 @@ import WebsiteLayout from '@components/layout/WebsiteLayout';
 import SlotsStep from '@components/rendez-vous/SlotsStep';
 const PinMap = dynamic(() => import('@components/rendez-vous/PinMap'), {
   ssr: false,
-  // loading: () => <FullLoading />,
+  loading: () => <FullLoading />,
 });
 import {Repairer} from '@interfaces/Repairer';
 import {isCyclist} from '@helpers/rolesHelpers';
