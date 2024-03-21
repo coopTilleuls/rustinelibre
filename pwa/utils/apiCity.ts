@@ -22,7 +22,6 @@ const nominatimCities = async (search: string) => {
 };
 
 const gouvCities = async (search: string) => {
-  search = formatSearch(search);
   search = encodeURIComponent(search);
 
   try {
@@ -36,10 +35,6 @@ const gouvCities = async (search: string) => {
   } catch (e) {
     return console.error(e);
   }
-};
-
-const formatSearch = (search: string): string => {
-  return search.replaceAll("'", ' ');
 };
 
 export const searchStreet = async (search: string, city: City | null) => {
