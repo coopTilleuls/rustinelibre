@@ -64,7 +64,7 @@ function MyApp({
               <meta property="og:title" content="Rustine Libre" />
               <meta
                 property="og:description"
-                content="Leader de la réparation à domicile, Rustine Libre est disponible à Lille"
+                content="Rustine Libre, la réparation de vos vélos sur Lille Métropole"
               />
               <meta property="og:url" content="https://rustinelibre.fr" />
               <meta property="og:image" content="img/og-image.jpg" />
