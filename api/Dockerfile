@@ -108,7 +108,7 @@ RUN xcaddy build v2.7.6 \
 	--with github.com/dunglas/vulcain/caddy
 
 # Caddy image
-FROM caddy:2-alpine AS app_caddy
+FROM caddy:2.7.6-alpine AS app_caddy
 
 # needed for security update until base image is updated
 RUN apk upgrade libcurl curl openssl openssl-dev libressl libcrypto1.1 libssl1.1 libcrypto3 libssl3
