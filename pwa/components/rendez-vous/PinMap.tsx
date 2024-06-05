@@ -139,7 +139,7 @@ const PinMap = ({
           value={street}
           options={streetList.filter(
             (address) =>
-              address.postcode.slice(0, 2) === city.postcode &&
+              address.postcode.slice(0, 2) === city.postcode?.slice(0, 2) &&
               address.city === city.name
           )}
           getOptionLabel={(streetObject) =>
