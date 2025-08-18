@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repo is out of date, maintained version is here https://github.com/RustineLibre/RustineLibre
+
 # Bikelib
 
 Plateforme de mise en relation avec des réparateurs de vélos
