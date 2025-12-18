@@ -4,7 +4,9 @@ type ColorKey = keyof Theme['palette'];
 
 const Logo = ({color, outline}: {color: ColorKey; outline?: boolean}) => {
   const theme = useTheme();
-  const fillColor = (theme.palette[color] as SimplePaletteColorOptions).main;
+  const paletteColor = (theme.palette[color] as SimplePaletteColorOptions) || theme.palette.primary;
+
+  const fillColor = paletteColor.main;
 
   return (
     <svg

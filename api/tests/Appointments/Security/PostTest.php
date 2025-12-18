@@ -17,11 +17,11 @@ class PostTest extends SlotsTestCase
     private RepairerEmployeeRepository $repairerEmployeeRepository;
     private User $userWithoutAppointment;
 
-    private Repairer $repairerWithAppointment;
+    private ?Repairer $repairerWithAppointment = null;
 
     private Appointment $appointment;
 
-    private Repairer $repairerWithoutAppointment;
+    private ?Repairer $repairerWithoutAppointment = null;
 
     private TranslatorInterface $translator;
 
@@ -30,12 +30,19 @@ class PostTest extends SlotsTestCase
         parent::setUp();
         $this->repairerEmployeeRepository = static::getContainer()->get(RepairerEmployeeRepository::class);
         $this->translator = static::getContainer()->get(TranslatorInterface::class);
-        $this->userWithoutAppointment = $this->userRepository->findOneBy(['email' => 'user1@test.com']);
+        /** @var ?User $user1 */
+        $user1 = $this->userRepository->findOneBy(['email' => 'user1@test.com']);
+        $this->userWithoutAppointment = $user1;
+
         $boss = $this->userRepository->findOneBy(['email' => 'boss@test.com']);
         $boss2 = $this->userRepository->findOneBy(['email' => 'boss2@test.com']);
         $this->repairerWithAppointment = $this->repairerRepository->findOneBy(['owner' => $boss]);
-        $this->appointment = $this->appointmentRepository->findOneBy(['repairer' => $this->repairerWithAppointment->id]);
-        $this->repairerWithoutAppointment = $this->repairerRepository->findOneBy(['owner' => $boss2]);
+        /** @var ?Appointment $appointment */
+        $appointment = $this->appointmentRepository->findOneBy(['repairer' => $this->repairerWithAppointment?->id]);
+        $this->appointment = $appointment;
+        /** @var ?Repairer $repairer */
+        $repairer =  $this->repairerRepository->findOneBy(['owner' => $boss2]);
+        $this->repairerWithoutAppointment = $repairer;
     }
 
     public function testUserCanCreateAppointment(): void
@@ -79,7 +86,10 @@ class PostTest extends SlotsTestCase
     {
         $client = $this->createClientWithUser($this->repairerWithAppointment->owner);
 
-        $slots = $client->request('GET', sprintf('/repairer_get_slots_available/%d', $this->repairerWithAppointment->id))->toArray();
+        $slots = $client->request(
+            'GET',
+            sprintf('/repairer_get_slots_available/%d', $this->repairerWithAppointment->id)
+        )->toArray();
         $slotTime = sprintf('%s %s', array_key_first($slots), $slots[array_key_first($slots)][0]);
 
         $client->request('POST', '/appointments', [
@@ -96,7 +106,10 @@ class PostTest extends SlotsTestCase
     {
         $client = $this->createClientWithUser($this->repairerWithoutAppointment->owner);
 
-        $slots = $client->request('GET', sprintf('/repairer_get_slots_available/%d', $this->repairerWithoutAppointment->id))->toArray();
+        $slots = $client->request(
+            'GET',
+            sprintf('/repairer_get_slots_available/%d', $this->repairerWithoutAppointment->id)
+        )->toArray();
         $slotTime = sprintf('%s %s', array_key_first($slots), $slots[array_key_first($slots)][0]);
 
         $client->request('POST', '/appointments', [
@@ -116,10 +129,14 @@ class PostTest extends SlotsTestCase
 
     public function testEmployeeCanCreateAppointmentForCustomer(): void
     {
-        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy(['repairer' => $this->repairerWithAppointment]);
+        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy(['repairer' => $this->repairerWithAppointment]
+        );
         $client = $this->createClientWithUser($repairerEmployee->employee);
 
-        $slots = $client->request('GET', sprintf('/repairer_get_slots_available/%d', $this->repairerWithAppointment->id))->toArray();
+        $slots = $client->request(
+            'GET',
+            sprintf('/repairer_get_slots_available/%d', $this->repairerWithAppointment->id)
+        )->toArray();
         $slotTime = sprintf('%s %s', array_key_first($slots), $slots[array_key_first($slots)][0]);
 
         $client->request('POST', '/appointments', [
@@ -134,10 +151,15 @@ class PostTest extends SlotsTestCase
 
     public function testEmployeeCannotCreateAppointmentForOtherUser(): void
     {
-        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy(['repairer' => $this->repairerWithoutAppointment]);
+        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy(
+            ['repairer' => $this->repairerWithoutAppointment]
+        );
         $client = $this->createClientWithUser($repairerEmployee->employee);
 
-        $slots = $client->request('GET', sprintf('/repairer_get_slots_available/%d', $this->repairerWithoutAppointment->id))->toArray();
+        $slots = $client->request(
+            'GET',
+            sprintf('/repairer_get_slots_available/%d', $this->repairerWithoutAppointment->id)
+        )->toArray();
         $slotTime = sprintf('%s %s', array_key_first($slots), $slots[array_key_first($slots)][0]);
 
         $client->request('POST', '/appointments', [
