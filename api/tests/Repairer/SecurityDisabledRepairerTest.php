@@ -30,7 +30,7 @@ class SecurityDisabledRepairerTest extends AbstractTestCase
     public function testRepairerDisabledCannotEnabledFail(): void
     {
         self::createClientWithUser($this->disabledRepairer->owner)->request('PUT', sprintf('/repairers/%s', $this->disabledRepairer->id), [
-            'headers' => ['Content-Type' => 'application/json'],
+            'headers' => ['Content-Type' => 'application/ld+json'],
             'json' => [
                 'enabled' => true,
             ],
@@ -42,7 +42,7 @@ class SecurityDisabledRepairerTest extends AbstractTestCase
     public function testPutByRepairerDisabledFail(): void
     {
         self::createClientWithUser($this->disabledRepairer->owner)->request('PUT', sprintf('/repairers/%s', $this->disabledRepairer->id), [
-             'headers' => ['Content-Type' => 'application/json'],
+             'headers' => ['Content-Type' => 'application/ld+json'],
              'json' => [
                  'name' => 'New Name',
                  'description' => 'test put disabled failed',
@@ -55,7 +55,7 @@ class SecurityDisabledRepairerTest extends AbstractTestCase
     public function testPatchByRepairerDisabledFail(): void
     {
         self::createClientWithUser($this->disabledRepairer->owner)->request('PATCH', sprintf('/repairers/%s', $this->disabledRepairer->id), [
-            'headers' => ['Content-Type' => 'application/json'],
+            'headers' => ['Content-Type' => 'application/ld+json'],
             'json' => [
                 'name' => 'patched Name',
                 'description' => 'test patch disabled failed',

@@ -19,7 +19,7 @@ class PostTest extends SlotsTestCase
 
     private ?Repairer $repairerWithAppointment = null;
 
-    private Appointment $appointment;
+    private ?Appointment $appointment = null;
 
     private ?Repairer $repairerWithoutAppointment = null;
 
@@ -84,7 +84,7 @@ class PostTest extends SlotsTestCase
 
     public function testBossCanCreateAppointmentForCustomer(): void
     {
-        $client = $this->createClientWithUser($this->repairerWithAppointment->owner);
+        $client = $this->createClientWithUser($this->repairerWithAppointment?->owner);
 
         $slots = $client->request(
             'GET',
@@ -131,7 +131,7 @@ class PostTest extends SlotsTestCase
     {
         $repairerEmployee = $this->repairerEmployeeRepository->findOneBy(['repairer' => $this->repairerWithAppointment]
         );
-        $client = $this->createClientWithUser($repairerEmployee->employee);
+        $client = $this->createClientWithUser($repairerEmployee?->employee);
 
         $slots = $client->request(
             'GET',

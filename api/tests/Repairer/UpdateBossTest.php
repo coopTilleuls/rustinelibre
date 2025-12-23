@@ -21,7 +21,10 @@ class UpdateBossTest extends AbstractTestCase
 
     public function testUpdateNoAuth(): void
     {
-        $this->createClient()->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id));
+        $this->createClient()->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [],
+        ]);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -59,6 +62,7 @@ class UpdateBossTest extends AbstractTestCase
                 'newBoss' => sprintf('/users/%d', $currentEmployeeId),
             ],
         ])->toArray();
+
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         // Check if boss became employee
         $this->assertSame($response['employee']['@id'], sprintf('/users/%d', $currentBossId));

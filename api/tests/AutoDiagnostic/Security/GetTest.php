@@ -57,7 +57,7 @@ class GetTest extends AbstractTestCase
     {
         // According to the fixtures, autoDiagnostics[5] is not assigned to the client auth as user
         $autoDiagnostic = $this->autoDiagnostics[5];
-        $this->createClientAuthAsUser()->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
+        $this->createClientAuthAsUser()->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id),['headers' => ['Content-Type' => 'application/json']]);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }

@@ -31,7 +31,7 @@ class MailConfirmationTest extends AbstractTestCase
         /** @var User $userTest */
         $userTest = self::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
 
-        $this->createClientAuthAsUser()->request('POST', '/validation-code', [
+        $this->createClientWithCredentials()->request('POST', '/validation-code', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'code' => $userTest->validationCode,

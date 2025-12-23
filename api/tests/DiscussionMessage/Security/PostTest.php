@@ -17,6 +17,7 @@ class PostTest extends DiscussionMessageAbstractTestCase
         self::assertResponseIsSuccessful();
 
         $this->createClientWithUser($customer)->request('POST', '/discussion_messages', [
+            'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'discussion' => sprintf('/discussions/%s', $discussion->id),
                 'content' => 'Hello',
@@ -32,6 +33,7 @@ class PostTest extends DiscussionMessageAbstractTestCase
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
 
         $this->createClientWithUser($repairer->owner)->request('POST', '/discussion_messages', [
+            'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'discussion' => sprintf('/discussions/%s', $discussion->id),
                 'content' => 'Hello',
@@ -47,6 +49,7 @@ class PostTest extends DiscussionMessageAbstractTestCase
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
 
         $this->createClientAuthAsUser()->request('POST', '/discussion_messages', [
+            'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'discussion' => sprintf('/discussions/%s', $discussion->id),
                 'content' => 'Hello',
@@ -62,6 +65,7 @@ class PostTest extends DiscussionMessageAbstractTestCase
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
 
         $this->createClientAuthAsRepairer()->request('POST', '/discussion_messages', [
+            'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'discussion' => sprintf('/discussions/%s', $discussion->id),
                 'content' => 'Hello',
