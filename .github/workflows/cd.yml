@@ -26,6 +26,7 @@ jobs:
     name: Build
     if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
     uses: ./.github/workflows/build.yml
+    secrets: inherit
     with:
       tags: |
         type=ref,event=branch
