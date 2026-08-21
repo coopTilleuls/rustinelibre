@@ -101,9 +101,9 @@ RUN set -eux; \
 RUN rm -f .env.local.php
 
 # Build Caddy with the Mercure and Vulcain modules
-FROM caddy:2.7-builder-alpine AS app_caddy_builder
+FROM caddy:builder-alpine AS app_caddy_builder
 
-RUN xcaddy build v2.7.6 \
+RUN xcaddy build v2.11.3 \
 	--with github.com/dunglas/mercure/caddy \
 	--with github.com/dunglas/vulcain/caddy
 
@@ -111,7 +111,7 @@ RUN xcaddy build v2.7.6 \
 FROM caddy:2-alpine AS app_caddy
 
 # needed for security update until base image is updated
-RUN apk upgrade libcurl curl openssl openssl-dev libressl libcrypto1.1 libssl1.1 libcrypto3 libssl3
+RUN apk upgrade libcurl curl openssl openssl-dev libcrypto3 libssl3
 
 WORKDIR /srv/app
 
