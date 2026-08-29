@@ -151,7 +151,7 @@ export const AutoDiagTunnelBikeSelection = (): JSX.Element => {
           </FormControl>
         </Box>
       )}
-      {!loading && bikeSelected !== 'other_bike' && (
+      {!loading && bikeSelected !== null && bikeSelected !== 'other_bike' && (
         <Box>
           <Button
             variant="contained"
