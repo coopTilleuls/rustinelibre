@@ -115,10 +115,12 @@ RUN xcaddy build v2.11.4 \
 	--with github.com/dunglas/vulcain/caddy
 
 # Caddy image
-FROM caddy:2-alpine AS app_caddy
+# caddy:2-alpine lags behind on Alpine 3.20 (EOL, no more security updates); pin the same
+# Caddy version built above, whose -alpine tag tracks a current Alpine base.
+FROM caddy:2.11.4-alpine AS app_caddy
 
 # needed for security update until base image is updated
-RUN apk upgrade libcurl curl openssl openssl-dev libcrypto3 libssl3
+RUN apk upgrade libcurl curl openssl openssl-dev libcrypto3 libssl3 c-ares
 
 WORKDIR /srv/app
 
