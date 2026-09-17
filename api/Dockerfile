@@ -101,9 +101,16 @@ RUN set -eux; \
 RUN rm -f .env.local.php
 
 # Build Caddy with the Mercure and Vulcain modules
-FROM caddy:builder-alpine AS app_caddy_builder
+# caddy:builder-alpine still ships Go 1.26, but github.com/dunglas/mercure/caddy now requires
+# Go >= 1.27, so we build on a plain golang image with xcaddy installed manually.
+FROM golang:1-alpine AS app_caddy_builder
 
-RUN xcaddy build v2.11.3 \
+RUN apk add --no-cache git && \
+	go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+
+WORKDIR /usr/bin
+
+RUN xcaddy build v2.11.4 \
 	--with github.com/dunglas/mercure/caddy \
 	--with github.com/dunglas/vulcain/caddy
 
