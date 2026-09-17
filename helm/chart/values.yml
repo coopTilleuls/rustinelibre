@@ -202,6 +202,10 @@ resources:
   fixtures:
     requests:
       memory: 100Mi
+  pwa:
+    requests:
+      memory: 100Mi
+      cpu: 25m
 
 # If you use Mercure, you need the managed or the On Premise version to deploy more than one pod: https://mercure.rocks/docs/hub/cluster
 replicaCount: 1
