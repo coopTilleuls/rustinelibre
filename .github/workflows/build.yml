@@ -27,52 +27,9 @@ jobs:
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
 
-  # Push miroir vers le registry Scaleway, en plus du push ghcr.io ci-dessus, le temps des tests
-  # de bascule vers le cluster Scaleway. Le flavor prefix (prod-/nonprod-) est indispensable :
-  # l'ArgoCD Image Updater (opentofu-scaleway-infra-mut/2_environments/3_k8s_objects/
-  # argocd_sites.tf, allowTags = "regexp:^${terraform.workspace}-") ne suit que les tags
-  # "prod-sha-xxxxxxx"/"nonprod-sha-xxxxxxx".
-  build-push-php-scaleway:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3.5.2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Login to Scaleway Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: rg.fr-par.scw.cloud
-        username: ${{ secrets.SCW_USERNAME }}
-        password: ${{ secrets.SCW_SECRET_KEY }}
-
-    - name: Docker meta
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: rg.fr-par.scw.cloud/infra-mut-cr-scw/rustinelibre
-        tags: ${{ inputs.tags }}
-        flavor: |
-          prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
-
-    - name: Build/Push
-      uses: docker/build-push-action@v6
-      with:
-        context: api
-        target: app_php
-        tags: ${{ steps.meta.outputs.tags }}
-        push: true
-        cache-from: |
-          type=gha,scope=${{ github.ref }}-php
-          type=gha,scope=refs/heads/main-php
-        cache-to: |
-          type=gha,scope=${{ github.ref }}-php,mode=max
-
   build-push-caddypreprod:
     # If it has no release tag, it's preprod
-    if: ${{ github.ref_type != 'tag' }}
+    if: ${{ github.ref_type != 'tag' }}
     # Same Dockerfile as php, with a build target which is after
     needs: [build-push-php]
     runs-on: ubuntu-latest
@@ -87,51 +44,9 @@ jobs:
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
 
-  # Push miroir vers le registry Scaleway (voir le commentaire sur build-push-php-scaleway).
-  build-push-caddypreprod-scaleway:
-    # If it has no release tag, it's preprod
-    if: ${{ github.ref_type != 'tag' }}
-    needs: [build-push-php-scaleway]
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3.5.2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Login to Scaleway Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: rg.fr-par.scw.cloud
-        username: ${{ secrets.SCW_USERNAME }}
-        password: ${{ secrets.SCW_SECRET_KEY }}
-
-    - name: Docker meta
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: rg.fr-par.scw.cloud/infra-mut-cr-scw/rustinelibre-caddy
-        tags: ${{ inputs.tags }}
-        flavor: |
-          prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
-
-    - name: Build/Push Preprod
-      uses: docker/build-push-action@v6
-      with:
-        context: api
-        target: app_caddypreprod
-        tags: ${{ steps.meta.outputs.tags }}
-        push: true
-        cache-from: |
-          type=gha,scope=${{ github.ref }}-caddy
-          type=gha,scope=refs/heads/main-caddy
-        cache-to: |
-          type=gha,scope=${{ github.ref }}-caddy,mode=max
-
   build-push-caddy:
     # If it has a release tag, it's prod
-    if: ${{ github.ref_type == 'tag' }}
+    if: ${{ github.ref_type == 'tag' }}
     # Same Dockerfile as php, with a build target which is after
     needs: [build-push-php]
     runs-on: ubuntu-latest
@@ -146,11 +61,157 @@ jobs:
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_REPOSITORY: ghcr.io/cooptilleuls
 
-  # Push miroir vers le registry Scaleway (voir le commentaire sur build-push-php-scaleway).
-  build-push-caddy-scaleway:
-    # If it has a release tag, it's prod
-    if: ${{ github.ref_type == 'tag' }}
-    needs: [build-push-php-scaleway]
+  # Push miroir vers le registry Scaleway, en plus du push ghcr.io ci-dessus, le temps des tests
+  # de bascule vers le cluster Scaleway. Le flavor prefix (prod-/nonprod-) est indispensable :
+  # l'ArgoCD Image Updater (opentofu-scaleway-infra-mut/2_environments/3_k8s_objects/
+  # argocd_sites.tf, allowTags = "regexp:^${terraform.workspace}-") ne suit que les tags
+  # "prod-sha-xxxxxxx"/"nonprod-sha-xxxxxxx".
+  #
+  # php et pwa sont construits et scannes (Trivy) dans un seul job : comme l'ArgoCD Image
+  # Updater deploie chaque image des qu'un tag apparait dans le registre, on ne doit pousser
+  # ni l'une ni l'autre avant d'etre sur que les deux builds ont reussi, pour eviter de
+  # deployer un site avec un back et un front desynchronises.
+  build-push-scaleway:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3.5.2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Scaleway Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: rg.fr-par.scw.cloud
+        username: ${{ secrets.SCW_USERNAME }}
+        password: ${{ secrets.SCW_SECRET_KEY }}
+
+    - name: Docker meta (php)
+      id: meta-php
+      uses: docker/metadata-action@v5
+      with:
+        images: rg.fr-par.scw.cloud/infra-mut-cr-scw/rustinelibre
+        tags: ${{ inputs.tags }}
+        flavor: |
+          prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
+
+    - name: Build php image locally
+      uses: docker/build-push-action@v6
+      with:
+        context: api
+        target: app_php
+        tags: ${{ steps.meta-php.outputs.tags }}
+        load: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-php
+          type=gha,scope=refs/heads/main-php
+        cache-to: |
+          type=gha,scope=${{ github.ref }}-php,mode=max
+
+    - name: Scan php image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ fromJSON(steps.meta-php.outputs.json).tags[0] }}
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: os,library
+        severity: CRITICAL,HIGH
+        trivyignores: .trivyignore
+
+    - name: Define Env
+      run: |
+        set -o pipefail
+        if [[ "${{ github.ref }}" == *"tag"* ]]; then
+            echo "SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
+        else
+            echo "SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
+        fi
+
+    - name: Docker meta (pwa)
+      id: meta-pwa
+      uses: docker/metadata-action@v5
+      with:
+        images: rg.fr-par.scw.cloud/infra-mut-cr-scw/rustinelibre-pwa
+        tags: ${{ inputs.tags }}
+        flavor: |
+          prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
+
+    - name: Build pwa image locally
+      uses: docker/build-push-action@v6
+      with:
+        context: pwa
+        target: prod
+        pull: true
+        load: true
+        tags: ${{ steps.meta-pwa.outputs.tags }}
+        build-args: |
+          NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
+          NEXT_PUBLIC_FIREBASE_API_KEY=${{ vars.FB_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ vars.FB_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ vars.FB_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ vars.FB_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ vars.FB_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID=${{ vars.FB_APP_ID }}
+          NEXT_PUBLIC_VAPID_KEY=${{ vars.VAPID_KEY }}
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-pwa
+          type=gha,scope=refs/heads/main-pwa
+        cache-to: |
+          type=gha,scope=${{ github.ref }}-pwa,mode=max
+
+    # Non bloquant pour le moment : Next.js est en v13 (voir package.json), ce qui laisse des
+    # CVE connues (dont CVE-2025-29927, montee de version majeure necessaire pour corriger)
+    # sans correctif possible sans casser l'app. Suivi via un ticket TMA. On garde le scan
+    # pour reperer toute regression supplementaire dans les logs.
+    - name: Scan pwa image with Trivy
+      uses: aquasecurity/trivy-action@master
+      continue-on-error: true
+      with:
+        image-ref: ${{ fromJSON(steps.meta-pwa.outputs.json).tags[0] }}
+        exit-code: '0'
+        ignore-unfixed: true
+        vuln-type: os,library
+        severity: CRITICAL,HIGH
+        trivyignores: .trivyignore
+
+    - name: Push php image
+      uses: docker/build-push-action@v6
+      with:
+        context: api
+        target: app_php
+        tags: ${{ steps.meta-php.outputs.tags }}
+        push: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-php
+          type=gha,scope=refs/heads/main-php
+
+    - name: Push pwa image
+      uses: docker/build-push-action@v6
+      with:
+        context: pwa
+        target: prod
+        push: true
+        tags: ${{ steps.meta-pwa.outputs.tags }}
+        build-args: |
+          NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
+          NEXT_PUBLIC_FIREBASE_API_KEY=${{ vars.FB_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ vars.FB_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ vars.FB_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ vars.FB_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ vars.FB_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID=${{ vars.FB_APP_ID }}
+          NEXT_PUBLIC_VAPID_KEY=${{ vars.VAPID_KEY }}
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-pwa
+          type=gha,scope=refs/heads/main-pwa
+
+  # Push miroir vers le registry Scaleway (voir le commentaire sur build-push-scaleway) :
+  # on attend que php et pwa aient ete construits/scannes avec succes avant de construire caddy.
+  build-push-caddypreprod-scaleway:
+    # If it has no release tag, it's preprod
+    if: ${{ github.ref_type != 'tag' }}
+    needs: [build-push-scaleway]
     runs-on: ubuntu-latest
 
     steps:
@@ -175,7 +236,94 @@ jobs:
         flavor: |
           prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
 
-    - name: Build/Push Prod
+    - name: Build caddypreprod image locally
+      uses: docker/build-push-action@v6
+      with:
+        context: api
+        target: app_caddypreprod
+        tags: ${{ steps.meta.outputs.tags }}
+        load: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-caddy
+          type=gha,scope=refs/heads/main-caddy
+        cache-to: |
+          type=gha,scope=${{ github.ref }}-caddy,mode=max
+
+    - name: Scan caddypreprod image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: os,library
+        severity: CRITICAL,HIGH
+        trivyignores: .trivyignore
+
+    - name: Push caddypreprod image
+      uses: docker/build-push-action@v6
+      with:
+        context: api
+        target: app_caddypreprod
+        tags: ${{ steps.meta.outputs.tags }}
+        push: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-caddy
+          type=gha,scope=refs/heads/main-caddy
+
+  # Push miroir vers le registry Scaleway (voir le commentaire sur build-push-scaleway) :
+  # on attend que php et pwa aient ete construits/scannes avec succes avant de construire caddy.
+  build-push-caddy-scaleway:
+    # If it has a release tag, it's prod
+    if: ${{ github.ref_type == 'tag' }}
+    needs: [build-push-scaleway]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3.5.2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Scaleway Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: rg.fr-par.scw.cloud
+        username: ${{ secrets.SCW_USERNAME }}
+        password: ${{ secrets.SCW_SECRET_KEY }}
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: rg.fr-par.scw.cloud/infra-mut-cr-scw/rustinelibre-caddy
+        tags: ${{ inputs.tags }}
+        flavor: |
+          prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
+
+    - name: Build caddy image locally
+      uses: docker/build-push-action@v6
+      with:
+        context: api
+        target: app_caddy
+        tags: ${{ steps.meta.outputs.tags }}
+        load: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-caddy
+          type=gha,scope=refs/heads/main-caddy
+        cache-to: |
+          type=gha,scope=${{ github.ref }}-caddy,mode=max
+
+    - name: Scan caddy image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: os,library
+        severity: CRITICAL,HIGH
+        trivyignores: .trivyignore
+
+    - name: Push caddy image
       uses: docker/build-push-action@v6
       with:
         context: api
@@ -185,8 +333,6 @@ jobs:
         cache-from: |
           type=gha,scope=${{ github.ref }}-caddy
           type=gha,scope=refs/heads/main-caddy
-        cache-to: |
-          type=gha,scope=${{ github.ref }}-caddy,mode=max
 
   build-push-pwa:
     runs-on: ubuntu-latest
@@ -245,62 +391,3 @@ jobs:
     #     BUILD_TARGET: prod
     #     REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
     #     IMAGE_REPOSITORY: ghcr.io/cooptilleuls
-
-  # Push miroir vers le registry Scaleway (voir le commentaire sur build-push-php-scaleway).
-  build-push-pwa-scaleway:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3.5.2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Login to Scaleway Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: rg.fr-par.scw.cloud
-        username: ${{ secrets.SCW_USERNAME }}
-        password: ${{ secrets.SCW_SECRET_KEY }}
-
-    - name: Define Env
-      run: |
-        set -o pipefail
-        if [[ "${{ github.ref }}" == *"tag"* ]]; then
-            echo "SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
-        else
-            echo "SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
-        fi
-
-    - name: Docker meta
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: rg.fr-par.scw.cloud/infra-mut-cr-scw/rustinelibre-pwa
-        tags: ${{ inputs.tags }}
-        flavor: |
-          prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
-
-    - name: Build and push
-      uses: docker/build-push-action@v6
-      with:
-        context: pwa
-        target: prod
-        pull: true
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
-          NEXT_PUBLIC_FIREBASE_API_KEY=${{ vars.FB_API_KEY }}
-          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ vars.FB_AUTH_DOMAIN }}
-          NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ vars.FB_PROJECT_ID }}
-          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ vars.FB_STORAGE_BUCKET }}
-          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ vars.FB_MESSAGING_SENDER_ID }}
-          NEXT_PUBLIC_FIREBASE_APP_ID=${{ vars.FB_APP_ID }}
-          NEXT_PUBLIC_VAPID_KEY=${{ vars.VAPID_KEY }}
-        cache-from: |
-          type=gha,scope=${{ github.ref }}-pwa
-          type=gha,scope=refs/heads/main-pwa
-        cache-to: |
-          type=gha,scope=${{ github.ref }}-pwa,mode=max
